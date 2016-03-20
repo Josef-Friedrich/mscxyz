@@ -3,6 +3,7 @@
 import lxml.etree as et
 import sys
 import subprocess
+import os
 
 if len(sys.argv) < 2:
     print('Usage: ' + sys.argv[0] + ' <musescore-fle.mscx>')
@@ -32,5 +33,10 @@ for score in mscx.xpath('/museScore/Score'):
 et.strip_tags(mscx, 'font', 'b', 'i')
 
 # To get closing tag use method 'html'
-output_file = ms_file.replace('.mscx', '_cleaned.mscx')
-mscx.write(output_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+tmp_file = ms_file.replace('.mscx', '_tmp.mscx')
+mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+
+output_file = tmp_file.replace('_tmp.mscx', '_cleaned.mscx')
+subprocess.call(["mscore", "-o", output_file, tmp_file])
+
+os.remove(tmp_file)
