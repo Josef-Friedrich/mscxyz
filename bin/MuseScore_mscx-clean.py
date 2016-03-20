@@ -1,8 +1,21 @@
 #! /usr/bin/env python
 
 import lxml.etree as et
-mscx = et.parse('parse-xml_in.mscx')
-defaultstyle = et.parse('_style/default.mss').getroot()
+import os
+import sys
+import subprocess
+
+if len(sys.argv) < 2:
+    print('Usage: ' + sys.argv[0] + ' <musescore-fle.mscx>')
+    sys.exit()
+
+ms_file = sys.argv[1]
+
+mscx = et.parse(ms_file)
+
+musescore_user_folder = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"])
+musescore_user_folder = musescore_user_folder.replace('\n', '') + '/MuseScore2'
+defaultstyle = et.parse(musescore_user_folder + '/Stile/default.mss').getroot()
 
 # Delete synthesizer tag
 for synthesizer in mscx.xpath('/museScore/Score/Synthesizer'):
@@ -20,4 +33,5 @@ for score in mscx.xpath('/museScore/Score'):
 et.strip_tags(mscx, 'font', 'b', 'i')
 
 # To get closing tag use method 'html'
-mscx.write('parse-xml_out.mscx', pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+output_file = ms_file.replace('.mscx', '_cleaned.mscx')
+mscx.write(output_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
