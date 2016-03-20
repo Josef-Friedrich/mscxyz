@@ -4,12 +4,13 @@ import lxml.etree as et
 import sys
 
 if len(sys.argv) < 3:
-    print('Usage: ' + sys.argv[0] + 'MuseScoreFile.mscx <lyrics-number>')
+    print('Usage: ' + sys.argv[0] + ' <musescore-fle.mscx> <lyrics-number_1-x>')
     sys.exit()
 
 ms_file = sys.argv[1]
-lyrics_number = sys.arv[2]
-new_file = ms_file.replace('.mscx', '_lyrics-no-' + lyrics_number + '.mscx')
+lyrics_no_display = sys.argv[2]
+lyrics_no = str(int(lyrics_no_display) - 1)
+new_file = ms_file.replace('.mscx', '_Lyrics-no-' + lyrics_no_display + '.mscx')
 
 print(new_file)
 
@@ -22,9 +23,9 @@ for lyric in mscx.findall('.//Lyrics'):
     else:
         no = '0'
 
-    if no != '2':
+    if no != lyrics_no:
         lyric.getparent().remove(lyric)
-    else:
+    elif hasattr(number, 'text'):
         number.text = '0'
 
 # To get closing tag use method 'html'
