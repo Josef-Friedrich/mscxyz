@@ -6,10 +6,14 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: ' + sys.argv[0] + 'MuseScoreFile.mscx <lyrics-number>')
     sys.exit()
-else:
-    print('troll')
 
-mscx = et.parse('affen.mscx')
+ms_file = sys.argv[1]
+lyrics_number = sys.arv[2]
+new_file = ms_file.replace('.mscx', '_lyrics-no-' + lyrics_number + '.mscx')
+
+print(new_file)
+
+mscx = et.parse(ms_file)
 
 for lyric in mscx.findall('.//Lyrics'):
     number = lyric.find('no')
@@ -24,4 +28,4 @@ for lyric in mscx.findall('.//Lyrics'):
         number.text = '0'
 
 # To get closing tag use method 'html'
-mscx.write('affen_out.mscx', pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
