@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import lxml.etree as et
-import os
 import sys
 import subprocess
 
