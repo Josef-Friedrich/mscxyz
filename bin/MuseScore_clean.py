@@ -39,4 +39,4 @@ mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', enc
 output_file = tmp_file.replace('_tmp.mscx', '_cleaned.mscx')
 subprocess.call(["mscore", "-o", output_file, tmp_file])
 
-os.remove(tmp_file)
+#os.remove(tmp_file)
