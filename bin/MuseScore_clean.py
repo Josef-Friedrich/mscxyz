@@ -4,6 +4,7 @@ import lxml.etree as et
 import sys
 import subprocess
 import os
+import shutil
 
 if len(sys.argv) < 2:
     print('Usage: ' + sys.argv[0] + ' <musescore-fle.mscx>')
@@ -34,12 +35,10 @@ et.strip_tags(mscx, 'font', 'b', 'i')
 
 # To get closing tag use method 'html'
 tmp_file = ms_file.replace('.mscx', '_tmp.mscx')
-#mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
 
 bak_file = ms_file.replace('.mscx', '_bak.mscx')
-print(ms_file)
-print(bak_file)
-os.renames = (ms_file, bak_file)
+shutil.copy2(ms_file, bak_file)
 
-#subprocess.call(["mscore", "-o", ms_file, tmp_file])
+subprocess.call(["mscore", "-o", ms_file, tmp_file])
 
