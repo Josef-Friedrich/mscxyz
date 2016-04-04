@@ -34,9 +34,12 @@ et.strip_tags(mscx, 'font', 'b', 'i')
 
 # To get closing tag use method 'html'
 tmp_file = ms_file.replace('.mscx', '_tmp.mscx')
-mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+#mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
 
-output_file = tmp_file.replace('_tmp.mscx', '_cleaned.mscx')
-subprocess.call(["mscore", "-o", output_file, tmp_file])
+bak_file = ms_file.replace('.mscx', '_bak.mscx')
+print(ms_file)
+print(bak_file)
+os.renames = (ms_file, bak_file)
 
-#os.remove(tmp_file)
+#subprocess.call(["mscore", "-o", ms_file, tmp_file])
+
