@@ -5,6 +5,11 @@ import os
 import json
 import errno
 import shutil
+import musescore
+
+musescore.printhello()
+
+sys.exit()
 
 def create_dir(path):
     try:
