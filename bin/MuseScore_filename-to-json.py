@@ -5,9 +5,6 @@ import os
 import json
 import errno
 import shutil
-import musescore
-
-musescore.printhello()
 
 sys.exit()
 
@@ -36,7 +33,7 @@ data['title'] = title
 
 json_file = cleaned_path.replace('.mscx', '.json')
 out_file = open(json_file, 'w')
-json.dump(data, out_file, indent=4)                                    
+json.dump(data, out_file, indent=4)
 out_file.close()
 
 os.rename(ms_path, cleaned_path)

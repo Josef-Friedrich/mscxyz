@@ -2,9 +2,8 @@
 
 import lxml.etree as et
 import sys
-import subprocess
-import os
 import shutil
+import musescore
 
 if len(sys.argv) < 2:
     print('Usage: ' + sys.argv[0] + ' <musescore-fle.mscx>')
@@ -12,14 +11,10 @@ if len(sys.argv) < 2:
 
 ms_file = sys.argv[1]
 
-home = os.path.expanduser('~')
-if os.path.exists(home + '/Documents/MuseScore2'):
-	ms_user_folder = home + '/Documents/MuseScore2'
-elif os.path.exists(home + '/Dokumente/MuseScore2'):
-	ms_user_folder = home + '/Dokumente/MuseScore2'
+style_folder = musescore.get_style_folder()
 
 mscx = et.parse(ms_file)
-defaultstyle = et.parse(ms_user_folder + '/Stile/default.mss').getroot()
+defaultstyle = et.parse(style_folder + '/default.mss').getroot()
 
 # Delete synthesizer tag
 for synthesizer in mscx.xpath('/museScore/Score/Synthesizer'):
@@ -43,8 +38,5 @@ mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', enc
 bak_file = ms_file.replace('.mscx', '_bak.mscx')
 shutil.copy2(ms_file, bak_file)
 
-mac_ms = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
-if os.path.exists(mac_ms):
-	subprocess.call([mac_ms, "-o", ms_file, tmp_file])
-else:
-	subprocess.call(["mscore", "-o", ms_file, tmp_file])
+musescore.re_open(tmp_file, ms_file)
+
