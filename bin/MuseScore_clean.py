@@ -12,11 +12,14 @@ if len(sys.argv) < 2:
 
 ms_file = sys.argv[1]
 
-mscx = et.parse(ms_file)
+home = os.path.expanduser('~')
+if os.path.exists(home + '/Documents/MuseScore2'):
+	ms_user_folder = home + '/Documents/Musescore2'
+elif os.path.exists(home + '/Dokumente/MuseScore2'):
+	ms_user_folder = home + '/Dokumente/Musescore2'
 
-musescore_user_folder = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"])
-musescore_user_folder = musescore_user_folder.replace('\n', '') + '/MuseScore2'
-defaultstyle = et.parse(musescore_user_folder + '/Stile/default.mss').getroot()
+mscx = et.parse(ms_file)
+defaultstyle = et.parse(ms_user_folder + '/Stile/default.mss').getroot()
 
 # Delete synthesizer tag
 for synthesizer in mscx.xpath('/museScore/Score/Synthesizer'):
@@ -40,5 +43,8 @@ mscx.write(tmp_file, pretty_print=True, xml_declaration=True, method='html', enc
 bak_file = ms_file.replace('.mscx', '_bak.mscx')
 shutil.copy2(ms_file, bak_file)
 
-subprocess.call(["mscore", "-o", ms_file, tmp_file])
-
+mac_ms = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
+if os.path.exists(mac_ms):
+	subprocess.call([mac_ms, "-o", ms_file, tmp_file])
+else:
+	subprocess.call(["mscore", "-o", ms_file, tmp_file])
