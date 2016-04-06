@@ -14,9 +14,9 @@ ms_file = sys.argv[1]
 
 home = os.path.expanduser('~')
 if os.path.exists(home + '/Documents/MuseScore2'):
-	ms_user_folder = home + '/Documents/Musescore2'
+	ms_user_folder = home + '/Documents/MuseScore2'
 elif os.path.exists(home + '/Dokumente/MuseScore2'):
-	ms_user_folder = home + '/Dokumente/Musescore2'
+	ms_user_folder = home + '/Dokumente/MuseScore2'
 
 mscx = et.parse(ms_file)
 defaultstyle = et.parse(ms_user_folder + '/Stile/default.mss').getroot()
