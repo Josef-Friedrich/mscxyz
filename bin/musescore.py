@@ -13,7 +13,7 @@ def get_style_folder():
 		return home + '/Dokumente/' + style_folder
 
 def re_open(input_file, output_file):
-	mac_ms = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
+	mac_ms = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac_ms):
 		subprocess.call([mac_ms, "-o", output_file, input_file])
 	else:
