@@ -4,6 +4,7 @@ import subprocess
 import json
 import errno
 import shutil
+import lxml.etree as et
 
 def get_style_folder():
 	style_folder = 'MuseScore2/Stile'
@@ -38,10 +39,23 @@ def get_lieder_folder():
 def backup(backup_file):
 	shutil.copy2(backup_file, backup_file.replace('.mscx', '_bak.mscx'))
 
-def remove(ms_et, xpath_string):
-	for to_remove in ms_et.xpath(xpath_string):
-		to_remove.getparent().remove(to_remove)
+class Tree:
+	def __init__(self, file_name):
+		self.file_name = file_name
+		self.tree = et.parse(file_name)
 
-def get_metatag(ms_et, name):
-	element = ms_et.getroot().xpath("//metaTag[@name='" + name + "']")
-	return element[0].text
+	def stripTags(self, *tags):
+		et.strip_tags(self.tree, tags)
+
+	def removeTagsByXPath(self, *xpath_strings):
+		for xpath_string in xpath_strings:
+			for rm in self.tree.xpath(xpath_string):
+				rm.getparent().remove(rm)
+
+	def getMetaTag(self, name):
+		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
+		return element[0].text
+
+	def write(self):
+		self.tree.write(self.file_name, encoding='UTF-8')
+
