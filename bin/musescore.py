@@ -3,6 +3,7 @@ import sys
 import subprocess
 import json
 import errno
+import shutil
 
 def get_style_folder():
 	style_folder = 'MuseScore2/Stile'
@@ -33,3 +34,10 @@ def create_dir(path):
 
 def get_lieder_folder():
 	return os.path.expanduser('~') + '/git-repositories/content/lieder/songs/'
+
+def backup(backup_file):
+	shutil.copy2(backup_file, backup_file.replace('.mscx', '_bak.mscx'))
+
+def remove(ms_etc, xpath_string):
+	for to_remove in mscx.xpath(xpath_string):
+		to_remove.getparent().remove(to_remove)
