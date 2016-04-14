@@ -41,3 +41,7 @@ def backup(backup_file):
 def remove(ms_et, xpath_string):
 	for to_remove in ms_et.xpath(xpath_string):
 		to_remove.getparent().remove(to_remove)
+
+def get_metatag(ms_et, name):
+	element = ms_et.getroot().xpath("//metaTag[@name='" + name + "']")
+	return element[0].text
