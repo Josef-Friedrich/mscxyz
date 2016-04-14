@@ -6,7 +6,16 @@ import errno
 import shutil
 import lxml.etree as et
 
-fiile = 'tril'
+# Name of the score file
+score = ''
+
+def catch_args(number_of_args, usage_text):
+	if len(sys.argv) < number_of_args + 1:
+		print('Usage: ' + os.path.basename(sys.argv[0]) + ' ' + usage_text)
+		sys.exit()
+
+	global score
+	score = sys.argv[1]
 
 def get_style_folder():
 	style_folder = 'MuseScore2/Stile'
@@ -16,12 +25,12 @@ def get_style_folder():
 	elif os.path.exists(home + '/Dokumente/' + style_folder):
 		return home + '/Dokumente/' + style_folder
 
-def re_open(input_file, output_file):
+def re_open():
 	mac_ms = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac_ms):
-		subprocess.call([mac_ms, "-o", output_file, input_file])
+		subprocess.call([mac_ms, "-o", score, score])
 	else:
-		subprocess.call(["mscore", "-o", output_file, input_file])
+		subprocess.call(["mscore", "-o", score, score])
 
 def create_info(json_file, data):
 	out_file = open(json_file, 'w')
@@ -38,13 +47,16 @@ def create_dir(path):
 def get_lieder_folder():
 	return os.path.expanduser('~') + '/git-repositories/content/lieder/songs/'
 
-def backup(backup_file):
-	shutil.copy2(backup_file, backup_file.replace('.mscx', '_bak.mscx'))
+def backup():
+	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
 
 class Tree:
-	def __init__(self, file_name):
-		self.file_name = file_name
-		self.tree = et.parse(file_name)
+	def __init__(self, file_name = ''):
+		if not file_name:
+			self.file_name = score
+		else:
+			self.file_name = file_name
+		self.tree = et.parse(self.file_name)
 
 	def stripTags(self, *tags):
 		et.strip_tags(self.tree, tags)
