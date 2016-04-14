@@ -6,6 +6,8 @@ import errno
 import shutil
 import lxml.etree as et
 
+fiile = 'tril'
+
 def get_style_folder():
 	style_folder = 'MuseScore2/Stile'
 	home = os.path.expanduser('~')
@@ -58,4 +60,8 @@ class Tree:
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
+
+
+	def printFilename(self):
+		print(fiile)
 

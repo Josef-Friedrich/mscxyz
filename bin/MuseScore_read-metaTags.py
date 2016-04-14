@@ -10,7 +10,10 @@ if len(sys.argv) < 2:
 
 ms_file = sys.argv[1]
 
-ms_et = et.parse(ms_file)
+tree = musescore.Tree(ms_file)
+
+
+musescore.score = sys.argv[1]
 
 # arranger
 # composer
@@ -26,6 +29,9 @@ ms_et = et.parse(ms_file)
 # workNumber
 # workTitle
 
-composer = musescore.get_metatag(ms_et, 'composer')
-composer = musescore.get_metatag(ms_et, 'platform')
+composer = tree.getMetaTag('composer')
 print(composer)
+platform = tree.getMetaTag('platform')
+print(platform)
+
+tree.printFilename()
