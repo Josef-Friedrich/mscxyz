@@ -38,6 +38,6 @@ def get_lieder_folder():
 def backup(backup_file):
 	shutil.copy2(backup_file, backup_file.replace('.mscx', '_bak.mscx'))
 
-def remove(ms_etc, xpath_string):
-	for to_remove in mscx.xpath(xpath_string):
+def remove(ms_et, xpath_string):
+	for to_remove in ms_et.xpath(xpath_string):
 		to_remove.getparent().remove(to_remove)
