@@ -76,6 +76,7 @@ class Tree:
 		else:
 			self.file_name = file_name
 		self.tree = et.parse(self.file_name)
+		self.root = self.tree.getroot()
 
 	def stripTags(self, *tags):
 		import lxml.etree as et
@@ -87,11 +88,16 @@ class Tree:
 				rm.getparent().remove(rm)
 
 	def getMetaTag(self, name):
-		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
+		element = self.root.xpath("//metaTag[@name='" + name + "']")
 		return element[0].text
 
+	def getVBox(self, name):
+		for element in self.root.xpath('//VBox/Text'):
+			if element.find('style').text == name:
+				return element.find('text').text
+
 	def setMetaTag(self, name, text):
-		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
+		element = self.root.xpath("//metaTag[@name='" + name + "']")
 		element[0].text = text
 
 	def write(self):
