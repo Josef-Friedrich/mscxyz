@@ -92,7 +92,7 @@ class Tree:
 
 	def setMetaTag(self, name, text):
 		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
-		element[0].text =  text
+		element[0].text = text
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
