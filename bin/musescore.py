@@ -68,60 +68,60 @@ class Rename:
 
 	def __init__(self, full_path):
 		self.dirname = os.path.dirname(full_path)
-		self.basename = os.path.basename(full_path).replace('.mscx', '')
+		self.basename = os.path.basename(full_path)
 
-	def debug(self):
-		print(self.basename)
+	def prepareBasename(self):
+		self.basename = self.basename.replace('.mscx', '')
+		self.basename = self.basename.decode('utf-8')
 
-	def transliterate(self):
-		import unidecode
-		string = self.basename.decode('utf-8')
+	def replaceGermanUmlaute(self):
+		string = self.basename
 		string = string.replace(u'ö', 'oe')
 		string = string.replace(u'ü', 'ue')
 		string = string.replace(u'ä', 'ae')
 		string = string.replace(u'Ö', 'Oe')
 		string = string.replace(u'Ü', 'Ue')
 		string = string.replace(u'Ä', 'Ae')
-		string = unidecode.unidecode(string)
 		self.basename = string
-		return string
+
+	def transliterate(self):
+		import unidecode
+		self.basename = unidecode.unidecode(self.basename)
 
 	def replaceToDash(self, *characters):
-		to_dashs = [' ', ';', '?', '!', '_', '#', '&']
-		for to_dash in to_dashs:
-			string = string.replace(to_dash, '-')
+		for character in characters:
+			self.basename = self.basename.replace(character, '-')
 
-	def deleteCharacter(self, *characters):
-		to_deletes = [',', '.', '\'', '`', ')']
-		for to_delete in to_deletes:
-			string = string.replace(to_delete, '')
+	def deleteCharacters(self, *characters):
+		for character in characters:
+			self.basename = self.basename.replace(character, '')
 
-	def clean(self):
+	def cleanUp(self):
 		string = self.basename
-
-		to_dashs = [' ', ';', '?', '!', '_', '#', '&']
-		for to_dash in to_dashs:
-			string = string.replace(to_dash, '-')
-
-		to_deletes = [',', '.', '\'', '`', ')']
-		for to_delete in to_deletes:
-			string = string.replace(to_delete, '')
-
 		string = string.replace('(', '_')
 		string = string.replace('-_', '_')
 
 		import re
 		# Replace two or more dashes with one.
 		string = re.sub('-{2,}', '_', string)
+		string = re.sub('__{2,}', '_', string)
 		# Remove dash at the begining
 		string = re.sub('^-', '', string)
 		# Remove the dash from the end
 		string = re.sub('-$', '', string)
 
 		self.basename = string
-		return string
 
+	def debug(self):
+		print(self.basename)
 
+	def execute(self):
+		self.prepareBasename()
+		self.replaceGermanUmlaute()
+		self.transliterate()
+		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+')
+		self.deleteCharacters(',', '.', '\'', '`', ')')
+		self.cleanUp()
 class Tree:
 
 	def __init__(self, file_name = ''):
