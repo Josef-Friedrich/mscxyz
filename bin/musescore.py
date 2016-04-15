@@ -86,6 +86,16 @@ class Rename:
 		self.basename = string
 		return string
 
+	def replaceToDash(self, *characters):
+		to_dashs = [' ', ';', '?', '!', '_', '#', '&']
+		for to_dash in to_dashs:
+			string = string.replace(to_dash, '-')
+
+	def deleteCharacter(self, *characters):
+		to_deletes = [',', '.', '\'', '`', ')']
+		for to_delete in to_deletes:
+			string = string.replace(to_delete, '')
+
 	def clean(self):
 		string = self.basename
 
@@ -110,6 +120,7 @@ class Rename:
 
 		self.basename = string
 		return string
+
 
 class Tree:
 
