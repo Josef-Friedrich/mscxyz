@@ -3,5 +3,12 @@
 
 import musescore
 
-print(musescore.transliterate(u'Hällö und Fußbad'))
+files = musescore.get_all_mscx()
+
+for file in files:
+	rename = musescore.Rename(file)
+	rename.debug()
+	rename.transliterate()
+	rename.clean()
+	rename.debug()
 

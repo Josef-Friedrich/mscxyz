@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 
@@ -62,28 +64,53 @@ def get_all_mscx():
 
 	return mscx_files
 
-def transliterate(string):
-	import unidecode
-	return unidecode.unidecode(string)
+class Rename:
 
-def clean_filename(string):
+	def __init__(self, full_path):
+		self.dirname = os.path.dirname(full_path)
+		self.basename = os.path.basename(full_path)
 
-	string = transliterate(string)
+	def debug(self):
+		print(self.basename)
 
-	to_dashs = [' ', ',', '.', ';', '?', '!', '_']
+	def transliterate(self):
+		import unidecode
+		string = self.basename.decode('utf-8')
+		string = string.replace(u'ö', 'oe')
+		string = string.replace(u'ü', 'ue')
+		string = string.replace(u'ä', 'ae')
+		string = string.replace(u'Ö', 'Oe')
+		string = string.replace(u'Ü', 'Ue')
+		string = string.replace(u'A', 'Ae')
+		string = unidecode.unidecode(string)
+		self.basename = string
+		return string
 
-	for to_dash in to_dashs:
-		string = string.replace(to_dash, '-')
+	def clean(self):
+		string = self.basename
 
-	import re
-	# Replace two or more dashes with one.
-	string = re.sub('-+', '-', string)
-	# Remove dash at the begining
-	string = re.sub('^-', '', string)
-	# Remove the dash from the end
-	string = re.sub('-$', '', string)
+		to_dashs = [' ', ',', ';', '?', '!', '_']
 
-	return string
+		for to_dash in to_dashs:
+			string = string.replace(to_dash, '-')
+
+		string = string.replace('\'', '')
+		string = string.replace('(', '_')
+		string = string.replace(')', '')
+		string = string.replace('-_', '_')
+
+		import re
+		# Replace two or more dashes with one.
+		string = re.sub('-+', '-', string)
+		# Remove dash at the begining
+		string = re.sub('^-', '', string)
+		# Remove the dash from the end
+		string = re.sub('-$', '', string)
+
+
+
+		self.basename = string
+		return string
 
 class Tree:
 
