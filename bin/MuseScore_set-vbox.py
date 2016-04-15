@@ -6,7 +6,7 @@ musescore.catch_args()
 
 tree = musescore.Tree()
 
-tree.setVBox('Composer', 'Ludwig van Beethoven')
+tree.insertInVBox('Composer', 'Ludwig van Beethoven')
 
 tree.write()
 
