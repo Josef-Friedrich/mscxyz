@@ -68,7 +68,7 @@ class Rename:
 
 	def __init__(self, full_path):
 		self.dirname = os.path.dirname(full_path)
-		self.basename = os.path.basename(full_path)
+		self.basename = os.path.basename(full_path).replace('.mscx', '')
 
 	def debug(self):
 		print(self.basename)
@@ -81,7 +81,7 @@ class Rename:
 		string = string.replace(u'ä', 'ae')
 		string = string.replace(u'Ö', 'Oe')
 		string = string.replace(u'Ü', 'Ue')
-		string = string.replace(u'A', 'Ae')
+		string = string.replace(u'Ä', 'Ae')
 		string = unidecode.unidecode(string)
 		self.basename = string
 		return string
@@ -90,24 +90,23 @@ class Rename:
 		string = self.basename
 
 		to_dashs = [' ', ',', ';', '?', '!', '_']
-
 		for to_dash in to_dashs:
 			string = string.replace(to_dash, '-')
 
-		string = string.replace('\'', '')
+		to_deletes = ['.', '\'', '`', ')']
+		for to_delete in to_deletes:
+			string = string.replace(to_delete, '')
+
 		string = string.replace('(', '_')
-		string = string.replace(')', '')
 		string = string.replace('-_', '_')
 
 		import re
 		# Replace two or more dashes with one.
-		string = re.sub('-+', '-', string)
+		string = re.sub('-{2,}', '_', string)
 		# Remove dash at the begining
 		string = re.sub('^-', '', string)
 		# Remove the dash from the end
 		string = re.sub('-$', '', string)
-
-
 
 		self.basename = string
 		return string
