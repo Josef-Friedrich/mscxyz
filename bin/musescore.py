@@ -50,6 +50,19 @@ def get_lieder_folder():
 def backup():
 	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
 
+def get_all_mscx():
+	path = os.getcwd()
+
+	mscx_files = []
+
+	for root, dirs, files in os.walk(path):
+		for file in files:
+			if file.endswith('.mscx'):
+				file_path = os.path.join(root, file)
+				mscx_files.append(file_path)
+
+	return mscx_files
+
 class Tree:
 	def __init__(self, file_name = ''):
 		if not file_name:
