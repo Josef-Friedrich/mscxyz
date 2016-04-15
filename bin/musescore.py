@@ -66,6 +66,21 @@ def transliterate(string):
 	import unidecode
 	return unidecode.unidecode(string)
 
+def clean_filename(string):
+	import re
+	string = transliterate(string)
+
+	to_dashs = [' ', ',', '.', ';', '?', '!', '_']
+
+	for to_dash in to_dashs:
+		string = string.replace(to_dash, '-')
+
+	string = re.sub('-+', '-', string)
+	string = re.sub('^-', '', string)
+	string = re.sub('-$', '', string)
+
+	return string
+
 class Tree:
 
 	def __init__(self, file_name = ''):
