@@ -67,7 +67,7 @@ def transliterate(string):
 	return unidecode.unidecode(string)
 
 def clean_filename(string):
-	import re
+
 	string = transliterate(string)
 
 	to_dashs = [' ', ',', '.', ';', '?', '!', '_']
@@ -75,8 +75,12 @@ def clean_filename(string):
 	for to_dash in to_dashs:
 		string = string.replace(to_dash, '-')
 
+	import re
+	# Replace two or more dashes with one.
 	string = re.sub('-+', '-', string)
+	# Remove dash at the begining
 	string = re.sub('^-', '', string)
+	# Remove the dash from the end
 	string = re.sub('-$', '', string)
 
 	return string
