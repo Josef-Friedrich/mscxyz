@@ -89,11 +89,11 @@ class Rename:
 	def clean(self):
 		string = self.basename
 
-		to_dashs = [' ', ',', ';', '?', '!', '_']
+		to_dashs = [' ', ';', '?', '!', '_', '#', '&']
 		for to_dash in to_dashs:
 			string = string.replace(to_dash, '-')
 
-		to_deletes = ['.', '\'', '`', ')']
+		to_deletes = [',', '.', '\'', '`', ')']
 		for to_delete in to_deletes:
 			string = string.replace(to_delete, '')
 
