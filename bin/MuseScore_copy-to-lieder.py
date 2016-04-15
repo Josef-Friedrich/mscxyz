@@ -6,8 +6,8 @@ import shutil
 import musescore
 
 if len(sys.argv) < 2:
-    print('Usage: ' + sys.argv[0] + ' <musescore-file.mscx>')
-    sys.exit()
+	print('Usage: ' + sys.argv[0] + ' <musescore-file.mscx>')
+	sys.exit()
 
 ms_path = os.path.abspath(sys.argv[1])
 ms_file = os.path.basename(sys.argv[1])

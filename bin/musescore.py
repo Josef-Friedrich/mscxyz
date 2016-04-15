@@ -1,10 +1,5 @@
 import os
 import sys
-import subprocess
-import json
-import errno
-import shutil
-import lxml.etree as et
 
 # Name of the score file
 score = ''
@@ -26,6 +21,7 @@ def get_style_folder():
 		return home + '/Dokumente/' + style_folder
 
 def re_open():
+	import subprocess
 	mac_ms = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac_ms):
 		subprocess.call([mac_ms, "-o", score, score])
@@ -33,11 +29,13 @@ def re_open():
 		subprocess.call(["mscore", "-o", score, score])
 
 def create_info(json_file, data):
+	import json
 	out_file = open(json_file, 'w')
 	json.dump(data, out_file, indent=4)
 	out_file.close()
 
 def create_dir(path):
+	import errno
 	try:
 		os.makedirs(path)
 	except OSError as exception:
@@ -48,6 +46,7 @@ def get_lieder_folder():
 	return os.path.expanduser('~') + '/git-repositories/content/lieder/songs/'
 
 def backup():
+	import shutil
 	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
 
 def get_all_mscx():
@@ -63,8 +62,15 @@ def get_all_mscx():
 
 	return mscx_files
 
+def transliterate(string):
+	import unidecode
+	return unidecode.unidecode(string)
+
+
 class Tree:
+
 	def __init__(self, file_name = ''):
+		import lxml.etree as et
 		if not file_name:
 			self.file_name = score
 		else:
@@ -72,6 +78,7 @@ class Tree:
 		self.tree = et.parse(self.file_name)
 
 	def stripTags(self, *tags):
+		import lxml.etree as et
 		et.strip_tags(self.tree, tags)
 
 	def removeTagsByXPath(self, *xpath_strings):
