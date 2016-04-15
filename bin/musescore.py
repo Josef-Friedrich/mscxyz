@@ -96,6 +96,19 @@ class Tree:
 			if element.find('style').text == name:
 				return element.find('text').text
 
+	def setVBox(self, style, text):
+		import lxml.etree as et
+		tag_root = et.Element('Text')
+		tag_text = et.SubElement(tag_root, 'text')
+		tag_text.text = text
+		tag_style = et.SubElement(tag_root, 'style')
+		tag_style.text = style
+		print(tag_root)
+
+		for element in self.root.xpath('//VBox'):
+			element.append(tag_root)
+
+
 	def setMetaTag(self, name, text):
 		element = self.root.xpath("//metaTag[@name='" + name + "']")
 		element[0].text = text
