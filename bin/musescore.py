@@ -9,7 +9,7 @@ import lxml.etree as et
 # Name of the score file
 score = ''
 
-def catch_args(number_of_args, usage_text):
+def catch_args(number_of_args = 1, usage_text = ' <musescore-fle.mscx>'):
 	if len(sys.argv) < number_of_args + 1:
 		print('Usage: ' + os.path.basename(sys.argv[0]) + ' ' + usage_text)
 		sys.exit()
@@ -69,6 +69,10 @@ class Tree:
 	def getMetaTag(self, name):
 		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
 		return element[0].text
+
+	def setMetaTag(self, name, text):
+		element = self.tree.getroot().xpath("//metaTag[@name='" + name + "']")
+		element[0].text =  text
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
