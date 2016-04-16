@@ -2,8 +2,9 @@
 
 import musescore
 
-musescore.catch_args()
+files = musescore.get_all_mscx()
 
-meta = musescore.Meta()
-meta.createVBox()
-meta.write()
+for file in files:
+	meta = musescore.Meta(file)
+	print(meta.getMetaTagText('composer'))
+t

@@ -71,13 +71,12 @@ class Rename:
 		self.basename = os.path.basename(full_path)
 
 	def prepareBasename(self):
-		self.basename = self.basename.replace('.mscx', '')
-		self.basename = self.basename.decode('utf-8')
+		self.basename = self.basename.replace('.mscx', '').decode('utf-8')
 
 	def replaceGermanUmlaute(self):
 		umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü', 'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
 		for replace, search in umlaute.iteritems():
-		self.basename = self.basename.replace(search, replace)
+			self.basename = self.basename.replace(search, replace)
 
 	def transliterate(self):
 		import unidecode
@@ -99,7 +98,7 @@ class Rename:
 		import re
 		# Replace two or more dashes with one.
 		string = re.sub('-{2,}', '_', string)
-		string = re.sub('__{2,}', '_', string)
+		string = re.sub('_{2,}', '_', string)
 		# Remove dash at the begining
 		string = re.sub('^-', '', string)
 		# Remove the dash from the end
@@ -148,8 +147,11 @@ class Tree:
 class Meta(Tree):
 
 	def getMetaTag(self, name):
-		element = self.root.xpath("//metaTag[@name='" + name + "']")
-		return element[0].text
+		for element in self.root.xpath("//metaTag[@name='" + name + "']"):
+			return element
+
+	def getMetaTagText(self, name):
+		return self.getMetaTag(name).text
 
 	def setMetaTag(self, name, text):
 		element = self.root.xpath("//metaTag[@name='" + name + "']")
