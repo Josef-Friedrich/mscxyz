@@ -6,6 +6,14 @@ import sys
 # Name of the score file
 score = ''
 
+def safe_unicode(text):
+    try:
+        return unicode(text)
+    except UnicodeDecodeError:
+        ascii_text = str(text).encode('utf-8')
+        return unicode(ascii_text)
+
+
 def catch_args(number_of_args = 1, usage_text = ' <musescore-fle.mscx>'):
 	if len(sys.argv) < number_of_args + 1:
 		print('Usage: ' + os.path.basename(sys.argv[0]) + ' ' + usage_text)
@@ -215,10 +223,21 @@ class Meta(Tree):
 			self.insertInVBox(style, text)
 
 	def syncMetaTags(self):
-		print(self.basename)
-		print(self.getMetaTagText('workTitle'))
-		print(self.getMetaTagText('movementTitle'))
-		print(self.getVBox('Title'))
+		titles = {}
 
+		titles['vbox'] = self.getVBox('Title')
+		titles['work'] = self.getMetaTagText('workTitle')
+		titles['movement'] = self.getMetaTagText('movementTitle')
+		titles['file'] = os.path.basename(self.file_name).replace('.mscx', '')
+
+
+		for key, title in titles.iteritems():
+			if title:
+				break
+
+		title = safe_unicode(title)
+		self.setVBox('Title', title)
+		self.setMetaTag('workTitle', title)
+		self.setMetaTag('movementTitle', '')
 
 
