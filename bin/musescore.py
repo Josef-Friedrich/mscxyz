@@ -3,16 +3,11 @@
 import os
 import sys
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 # Name of the score file
 score = ''
-
-def safe_unicode(text):
-    try:
-        return unicode(text)
-    except UnicodeDecodeError:
-        ascii_text = str(text).encode('utf-8')
-        return unicode(ascii_text)
-
 
 def catch_args(number_of_args = 1, usage_text = ' <musescore-fle.mscx>'):
 	if len(sys.argv) < number_of_args + 1:
@@ -235,7 +230,7 @@ class Meta(Tree):
 			if title:
 				break
 
-		title = safe_unicode(title)
+		title = title.decode('utf-8')
 		self.setVBox('Title', title)
 		self.setMetaTag('workTitle', title)
 		self.setMetaTag('movementTitle', '')
