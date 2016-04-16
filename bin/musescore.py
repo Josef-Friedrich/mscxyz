@@ -214,5 +214,11 @@ class Meta(Tree):
 		else:
 			self.insertInVBox(style, text)
 
+	def syncMetaTags(self):
+		print(self.basename)
+		print(self.getMetaTagText('workTitle'))
+		print(self.getMetaTagText('movementTitle'))
+		print(self.getVBox('Title'))
+
 
 
