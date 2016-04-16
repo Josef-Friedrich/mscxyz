@@ -142,6 +142,16 @@ class Tree:
 			for rm in self.tree.xpath(xpath_string):
 				rm.getparent().remove(rm)
 
+	def addSubElement(self, root_tag, tag, text):
+		import lxml.etree as et
+		tag = et.SubElement(root_tag, tag)
+		tag.text = text
+
+	def write(self):
+		self.tree.write(self.file_name, encoding='UTF-8')
+
+class Meta(Tree):
+
 	def getMetaTag(self, name):
 		element = self.root.xpath("//metaTag[@name='" + name + "']")
 		return element[0].text
@@ -149,6 +159,15 @@ class Tree:
 	def setMetaTag(self, name, text):
 		element = self.root.xpath("//metaTag[@name='" + name + "']")
 		element[0].text = text
+
+	def createVBox(self):
+		import lxml.etree as et
+		xpath = '/museScore/Score/Staff[@id="1"]'
+		if not self.root.xpath(xpath + '/VBox'):
+			tag = et.Element('VBox')
+			self.addSubElement(tag, 'height', '10')
+			for element in self.root.xpath(xpath):
+				element.insert(0, tag)
 
 	def getVBox(self, name):
 		for element in self.root.xpath('//VBox/Text'):
@@ -161,11 +180,6 @@ class Tree:
 				tag_text = element.find('text')
 				tag_text.text = text
 
-	def addSubElement(self, root_tag, tag, text):
-		import lxml.etree as et
-		tag = et.SubElement(root_tag, tag)
-		tag.text = text
-
 	def insertInVBox(self, style, text):
 		import lxml.etree as et
 		tag = et.Element('Text')
@@ -173,16 +187,4 @@ class Tree:
 		self.addSubElement(tag, 'style', style)
 		for element in self.root.xpath('//VBox'):
 			element.append(tag)
-
-	def createVBox(self):
-		import lxml.etree as et
-		xpath = '/museScore/Score/Staff[@id="1"]'
-		if not self.root.xpath(xpath + '/VBox'):
-			tag = et.Element('VBox')
-			self.addSubElement(tag, 'height', '10')
-			for element in self.root.xpath(xpath):
-				element.insert(0, tag)
-
-	def write(self):
-		self.tree.write(self.file_name, encoding='UTF-8')
 

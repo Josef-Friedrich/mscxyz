@@ -4,6 +4,6 @@ import musescore
 
 musescore.catch_args()
 
-tree = musescore.Tree()
-tree.createVBox()
-tree.write()
+meta = musescore.Meta()
+meta.createVBox()
+meta.write()
