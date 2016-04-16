@@ -172,10 +172,15 @@ class Tree:
 		for element in self.root.xpath('//VBox'):
 			element.append(tag_root)
 
+	def createVBox(self):
+		import lxml.etree as et
+		tag_vbox = et.Element('VBox')
+		tag_height = et.SubElement(tag_vbox, 'height')
+		tag_height.text = '10'
+
+		for element in self.root.xpath('/museScore/Score/Staff[@id="1"]'):
+			element.append(tag_vbox)
+
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
-
-
-	def printFilename(self):
-		print(fiile)
 
