@@ -161,25 +161,27 @@ class Tree:
 				tag_text = element.find('text')
 				tag_text.text = text
 
+	def addSubElement(self, root_tag, tag, text):
+		import lxml.etree as et
+		tag = et.SubElement(root_tag, tag)
+		tag.text = text
+
 	def insertInVBox(self, style, text):
 		import lxml.etree as et
-		tag_root = et.Element('Text')
-		tag_text = et.SubElement(tag_root, 'text')
-		tag_text.text = text
-		tag_style = et.SubElement(tag_root, 'style')
-		tag_style.text = style
-
+		tag = et.Element('Text')
+		self.addSubElement(tag, 'text', text)
+		self.addSubElement(tag, 'style', style)
 		for element in self.root.xpath('//VBox'):
-			element.append(tag_root)
+			element.append(tag)
 
 	def createVBox(self):
 		import lxml.etree as et
-		tag_vbox = et.Element('VBox')
-		tag_height = et.SubElement(tag_vbox, 'height')
-		tag_height.text = '10'
-
-		for element in self.root.xpath('/museScore/Score/Staff[@id="1"]'):
-			element.append(tag_vbox)
+		xpath = '/museScore/Score/Staff[@id="1"]'
+		if not self.root.xpath(xpath + '/VBox'):
+			tag = et.Element('VBox')
+			self.addSubElement(tag, 'height', '10')
+			for element in self.root.xpath(xpath):
+				element.insert(0, tag)
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
