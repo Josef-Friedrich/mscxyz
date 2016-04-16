@@ -127,6 +127,11 @@ class Tree:
 		self.tree = et.parse(self.file_name)
 		self.root = self.tree.getroot()
 
+	def addSubElement(self, root_tag, tag, text):
+		import lxml.etree as et
+		tag = et.SubElement(root_tag, tag)
+		tag.text = text
+
 	def stripTags(self, *tags):
 		import lxml.etree as et
 		et.strip_tags(self.tree, tags)
@@ -136,10 +141,9 @@ class Tree:
 			for rm in self.tree.xpath(xpath_string):
 				rm.getparent().remove(rm)
 
-	def addSubElement(self, root_tag, tag, text):
-		import lxml.etree as et
-		tag = et.SubElement(root_tag, tag)
-		tag.text = text
+	def clean(self):
+		self.removeTagsByXPath('/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
+		self.stripTags('font', 'b', 'i')
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
@@ -165,21 +169,10 @@ class Meta(Tree):
 			for element in self.root.xpath(xpath):
 				element.insert(0, tag)
 
-	def getVBoxTag(self, name):
+	def getVBoxTag(self, style):
 		for element in self.root.xpath('//VBox/Text'):
-			if element.find('style').text == name:
+			if element.find('style').text == style:
 				return element.find('text')
-
-	def getVBox(self, name):
-		element = self.getVBoxTag(name)
-		if hasattr(element, 'text'):
-			return element.text
-
-	def setVBox(self, name, text):
-		for element in self.root.xpath('//VBox/Text'):
-			if element.find('style').text == name:
-				tag_text = element.find('text')
-				tag_text.text = text
 
 	def insertInVBox(self, style, text):
 		import lxml.etree as et
@@ -188,4 +181,19 @@ class Meta(Tree):
 		self.addSubElement(tag, 'style', style)
 		for element in self.root.xpath('//VBox'):
 			element.append(tag)
+
+	def getVBox(self, style):
+		element = self.getVBoxTag(style)
+		if hasattr(element, 'text'):
+			return element.text
+
+	def setVBox(self, style, text):
+		self.createVBox()
+		element = self.getVBoxTag(style)
+		if hasattr(element, 'text'):
+			element.text = text
+		else:
+			self.insertInVBox(style, text)
+
+
 
