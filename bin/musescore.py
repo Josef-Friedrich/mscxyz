@@ -75,14 +75,9 @@ class Rename:
 		self.basename = self.basename.decode('utf-8')
 
 	def replaceGermanUmlaute(self):
-		string = self.basename
-		string = string.replace(u'ö', 'oe')
-		string = string.replace(u'ü', 'ue')
-		string = string.replace(u'ä', 'ae')
-		string = string.replace(u'Ö', 'Oe')
-		string = string.replace(u'Ü', 'Ue')
-		string = string.replace(u'Ä', 'Ae')
-		self.basename = string
+		umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü', 'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
+		for replace, search in umlaute.iteritems():
+		self.basename = self.basename.replace(search, replace)
 
 	def transliterate(self):
 		import unidecode
