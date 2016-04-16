@@ -5,6 +5,7 @@ import musescore
 files = musescore.get_all_mscx()
 
 for file in files:
+	print(file)
 	meta = musescore.Meta(file)
-	print(meta.getMetaTagText('composer'))
-t
+	print(meta.getVBox('Title'))
+

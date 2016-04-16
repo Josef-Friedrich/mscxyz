@@ -147,15 +147,14 @@ class Tree:
 class Meta(Tree):
 
 	def getMetaTag(self, name):
-		for element in self.root.xpath("//metaTag[@name='" + name + "']"):
+		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
 			return element
 
 	def getMetaTagText(self, name):
 		return self.getMetaTag(name).text
 
 	def setMetaTag(self, name, text):
-		element = self.root.xpath("//metaTag[@name='" + name + "']")
-		element[0].text = text
+		self.getMetaTag(name).text = text
 
 	def createVBox(self):
 		import lxml.etree as et
@@ -166,10 +165,15 @@ class Meta(Tree):
 			for element in self.root.xpath(xpath):
 				element.insert(0, tag)
 
-	def getVBox(self, name):
+	def getVBoxTag(self, name):
 		for element in self.root.xpath('//VBox/Text'):
 			if element.find('style').text == name:
-				return element.find('text').text
+				return element.find('text')
+
+	def getVBox(self, name):
+		element = self.getVBoxTag(name)
+		if hasattr(element, 'text'):
+			return element.text
 
 	def setVBox(self, name, text):
 		for element in self.root.xpath('//VBox/Text'):
