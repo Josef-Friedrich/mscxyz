@@ -4,10 +4,13 @@ import musescore
 
 files = musescore.get_all_mscx()
 
+
+
 for file in files:
-	print(file)
+	print('\n\n' + file)
 	meta = musescore.Meta(file)
-	meta.clean()
-	meta.setVBox('Title', 'Test')
-	meta.write()
+	meta.getAllMetaTags()
+	#meta.clean()
+	#meta.setVBox('Title', 'Test')
+	#meta.write()
 

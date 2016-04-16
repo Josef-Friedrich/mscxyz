@@ -157,6 +157,25 @@ class Meta(Tree):
 	def getMetaTagText(self, name):
 		return self.getMetaTag(name).text
 
+	def getAllMetaTags(self):
+ 		tags = [
+ 			"arranger",
+ 			"composer",
+ 			"copyright",
+ 			"lyricist",
+ 			"movementNumber",
+ 			"movementTitle",
+ 			"poet",
+ 			"source",
+ 			"translator",
+ 			"workNumber",
+ 			"workTitle"
+ 			]
+ 		for tag in tags:
+ 			text = self.getMetaTagText(tag)
+ 			if text:
+ 				print(tag + ': ' + text)
+
 	def setMetaTag(self, name, text):
 		self.getMetaTag(name).text = text
 
