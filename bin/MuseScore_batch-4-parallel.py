@@ -4,14 +4,25 @@ import os
 import sys
 import musescore
 
+def execute(score, counter):
+	print('File number ' + str(counter) + ': ' + score)
+
 if len(sys.argv) < 2:
-	print('Usage: ' + os.path.basename(sys.argv[0]) + ' <number_1-4>')
+	print('Usage: ' + os.path.basename(sys.argv[0]) + ' <start-number> <cycle-number>')
 	sys.exit()
 
-files = musescore.get_files('mscx')
+start_number = int(sys.argv[1])
 
+if len(sys.argv) > 2:
+	cycle_number = int(sys.argv[2])
+else:
+	cycle_number = 4
+
+files = musescore.get_files('mscx')
+hit = start_number
 counter = 0
 for score in files:
 	counter += 1
-	print(str(counter) + ': ' + score)
-
+	if hit == counter:
+		execute(score, counter)
+		hit = hit + cycle_number
