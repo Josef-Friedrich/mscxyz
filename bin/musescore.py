@@ -39,7 +39,6 @@ def mscore(args):
 def re_open():
 	mscore(['-o', score, score])
 
-
 def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')
 	mscore(['-o', output_file, input_file])
@@ -76,6 +75,19 @@ def get_files(extension = 'mscx'):
 				file_path = os.path.join(root, file)
 				output.append(file_path)
 	return output
+
+def rename_bad_musicxml_extensions():
+	numbers = ['1', '2', '3', '4', '5']
+
+	for number in numbers:
+		print(number)
+		files = musescore.get_files('mxl.' + number)
+
+		for score in files:
+			new_number = int(number) + 1 
+			new_score = score.replace('.mxl.' + number, '[' + str(new_number) + '].mxl')
+			print(score + ' -> ' + new_score)
+			os.rename(score, new_score)
 
 class Rename:
 
