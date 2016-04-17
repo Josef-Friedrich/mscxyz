@@ -3,6 +3,9 @@
 
 import musescore
 
-filename = u',Lasst, uns heute fröhlich springen!'
+files = musescore.get_files('mxl')
 
-print(musescore.clean_filename(filename))
+for file in files:
+	print('\n' + file)
+	musescore.convert_mxl(file)
+

@@ -25,13 +25,25 @@ def get_style_folder():
 	elif os.path.exists(home + '/Dokumente/' + style_folder):
 		return home + '/Dokumente/' + style_folder
 
-def re_open():
+def mscore(args):
 	import subprocess
-	mac_ms = '/Applications/MuseScore.app/Contents/MacOS/mscore'
-	if os.path.exists(mac_ms):
-		subprocess.call([mac_ms, "-o", score, score])
+	mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
+	if os.path.exists(mac):
+		executeable = mac
 	else:
-		subprocess.call(["mscore", "-o", score, score])
+		executeable = 'mscore'
+
+	args.insert(0, executeable)
+	subprocess.call(args)
+
+def re_open():
+	mscore(['-o', score, score])
+
+
+def convert_mxl(input_file):
+	output_file = input_file.replace('.mxl', '.mscx')
+	mscore(['-o', output_file, input_file])
+	os.remove(input_file)
 
 def create_info(json_file, data):
 	import json
@@ -54,18 +66,16 @@ def backup():
 	import shutil
 	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
 
-def get_all_mscx():
+def get_files(extension = 'mscx'):
 	path = os.getcwd()
 
-	mscx_files = []
-
+	output = []
 	for root, dirs, files in os.walk(path):
 		for file in files:
-			if file.endswith('.mscx'):
+			if file.endswith('.' + extension):
 				file_path = os.path.join(root, file)
-				mscx_files.append(file_path)
-
-	return mscx_files
+				output.append(file_path)
+	return output
 
 class Rename:
 
