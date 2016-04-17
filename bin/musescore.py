@@ -146,7 +146,7 @@ class Tree:
 
 	def clean(self):
 		self.removeTagsByXPath('/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-		self.stripTags('font', 'b', 'i')
+		self.stripTags('font', 'b', 'i', 'pos')
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
@@ -217,14 +217,13 @@ class Meta(Tree):
 		else:
 			self.insertInVBox(style, text)
 
-	def syncMetaTags(self):
+	def syncTitle(self):
 		titles = {}
 
 		titles['vbox'] = self.getVBox('Title')
 		titles['work'] = self.getMetaTagText('workTitle')
 		titles['movement'] = self.getMetaTagText('movementTitle')
 		titles['file'] = os.path.basename(self.file_name).replace('.mscx', '')
-
 
 		for key, title in titles.iteritems():
 			if title:
@@ -234,5 +233,51 @@ class Meta(Tree):
 		self.setVBox('Title', title)
 		self.setMetaTag('workTitle', title)
 		self.setMetaTag('movementTitle', '')
+
+	def syncComposer(self):
+		values = {}
+
+		values['vbox'] = self.getVBox('Composer')
+		values['meta'] = self.getMetaTagText('composer')
+
+		for key, value in values.iteritems():
+			if value:
+				value = value.decode('utf-8')
+				self.setVBox('Composer', value)
+				self.setMetaTag('composer', value)
+				break
+
+	def syncLyricist(self):
+		values = {}
+
+		values['vbox'] = self.getVBox('Lyricist')
+		values['meta'] = self.getMetaTagText('lyricist')
+
+		for key, value in values.iteritems():
+			if value:
+				value = value.decode('utf-8')
+				self.setVBox('Lyricist', value)
+				self.setMetaTag('lyricist', value)
+				break
+
+	def cleanMetaTags(self):
+		tags = [
+			"arranger",
+			"copyright",
+			"movementNumber",
+			"movementTitle",
+			"poet",
+			"translator",
+			"workNumber"
+			]
+		for tag in tags:
+			self.setMetaTag(tag, '')
+
+	def syncMetaTags(self):
+		self.syncTitle()
+		self.syncComposer()
+		self.syncLyricist()
+		self.cleanMetaTags()
+
 
 
