@@ -36,8 +36,10 @@ def mscore(args):
 	args.insert(0, executeable)
 	subprocess.call(args)
 
-def re_open():
-	mscore(['-o', score, score])
+def re_open(input_file):
+	if not input_file:
+		input_file = score
+	mscore(['-o', input_file, input_file])
 
 def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')

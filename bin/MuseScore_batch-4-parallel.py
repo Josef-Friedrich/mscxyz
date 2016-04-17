@@ -6,6 +6,12 @@ import musescore
 
 def execute(score, counter):
 	print('File number ' + str(counter) + ': ' + score)
+	ms = musescore.Meta(score)
+	ms.clean()
+	ms.syncMetaTags()
+	ms.write()
+	musescore.re_open(score)
+
 
 if len(sys.argv) < 2:
 	print('Usage: ' + os.path.basename(sys.argv[0]) + ' <start-number> <cycle-number>')
