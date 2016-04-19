@@ -9,7 +9,7 @@ sys.setdefaultencoding('utf8')
 # Name of the score file
 score = ''
 
-def catch_args(number_of_args = 1, usage_text = ' <musescore-fle.mscx>'):
+def catch_args(number_of_args = 1, usage_text = ' <musescore-file.mscx>'):
 	if len(sys.argv) < number_of_args + 1:
 		print('Usage: ' + os.path.basename(sys.argv[0]) + ' ' + usage_text)
 		sys.exit()
@@ -67,9 +67,13 @@ def backup():
 	import shutil
 	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
 
-def get_files(extension = 'mscx'):
-	path = os.getcwd()
+def get_mscx(path):
+	if os.path.isdir(path):
+		return get_files(path, 'mscx')
+	else:
+		return [path]
 
+def get_files(path, extension = 'mscx'):
 	output = []
 	for root, dirs, files in os.walk(path):
 		for file in files:
@@ -85,7 +89,7 @@ def rename_bad_musicxml_extensions():
 		files = musescore.get_files('mxl.' + number)
 
 		for score in files:
-			new_number = int(number) + 1 
+			new_number = int(number) + 1
 			new_score = score.replace('.mxl.' + number, '[' + str(new_number) + '].mxl')
 			os.rename(score, new_score)
 
