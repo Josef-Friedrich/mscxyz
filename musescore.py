@@ -17,6 +17,49 @@ def catch_args(number_of_args = 1, usage_text = ' <musescore-file.mscx>'):
 	global score
 	score = sys.argv[1]
 
+def batch():
+	start_number = int(sys.argv[1])
+
+	if len(sys.argv) > 2:
+		cycle_number = int(sys.argv[2])
+	else:
+		cycle_number = 4
+
+	files = musescore.get_files('mscx')
+	hit = start_number
+	counter = 0
+	for score in files:
+		counter += 1
+		if hit == counter:
+			execute(score, counter)
+			hit = hit + cycle_number
+
+def extract_lyrics():
+	ms_file = sys.argv[1]
+	lyrics_no_display = sys.argv[2]
+	lyrics_no = str(int(lyrics_no_display) - 1)
+	new_file = ms_file.replace('.mscx', '_Lyrics-no-' + lyrics_no_display + '.mscx')
+
+	print(new_file)
+
+	mscx = et.parse(ms_file)
+
+	for lyric in mscx.findall('.//Lyrics'):
+		number = lyric.find('no')
+		if hasattr(number, 'text'):
+			no = number.text
+		else:
+			no = '0'
+
+		if no != lyrics_no:
+			lyric.getparent().remove(lyric)
+		elif hasattr(number, 'text'):
+			number.text = '0'
+
+	# To get closing tag use method 'html'
+	mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+
+
 def get_style_folder():
 	style_folder = 'MuseScore2/Stile'
 	home = os.path.expanduser('~')
@@ -45,6 +88,26 @@ def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')
 	mscore(['-o', output_file, input_file])
 	os.remove(input_file)
+
+def metadata_to_json():
+	title = get_meta_tag('workTitle')
+	composer = get_meta_tag('composer')
+	lyricist = get_meta_tag('lyricist')
+
+	print('Title: ' + str(title) + '; Composer: ' + str(composer) + '; Lyricist: ' + str(lyricist))
+
+	data = {}
+	data['title'] = title
+
+	if composer:
+		data['composer'] = composer
+
+	if lyricist:
+		data['lyricist'] = lyricist
+
+	out_file = open("test.json","w")
+	json.dump(data,out_file, indent=4)
+	out_file.close()
 
 def create_info(json_file, data):
 	import json
