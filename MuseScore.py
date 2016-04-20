@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import argparse
 import musescore
@@ -13,7 +14,3 @@ parser.add_argument('-j', '--json', action='store_true',
 parser.add_argument('-b', '--backup', action='store_true',
 	help='Create a backup file.')
 args = parser.parse_args()
-
-files = musescore.get_mscx(args.path)
-for score in files:
-	print(score)
