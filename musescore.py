@@ -2,6 +2,7 @@
 
 import os
 import sys
+from termcolor import colored, cprint
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -232,6 +233,9 @@ class Tree(File):
 
 class Meta(Tree):
 
+	def __init__(self, fullpath):
+		super(Meta, self).__init__(fullpath)
+
 	def getMetaTag(self, name):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
 			return element
@@ -239,7 +243,8 @@ class Meta(Tree):
 	def getMetaTagText(self, name):
 		return self.getMetaTag(name).text
 
-	def getAllMetaTags(self):
+	def show(self):
+		cprint('\n' + self.basename,'red')
  		tags = [
  			"arranger",
  			"composer",

@@ -17,8 +17,7 @@ def meta(args):
 		meta = musescore.Meta(score)
 		rename = musescore.Rename(score)
 		if args.show:
-			meta.getAllMetaTags()
-			#rename.debug()
+			meta.show()
 		else:
 			meta.syncMetaTags()
 			meta.write()
