@@ -9,6 +9,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 def main():
+	"""Expose the command line interface."""
 	import argparse
 	import musescore
 
