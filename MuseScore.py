@@ -5,18 +5,22 @@ import argparse
 import musescore
 
 def clean(args):
-	print(args)
+	for score in musescore.get_mscx(args.path):
+		print(score)
 
 def lyrics(args):
-	print(args)
+	for score in musescore.get_mscx(args.path):
+		print(score)
 
 def meta(args):
-	print('meta')
-	print(args)
+	for score in musescore.get_mscx(args.path):
+		meta = musescore.Meta(score)
+		meta.syncMetaTags()
+		meta.write()
 
 def rename(args):
-	print('meta')
-	print(args)
+	for score in musescore.get_mscx(args.path):
+		print(score)
 
 parser = argparse.ArgumentParser(description='Muggle the *.mscx files \
 	of the notation software MuseScore.')
@@ -67,5 +71,3 @@ parser.add_argument('path', help='Path to a *.mscx file or a \
 
 args = parser.parse_args()
 args.func(args)
-
-#print(args)

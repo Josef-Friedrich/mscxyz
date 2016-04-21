@@ -9,14 +9,6 @@ sys.setdefaultencoding('utf8')
 # Name of the score file
 score = ''
 
-def catch_args(number_of_args = 1, usage_text = ' <musescore-file.mscx>'):
-	if len(sys.argv) < number_of_args + 1:
-		print('Usage: ' + os.path.basename(sys.argv[0]) + ' ' + usage_text)
-		sys.exit()
-
-	global score
-	score = sys.argv[1]
-
 def batch():
 	start_number = int(sys.argv[1])
 
@@ -239,6 +231,7 @@ class Tree:
 
 	def write(self):
 		self.tree.write(self.file_name, encoding='UTF-8')
+		re_open(self.file_name)
 
 class Meta(Tree):
 
