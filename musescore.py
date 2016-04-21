@@ -442,5 +442,5 @@ class Meta(Tree):
 		self.syncLyricist()
 		self.cleanMetaTags()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	main()
