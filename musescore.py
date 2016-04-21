@@ -231,6 +231,7 @@ class File(object):
 		self.fullpath = fullpath
 		self.dirname = os.path.dirname(fullpath)
 		self.basename = os.path.basename(fullpath)
+		self.filename = self.basename.replace('.mscx', '').decode('utf-8')
 
 class Rename(File):
 
@@ -316,32 +317,54 @@ class Meta(Tree):
 	def __init__(self, fullpath):
 		super(Meta, self).__init__(fullpath)
 
+		tags = [
+			"arranger",
+			"composer",
+			"copyright",
+			"creationDate",
+			"lyricist",
+			"movementNumber",
+			"movementTitle",
+			"originalFormat",
+			"platform",
+			"poet",
+			"source",
+			"translator",
+			"workNumber",
+			"workTitle"
+		]
+
+		self.meta = {}
+		for tag in tags:
+			text = self.getMetaTagText(tag)
+			if text:
+				self.meta[tag] = text.decode('utf-8')
+			else:
+				self.meta[tag] = ''
+
+		tags = [
+			"Title",
+			"Subtitle",
+			"Composer",
+			"Lyricist"
+		]
+
+		self.vbox = {}
+		for tag in tags:
+			text = self.getVBox(tag)
+			if text:
+				self.vbox[tag] = text.decode('utf-8')
+			else:
+				self.vbox[tag] = ''
+
 	def getMetaTag(self, name):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
 			return element
 
 	def getMetaTagText(self, name):
-		return self.getMetaTag(name).text
-
-	def show(self):
-		cprint('\n' + self.basename,'red')
- 		tags = [
- 			"arranger",
- 			"composer",
- 			"copyright",
- 			"lyricist",
- 			"movementNumber",
- 			"movementTitle",
- 			"poet",
- 			"source",
- 			"translator",
- 			"workNumber",
- 			"workTitle"
- 			]
- 		for tag in tags:
- 			text = self.getMetaTagText(tag)
- 			if text:
- 				print(tag + ': ' + text)
+		element = self.getMetaTag(name)
+		if hasattr(element, 'text'):
+			return element.text
 
 	def setMetaTag(self, name, text):
 		self.getMetaTag(name).text = text
@@ -382,44 +405,41 @@ class Meta(Tree):
 			self.insertInVBox(style, text)
 
 	def syncTitle(self):
-		titles = {}
+		values = [
+			self.vbox['Title'],
+			self.meta['workTitle'],
+			self.meta['movementTitle'],
+			self.filename
+		]
 
-		titles['vbox'] = self.getVBox('Title')
-		titles['work'] = self.getMetaTagText('workTitle')
-		titles['movement'] = self.getMetaTagText('movementTitle')
-		titles['file'] = os.path.basename(self.file_name).replace('.mscx', '')
-
-		for key, title in titles.iteritems():
-			if title:
+		for value in values:
+			if value:
 				break
 
-		title = title.decode('utf-8')
-		self.setVBox('Title', title)
-		self.setMetaTag('workTitle', title)
+		self.setVBox('Title', value)
+		self.setMetaTag('workTitle', value)
 		self.setMetaTag('movementTitle', '')
 
 	def syncComposer(self):
-		values = {}
+		values = [
+			self.vbox['Composer'],
+			self.meta['composer']
+		]
 
-		values['vbox'] = self.getVBox('Composer')
-		values['meta'] = self.getMetaTagText('composer')
-
-		for key, value in values.iteritems():
+		for value in values:
 			if value:
-				value = value.decode('utf-8')
 				self.setVBox('Composer', value)
 				self.setMetaTag('composer', value)
 				break
 
 	def syncLyricist(self):
-		values = {}
+		values = [
+			self.vbox['Lyricist'],
+			self.meta['lyricist']
+		]
 
-		values['vbox'] = self.getVBox('Lyricist')
-		values['meta'] = self.getMetaTagText('lyricist')
-
-		for key, value in values.iteritems():
+		for value in values:
 			if value:
-				value = value.decode('utf-8')
 				self.setVBox('Lyricist', value)
 				self.setMetaTag('lyricist', value)
 				break
@@ -442,6 +462,19 @@ class Meta(Tree):
 		self.syncComposer()
 		self.syncLyricist()
 		self.cleanMetaTags()
+
+	def show(self):
+		cprint('\n' + self.basename, 'red')
+
+		print(colored('filename', 'blue') + ': ' + self.filename)
+
+		for tag, text in self.meta.iteritems():
+			if text:
+				print(colored(tag, 'yellow') + ': ' + text)
+
+		for tag, text in self.vbox.iteritems():
+			if text:
+				print(colored(tag, 'green') + ': ' + text)
 
 if __name__ == '__main__':
 	main()
