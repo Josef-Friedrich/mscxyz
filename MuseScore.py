@@ -15,8 +15,13 @@ def lyrics(args):
 def meta(args):
 	for score in musescore.get_mscx(args.path):
 		meta = musescore.Meta(score)
-		meta.syncMetaTags()
-		meta.write()
+		rename = musescore.Rename(score)
+		if args.show:
+			meta.getAllMetaTags()
+			#rename.debug()
+		else:
+			meta.syncMetaTags()
+			meta.write()
 
 def rename(args):
 	for score in musescore.get_mscx(args.path):
@@ -49,6 +54,8 @@ parser_meta = subparsers.add_parser('meta', help='Synchronize the \
 	with the corresponding metadata fields.')
 parser_meta.add_argument('-j', '--json', action='store_true',
 	help='Additionally write the metadata to a json file.')
+parser_meta.add_argument('-s', '--show', action='store_true',
+	help='Show all metadata.')
 parser_meta.set_defaults(func=meta)
 
 # lyrics

@@ -6,9 +6,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-# Name of the score file
-score = ''
-
 def batch():
 	start_number = int(sys.argv[1])
 
@@ -148,11 +145,13 @@ def rename_bad_musicxml_extensions():
 			new_score = score.replace('.mxl.' + number, '[' + str(new_number) + '].mxl')
 			os.rename(score, new_score)
 
-class Rename:
+class File(object):
+	def __init__(self, fullpath):
+		self.fullpath = fullpath
+		self.dirname = os.path.dirname(fullpath)
+		self.basename = os.path.basename(fullpath)
 
-	def __init__(self, full_path):
-		self.dirname = os.path.dirname(full_path)
-		self.basename = os.path.basename(full_path)
+class Rename(File):
 
 	def prepareBasename(self):
 		self.basename = self.basename.replace('.mscx', '').decode('utf-8')
@@ -200,15 +199,13 @@ class Rename:
 		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+')
 		self.deleteCharacters(',', '.', '\'', '`', ')')
 		self.cleanUp()
-class Tree:
 
-	def __init__(self, file_name = ''):
+class Tree(File):
+
+	def __init__(self, fullpath):
+		super(Tree, self).__init__(fullpath)
 		import lxml.etree as et
-		if not file_name:
-			self.file_name = score
-		else:
-			self.file_name = file_name
-		self.tree = et.parse(self.file_name)
+		self.tree = et.parse(self.fullpath)
 		self.root = self.tree.getroot()
 
 	def addSubElement(self, root_tag, tag, text):
@@ -230,8 +227,8 @@ class Tree:
 		self.stripTags('font', 'b', 'i', 'pos')
 
 	def write(self):
-		self.tree.write(self.file_name, encoding='UTF-8')
-		re_open(self.file_name)
+		self.tree.write(self.fullpath, encoding='UTF-8')
+		re_open(self.fullpath)
 
 class Meta(Tree):
 
