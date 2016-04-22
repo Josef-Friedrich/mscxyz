@@ -10,6 +10,7 @@ sys.setdefaultencoding('utf8')
 
 def main():
 	"""Expose the command line interface."""
+
 	import argparse
 	import musescore
 
@@ -44,7 +45,8 @@ def main():
 		help='')
 	parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
 		help='')
-
+	parser.add_argument('-v', '--verbosity', nargs=1, default=1,
+		help='Possible values are 1, 2 or 3.')
 	##
 	# subcommand
 	##
@@ -142,7 +144,7 @@ def get_style_folder():
 	elif os.path.exists(home + '/Dokumente/' + style_folder):
 		return home + '/Dokumente/' + style_folder
 
-def mscore(args):
+def mscore(commands):
 	import subprocess
 	mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac):
@@ -150,8 +152,12 @@ def mscore(args):
 	else:
 		executeable = 'mscore'
 
-	args.insert(0, executeable)
-	subprocess.call(args)
+	commands.insert(0, executeable)
+	if 0:
+		OUT = subprocess.PIPE
+	else:
+		OUT = open(os.devnull, 'wb')
+	subprocess.call(commands, stdout=OUT, stderr=OUT)
 
 def re_open(input_file):
 	if not input_file:
