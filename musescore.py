@@ -8,34 +8,10 @@ from termcolor import colored, cprint
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def main():
+def parse():
 	"""Expose the command line interface."""
 
 	import argparse
-	import musescore
-
-	def clean(args):
-		for score in musescore.get_mscx(args.path):
-			print(score)
-
-	def lyrics(args):
-		for score in musescore.get_mscx(args.path):
-			print(score)
-
-	def meta(args):
-		for score in musescore.get_mscx(args.path):
-			meta = musescore.Meta(score)
-			rename = musescore.Rename(score)
-			if args.show:
-				meta.show()
-			else:
-				meta.syncMetaTags()
-				meta.write()
-
-	def rename(args):
-		for score in musescore.get_mscx(args.path):
-			print(score)
-
 	parser = argparse.ArgumentParser(description='Muggle the *.mscx files \
 		of the notation software MuseScore.')
 
@@ -51,8 +27,9 @@ def main():
 	# subcommand
 	##
 
-	subparsers = parser.add_subparsers(title='Subcommands', help='Run \
-		"subcommand --help" for more informations.')
+	subparsers = parser.add_subparsers(title='Subcommands',
+		dest='subcommand', help='Run "subcommand --help" for more \
+		informations.')
 
 	# clean
 	parser_clean = subparsers.add_parser('clean', help='Clean and reset \
@@ -60,7 +37,6 @@ def main():
 	parser_clean.add_argument('-s', '--style', nargs=1,
 		help='Load a *.mss style file and include the contents of this \
 		file.')
-	parser_clean.set_defaults(func=clean)
 
 	# meta
 	parser_meta = subparsers.add_parser('meta', help='Synchronize the \
@@ -70,18 +46,15 @@ def main():
 		help='Additionally write the metadata to a json file.')
 	parser_meta.add_argument('-s', '--show', action='store_true',
 		help='Show all metadata.')
-	parser_meta.set_defaults(func=meta)
 
 	# lyrics
 	parser_lyrics = subparsers.add_parser('lyrics', help='Extract lyrics.')
 	parser_lyrics.add_argument('-n', '--number', nargs=1,
 		help='Number of lyric verses.')
-	parser_lyrics.set_defaults(func=lyrics)
 
 	# rename
 	parser_rename = subparsers.add_parser('rename', help='Rename the \
 		*.mscx files.')
-	parser_rename.set_defaults(func=rename)
 
 	##
 	# suffix positional parameters
@@ -90,8 +63,24 @@ def main():
 	parser.add_argument('path', help='Path to a *.mscx file or a \
 		folder which contains *.mscx files.')
 
-	args = parser.parse_args()
-	args.func(args)
+	return parser.parse_args()
+
+def execute():
+	for score in get_mscx(args.path):
+
+		if args.subcommand == 'clean':
+			print(score)
+		elif args.subcommand == 'lyrics':
+			print(score)
+		elif args.subcommand == 'meta':
+			meta = Meta(score)
+			if args.show:
+				meta.show()
+			else:
+				meta.syncMetaTags()
+				meta.write()
+		elif args.subcommand == 'rename':
+			print(score)
 
 def batch():
 	start_number = int(sys.argv[1])
@@ -101,7 +90,7 @@ def batch():
 	else:
 		cycle_number = 4
 
-	files = musescore.get_files('mscx')
+	files = get_files('mscx')
 	hit = start_number
 	counter = 0
 	for score in files:
@@ -153,7 +142,8 @@ def mscore(commands):
 		executeable = 'mscore'
 
 	commands.insert(0, executeable)
-	if 0:
+	verbosity = args.verbosity[0]
+	if verbosity > 1:
 		OUT = subprocess.PIPE
 	else:
 		OUT = open(os.devnull, 'wb')
@@ -229,7 +219,7 @@ def rename_bad_musicxml_extensions():
 	numbers = ['1', '2', '3', '4', '5']
 
 	for number in numbers:
-		files = musescore.get_files('mxl.' + number)
+		files = get_files('mxl.' + number)
 
 		for score in files:
 			new_number = int(number) + 1
@@ -487,4 +477,6 @@ class Meta(Tree):
 				print(colored(tag, 'green') + ': ' + text)
 
 if __name__ == '__main__':
-	main()
+	args = parse()
+	execute()
+
