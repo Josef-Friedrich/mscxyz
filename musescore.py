@@ -336,7 +336,7 @@ class Meta(Tree):
 
 		self.meta = {}
 		for tag in tags:
-			text = self.getMetaTagText(tag)
+			text = self.getMetaText(tag)
 			if text:
 				self.meta[tag] = text.decode('utf-8')
 			else:
@@ -351,7 +351,7 @@ class Meta(Tree):
 
 		self.vbox = {}
 		for tag in tags:
-			text = self.getVBox(tag)
+			text = self.getVBoxText(tag)
 			if text:
 				self.vbox[tag] = text.decode('utf-8')
 			else:
@@ -361,12 +361,12 @@ class Meta(Tree):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
 			return element
 
-	def getMetaTagText(self, name):
+	def getMetaText(self, name):
 		element = self.getMetaTag(name)
 		if hasattr(element, 'text'):
 			return element.text
 
-	def setMetaTag(self, name, text):
+	def setMeta(self, name, text):
 		self.getMetaTag(name).text = text
 
 	def createVBox(self):
@@ -391,7 +391,7 @@ class Meta(Tree):
 		for element in self.root.xpath('//VBox'):
 			element.append(tag)
 
-	def getVBox(self, style):
+	def getVBoxText(self, style):
 		element = self.getVBoxTag(style)
 		if hasattr(element, 'text'):
 			return element.text
@@ -417,8 +417,8 @@ class Meta(Tree):
 				break
 
 		self.setVBox('Title', value)
-		self.setMetaTag('workTitle', value)
-		self.setMetaTag('movementTitle', '')
+		self.setMeta('workTitle', value)
+		self.setMeta('movementTitle', '')
 
 	def syncComposer(self):
 		values = [
@@ -429,7 +429,7 @@ class Meta(Tree):
 		for value in values:
 			if value:
 				self.setVBox('Composer', value)
-				self.setMetaTag('composer', value)
+				self.setMeta('composer', value)
 				break
 
 	def syncLyricist(self):
@@ -441,10 +441,10 @@ class Meta(Tree):
 		for value in values:
 			if value:
 				self.setVBox('Lyricist', value)
-				self.setMetaTag('lyricist', value)
+				self.setMeta('lyricist', value)
 				break
 
-	def cleanMetaTags(self):
+	def cleanMeta(self):
 		tags = [
 			"arranger",
 			"copyright",
@@ -455,13 +455,13 @@ class Meta(Tree):
 			"workNumber"
 			]
 		for tag in tags:
-			self.setMetaTag(tag, '')
+			self.setMeta(tag, '')
 
 	def syncMetaTags(self):
 		self.syncTitle()
 		self.syncComposer()
 		self.syncLyricist()
-		self.cleanMetaTags()
+		self.cleanMeta()
 
 	def show(self):
 		cprint('\n' + self.basename, 'red')
