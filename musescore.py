@@ -40,6 +40,10 @@ def main():
 
 	parser.add_argument('-b', '--backup', action='store_true',
 		help='Create a backup file.')
+	parser.add_argument('-n', '--start-number', nargs=1,
+		help='')
+	parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
+		help='')
 
 	##
 	# subcommand
