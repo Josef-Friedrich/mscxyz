@@ -21,7 +21,7 @@ def parse():
 		help='')
 	parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
 		help='')
-	parser.add_argument('-v', '--verbosity', nargs=1, default=1,
+	parser.add_argument('-v', '--verbosity', type=int, default=1,
 		help='Possible values are 1, 2 or 3.')
 	##
 	# subcommand
@@ -142,11 +142,11 @@ def mscore(commands):
 		executeable = 'mscore'
 
 	commands.insert(0, executeable)
-	verbosity = args.verbosity[0]
-	if verbosity > 1:
-		OUT = subprocess.PIPE
+	if args.verbosity > 1:
+		OUT=None
 	else:
 		OUT = open(os.devnull, 'wb')
+
 	subprocess.call(commands, stdout=OUT, stderr=OUT)
 
 def re_open(input_file):
