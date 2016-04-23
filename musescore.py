@@ -8,65 +8,75 @@ from termcolor import colored, cprint
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def parse():
+class Parse(object):
 	"""Expose the command line interface."""
 
-	import argparse
-	parser = argparse.ArgumentParser(description='Muggle the *.mscx files \
-		of the notation software MuseScore.')
+	def __init__(self):
+		self.initParser()
+		self.addArguments()
+		self.addSubParser()
+		self.clean()
+		self.meta()
+		self.lyrics()
+		self.rename()
+		self.addPositional()
 
-	parser.add_argument('-b', '--backup', action='store_true',
-		help='Create a backup file.')
-	parser.add_argument('-n', '--start-number', nargs=1,
-		help='')
-	parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
-		help='')
-	parser.add_argument('-v', '--verbose', action='count', default=0,
-		help='Make commands more verbose. You can specifiy multiple \
-		arguments (. g.: -vvv) to make the command more verbose.')
-	##
-	# subcommand
-	##
+	def initParser(self):
+		import argparse
+		self.parser = argparse.ArgumentParser(description='Muggle the *.mscx files \
+			of the notation software MuseScore.')
 
-	subparsers = parser.add_subparsers(title='Subcommands',
-		dest='subcommand', help='Run "subcommand --help" for more \
-		informations.')
+	def addArguments(self):
+		parser = self.parser
+		parser.add_argument('-b', '--backup', action='store_true',
+			help='Create a backup file.')
+		parser.add_argument('-n', '--start-number', nargs=1,
+			help='')
+		parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
+			help='')
+		parser.add_argument('-v', '--verbose', action='count', default=0,
+			help='Make commands more verbose. You can specifiy multiple \
+			arguments (. g.: -vvv) to make the command more verbose.')
 
-	# clean
-	parser_clean = subparsers.add_parser('clean', help='Clean and reset \
-		the formating of the *.mscx file')
-	parser_clean.add_argument('-s', '--style', nargs=1,
-		help='Load a *.mss style file and include the contents of this \
-		file.')
+	def addSubParser(self):
+		self.sparser = self.parser.add_subparsers(title='Subcommands',
+			dest='subcommand', help='Run "subcommand --help" for more \
+			informations.')
 
-	# meta
-	parser_meta = subparsers.add_parser('meta', help='Synchronize the \
-		values of the first vertical frame (title, composer, lyricist) \
-		with the corresponding metadata fields.')
-	parser_meta.add_argument('-j', '--json', action='store_true',
-		help='Additionally write the metadata to a json file.')
-	parser_meta.add_argument('-s', '--show', action='store_true',
-		help='Show all metadata.')
+	def clean(self):
+		p = self.sparser.add_parser('clean', help='Clean and reset \
+			the formating of the *.mscx file')
+		p.add_argument('-s', '--style', nargs=1,
+			help='Load a *.mss style file and include the contents of this \
+			file.')
 
-	# lyrics
-	parser_lyrics = subparsers.add_parser('lyrics', help='Extract lyrics.')
-	parser_lyrics.add_argument('-n', '--number', nargs=1,
-		help='Number of lyric verses.')
+	def meta(self):
+		p = self.sparser.add_parser('meta', help='Synchronize the \
+			values of the first vertical frame (title, composer, lyricist) \
+			with the corresponding metadata fields.')
+		p.add_argument('-j', '--json', action='store_true',
+			help='Additionally write the metadata to a json file.')
+		p.add_argument('-s', '--show', action='store_true',
+			help='Show all metadata.')
 
-	# rename
-	parser_rename = subparsers.add_parser('rename', help='Rename the \
-		*.mscx files.')
-	parser_rename.add_argument('-d', '--dry-run', action='store_true',
-		help='Do not rename the scores')
+	def lyrics(self):
+		p = self.sparser.add_parser('lyrics', help='Extract lyrics.')
+		p.add_argument('-n', '--number', nargs=1,
+			help='Number of lyric verses.')
 
-	##
-	# suffix positional parameters
-	##
+	def rename(self):
+		p = self.sparser.add_parser('rename', help='Rename the \
+			*.mscx files.')
+		p.add_argument('-d', '--dry-run', action='store_true',
+			help='Do not rename the scores')
 
-	parser.add_argument('path', help='Path to a *.mscx file or a \
-		folder which contains *.mscx files.')
+	def addPositional(self):
+		self.parser.add_argument('path', help='Path to a *.mscx file or a \
+			folder which contains *.mscx files.')
 
-	return parser.parse_args()
+	def parse(self):
+		return self.parser.parse_args()
+
 
 def execute():
 	for score in get_mscx(args.path):
@@ -468,6 +478,7 @@ class Meta(Tree):
 				print(colored(tag, 'green') + ': ' + text)
 
 if __name__ == '__main__':
-	args = parse()
+	parse = Parse()
+	args = parse.parse()
 	execute()
 
