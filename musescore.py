@@ -124,15 +124,6 @@ def extract_lyrics():
 	# To get closing tag use method 'html'
 	mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
 
-
-def get_style_folder():
-	style_folder = 'MuseScore2/Stile'
-	home = os.path.expanduser('~')
-	if os.path.exists(home + '/Documents/' + style_folder):
-		return home + '/Documents/' + style_folder
-	elif os.path.exists(home + '/Dokumente/' + style_folder):
-		return home + '/Dokumente/' + style_folder
-
 def mscore(commands):
 	import subprocess
 	mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
@@ -193,9 +184,6 @@ def create_dir(path):
 		if exception.errno != errno.EEXIST:
 			raise
 
-def get_lieder_folder():
-	return os.path.expanduser('~') + '/git-repositories/content/lieder/songs/'
-
 def backup():
 	import shutil
 	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
@@ -214,17 +202,6 @@ def get_files(path, extension = 'mscx'):
 				file_path = os.path.join(root, file)
 				output.append(file_path)
 	return output
-
-def rename_bad_musicxml_extensions():
-	numbers = ['1', '2', '3', '4', '5']
-
-	for number in numbers:
-		files = get_files('mxl.' + number)
-
-		for score in files:
-			new_number = int(number) + 1
-			new_score = score.replace('.mxl.' + number, '[' + str(new_number) + '].mxl')
-			os.rename(score, new_score)
 
 class File(object):
 	def __init__(self, fullpath):
