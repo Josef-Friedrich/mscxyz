@@ -82,7 +82,11 @@ def execute():
 	for score in get_mscx(args.path):
 
 		if args.subcommand == 'clean':
-			print(score)
+			if args.verbose > 0:
+				print(colored('clean: ', 'yellow') + score)
+			clean = Tree(score)
+			clean.clean()
+			clean.write()
 
 		elif args.subcommand == 'lyrics':
 			print(score)
@@ -150,7 +154,7 @@ def mscore(commands):
 		executeable = 'mscore'
 
 	commands.insert(0, executeable)
-	if args.verbose > 1:
+	if args.verbose > 2:
 		OUT=None
 	else:
 		OUT = open(os.devnull, 'wb')
@@ -299,10 +303,14 @@ class Tree(File):
 	def stripTags(self, *tags):
 		import lxml.etree as et
 		et.strip_tags(self.tree, tags)
+		if args.verbose > 1:
+			print(colored('strip: ', 'blue') + str(tags))
 
 	def removeTagsByXPath(self, *xpath_strings):
 		for xpath_string in xpath_strings:
 			for rm in self.tree.xpath(xpath_string):
+				if args.verbose > 1:
+					print(colored('remove: ', 'red') + rm.tag)
 				rm.getparent().remove(rm)
 
 	def clean(self):
