@@ -21,8 +21,9 @@ def parse():
 		help='')
 	parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
 		help='')
-	parser.add_argument('-v', '--verbosity', type=int, default=1,
-		help='Possible values are 1, 2 or 3.')
+	parser.add_argument('-v', '--verbose', action='count', default=0,
+		help='Make commands more verbose. You can specifiy multiple \
+		arguments (. g.: -vvv) to make the command more verbose.')
 	##
 	# subcommand
 	##
@@ -139,7 +140,7 @@ def mscore(commands):
 		executeable = 'mscore'
 
 	commands.insert(0, executeable)
-	if args.verbosity > 1:
+	if args.verbose > 1:
 		OUT=None
 	else:
 		OUT = open(os.devnull, 'wb')
@@ -266,7 +267,7 @@ class Rename(File):
 		self.deleteCharacters(',', '.', '\'', '`', ')')
 		self.cleanUp()
 
-		if args.dry_run or args.verbosity > 0:
+		if args.dry_run or args.verbose > 0:
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
 
 		if not args.dry_run:
