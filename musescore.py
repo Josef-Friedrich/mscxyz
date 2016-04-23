@@ -55,6 +55,8 @@ def parse():
 	# rename
 	parser_rename = subparsers.add_parser('rename', help='Rename the \
 		*.mscx files.')
+	parser_rename.add_argument('-d', '--dry-run', action='store_true',
+		help='Do not rename the scores')
 
 	##
 	# suffix positional parameters
@@ -70,8 +72,10 @@ def execute():
 
 		if args.subcommand == 'clean':
 			print(score)
+
 		elif args.subcommand == 'lyrics':
 			print(score)
+
 		elif args.subcommand == 'meta':
 			meta = Meta(score)
 			if args.show:
@@ -79,8 +83,10 @@ def execute():
 			else:
 				meta.syncMetaTags()
 				meta.write()
+
 		elif args.subcommand == 'rename':
-			print(score)
+			rename = Rename(score)
+			rename.execute()
 
 def batch():
 	start_number = int(sys.argv[1])
@@ -207,33 +213,35 @@ class File(object):
 	def __init__(self, fullpath):
 		self.fullpath = fullpath
 		self.dirname = os.path.dirname(fullpath)
-		self.basename = os.path.basename(fullpath)
-		self.filename = self.basename.replace('.mscx', '').decode('utf-8')
+		self.filename = os.path.basename(fullpath)
+		self.basename = self.filename.replace('.mscx', '').decode('utf-8')
+		self.extension = self.fullpath.split('.')[-1]
 
 class Rename(File):
 
-	def prepareBasename(self):
-		self.basename = self.basename.replace('.mscx', '').decode('utf-8')
+	def __init__(self, fullpath):
+		super(Rename, self).__init__(fullpath)
+		self.workname = self.basename
 
 	def replaceGermanUmlaute(self):
 		umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü', 'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
 		for replace, search in umlaute.iteritems():
-			self.basename = self.basename.replace(search, replace)
+			self.workname = self.workname.replace(search, replace)
 
 	def transliterate(self):
 		import unidecode
-		self.basename = unidecode.unidecode(self.basename)
+		self.workname = unidecode.unidecode(self.workname)
 
 	def replaceToDash(self, *characters):
 		for character in characters:
-			self.basename = self.basename.replace(character, '-')
+			self.workname = self.workname.replace(character, '-')
 
 	def deleteCharacters(self, *characters):
 		for character in characters:
-			self.basename = self.basename.replace(character, '')
+			self.workname = self.workname.replace(character, '')
 
 	def cleanUp(self):
-		string = self.basename
+		string = self.workname
 		string = string.replace('(', '_')
 		string = string.replace('-_', '_')
 
@@ -246,18 +254,23 @@ class Rename(File):
 		# Remove the dash from the end
 		string = re.sub('-$', '', string)
 
-		self.basename = string
+		self.workname = string
 
 	def debug(self):
-		print(self.basename)
+		print(self.workname)
 
 	def execute(self):
-		self.prepareBasename()
 		self.replaceGermanUmlaute()
 		self.transliterate()
 		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+')
 		self.deleteCharacters(',', '.', '\'', '`', ')')
 		self.cleanUp()
+
+		if args.dry_run or args.verbosity > 0:
+			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
+
+		if not args.dry_run:
+			os.rename(self.fullpath, self.dirname + '/' + self.workname + '.' + self.extension)
 
 class Tree(File):
 
@@ -386,7 +399,7 @@ class Meta(Tree):
 			self.vbox['Title'],
 			self.meta['workTitle'],
 			self.meta['movementTitle'],
-			self.filename
+			self.basename
 		]
 
 		for value in values:
@@ -441,9 +454,9 @@ class Meta(Tree):
 		self.cleanMeta()
 
 	def show(self):
-		cprint('\n' + self.basename, 'red')
+		cprint('\n' + self.filename, 'red')
 
-		print(colored('filename', 'blue') + ': ' + self.filename)
+		print(colored('filename', 'blue') + ': ' + self.basename)
 
 		for tag, text in self.meta.iteritems():
 			if text:
