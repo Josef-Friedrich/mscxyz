@@ -1,2 +1,4 @@
-Collection of Python scripts to manipulate the XML based *.mscx files 
+# mscxyz
+
+A command line tool to manipulate the XML based *.mscX and (Yet) *.mscZ files 
 of the notation software MuseScore.
