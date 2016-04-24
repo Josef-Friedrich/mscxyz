@@ -82,8 +82,7 @@ def execute():
 	for score in get_mscx(args.path):
 
 		if args.subcommand == 'clean':
-			if args.verbose > 0:
-				print(colored('clean: ', 'yellow') + score)
+			verbose(score, '\nclean', 'yellow')
 			clean = Tree(score)
 			clean.clean()
 			clean.write()
@@ -224,6 +223,16 @@ def get_files(path, extension = 'mscx'):
 				output.append(file_path)
 	return output
 
+def print_desc(text, description='', color='red'):
+	prefix = ''
+	if description:
+		prefix = colored(description, color) + ': '
+	print(prefix + text)
+
+def verbose(text, description='', color='red', verbosity=1):
+	if args.verbose >= verbosity:
+		print_desc(text=text, description=description, color=color)
+
 class File(object):
 	def __init__(self, fullpath):
 		self.fullpath = fullpath
@@ -303,14 +312,12 @@ class Tree(File):
 	def stripTags(self, *tags):
 		import lxml.etree as et
 		et.strip_tags(self.tree, tags)
-		if args.verbose > 1:
-			print(colored('strip: ', 'blue') + str(tags))
+		verbose(str(tags), 'strip', color='blue', verbosity=2)
 
 	def removeTagsByXPath(self, *xpath_strings):
 		for xpath_string in xpath_strings:
 			for rm in self.tree.xpath(xpath_string):
-				if args.verbose > 1:
-					print(colored('remove: ', 'red') + rm.tag)
+				verbose(rm.tag, 'remove', verbosity=2)
 				rm.getparent().remove(rm)
 
 	def clean(self):
@@ -473,17 +480,16 @@ class Meta(Tree):
 		self.cleanMeta()
 
 	def show(self):
-		cprint('\n' + self.filename, 'red')
-
-		print(colored('filename', 'blue') + ': ' + self.basename)
+		print_desc('\n' + colored(self.filename, 'red'))
+		print_desc(self.basename, 'filename', 'blue')
 
 		for tag, text in self.meta.iteritems():
 			if text:
-				print(colored(tag, 'yellow') + ': ' + text)
+				print_desc(text, tag, 'yellow')
 
 		for tag, text in self.vbox.iteritems():
 			if text:
-				print(colored(tag, 'green') + ': ' + text)
+				print_desc(text, tag, 'green')
 
 if __name__ == '__main__':
 	parse = Parse()
