@@ -3,6 +3,7 @@
 
 import os
 import sys
+import lxml.etree
 from termcolor import colored, cprint
 
 reload(sys)
@@ -23,8 +24,9 @@ class Parse(object):
 
 	def initParser(self):
 		import argparse
-		self.parser = argparse.ArgumentParser(description='Muggle the *.mscx files \
-			of the notation software MuseScore.')
+		self.parser = argparse.ArgumentParser(description='A command \
+			line tool to manipulate the XML based *.mscX and *.mscZ \
+			files of the notation software MuseScore')
 
 	def addArguments(self):
 		parser = self.parser
@@ -83,9 +85,14 @@ def execute():
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
-			clean = Tree(score)
-			clean.clean()
-			clean.write()
+			try:
+				clean = Tree(score)
+			except lxml.etree.XMLSyntaxError, e:
+				print('Error!!! ' + str(e))
+			else:
+				clean.clean()
+				clean.write()
+				print('write')
 
 		elif args.subcommand == 'lyrics':
 			print(score)
