@@ -85,12 +85,9 @@ def execute():
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
-
 			clean = Tree(score)
-
 			clean.clean()
 			clean.write()
-
 
 		elif args.subcommand == 'lyrics':
 			print(score)
@@ -166,8 +163,6 @@ def mscore(commands):
 	subprocess.call(commands, stdout=OUT, stderr=OUT)
 
 def re_open(input_file):
-	if not input_file:
-		input_file = score
 	mscore(['-o', input_file, input_file])
 
 def convert_mxl(input_file):
