@@ -34,8 +34,17 @@ class Parse(object):
 			help='Create a backup file.')
 		parser.add_argument('-p', '--pick', type=int, default=0,
 			help='The --pick option can be used to run multiple \
-			mscxyz.py commands in parallel on multiple consols. By \
-			default every fourth file gets picked up.')
+			mscxyz.py commands in parallel on multiple consoles. If \
+			you like so, using this option a "poor man\'s \
+			multithreading" can be accomplished. Multicore CPUs can be \
+			used to full capacity. \
+			By default every fourth file gets picked up. The option \
+			"-p N" begins the picking on the Nth file of a cycle. The \
+			corresponding option is named "-c" or "--cycle-length".')
+		parser.add_argument('-c', '--cycle-length', type=int, default=4,
+			help='This option specifies the distance between the \
+			picked files. The option "-c N" picks every Nth file. The \
+			corresponding options is named "-p" or "--pick".')
 		parser.add_argument('-v', '--verbose', action='count', default=0,
 			help='Make commands more verbose. You can specifiy multiple \
 			arguments (. g.: -vvv) to make the command more verbose.')
@@ -115,11 +124,14 @@ class Batch(object):
 
 	def __init__(self, path, extension = 'mscx'):
 		self.files = []
+
 		for root, dirs, files in os.walk(path):
 			for file in files:
 				if file.endswith('.' + extension):
 					file_path = os.path.join(root, file)
 					self.files.append(file_path)
+
+		self.files.sort()
 
 	def pick(self, pick=1, cycle_length=4):
 		hit = int(pick)
