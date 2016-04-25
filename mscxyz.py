@@ -32,10 +32,10 @@ class Parse(object):
 		parser = self.parser
 		parser.add_argument('-b', '--backup', action='store_true',
 			help='Create a backup file.')
-		parser.add_argument('-n', '--start-number', nargs=1,
-			help='')
-		parser.add_argument('-c', '--cycle-number', nargs=1, default=4,
-			help='')
+		parser.add_argument('-p', '--pick', type=int, default=0,
+			help='The --pick option can be used to run multiple \
+			mscxyz.py commands in parallel on multiple consols. By \
+			default every fourth file gets picked up.')
 		parser.add_argument('-v', '--verbose', action='count', default=0,
 			help='Make commands more verbose. You can specifiy multiple \
 			arguments (. g.: -vvv) to make the command more verbose.')
@@ -81,7 +81,14 @@ class Parse(object):
 
 
 def execute():
-	for score in get_mscx(args.path):
+
+	batch = Batch(args.path)
+
+	if args.pick:
+		batch.pick(args.pick)
+
+	files = batch.getFiles()
+	for score in files:
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
@@ -104,22 +111,33 @@ def execute():
 			rename = Rename(score)
 			rename.execute()
 
-def batch():
-	start_number = int(sys.argv[1])
+class Batch(object):
 
-	if len(sys.argv) > 2:
-		cycle_number = int(sys.argv[2])
-	else:
-		cycle_number = 4
+	def __init__(self, path, extension = 'mscx'):
+		self.files = []
+		for root, dirs, files in os.walk(path):
+			for file in files:
+				if file.endswith('.' + extension):
+					file_path = os.path.join(root, file)
+					self.files.append(file_path)
 
-	files = get_files('mscx')
-	hit = start_number
-	counter = 0
-	for score in files:
-		counter += 1
-		if hit == counter:
-			execute(score, counter)
-			hit = hit + cycle_number
+	def pick(self, pick=1, cycle_length=4):
+		hit = int(pick)
+		counter = 0
+
+		output = []
+		for score in self.files:
+
+			counter += 1
+			if hit == counter:
+				verbose(str(counter), 'pick', 'green')
+				output.append(score)
+				hit = hit + pick
+
+		self.files = output
+
+	def getFiles(self):
+		return self.files
 
 def extract_lyrics():
 	ms_file = sys.argv[1]
@@ -213,15 +231,6 @@ def get_mscx(path):
 		return get_files(path, 'mscx')
 	else:
 		return [path]
-
-def get_files(path, extension = 'mscx'):
-	output = []
-	for root, dirs, files in os.walk(path):
-		for file in files:
-			if file.endswith('.' + extension):
-				file_path = os.path.join(root, file)
-				output.append(file_path)
-	return output
 
 def print_desc(text, description='', color='red'):
 	prefix = ''
