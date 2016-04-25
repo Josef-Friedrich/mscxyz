@@ -85,14 +85,12 @@ def execute():
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
-			try:
-				clean = Tree(score)
-			except lxml.etree.XMLSyntaxError, e:
-				print('Error!!! ' + str(e))
-			else:
-				clean.clean()
-				clean.write()
-				print('write')
+
+			clean = Tree(score)
+
+			clean.clean()
+			clean.write()
+
 
 		elif args.subcommand == 'lyrics':
 			print(score)
@@ -308,77 +306,89 @@ class Tree(File):
 	def __init__(self, fullpath):
 		super(Tree, self).__init__(fullpath)
 		import lxml.etree as et
-		self.tree = et.parse(self.fullpath)
-		self.root = self.tree.getroot()
+		try:
+			self.tree = et.parse(self.fullpath)
+		except et.XMLSyntaxError, e:
+			print('Error!!! ' + str(e))
+			self.error = True
+		else:
+			self.error = False
+			self.root = self.tree.getroot()
 
 	def addSubElement(self, root_tag, tag, text):
-		import lxml.etree as et
-		tag = et.SubElement(root_tag, tag)
-		tag.text = text
+		if not self.error:
+			import lxml.etree as et
+			tag = et.SubElement(root_tag, tag)
+			tag.text = text
 
 	def stripTags(self, *tags):
-		import lxml.etree as et
-		et.strip_tags(self.tree, tags)
-		verbose(str(tags), 'strip', color='blue', verbosity=2)
+		if not self.error:
+			import lxml.etree as et
+			et.strip_tags(self.tree, tags)
+			verbose(str(tags), 'strip', color='blue', verbosity=2)
 
 	def removeTagsByXPath(self, *xpath_strings):
-		for xpath_string in xpath_strings:
-			for rm in self.tree.xpath(xpath_string):
-				verbose(rm.tag, 'remove', verbosity=2)
-				rm.getparent().remove(rm)
+		if not self.error:
+			for xpath_string in xpath_strings:
+				for rm in self.tree.xpath(xpath_string):
+					verbose(rm.tag, 'remove', verbosity=2)
+					rm.getparent().remove(rm)
 
 	def clean(self):
-		self.removeTagsByXPath('/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-		self.stripTags('font', 'b', 'i', 'pos')
+		if not self.error:
+			self.removeTagsByXPath('/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
+			self.stripTags('font', 'b', 'i', 'pos')
 
 	def write(self):
-		self.tree.write(self.fullpath, encoding='UTF-8')
-		re_open(self.fullpath)
+		if not self.error:
+			self.tree.write(self.fullpath, encoding='UTF-8')
+			re_open(self.fullpath)
 
 class Meta(Tree):
 
 	def __init__(self, fullpath):
 		super(Meta, self).__init__(fullpath)
 
-		tags = [
-			"arranger",
-			"composer",
-			"copyright",
-			"creationDate",
-			"lyricist",
-			"movementNumber",
-			"movementTitle",
-			"originalFormat",
-			"platform",
-			"poet",
-			"source",
-			"translator",
-			"workNumber",
-			"workTitle"
-		]
+		if not self.error:
+			tags = [
+				"arranger",
+				"composer",
+				"copyright",
+				"creationDate",
+				"lyricist",
+				"movementNumber",
+				"movementTitle",
+				"originalFormat",
+				"platform",
+				"poet",
+				"source",
+				"translator",
+				"workNumber",
+				"workTitle"
+			]
 
-		self.meta = {}
-		for tag in tags:
-			text = self.getMetaText(tag)
-			if text:
-				self.meta[tag] = text.decode('utf-8')
-			else:
-				self.meta[tag] = ''
+			self.meta = {}
+			for tag in tags:
+				text = self.getMetaText(tag)
+				if text:
+					self.meta[tag] = text.decode('utf-8')
+				else:
+					self.meta[tag] = ''
 
-		tags = [
-			"Title",
-			"Subtitle",
-			"Composer",
-			"Lyricist"
-		]
+			tags = [
+				"Title",
+				"Subtitle",
+				"Composer",
+				"Lyricist"
+			]
 
-		self.vbox = {}
-		for tag in tags:
-			text = self.getVBoxText(tag)
-			if text:
-				self.vbox[tag] = text.decode('utf-8')
-			else:
-				self.vbox[tag] = ''
+			self.vbox = {}
+			for tag in tags:
+				text = self.getVBoxText(tag)
+				if text:
+					self.vbox[tag] = text.decode('utf-8')
+				else:
+					self.vbox[tag] = ''
 
 	def getMetaTag(self, name):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
@@ -481,22 +491,23 @@ class Meta(Tree):
 			self.setMeta(tag, '')
 
 	def syncMetaTags(self):
-		self.syncTitle()
-		self.syncComposer()
-		self.syncLyricist()
-		self.cleanMeta()
+		if not self.error:
+			self.syncTitle()
+			self.syncComposer()
+			self.syncLyricist()
+			self.cleanMeta()
 
 	def show(self):
 		print_desc('\n' + colored(self.filename, 'red'))
 		print_desc(self.basename, 'filename', 'blue')
+		if not self.error:
+			for tag, text in self.meta.iteritems():
+				if text:
+					print_desc(text, tag, 'yellow')
 
-		for tag, text in self.meta.iteritems():
-			if text:
-				print_desc(text, tag, 'yellow')
-
-		for tag, text in self.vbox.iteritems():
-			if text:
-				print_desc(text, tag, 'green')
+			for tag, text in self.vbox.iteritems():
+				if text:
+					print_desc(text, tag, 'green')
 
 if __name__ == '__main__':
 	parse = Parse()
