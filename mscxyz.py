@@ -94,10 +94,14 @@ def execute():
 	batch = Batch(args.path)
 
 	if args.pick:
-		batch.pick(args.pick)
+		batch.pick(args.pick, args.cycle_length)
 
 	files = batch.getFiles()
 	for score in files:
+
+		if args.backup:
+			backup = File(score)
+			backup.backup()
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
@@ -123,6 +127,8 @@ def execute():
 class Batch(object):
 
 	def __init__(self, path, extension = 'mscx'):
+		self.path = path
+		self.extension = extension
 		self.files = []
 
 		for root, dirs, files in os.walk(path):
@@ -149,7 +155,10 @@ class Batch(object):
 		self.files = output
 
 	def getFiles(self):
-		return self.files
+		if os.path.isdir(self.path):
+			return self.files
+		else:
+			return [self.path]
 
 def extract_lyrics():
 	ms_file = sys.argv[1]
@@ -234,16 +243,6 @@ def create_dir(path):
 		if exception.errno != errno.EEXIST:
 			raise
 
-def backup():
-	import shutil
-	shutil.copy2(score, score.replace('.mscx', '_bak.mscx'))
-
-def get_mscx(path):
-	if os.path.isdir(path):
-		return get_files(path, 'mscx')
-	else:
-		return [path]
-
 def print_desc(text, description='', color='red'):
 	prefix = ''
 	if description:
@@ -261,6 +260,13 @@ class File(object):
 		self.filename = os.path.basename(fullpath)
 		self.basename = self.filename.replace('.mscx', '').decode('utf-8')
 		self.extension = self.fullpath.split('.')[-1]
+
+	def backup(self):
+		import shutil
+		score = self.fullpath
+		ext = '.' + self.extension
+		backup = score.replace(ext, '_bak' + ext)
+		shutil.copy2(score, backup)
 
 class Rename(File):
 
