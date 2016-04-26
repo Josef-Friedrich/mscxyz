@@ -32,6 +32,10 @@ class Parse(object):
 		parser = self.parser
 		parser.add_argument('-b', '--backup', action='store_true',
 			help='Create a backup file.')
+		parser.add_argument('-g', '--glob', default='*.mscx',
+			help='Handle only files which matches against Unix style \
+			glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
+			option, the standard glob pattern "*.mscx" is used.')
 		parser.add_argument('-p', '--pick', type=int, default=0,
 			help='The --pick option can be used to run multiple \
 			mscxyz.py commands in parallel on multiple consoles. If \
@@ -91,7 +95,7 @@ class Parse(object):
 
 def execute():
 
-	batch = Batch(args.path)
+	batch = Batch(args.path, args.glob)
 
 	if args.pick:
 		batch.pick(args.pick, args.cycle_length)
@@ -126,14 +130,15 @@ def execute():
 
 class Batch(object):
 
-	def __init__(self, path, extension = 'mscx'):
+	def __init__(self, path, glob = '*.mscx'):
 		self.path = path
-		self.extension = extension
 		self.files = []
+
+		import fnmatch
 
 		for root, dirs, files in os.walk(path):
 			for file in files:
-				if file.endswith('.' + extension):
+				if fnmatch.fnmatch(file, glob):
 					file_path = os.path.join(root, file)
 					self.files.append(file_path)
 
