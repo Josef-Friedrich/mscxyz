@@ -85,6 +85,10 @@ class Parse(object):
 			*.mscx files.')
 		p.add_argument('-d', '--dry-run', action='store_true',
 			help='Do not rename the scores')
+		p.add_argument('-f', '--format',
+			help='Format string: possible placeholders are %%title%%')
+		p.add_argument('-a', '--ascii', action='store_true',
+			help='Use only ASCII characters.')
 
 	def addPositional(self):
 		self.parser.add_argument('path', help='Path to a *.mscx file or a \
@@ -334,9 +338,17 @@ class Rename(File):
 	def debug(self):
 		print(self.workname)
 
+	def applyFormatString(self):
+		pass
+
 	def execute(self):
-		self.replaceGermanUmlaute()
-		self.transliterate()
+		if args.format:
+			self.applyFormatString()
+
+		if args.ascii:
+			self.replaceGermanUmlaute()
+			self.transliterate()
+
 		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+')
 		self.deleteCharacters(',', '.', '\'', '`', ')')
 		self.cleanUp()
@@ -395,6 +407,8 @@ class Meta(Tree):
 	def __init__(self, fullpath):
 		super(Meta, self).__init__(fullpath)
 
+		self.metaMapping()
+
 		if not self.error:
 			tags = [
 				"arranger",
@@ -435,6 +449,38 @@ class Meta(Tree):
 					self.vbox[tag] = text.decode('utf-8')
 				else:
 					self.vbox[tag] = ''
+
+	def metaMapping(self):
+		title = {
+			"meta" : "workTitle",
+			"vbox": "Title",
+			"format":"%title%",
+		}
+
+		subtitle = {
+			"meta" : "movementTitle",
+			"vbox": "Subtitle",
+			"format":"%subtitle%",
+		}
+
+		composer = {
+			"meta" : "composer",
+			"vbox": "Composer",
+			"format":"%composer%",
+		}
+
+		lyricist = {
+			"meta" : "lyricist",
+			"vbox": "Lyricist",
+			"format":"%lyricist%",
+		}
+
+		self.map = {
+			"title": title,
+			"subtitle": subtitle,
+			"composer": composer,
+			"lyricist": lyricist,
+		}
 
 	def getMetaTag(self, name):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
