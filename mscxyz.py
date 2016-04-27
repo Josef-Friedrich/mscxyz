@@ -339,7 +339,15 @@ class Rename(File):
 		print(self.workname)
 
 	def applyFormatString(self):
-		pass
+		import re
+		output = args.format
+		for tag in re.findall('%(.*?)%', output):
+			score = Meta(self.fullpath)
+			meta_tag = score.map[tag]['meta']
+			text = score.meta[meta_tag]
+			output = output.replace('%' + tag + '%', text)
+
+		self.workname = output
 
 	def execute(self):
 		if args.format:
