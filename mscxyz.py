@@ -21,6 +21,7 @@ class Parse(object):
 		self.meta()
 		self.lyrics()
 		self.rename()
+		self.export()
 		self.addPositional()
 
 	def initParser(self):
@@ -90,13 +91,18 @@ class Parse(object):
 		p.add_argument('-a', '--ascii', action='store_true',
 			help='Use only ASCII characters.')
 
+	def export(self):
+		p = self.sparser.add_parser('export', help='Export the scores to PDFs \
+			or to the specified extension.')
+		p.add_argument('-e', '--extension', default='pdf',
+			help='Extension to export')
+
 	def addPositional(self):
 		self.parser.add_argument('path', help='Path to a *.mscx file or a \
 			folder which contains *.mscx files.')
 
 	def parse(self):
 		return self.parser.parse_args()
-
 
 def execute():
 
@@ -132,6 +138,12 @@ def execute():
 		elif args.subcommand == 'rename':
 			rename = Rename(score)
 			rename.execute()
+
+		elif args.subcommand == 'export':
+			verbose(score, '\nexport', 'yellow')
+			verbose(args.extension, 'extension', 'green')
+			export = File(score)
+			export.export()
 
 class Batch(object):
 
@@ -295,6 +307,10 @@ class File(object):
 		ext = '.' + self.extension
 		backup = score.replace(ext, '_bak' + ext)
 		shutil.copy2(score, backup)
+
+	def export(self):
+		score = self.fullpath
+		mscore(['--export-to', score.replace('.mscx', '.' + args.extension), score])
 
 class Rename(File):
 
