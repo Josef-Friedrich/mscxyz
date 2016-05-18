@@ -420,9 +420,7 @@ class Rename(File):
 		output = args.format
 		for tag in re.findall('%(.*?)%', output):
 			score = Meta(self.fullpath)
-			meta_tag = score.map[tag]['meta']
-			text = score.meta[meta_tag]
-			output = output.replace('%' + tag + '%', text)
+			output = output.replace('%' + tag + '%', score.get(tag))
 
 		self.workname = output
 
@@ -606,7 +604,7 @@ class Meta(Tree):
 			]
 		else:
 			values = [
-				self.vbox[key.title],
+				self.vbox[key.title()],
 				self.meta[key],
 			]
 
@@ -624,7 +622,7 @@ class Meta(Tree):
 			self.setVBox('Subtitle', self.get(key))
 			self.setMeta('workTitle', self.get(key))
 		else:
-			self.setVBox(key.title, self.get(key))
+			self.setVBox(key.title(), self.get(key))
 			self.setMeta(key, self.get(key))
 
 	def cleanMeta(self):
