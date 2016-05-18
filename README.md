@@ -1,4 +1,3 @@
-help!
 ```
 usage: mscxyz.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
                  {clean,meta,lyrics,rename,export,help} ... path
