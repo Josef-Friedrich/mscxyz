@@ -109,6 +109,10 @@ class Parse(object):
 		self.sub['rename'].add_argument('-a', '--ascii',
 			action='store_true', help='Use only ASCII characters.')
 
+		self.sub['rename'].add_argument('-n', '--no-whitespace',
+			action='store_true', help='Replace all whitespaces with dashes or \
+			sometimes underlines.')
+
 	def export(self):
 		self.sub['export'] = self.sparser.add_parser('export',
 			help='Export the scores to PDFs or to the specified \
@@ -432,9 +436,10 @@ class Rename(File):
 			self.replaceGermanUmlaute()
 			self.transliterate()
 
-		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+')
-		self.deleteCharacters(',', '.', '\'', '`', ')')
-		self.cleanUp()
+		if args.no_whitespace:
+			self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
+			self.deleteCharacters(',', '.', '\'', '`', ')')
+			self.cleanUp()
 
 		if args.dry_run or args.verbose > 0:
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
