@@ -59,8 +59,9 @@ class Parse(object):
 			corresponding options is named "-p" or "--pick".')
 
 		parser.add_argument('-v', '--verbose', action='count', default=0,
-			help='Make commands more verbose. You can specifiy multiple \
-			arguments (. g.: -vvv) to make the command more verbose.')
+			help='Make commands more verbose. You can specifiy \
+			multiple arguments (. g.: -vvv) to make the command more \
+			verbose.')
 
 	def addSubParser(self):
 		self.sparser = self.parser.add_subparsers(title='Subcommands',
@@ -68,11 +69,12 @@ class Parse(object):
 			informations.')
 
 	def clean(self):
-		self.sub['clean'] = self.sparser.add_parser('clean', help='Clean and reset \
-			the formating of the *.mscx file')
+		self.sub['clean'] = self.sparser.add_parser('clean', 
+			help='Clean and reset the formating of the *.mscx file')
+
 		self.sub['clean'].add_argument('-s', '--style', type=file,
-			help='Load a *.mss style file and include the contents of this \
-			file.')
+			help='Load a *.mss style file and include the contents of \
+			this file.')
 
 	def meta(self):
 		self.sub['meta'] = self.sparser.add_parser('meta',
@@ -80,22 +82,23 @@ class Parse(object):
 			(title, composer, lyricist) with the corresponding \
 			metadata fields.')
 
-		self.sub['meta'].add_argument('-j', '--json', action='store_true',
-			help='Additionally write the metadata to a json file.')
+		self.sub['meta'].add_argument('-j', '--json',
+			action='store_true', help='Additionally write the metadata \
+			to a json file.')
 
-		self.sub['meta'].add_argument('-s', '--show', action='store_true',
-			help='Show all metadata.')
+		self.sub['meta'].add_argument('-s', '--show',
+			action='store_true', help='Show all metadata.')
 
 	def lyrics(self):
 		self.sub['lyrics'] = self.sparser.add_parser('lyrics',
-		help='Extract lyrics.')
+			help='Extract lyrics.')
 
 		self.sub['lyrics'].add_argument('-n', '--number', nargs=1,
 			help='Number of lyric verses.')
 
 	def rename(self):
 		self.sub['rename'] = self.sparser.add_parser('rename',
-		help='Rename the *.mscx files.')
+			help='Rename the *.mscx files.')
 
 		self.sub['rename'].add_argument('-d', '--dry-run',
 			action='store_true', help='Do not rename the scores')
@@ -103,26 +106,36 @@ class Parse(object):
 		self.sub['rename'].add_argument('-f', '--format',
 			help='Format string: possible placeholders are %%title%%')
 
-		self.sub['rename'].add_argument('-a', '--ascii', action='store_true',
-			help='Use only ASCII characters.')
+		self.sub['rename'].add_argument('-a', '--ascii',
+			action='store_true', help='Use only ASCII characters.')
 
 	def export(self):
 		self.sub['export'] = self.sparser.add_parser('export',
 			help='Export the scores to PDFs or to the specified \
 			extension.')
 
-		self.sub['export'].add_argument('-e', '--extension', default='pdf',
-			help='Extension to export')
+		self.sub['export'].add_argument('-e', '--extension',
+			default='pdf', help='Extension to export. If this option \
+			is omitted, then the default extension is "pdf".')
 
 	def help(self):
-		self.sub['help'] = self.sparser.add_parser('help', help='Show help')
+		self.sub['help'] = self.sparser.add_parser('help',
+			help='Show help. Use "mscxyz.py help all" to show help \
+			messages of all subcommands. Use \
+			"mscxyz.py help <subcommand>" to show only help messages \
+			for the given subcommand.')
 
-		self.sub['help'].add_argument('-m', '--markdown', action='store_true',
-			help='Show help in markdown format.')
+		self.sub['help'].add_argument('-m', '--markdown',
+			action='store_true', help='Show help in markdown format. \
+			This option enables to generate the README file directly \
+			form the command line output.')
 
 	def addPositional(self):
-		self.parser.add_argument('path', help='Path to a *.mscx file or a \
-			folder which contains *.mscx files.')
+		self.parser.add_argument('path', help='Path to a *.mscx file \
+			or a folder which contains *.mscx files. In conjunction \
+			with the subcommand "help" this positional parameter \
+			accepts the names of all other subcommands oder the word \
+			"all".')
 
 	def parse(self):
 		return self.parser.parse_args()

@@ -9,7 +9,9 @@ notation software MuseScore.
 
 positional arguments:
   path                  Path to a *.mscx file or a folder which contains
-                        *.mscx files.
+                        *.mscx files. In conjunction with the subcommand
+                        "help" this positional parameter accepts the names of
+                        all other subcommands oder the word "all".
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -45,7 +47,10 @@ Subcommands:
     rename              Rename the *.mscx files.
     export              Export the scores to PDFs or to the specified
                         extension.
-    help                Show help
+    help                Show help. Use "mscxyz.py help all" to show help
+                        messages of all subcommands. Use "mscxyz.py help
+                        <subcommand>" to show only help messages for the given
+                        subcommand.
 ```
 
 # Subcommands
@@ -72,7 +77,9 @@ usage: mscxyz.py help [-h] [-m]
 
 optional arguments:
   -h, --help      show this help message and exit
-  -m, --markdown  Show help in markdown format.
+  -m, --markdown  Show help in markdown format. This option enables to
+                  generate the README file directly form the command line
+                  output.
 ```
 
 ## mscxyz.py lyrics
@@ -105,7 +112,8 @@ usage: mscxyz.py export [-h] [-e EXTENSION]
 optional arguments:
   -h, --help            show this help message and exit
   -e EXTENSION, --extension EXTENSION
-                        Extension to export
+                        Extension to export. If this option is omitted, then
+                        the default extension is "pdf".
 ```
 
 ## mscxyz.py clean
