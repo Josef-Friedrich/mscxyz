@@ -18,12 +18,6 @@ class Parse(object):
 		self.initParser()
 		self.addArguments()
 		self.addSubParser()
-		self.clean()
-		self.meta()
-		self.lyrics()
-		self.rename()
-		self.export()
-		self.help()
 		self.addPositional()
 
 	def initParser(self):
@@ -68,7 +62,8 @@ class Parse(object):
 			dest='subcommand', help='Run "subcommand --help" for more \
 			informations.')
 
-	def clean(self):
+	# clean
+
 		self.sub['clean'] = self.sparser.add_parser('clean',
 			help='Clean and reset the formating of the *.mscx file')
 
@@ -76,7 +71,6 @@ class Parse(object):
 			help='Load a *.mss style file and include the contents of \
 			this file.')
 
-	def meta(self):
 		self.sub['meta'] = self.sparser.add_parser('meta',
 			help='Synchronize the values of the first vertical frame \
 			(title, composer, lyricist) with the corresponding \
@@ -89,14 +83,15 @@ class Parse(object):
 		self.sub['meta'].add_argument('-s', '--show',
 			action='store_true', help='Show all metadata.')
 
-	def lyrics(self):
+	# lyrics
+
 		self.sub['lyrics'] = self.sparser.add_parser('lyrics',
 			help='Extract lyrics.')
 
 		self.sub['lyrics'].add_argument('-n', '--number', nargs=1,
 			help='Number of lyric verses.')
 
-	def rename(self):
+	# rename
 		self.sub['rename'] = self.sparser.add_parser('rename',
 			help='Rename the *.mscx files.')
 
@@ -113,7 +108,8 @@ class Parse(object):
 			action='store_true', help='Replace all whitespaces with dashes or \
 			sometimes underlines.')
 
-	def export(self):
+	# export
+
 		self.sub['export'] = self.sparser.add_parser('export',
 			help='Export the scores to PDFs or to the specified \
 			extension.')
@@ -122,7 +118,8 @@ class Parse(object):
 			default='pdf', help='Extension to export. If this option \
 			is omitted, then the default extension is "pdf".')
 
-	def help(self):
+	# help
+
 		self.sub['help'] = self.sparser.add_parser('help',
 			help='Show help. Use "mscxyz.py help all" to show help \
 			messages of all subcommands. Use \

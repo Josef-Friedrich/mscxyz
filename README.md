@@ -60,7 +60,7 @@ Subcommands:
 ## mscxyz.py rename
 
 ```
-usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a]
+usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a] [-n]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -68,6 +68,8 @@ optional arguments:
   -f FORMAT, --format FORMAT
                         Format string: possible placeholders are %title%
   -a, --ascii           Use only ASCII characters.
+  -n, --no-whitespace   Replace all whitespaces with dashes or sometimes
+                        underlines.
 ```
 
 ## mscxyz.py help
