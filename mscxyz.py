@@ -499,8 +499,6 @@ class Meta(Tree):
 	def __init__(self, fullpath):
 		super(Meta, self).__init__(fullpath)
 
-		self.metaMapping()
-
 		if not self.error:
 			tags = [
 				"arranger",
@@ -541,38 +539,6 @@ class Meta(Tree):
 					self.vbox[tag] = text.decode('utf-8')
 				else:
 					self.vbox[tag] = ''
-
-	def metaMapping(self):
-		title = {
-			"meta" : "workTitle",
-			"vbox": "Title",
-			"format":"%title%",
-		}
-
-		subtitle = {
-			"meta" : "movementTitle",
-			"vbox": "Subtitle",
-			"format":"%subtitle%",
-		}
-
-		composer = {
-			"meta" : "composer",
-			"vbox": "Composer",
-			"format":"%composer%",
-		}
-
-		lyricist = {
-			"meta" : "lyricist",
-			"vbox": "Lyricist",
-			"format":"%lyricist%",
-		}
-
-		self.map = {
-			"title": title,
-			"subtitle": subtitle,
-			"composer": composer,
-			"lyricist": lyricist,
-		}
 
 	def getMetaTag(self, name):
 		for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
@@ -621,45 +587,45 @@ class Meta(Tree):
 		else:
 			self.insertInVBox(style, text)
 
-	def syncTitle(self):
-		values = [
-			self.vbox['Title'],
-			self.meta['workTitle'],
-			self.meta['movementTitle'],
-			self.basename
-		]
+	# Get a value by key.
+	#
+	# This function searches for values in this order: vbox, meta, filename.
+	# Possible "key"s are: title, subtitle, composer, lyricist
+	def get(self, key):
+		if key == 'title':
+			values = [
+				self.vbox['Title'],
+				self.meta['workTitle'],
+				self.meta['movementTitle'],
+				self.basename
+			]
+		elif key == 'subtitle':
+			values = [
+				self.vbox['Subtitle'],
+				self.meta['movementTitle'],
+			]
+		else:
+			values = [
+				self.vbox[key.title],
+				self.meta[key],
+			]
 
 		for value in values:
 			if value:
 				break
 
-		self.setVBox('Title', value)
-		self.setMeta('workTitle', value)
-		self.setMeta('movementTitle', '')
+		return value
 
-	def syncComposer(self):
-		values = [
-			self.vbox['Composer'],
-			self.meta['composer']
-		]
-
-		for value in values:
-			if value:
-				self.setVBox('Composer', value)
-				self.setMeta('composer', value)
-				break
-
-	def syncLyricist(self):
-		values = [
-			self.vbox['Lyricist'],
-			self.meta['lyricist']
-		]
-
-		for value in values:
-			if value:
-				self.setVBox('Lyricist', value)
-				self.setMeta('lyricist', value)
-				break
+	def sync(self, key):
+		if key == 'title':
+			self.setVBox('Title', self.get(key))
+			self.setMeta('workTitle', self.get(key))
+		elif key == 'subtitle':
+			self.setVBox('Subtitle', self.get(key))
+			self.setMeta('workTitle', self.get(key))
+		else:
+			self.setVBox(key.title, self.get(key))
+			self.setMeta(key, self.get(key))
 
 	def cleanMeta(self):
 		tags = [
@@ -676,9 +642,8 @@ class Meta(Tree):
 
 	def syncMetaTags(self):
 		if not self.error:
-			self.syncTitle()
-			self.syncComposer()
-			self.syncLyricist()
+			for key in ['title', 'subtitle', 'composer', 'lyricist']:
+				self.sync(key)
 			self.cleanMeta()
 
 	def show(self):
