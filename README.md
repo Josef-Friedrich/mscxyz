@@ -1,3 +1,5 @@
+# mscxyz.py
+
 ```
 usage: mscxyz.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
                  {clean,meta,lyrics,rename,export,help} ... path
@@ -46,7 +48,11 @@ Subcommands:
     help                Show help
 ```
 
-# mscxyz.py rename
+# Subcommands
+
+---
+
+## mscxyz.py rename
 
 ```
 usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a]
@@ -59,7 +65,7 @@ optional arguments:
   -a, --ascii           Use only ASCII characters.
 ```
 
-# mscxyz.py help
+## mscxyz.py help
 
 ```
 usage: mscxyz.py help [-h] [-m]
@@ -69,7 +75,7 @@ optional arguments:
   -m, --markdown  Show help in markdown format.
 ```
 
-# mscxyz.py lyrics
+## mscxyz.py lyrics
 
 ```
 usage: mscxyz.py lyrics [-h] [-n NUMBER]
@@ -80,7 +86,7 @@ optional arguments:
                         Number of lyric verses.
 ```
 
-# mscxyz.py meta
+## mscxyz.py meta
 
 ```
 usage: mscxyz.py meta [-h] [-j] [-s]
@@ -91,7 +97,7 @@ optional arguments:
   -s, --show  Show all metadata.
 ```
 
-# mscxyz.py export
+## mscxyz.py export
 
 ```
 usage: mscxyz.py export [-h] [-e EXTENSION]
@@ -102,7 +108,7 @@ optional arguments:
                         Extension to export
 ```
 
-# mscxyz.py clean
+## mscxyz.py clean
 
 ```
 usage: mscxyz.py clean [-h] [-s STYLE]

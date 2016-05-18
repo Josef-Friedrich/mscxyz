@@ -128,13 +128,22 @@ class Parse(object):
 		return self.parser.parse_args()
 
 	def showAllHelp(self):
-		if args.markdown: print('```')
-		self.parser.print_help()
-		if args.markdown: print('```')
-		for sub, command in self.sub.iteritems():
-			print('\n# ' + command.prog + '\n')
+		if args.path == 'all':
+			print('# mscxyz.py\n')
 			if args.markdown: print('```')
-			command.print_help()
+			self.parser.print_help()
+			if args.markdown: print('```')
+
+			print('\n# Subcommands\n\n---')
+
+			for sub, command in self.sub.iteritems():
+				print('\n## ' + command.prog + '\n')
+				if args.markdown: print('```')
+				command.print_help()
+				if args.markdown: print('```')
+		else:
+			if args.markdown: print('```')
+			self.sub[args.path].print_help()
 			if args.markdown: print('```')
 
 def execute():
