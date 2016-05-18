@@ -34,12 +34,15 @@ class Parse(object):
 
 	def addArguments(self):
 		parser = self.parser
+
 		parser.add_argument('-b', '--backup', action='store_true',
 			help='Create a backup file.')
+
 		parser.add_argument('-g', '--glob', default='*.mscx',
 			help='Handle only files which matches against Unix style \
 			glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
 			option, the standard glob pattern "*.mscx" is used.')
+
 		parser.add_argument('-p', '--pick', type=int, default=0,
 			help='The --pick option can be used to run multiple \
 			mscxyz.py commands in parallel on multiple consoles. If \
@@ -49,10 +52,12 @@ class Parse(object):
 			By default every fourth file gets picked up. The option \
 			"-p N" begins the picking on the Nth file of a cycle. The \
 			corresponding option is named "-c" or "--cycle-length".')
+
 		parser.add_argument('-c', '--cycle-length', type=int, default=4,
 			help='This option specifies the distance between the \
 			picked files. The option "-c N" picks every Nth file. The \
 			corresponding options is named "-p" or "--pick".')
+
 		parser.add_argument('-v', '--verbose', action='count', default=0,
 			help='Make commands more verbose. You can specifiy multiple \
 			arguments (. g.: -vvv) to make the command more verbose.')
@@ -70,37 +75,48 @@ class Parse(object):
 			file.')
 
 	def meta(self):
-		self.sub['meta'] = self.sparser.add_parser('meta', help='Synchronize the \
-			values of the first vertical frame (title, composer, lyricist) \
-			with the corresponding metadata fields.')
+		self.sub['meta'] = self.sparser.add_parser('meta',
+			help='Synchronize the values of the first vertical frame \
+			(title, composer, lyricist) with the corresponding \
+			metadata fields.')
+
 		self.sub['meta'].add_argument('-j', '--json', action='store_true',
 			help='Additionally write the metadata to a json file.')
+
 		self.sub['meta'].add_argument('-s', '--show', action='store_true',
 			help='Show all metadata.')
 
 	def lyrics(self):
-		self.sub['lyrics'] = self.sparser.add_parser('lyrics', help='Extract lyrics.')
+		self.sub['lyrics'] = self.sparser.add_parser('lyrics',
+		help='Extract lyrics.')
+
 		self.sub['lyrics'].add_argument('-n', '--number', nargs=1,
 			help='Number of lyric verses.')
 
 	def rename(self):
-		self.sub['rename'] = self.sparser.add_parser('rename', help='Rename the \
-			*.mscx files.')
-		self.sub['rename'].add_argument('-d', '--dry-run', action='store_true',
-			help='Do not rename the scores')
+		self.sub['rename'] = self.sparser.add_parser('rename',
+		help='Rename the *.mscx files.')
+
+		self.sub['rename'].add_argument('-d', '--dry-run',
+			action='store_true', help='Do not rename the scores')
+
 		self.sub['rename'].add_argument('-f', '--format',
 			help='Format string: possible placeholders are %%title%%')
+
 		self.sub['rename'].add_argument('-a', '--ascii', action='store_true',
 			help='Use only ASCII characters.')
 
 	def export(self):
-		self.sub['export'] = self.sparser.add_parser('export', help='Export the scores to PDFs \
-			or to the specified extension.')
+		self.sub['export'] = self.sparser.add_parser('export',
+			help='Export the scores to PDFs or to the specified \
+			extension.')
+
 		self.sub['export'].add_argument('-e', '--extension', default='pdf',
 			help='Extension to export')
 
 	def help(self):
 		self.sub['help'] = self.sparser.add_parser('help', help='Show help')
+
 		self.sub['help'].add_argument('-m', '--markdown', action='store_true',
 			help='Show help in markdown format.')
 
