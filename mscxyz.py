@@ -63,7 +63,7 @@ class Parse(object):
 	def clean(self):
 		p = self.sparser.add_parser('clean', help='Clean and reset \
 			the formating of the *.mscx file')
-		p.add_argument('-s', '--style', nargs=1,
+		p.add_argument('-s', '--style', type=file,
 			help='Load a *.mss style file and include the contents of this \
 			file.')
 
@@ -122,6 +122,9 @@ def execute():
 			verbose(score, '\nclean', 'yellow')
 			clean = Tree(score)
 			clean.clean()
+			if args.style:
+				verbose(args.style.name, 'style file', 'blue')
+				clean.mergeStyle()
 			clean.write()
 
 		elif args.subcommand == 'lyrics':
@@ -415,6 +418,13 @@ class Tree(File):
 				for rm in self.tree.xpath(xpath_string):
 					verbose(rm.tag, 'remove', verbosity=2)
 					rm.getparent().remove(rm)
+
+	def mergeStyle(self):
+		import lxml.etree as et
+		style = et.parse(args.style.name).getroot()
+
+		for score in self.tree.xpath('/museScore/Score'):
+			score.insert(0, style[0])
 
 	def clean(self):
 		if not self.error:
