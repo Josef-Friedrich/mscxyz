@@ -69,7 +69,7 @@ class Parse(object):
 			informations.')
 
 	def clean(self):
-		self.sub['clean'] = self.sparser.add_parser('clean', 
+		self.sub['clean'] = self.sparser.add_parser('clean',
 			help='Clean and reset the formating of the *.mscx file')
 
 		self.sub['clean'].add_argument('-s', '--style', type=file,
@@ -134,7 +134,7 @@ class Parse(object):
 		self.parser.add_argument('path', help='Path to a *.mscx file \
 			or a folder which contains *.mscx files. In conjunction \
 			with the subcommand "help" this positional parameter \
-			accepts the names of all other subcommands oder the word \
+			accepts the names of all other subcommands or the word \
 			"all".')
 
 	def parse(self):

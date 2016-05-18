@@ -11,7 +11,7 @@ positional arguments:
   path                  Path to a *.mscx file or a folder which contains
                         *.mscx files. In conjunction with the subcommand
                         "help" this positional parameter accepts the names of
-                        all other subcommands oder the word "all".
+                        all other subcommands or the word "all".
 
 optional arguments:
   -h, --help            show this help message and exit
