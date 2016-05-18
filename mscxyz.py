@@ -14,6 +14,7 @@ class Parse(object):
 	"""Expose the command line interface."""
 
 	def __init__(self):
+		self.sub = {}
 		self.initParser()
 		self.addArguments()
 		self.addSubParser()
@@ -22,13 +23,14 @@ class Parse(object):
 		self.lyrics()
 		self.rename()
 		self.export()
+		self.help()
 		self.addPositional()
 
 	def initParser(self):
 		import argparse
 		self.parser = argparse.ArgumentParser(description='A command \
 			line tool to manipulate the XML based *.mscX and *.mscZ \
-			files of the notation software MuseScore')
+			files of the notation software MuseScore.')
 
 	def addArguments(self):
 		parser = self.parser
@@ -61,41 +63,46 @@ class Parse(object):
 			informations.')
 
 	def clean(self):
-		p = self.sparser.add_parser('clean', help='Clean and reset \
+		self.sub['clean'] = self.sparser.add_parser('clean', help='Clean and reset \
 			the formating of the *.mscx file')
-		p.add_argument('-s', '--style', type=file,
+		self.sub['clean'].add_argument('-s', '--style', type=file,
 			help='Load a *.mss style file and include the contents of this \
 			file.')
 
 	def meta(self):
-		p = self.sparser.add_parser('meta', help='Synchronize the \
+		self.sub['meta'] = self.sparser.add_parser('meta', help='Synchronize the \
 			values of the first vertical frame (title, composer, lyricist) \
 			with the corresponding metadata fields.')
-		p.add_argument('-j', '--json', action='store_true',
+		self.sub['meta'].add_argument('-j', '--json', action='store_true',
 			help='Additionally write the metadata to a json file.')
-		p.add_argument('-s', '--show', action='store_true',
+		self.sub['meta'].add_argument('-s', '--show', action='store_true',
 			help='Show all metadata.')
 
 	def lyrics(self):
-		p = self.sparser.add_parser('lyrics', help='Extract lyrics.')
-		p.add_argument('-n', '--number', nargs=1,
+		self.sub['lyrics'] = self.sparser.add_parser('lyrics', help='Extract lyrics.')
+		self.sub['lyrics'].add_argument('-n', '--number', nargs=1,
 			help='Number of lyric verses.')
 
 	def rename(self):
-		p = self.sparser.add_parser('rename', help='Rename the \
+		self.sub['rename'] = self.sparser.add_parser('rename', help='Rename the \
 			*.mscx files.')
-		p.add_argument('-d', '--dry-run', action='store_true',
+		self.sub['rename'].add_argument('-d', '--dry-run', action='store_true',
 			help='Do not rename the scores')
-		p.add_argument('-f', '--format',
+		self.sub['rename'].add_argument('-f', '--format',
 			help='Format string: possible placeholders are %%title%%')
-		p.add_argument('-a', '--ascii', action='store_true',
+		self.sub['rename'].add_argument('-a', '--ascii', action='store_true',
 			help='Use only ASCII characters.')
 
 	def export(self):
-		p = self.sparser.add_parser('export', help='Export the scores to PDFs \
+		self.sub['export'] = self.sparser.add_parser('export', help='Export the scores to PDFs \
 			or to the specified extension.')
-		p.add_argument('-e', '--extension', default='pdf',
+		self.sub['export'].add_argument('-e', '--extension', default='pdf',
 			help='Extension to export')
+
+	def help(self):
+		self.sub['help'] = self.sparser.add_parser('help', help='Show help')
+		self.sub['help'].add_argument('-m', '--markdown', action='store_true',
+			help='Show help in markdown format.')
 
 	def addPositional(self):
 		self.parser.add_argument('path', help='Path to a *.mscx file or a \
@@ -104,7 +111,20 @@ class Parse(object):
 	def parse(self):
 		return self.parser.parse_args()
 
+	def showAllHelp(self):
+		if args.markdown: print('```')
+		self.parser.print_help()
+		if args.markdown: print('```')
+		for sub, command in self.sub.iteritems():
+			print('\n# ' + command.prog + '\n')
+			if args.markdown: print('```')
+			command.print_help()
+			if args.markdown: print('```')
+
 def execute():
+	if args.subcommand == 'help':
+		parse.showAllHelp()
+		return
 
 	batch = Batch(args.path, args.glob)
 
@@ -642,4 +662,5 @@ if __name__ == '__main__':
 
 	parse = Parse()
 	args = parse.parse()
+
 	execute()
