@@ -58,6 +58,9 @@ class Parse(object):
 			verbose.')
 
 	def addSubParser(self):
+		import argparse
+		import textwrap
+
 		self.sparser = self.parser.add_subparsers(title='Subcommands',
 			dest='subcommand', help='Run "subcommand --help" for more \
 			informations.')
@@ -71,10 +74,13 @@ class Parse(object):
 			help='Load a *.mss style file and include the contents of \
 			this file.')
 
+	# meta
+
 		self.sub['meta'] = self.sparser.add_parser('meta',
 			help='Synchronize the values of the first vertical frame \
 			(title, composer, lyricist) with the corresponding \
-			metadata fields.')
+			metadata fields.',
+			)
 
 		self.sub['meta'].add_argument('-j', '--json',
 			action='store_true', help='Additionally write the metadata \
@@ -92,14 +98,26 @@ class Parse(object):
 			help='Number of lyric verses.')
 
 	# rename
+
 		self.sub['rename'] = self.sparser.add_parser('rename',
-			help='Rename the *.mscx files.')
+			help='Rename the *.mscx files.',
+			formatter_class=argparse.RawDescriptionHelpFormatter,
+			description=textwrap.dedent('''\
+			Placholders you can use in the format string (-f, --format):
+
+				- %title%
+				- %subtitle%
+				- %composer%
+				- %lyricist%
+			'''
+			)
+		)
 
 		self.sub['rename'].add_argument('-d', '--dry-run',
 			action='store_true', help='Do not rename the scores')
 
 		self.sub['rename'].add_argument('-f', '--format',
-			help='Format string: possible placeholders are %%title%%')
+			help='Format string.')
 
 		self.sub['rename'].add_argument('-a', '--ascii',
 			action='store_true', help='Use only ASCII characters.')
