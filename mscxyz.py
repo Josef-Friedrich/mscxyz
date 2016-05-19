@@ -194,6 +194,7 @@ def execute():
 			if args.show:
 				meta.show()
 			else:
+				if args.json: meta.exportJson()
 				meta.syncMetaTags()
 				meta.write()
 
@@ -292,32 +293,6 @@ def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')
 	mscore(['-o', output_file, input_file])
 	os.remove(input_file)
-
-def metadata_to_json():
-	title = get_meta_tag('workTitle')
-	composer = get_meta_tag('composer')
-	lyricist = get_meta_tag('lyricist')
-
-	print('Title: ' + str(title) + '; Composer: ' + str(composer) + '; Lyricist: ' + str(lyricist))
-
-	data = {}
-	data['title'] = title
-
-	if composer:
-		data['composer'] = composer
-
-	if lyricist:
-		data['lyricist'] = lyricist
-
-	out_file = open("test.json","w")
-	json.dump(data,out_file, indent=4)
-	out_file.close()
-
-def create_info(json_file, data):
-	import json
-	out_file = open(json_file, 'w')
-	json.dump(data, out_file, indent=4)
-	out_file.close()
 
 def create_dir(path):
 	import errno
@@ -657,6 +632,15 @@ class Meta(Tree):
 			for tag, text in self.vbox.iteritems():
 				if text:
 					print_desc(text, tag, 'green')
+
+	def exportJson(self):
+		import json
+		data = {}
+		data['title'] = self.get('title')
+
+		output = open(self.fullpath.replace('.' + self.extension, '.json'), 'w')
+		json.dump(data, output, indent=4)
+		output.close()
 
 if __name__ == '__main__':
 
