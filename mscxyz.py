@@ -206,7 +206,7 @@ def execute():
 
 		elif args.subcommand == 'lyrics':
 			lyrics = Lyrics(score)
-			print(lyrics.max)
+			lyrics.extractLyrics()
 
 		elif args.subcommand == 'meta':
 			meta = Meta(score)
@@ -458,10 +458,14 @@ class Tree(File):
 			self.removeTagsByXPath('/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
 			self.stripTags('font', 'b', 'i', 'pos')
 
-	def write(self):
+	def write(self, new_name=''):
+		if new_name:
+			filename = new_name
+		else:
+			filename = self.fullpath
 		if not self.error:
-			self.tree.write(self.fullpath, encoding='UTF-8')
-			re_open(self.fullpath)
+			self.tree.write(filename, encoding='UTF-8')
+			re_open(filename)
 
 class Lyrics(Tree):
 
@@ -495,30 +499,21 @@ class Lyrics(Tree):
 
 		return max_lyric
 
-	def extractLyics(self):
-		ms_file = sys.argv[1]
-		lyrics_no_display = sys.argv[2]
-		lyrics_no = str(int(lyrics_no_display) - 1)
-		new_file = ms_file.replace('.mscx', '_Lyrics-no-' + lyrics_no_display + '.mscx')
+	def extractLyrics(self):
+		for number in range(1, self.max + 1):
+			score = Lyrics(self.fullpath)
 
-		print(new_file)
+			for element in score.lyrics:
+				tag = element['element']
 
-		mscx = et.parse(ms_file)
+				if element['number'] != number:
+					tag.getparent().remove(tag)
+				elif number != 1:
+					tag.find('no').text = '0'
 
-		for lyric in mscx.findall('.//Lyrics'):
-			number = lyric.find('no')
-			if hasattr(number, 'text'):
-				no = number.text
-			else:
-				no = '0'
-
-			if no != lyrics_no:
-				lyric.getparent().remove(lyric)
-			elif hasattr(number, 'text'):
-				number.text = '0'
-
-		# To get closing tag use method 'html'
-		mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
+			ext = '.' + self.extension
+			new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
+			score.write(new_name)
 
 class Meta(Tree):
 
