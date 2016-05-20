@@ -205,7 +205,8 @@ def execute():
 			clean.write()
 
 		elif args.subcommand == 'lyrics':
-			print(score)
+			lyrics = Lyrics(score)
+			print(lyrics.max)
 
 		elif args.subcommand == 'meta':
 			meta = Meta(score)
@@ -262,31 +263,6 @@ class Batch(object):
 			return self.files
 		else:
 			return [self.path]
-
-def extract_lyrics():
-	ms_file = sys.argv[1]
-	lyrics_no_display = sys.argv[2]
-	lyrics_no = str(int(lyrics_no_display) - 1)
-	new_file = ms_file.replace('.mscx', '_Lyrics-no-' + lyrics_no_display + '.mscx')
-
-	print(new_file)
-
-	mscx = et.parse(ms_file)
-
-	for lyric in mscx.findall('.//Lyrics'):
-		number = lyric.find('no')
-		if hasattr(number, 'text'):
-			no = number.text
-		else:
-			no = '0'
-
-		if no != lyrics_no:
-			lyric.getparent().remove(lyric)
-		elif hasattr(number, 'text'):
-			number.text = '0'
-
-	# To get closing tag use method 'html'
-	mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
 
 def mscore(commands):
 	import subprocess
@@ -486,6 +462,63 @@ class Tree(File):
 		if not self.error:
 			self.tree.write(self.fullpath, encoding='UTF-8')
 			re_open(self.fullpath)
+
+class Lyrics(Tree):
+
+	def __init__(self, fullpath):
+		super(Lyrics, self).__init__(fullpath)
+		self.lyrics = self.normalizeLyrics()
+		self.max = self.getMax()
+
+	def normalizeLyrics(self):
+		lyrics = []
+		for lyric in self.tree.findall('.//Lyrics'):
+			safe = {}
+			safe['element'] = lyric
+			number = lyric.find('no')
+
+			if hasattr(number, 'text'):
+				no = int(number.text) + 1
+			else:
+				no = 1
+			safe['number'] = no
+
+			lyrics.append(safe)
+
+		return lyrics
+
+	def getMax(self):
+		max_lyric = 0
+		for element in self.lyrics:
+			if element['number'] > max_lyric:
+				max_lyric = element['number']
+
+		return max_lyric
+
+	def extractLyics(self):
+		ms_file = sys.argv[1]
+		lyrics_no_display = sys.argv[2]
+		lyrics_no = str(int(lyrics_no_display) - 1)
+		new_file = ms_file.replace('.mscx', '_Lyrics-no-' + lyrics_no_display + '.mscx')
+
+		print(new_file)
+
+		mscx = et.parse(ms_file)
+
+		for lyric in mscx.findall('.//Lyrics'):
+			number = lyric.find('no')
+			if hasattr(number, 'text'):
+				no = number.text
+			else:
+				no = '0'
+
+			if no != lyrics_no:
+				lyric.getparent().remove(lyric)
+			elif hasattr(number, 'text'):
+				number.text = '0'
+
+		# To get closing tag use method 'html'
+		mscx.write(new_file, pretty_print=True, xml_declaration=True, method='html', encoding='UTF-8')
 
 class Meta(Tree):
 
