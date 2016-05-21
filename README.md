@@ -62,7 +62,7 @@ Subcommands:
 ```
 usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a] [-n]
 
-Placholders you can use in the format string (-f, --format):
+Tokens you can use in the format string (-f, --format):
 
 	- %title%
 	- %title_1char%  The first character of the token 'title'.

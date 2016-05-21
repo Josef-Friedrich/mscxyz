@@ -103,7 +103,7 @@ class Parse(object):
 			help='Rename the *.mscx files.',
 			formatter_class=argparse.RawDescriptionHelpFormatter,
 			description=textwrap.dedent('''\
-			Placholders you can use in the format string (-f, --format):
+			Tokens you can use in the format string (-f, --format):
 
 				- %title%
 				- %title_1char%  The first character of the token 'title'.
