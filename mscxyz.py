@@ -106,6 +106,8 @@ class Parse(object):
 			Placholders you can use in the format string (-f, --format):
 
 				- %title%
+				- %title_1char%  The first character of the token 'title'.
+				- %title_2char%  The first two characters of the token 'title'
 				- %subtitle%
 				- %composer%
 				- %lyricist%
@@ -347,6 +349,7 @@ class Rename(File):
 
 	def __init__(self, fullpath):
 		super(Rename, self).__init__(fullpath)
+		self.score = Meta(self.fullpath)
 		self.workname = self.basename
 
 	def replaceGermanUmlaute(self):
@@ -385,12 +388,28 @@ class Rename(File):
 	def debug(self):
 		print(self.workname)
 
+	def prepareTokenSubstring(self, value, length):
+		import unidecode
+		import re
+		value = value.lower()
+		value = unidecode.unidecode(value)
+		value = re.sub('[^A-Za-z]', '', value)
+		return value[0:length]
+
+	def getToken(self, token):
+		title = self.score.get('title')
+		if token == 'title_1char':
+			return self.prepareTokenSubstring(title, 1)
+		elif token == 'title_2char':
+			return self.prepareTokenSubstring(title, 2)
+		else:
+			return self.score.get(token)
+
 	def applyFormatString(self):
 		import re
 		output = args.format
-		for tag in re.findall('%(.*?)%', output):
-			score = Meta(self.fullpath)
-			output = output.replace('%' + tag + '%', score.get(tag))
+		for token in re.findall('%(.*?)%', output):
+			output = output.replace('%' + token + '%', self.getToken(token))
 
 		self.workname = output
 

@@ -62,11 +62,20 @@ Subcommands:
 ```
 usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a] [-n]
 
+Placholders you can use in the format string (-f, --format):
+
+	- %title%
+	- %title_1char%  The first character of the token 'title'.
+	- %title_2char%  The first two characters of the token 'title'
+	- %subtitle%
+	- %composer%
+	- %lyricist%
+
 optional arguments:
   -h, --help            show this help message and exit
   -d, --dry-run         Do not rename the scores
   -f FORMAT, --format FORMAT
-                        Format string: possible placeholders are %title%
+                        Format string.
   -a, --ascii           Use only ASCII characters.
   -n, --no-whitespace   Replace all whitespaces with dashes or sometimes
                         underlines.
