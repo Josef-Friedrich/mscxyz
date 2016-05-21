@@ -430,7 +430,9 @@ class Rename(File):
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
 
 		if not args.dry_run:
-			os.rename(self.fullpath, self.dirname + '/' + self.workname + '.' + self.extension)
+			newpath = self.workname + '.' + self.extension
+			create_dir(os.path.dirname(newpath))
+			os.rename(self.fullpath, newpath)
 
 class Tree(File):
 
