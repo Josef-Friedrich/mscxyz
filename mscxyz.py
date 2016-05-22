@@ -140,7 +140,46 @@ class Parse(object):
 			help='Synchronize the values of the first vertical frame \
 			(title, composer, lyricist) with the corresponding \
 			metadata fields.',
+			formatter_class=argparse.RawDescriptionHelpFormatter,
+			description=textwrap.dedent('''\
+			# XML structure of a meta tag:
+
+				<metaTag name="tag"></metaTag>
+
+			# All meta tags:
+
+				- arranger
+				- composer
+				- copyright
+				- creationDate
+				- lyricist
+				- movementNumber
+				- movementTitle
+				- originalFormat
+				- platform
+				- poet
+				- source
+				- translator
+				- workNumber
+				- workTitle
+
+			# XML structure of a vbox tag:
+
+				<VBox>
+				  <Text>
+				    <style>Title</style>
+				    <text>Some title text</text>
+				    </Text>
+
+			# All vbox tags:
+
+				- Title
+				- Subtitle
+				- Composer
+				- Lyricis
+			'''
 			)
+		)
 
 		self.sub['meta'].add_argument('-j', '--json',
 			action='store_true', help='Additionally write the metadata \

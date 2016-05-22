@@ -120,6 +120,42 @@ optional arguments:
 ```
 usage: mscxyz.py meta [-h] [-j] [-s]
 
+# XML structure of a meta tag:
+
+	<metaTag name="tag"></metaTag>
+
+# All meta tags:
+
+	- arranger
+	- composer
+	- copyright
+	- creationDate
+	- lyricist
+	- movementNumber
+	- movementTitle
+	- originalFormat
+	- platform
+	- poet
+	- source
+	- translator
+	- workNumber
+	- workTitle
+
+# XML structure of a vbox tag:
+
+	<VBox>
+	  <Text>
+	    <style>Title</style>
+	    <text>Some title text</text>
+	    </Text>
+
+# All vbox tags:
+
+	- Title
+	- Subtitle
+	- Composer
+	- Lyricis
+
 optional arguments:
   -h, --help  show this help message and exit
   -j, --json  Additionally write the metadata to a json file.
