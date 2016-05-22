@@ -180,55 +180,6 @@ class Parse(object):
 			self.sub[args.path].print_help()
 			if args.markdown: print('```')
 
-def execute():
-	if args.subcommand == 'help':
-		parse.showAllHelp()
-		return
-
-	batch = Batch(args.path, args.glob)
-
-	if args.pick:
-		batch.pick(args.pick, args.cycle_length)
-
-	files = batch.getFiles()
-	for score in files:
-
-		if args.backup:
-			backup = File(score)
-			backup.backup()
-
-		if args.subcommand == 'clean':
-			verbose(score, '\nclean', 'yellow')
-			clean = Tree(score)
-			clean.clean()
-			if args.style:
-				verbose(args.style.name, 'style file', 'blue')
-				clean.mergeStyle()
-			clean.write()
-
-		elif args.subcommand == 'lyrics':
-			lyrics = Lyrics(score)
-			lyrics.extractLyrics()
-
-		elif args.subcommand == 'meta':
-			meta = Meta(score)
-			if args.show:
-				meta.show()
-			else:
-				if args.json: meta.exportJson()
-				meta.syncMetaTags()
-				meta.write()
-
-		elif args.subcommand == 'rename':
-			rename = Rename(score)
-			rename.execute()
-
-		elif args.subcommand == 'export':
-			verbose(score, '\nexport', 'yellow')
-			verbose(args.extension, 'extension', 'green')
-			export = File(score)
-			export.export()
-
 class Batch(object):
 
 	def __init__(self, path, glob = '*.mscx'):
@@ -717,4 +668,50 @@ if __name__ == '__main__':
 	parse = Parse()
 	args = parse.parse()
 
-	execute()
+	if args.subcommand == 'help':
+		parse.showAllHelp()
+		sys.exit()
+
+	batch = Batch(args.path, args.glob)
+
+	if args.pick:
+		batch.pick(args.pick, args.cycle_length)
+
+	files = batch.getFiles()
+	for score in files:
+
+		if args.backup:
+			backup = File(score)
+			backup.backup()
+
+		if args.subcommand == 'clean':
+			verbose(score, '\nclean', 'yellow')
+			clean = Tree(score)
+			clean.clean()
+			if args.style:
+				verbose(args.style.name, 'style file', 'blue')
+				clean.mergeStyle()
+			clean.write()
+
+		elif args.subcommand == 'lyrics':
+			lyrics = Lyrics(score)
+			lyrics.extractLyrics()
+
+		elif args.subcommand == 'meta':
+			meta = Meta(score)
+			if args.show:
+				meta.show()
+			else:
+				if args.json: meta.exportJson()
+				meta.syncMetaTags()
+				meta.write()
+
+		elif args.subcommand == 'rename':
+			rename = Rename(score)
+			rename.execute()
+
+		elif args.subcommand == 'export':
+			verbose(score, '\nexport', 'yellow')
+			verbose(args.extension, 'extension', 'green')
+			export = File(score)
+			export.export()
