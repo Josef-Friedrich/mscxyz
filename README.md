@@ -43,7 +43,11 @@ Subcommands:
     meta                Synchronize the values of the first vertical frame
                         (title, composer, lyricist) with the corresponding
                         metadata fields.
-    lyrics              Extract lyrics.
+    lyrics              Extract lyrics. Without any option this subcommand
+                        extracts all lyrics verses into separate mscx files.
+                        This generated mscx files contain only one verse. The
+                        old verse number is appended to the file name, e. g.:
+                        score_1.mscx.
     rename              Rename the *.mscx files.
     export              Export the scores to PDFs or to the specified
                         extension.
@@ -96,12 +100,19 @@ optional arguments:
 ## mscxyz.py lyrics
 
 ```
-usage: mscxyz.py lyrics [-h] [-n NUMBER]
+usage: mscxyz.py lyrics [-h] [-n NUMBER] [-r REMAP]
 
 optional arguments:
   -h, --help            show this help message and exit
   -n NUMBER, --number NUMBER
-                        Number of lyric verses.
+                        The lyric verse number to extract.
+  -r REMAP, --remap REMAP
+                        Remap lyrics. Example: "--remap 3:2,5:3". This example
+                        remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
+                        commas to specify multiple remap pairs. One remap pair
+                        is separated by a colon in this form: "old:new": "old"
+                        stands for the old verse number. "new" stands for the
+                        new verse number.
 ```
 
 ## mscxyz.py meta
