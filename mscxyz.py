@@ -92,10 +92,22 @@ class Parse(object):
 	# lyrics
 
 		self.sub['lyrics'] = self.sparser.add_parser('lyrics',
-			help='Extract lyrics.')
+			help='Extract lyrics. Without any option this subcommand \
+			extracts all lyrics verses into separate mscx files. \
+			This generated mscx files contain only one verse. The old \
+			verse number is appended to the file name, e. g.: \
+			score_1.mscx.')
 
-		self.sub['lyrics'].add_argument('-n', '--number', nargs=1,
-			help='Number of lyric verses.')
+		self.sub['lyrics'].add_argument('-n', '--number',
+			help='The lyric verse number to extract.')
+
+		self.sub['lyrics'].add_argument('-r', '--remap',
+			help='Remap lyrics. Example: "--remap 3:2,5:3". This \
+			example remaps lyrics verse 3 to verse 2 and verse 5 to 3. \
+			Use commas to specify multiple remap pairs. One remap pair \
+			is separated by a colon in this form: "old:new": "old" \
+			stands for the old verse number. "new" stands for the new \
+			verse number.')
 
 	# rename
 
@@ -471,21 +483,37 @@ class Lyrics(Tree):
 
 		return max_lyric
 
+	def remap(self):
+		for pair in args.remap.split(','):
+			old = pair.split(':')[0]
+			new = pair.split(':')[1]
+			for element in self.lyrics:
+				if element['number'] == int(old):
+					element['element'].find('no').text = str(int(new) - 1)
+
+		self.write()
+
+	def extractOneLyricVerse(self, number):
+		score = Lyrics(self.fullpath)
+
+		for element in score.lyrics:
+			tag = element['element']
+
+			if element['number'] != number:
+				tag.getparent().remove(tag)
+			elif number != 1:
+				tag.find('no').text = '0'
+
+		ext = '.' + self.extension
+		new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
+		score.write(new_name)
+
 	def extractLyrics(self):
-		for number in range(1, self.max + 1):
-			score = Lyrics(self.fullpath)
-
-			for element in score.lyrics:
-				tag = element['element']
-
-				if element['number'] != number:
-					tag.getparent().remove(tag)
-				elif number != 1:
-					tag.find('no').text = '0'
-
-			ext = '.' + self.extension
-			new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
-			score.write(new_name)
+		if args.number:
+			self.extractOneLyricVerse(int(args.number))
+		else:
+			for number in range(1, self.max + 1):
+				self.extractOneLyricVerse(number)
 
 class Meta(Tree):
 
@@ -695,7 +723,10 @@ if __name__ == '__main__':
 
 		elif args.subcommand == 'lyrics':
 			lyrics = Lyrics(score)
-			lyrics.extractLyrics()
+			if args.remap:
+				lyrics.remap()
+			else:
+				lyrics.extractLyrics()
 
 		elif args.subcommand == 'meta':
 			meta = Meta(score)
