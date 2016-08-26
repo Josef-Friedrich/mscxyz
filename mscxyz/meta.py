@@ -1,4 +1,3 @@
-
 import lxml.etree
 import mscxyz.Tree as Tree
 
