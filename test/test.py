@@ -1,7 +1,12 @@
+import os
 import unittest
 
-import mscxyz.mscxyz as m
-meta = m.Meta('./test.mscx')
+import mscxyz as m
+
+def get_testfile(filename):
+    return os.path.join(os.path.dirname(__file__), './' + filename)
+
+meta = m.Meta(get_testfile('test.mscx'))
 
 class TestMeta(unittest.TestCase):
 
