@@ -262,6 +262,11 @@ class Parse(object):
 			This option enables to generate the README file directly \
 			form the command line output.')
 
+		self.sub['help'].add_argument('-r', '--rst',
+			action='store_true', help='Show help in reStructuresText \
+			format. This option enables to generate the README file \
+			directly form the command line output.')
+
 	def addPositional(self):
 		self.parser.add_argument('path', help='Path to a *.mscx file \
 			or a folder which contains *.mscx files. In conjunction \
@@ -272,24 +277,46 @@ class Parse(object):
 	def parse(self):
 		return self.parser.parse_args()
 
+	def heading(self, text, level=1):
+		length = len(text)
+		if args.markdown:
+			print('\n' + ('#' * level) + ' ' + text + '\n')
+		elif args.rst:
+			if level == 1:
+				underline = '='
+			elif level == 2:
+				underline = '-'
+			elif level == 2:
+				underline = '^'
+			elif level == 2:
+				underline = '"'
+			else:
+				underline = '-'
+			print('\n' + text + '\n' + (underline * length) + '\n')
+		else:
+			print(text)
+
+	def codeBlock(self, text):
+		if args.markdown:
+			print('```' + text + '```')
+		elif args.rst:
+			print('.. code-block::\n\n  ' + text.replace('\n', '\n  '))
+		else:
+			print(text)
+
 	def showAllHelp(self):
 		if args.path == 'all':
-			print('# mscxyz.py\n')
-			if args.markdown: print('```')
-			self.parser.print_help()
-			if args.markdown: print('```')
+			self.heading('mscxyz.py', 1)
+			self.codeBlock(self.parser.format_help())
 
-			print('\n# Subcommands\n\n---')
+			self.heading('Subcommands', 1)
 
 			for sub, command in self.sub.iteritems():
-				print('\n## ' + command.prog + '\n')
-				if args.markdown: print('```')
-				command.print_help()
-				if args.markdown: print('```')
+				self.heading(command.prog, 2)
+				self.codeBlock(command.format_help())
+
 		else:
-			if args.markdown: print('```')
-			self.sub[args.path].print_help()
-			if args.markdown: print('```')
+			self.codeBlock(self.sub[args.path].format_help())
 
 class Batch(object):
 

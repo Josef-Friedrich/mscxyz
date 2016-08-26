@@ -1,3 +1,3 @@
 #! /bin/sh
 
-./mscxyz.py help --markdown all > README.rst
+./mscxyz/mscxyz.py help --rst all > README.rst
