@@ -1,3 +1,5 @@
+from tree import Tree
+
 class Lyrics(Tree):
 
 	def __init__(self, fullpath):

@@ -1,5 +1,5 @@
 import lxml.etree
-import mscxyz.Tree as Tree
+from tree import Tree
 
 class Meta(Tree):
 

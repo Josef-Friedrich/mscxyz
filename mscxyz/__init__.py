@@ -5,8 +5,6 @@ import sys
 import signal
 import lxml.etree
 from termcolor import colored, cprint
-import meta.Meta as Meta
-import parse.Parse as Parse
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -71,10 +69,10 @@ def verbose(text, description='', color='red', verbosity=1):
 	if args.verbose >= verbosity:
 		print_desc(text=text, description=description, color=color)
 
-if __name__ == '__main__':
-
+def execute():
 	original_sigint = signal.getsignal(signal.SIGINT)
 	signal.signal(signal.SIGINT, exit_gracefully)
+	from parse import Parse
 
 	parse = Parse()
 	args = parse.parse()

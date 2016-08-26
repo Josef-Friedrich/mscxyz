@@ -1,3 +1,5 @@
+from fileloader import File
+
 class Rename(File):
 
 	def __init__(self, fullpath):
