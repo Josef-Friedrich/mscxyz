@@ -13,7 +13,7 @@ setup(
 	install_requires = [
 		'lxml',
 	],
-	scripts = ['bin/mscxyz.py'],
+	scripts = ['bin/mscx-manager'],
 	classifiers = [
 		'Development Status :: 3 - Alpha',
 	],
