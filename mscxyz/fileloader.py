@@ -1,3 +1,5 @@
+import os
+
 class File(object):
 	def __init__(self, fullpath):
 		self.fullpath = fullpath

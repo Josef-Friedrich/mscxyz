@@ -1,7 +1,7 @@
 import os
 import unittest
 
-import mscxyz as m
+import mscxyz.meta as m
 
 def get_testfile(filename):
     return os.path.join(os.path.dirname(__file__), './' + filename)
