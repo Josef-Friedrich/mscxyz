@@ -73,6 +73,7 @@ def execute():
 	original_sigint = signal.getsignal(signal.SIGINT)
 	signal.signal(signal.SIGINT, exit_gracefully)
 	from parse import Parse
+	from batch import Batch
 
 	parse = Parse()
 	args = parse.parse()
@@ -103,6 +104,7 @@ def execute():
 			clean.write()
 
 		elif args.subcommand == 'lyrics':
+			from lyrics import Lyrics
 			lyrics = Lyrics(score)
 			if args.remap:
 				lyrics.remap()
@@ -110,6 +112,7 @@ def execute():
 				lyrics.extractLyrics()
 
 		elif args.subcommand == 'meta':
+			from meta import Meta
 			meta = Meta(score)
 			if args.show:
 				meta.show()

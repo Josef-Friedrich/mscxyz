@@ -1,3 +1,5 @@
+import os
+
 class Batch(object):
 
 	def __init__(self, path, glob = '*.mscx'):
