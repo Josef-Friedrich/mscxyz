@@ -203,13 +203,14 @@ class Parse(object):
 			"all".')
 
 	def parse(self):
-		return self.parser.parse_args()
+		self.args = self.parser.parse_args()
+		return self.args
 
 	def heading(self, text, level=1):
 		length = len(text)
-		if args.markdown:
+		if self.args.markdown:
 			print('\n' + ('#' * level) + ' ' + text + '\n')
-		elif args.rst:
+		elif self.args.rst:
 			if level == 1:
 				underline = '='
 			elif level == 2:
@@ -225,15 +226,15 @@ class Parse(object):
 			print(text)
 
 	def codeBlock(self, text):
-		if args.markdown:
+		if self.args.markdown:
 			print('```' + text + '```')
-		elif args.rst:
+		elif self.args.rst:
 			print('.. code-block::\n\n  ' + text.replace('\n', '\n  '))
 		else:
 			print(text)
 
 	def showAllHelp(self):
-		if args.path == 'all':
+		if self.args.path == 'all':
 			self.heading('mscxyz.py', 1)
 			self.codeBlock(self.parser.format_help())
 
