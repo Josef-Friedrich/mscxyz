@@ -227,7 +227,7 @@ class Parse(object):
 
 	def codeBlock(self, text):
 		if self.args.markdown:
-			print('```' + text + '```')
+			print('```\n' + text + '\n```')
 		elif self.args.rst:
 			print('.. code-block::\n\n  ' + text.replace('\n', '\n  '))
 		else:
