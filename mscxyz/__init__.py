@@ -33,14 +33,6 @@ def convert_mxl(input_file):
 	mscore(['-o', output_file, input_file])
 	os.remove(input_file)
 
-def create_dir(path):
-	import errno
-	try:
-		os.makedirs(path)
-	except OSError as exception:
-		if exception.errno != errno.EEXIST:
-			raise
-
 def exit_gracefully(signum, frame):
 	# Restore the original signal handler as otherwise evil things will
 	# happen, in raw_input when CTRL+C is pressed, and our signal
@@ -122,6 +114,7 @@ def execute():
 				meta.write()
 
 		elif args.subcommand == 'rename':
+			from rename import Rename
 			rename = Rename(score, args)
 			rename.execute()
 

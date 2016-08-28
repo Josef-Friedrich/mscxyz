@@ -1,10 +1,21 @@
+import os
 from fileloader import File
+from meta import Meta
+from termcolor import colored
+
+def create_dir(path):
+	import errno
+	try:
+		os.makedirs(path)
+	except OSError as exception:
+		if exception.errno != errno.EEXIST:
+			raise
 
 class Rename(File):
 
 	def __init__(self, fullpath, args):
 		super(Rename, self).__init__(fullpath, args)
-		self.score = Meta(self.fullpath)
+		self.score = Meta(self.fullpath, args)
 		self.workname = self.basename
 
 	def replaceGermanUmlaute(self):
@@ -86,5 +97,7 @@ class Rename(File):
 
 		if not self.args.dry_run:
 			newpath = self.workname + '.' + self.extension
-			create_dir(os.path.dirname(newpath))
+			newdir = os.path.dirname(newpath)
+			if newdir:
+				create_dir(os.path.dirname(newpath))
 			os.rename(self.fullpath, newpath)
