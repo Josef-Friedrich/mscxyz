@@ -87,11 +87,12 @@ def execute():
 			backup.backup()
 
 		if args.subcommand == 'clean':
-			verbose(score, '\nclean', 'yellow')
+			verbose(score, '\nclean', 'yellow', args=args)
+			from tree import Tree
 			clean = Tree(score, args)
 			clean.clean()
 			if args.style:
-				verbose(args.style.name, 'style file', 'blue')
+				verbose(args.style.name, 'style file', 'blue', args=args)
 				clean.mergeStyle()
 			clean.write()
 

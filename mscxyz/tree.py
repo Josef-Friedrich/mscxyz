@@ -1,5 +1,5 @@
 from fileloader import File
-from mscxyz import re_open
+from mscxyz import re_open, verbose
 
 class Tree(File):
 
@@ -25,13 +25,13 @@ class Tree(File):
 		if not self.error:
 			import lxml.etree as et
 			et.strip_tags(self.tree, tags)
-			verbose(str(tags), 'strip', color='blue', verbosity=2)
+			verbose(str(tags), 'strip', color='blue', verbosity=2, args=self.args)
 
 	def removeTagsByXPath(self, *xpath_strings):
 		if not self.error:
 			for xpath_string in xpath_strings:
 				for rm in self.tree.xpath(xpath_string):
-					verbose(rm.tag, 'remove', verbosity=2)
+					verbose(rm.tag, 'remove', verbosity=2, args=self.args)
 					rm.getparent().remove(rm)
 
 	def mergeStyle(self):
