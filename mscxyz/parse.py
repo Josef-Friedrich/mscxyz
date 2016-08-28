@@ -202,8 +202,8 @@ class Parse(object):
 			accepts the names of all other subcommands or the word \
 			"all".')
 
-	def parse(self):
-		self.args = self.parser.parse_args()
+	def parse(self, args=None):
+		self.args = self.parser.parse_args(args)
 		return self.args
 
 	def heading(self, text, level=1):

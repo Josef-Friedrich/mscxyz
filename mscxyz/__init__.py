@@ -61,14 +61,14 @@ def verbose(text, description='', color='red', verbosity=1, args=None):
 	if args.verbose >= verbosity:
 		print_desc(text=text, description=description, color=color)
 
-def execute():
+def execute(args=None):
 	original_sigint = signal.getsignal(signal.SIGINT)
 	signal.signal(signal.SIGINT, exit_gracefully)
 	from parse import Parse
 	from batch import Batch
 
 	parse = Parse()
-	args = parse.parse()
+	args = parse.parse(args)
 
 	if args.subcommand == 'help':
 		parse.showAllHelp()
