@@ -1,4 +1,5 @@
 import os
+from mscxyz import mscore
 
 class File(object):
 	def __init__(self, fullpath, args):

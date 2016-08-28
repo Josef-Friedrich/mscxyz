@@ -57,7 +57,7 @@ def print_desc(text, description='', color='red'):
 		prefix = colored(description, color) + ': '
 	print(prefix + text)
 
-def verbose(text, description='', color='red', verbosity=1):
+def verbose(text, description='', color='red', verbosity=1, args=None):
 	if args.verbose >= verbosity:
 		print_desc(text=text, description=description, color=color)
 
@@ -119,7 +119,8 @@ def execute():
 			rename.execute()
 
 		elif args.subcommand == 'export':
-			verbose(score, '\nexport', 'yellow')
-			verbose(args.extension, 'extension', 'green')
+			verbose(score, '\nexport', 'yellow', args=args)
+			verbose(args.extension, 'extension', 'green', args=args)
+			from fileloader import File
 			export = File(score, args)
 			export.export()
