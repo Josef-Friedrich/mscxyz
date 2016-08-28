@@ -2,8 +2,8 @@ from tree import Tree
 
 class Lyrics(Tree):
 
-	def __init__(self, fullpath):
-		super(Lyrics, self).__init__(fullpath)
+	def __init__(self, fullpath, args):
+		super(Lyrics, self).__init__(fullpath, args)
 		self.lyrics = self.normalizeLyrics()
 		self.max = self.getMax()
 
@@ -33,7 +33,7 @@ class Lyrics(Tree):
 		return max_lyric
 
 	def remap(self):
-		for pair in args.remap.split(','):
+		for pair in self.args.remap.split(','):
 			old = pair.split(':')[0]
 			new = pair.split(':')[1]
 			for element in self.lyrics:
@@ -58,8 +58,8 @@ class Lyrics(Tree):
 		score.write(new_name)
 
 	def extractLyrics(self):
-		if args.number:
-			self.extractOneLyricVerse(int(args.number))
+		if self.args.number:
+			self.extractOneLyricVerse(int(self.args.number))
 		else:
 			for number in range(1, self.max + 1):
 				self.extractOneLyricVerse(number)

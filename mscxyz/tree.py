@@ -1,9 +1,10 @@
 from fileloader import File
+from mscxyz import re_open
 
 class Tree(File):
 
-	def __init__(self, fullpath):
-		super(Tree, self).__init__(fullpath)
+	def __init__(self, fullpath, args):
+		super(Tree, self).__init__(fullpath, args)
 		import lxml.etree as et
 		try:
 			self.tree = et.parse(self.fullpath)
@@ -35,7 +36,7 @@ class Tree(File):
 
 	def mergeStyle(self):
 		import lxml.etree as et
-		style = et.parse(args.style.name).getroot()
+		style = et.parse(self.args.style.name).getroot()
 
 		for score in self.tree.xpath('/museScore/Score'):
 			score.insert(0, style[0])
@@ -52,4 +53,4 @@ class Tree(File):
 			filename = self.fullpath
 		if not self.error:
 			self.tree.write(filename, encoding='UTF-8')
-			re_open(filename)
+			re_open(filename, self.args)

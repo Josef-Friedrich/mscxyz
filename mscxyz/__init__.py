@@ -9,7 +9,7 @@ from termcolor import colored, cprint
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def mscore(commands):
+def mscore(commands, args=None):
 	import subprocess
 	mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac):
@@ -25,8 +25,8 @@ def mscore(commands):
 
 	subprocess.call(commands, stdout=OUT, stderr=OUT)
 
-def re_open(input_file):
-	mscore(['-o', input_file, input_file])
+def re_open(input_file, args):
+	mscore(['-o', input_file, input_file], args)
 
 def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')
@@ -91,12 +91,12 @@ def execute():
 	for score in files:
 
 		if args.backup:
-			backup = File(score)
+			backup = File(score, args)
 			backup.backup()
 
 		if args.subcommand == 'clean':
 			verbose(score, '\nclean', 'yellow')
-			clean = Tree(score)
+			clean = Tree(score, args)
 			clean.clean()
 			if args.style:
 				verbose(args.style.name, 'style file', 'blue')
@@ -105,7 +105,7 @@ def execute():
 
 		elif args.subcommand == 'lyrics':
 			from lyrics import Lyrics
-			lyrics = Lyrics(score)
+			lyrics = Lyrics(score, args)
 			if args.remap:
 				lyrics.remap()
 			else:
@@ -113,7 +113,7 @@ def execute():
 
 		elif args.subcommand == 'meta':
 			from meta import Meta
-			meta = Meta(score)
+			meta = Meta(score, args)
 			if args.show:
 				meta.show()
 			else:
@@ -122,11 +122,11 @@ def execute():
 				meta.write()
 
 		elif args.subcommand == 'rename':
-			rename = Rename(score)
+			rename = Rename(score, args)
 			rename.execute()
 
 		elif args.subcommand == 'export':
 			verbose(score, '\nexport', 'yellow')
 			verbose(args.extension, 'extension', 'green')
-			export = File(score)
+			export = File(score, args)
 			export.export()

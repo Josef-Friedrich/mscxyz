@@ -2,8 +2,8 @@ from fileloader import File
 
 class Rename(File):
 
-	def __init__(self, fullpath):
-		super(Rename, self).__init__(fullpath)
+	def __init__(self, fullpath, args):
+		super(Rename, self).__init__(fullpath, args)
 		self.score = Meta(self.fullpath)
 		self.workname = self.basename
 
@@ -62,29 +62,29 @@ class Rename(File):
 
 	def applyFormatString(self):
 		import re
-		output = args.format
+		output = self.args.format
 		for token in re.findall('%(.*?)%', output):
 			output = output.replace('%' + token + '%', self.getToken(token))
 
 		self.workname = output
 
 	def execute(self):
-		if args.format:
+		if self.args.format:
 			self.applyFormatString()
 
-		if args.ascii:
+		if self.args.ascii:
 			self.replaceGermanUmlaute()
 			self.transliterate()
 
-		if args.no_whitespace:
+		if self.args.no_whitespace:
 			self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
 			self.deleteCharacters(',', '.', '\'', '`', ')')
 			self.cleanUp()
 
-		if args.dry_run or args.verbose > 0:
+		if self.args.dry_run or self.args.verbose > 0:
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
 
-		if not args.dry_run:
+		if not self.args.dry_run:
 			newpath = self.workname + '.' + self.extension
 			create_dir(os.path.dirname(newpath))
 			os.rename(self.fullpath, newpath)
