@@ -1,3 +1,3 @@
 #! /bin/sh
 
-./mscxyz/mscxyz.py help --rst all > README.rst
+./bin/mscx-manager help --rst all > README.rst

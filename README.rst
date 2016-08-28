@@ -2,10 +2,10 @@
 mscxyz.py
 =========
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
-                   {clean,meta,lyrics,rename,export,help} ... path
+  usage: mscx-manager [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
+                      {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based *.mscX and *.mscZ files of the
   notation software MuseScore.
@@ -64,12 +64,12 @@ Subcommands
 ===========
 
 
-mscxyz.py rename
-----------------
+mscx-manager rename
+-------------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py rename [-h] [-d] [-f FORMAT] [-a] [-n]
+  usage: mscx-manager rename [-h] [-d] [-f FORMAT] [-a] [-n]
   
   Tokens you can use in the format string (-f, --format):
   
@@ -90,12 +90,12 @@ mscxyz.py rename
                           underlines.
   
 
-mscxyz.py help
---------------
+mscx-manager help
+-----------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py help [-h] [-m] [-r]
+  usage: mscx-manager help [-h] [-m] [-r]
   
   optional arguments:
     -h, --help      show this help message and exit
@@ -107,12 +107,12 @@ mscxyz.py help
                     output.
   
 
-mscxyz.py lyrics
-----------------
+mscx-manager lyrics
+-------------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py lyrics [-h] [-n NUMBER] [-r REMAP]
+  usage: mscx-manager lyrics [-h] [-n NUMBER] [-r REMAP]
   
   optional arguments:
     -h, --help            show this help message and exit
@@ -127,12 +127,12 @@ mscxyz.py lyrics
                           new verse number.
   
 
-mscxyz.py meta
---------------
+mscx-manager meta
+-----------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py meta [-h] [-j] [-s]
+  usage: mscx-manager meta [-h] [-j] [-s]
   
   # XML structure of a meta tag:
   
@@ -176,12 +176,12 @@ mscxyz.py meta
     -s, --show  Show all metadata.
   
 
-mscxyz.py export
-----------------
+mscx-manager export
+-------------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py export [-h] [-e EXTENSION]
+  usage: mscx-manager export [-h] [-e EXTENSION]
   
   optional arguments:
     -h, --help            show this help message and exit
@@ -190,12 +190,12 @@ mscxyz.py export
                           the default extension is "pdf".
   
 
-mscxyz.py clean
----------------
+mscx-manager clean
+------------------
 
-.. code-block::
+.. code-block:: none
 
-  usage: mscxyz.py clean [-h] [-s STYLE]
+  usage: mscx-manager clean [-h] [-s STYLE]
   
   optional arguments:
     -h, --help            show this help message and exit

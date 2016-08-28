@@ -229,7 +229,7 @@ class Parse(object):
 		if self.args.markdown:
 			print('```\n' + text + '\n```')
 		elif self.args.rst:
-			print('.. code-block::\n\n  ' + text.replace('\n', '\n  '))
+			print('.. code-block:: none\n\n  ' + text.replace('\n', '\n  '))
 		else:
 			print(text)
 
