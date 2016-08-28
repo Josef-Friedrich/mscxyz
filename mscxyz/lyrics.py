@@ -43,7 +43,7 @@ class Lyrics(Tree):
 		self.write()
 
 	def extractOneLyricVerse(self, number):
-		score = Lyrics(self.fullpath)
+		score = Lyrics(self.fullpath, self.args)
 
 		for element in score.lyrics:
 			tag = element['element']
