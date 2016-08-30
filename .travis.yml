@@ -1,0 +1,9 @@
+branches:
+          except:
+                      - donttestme 
+language: python
+sudo: required
+services:
+        - docker
+script:
+        - python /mscxyz/test/test.py
