@@ -235,7 +235,7 @@ class Parse(object):
 
 	def showAllHelp(self):
 		if self.args.path == 'all':
-			self.heading('mscxyz.py', 1)
+			self.heading('mscxyz', 1)
 			self.codeBlock(self.parser.format_help())
 
 			self.heading('Subcommands', 1)
