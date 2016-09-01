@@ -143,13 +143,6 @@ class Parse(object):
 			formatter_class=argparse.RawDescriptionHelpFormatter,
 			description=textwrap.dedent('''\
 			Tokens you can use in the format string (-f, --format):
-
-				- %title%
-				- %title_1char%  The first character of the token 'title'.
-				- %title_2char%  The first two characters of the token 'title'
-				- %subtitle%
-				- %composer%
-				- %lyricist%
 			'''
 			)
 		)

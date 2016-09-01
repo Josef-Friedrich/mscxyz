@@ -2,6 +2,7 @@ import os
 from fileloader import File
 from meta import Meta
 from termcolor import colored
+import tmep
 
 def create_dir(path):
 	import errno
@@ -54,30 +55,15 @@ class Rename(File):
 	def debug(self):
 		print(self.workname)
 
-	def prepareTokenSubstring(self, value, length):
-		import unidecode
-		import re
-		value = value.lower()
-		value = unidecode.unidecode(value)
-		value = re.sub('[^A-Za-z]', '', value)
-		return value[0:length]
-
 	def getToken(self, token):
-		title = self.score.get('title')
-		if token == 'title_1char':
-			return self.prepareTokenSubstring(title, 1)
-		elif token == 'title_2char':
-			return self.prepareTokenSubstring(title, 2)
-		else:
-			return self.score.get(token)
+		return self.score.get(token)
 
 	def applyFormatString(self):
-		import re
-		output = self.args.format
-		for token in re.findall('%(.*?)%', output):
-			output = output.replace('%' + token + '%', self.getToken(token))
+		values = {}
+		for key in ['title', 'subtitle', 'composer', 'lyricist']:
+			values[key] = self.getToken(key)
 
-		self.workname = output
+		self.workname = tmep.parse(self.args.format, values)
 
 	def execute(self):
 		if self.args.format:
