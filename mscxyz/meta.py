@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import lxml.etree
 from tree import Tree
 from mscxyz import print_desc

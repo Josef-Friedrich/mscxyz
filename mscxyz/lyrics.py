@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from tree import Tree
 
 class Lyrics(Tree):

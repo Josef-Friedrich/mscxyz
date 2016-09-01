@@ -1,8 +1,15 @@
+# -*- coding: utf-8 -*-
+
 import os
 from fileloader import File
 from meta import Meta
 from termcolor import colored
 import tmep
+
+class Args(object):
+	format = '$title ($composer)'
+	ascii = True
+	no_whitespace = True
 
 def create_dir(path):
 	import errno
@@ -14,7 +21,9 @@ def create_dir(path):
 
 class Rename(File):
 
-	def __init__(self, fullpath, args):
+	def __init__(self, fullpath, args=None):
+		if not args:
+			args = Args();
 		super(Rename, self).__init__(fullpath, args)
 		self.score = Meta(self.fullpath, args)
 		self.workname = self.basename

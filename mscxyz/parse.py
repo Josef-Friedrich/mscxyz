@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 class Parse(object):
 	"""Expose the command line interface."""
 
@@ -151,6 +153,7 @@ class Parse(object):
 			action='store_true', help='Do not rename the scores')
 
 		self.sub['rename'].add_argument('-f', '--format',
+			default='$title ($composer)',
 			help='Format string.')
 
 		self.sub['rename'].add_argument('-a', '--ascii',

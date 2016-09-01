@@ -79,5 +79,14 @@ class TestCommandlineInterface(unittest.TestCase):
 				mscxyz.execute(['-h'])
 		self.assertEqual(output[0], 'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]')
 
+class TestRename(unittest.TestCase):
+	def setUp(self):
+		from mscxyz.rename import Rename
+		self.rename = Rename(get_testfile('test.mscx'))
+
+	def test_option_format(self):
+		self.rename.applyFormatString()
+		self.assertEqual(self.rename.workname, u'Title (Composer)')
+
 if __name__ == '__main__':
 	unittest.main()
