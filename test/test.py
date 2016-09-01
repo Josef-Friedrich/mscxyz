@@ -1,6 +1,29 @@
 import os
 import unittest
 import mscxyz
+from cStringIO import StringIO
+import sys
+
+class Capturing(list):
+
+	def __init__(self, channel='out'):
+		self.channel = channel
+
+	def __enter__(self):
+		if self.channel == 'out':
+			self._pipe = sys.stdout
+			sys.stdout = self._stringio = StringIO()
+		elif self.channel == 'err':
+			self._pipe = sys.stderr
+			sys.stderr = self._stringio = StringIO()
+		return self
+
+	def __exit__(self, *args):
+		self.extend(self._stringio.getvalue().splitlines())
+		if self.channel == 'out':
+			sys.stdout = self._pipe
+		elif self.channel == 'err':
+			sys.stderr = self._pipe
 
 def get_testfile(filename):
 	return os.path.join(os.path.dirname(__file__), './' + filename)
@@ -31,21 +54,30 @@ class TestCommandlineInterface(unittest.TestCase):
 
 	def test_help_short(self):
 		with self.assertRaises(SystemExit) as cm:
-			mscxyz.execute(['-h'])
+			with Capturing() as output:
+				mscxyz.execute(['-h'])
 		the_exception = cm.exception
 		self.assertEqual(str(the_exception), '0')
 
 	def test_help_long(self):
 		with self.assertRaises(SystemExit) as cm:
-			mscxyz.execute(['--help'])
+			with Capturing() as output:
+				mscxyz.execute(['--help'])
 		the_exception = cm.exception
 		self.assertEqual(str(the_exception), '0')
 
 	def test_without_arguments(self):
 		with self.assertRaises(SystemExit) as cm:
-			mscxyz.execute()
+			with Capturing('err') as output:
+				mscxyz.execute()
 		the_exception = cm.exception
 		self.assertEqual(str(the_exception), '2')
+
+	def test_help_text(self):
+		with self.assertRaises(SystemExit) as cm:
+			with Capturing() as output:
+				mscxyz.execute(['-h'])
+		self.assertEqual(output[0], 'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]')
 
 if __name__ == '__main__':
 	unittest.main()
