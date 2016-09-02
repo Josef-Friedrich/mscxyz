@@ -117,6 +117,17 @@ def execute(args=None):
 		elif args.subcommand == 'rename':
 			from rename import Rename
 			rename = Rename(score, args)
+			if args.format:
+				rename.applyFormatString(args.format)
+
+			if args.ascii:
+				rename.replaceGermanUmlaute()
+				rename.transliterate()
+
+			if args.no_whitespace:
+				rename.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
+				rename.deleteCharacters(',', '.', '\'', '`', ')')
+				rename.cleanUp()
 			rename.execute()
 
 		elif args.subcommand == 'export':

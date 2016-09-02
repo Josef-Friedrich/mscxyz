@@ -28,12 +28,11 @@ class Rename(File):
 		self.score = Meta(self.fullpath, args)
 		self.workname = self.basename
 
-	def replaceGermanUmlaute(self):
+	def asciify(self):
 		umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü', 'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
 		for replace, search in umlaute.iteritems():
 			self.workname = self.workname.replace(search, replace)
 
-	def transliterate(self):
 		import unidecode
 		self.workname = unidecode.unidecode(self.workname)
 
@@ -61,32 +60,25 @@ class Rename(File):
 
 		self.workname = string
 
+	def noWhitespace(self):
+		self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
+		self.deleteCharacters(',', '.', '\'', '`', ')')
+		self.cleanUp()
+
 	def debug(self):
 		print(self.workname)
 
 	def getToken(self, token):
 		return self.score.get(token)
 
-	def applyFormatString(self):
+	def applyFormatString(self, format):
 		values = {}
 		for key in ['title', 'subtitle', 'composer', 'lyricist']:
 			values[key] = self.getToken(key)
 
-		self.workname = tmep.parse(self.args.format, values)
+		self.workname = tmep.parse(format, values)
 
 	def execute(self):
-		if self.args.format:
-			self.applyFormatString()
-
-		if self.args.ascii:
-			self.replaceGermanUmlaute()
-			self.transliterate()
-
-		if self.args.no_whitespace:
-			self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
-			self.deleteCharacters(',', '.', '\'', '`', ')')
-			self.cleanUp()
-
 		if self.args.dry_run or self.args.verbose > 0:
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
 

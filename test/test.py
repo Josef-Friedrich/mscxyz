@@ -84,9 +84,13 @@ class TestRename(unittest.TestCase):
 		from mscxyz.rename import Rename
 		self.rename = Rename(get_testfile('test.mscx'))
 
-	def test_option_format(self):
-		self.rename.applyFormatString()
+	def test_option_format_default(self):
+		self.rename.applyFormatString('$title ($composer)')
 		self.assertEqual(self.rename.workname, u'Title (Composer)')
+
+	def test_option_format_given(self):
+		self.rename.applyFormatString('${composer}_${title}')
+		self.assertEqual(self.rename.workname, u'Composer_Title')
 
 if __name__ == '__main__':
 	unittest.main()
