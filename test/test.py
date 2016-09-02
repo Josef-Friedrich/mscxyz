@@ -26,12 +26,12 @@ class Capturing(list):
 			sys.stderr = self._pipe
 
 def get_testfile(filename):
-	return os.path.join(os.path.dirname(__file__), './' + filename)
+	return os.path.join(os.path.dirname(__file__), 'files',  filename + '.mscx')
 
 class TestMeta(unittest.TestCase):
 	def setUp(self):
 		from mscxyz.meta import Meta
-		self.meta = Meta(get_testfile('test.mscx'), args=None)
+		self.meta = Meta(get_testfile('simple'), args=None)
 
 	def test_get(self):
 		self.assertEqual(self.meta.get('title'), 'Title')
@@ -41,13 +41,13 @@ class TestFile(unittest.TestCase):
 
 	def setUp(self):
 		from mscxyz.fileloader import File
-		self.file = File(get_testfile('test.mscx'), args=None)
+		self.file = File(get_testfile('simple'), args=None)
 
 	def test_file_object_initialisation(self):
-		self.assertEqual(self.file.fullpath, get_testfile('test.mscx'))
-		self.assertEqual(self.file.dirname, os.path.dirname(get_testfile('test.mscx')))
-		self.assertEqual(self.file.filename, 'test.mscx')
-		self.assertEqual(self.file.basename, 'test')
+		self.assertEqual(self.file.fullpath, get_testfile('simple'))
+		self.assertEqual(self.file.dirname, os.path.dirname(get_testfile('simple')))
+		self.assertEqual(self.file.filename, 'simple.mscx')
+		self.assertEqual(self.file.basename, 'simple')
 		self.assertEqual(self.file.extension, 'mscx')
 
 class TestCommandlineInterface(unittest.TestCase):
@@ -82,15 +82,27 @@ class TestCommandlineInterface(unittest.TestCase):
 class TestRename(unittest.TestCase):
 	def setUp(self):
 		from mscxyz.rename import Rename
-		self.rename = Rename(get_testfile('test.mscx'))
+		self.simple = Rename(get_testfile('simple'))
+		self.unicode = Rename(get_testfile('unicode'))
 
 	def test_option_format_default(self):
-		self.rename.applyFormatString('$title ($composer)')
-		self.assertEqual(self.rename.workname, u'Title (Composer)')
+		self.simple.applyFormatString()
+		self.assertEqual(self.simple.workname, u'Title (Composer)')
 
 	def test_option_format_given(self):
-		self.rename.applyFormatString('${composer}_${title}')
-		self.assertEqual(self.rename.workname, u'Composer_Title')
+		self.simple.applyFormatString('${composer}_${title}')
+		self.assertEqual(self.simple.workname, u'Composer_Title')
+
+	def test_option_asciify(self):
+		self.unicode.applyFormatString()
+		self.unicode.asciify()
+		self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
+
+	def test_option_no_whitespace(self):
+		self.simple.applyFormatString()
+		self.simple.noWhitespace()
+		self.assertEqual(self.simple.workname, 'Title_Composer')
+
 
 if __name__ == '__main__':
 	unittest.main()

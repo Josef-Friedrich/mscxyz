@@ -121,13 +121,10 @@ def execute(args=None):
 				rename.applyFormatString(args.format)
 
 			if args.ascii:
-				rename.replaceGermanUmlaute()
-				rename.transliterate()
+				self.asciify()
 
 			if args.no_whitespace:
-				rename.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
-				rename.deleteCharacters(',', '.', '\'', '`', ')')
-				rename.cleanUp()
+				self.noWhitespace
 			rename.execute()
 
 		elif args.subcommand == 'export':

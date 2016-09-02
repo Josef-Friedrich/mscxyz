@@ -71,7 +71,7 @@ class Rename(File):
 	def getToken(self, token):
 		return self.score.get(token)
 
-	def applyFormatString(self, format):
+	def applyFormatString(self, format='$title ($composer)'):
 		values = {}
 		for key in ['title', 'subtitle', 'composer', 'lyricist']:
 			values[key] = self.getToken(key)
