@@ -103,6 +103,10 @@ class TestRename(unittest.TestCase):
 		self.simple.noWhitespace()
 		self.assertEqual(self.simple.workname, 'Title_Composer')
 
+class TestClean(unittest.TestCase):
+
+	def test_clean(self):
+		mscxyz.execute(['clean', 'test/files/formats.mscx'])
 
 if __name__ == '__main__':
 	unittest.main()
