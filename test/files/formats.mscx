@@ -9,10 +9,9 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
-      <lastSystemFillLimit>0</lastSystemFillLimit>
       <page-layout>
-        <page-height>1683.36</page-height>
-        <page-width>1190.88</page-width>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
         <page-margins type="even">
           <left-margin>56.6929</left-margin>
           <right-margin>56.6929</right-margin>
@@ -109,14 +108,14 @@
       <VBox>
         <height>10</height>
         <Text>
-          <pos x="-6.81697" y="2.70931"/>
+          <pos x="-11.7986" y="2.01013"/>
           <style>Title</style>
           <text>T<i>it</i>le</text>
           </Text>
         <Text>
-          <pos x="-10.0507" y="-2.62191"/>
+          <pos x="-9.17669" y="-3.23369"/>
           <style>Composer</style>
-          <text>Co<b>mpo</b>ser</text>
+          <text>C<b>omp</b>oser</text>
           </Text>
         </VBox>
       <Measure number="1">
