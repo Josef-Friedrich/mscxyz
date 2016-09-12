@@ -3,6 +3,19 @@ import unittest
 import mscxyz
 from cStringIO import StringIO
 import sys
+import shutil
+import tempfile
+
+def tmp_file(file_token):
+	#shutil.copyfile(File, dst)
+	tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)), file_token + '.mscx')
+	print(tmp)
+
+	tmp = os.path.dirname(tmp)
+	print(tmp)
+
+	tmp_dir = tempfile.mkdtemp()
+	print tmp_dir
 
 class Capturing(list):
 
@@ -106,7 +119,8 @@ class TestRename(unittest.TestCase):
 class TestClean(unittest.TestCase):
 
 	def test_clean(self):
-		mscxyz.execute(['clean', 'test/files/formats.mscx'])
+		#mscxyz.execute(['clean', 'test/files/formats.mscx'])
+		tmp_file('formats')
 
 if __name__ == '__main__':
 	unittest.main()
