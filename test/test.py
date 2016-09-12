@@ -115,8 +115,19 @@ class TestRename(unittest.TestCase):
 class TestClean(unittest.TestCase):
 
 	def test_clean(self):
-		mscxyz.execute(['clean', tmp_file('formats')])
+		clean = mscxyz.execute(['clean', tmp_file('formats')])
+		clean.fullpath
 
+		clean_file = open(clean.fullpath).read()
+
+		if '<font>' in clean_file:
+			self.fail('Found font>')
+		if '<b>' in clean_file:
+			self.fail('Found <b>')
+		if '<i>' in clean_file:
+			self.fail('Found <i>')
+		if '<pos>' in clean_file:
+			self.fail('Found <pos>')
 
 if __name__ == '__main__':
 	unittest.main()

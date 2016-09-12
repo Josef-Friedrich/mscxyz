@@ -95,6 +95,7 @@ def execute(args=None):
 				verbose(args.style.name, 'style file', 'blue', args=args)
 				clean.mergeStyle()
 			clean.write()
+			return clean
 
 		elif args.subcommand == 'lyrics':
 			from lyrics import Lyrics
