@@ -114,20 +114,34 @@ class TestRename(unittest.TestCase):
 
 class TestClean(unittest.TestCase):
 
-	def test_clean(self):
+	def setUp(self):
 		clean = mscxyz.execute(['clean', tmp_file('formats')])
 		clean.fullpath
+		self.clean_file = open(clean.fullpath).read()
 
-		clean_file = open(clean.fullpath).read()
-
-		if '<font>' in clean_file:
+	def test_font(self):
+		if '<font' in self.clean_file:
 			self.fail('Found font>')
-		if '<b>' in clean_file:
+
+	def test_b(self):
+		if '<b>' in self.clean_file:
 			self.fail('Found <b>')
-		if '<i>' in clean_file:
+
+	def test_i(self):
+		if '<i>' in self.clean_file:
 			self.fail('Found <i>')
-		if '<pos>' in clean_file:
+
+	def test_pos(self):
+		if '<pos' in self.clean_file:
 			self.fail('Found <pos>')
+
+	def test_layout_break(self):
+		if '<LayoutBreak>' in self.clean_file:
+			self.fail('Found <LayoutBreak>')
+
+	def test_stem_direction(self):
+		if '<StemDirection>' in self.clean_file:
+			self.fail('Found <StemDirection>')
 
 if __name__ == '__main__':
 	unittest.main()

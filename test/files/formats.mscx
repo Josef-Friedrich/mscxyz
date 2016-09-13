@@ -110,7 +110,7 @@
         <Text>
           <pos x="-11.7986" y="2.01013"/>
           <style>Title</style>
-          <text>T<i>it</i>le</text>
+          <text>T<i>it</i>l<font face="Aladin"/>e</text>
           </Text>
         <Text>
           <pos x="-9.17669" y="-3.23369"/>
@@ -127,9 +127,19 @@
           <sigD>4</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Chord>
+          <durationType>quarter</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
         <Rest>
-          <durationType>measure</durationType>
-          <duration z="4" n="4"/>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Rest>
+          <durationType>half</durationType>
           </Rest>
         </Measure>
       <Measure number="2">
