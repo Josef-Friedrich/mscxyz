@@ -59,9 +59,9 @@ class Lyrics(Tree):
 		new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
 		score.write(new_name)
 
-	def extractLyrics(self):
-		if self.args.number:
-			self.extractOneLyricVerse(int(self.args.number))
+	def extractLyrics(self, number=None):
+		if number:
+			self.extractOneLyricVerse(int(number))
 		else:
 			for number in range(1, self.max + 1):
 				self.extractOneLyricVerse(number)

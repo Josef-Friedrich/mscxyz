@@ -162,5 +162,27 @@ class TestLyrics(unittest.TestCase):
 		check(3)
 
 
+class TestLyricsExtractByNumber(unittest.TestCase):
+
+	def setUp(self):
+		self.token = 'lyrics'
+		self.lyrics = mscxyz.execute(['lyrics', '--number', '2', tmp_file(self.token)])
+
+	def test_files_exist(self):
+		tmpdir = os.path.dirname(self.lyrics.fullpath)
+
+		def tmpfile(number):
+			return os.path.join(tmpdir, self.token + '_' + str(number) + '.mscx')
+
+		if os.path.isfile(tmpfile(1)):
+			self.fail(tmpfile(1))
+
+		if not os.path.isfile(tmpfile(2)):
+			self.fail(tmpfile(2))
+
+		if os.path.isfile(tmpfile(3)):
+			self.fail(tmpfile(3))
+
+
 if __name__ == '__main__':
 	unittest.main()

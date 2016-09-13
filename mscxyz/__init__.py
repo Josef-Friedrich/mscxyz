@@ -104,7 +104,7 @@ def execute(args=None):
 				lyrics.remap()
 				return lyrics
 			else:
-				lyrics.extractLyrics()
+				lyrics.extractLyrics(args.number)
 				return lyrics
 
 		elif args.subcommand == 'meta':
