@@ -80,59 +80,63 @@ def execute(args=None):
 		batch.pick(args.pick, args.cycle_length)
 
 	files = batch.getFiles()
-	for score in files:
+
+	output = []
+	for file in files:
 
 		if args.backup:
-			backup = File(score, args)
-			backup.backup()
+			score = File(file, args)
+			score.backup()
 
 		if args.subcommand == 'clean':
-			verbose(score, '\nclean', 'yellow', args=args)
+			verbose(file, '\nclean', 'yellow', args=args)
 			from tree import Tree
-			clean = Tree(score, args)
-			clean.clean()
+			score = Tree(file, args)
+			score.clean()
 			if args.style:
 				verbose(args.style.name, 'style file', 'blue', args=args)
 				clean.mergeStyle()
-			clean.write()
-			return clean
+			score.write()
 
 		elif args.subcommand == 'lyrics':
 			from lyrics import Lyrics
-			lyrics = Lyrics(score, args)
+			score = Lyrics(file, args)
 			if args.remap:
-				lyrics.remap()
+				score.remap()
 				return lyrics
 			else:
-				lyrics.extractLyrics(args.number)
-				return lyrics
+				score.extractLyrics(args.number)
 
 		elif args.subcommand == 'meta':
 			from meta import Meta
-			meta = Meta(score, args)
+			score = Meta(file, args)
 			if args.show:
-				meta.show()
+				score.show()
 			else:
 				if args.json: meta.exportJson()
-				meta.syncMetaTags()
-				meta.write()
+				score.syncMetaTags()
+				score.write()
 
 		elif args.subcommand == 'rename':
 			from rename import Rename
-			rename = Rename(score, args)
+			score = Rename(file, args)
 			if args.format:
-				rename.applyFormatString(args.format)
+				score.applyFormatString(args.format)
 
 			if args.ascii:
 				self.asciify()
 
 			if args.no_whitespace:
 				self.noWhitespace
-			rename.execute()
+			score.execute()
 
 		elif args.subcommand == 'export':
-			verbose(score, '\nexport', 'yellow', args=args)
+			verbose(file, '\nexport', 'yellow', args=args)
 			verbose(args.extension, 'extension', 'green', args=args)
 			from fileloader import File
-			export = File(score, args)
-			export.export()
+			score = File(file, args)
+			score.export()
+
+		output.append(score)
+
+	return output

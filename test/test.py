@@ -115,7 +115,7 @@ class TestRename(unittest.TestCase):
 class TestClean(unittest.TestCase):
 
 	def setUp(self):
-		clean = mscxyz.execute(['clean', tmp_file('formats')])
+		clean = mscxyz.execute(['clean', tmp_file('formats')])[0]
 		clean.fullpath
 		self.clean_file = open(clean.fullpath).read()
 
@@ -147,7 +147,7 @@ class TestLyrics(unittest.TestCase):
 
 	def setUp(self):
 		self.token = 'lyrics'
-		self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.token)])
+		self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.token)])[0]
 
 	def test_files_exist(self):
 		tmpdir = os.path.dirname(self.lyrics.fullpath)
@@ -166,7 +166,7 @@ class TestLyricsExtractByNumber(unittest.TestCase):
 
 	def setUp(self):
 		self.token = 'lyrics'
-		self.lyrics = mscxyz.execute(['lyrics', '--number', '2', tmp_file(self.token)])
+		self.lyrics = mscxyz.execute(['lyrics', '--number', '2', tmp_file(self.token)])[0]
 
 	def test_files_exist(self):
 		tmpdir = os.path.dirname(self.lyrics.fullpath)
