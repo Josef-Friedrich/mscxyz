@@ -191,6 +191,7 @@ class TestLyricsFix(unittest.TestCase):
 
 	def test_fix(self):
 		print(self.lyrics)
+		print(self.lyrics.fullpath)
 
 
 if __name__ == '__main__':
