@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""XML tree manipulation"""
+
 from fileloader import File
 from mscxyz import re_open, verbose
 

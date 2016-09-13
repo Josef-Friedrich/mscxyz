@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Rename MuseScore files"""
+
 import os
 from fileloader import File
 from meta import Meta

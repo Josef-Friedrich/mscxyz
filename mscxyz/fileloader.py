@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Basic file loading"""
+
 import os
 from mscxyz import mscore
 

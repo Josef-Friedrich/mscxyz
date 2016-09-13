@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""A command line tool to manipulate the XML based *.mscX and *.mscZ
+files of the notation software MuseScore
+"""
+
 import os
 import sys
 import signal

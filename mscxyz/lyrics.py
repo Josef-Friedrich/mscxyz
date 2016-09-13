@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Manipulate the lyrics"""
+
 from tree import Tree
 
 class Lyrics(Tree):
@@ -67,33 +69,35 @@ class Lyrics(Tree):
 				self.extractOneLyricVerse(number)
 
 	def fixLyrics(self):
-	# from:
+		"""
+		from:
 
-	# <Lyrics>
-	# 	<text>la-</text>
-	# </Lyrics>
-	# <Lyrics>
-	# 	<syllabic>end</syllabic>
-	# 	<text>la-</text>
-	# </Lyrics>
-	# <Lyrics>
-	# 	<text>la.</text>
-	# </Lyrics>
+			<Lyrics>
+				<text>la-</text>
+			</Lyrics>
+			<Lyrics>
+				<syllabic>end</syllabic>
+				<text>la-</text>
+			</Lyrics>
+			<Lyrics>
+				<text>la.</text>
+			</Lyrics>
 
-	# to:
+		to:
 
-	# <Lyrics>
-	# 	<syllabic>begin</syllabic>
-	# 	<text>la</text>
-	# </Lyrics>
-	# <Lyrics>
-	# 	<syllabic>middle</syllabic>
-	# 	<text>la</text>
-	# </Lyrics>
-	# <Lyrics>
-	# 	<syllabic>end</syllabic>
-	# 	<text>la.</text>
-	# </Lyrics>
+			<Lyrics>
+				<syllabic>begin</syllabic>
+				<text>la</text>
+			</Lyrics>
+			<Lyrics>
+				<syllabic>middle</syllabic>
+				<text>la</text>
+			</Lyrics>
+			<Lyrics>
+				<syllabic>end</syllabic>
+				<text>la.</text>
+			</Lyrics>
+		"""
 
 		for element in self.lyrics:
 			print(element['element'].find('text').text)

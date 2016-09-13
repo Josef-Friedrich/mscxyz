@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Load multiple MuseScore files"""
+
 import os
 
 class Batch(object):

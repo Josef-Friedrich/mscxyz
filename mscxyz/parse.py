@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Wrapper for the command line interface"""
+
 class Parse(object):
 	"""Expose the command line interface."""
 

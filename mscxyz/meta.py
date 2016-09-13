@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Class for metadata maniplation"""
+
 import lxml.etree
 from tree import Tree
 from mscxyz import print_desc
