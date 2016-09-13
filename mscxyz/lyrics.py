@@ -105,28 +105,19 @@ class Lyrics(Tree):
 			tag = element['element']
 			tag_text = tag.find('text')
 			text = tag_text.text
-			print(text)
-
 			tag_syl = etree.Element('syllabic')
-
 			if text.endswith('-'):
 				tag_text.text = text[:-1]
 				if not syllabic:
-					print('begin')
 					tag_syl.text = 'begin'
 					syllabic = True
 				else:
-					print('middle')
 					tag_syl.text = 'middle'
 			else:
 				if syllabic:
-					print('end')
 					tag_syl.text = 'end'
 					syllabic = False
 				else:
-					print('no')
 					tag_syl = False
-
 			tag.append(tag_syl)
-
 			self.write()
