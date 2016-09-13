@@ -138,6 +138,11 @@ class Parse(object):
 			stands for the old verse number. "new" stands for the new \
 			verse number.')
 
+		self.sub['lyrics'].add_argument('-f', '--fix',
+			action='store_true',
+			help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
+			to a correct hyphenation ("la - la - la")')
+
 	# rename
 
 		self.sub['rename'] = self.sparser.add_parser('rename',

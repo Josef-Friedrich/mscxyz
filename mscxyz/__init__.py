@@ -103,7 +103,8 @@ def execute(args=None):
 			score = Lyrics(file, args)
 			if args.remap:
 				score.remap()
-				return lyrics
+			elif args.fix:
+				score.fixLyrics()
 			else:
 				score.extractLyrics(args.number)
 

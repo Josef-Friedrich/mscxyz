@@ -65,3 +65,35 @@ class Lyrics(Tree):
 		else:
 			for number in range(1, self.max + 1):
 				self.extractOneLyricVerse(number)
+
+	def fixLyrics(self):
+	# from:
+
+	# <Lyrics>
+	# 	<text>la-</text>
+	# </Lyrics>
+	# <Lyrics>
+	# 	<syllabic>end</syllabic>
+	# 	<text>la-</text>
+	# </Lyrics>
+	# <Lyrics>
+	# 	<text>la.</text>
+	# </Lyrics>
+
+	# to:
+
+	# <Lyrics>
+	# 	<syllabic>begin</syllabic>
+	# 	<text>la</text>
+	# </Lyrics>
+	# <Lyrics>
+	# 	<syllabic>middle</syllabic>
+	# 	<text>la</text>
+	# </Lyrics>
+	# <Lyrics>
+	# 	<syllabic>end</syllabic>
+	# 	<text>la.</text>
+	# </Lyrics>
+
+		for element in self.lyrics:
+			print(element['element'].find('text').text)

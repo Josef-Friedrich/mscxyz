@@ -184,5 +184,14 @@ class TestLyricsExtractByNumber(unittest.TestCase):
 			self.fail(tmpfile(3))
 
 
+class TestLyricsFix(unittest.TestCase):
+
+	def setUp(self):
+		self.lyrics = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
+
+	def test_fix(self):
+		print(self.lyrics)
+
+
 if __name__ == '__main__':
 	unittest.main()
