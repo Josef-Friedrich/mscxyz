@@ -102,8 +102,10 @@ def execute(args=None):
 			lyrics = Lyrics(score, args)
 			if args.remap:
 				lyrics.remap()
+				return lyrics
 			else:
 				lyrics.extractLyrics()
+				return lyrics
 
 		elif args.subcommand == 'meta':
 			from meta import Meta

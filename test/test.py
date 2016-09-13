@@ -143,5 +143,24 @@ class TestClean(unittest.TestCase):
 		if '<StemDirection>' in self.clean_file:
 			self.fail('Found <StemDirection>')
 
+class TestLyrics(unittest.TestCase):
+
+	def setUp(self):
+		self.token = 'lyrics'
+		self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.token)])
+
+	def test_files_exist(self):
+		tmpdir = os.path.dirname(self.lyrics.fullpath)
+
+		def check(number):
+			lyrics_file = os.path.join(tmpdir, self.token + '_' + str(number) + '.mscx')
+			if not os.path.isfile(lyrics_file):
+				self.fail(lyrics_file)
+
+		check(1)
+		check(2)
+		check(3)
+
+
 if __name__ == '__main__':
 	unittest.main()
