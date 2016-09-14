@@ -13,7 +13,7 @@ from termcolor import colored, cprint
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def mscore(commands, args=None):
+def mscore(commands):
 	import subprocess
 	mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
 	if os.path.exists(mac):
@@ -22,15 +22,13 @@ def mscore(commands, args=None):
 		executeable = 'mscore'
 
 	commands.insert(0, executeable)
-	if args.verbose > 2:
-		OUT=None
-	else:
-		OUT = open(os.devnull, 'wb')
 
+	#OUT=None
+	OUT = open(os.devnull, 'wb')
 	subprocess.call(commands, stdout=OUT, stderr=OUT)
 
-def re_open(input_file, args):
-	mscore(['-o', input_file, input_file], args)
+def re_open(input_file):
+	mscore(['-o', input_file, input_file])
 
 def convert_mxl(input_file):
 	output_file = input_file.replace('.mxl', '.mscx')
@@ -61,8 +59,8 @@ def print_desc(text, description='', color='red'):
 		prefix = colored(description, color) + ': '
 	print(prefix + text)
 
-def verbose(text, description='', color='red', verbosity=1, args=None):
-	if args.verbose >= verbosity:
+def verbose(text, description='', color='red', verbosity=1):
+	if verbose >= 1:
 		print_desc(text=text, description=description, color=color)
 
 def execute(args=None):
@@ -89,22 +87,22 @@ def execute(args=None):
 	for file in files:
 
 		if args.backup:
-			score = File(file, args)
+			score = File(file)
 			score.backup()
 
 		if args.subcommand == 'clean':
-			verbose(file, '\nclean', 'yellow', args=args)
+			verbose(file, '\nclean', 'yellow')
 			from tree import Tree
-			score = Tree(file, args)
+			score = Tree(file)
 			score.clean()
 			if args.style:
-				verbose(args.style.name, 'style file', 'blue', args=args)
+				verbose(args.style.name, 'style file', 'blue')
 				clean.mergeStyle()
 			score.write()
 
 		elif args.subcommand == 'lyrics':
 			from lyrics import Lyrics
-			score = Lyrics(file, args)
+			score = Lyrics(file)
 			if args.remap:
 				score.remap()
 			elif args.fix:
@@ -114,7 +112,7 @@ def execute(args=None):
 
 		elif args.subcommand == 'meta':
 			from meta import Meta
-			score = Meta(file, args)
+			score = Meta(file)
 			if args.show:
 				score.show()
 			else:
@@ -136,8 +134,8 @@ def execute(args=None):
 			score.execute()
 
 		elif args.subcommand == 'export':
-			verbose(file, '\nexport', 'yellow', args=args)
-			verbose(args.extension, 'extension', 'green', args=args)
+			verbose(file, '\nexport', 'yellow')
+			verbose(args.extension, 'extension', 'green')
 			from fileloader import File
 			score = File(file, args)
 			score.export()

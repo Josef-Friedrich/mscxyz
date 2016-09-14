@@ -47,7 +47,7 @@ def get_testfile(filename):
 class TestMeta(unittest.TestCase):
 	def setUp(self):
 		from mscxyz.meta import Meta
-		self.meta = Meta(get_testfile('simple'), args=None)
+		self.meta = Meta(get_testfile('simple'))
 
 	def test_get(self):
 		self.assertEqual(self.meta.get('title'), 'Title')
@@ -57,7 +57,7 @@ class TestFile(unittest.TestCase):
 
 	def setUp(self):
 		from mscxyz.fileloader import File
-		self.file = File(get_testfile('simple'), args=None)
+		self.file = File(get_testfile('simple'))
 
 	def test_file_object_initialisation(self):
 		self.assertEqual(self.file.fullpath, get_testfile('simple'))
@@ -194,11 +194,12 @@ class TestLyricsExtractByNumber(unittest.TestCase):
 class TestLyricsFix(unittest.TestCase):
 
 	def setUp(self):
-		self.lyrics = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
+		tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
+		self.lyrics = mscxyz.lyrics.Lyrics(tmp.fullpath)
 
 	def test_fix(self):
 		print(self.lyrics)
-		print(self.lyrics.fullpath)
+		#print(self.lyrics.fullpath)
 
 
 class TestBatch(unittest.TestCase):

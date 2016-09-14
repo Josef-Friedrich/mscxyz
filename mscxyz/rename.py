@@ -8,11 +8,6 @@ from meta import Meta
 from termcolor import colored
 import tmep
 
-class Args(object):
-	format = '$title ($composer)'
-	ascii = True
-	no_whitespace = True
-
 def create_dir(path):
 	import errno
 	try:
@@ -23,11 +18,9 @@ def create_dir(path):
 
 class Rename(File):
 
-	def __init__(self, fullpath, args=None):
-		if not args:
-			args = Args();
-		super(Rename, self).__init__(fullpath, args)
-		self.score = Meta(self.fullpath, args)
+	def __init__(self, fullpath):
+		super(Rename, self).__init__(fullpath)
+		self.score = Meta(self.fullpath)
 		self.workname = self.basename
 
 	def asciify(self):
@@ -80,11 +73,11 @@ class Rename(File):
 
 		self.workname = tmep.parse(format, values)
 
-	def execute(self):
-		if self.args.dry_run or self.args.verbose > 0:
+	def execute(self, dry_run=False, verbose=0):
+		if dry_run or verbose > 0:
 			print(colored(self.basename, 'red') + ' -> ' + colored(self.workname, 'yellow'))
 
-		if not self.args.dry_run:
+		if not dry_run:
 			newpath = self.workname + '.' + self.extension
 			newdir = os.path.dirname(newpath)
 			if newdir:

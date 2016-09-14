@@ -7,8 +7,8 @@ from mscxyz import re_open, verbose
 
 class Tree(File):
 
-	def __init__(self, fullpath, args):
-		super(Tree, self).__init__(fullpath, args)
+	def __init__(self, fullpath):
+		super(Tree, self).__init__(fullpath)
 		import lxml.etree as et
 		try:
 			self.tree = et.parse(self.fullpath)
@@ -29,13 +29,13 @@ class Tree(File):
 		if not self.error:
 			import lxml.etree as et
 			et.strip_tags(self.tree, tags)
-			verbose(str(tags), 'strip', color='blue', verbosity=2, args=self.args)
+			verbose(str(tags), 'strip', color='blue', verbosity=2)
 
 	def removeTagsByXPath(self, *xpath_strings):
 		if not self.error:
 			for xpath_string in xpath_strings:
 				for rm in self.tree.xpath(xpath_string):
-					verbose(rm.tag, 'remove', verbosity=2, args=self.args)
+					verbose(rm.tag, 'remove', verbosity=2)
 					rm.getparent().remove(rm)
 
 	def mergeStyle(self):
@@ -57,4 +57,4 @@ class Tree(File):
 			filename = self.fullpath
 		if not self.error:
 			self.tree.write(filename, encoding='UTF-8')
-			re_open(filename, self.args)
+			re_open(filename)

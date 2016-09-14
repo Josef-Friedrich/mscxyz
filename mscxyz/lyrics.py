@@ -6,8 +6,8 @@ from tree import Tree
 
 class Lyrics(Tree):
 
-	def __init__(self, fullpath, args):
-		super(Lyrics, self).__init__(fullpath, args)
+	def __init__(self, fullpath):
+		super(Lyrics, self).__init__(fullpath)
 		self.lyrics = self.normalizeLyrics()
 		self.max = self.getMax()
 
@@ -47,7 +47,7 @@ class Lyrics(Tree):
 		self.write()
 
 	def extractOneLyricVerse(self, number):
-		score = Lyrics(self.fullpath, self.args)
+		score = Lyrics(self.fullpath)
 
 		for element in score.lyrics:
 			tag = element['element']

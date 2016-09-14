@@ -9,8 +9,8 @@ from termcolor import colored
 
 class Meta(Tree):
 
-	def __init__(self, fullpath, args):
-		super(Meta, self).__init__(fullpath, args)
+	def __init__(self, fullpath):
+		super(Meta, self).__init__(fullpath)
 
 		if not self.error:
 			tags = [
