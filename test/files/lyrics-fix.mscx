@@ -113,6 +113,11 @@
           <Lyrics>
             <text>la-</text>
             </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
+            <text>la-</text>
+            </Lyrics>
           <Note>
             <pitch>60</pitch>
             <tpc>14</tpc>
@@ -122,6 +127,11 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
+            <text>la-</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
             <text>la-</text>
             </Lyrics>
           <Note>
@@ -134,6 +144,11 @@
           <Lyrics>
             <text>la-</text>
             </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
+            <text>la-</text>
+            </Lyrics>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -142,6 +157,11 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
+            <text>la.</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
             <text>la.</text>
             </Lyrics>
           <Note>
@@ -156,6 +176,11 @@
           <Lyrics>
             <text>la-</text>
             </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
+            <text>la-</text>
+            </Lyrics>
           <Note>
             <pitch>67</pitch>
             <tpc>15</tpc>
@@ -165,6 +190,11 @@
           <durationType>quarter</durationType>
           <Lyrics>
             <syllabic>end</syllabic>
+            <text>la-</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
             <text>la-</text>
             </Lyrics>
           <Note>
@@ -177,6 +207,11 @@
           <Lyrics>
             <text>la</text>
             </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
+            <text>la</text>
+            </Lyrics>
           <Note>
             <pitch>64</pitch>
             <tpc>18</tpc>
@@ -185,6 +220,11 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
+            <text>la.</text>
+            </Lyrics>
+          <Lyrics>
+            <no>1</no>
+            <style>Lyrics Even Lines</style>
             <text>la.</text>
             </Lyrics>
           <Note>
