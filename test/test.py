@@ -195,12 +195,19 @@ class TestLyricsFix(unittest.TestCase):
 
 	def setUp(self):
 		tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
-		self.lyrics = mscxyz.lyrics.Lyrics(tmp.fullpath)
+		self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
+		print(self.tree.fullpath)
+		self.lyrics = self.tree.lyrics
 
 	def test_fix(self):
 		print(self.lyrics)
-		#print(self.lyrics.fullpath)
-
+		for element in self.lyrics:
+			tag = element['element']
+			tag_text = tag.find('text')
+			print(tag_text.text)
+			tag_syllabic = tag.find('syllabic')
+			if tag_syllabic:
+				print(tag_syllabic.text)
 
 class TestBatch(unittest.TestCase):
 	def setUp(self):
