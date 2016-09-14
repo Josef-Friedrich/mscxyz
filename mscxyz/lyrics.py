@@ -120,6 +120,6 @@ class Lyrics(Tree):
 				else:
 					tag_syl = False
 
-			if isinstance(tag_syl, list):
+			if not isinstance(tag_syl, bool):
 				tag.append(tag_syl)
 			self.write()

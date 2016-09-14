@@ -196,18 +196,21 @@ class TestLyricsFix(unittest.TestCase):
 	def setUp(self):
 		tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
 		self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
-		print(self.tree.fullpath)
 		self.lyrics = self.tree.lyrics
 
 	def test_fix(self):
-		print(self.lyrics)
+		text = []
+		syllabic = []
 		for element in self.lyrics:
 			tag = element['element']
 			tag_text = tag.find('text')
-			print(tag_text.text)
+			text.append(tag_text.text)
 			tag_syllabic = tag.find('syllabic')
-			if tag_syllabic:
-				print(tag_syllabic.text)
+			if hasattr(tag_syllabic, 'text'):
+				syllabic.append(tag_syllabic.text)
+
+		self.assertEqual(text, ['la', 'la', 'la', 'la.', 'la', 'la', 'la', 'la.'])
+		self.assertEqual(syllabic, ['begin', 'middle', 'middle', 'end', 'begin', 'middle', 'end'])
 
 class TestBatch(unittest.TestCase):
 	def setUp(self):
