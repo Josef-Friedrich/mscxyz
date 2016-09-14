@@ -119,5 +119,7 @@ class Lyrics(Tree):
 					syllabic = False
 				else:
 					tag_syl = False
-			tag.append(tag_syl)
+
+			if isinstance(tag_syl, list):
+				tag.append(tag_syl)
 			self.write()
