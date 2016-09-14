@@ -4,8 +4,8 @@
 .. image:: https://travis-ci.org/Josef-Friedrich/mscxyz.svg?branch=master
     :target: https://travis-ci.org/Josef-Friedrich/mscxyz
 
-mscxyz.py
-=========
+mscxyz
+======
 
 .. code-block:: none
 
@@ -78,13 +78,6 @@ mscx-manager rename
   
   Tokens you can use in the format string (-f, --format):
   
-  	- %title%
-  	- %title_1char%  The first character of the token 'title'.
-  	- %title_2char%  The first two characters of the token 'title'
-  	- %subtitle%
-  	- %composer%
-  	- %lyricist%
-  
   optional arguments:
     -h, --help            show this help message and exit
     -d, --dry-run         Do not rename the scores
@@ -117,7 +110,7 @@ mscx-manager lyrics
 
 .. code-block:: none
 
-  usage: mscx-manager lyrics [-h] [-n NUMBER] [-r REMAP]
+  usage: mscx-manager lyrics [-h] [-n NUMBER] [-r REMAP] [-f]
   
   optional arguments:
     -h, --help            show this help message and exit
@@ -130,6 +123,8 @@ mscx-manager lyrics
                           is separated by a colon in this form: "old:new": "old"
                           stands for the old verse number. "new" stands for the
                           new verse number.
+    -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to
+                          a correct hyphenation ("la - la - la")
   
 
 mscx-manager meta
