@@ -5,12 +5,19 @@ from cStringIO import StringIO
 import sys
 import shutil
 import tempfile
+from distutils.dir_util import copy_tree
 
 def tmp_file(file_token):
-	orig = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files' , file_token + '.mscx')
+	orig = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', file_token + '.mscx')
 	tmp_dir = tempfile.mkdtemp()
 	tmp = os.path.join(tmp_dir, file_token + '.mscx')
 	shutil.copyfile(orig, tmp)
+	return tmp
+
+def tmp_dir(relative_dir):
+	orig = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files', relative_dir)
+	tmp = tempfile.mkdtemp()
+	copy_tree(orig, tmp)
 	return tmp
 
 class Capturing(list):
@@ -193,6 +200,14 @@ class TestLyricsFix(unittest.TestCase):
 		print(self.lyrics)
 		print(self.lyrics.fullpath)
 
+
+class TestBatch(unittest.TestCase):
+	def setUp(self):
+		with Capturing() as output:
+			self.batch = mscxyz.execute(['meta', '-s', tmp_dir('batch')])
+
+	def test_batch(self):
+		self.assertEqual(len(self.batch), 3)
 
 if __name__ == '__main__':
 	unittest.main()
