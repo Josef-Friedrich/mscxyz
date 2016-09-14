@@ -201,7 +201,6 @@ class TestLyricsFix(unittest.TestCase):
 	def test_fix(self):
 		text = []
 		syllabic = []
-		print(self.tree.fullpath)
 		for element in self.lyrics:
 			tag = element['element']
 			tag_text = tag.find('text')

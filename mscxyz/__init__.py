@@ -91,7 +91,6 @@ def execute(args=None):
 			score.backup()
 
 		if args.subcommand == 'clean':
-			verbose(file, '\nclean', 'yellow')
 			from tree import Tree
 			score = Tree(file)
 			score.clean()
