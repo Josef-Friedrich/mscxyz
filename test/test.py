@@ -201,6 +201,7 @@ class TestLyricsFix(unittest.TestCase):
 	def test_fix(self):
 		text = []
 		syllabic = []
+		print(self.tree.fullpath)
 		for element in self.lyrics:
 			tag = element['element']
 			tag_text = tag.find('text')
@@ -209,8 +210,8 @@ class TestLyricsFix(unittest.TestCase):
 			if hasattr(tag_syllabic, 'text'):
 				syllabic.append(tag_syllabic.text)
 
-		self.assertEqual(text, ['la', 'la', 'la', 'la.', 'la', 'la', 'la', 'la.'])
-		self.assertEqual(syllabic, ['begin', 'middle', 'middle', 'end', 'begin', 'middle', 'end'])
+		self.assertEqual(text, ['Al', u'K\xf6pf', 'le', 'chen', 'mei', 'un', 'ne', 'ters', 'En', 'Was', 'te', 'si', 'lein.', 'lein.'])
+		self.assertEqual(syllabic, ['begin', 'begin', 'end', 'end', 'begin', 'begin', 'end', 'end', 'begin', 'begin', 'middle', 'middle', 'end', 'end'])
 
 class TestBatch(unittest.TestCase):
 	def setUp(self):

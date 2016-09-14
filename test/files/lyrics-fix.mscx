@@ -111,12 +111,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>la-</text>
+            <text>Al-</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la-</text>
+            <text>Köpf-</text>
             </Lyrics>
           <Note>
             <pitch>60</pitch>
@@ -126,13 +126,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <syllabic>end</syllabic>
-            <text>la-</text>
+            <text>le</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la-</text>
+            <text>chen</text>
             </Lyrics>
           <Note>
             <pitch>62</pitch>
@@ -142,12 +141,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>la-</text>
+            <text>mei-</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la-</text>
+            <text>un-</text>
             </Lyrics>
           <Note>
             <pitch>64</pitch>
@@ -157,12 +156,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>la.</text>
+            <text>ne</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la.</text>
+            <text>ters</text>
             </Lyrics>
           <Note>
             <pitch>65</pitch>
@@ -174,12 +173,12 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <text>la-</text>
+            <text>En-</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la-</text>
+            <text>Was-</text>
             </Lyrics>
           <Note>
             <pitch>67</pitch>
@@ -189,47 +188,31 @@
         <Chord>
           <durationType>quarter</durationType>
           <Lyrics>
-            <syllabic>end</syllabic>
-            <text>la-</text>
+            <text>te-</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la-</text>
+            <text>si-</text>
             </Lyrics>
           <Note>
-            <pitch>65</pitch>
-            <tpc>13</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <Chord>
-          <durationType>quarter</durationType>
+          <durationType>half</durationType>
           <Lyrics>
-            <text>la</text>
+            <text>lein.</text>
             </Lyrics>
           <Lyrics>
             <no>1</no>
             <style>Lyrics Even Lines</style>
-            <text>la</text>
+            <text>lein.</text>
             </Lyrics>
           <Note>
-            <pitch>64</pitch>
-            <tpc>18</tpc>
-            </Note>
-          </Chord>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Lyrics>
-            <text>la.</text>
-            </Lyrics>
-          <Lyrics>
-            <no>1</no>
-            <style>Lyrics Even Lines</style>
-            <text>la.</text>
-            </Lyrics>
-          <Note>
-            <pitch>60</pitch>
-            <tpc>14</tpc>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
             </Note>
           </Chord>
         <BarLine>

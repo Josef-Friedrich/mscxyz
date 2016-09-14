@@ -105,7 +105,8 @@ class Lyrics(Tree):
 			for number in range(1, self.max + 1):
 				self.extractOneLyricVerse(number)
 
-	def fixLyrics(self):
+
+	def fixLyricsVerse(self, verse_number):
 		"""
 		from:
 
@@ -139,24 +140,30 @@ class Lyrics(Tree):
 
 		syllabic = False
 		for element in self.lyrics:
-			tag = element['element']
-			tag_text = tag.find('text')
-			text = tag_text.text
-			tag_syl = etree.Element('syllabic')
-			if text.endswith('-'):
-				tag_text.text = text[:-1]
-				if not syllabic:
-					tag_syl.text = 'begin'
-					syllabic = True
+			if element['number'] == verse_number:
+				tag = element['element']
+				tag_text = tag.find('text')
+				text = tag_text.text
+				tag_syl = etree.Element('syllabic')
+				if text.endswith('-'):
+					tag_text.text = text[:-1]
+					if not syllabic:
+						tag_syl.text = 'begin'
+						syllabic = True
+					else:
+						tag_syl.text = 'middle'
 				else:
-					tag_syl.text = 'middle'
-			else:
-				if syllabic:
-					tag_syl.text = 'end'
-					syllabic = False
-				else:
-					tag_syl = False
+					if syllabic:
+						tag_syl.text = 'end'
+						syllabic = False
+					else:
+						tag_syl = False
 
-			if not isinstance(tag_syl, bool):
-				tag.append(tag_syl)
-			self.write()
+				if not isinstance(tag_syl, bool):
+					tag.append(tag_syl)
+
+	def fixLyrics(self):
+		for verse_number in range(1, self.max + 1):
+			self.fixLyricsVerse(verse_number)
+
+		self.write()
