@@ -12,6 +12,30 @@ class Lyrics(Tree):
 		self.max = self.getMax()
 
 	def normalizeLyrics(self):
+		"""Normalize numbering of verses to natural numbering (1,2,3).
+
+		From:
+			<Lyrics>
+				<text>1. la</text>
+				</Lyrics>
+			<Lyrics>
+				<no>1</no>
+				<style>Lyrics Even Lines</style>
+			<text>2. li</text>
+			</Lyrics>
+			<Lyrics>
+				<no>2</no>
+				<text>3. lo</text>
+			</Lyrics>
+
+		To:
+
+			[
+				{'number': 1, 'element': lyrics_tag},
+				{'number': 2, 'element': lyrics_tag},
+				{'number': 3, 'element': lyrics_tag},
+			]
+		"""
 		lyrics = []
 		for lyric in self.tree.findall('.//Lyrics'):
 			safe = {}
@@ -29,6 +53,19 @@ class Lyrics(Tree):
 		return lyrics
 
 	def getMax(self):
+		"""Retrieve the number of verses.
+
+		From:
+
+			1. La
+			2. La
+			3. La
+
+		To:
+
+			3
+
+		"""
 		max_lyric = 0
 		for element in self.lyrics:
 			if element['number'] > max_lyric:
