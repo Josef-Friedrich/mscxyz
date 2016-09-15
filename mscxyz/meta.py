@@ -2,10 +2,11 @@
 
 """Class for metadata maniplation"""
 
-import lxml.etree
-from tree import Tree
-from mscxyz import print_desc
+import lxml.etree as et
 from termcolor import colored
+
+from tree import Tree
+from mscxyz.utils import print_desc
 
 class Meta(Tree):
 
@@ -66,7 +67,6 @@ class Meta(Tree):
 		self.getMetaTag(name).text = text
 
 	def createVBox(self):
-		import lxml.etree as et
 		xpath = '/museScore/Score/Staff[@id="1"]'
 		if not self.root.xpath(xpath + '/VBox'):
 			tag = et.Element('VBox')
@@ -80,7 +80,6 @@ class Meta(Tree):
 				return element.find('text')
 
 	def insertInVBox(self, style, text):
-		import lxml.etree as et
 		tag = et.Element('Text')
 		self.addSubElement(tag, 'text', text)
 		self.addSubElement(tag, 'style', style)

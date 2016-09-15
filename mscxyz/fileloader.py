@@ -4,7 +4,7 @@
 
 import os
 import shutil
-from mscxyz import mscore
+from mscxyz.utils import mscore
 
 class File(object):
 	def __init__(self, fullpath):

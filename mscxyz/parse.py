@@ -2,6 +2,9 @@
 
 """Wrapper for the command line interface"""
 
+import argparse
+import textwrap
+
 class Parse(object):
 	"""Expose the command line interface."""
 
@@ -13,7 +16,6 @@ class Parse(object):
 		self.addPositional()
 
 	def initParser(self):
-		import argparse
 		self.parser = argparse.ArgumentParser(description='A command \
 			line tool to manipulate the XML based *.mscX and *.mscZ \
 			files of the notation software MuseScore.')
@@ -50,8 +52,6 @@ class Parse(object):
 			verbose.')
 
 	def addSubParser(self):
-		import argparse
-		import textwrap
 
 		self.sparser = self.parser.add_subparsers(title='Subcommands',
 			dest='subcommand', help='Run "subcommand --help" for more \

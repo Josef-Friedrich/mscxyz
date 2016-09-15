@@ -3,14 +3,13 @@
 """Load multiple MuseScore files"""
 
 import os
+import fnmatch
 
 class Batch(object):
 
 	def __init__(self, path, glob = '*.mscx'):
 		self.path = path
 		self.files = []
-
-		import fnmatch
 
 		for root, dirs, files in os.walk(path):
 			for file in files:

@@ -3,13 +3,16 @@
 """Rename MuseScore files"""
 
 import os
-from fileloader import File
-from meta import Meta
 from termcolor import colored
 import tmep
+import unidecode
+import re
+import errno
+
+from fileloader import File
+from meta import Meta
 
 def create_dir(path):
-	import errno
 	try:
 		os.makedirs(path)
 	except OSError as exception:
@@ -28,7 +31,6 @@ class Rename(File):
 		for replace, search in umlaute.iteritems():
 			self.workname = self.workname.replace(search, replace)
 
-		import unidecode
 		self.workname = unidecode.unidecode(self.workname)
 
 	def replaceToDash(self, *characters):
@@ -44,7 +46,6 @@ class Rename(File):
 		string = string.replace('(', '_')
 		string = string.replace('-_', '_')
 
-		import re
 		# Replace two or more dashes with one.
 		string = re.sub('-{2,}', '_', string)
 		string = re.sub('_{2,}', '_', string)

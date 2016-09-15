@@ -3,13 +3,13 @@
 """XML tree manipulation"""
 
 from fileloader import File
-from mscxyz import re_open, verbose
+import lxml.etree as et
+from mscxyz.utils import re_open
 
 class Tree(File):
 
 	def __init__(self, fullpath):
 		super(Tree, self).__init__(fullpath)
-		import lxml.etree as et
 		try:
 			self.tree = et.parse(self.fullpath)
 		except et.XMLSyntaxError, e:
@@ -21,13 +21,11 @@ class Tree(File):
 
 	def addSubElement(self, root_tag, tag, text):
 		if not self.error:
-			import lxml.etree as et
 			tag = et.SubElement(root_tag, tag)
 			tag.text = text
 
 	def stripTags(self, *tags):
 		if not self.error:
-			import lxml.etree as et
 			et.strip_tags(self.tree, tags)
 
 	def removeTagsByXPath(self, *xpath_strings):
@@ -37,7 +35,6 @@ class Tree(File):
 					rm.getparent().remove(rm)
 
 	def mergeStyle(self):
-		import lxml.etree as et
 		style = et.parse(self.args.style.name).getroot()
 
 		for score in self.tree.xpath('/museScore/Score'):

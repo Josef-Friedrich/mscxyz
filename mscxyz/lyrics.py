@@ -2,6 +2,8 @@
 
 """Manipulate the lyrics"""
 
+import lxml.etree as etree
+
 from tree import Tree
 
 class Lyrics(Tree):
@@ -136,7 +138,6 @@ class Lyrics(Tree):
 				<text>la.</text>
 			</Lyrics>
 		"""
-		import lxml.etree as etree
 
 		syllabic = False
 		for element in self.lyrics:
