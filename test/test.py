@@ -229,14 +229,39 @@ class TestBackup(unittest.TestCase):
 			self.fullpath_backup = self.score.fullpath_backup
 
 	def test_path_not_empty(self):
-		if not self.fullpath_backup:
-			self.fail('self.fullpath_backup not given')
+		self.assertTrue(os.path.isfile(self.fullpath_backup))
 
 	def test_path_attribute(self):
 		self.assertRegexpMatches(self.fullpath_backup, '_bak')
 
 	def test_size(self):
 		self.assertEqual(os.path.getsize(self.fullpath_backup), os.path.getsize(self.fullpath_backup))
+
+class TestExport(unittest.TestCase):
+
+	def export(self, extension):
+		score = mscxyz.execute(['export', '--extension', extension, tmp_file('simple')])[0]
+		self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', extension)))
+
+	def test_pdf(self):
+		score = mscxyz.execute(['export', tmp_file('simple')])[0]
+		self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
+
+	def test_png(self):
+		score = mscxyz.execute(['export', '--extension', 'png', tmp_file('simple')])[0]
+		self.assertTrue(os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
+
+	def test_svg(self):
+		self.export('svg')
+
+	def test_xml(self):
+		self.export('xml')
+
+	def test_mxl(self):
+		self.export('mxl')
+
+	def test_mid(self):
+		self.export('mid')
 
 if __name__ == '__main__':
 	unittest.main()

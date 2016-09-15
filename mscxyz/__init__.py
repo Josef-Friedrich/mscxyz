@@ -71,7 +71,7 @@ def execute(args=None):
 				score.write()
 
 		elif args.subcommand == 'rename':
-			score = Rename(file, args)
+			score = Rename(file)
 			if args.format:
 				score.applyFormatString(args.format)
 
@@ -83,11 +83,9 @@ def execute(args=None):
 			score.execute()
 
 		elif args.subcommand == 'export':
-			verbose(file, '\nexport', 'yellow')
-			verbose(args.extension, 'extension', 'green')
 			from fileloader import File
-			score = File(file, args)
-			score.export()
+			score = File(file)
+			score.export(args.extension)
 
 		output.append(score)
 

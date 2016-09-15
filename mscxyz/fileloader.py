@@ -18,6 +18,6 @@ class File(object):
 	def backup(self):
 		shutil.copy2(self.fullpath, self.fullpath_backup)
 
-	def export(self):
+	def export(self, extension='pdf'):
 		score = self.fullpath
-		mscore(['--export-to', score.replace('.mscx', '.' + self.args.extension), score])
+		mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
