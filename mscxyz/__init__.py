@@ -87,6 +87,7 @@ def execute(args=None):
 	for file in files:
 
 		if args.backup:
+			from fileloader import File
 			score = File(file)
 			score.backup()
 

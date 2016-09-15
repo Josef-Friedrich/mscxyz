@@ -3,22 +3,20 @@
 """Basic file loading"""
 
 import os
+import shutil
 from mscxyz import mscore
 
 class File(object):
 	def __init__(self, fullpath):
 		self.fullpath = fullpath
+		self.extension = self.fullpath.split('.')[-1]
+		self.fullpath_backup = self.fullpath.replace('.' + self.extension, '_bak.' + self.extension)
 		self.dirname = os.path.dirname(fullpath)
 		self.filename = os.path.basename(fullpath)
 		self.basename = self.filename.replace('.mscx', '').decode('utf-8')
-		self.extension = self.fullpath.split('.')[-1]
 
 	def backup(self):
-		import shutil
-		score = self.fullpath
-		ext = '.' + self.extension
-		backup = score.replace(ext, '_bak' + ext)
-		shutil.copy2(score, backup)
+		shutil.copy2(self.fullpath, self.fullpath_backup)
 
 	def export(self):
 		score = self.fullpath

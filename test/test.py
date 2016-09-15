@@ -220,5 +220,23 @@ class TestBatch(unittest.TestCase):
 	def test_batch(self):
 		self.assertEqual(len(self.batch), 3)
 
+class TestBackup(unittest.TestCase):
+
+	def setUp(self):
+		with Capturing() as output:
+			self.score = mscxyz.execute(['-b', 'meta', '-s', tmp_file('simple')])[0]
+			self.fullpath = self.score.fullpath
+			self.fullpath_backup = self.score.fullpath_backup
+
+	def test_path_not_empty(self):
+		if not self.fullpath_backup:
+			self.fail('self.fullpath_backup not given')
+
+	def test_path_attribute(self):
+		self.assertRegexpMatches(self.fullpath_backup, '_bak')
+
+	def test_size(self):
+		self.assertEqual(os.path.getsize(self.fullpath_backup), os.path.getsize(self.fullpath_backup))
+
 if __name__ == '__main__':
 	unittest.main()
