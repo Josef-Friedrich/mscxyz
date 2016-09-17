@@ -1,10 +1,14 @@
 import os
 import unittest
 import mscxyz
-from cStringIO import StringIO
 import sys
 import shutil
 import tempfile
+import six
+if six.PY2:
+	from cStringIO import StringIO
+else:
+	from io import StringIO
 from distutils.dir_util import copy_tree
 
 def tmp_file(file_token):
@@ -232,7 +236,10 @@ class TestBackup(unittest.TestCase):
 		self.assertTrue(os.path.isfile(self.fullpath_backup))
 
 	def test_path_attribute(self):
-		self.assertRegexpMatches(self.fullpath_backup, '_bak')
+		if six.PY2:
+			self.assertRegexpMatches(self.fullpath_backup, '_bak')
+		else:
+			self.assertRegex(self.fullpath_backup, '_bak')
 
 	def test_size(self):
 		self.assertEqual(os.path.getsize(self.fullpath_backup), os.path.getsize(self.fullpath_backup))

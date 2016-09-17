@@ -4,6 +4,7 @@
 
 import lxml.etree as et
 from termcolor import colored
+import six
 
 from mscxyz.tree import Tree
 from mscxyz.utils import print_desc
@@ -35,7 +36,10 @@ class Meta(Tree):
 			for tag in tags:
 				text = self.getMetaText(tag)
 				if text:
-					self.meta[tag] = text.decode('utf-8')
+					if six.PY2:
+						self.meta[tag] = text.decode('utf-8')
+					else:
+						self.meta[tag] = text
 				else:
 					self.meta[tag] = ''
 
@@ -50,7 +54,10 @@ class Meta(Tree):
 			for tag in tags:
 				text = self.getVBoxText(tag)
 				if text:
-					self.vbox[tag] = text.decode('utf-8')
+					if six.PY2:
+						self.vbox[tag] = text.decode('utf-8')
+					else:
+						self.vbox[tag] = text
 				else:
 					self.vbox[tag] = ''
 
@@ -162,11 +169,11 @@ class Meta(Tree):
 		print_desc('\n' + colored(self.filename, 'red'))
 		print_desc(self.basename, 'filename', 'blue')
 		if not self.error:
-			for tag, text in self.meta.iteritems():
+			for tag, text in self.meta.items():
 				if text:
 					print_desc(text, tag, 'yellow')
 
-			for tag, text in self.vbox.iteritems():
+			for tag, text in self.vbox.items():
 				if text:
 					print_desc(text, tag, 'green')
 

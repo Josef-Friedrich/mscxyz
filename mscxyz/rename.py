@@ -28,7 +28,7 @@ class Rename(File):
 
 	def asciify(self):
 		umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü', 'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
-		for replace, search in umlaute.iteritems():
+		for replace, search in umlaute.items():
 			self.workname = self.workname.replace(search, replace)
 
 		self.workname = unidecode.unidecode(self.workname)

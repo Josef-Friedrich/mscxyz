@@ -79,7 +79,7 @@ def execute(args=None):
 			score.execute()
 
 		elif args.subcommand == 'export':
-			from fileloader import File
+			from mscxyz.fileloader import File
 			score = File(file)
 			score.export(args.extension)
 

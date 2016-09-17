@@ -4,6 +4,7 @@
 
 import os
 import shutil
+import six
 
 from mscxyz.utils import mscore
 
@@ -14,7 +15,10 @@ class File(object):
 		self.fullpath_backup = self.fullpath.replace('.' + self.extension, '_bak.' + self.extension)
 		self.dirname = os.path.dirname(fullpath)
 		self.filename = os.path.basename(fullpath)
-		self.basename = self.filename.replace('.mscx', '').decode('utf-8')
+		if six.PY2:
+			self.basename = self.filename.replace('.mscx', '').decode('utf-8')
+		else:
+			self.basename = self.filename.replace('.mscx', '')
 
 	def backup(self):
 		shutil.copy2(self.fullpath, self.fullpath_backup)
