@@ -12,7 +12,7 @@ class Tree(File):
 		super(Tree, self).__init__(fullpath)
 		try:
 			self.tree = et.parse(self.fullpath)
-		except et.XMLSyntaxError, e:
+		except et.XMLSyntaxError as e:
 			print('Error!!! ' + str(e))
 			self.error = True
 		else:
