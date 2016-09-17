@@ -62,7 +62,7 @@ class Parse(object):
 		self.sub['clean'] = self.sparser.add_parser('clean',
 			help='Clean and reset the formating of the *.mscx file')
 
-		self.sub['clean'].add_argument('-s', '--style',
+		self.sub['clean'].add_argument('-s', '--style', type=open,
 			help='Load a *.mss style file and include the contents of \
 			this file.')
 

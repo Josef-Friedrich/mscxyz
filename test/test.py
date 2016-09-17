@@ -127,8 +127,9 @@ class TestClean(unittest.TestCase):
 
 	def setUp(self):
 		clean = mscxyz.execute(['clean', tmp_file('formats')])[0]
-		clean.fullpath
-		self.clean_file = open(clean.fullpath).read()
+		tmp = open(clean.fullpath)
+		self.clean_file = tmp.read()
+		tmp.close()
 
 	def test_font(self):
 		if '<font' in self.clean_file:
