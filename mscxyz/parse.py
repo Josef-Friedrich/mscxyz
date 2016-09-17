@@ -248,4 +248,4 @@ class Parse(object):
 				self.codeBlock(command.format_help())
 
 		else:
-			self.codeBlock(self.sub[args.path].format_help())
+			self.codeBlock(self.sub[self.args.path].format_help())

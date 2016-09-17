@@ -5,7 +5,6 @@ files of the notation software MuseScore
 """
 
 import sys
-import signal
 
 from mscxyz.tree import Tree
 from mscxyz.lyrics import Lyrics
@@ -13,15 +12,11 @@ from mscxyz.meta import Meta
 from mscxyz.rename import Rename
 from mscxyz.parse import Parse
 from mscxyz.batch import Batch
-from mscxyz.utils import exit_gracefully
 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
 def execute(args=None):
-	original_sigint = signal.getsignal(signal.SIGINT)
-	signal.signal(signal.SIGINT, exit_gracefully)
-
 	parse = Parse()
 	args = parse.parse(args)
 
@@ -48,8 +43,7 @@ def execute(args=None):
 			score = Tree(file)
 			score.clean()
 			if args.style:
-				verbose(args.style.name, 'style file', 'blue')
-				clean.mergeStyle()
+				score.mergeStyle()
 			score.write()
 
 		elif args.subcommand == 'lyrics':
@@ -66,7 +60,7 @@ def execute(args=None):
 			if args.show:
 				score.show()
 			else:
-				if args.json: meta.exportJson()
+				if args.json: score.exportJson()
 				score.syncMetaTags()
 				score.write()
 
@@ -76,10 +70,10 @@ def execute(args=None):
 				score.applyFormatString(args.format)
 
 			if args.ascii:
-				self.asciify()
+				score.asciify()
 
 			if args.no_whitespace:
-				self.noWhitespace
+				score.noWhitespace()
 			score.execute()
 
 		elif args.subcommand == 'export':

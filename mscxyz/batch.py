@@ -28,7 +28,6 @@ class Batch(object):
 
 			counter += 1
 			if hit == counter:
-				verbose(str(counter), 'pick', 'green')
 				output.append(score)
 				hit = hit + pick
 

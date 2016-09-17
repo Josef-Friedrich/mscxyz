@@ -30,6 +30,8 @@ def convert_mxl(input_file):
 	os.remove(input_file)
 
 def exit_gracefully(signum, frame):
+	original_sigint = signal.getsignal(signal.SIGINT)
+	signal.signal(signal.SIGINT, exit_gracefully)
 	# Restore the original signal handler as otherwise evil things will
 	# happen, in raw_input when CTRL+C is pressed, and our signal
 	# handler is not re-entrant
