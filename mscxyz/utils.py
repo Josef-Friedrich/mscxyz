@@ -17,10 +17,10 @@ def mscore(commands):
 
 	commands.insert(0, executeable)
 
-	#OUT=None
-	OUT = open(os.devnull, 'wb')
+	OUT=None
+	#OUT = open(os.devnull, 'wb')
 	subprocess.call(commands, stdout=OUT, stderr=OUT)
-	OUT.close()
+	#OUT.close()
 
 def re_open(input_file):
 	mscore(['-o', input_file, input_file])
