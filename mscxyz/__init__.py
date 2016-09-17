@@ -5,6 +5,7 @@ files of the notation software MuseScore
 """
 
 import sys
+import six
 
 from mscxyz.tree import Tree
 from mscxyz.lyrics import Lyrics
@@ -13,8 +14,9 @@ from mscxyz.rename import Rename
 from mscxyz.parse import Parse
 from mscxyz.batch import Batch
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+if six.PY2:
+	reload(sys)
+	sys.setdefaultencoding('utf8')
 
 def execute(args=None):
 	parse = Parse()

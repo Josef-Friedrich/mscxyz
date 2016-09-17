@@ -15,7 +15,7 @@ setup(
 	keywords = 'audio',
 	url = 'https://github.com/Josef-Friedrich/mscxyz',
 	install_requires = [
-		'lxml', 'termcolor', 'tmep',
+		'lxml', 'termcolor', 'tmep', 'six',
 	],
 	scripts = ['bin/mscx-manager'],
 	long_description=read('README.rst'),
