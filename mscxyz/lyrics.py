@@ -4,7 +4,7 @@
 
 import lxml.etree as etree
 
-from tree import Tree
+from mscxyz.tree import Tree
 
 class Lyrics(Tree):
 

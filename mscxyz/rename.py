@@ -9,8 +9,8 @@ import unidecode
 import re
 import errno
 
-from fileloader import File
-from meta import Meta
+from mscxyz.fileloader import File
+from mscxyz.meta import Meta
 
 def create_dir(path):
 	try:

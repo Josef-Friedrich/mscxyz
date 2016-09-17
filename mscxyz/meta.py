@@ -5,7 +5,7 @@
 import lxml.etree as et
 from termcolor import colored
 
-from tree import Tree
+from mscxyz.tree import Tree
 from mscxyz.utils import print_desc
 
 class Meta(Tree):

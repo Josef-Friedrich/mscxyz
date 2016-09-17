@@ -2,9 +2,10 @@
 
 """XML tree manipulation"""
 
-from fileloader import File
 import lxml.etree as et
+
 from mscxyz.utils import re_open
+from mscxyz.fileloader import File
 
 class Tree(File):
 
