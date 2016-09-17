@@ -8,21 +8,24 @@ import six
 
 from mscxyz.utils import mscore
 
+
 class File(object):
-	def __init__(self, fullpath):
-		self.fullpath = fullpath
-		self.extension = self.fullpath.split('.')[-1]
-		self.fullpath_backup = self.fullpath.replace('.' + self.extension, '_bak.' + self.extension)
-		self.dirname = os.path.dirname(fullpath)
-		self.filename = os.path.basename(fullpath)
-		if six.PY2:
-			self.basename = self.filename.replace('.mscx', '').decode('utf-8')
-		else:
-			self.basename = self.filename.replace('.mscx', '')
 
-	def backup(self):
-		shutil.copy2(self.fullpath, self.fullpath_backup)
+    def __init__(self, fullpath):
+        self.fullpath = fullpath
+        self.extension = self.fullpath.split('.')[-1]
+        self.fullpath_backup = self.fullpath.replace(
+            '.' + self.extension, '_bak.' + self.extension)
+        self.dirname = os.path.dirname(fullpath)
+        self.filename = os.path.basename(fullpath)
+        if six.PY2:
+            self.basename = self.filename.replace('.mscx', '').decode('utf-8')
+        else:
+            self.basename = self.filename.replace('.mscx', '')
 
-	def export(self, extension='pdf'):
-		score = self.fullpath
-		mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
+    def backup(self):
+        shutil.copy2(self.fullpath, self.fullpath_backup)
+
+    def export(self, extension='pdf'):
+        score = self.fullpath
+        mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
