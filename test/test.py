@@ -249,7 +249,14 @@ class TestExport(unittest.TestCase):
 
 	def export(self, extension):
 		score = mscxyz.execute(['export', '--extension', extension, tmp_file('simple')])[0]
-		self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', extension)))
+		export = score.fullpath.replace('mscx', extension)
+		print(export)
+
+		with open(export, 'rb') as com:
+			lol = com.read()
+
+		print(lol)
+		self.assertTrue(os.path.isfile(export))
 
 	def test_pdf(self):
 		score = mscxyz.execute(['export', tmp_file('simple')])[0]
