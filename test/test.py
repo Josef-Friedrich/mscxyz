@@ -1,20 +1,23 @@
+"""File for various tests"""
+
 import os
 import unittest
 import mscxyz
 import sys
 import shutil
 import tempfile
+from distutils.dir_util import copy_tree
 import six
 if six.PY2:
     from cStringIO import StringIO
 else:
     from io import StringIO
-from distutils.dir_util import copy_tree
 
 
 def tmp_file(file_token):
-    orig = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'files', file_token + '.mscx')
+    orig = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'files',
+        file_token + '.mscx')
     tmp_dir = tempfile.mkdtemp()
     tmp = os.path.join(tmp_dir, file_token + '.mscx')
     shutil.copyfile(orig, tmp)
@@ -22,15 +25,14 @@ def tmp_file(file_token):
 
 
 def tmp_dir(relative_dir):
-    orig = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'files', relative_dir)
+    orig = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'files', relative_dir)
     tmp = tempfile.mkdtemp()
     copy_tree(orig, tmp)
     return tmp
 
 
 class Capturing(list):
-
     def __init__(self, channel='out'):
         self.channel = channel
 
@@ -52,11 +54,10 @@ class Capturing(list):
 
 
 def get_testfile(filename):
-    return os.path.join(os.path.dirname(__file__), 'files',  filename + '.mscx')
+    return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
 
 
 class TestMeta(unittest.TestCase):
-
     def setUp(self):
         from mscxyz.meta import Meta
         self.meta = Meta(get_testfile('simple'))
@@ -67,7 +68,6 @@ class TestMeta(unittest.TestCase):
 
 
 class TestFile(unittest.TestCase):
-
     def setUp(self):
         from mscxyz.fileloader import File
         self.file = File(get_testfile('simple'))
@@ -82,7 +82,6 @@ class TestFile(unittest.TestCase):
 
 
 class TestCommandlineInterface(unittest.TestCase):
-
     def test_help_short(self):
         with self.assertRaises(SystemExit) as cm:
             with Capturing() as output:
@@ -109,11 +108,12 @@ class TestCommandlineInterface(unittest.TestCase):
             with Capturing() as output:
                 mscxyz.execute(['-h'])
         self.assertEqual(
-            output[0], 'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]')
+            output[0],
+            'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] \
+[-c CYCLE_LENGTH] [-v]')
 
 
 class TestRename(unittest.TestCase):
-
     def setUp(self):
         from mscxyz.rename import Rename
         self.simple = Rename(get_testfile('simple'))
@@ -139,7 +139,6 @@ class TestRename(unittest.TestCase):
 
 
 class TestClean(unittest.TestCase):
-
     def setUp(self):
         clean = mscxyz.execute(['clean', tmp_file('formats')])[0]
         tmp = open(clean.fullpath)
@@ -172,7 +171,6 @@ class TestClean(unittest.TestCase):
 
 
 class TestLyrics(unittest.TestCase):
-
     def setUp(self):
         self.token = 'lyrics'
         self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.token)])[0]
@@ -192,7 +190,6 @@ class TestLyrics(unittest.TestCase):
 
 
 class TestLyricsExtractByNumber(unittest.TestCase):
-
     def setUp(self):
         self.token = 'lyrics'
         self.lyrics = mscxyz.execute(
@@ -202,7 +199,8 @@ class TestLyricsExtractByNumber(unittest.TestCase):
         tmpdir = os.path.dirname(self.lyrics.fullpath)
 
         def tmpfile(number):
-            return os.path.join(tmpdir, self.token + '_' + str(number) + '.mscx')
+            return os.path.join(tmpdir,
+                                self.token + '_' + str(number) + '.mscx')
 
         if os.path.isfile(tmpfile(1)):
             self.fail(tmpfile(1))
@@ -215,7 +213,6 @@ class TestLyricsExtractByNumber(unittest.TestCase):
 
 
 class TestLyricsFix(unittest.TestCase):
-
     def setUp(self):
         tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
         self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
@@ -232,14 +229,15 @@ class TestLyricsFix(unittest.TestCase):
             if hasattr(tag_syllabic, 'text'):
                 syllabic.append(tag_syllabic.text)
 
-        self.assertEqual(text, ['Al', u'K\xf6pf', 'le', 'chen', 'mei',
-                                'un', 'ne', 'ters', 'En', 'Was', 'te', 'si', 'lein.', 'lein.'])
-        self.assertEqual(syllabic, ['begin', 'begin', 'end', 'end', 'begin', 'begin',
-                                    'end', 'end', 'begin', 'begin', 'middle', 'middle', 'end', 'end'])
+        self.assertEqual(text,
+                         ['Al', u'K\xf6pf', 'le', 'chen', 'mei', 'un', 'ne',
+                          'ters', 'En', 'Was', 'te', 'si', 'lein.', 'lein.'])
+        self.assertEqual(syllabic, ['begin', 'begin', 'end', 'end', 'begin',
+                                    'begin', 'end', 'end', 'begin', 'begin',
+                                    'middle', 'middle', 'end', 'end'])
 
 
 class TestBatch(unittest.TestCase):
-
     def setUp(self):
         with Capturing() as output:
             self.batch = mscxyz.execute(['meta', '-s', tmp_dir('batch')])
@@ -249,7 +247,6 @@ class TestBatch(unittest.TestCase):
 
 
 class TestBackup(unittest.TestCase):
-
     def setUp(self):
         with Capturing() as output:
             self.score = mscxyz.execute(
@@ -267,12 +264,12 @@ class TestBackup(unittest.TestCase):
             self.assertRegex(self.fullpath_backup, '_bak')
 
     def test_size(self):
-        self.assertEqual(os.path.getsize(self.fullpath_backup),
-                         os.path.getsize(self.fullpath_backup))
+        self.assertEqual(
+            os.path.getsize(self.fullpath_backup),
+            os.path.getsize(self.fullpath_backup))
 
 
 class TestExport(unittest.TestCase):
-
     def export(self, extension):
         score = mscxyz.execute(
             ['export', '--extension', extension, tmp_file('simple')])[0]
@@ -288,8 +285,8 @@ class TestExport(unittest.TestCase):
     def test_png(self):
         score = mscxyz.execute(
             ['export', '--extension', 'png', tmp_file('simple')])[0]
-        self.assertTrue(os.path.isfile(
-            score.fullpath.replace('.mscx', '-1.png')))
+        self.assertTrue(
+            os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
 
     @unittest.skip('export not working in travis')
     def test_svg(self):
@@ -306,6 +303,7 @@ class TestExport(unittest.TestCase):
     @unittest.skip('export not working in travis')
     def test_mid(self):
         self.export('mid')
+
 
 if __name__ == '__main__':
     unittest.main()
