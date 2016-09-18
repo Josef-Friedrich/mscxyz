@@ -17,7 +17,10 @@ class Lyrics(Tree):
     def normalizeLyrics(self):
         """Normalize numbering of verses to natural numbering (1,2,3).
 
-        From:
+        From
+
+        .. code-block:: xml
+
                 <Lyrics>
                         <text>1. la</text>
                         </Lyrics>
@@ -31,7 +34,9 @@ class Lyrics(Tree):
                         <text>3. lo</text>
                 </Lyrics>
 
-        To:
+        To
+
+        .. code-block:: python
 
                 [
                         {'number': 1, 'element': lyrics_tag},
@@ -112,6 +117,8 @@ class Lyrics(Tree):
         """
         from:
 
+        .. code-block:: xml
+
                 <Lyrics>
                         <text>la-</text>
                 </Lyrics>
@@ -124,6 +131,8 @@ class Lyrics(Tree):
                 </Lyrics>
 
         to:
+
+        .. code-block:: xml
 
                 <Lyrics>
                         <syllabic>begin</syllabic>
