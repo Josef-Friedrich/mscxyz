@@ -24,8 +24,13 @@ class File(object):
             self.basename = self.filename.replace('.mscx', '')
 
     def backup(self):
+        """Make a copy of the MuseScore"""
         shutil.copy2(self.fullpath, self.fullpath_backup)
 
     def export(self, extension='pdf'):
+        """Export the score to the specifed file type
+
+        :param str extension: The extension (default: pdf)
+        """
         score = self.fullpath
         mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
