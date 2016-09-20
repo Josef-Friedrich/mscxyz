@@ -66,6 +66,22 @@ class TestMeta(unittest.TestCase):
         self.assertEqual(self.meta.get('title'), 'Title')
         self.assertEqual(self.meta.get('composer'), 'Composer')
 
+    def test_show(self):
+        with Capturing() as output:
+            mscxyz.execute(['meta', '-s', get_testfile('simple')])
+
+        compare = [
+            '',
+            '\x1b[31msimple.mscx\x1b[0m',
+            '\x1b[34mfilename\x1b[0m: simple',
+            '\x1b[33mworkTitle\x1b[0m: Title',
+            '\x1b[33mplatform\x1b[0m: Linux',
+            '\x1b[33mcomposer\x1b[0m: Composer',
+            '\x1b[32mComposer\x1b[0m: Composer',
+            '\x1b[32mTitle\x1b[0m: Title'
+        ]
+
+        self.assertEqual(output, compare)
 
 class TestFile(unittest.TestCase):
     def setUp(self):
