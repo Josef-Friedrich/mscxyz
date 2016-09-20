@@ -169,28 +169,22 @@ class TestClean(unittest.TestCase):
         self.clean_file = read_file(clean.fullpath)
 
     def test_font(self):
-        if '<font' in self.clean_file:
-            self.fail('Found font>')
+        self.assertFalse('<font' in self.clean_file)
 
     def test_b(self):
-        if '<b>' in self.clean_file:
-            self.fail('Found <b>')
+        self.assertFalse('<b>' in self.clean_file)
 
     def test_i(self):
-        if '<i>' in self.clean_file:
-            self.fail('Found <i>')
+        self.assertFalse('<i>' in self.clean_file)
 
     def test_pos(self):
-        if '<pos' in self.clean_file:
-            self.fail('Found <pos>')
+        self.assertFalse('<pos' in self.clean_file)
 
     def test_layout_break(self):
-        if '<LayoutBreak>' in self.clean_file:
-            self.fail('Found <LayoutBreak>')
+        self.assertFalse('<LayoutBreak>' in self.clean_file)
 
     def test_stem_direction(self):
-        if '<StemDirection>' in self.clean_file:
-            self.fail('Found <StemDirection>')
+        self.assertFalse('<StemDirection>' in self.clean_file)
 
 
 class TestCleanAddStyle(unittest.TestCase):
