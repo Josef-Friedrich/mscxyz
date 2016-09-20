@@ -100,27 +100,27 @@ class TestFile(unittest.TestCase):
 class TestCommandlineInterface(unittest.TestCase):
     def test_help_short(self):
         with self.assertRaises(SystemExit) as cm:
-            with Capturing() as output:
+            with Capturing():
                 mscxyz.execute(['-h'])
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '0')
 
     def test_help_long(self):
         with self.assertRaises(SystemExit) as cm:
-            with Capturing() as output:
+            with Capturing():
                 mscxyz.execute(['--help'])
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '0')
 
     def test_without_arguments(self):
         with self.assertRaises(SystemExit) as cm:
-            with Capturing('err') as output:
+            with Capturing('err'):
                 mscxyz.execute()
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '2')
 
     def test_help_text(self):
-        with self.assertRaises(SystemExit) as cm:
+        with self.assertRaises(SystemExit):
             with Capturing() as output:
                 mscxyz.execute(['-h'])
         self.assertEqual(
