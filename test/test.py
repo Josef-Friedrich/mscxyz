@@ -81,7 +81,8 @@ class TestMeta(unittest.TestCase):
             '\x1b[32mTitle\x1b[0m: Title'
         ]
 
-        self.assertEqual(output, compare)
+        self.assertTrue('\x1b[33mworkTitle\x1b[0m: Title' in output)
+        self.assertEqual(output.sort(), compare.sort())
 
 class TestFile(unittest.TestCase):
     def setUp(self):
@@ -255,7 +256,7 @@ class TestLyricsFix(unittest.TestCase):
 
 class TestBatch(unittest.TestCase):
     def setUp(self):
-        with Capturing() as output:
+        with Capturing():
             self.batch = mscxyz.execute(['meta', '-s', tmp_dir('batch')])
 
     def test_batch(self):
@@ -264,7 +265,7 @@ class TestBatch(unittest.TestCase):
 
 class TestBackup(unittest.TestCase):
     def setUp(self):
-        with Capturing() as output:
+        with Capturing():
             self.score = mscxyz.execute(
                 ['-b', 'meta', '-s', tmp_file('simple')])[0]
             self.fullpath = self.score.fullpath
@@ -320,6 +321,29 @@ class TestExport(unittest.TestCase):
     def test_mid(self):
         self.export('mid')
 
+
+class TestHelp(unittest.TestCase):
+
+    def test_all(self):
+        with self.assertRaises(SystemExit):
+            with Capturing() as output:
+                mscxyz.execute(['help', 'all'])
+
+        self.assertTrue(len(output) > 150)
+
+    def test_restructuredtext(self):
+        with self.assertRaises(SystemExit):
+            with Capturing() as output:
+                mscxyz.execute(['help', '--rst', 'all'])
+
+        self.assertTrue('.. code-block:: none' in output)
+
+    def test_markdown(self):
+        with self.assertRaises(SystemExit):
+            with Capturing() as output:
+                mscxyz.execute(['help', '--markdown', 'all'])
+
+        self.assertTrue('```' in output)
 
 if __name__ == '__main__':
     unittest.main()

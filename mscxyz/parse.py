@@ -295,7 +295,7 @@ class Parse(object):
 
             self.heading('Subcommands', 1)
 
-            for sub, command in self.sub.iteritems():
+            for sub, command in self.sub.items():
                 self.heading(command.prog, 2)
                 self.codeBlock(command.format_help())
 
