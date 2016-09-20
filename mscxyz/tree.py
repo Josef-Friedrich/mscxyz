@@ -36,8 +36,8 @@ class Tree(File):
                 for rm in self.tree.xpath(xpath_string):
                     rm.getparent().remove(rm)
 
-    def mergeStyle(self):
-        style = et.parse(self.args.style.name).getroot()
+    def mergeStyle(self, style_file):
+        style = et.parse(style_file).getroot()
 
         for score in self.tree.xpath('/museScore/Score'):
             score.insert(0, style[0])

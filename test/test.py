@@ -14,12 +14,12 @@ else:
     from io import StringIO
 
 
-def tmp_file(file_token):
+def tmp_file(test_file):
     orig = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'files',
-        file_token + '.mscx')
+        test_file)
     tmp_dir = tempfile.mkdtemp()
-    tmp = os.path.join(tmp_dir, file_token + '.mscx')
+    tmp = os.path.join(tmp_dir, test_file)
     shutil.copyfile(orig, tmp)
     return tmp
 
@@ -30,6 +30,13 @@ def tmp_dir(relative_dir):
     tmp = tempfile.mkdtemp()
     copy_tree(orig, tmp)
     return tmp
+
+
+def read_file(test_file):
+    tmp = open(test_file)
+    output = tmp.read()
+    tmp.close()
+    return output
 
 
 class Capturing(list):
@@ -156,11 +163,10 @@ class TestRename(unittest.TestCase):
 
 
 class TestClean(unittest.TestCase):
+
     def setUp(self):
-        clean = mscxyz.execute(['clean', tmp_file('formats')])[0]
-        tmp = open(clean.fullpath)
-        self.clean_file = tmp.read()
-        tmp.close()
+        clean = mscxyz.execute(['clean', tmp_file('formats.mscx')])[0]
+        self.clean_file = read_file(clean.fullpath)
 
     def test_font(self):
         if '<font' in self.clean_file:
@@ -187,19 +193,30 @@ class TestClean(unittest.TestCase):
             self.fail('Found <StemDirection>')
 
 
-class TestLyrics(unittest.TestCase):
+class TestCleanAddStyle(unittest.TestCase):
+
     def setUp(self):
-        self.token = 'lyrics'
-        self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.token)])[0]
+        self.score = mscxyz.execute(
+            ['clean', '--style', tmp_file('style.mss') , tmp_file('simple.mscx')])[0]
+        self.style = read_file(self.score.fullpath)
+
+    def test_style(self):
+        self.assertTrue('<staffUpperBorder>77</staffUpperBorder>' in self.style)
+
+class TestLyrics(unittest.TestCase):
+
+    def setUp(self):
+        self.file = 'lyrics.mscx'
+        self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.file)])[0]
 
     def test_files_exist(self):
         tmpdir = os.path.dirname(self.lyrics.fullpath)
 
         def check(number):
             lyrics_file = os.path.join(
-                tmpdir, self.token + '_' + str(number) + '.mscx')
-            if not os.path.isfile(lyrics_file):
-                self.fail(lyrics_file)
+                tmpdir,
+                self.file.replace('.mscx', '_' + str(number) + '.mscx'))
+            self.assertTrue(os.path.isfile(lyrics_file))
 
         check(1)
         check(2)
@@ -208,30 +225,27 @@ class TestLyrics(unittest.TestCase):
 
 class TestLyricsExtractByNumber(unittest.TestCase):
     def setUp(self):
-        self.token = 'lyrics'
+        self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--number', '2', tmp_file(self.token)])[0]
+            ['lyrics', '--number', '2', tmp_file(self.file)])[0]
 
     def test_files_exist(self):
         tmpdir = os.path.dirname(self.lyrics.fullpath)
 
         def tmpfile(number):
-            return os.path.join(tmpdir,
-                                self.token + '_' + str(number) + '.mscx')
+            return os.path.join(
+                tmpdir,
+                self.file.replace('.mscx', '_' + str(number) + '.mscx')
+            )
 
-        if os.path.isfile(tmpfile(1)):
-            self.fail(tmpfile(1))
-
-        if not os.path.isfile(tmpfile(2)):
-            self.fail(tmpfile(2))
-
-        if os.path.isfile(tmpfile(3)):
-            self.fail(tmpfile(3))
+        self.assertFalse(os.path.isfile(tmpfile(1)))
+        self.assertTrue(os.path.isfile(tmpfile(2)))
+        self.assertFalse(os.path.isfile(tmpfile(3)))
 
 
 class TestLyricsFix(unittest.TestCase):
     def setUp(self):
-        tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix')])[0]
+        tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix.mscx')])[0]
         self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
         self.lyrics = self.tree.lyrics
 
@@ -267,7 +281,7 @@ class TestBackup(unittest.TestCase):
     def setUp(self):
         with Capturing():
             self.score = mscxyz.execute(
-                ['-b', 'meta', '-s', tmp_file('simple')])[0]
+                ['-b', 'meta', '-s', tmp_file('simple.mscx')])[0]
             self.fullpath = self.score.fullpath
             self.fullpath_backup = self.score.fullpath_backup
 
@@ -289,19 +303,19 @@ class TestBackup(unittest.TestCase):
 class TestExport(unittest.TestCase):
     def export(self, extension):
         score = mscxyz.execute(
-            ['export', '--extension', extension, tmp_file('simple')])[0]
+            ['export', '--extension', extension, tmp_file('simple.mscx')])[0]
         export = score.fullpath.replace('mscx', extension)
         self.assertTrue(os.path.isfile(export))
 
     @unittest.skip('export not working in travis')
     def test_pdf(self):
-        score = mscxyz.execute(['export', tmp_file('simple')])[0]
+        score = mscxyz.execute(['export', tmp_file('simple.mscx')])[0]
         self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
 
     @unittest.skip('export not working in travis')
     def test_png(self):
         score = mscxyz.execute(
-            ['export', '--extension', 'png', tmp_file('simple')])[0]
+            ['export', '--extension', 'png', tmp_file('simple.mscx')])[0]
         self.assertTrue(
             os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
 
