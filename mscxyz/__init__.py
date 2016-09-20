@@ -52,7 +52,7 @@ def execute(args=None):
         elif args.subcommand == 'lyrics':
             score = Lyrics(file)
             if args.remap:
-                score.remap()
+                score.remap(args.remap)
             elif args.fix:
                 score.fixLyrics()
             else:

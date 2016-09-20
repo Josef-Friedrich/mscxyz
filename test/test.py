@@ -262,6 +262,23 @@ class TestLyricsFix(unittest.TestCase):
                                     'middle', 'middle', 'end', 'end'])
 
 
+class TestLyricsRemap(unittest.TestCase):
+
+    def setUp(self):
+        self.score = mscxyz.execute(['lyrics', '--remap', '2:6', tmp_file('lyrics-remap.mscx')])[0]
+        self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
+        self.lyrics = self.tree.lyrics
+
+    def test_remap(self):
+        text = []
+        for element in self.lyrics:
+            tag = element['element']
+            tag_text = tag.find('text')
+            text.append(tag_text.text)
+
+        self.assertEqual(text, ['1', '3', '4', '5', '2'])
+
+
 class TestBatch(unittest.TestCase):
     def setUp(self):
         with Capturing():

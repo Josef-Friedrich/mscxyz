@@ -3,7 +3,6 @@
 """Manipulate the lyrics"""
 
 import lxml.etree as etree
-
 from mscxyz.tree import Tree
 
 
@@ -81,8 +80,8 @@ class Lyrics(Tree):
 
         return max_lyric
 
-    def remap(self):
-        for pair in self.args.remap.split(','):
+    def remap(self, remap_string):
+        for pair in remap_string.split(','):
             old = pair.split(':')[0]
             new = pair.split(':')[1]
             for element in self.lyrics:
