@@ -279,6 +279,9 @@ class TestLyricsRemap(unittest.TestCase):
 
         self.assertEqual(text, ['1', '3', '4', '5', '2'])
 
+    def test_file_content(self):
+        print(read_file(self.score.fullpath))
+
 
 class TestBatch(unittest.TestCase):
     def setUp(self):
