@@ -274,6 +274,7 @@ class TestLyricsRemap(unittest.TestCase):
         for element in self.lyrics:
             tag = element['element']
             tag_text = tag.find('text')
+            print(tag_text.text)
             text.append(tag_text.text)
 
         self.assertEqual(text, ['1', '3', '4', '5', '2'])
