@@ -93,3 +93,5 @@ ENV/
 .ropeproject
 
 _build/
+
+.tex/
