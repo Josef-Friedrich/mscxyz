@@ -6,8 +6,21 @@ import subprocess
 import os
 import sys
 import signal
+import platform
 from termcolor import colored
 
+def is_mscore(executable='mscore'):
+    """Check the existance of the executable mscore
+
+    :return: Path of the executable if true, else false.
+    """
+    cmd = 'where' if platform.system() == 'Windows' else 'which'
+    try:
+        executable = subprocess.check_output([cmd, executable])
+    except:
+        return False
+    else:
+        return executable
 
 def mscore(commands):
     mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'

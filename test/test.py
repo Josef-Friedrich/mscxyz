@@ -1,8 +1,10 @@
 """File for various tests"""
 
+
 import os
 import unittest
 import mscxyz
+from mscxyz.utils import is_mscore
 import sys
 import shutil
 import tempfile
@@ -16,15 +18,9 @@ else:
     from io import StringIO
 
 
-cmd = 'where' if platform.system() == 'Windows' else 'which'
-try:
-    subprocess.call([cmd, 'mscore'])
-except:
-    no_mscore = True
-else:
-    no_mscore = False
 
-no_mscore = True
+mscore = is_mscore()
+mscore = False
 
 def tmp_file(test_file):
     orig = os.path.join(
@@ -282,7 +278,7 @@ class TestLyricsRemap(unittest.TestCase):
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_remap(self):
         text = []
         for element in self.lyrics:
@@ -332,31 +328,31 @@ class TestExport(unittest.TestCase):
         export = score.fullpath.replace('mscx', extension)
         self.assertTrue(os.path.isfile(export))
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_pdf(self):
         score = mscxyz.execute(['export', tmp_file('simple.mscx')])[0]
         self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_png(self):
         score = mscxyz.execute(
             ['export', '--extension', 'png', tmp_file('simple.mscx')])[0]
         self.assertTrue(
             os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_svg(self):
         self.export('svg')
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_xml(self):
         self.export('xml')
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_mxl(self):
         self.export('mxl')
 
-    @unittest.skipIf(no_mscore, 'export not working in travis')
+    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_mid(self):
         self.export('mid')
 
@@ -383,6 +379,22 @@ class TestHelp(unittest.TestCase):
                 mscxyz.execute(['help', '--markdown', 'all'])
 
         self.assertTrue('```' in output)
+
+class TestUtils(unittest.TestCase):
+
+    def setUp(self):
+        from mscxyz import utils
+        self.utils = utils
+
+    def test_is_mscore(self):
+        from mscxyz import utils
+        output = self.utils.is_mscore('ls')
+        if six.PY2:
+            self.assertEqual(type(output), str)
+        else:
+            self.assertEqual(type(output), bytes)
+        self.assertTrue(self.utils.is_mscore('ls'))
+        self.assertFalse(self.utils.is_mscore('nooooooooooooooot'))
 
 if __name__ == '__main__':
     unittest.main()
