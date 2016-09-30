@@ -20,21 +20,17 @@ def is_mscore(executable='mscore'):
     except:
         return False
     else:
-        return executable
+        return executable.replace(b'\n', b'')
 
 def mscore(commands):
-    mac = '/Applications/MuseScore.app/Contents/MacOS/mscore'
-    if os.path.exists(mac):
-        executeable = mac
-    else:
-        executeable = 'mscore'
+    executable = is_mscore()
+    if executable:
+        commands.insert(0, executable)
 
-    commands.insert(0, executeable)
-
-    # OUT=None
-    OUT = open(os.devnull, 'wb')
-    subprocess.call(commands, stdout=OUT, stderr=OUT)
-    OUT.close()
+        # OUT=None
+        OUT = open(os.devnull, 'wb')
+        subprocess.call(commands, stdout=OUT, stderr=OUT)
+        OUT.close()
 
 
 def re_open(input_file):

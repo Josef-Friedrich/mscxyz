@@ -18,9 +18,8 @@ else:
     from io import StringIO
 
 
-
 mscore = is_mscore()
-mscore = False
+
 
 def tmp_file(test_file):
     orig = os.path.join(
