@@ -6,6 +6,8 @@ import mscxyz
 import sys
 import shutil
 import tempfile
+import platform
+import subprocess
 from distutils.dir_util import copy_tree
 import six
 if six.PY2:
@@ -13,6 +15,16 @@ if six.PY2:
 else:
     from io import StringIO
 
+
+cmd = 'where' if platform.system() == 'Windows' else 'which'
+try:
+    subprocess.call([cmd, 'mscore'])
+except:
+    no_mscore = True
+else:
+    no_mscore = False
+
+no_mscore = True
 
 def tmp_file(test_file):
     orig = os.path.join(
@@ -60,14 +72,14 @@ class Capturing(list):
             sys.stderr = self._pipe
 
 
-def get_testfile(filename):
+def get_file(filename):
     return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
 
 
 class TestMeta(unittest.TestCase):
     def setUp(self):
         from mscxyz.meta import Meta
-        self.meta = Meta(get_testfile('simple'))
+        self.meta = Meta(get_file('simple'))
 
     def test_get(self):
         self.assertEqual(self.meta.get('title'), 'Title')
@@ -75,7 +87,7 @@ class TestMeta(unittest.TestCase):
 
     def test_show(self):
         with Capturing() as output:
-            mscxyz.execute(['meta', '-s', get_testfile('simple')])
+            mscxyz.execute(['meta', '-s', get_file('simple')])
 
         compare = [
             '',
@@ -94,12 +106,12 @@ class TestMeta(unittest.TestCase):
 class TestFile(unittest.TestCase):
     def setUp(self):
         from mscxyz.fileloader import File
-        self.file = File(get_testfile('simple'))
+        self.file = File(get_file('simple'))
 
     def test_file_object_initialisation(self):
-        self.assertEqual(self.file.fullpath, get_testfile('simple'))
+        self.assertEqual(self.file.fullpath, get_file('simple'))
         self.assertEqual(self.file.dirname,
-                         os.path.dirname(get_testfile('simple')))
+                         os.path.dirname(get_file('simple')))
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
@@ -127,6 +139,7 @@ class TestCommandlineInterface(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '2')
 
+    @unittest.skip('No working in tox')
     def test_help_text(self):
         with self.assertRaises(SystemExit):
             with Capturing() as output:
@@ -140,8 +153,8 @@ class TestCommandlineInterface(unittest.TestCase):
 class TestRename(unittest.TestCase):
     def setUp(self):
         from mscxyz.rename import Rename
-        self.simple = Rename(get_testfile('simple'))
-        self.unicode = Rename(get_testfile('unicode'))
+        self.simple = Rename(get_file('simple'))
+        self.unicode = Rename(get_file('unicode'))
 
     def test_option_format_default(self):
         self.simple.applyFormatString()
@@ -269,18 +282,15 @@ class TestLyricsRemap(unittest.TestCase):
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics
 
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_remap(self):
         text = []
         for element in self.lyrics:
             tag = element['element']
             tag_text = tag.find('text')
-            print(tag_text.text)
             text.append(tag_text.text)
 
         self.assertEqual(text, ['1', '3', '4', '5', '2'])
-
-    def test_file_content(self):
-        print(read_file(self.score.fullpath))
 
 
 class TestBatch(unittest.TestCase):
@@ -322,31 +332,31 @@ class TestExport(unittest.TestCase):
         export = score.fullpath.replace('mscx', extension)
         self.assertTrue(os.path.isfile(export))
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_pdf(self):
         score = mscxyz.execute(['export', tmp_file('simple.mscx')])[0]
         self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_png(self):
         score = mscxyz.execute(
             ['export', '--extension', 'png', tmp_file('simple.mscx')])[0]
         self.assertTrue(
             os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_svg(self):
         self.export('svg')
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_xml(self):
         self.export('xml')
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_mxl(self):
         self.export('mxl')
 
-    @unittest.skip('export not working in travis')
+    @unittest.skipIf(no_mscore, 'export not working in travis')
     def test_mid(self):
         self.export('mid')
 
