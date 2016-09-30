@@ -2,11 +2,6 @@ sudo: required
 dist: trusty
 language: python
 
-before_install:
-  - sudo add-apt-repository ppa:mscore-ubuntu/mscore-stable -y
-  - sudo apt-get -qq update
-  - sudo apt-get install -y musescore build-essential libxml2-dev libxslt1-dev zlib1g-dev
-
 matrix:
     include:
         - python: 3.5
