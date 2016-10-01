@@ -18,7 +18,10 @@ else:
     from io import StringIO
 
 
-mscore = is_mscore()
+if sys.prefix == '/usr':
+    mscore = True
+else:
+    mscore = False
 
 
 def tmp_file(test_file):
