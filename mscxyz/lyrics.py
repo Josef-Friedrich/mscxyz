@@ -121,7 +121,6 @@ class Lyrics(Tree):
         else:
             self.extractOneLyricVerse(int(number))
 
-
     def fixLyricsVerse(self, verse_number):
         """
         from:

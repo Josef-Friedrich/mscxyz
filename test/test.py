@@ -235,6 +235,7 @@ class TestLyrics(unittest.TestCase):
         check(2)
         check(3)
 
+
 class TestLyricsExtractAll(unittest.TestCase):
 
     def setUp(self):
