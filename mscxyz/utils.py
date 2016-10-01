@@ -9,6 +9,7 @@ import signal
 import platform
 from termcolor import colored
 
+
 def is_mscore(executable='mscore'):
     """Check the existance of the executable mscore
 
@@ -21,6 +22,7 @@ def is_mscore(executable='mscore'):
         return False
     else:
         return executable.replace(b'\n', b'')
+
 
 def mscore(commands):
     executable = is_mscore()

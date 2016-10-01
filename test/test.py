@@ -8,8 +8,6 @@ from mscxyz.utils import is_mscore
 import sys
 import shutil
 import tempfile
-import platform
-import subprocess
 from distutils.dir_util import copy_tree
 import six
 if six.PY2:
@@ -100,6 +98,7 @@ class TestMeta(unittest.TestCase):
 
         self.assertTrue('\x1b[33mworkTitle\x1b[0m: Title' in output)
         self.assertEqual(output.sort(), compare.sort())
+
 
 class TestFile(unittest.TestCase):
     def setUp(self):
@@ -202,11 +201,20 @@ class TestCleanAddStyle(unittest.TestCase):
 
     def setUp(self):
         self.score = mscxyz.execute(
-            ['clean', '--style', tmp_file('style.mss') , tmp_file('simple.mscx')])[0]
+            [
+                'clean',
+                '--style',
+                tmp_file('style.mss'),
+                tmp_file('simple.mscx')
+            ])[0]
         self.style = read_file(self.score.fullpath)
 
     def test_style(self):
-        self.assertTrue('<staffUpperBorder>77</staffUpperBorder>' in self.style)
+        self.assertTrue(
+            '<staffUpperBorder>77</staffUpperBorder>'
+            in self.style
+        )
+
 
 class TestLyrics(unittest.TestCase):
 
@@ -250,7 +258,11 @@ class TestLyricsExtractByNumber(unittest.TestCase):
 
 class TestLyricsFix(unittest.TestCase):
     def setUp(self):
-        tmp = mscxyz.execute(['lyrics', '--fix', tmp_file('lyrics-fix.mscx')])[0]
+        tmp = mscxyz.execute([
+            'lyrics',
+            '--fix',
+            tmp_file('lyrics-fix.mscx')
+        ])[0]
         self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
         self.lyrics = self.tree.lyrics
 
@@ -276,7 +288,12 @@ class TestLyricsFix(unittest.TestCase):
 class TestLyricsRemap(unittest.TestCase):
 
     def setUp(self):
-        self.score = mscxyz.execute(['lyrics', '--remap', '2:6', tmp_file('lyrics-remap.mscx')])[0]
+        self.score = mscxyz.execute([
+            'lyrics',
+            '--remap',
+            '2:6',
+            tmp_file('lyrics-remap.mscx')
+        ])[0]
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics
 
@@ -382,21 +399,17 @@ class TestHelp(unittest.TestCase):
 
         self.assertTrue('```' in output)
 
+
 class TestUtils(unittest.TestCase):
 
-    def setUp(self):
-        from mscxyz import utils
-        self.utils = utils
-
     def test_is_mscore(self):
-        from mscxyz import utils
-        output = self.utils.is_mscore('ls')
+        output = is_mscore('ls')
         if six.PY2:
             self.assertEqual(type(output), str)
         else:
             self.assertEqual(type(output), bytes)
-        self.assertTrue(self.utils.is_mscore('ls'))
-        self.assertFalse(self.utils.is_mscore('nooooooooooooooot'))
+        self.assertTrue(is_mscore('ls'))
+        self.assertFalse(is_mscore('nooooooooooooooot'))
 
 if __name__ == '__main__':
     unittest.main()

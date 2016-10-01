@@ -40,6 +40,8 @@ man_pages = [
 
 texinfo_documents = [
     (master_doc, 'mscxyz', u'mscxyz Documentation',
-     author, 'mscxyz', 'Manipulate the XML based *.mscx files of the notation software MuseScore.',
+     author, 'mscxyz',
+     u'Manipulate the XML based *.mscx files of the notation software \
+     MuseScore.',
      'Miscellaneous'),
 ]
