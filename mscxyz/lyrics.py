@@ -114,7 +114,7 @@ class Lyrics(Tree):
 
         :param mixed number: The lyric verse number or 'all'
         """
-        print(number)
+
         if number == 'all':
             for n in range(1, self.max + 1):
                 self.extractOneLyricVerse(n)
