@@ -235,25 +235,56 @@ class TestLyrics(unittest.TestCase):
         check(2)
         check(3)
 
+class TestLyricsExtractAll(unittest.TestCase):
 
-class TestLyricsExtractByNumber(unittest.TestCase):
     def setUp(self):
         self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--number', '2', tmp_file(self.file)])[0]
+            ['lyrics', '--extract', 'all', tmp_file(self.file)])[0]
 
-    def test_files_exist(self):
-        tmpdir = os.path.dirname(self.lyrics.fullpath)
+    def tmpFile(self, number):
+        return os.path.join(
+            os.path.dirname(self.lyrics.fullpath),
+            self.file.replace('.mscx', '_' + str(number) + '.mscx')
+        )
 
-        def tmpfile(number):
-            return os.path.join(
-                tmpdir,
-                self.file.replace('.mscx', '_' + str(number) + '.mscx')
-            )
+    def isFile(self, number):
+        return os.path.isfile(self.tmpFile(number))
 
-        self.assertFalse(os.path.isfile(tmpfile(1)))
-        self.assertTrue(os.path.isfile(tmpfile(2)))
-        self.assertFalse(os.path.isfile(tmpfile(3)))
+    def test_1(self):
+        self.assertTrue(self.isFile(1))
+
+    def test_2(self):
+        self.assertTrue(self.isFile(2))
+
+    def test_3(self):
+        self.assertTrue(self.isFile(3))
+
+
+class TestLyricsExtractByNumber(unittest.TestCase):
+
+    def setUp(self):
+        self.file = 'lyrics.mscx'
+        self.lyrics = mscxyz.execute(
+            ['lyrics', '--extract', '2', tmp_file(self.file)])[0]
+
+    def tmpFile(self, number):
+        return os.path.join(
+            os.path.dirname(self.lyrics.fullpath),
+            self.file.replace('.mscx', '_' + str(number) + '.mscx')
+        )
+
+    def isFile(self, number):
+        return os.path.isfile(self.tmpFile(number))
+
+    def test_1(self):
+        self.assertFalse(self.isFile(1))
+
+    def test_2(self):
+        self.assertTrue(self.isFile(2))
+
+    def test_3(self):
+        self.assertFalse(self.isFile(3))
 
 
 class TestLyricsFix(unittest.TestCase):

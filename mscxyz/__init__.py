@@ -56,7 +56,9 @@ def execute(args=None):
             elif args.fix:
                 score.fixLyrics()
             else:
-                score.extractLyrics(args.number)
+                print(args)
+                print(args.extract)
+                score.extractLyrics(args.extract)
 
         elif args.subcommand == 'meta':
             score = Meta(file)

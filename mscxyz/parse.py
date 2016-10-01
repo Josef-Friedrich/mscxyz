@@ -155,7 +155,11 @@ class Parse(object):
             score_1.mscx.')
 
         self.sub['lyrics'].add_argument(
-            '-n', '--number', help='The lyric verse number to extract.')
+            '-e',
+            '--extract',
+            default='all',
+            help='The lyric verse number to extract or "all".'
+        )
 
         self.sub['lyrics'].add_argument(
             '-r',

@@ -110,12 +110,12 @@ mscx-manager lyrics
 
 .. code-block:: none
 
-  usage: mscx-manager lyrics [-h] [-n NUMBER] [-r REMAP] [-f]
+  usage: mscx-manager lyrics [-h] [-e EXTRACT] [-r REMAP] [-f]
   
   optional arguments:
     -h, --help            show this help message and exit
-    -n NUMBER, --number NUMBER
-                          The lyric verse number to extract.
+    -e EXTRACT, --extract EXTRACT
+                          The lyric verse number to extract or "all".
     -r REMAP, --remap REMAP
                           Remap lyrics. Example: "--remap 3:2,5:3". This example
                           remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
@@ -136,39 +136,39 @@ mscx-manager meta
   
   # XML structure of a meta tag:
   
-  	<metaTag name="tag"></metaTag>
+      <metaTag name="tag"></metaTag>
   
   # All meta tags:
   
-  	- arranger
-  	- composer
-  	- copyright
-  	- creationDate
-  	- lyricist
-  	- movementNumber
-  	- movementTitle
-  	- originalFormat
-  	- platform
-  	- poet
-  	- source
-  	- translator
-  	- workNumber
-  	- workTitle
+      - arranger
+      - composer
+      - copyright
+      - creationDate
+      - lyricist
+      - movementNumber
+      - movementTitle
+      - originalFormat
+      - platform
+      - poet
+      - source
+      - translator
+      - workNumber
+      - workTitle
   
   # XML structure of a vbox tag:
   
-  	<VBox>
-  	  <Text>
-  	    <style>Title</style>
-  	    <text>Some title text</text>
-  	    </Text>
+      <VBox>
+        <Text>
+          <style>Title</style>
+          <text>Some title text</text>
+          </Text>
   
   # All vbox tags:
   
-  	- Title
-  	- Subtitle
-  	- Composer
-  	- Lyricis
+      - Title
+      - Subtitle
+      - Composer
+      - Lyricis
   
   optional arguments:
     -h, --help  show this help message and exit

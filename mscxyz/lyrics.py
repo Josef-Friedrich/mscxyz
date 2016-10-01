@@ -91,6 +91,10 @@ class Lyrics(Tree):
         self.write()
 
     def extractOneLyricVerse(self, number):
+        """Extract a lyric verse by verse number.
+
+        :param int number: The number of the lyrics verse starting by 1
+        """
         score = Lyrics(self.fullpath)
 
         for element in score.lyrics:
@@ -106,11 +110,17 @@ class Lyrics(Tree):
         score.write(new_name)
 
     def extractLyrics(self, number=None):
-        if number:
-            self.extractOneLyricVerse(int(number))
+        """Extract one lyric verse or all lyric verses.
+
+        :param mixed number: The lyric verse number or 'all'
+        """
+        print(number)
+        if number == 'all':
+            for n in range(1, self.max + 1):
+                self.extractOneLyricVerse(n)
         else:
-            for number in range(1, self.max + 1):
-                self.extractOneLyricVerse(number)
+            self.extractOneLyricVerse(int(number))
+
 
     def fixLyricsVerse(self, verse_number):
         """
