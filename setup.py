@@ -1,3 +1,4 @@
+import versioneer
 import os
 from setuptools import setup
 
@@ -7,7 +8,8 @@ def read(fname):
 
 setup(
     name='mscxyz',
-    version='0.0.4',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     author='Josef Friedrich',
     author_email='josef@friedrich.rocks',
     description=(

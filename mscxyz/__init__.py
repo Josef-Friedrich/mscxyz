@@ -14,6 +14,10 @@ from mscxyz.rename import Rename
 from mscxyz.parse import Parse
 from mscxyz.batch import Batch
 
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
+
 if six.PY2:
     reload(sys)
     sys.setdefaultencoding('utf8')

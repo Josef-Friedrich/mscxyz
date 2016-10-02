@@ -3,6 +3,7 @@
 
 import argparse
 import textwrap
+from ._version import get_versions
 
 
 class Parse(object):
@@ -22,6 +23,13 @@ class Parse(object):
 
     def addArguments(self):
         parser = self.parser
+
+        parser.add_argument(
+            '-V',
+            '--version',
+            action='version',
+            version='%(prog)s {version}'.format(version=get_versions()['version'])
+        )
 
         parser.add_argument(
             '-b',
