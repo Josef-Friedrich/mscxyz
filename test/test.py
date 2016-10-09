@@ -423,7 +423,7 @@ class TestHelp(unittest.TestCase):
             with Capturing() as output:
                 mscxyz.execute(['help', '--rst', 'all'])
 
-        self.assertTrue('.. code-block:: none' in output)
+        self.assertTrue('.. code-block:: text' in output)
 
     def test_markdown(self):
         with self.assertRaises(SystemExit):
