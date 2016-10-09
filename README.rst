@@ -7,9 +7,9 @@
 mscxyz
 ======
 
-.. code-block:: none
+.. code-block:: text
 
-  usage: mscx-manager [-h] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based *.mscX and *.mscZ files of the
@@ -23,6 +23,7 @@ mscxyz
   
   optional arguments:
     -h, --help            show this help message and exit
+    -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
     -g GLOB, --glob GLOB  Handle only files which matches against Unix style
                           glob patterns (e. g. "*.mscx", "* - *"). If you omit
@@ -72,7 +73,7 @@ Subcommands
 mscx-manager rename
 -------------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager rename [-h] [-d] [-f FORMAT] [-a] [-n]
   
@@ -91,7 +92,7 @@ mscx-manager rename
 mscx-manager help
 -----------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager help [-h] [-m] [-r]
   
@@ -108,7 +109,7 @@ mscx-manager help
 mscx-manager lyrics
 -------------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager lyrics [-h] [-e EXTRACT] [-r REMAP] [-f]
   
@@ -130,7 +131,7 @@ mscx-manager lyrics
 mscx-manager meta
 -----------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager meta [-h] [-j] [-s]
   
@@ -179,7 +180,7 @@ mscx-manager meta
 mscx-manager export
 -------------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager export [-h] [-e EXTENSION]
   
@@ -193,7 +194,7 @@ mscx-manager export
 mscx-manager clean
 ------------------
 
-.. code-block:: none
+.. code-block:: text
 
   usage: mscx-manager clean [-h] [-s STYLE]
   
