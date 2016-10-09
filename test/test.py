@@ -2,6 +2,7 @@
 
 
 import os
+import re
 import unittest
 import mscxyz
 from mscxyz.utils import is_mscore
@@ -442,6 +443,21 @@ class TestUtils(unittest.TestCase):
             self.assertEqual(type(output), bytes)
         self.assertTrue(is_mscore('ls'))
         self.assertFalse(is_mscore('nooooooooooooooot'))
+
+
+class TestVersion(unittest.TestCase):
+
+    def test_version(self):
+        with self.assertRaises(SystemExit) as cm:
+            if six.PY2:
+                with Capturing('err') as output:
+                    mscxyz.execute(['--version'])
+            else:
+                with Capturing() as output:
+                    mscxyz.execute(['--version'])
+
+        result = re.search('[^ ]* [^ ]*', output[0])
+        self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()
