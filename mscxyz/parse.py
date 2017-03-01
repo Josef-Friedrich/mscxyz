@@ -28,7 +28,9 @@ class Parse(object):
             '-V',
             '--version',
             action='version',
-            version='%(prog)s {version}'.format(version=get_versions()['version'])
+            version='%(prog)s {version}'.format(
+                version=get_versions()['version']
+            )
         )
 
         parser.add_argument(

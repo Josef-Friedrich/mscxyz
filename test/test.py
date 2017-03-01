@@ -448,7 +448,7 @@ class TestUtils(unittest.TestCase):
 class TestVersion(unittest.TestCase):
 
     def test_version(self):
-        with self.assertRaises(SystemExit) as cm:
+        with self.assertRaises(SystemExit):
             if six.PY2:
                 with Capturing('err') as output:
                     mscxyz.execute(['--version'])
@@ -458,6 +458,7 @@ class TestVersion(unittest.TestCase):
 
         result = re.search('[^ ]* [^ ]*', output[0])
         self.assertTrue(result)
+
 
 if __name__ == '__main__':
     unittest.main()
