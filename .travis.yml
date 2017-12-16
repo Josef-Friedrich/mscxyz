@@ -10,6 +10,10 @@ matrix:
           env: TOXENV=py36
         - python: 3.6
           env: TOXENV=docs
+        - python: 2.7
+          env: TOXENV=py27-flake8
+        - python: 3.6
+          env: TOXENV=py36-flake8
 
 install:
     - pip install tox
