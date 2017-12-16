@@ -8,7 +8,7 @@
 mscxyz
 ======
 
-Manipulate the XML based \*.mscx files of the notation software MuseScore.
+Manipulate the XML based mscx files of the notation software MuseScore.
 
 Installation
 ============
