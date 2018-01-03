@@ -1,11 +1,19 @@
 mscxyz package
 ==============
 
+Module contents
+---------------
+
+.. automodule:: mscxyz
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
 mscxyz.batch module
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.batch
     :members:
@@ -13,7 +21,7 @@ mscxyz.batch module
     :show-inheritance:
 
 mscxyz.fileloader module
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.fileloader
     :members:
@@ -21,7 +29,7 @@ mscxyz.fileloader module
     :show-inheritance:
 
 mscxyz.lyrics module
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.lyrics
     :members:
@@ -29,7 +37,7 @@ mscxyz.lyrics module
     :show-inheritance:
 
 mscxyz.meta module
-------------------
+^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.meta
     :members:
@@ -37,7 +45,7 @@ mscxyz.meta module
     :show-inheritance:
 
 mscxyz.parse module
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.parse
     :members:
@@ -45,7 +53,7 @@ mscxyz.parse module
     :show-inheritance:
 
 mscxyz.rename module
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.rename
     :members:
@@ -53,7 +61,7 @@ mscxyz.rename module
     :show-inheritance:
 
 mscxyz.tree module
-------------------
+^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.tree
     :members:
@@ -61,18 +69,9 @@ mscxyz.tree module
     :show-inheritance:
 
 mscxyz.utils module
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: mscxyz
     :members:
     :undoc-members:
     :show-inheritance:
