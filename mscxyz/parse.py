@@ -18,7 +18,7 @@ class Parse(object):
 
     def initParser(self):
         self.parser = argparse.ArgumentParser(description='A command \
-            line tool to manipulate the XML based *.mscX and *.mscZ \
+            line tool to manipulate the XML based "*.mscX" and "*.mscZ" \
             files of the notation software MuseScore.')
 
     def addArguments(self):
@@ -90,13 +90,13 @@ class Parse(object):
         # clean
 
         self.sub['clean'] = self.sparser.add_parser(
-            'clean', help='Clean and reset the formating of the *.mscx file')
+            'clean', help='Clean and reset the formating of the "*.mscx" file')
 
         self.sub['clean'].add_argument(
             '-s',
             '--style',
             type=open,
-            help='Load a *.mss style file and include the contents of \
+            help='Load a "*.mss" style file and include the contents of \
             this file.')
 
         # meta
@@ -192,7 +192,7 @@ class Parse(object):
 
         self.sub['rename'] = self.sparser.add_parser(
             'rename',
-            help='Rename the *.mscx files.',
+            help='Rename the "*.mscx" files.',
             formatter_class=argparse.RawDescriptionHelpFormatter,
             description=textwrap.dedent('''\
             Tokens you can use in the format string (-f, --format):
@@ -265,8 +265,8 @@ class Parse(object):
     def addPositional(self):
         self.parser.add_argument(
             'path',
-            help='Path to a *.mscx file \
-            or a folder which contains *.mscx files. In conjunction \
+            help='Path to a "*.mscx" file \
+            or a folder which contains "*.mscx" files. In conjunction \
             with the subcommand "help" this positional parameter \
             accepts the names of all other subcommands or the word \
             "all".')

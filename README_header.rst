@@ -32,3 +32,5 @@ From PyPI
 
 Usage
 =====
+
+.. code-block:: text
