@@ -11,17 +11,17 @@ class Parse(object):
 
     def __init__(self):
         self.sub = {}
-        self.initParser()
-        self.addArguments()
-        self.addSubParser()
-        self.addPositional()
+        self.init_parser()
+        self.add_arguments()
+        self.add_sub_parser()
+        self.add_positional()
 
-    def initParser(self):
+    def init_parser(self):
         self.parser = argparse.ArgumentParser(description='A command \
             line tool to manipulate the XML based "*.mscX" and "*.mscZ" \
             files of the notation software MuseScore.')
 
-    def addArguments(self):
+    def add_arguments(self):
         parser = self.parser
 
         parser.add_argument(
@@ -79,7 +79,7 @@ class Parse(object):
             multiple arguments (. g.: -vvv) to make the command more \
             verbose.')
 
-    def addSubParser(self):
+    def add_sub_parser(self):
 
         self.sparser = self.parser.add_subparsers(
             title='Subcommands',
@@ -262,7 +262,7 @@ class Parse(object):
             format. This option enables to generate the README file \
             directly form the command line output.')
 
-    def addPositional(self):
+    def add_positional(self):
         self.parser.add_argument(
             'path',
             help='Path to a "*.mscx" file \
@@ -294,7 +294,7 @@ class Parse(object):
         else:
             print(text)
 
-    def codeBlock(self, text):
+    def code_block(self, text):
         if self.args.markdown:
             print('```\n' + text + '\n```')
         elif self.args.rst:
@@ -302,16 +302,16 @@ class Parse(object):
         else:
             print(text)
 
-    def showAllHelp(self):
+    def show_all_help(self):
         if self.args.path == 'all':
             self.heading('mscxyz', 1)
-            self.codeBlock(self.parser.format_help())
+            self.code_block(self.parser.format_help())
 
             self.heading('Subcommands', 1)
 
             for sub, command in self.sub.items():
                 self.heading(command.prog, 2)
-                self.codeBlock(command.format_help())
+                self.code_block(command.format_help())
 
         else:
-            self.codeBlock(self.sub[self.args.path].format_help())
+            self.code_block(self.sub[self.args.path].format_help())

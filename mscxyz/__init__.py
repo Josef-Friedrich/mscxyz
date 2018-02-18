@@ -28,7 +28,7 @@ def execute(args=None):
     args = parse.parse(args)
 
     if args.subcommand == 'help':
-        parse.showAllHelp()
+        parse.show_all_help()
         sys.exit()
 
     batch = Batch(args.path, args.glob)
