@@ -37,7 +37,7 @@ for line in header:
     readme.write(line)
 
 mscx = subprocess.Popen('mscx-manager help all', shell=True,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 readme.write('\n')
 
