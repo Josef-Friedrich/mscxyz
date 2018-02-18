@@ -68,8 +68,8 @@ def execute(args=None):
                 score.show()
             else:
                 if args.json:
-                    score.exportJson()
-                score.syncMetaTags()
+                    score.export_json()
+                score.sync_meta_tags()
                 score.write()
 
         elif args.subcommand == 'rename':

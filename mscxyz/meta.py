@@ -35,7 +35,7 @@ class Meta(Tree):
 
             self.meta = {}
             for tag in tags:
-                text = self.getMetaText(tag)
+                text = self.get_meta_text(tag)
                 if text:
                     if six.PY2:
                         self.meta[tag] = text.decode('utf-8')
@@ -53,7 +53,7 @@ class Meta(Tree):
 
             self.vbox = {}
             for tag in tags:
-                text = self.getVBoxText(tag)
+                text = self.get_vbox_text(tag)
                 if text:
                     if six.PY2:
                         self.vbox[tag] = text.decode('utf-8')
@@ -62,19 +62,19 @@ class Meta(Tree):
                 else:
                     self.vbox[tag] = ''
 
-    def getMetaTag(self, name):
+    def get_meta_tag(self, name):
         for element in self.root.xpath('//metaTag[@name="' + name + '"]'):
             return element
 
-    def getMetaText(self, name):
-        element = self.getMetaTag(name)
+    def get_meta_text(self, name):
+        element = self.get_meta_tag(name)
         if hasattr(element, 'text'):
             return element.text
 
-    def setMeta(self, name, text):
-        self.getMetaTag(name).text = text
+    def set_meta(self, name, text):
+        self.get_meta_tag(name).text = text
 
-    def createVBox(self):
+    def create_vbox(self):
         xpath = '/museScore/Score/Staff[@id="1"]'
         if not self.root.xpath(xpath + '/VBox'):
             tag = et.Element('VBox')
@@ -82,30 +82,30 @@ class Meta(Tree):
             for element in self.root.xpath(xpath):
                 element.insert(0, tag)
 
-    def getVBoxTag(self, style):
+    def get_vbox_tag(self, style):
         for element in self.root.xpath('//VBox/Text'):
             if element.find('style').text == style:
                 return element.find('text')
 
-    def insertInVBox(self, style, text):
+    def insert_in_vbox(self, style, text):
         tag = et.Element('Text')
         self.add_sub_element(tag, 'text', text)
         self.add_sub_element(tag, 'style', style)
         for element in self.root.xpath('//VBox'):
             element.append(tag)
 
-    def getVBoxText(self, style):
-        element = self.getVBoxTag(style)
+    def get_vbox_text(self, style):
+        element = self.get_vbox_tag(style)
         if hasattr(element, 'text'):
             return element.text
 
-    def setVBox(self, style, text):
-        self.createVBox()
-        element = self.getVBoxTag(style)
+    def set_vbox(self, style, text):
+        self.create_vbox()
+        element = self.get_vbox_tag(style)
         if hasattr(element, 'text'):
             element.text = text
         else:
-            self.insertInVBox(style, text)
+            self.insert_in_vbox(style, text)
 
     # Get a value by key.
     #
@@ -138,16 +138,16 @@ class Meta(Tree):
 
     def sync(self, key):
         if key == 'title':
-            self.setVBox('Title', self.get(key))
-            self.setMeta('workTitle', self.get(key))
+            self.set_vbox('Title', self.get(key))
+            self.set_meta('workTitle', self.get(key))
         elif key == 'subtitle':
-            self.setVBox('Subtitle', self.get(key))
-            self.setMeta('workTitle', self.get(key))
+            self.set_vbox('Subtitle', self.get(key))
+            self.set_meta('workTitle', self.get(key))
         else:
-            self.setVBox(key.title(), self.get(key))
-            self.setMeta(key, self.get(key))
+            self.set_vbox(key.title(), self.get(key))
+            self.set_meta(key, self.get(key))
 
-    def cleanMeta(self):
+    def clean_meta(self):
         tags = [
             "arranger",
             "copyright",
@@ -158,13 +158,13 @@ class Meta(Tree):
             "workNumber"
         ]
         for tag in tags:
-            self.setMeta(tag, '')
+            self.set_meta(tag, '')
 
-    def syncMetaTags(self):
+    def sync_meta_tags(self):
         if not self.error:
             for key in ['title', 'subtitle', 'composer', 'lyricist']:
                 self.sync(key)
-            self.cleanMeta()
+            self.clean_meta()
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))
@@ -178,7 +178,7 @@ class Meta(Tree):
                 if text:
                     print_desc(text, tag, 'green')
 
-    def exportJson(self):
+    def export_json(self):
         import json
         data = {}
         data['title'] = self.get('title')
