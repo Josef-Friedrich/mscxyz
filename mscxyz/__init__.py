@@ -50,7 +50,7 @@ def execute(args=None):
             score = Tree(file)
             score.clean()
             if args.style:
-                score.mergeStyle(args.style.name)
+                score.merge_style(args.style.name)
             score.write()
 
         elif args.subcommand == 'lyrics':

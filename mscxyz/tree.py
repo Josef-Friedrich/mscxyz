@@ -21,22 +21,22 @@ class Tree(File):
             self.error = False
             self.root = self.tree.getroot()
 
-    def addSubElement(self, root_tag, tag, text):
+    def add_sub_element(self, root_tag, tag, text):
         if not self.error:
             tag = et.SubElement(root_tag, tag)
             tag.text = text
 
-    def stripTags(self, *tags):
+    def strip_tags(self, *tags):
         if not self.error:
             et.strip_tags(self.tree, tags)
 
-    def removeTagsByXPath(self, *xpath_strings):
+    def remove_tags_by_xpath(self, *xpath_strings):
         if not self.error:
             for xpath_string in xpath_strings:
                 for rm in self.tree.xpath(xpath_string):
                     rm.getparent().remove(rm)
 
-    def mergeStyle(self, style_file):
+    def merge_style(self, style_file):
         style = et.parse(style_file).getroot()
 
         for score in self.tree.xpath('/museScore/Score'):
@@ -44,9 +44,9 @@ class Tree(File):
 
     def clean(self):
         if not self.error:
-            self.removeTagsByXPath(
+            self.remove_tags_by_xpath(
                 '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-            self.stripTags('font', 'b', 'i', 'pos')
+            self.strip_tags('font', 'b', 'i', 'pos')
 
     def write(self, new_name=''):
         if new_name:

@@ -78,7 +78,7 @@ class Meta(Tree):
         xpath = '/museScore/Score/Staff[@id="1"]'
         if not self.root.xpath(xpath + '/VBox'):
             tag = et.Element('VBox')
-            self.addSubElement(tag, 'height', '10')
+            self.add_sub_element(tag, 'height', '10')
             for element in self.root.xpath(xpath):
                 element.insert(0, tag)
 
@@ -89,8 +89,8 @@ class Meta(Tree):
 
     def insertInVBox(self, style, text):
         tag = et.Element('Text')
-        self.addSubElement(tag, 'text', text)
-        self.addSubElement(tag, 'style', style)
+        self.add_sub_element(tag, 'text', text)
+        self.add_sub_element(tag, 'style', style)
         for element in self.root.xpath('//VBox'):
             element.append(tag)
 
