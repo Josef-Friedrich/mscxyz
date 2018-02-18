@@ -34,7 +34,7 @@ class Batch(object):
 
         self.files = output
 
-    def getFiles(self):
+    def get_files(self):
         if os.path.isdir(self.path):
             return self.files
         else:

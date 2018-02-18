@@ -36,7 +36,7 @@ def execute(args=None):
     if args.pick:
         batch.pick(args.pick, args.cycle_length)
 
-    files = batch.getFiles()
+    files = batch.get_files()
 
     output = []
     for file in files:
