@@ -75,13 +75,13 @@ def execute(args=None):
         elif args.subcommand == 'rename':
             score = Rename(file)
             if args.format:
-                score.applyFormatString(args.format)
+                score.apply_format_string(args.format)
 
             if args.ascii:
                 score.asciify()
 
             if args.no_whitespace:
-                score.noWhitespace()
+                score.no_whitespace()
             score.execute()
 
         elif args.subcommand == 'export':

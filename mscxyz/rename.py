@@ -36,15 +36,15 @@ class Rename(File):
 
         self.workname = unidecode.unidecode(self.workname)
 
-    def replaceToDash(self, *characters):
+    def replace_to_dash(self, *characters):
         for character in characters:
             self.workname = self.workname.replace(character, '-')
 
-    def deleteCharacters(self, *characters):
+    def delete_characters(self, *characters):
         for character in characters:
             self.workname = self.workname.replace(character, '')
 
-    def cleanUp(self):
+    def clean_up(self):
         string = self.workname
         string = string.replace('(', '_')
         string = string.replace('-_', '_')
@@ -59,21 +59,21 @@ class Rename(File):
 
         self.workname = string
 
-    def noWhitespace(self):
-        self.replaceToDash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
-        self.deleteCharacters(',', '.', '\'', '`', ')')
-        self.cleanUp()
+    def no_whitespace(self):
+        self.replace_to_dash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
+        self.delete_characters(',', '.', '\'', '`', ')')
+        self.clean_up()
 
     def debug(self):
         print(self.workname)
 
-    def getToken(self, token):
+    def get_token(self, token):
         return self.score.get(token)
 
-    def applyFormatString(self, format='$title ($composer)'):
+    def apply_format_string(self, format='$title ($composer)'):
         values = {}
         for key in ['title', 'subtitle', 'composer', 'lyricist']:
-            values[key] = self.getToken(key)
+            values[key] = self.get_token(key)
 
         self.workname = tmep.parse(format, values)
 

@@ -155,21 +155,21 @@ class TestRename(unittest.TestCase):
         self.unicode = Rename(get_file('unicode'))
 
     def test_option_format_default(self):
-        self.simple.applyFormatString()
+        self.simple.apply_format_string()
         self.assertEqual(self.simple.workname, u'Title (Composer)')
 
     def test_option_format_given(self):
-        self.simple.applyFormatString('${composer}_${title}')
+        self.simple.apply_format_string('${composer}_${title}')
         self.assertEqual(self.simple.workname, u'Composer_Title')
 
     def test_option_asciify(self):
-        self.unicode.applyFormatString()
+        self.unicode.apply_format_string()
         self.unicode.asciify()
         self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
 
     def test_option_no_whitespace(self):
-        self.simple.applyFormatString()
-        self.simple.noWhitespace()
+        self.simple.apply_format_string()
+        self.simple.no_whitespace()
         self.assertEqual(self.simple.workname, 'Title_Composer')
 
 
