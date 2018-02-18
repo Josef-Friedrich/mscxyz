@@ -3,7 +3,17 @@
 
 import argparse
 import textwrap
+import tmep
 from ._version import get_versions
+from mscxyz.rename import TOKEN
+
+
+def format_token():
+    out = []
+    for token in TOKEN:
+        out.append('- ' + token)
+
+    return '\n'.join(out)
 
 
 class Parse(object):
@@ -195,8 +205,20 @@ class Parse(object):
             help='Rename the "*.mscx" files.',
             formatter_class=argparse.RawDescriptionHelpFormatter,
             description=textwrap.dedent('''\
-            Tokens you can use in the format string (-f, --format):
-            '''))
+            Tokens and functions you can use in the format string (-f, --format):
+
+            Tokens
+            ======
+
+            ''' + format_token() +
+
+            '''
+
+            Functions
+            =========
+
+            ''' + tmep.doc.Doc().get()
+            ))
 
         self.sub['rename'].add_argument(
             '-d',

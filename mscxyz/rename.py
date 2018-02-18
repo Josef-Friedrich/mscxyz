@@ -13,6 +13,14 @@ from mscxyz.fileloader import File
 from mscxyz.meta import Meta
 
 
+TOKEN = (
+    'composer',
+    'lyricist',
+    'subtitle',
+    'title',
+)
+
+
 def create_dir(path):
     try:
         os.makedirs(path)
@@ -72,7 +80,7 @@ class Rename(File):
 
     def apply_format_string(self, format='$title ($composer)'):
         values = {}
-        for key in ['title', 'subtitle', 'composer', 'lyricist']:
+        for key in TOKEN:
             values[key] = self.get_token(key)
 
         self.workname = tmep.parse(format, values)
