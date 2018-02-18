@@ -10,10 +10,10 @@ class Lyrics(Tree):
 
     def __init__(self, fullpath):
         super(Lyrics, self).__init__(fullpath)
-        self.lyrics = self.normalizeLyrics()
-        self.max = self.getMax()
+        self.lyrics = self.normalize_lyrics()
+        self.max = self.get_max()
 
-    def normalizeLyrics(self):
+    def normalize_lyrics(self):
         """Normalize numbering of verses to natural numbering (1,2,3).
 
         From
@@ -59,7 +59,7 @@ class Lyrics(Tree):
 
         return lyrics
 
-    def getMax(self):
+    def get_max(self):
         """Retrieve the number of verses.
 
         From:
@@ -90,7 +90,7 @@ class Lyrics(Tree):
 
         self.write()
 
-    def extractOneLyricVerse(self, number):
+    def extract_one_lyrics_verse(self, number):
         """Extract a lyric verse by verse number.
 
         :param int number: The number of the lyrics verse starting by 1
@@ -109,7 +109,7 @@ class Lyrics(Tree):
         new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
         score.write(new_name)
 
-    def extractLyrics(self, number=None):
+    def extract_lyrics(self, number=None):
         """Extract one lyric verse or all lyric verses.
 
         :param mixed number: The lyric verse number or 'all'
@@ -117,11 +117,11 @@ class Lyrics(Tree):
 
         if number == 'all':
             for n in range(1, self.max + 1):
-                self.extractOneLyricVerse(n)
+                self.extract_one_lyrics_verse(n)
         else:
-            self.extractOneLyricVerse(int(number))
+            self.extract_one_lyrics_verse(int(number))
 
-    def fixLyricsVerse(self, verse_number):
+    def fix_lyrics_verse(self, verse_number):
         """
         from:
 
@@ -180,8 +180,8 @@ class Lyrics(Tree):
                 if not isinstance(tag_syl, bool):
                     tag.append(tag_syl)
 
-    def fixLyrics(self):
+    def fix_lyrics(self):
         for verse_number in range(1, self.max + 1):
-            self.fixLyricsVerse(verse_number)
+            self.fix_lyrics_verse(verse_number)
 
         self.write()

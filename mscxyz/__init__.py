@@ -58,9 +58,9 @@ def execute(args=None):
             if args.remap:
                 score.remap(args.remap)
             elif args.fix:
-                score.fixLyrics()
+                score.fix_lyrics()
             else:
-                score.extractLyrics(args.extract)
+                score.extract_lyrics(args.extract)
 
         elif args.subcommand == 'meta':
             score = Meta(file)
