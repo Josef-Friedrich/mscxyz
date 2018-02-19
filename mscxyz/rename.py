@@ -67,7 +67,7 @@ class Rename(File):
         self.workname = string
 
     def no_whitespace(self):
-        self.replace_to_dash(' ', ';', '?', '!', '_', '#', '&', '+', '/', ':')
+        self.replace_to_dash(' ', ';', '?', '!', '_', '#', '&', '+', ':')
         self.delete_characters(',', '.', '\'', '`', ')')
         self.clean_up()
 
