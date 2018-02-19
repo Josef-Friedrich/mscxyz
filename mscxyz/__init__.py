@@ -81,7 +81,7 @@ def execute(args=None):
 
             if args.no_whitespace:
                 score.no_whitespace()
-            score.execute()
+            score.execute(args.dry_run, args.verbose)
 
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File

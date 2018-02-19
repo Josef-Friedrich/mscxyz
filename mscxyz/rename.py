@@ -77,12 +77,12 @@ class Rename(File):
     def get_token(self, token):
         return self.score.get(token)
 
-    def apply_format_string(self, format='$title ($composer)'):
+    def apply_format_string(self, format_string='$title ($composer)'):
         values = {}
         for key in TOKEN:
             values[key] = self.get_token(key)
 
-        self.workname = tmep.parse(format, values)
+        self.workname = tmep.parse(format_string, values)
 
     def execute(self, dry_run=False, verbose=0):
         if dry_run or verbose > 0:
