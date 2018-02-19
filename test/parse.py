@@ -45,22 +45,31 @@ class TestHelp(unittest.TestCase):
         with self.assertRaises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(['help', 'all'])
-
         self.assertTrue(len(output) > 150)
 
     def test_restructuredtext(self):
         with self.assertRaises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(['help', '--rst', 'all'])
-
         self.assertTrue('.. code-block:: text' in output)
 
     def test_markdown(self):
         with self.assertRaises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(['help', '--markdown', 'all'])
-
         self.assertTrue('```' in output)
+
+    def test_functions_in_all(self):
+        with self.assertRaises(SystemExit):
+            with helper.Capturing() as output:
+                mscxyz.execute(['help', 'all'])
+        self.assertTrue('%asciify{text}' in '\n'.join(output))
+
+    def test_functions_in_rename(self):
+        with self.assertRaises(SystemExit):
+            with helper.Capturing() as output:
+                mscxyz.execute(['rename', '--help'])
+        self.assertTrue('%asciify{text}' in '\n'.join(output))
 
 
 if __name__ == '__main__':
