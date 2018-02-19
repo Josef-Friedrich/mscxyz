@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Wrapper for the command line interface"""
 
+from mscxyz._version import get_versions
+from mscxyz.rename import TOKEN
 import argparse
 import textwrap
 import tmep
-from ._version import get_versions
-from mscxyz.rename import TOKEN
 
 
 def format_token():

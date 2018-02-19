@@ -2,8 +2,8 @@
 
 """Load multiple MuseScore files"""
 
-import os
 import fnmatch
+import os
 
 
 class Batch(object):

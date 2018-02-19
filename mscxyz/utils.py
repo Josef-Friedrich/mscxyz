@@ -2,12 +2,12 @@
 
 """A collection of useful utility functions"""
 
-import subprocess
-import os
-import sys
-import signal
-import platform
 from termcolor import colored
+import os
+import platform
+import signal
+import subprocess
+import sys
 
 
 def is_mscore(executable='mscore'):

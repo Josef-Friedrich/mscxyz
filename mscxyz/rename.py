@@ -2,15 +2,14 @@
 
 """Rename MuseScore files"""
 
-import os
-from termcolor import colored
-import tmep
-import unidecode
-import re
-import errno
-
 from mscxyz.fileloader import File
 from mscxyz.meta import Meta
+from termcolor import colored
+import errno
+import os
+import re
+import tmep
+import unidecode
 
 
 TOKEN = (

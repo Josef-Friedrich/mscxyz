@@ -2,12 +2,11 @@
 
 """Class for metadata maniplation"""
 
-import lxml.etree as et
-from termcolor import colored
-import six
-
 from mscxyz.tree import Tree
 from mscxyz.utils import print_desc
+from termcolor import colored
+import lxml.etree as et
+import six
 
 
 class Meta(Tree):

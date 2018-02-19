@@ -2,11 +2,10 @@
 
 """Basic file loading"""
 
+from mscxyz.utils import mscore
 import os
 import shutil
 import six
-
-from mscxyz.utils import mscore
 
 
 class File(object):

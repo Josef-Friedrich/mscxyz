@@ -2,8 +2,8 @@
 
 """Manipulate the lyrics"""
 
-import lxml.etree as etree
 from mscxyz.tree import Tree
+import lxml.etree as etree
 
 
 class Lyrics(Tree):
