@@ -3,18 +3,12 @@
 
 import os
 import re
+import helper
 import unittest
 import mscxyz
 from mscxyz.utils import is_mscore
 import sys
-import shutil
-import tempfile
-from distutils.dir_util import copy_tree
 import six
-if six.PY2:
-    from cStringIO import StringIO
-else:
-    from io import StringIO
 
 
 if sys.prefix == '/usr':
@@ -23,68 +17,18 @@ else:
     mscore = False
 
 
-def tmp_file(test_file):
-    orig = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), 'files',
-        test_file)
-    tmp_dir = tempfile.mkdtemp()
-    tmp = os.path.join(tmp_dir, test_file)
-    shutil.copyfile(orig, tmp)
-    return tmp
-
-
-def tmp_dir(relative_dir):
-    orig = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), 'files', relative_dir)
-    tmp = tempfile.mkdtemp()
-    copy_tree(orig, tmp)
-    return tmp
-
-
-def read_file(test_file):
-    tmp = open(test_file)
-    output = tmp.read()
-    tmp.close()
-    return output
-
-
-class Capturing(list):
-    def __init__(self, channel='out'):
-        self.channel = channel
-
-    def __enter__(self):
-        if self.channel == 'out':
-            self._pipe = sys.stdout
-            sys.stdout = self._stringio = StringIO()
-        elif self.channel == 'err':
-            self._pipe = sys.stderr
-            sys.stderr = self._stringio = StringIO()
-        return self
-
-    def __exit__(self, *args):
-        self.extend(self._stringio.getvalue().splitlines())
-        if self.channel == 'out':
-            sys.stdout = self._pipe
-        elif self.channel == 'err':
-            sys.stderr = self._pipe
-
-
-def get_file(filename):
-    return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
-
-
 class TestMeta(unittest.TestCase):
     def setUp(self):
         from mscxyz.meta import Meta
-        self.meta = Meta(get_file('simple'))
+        self.meta = Meta(helper.get_file('simple'))
 
     def test_get(self):
         self.assertEqual(self.meta.get('title'), 'Title')
         self.assertEqual(self.meta.get('composer'), 'Composer')
 
     def test_show(self):
-        with Capturing() as output:
-            mscxyz.execute(['meta', '-s', get_file('simple')])
+        with helper.Capturing() as output:
+            mscxyz.execute(['meta', '-s', helper.get_file('simple')])
 
         compare = [
             '',
@@ -104,55 +48,22 @@ class TestMeta(unittest.TestCase):
 class TestFile(unittest.TestCase):
     def setUp(self):
         from mscxyz.fileloader import File
-        self.file = File(get_file('simple'))
+        self.file = File(helper.get_file('simple'))
 
     def test_file_object_initialisation(self):
-        self.assertEqual(self.file.fullpath, get_file('simple'))
+        self.assertEqual(self.file.fullpath, helper.get_file('simple'))
         self.assertEqual(self.file.dirname,
-                         os.path.dirname(get_file('simple')))
+                         os.path.dirname(helper.get_file('simple')))
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
 
 
-class TestCommandlineInterface(unittest.TestCase):
-    def test_help_short(self):
-        with self.assertRaises(SystemExit) as cm:
-            with Capturing():
-                mscxyz.execute(['-h'])
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), '0')
-
-    def test_help_long(self):
-        with self.assertRaises(SystemExit) as cm:
-            with Capturing():
-                mscxyz.execute(['--help'])
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), '0')
-
-    def test_without_arguments(self):
-        with self.assertRaises(SystemExit) as cm:
-            with Capturing('err'):
-                mscxyz.execute()
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), '2')
-
-    @unittest.skip('No working in tox')
-    def test_help_text(self):
-        with self.assertRaises(SystemExit):
-            with Capturing() as output:
-                mscxyz.execute(['-h'])
-        self.assertEqual(
-            output[0],
-            'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] \
-[-c CYCLE_LENGTH] [-v]')
-
-
 class TestRename(unittest.TestCase):
     def setUp(self):
         from mscxyz.rename import Rename
-        self.simple = Rename(get_file('simple'))
-        self.unicode = Rename(get_file('unicode'))
+        self.simple = Rename(helper.get_file('simple'))
+        self.unicode = Rename(helper.get_file('unicode'))
 
     def test_option_format_default(self):
         self.simple.apply_format_string()
@@ -176,8 +87,8 @@ class TestRename(unittest.TestCase):
 class TestClean(unittest.TestCase):
 
     def setUp(self):
-        clean = mscxyz.execute(['clean', tmp_file('formats.mscx')])[0]
-        self.clean_file = read_file(clean.fullpath)
+        clean = mscxyz.execute(['clean', helper.tmp_file('formats.mscx')])[0]
+        self.clean_file = helper.read_file(clean.fullpath)
 
     def test_font(self):
         self.assertFalse('<font' in self.clean_file)
@@ -205,10 +116,10 @@ class TestCleanAddStyle(unittest.TestCase):
             [
                 'clean',
                 '--style',
-                tmp_file('style.mss'),
-                tmp_file('simple.mscx')
+                helper.tmp_file('style.mss'),
+                helper.tmp_file('simple.mscx')
             ])[0]
-        self.style = read_file(self.score.fullpath)
+        self.style = helper.read_file(self.score.fullpath)
 
     def test_style(self):
         self.assertTrue(
@@ -221,7 +132,7 @@ class TestLyrics(unittest.TestCase):
 
     def setUp(self):
         self.file = 'lyrics.mscx'
-        self.lyrics = mscxyz.execute(['lyrics', tmp_file(self.file)])[0]
+        self.lyrics = mscxyz.execute(['lyrics', helper.tmp_file(self.file)])[0]
 
     def test_files_exist(self):
         tmpdir = os.path.dirname(self.lyrics.fullpath)
@@ -242,7 +153,7 @@ class TestLyricsExtractAll(unittest.TestCase):
     def setUp(self):
         self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', 'all', tmp_file(self.file)])[0]
+            ['lyrics', '--extract', 'all', helper.tmp_file(self.file)])[0]
 
     def tmpFile(self, number):
         return os.path.join(
@@ -268,7 +179,7 @@ class TestLyricsExtractByNumber(unittest.TestCase):
     def setUp(self):
         self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', '2', tmp_file(self.file)])[0]
+            ['lyrics', '--extract', '2', helper.tmp_file(self.file)])[0]
 
     def tmpFile(self, number):
         return os.path.join(
@@ -294,7 +205,7 @@ class TestLyricsFix(unittest.TestCase):
         tmp = mscxyz.execute([
             'lyrics',
             '--fix',
-            tmp_file('lyrics-fix.mscx')
+            helper.tmp_file('lyrics-fix.mscx')
         ])[0]
         self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
         self.lyrics = self.tree.lyrics
@@ -325,7 +236,7 @@ class TestLyricsRemap(unittest.TestCase):
             'lyrics',
             '--remap',
             '2:6',
-            tmp_file('lyrics-remap.mscx')
+            helper.tmp_file('lyrics-remap.mscx')
         ])[0]
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics
@@ -343,8 +254,9 @@ class TestLyricsRemap(unittest.TestCase):
 
 class TestBatch(unittest.TestCase):
     def setUp(self):
-        with Capturing():
-            self.batch = mscxyz.execute(['meta', '-s', tmp_dir('batch')])
+        with helper.Capturing():
+            self.batch = mscxyz.execute(['meta', '-s',
+                                        helper.tmp_dir('batch')])
 
     def test_batch(self):
         self.assertEqual(len(self.batch), 3)
@@ -352,9 +264,9 @@ class TestBatch(unittest.TestCase):
 
 class TestBackup(unittest.TestCase):
     def setUp(self):
-        with Capturing():
+        with helper.Capturing():
             self.score = mscxyz.execute(
-                ['-b', 'meta', '-s', tmp_file('simple.mscx')])[0]
+                ['-b', 'meta', '-s', helper.tmp_file('simple.mscx')])[0]
             self.fullpath = self.score.fullpath
             self.fullpath_backup = self.score.fullpath_backup
 
@@ -375,20 +287,21 @@ class TestBackup(unittest.TestCase):
 
 class TestExport(unittest.TestCase):
     def export(self, extension):
-        score = mscxyz.execute(
-            ['export', '--extension', extension, tmp_file('simple.mscx')])[0]
+        score = mscxyz.execute(['export', '--extension', extension,
+                               helper.tmp_file('simple.mscx')])[0]
         export = score.fullpath.replace('mscx', extension)
         self.assertTrue(os.path.isfile(export))
 
     @unittest.skipIf(not mscore, 'export not working in travis')
     def test_pdf(self):
-        score = mscxyz.execute(['export', tmp_file('simple.mscx')])[0]
+        score = mscxyz.execute(['export', helper.tmp_file('simple.mscx')])[0]
         self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
 
     @unittest.skipIf(not mscore, 'export not working in travis')
     def test_png(self):
         score = mscxyz.execute(
-            ['export', '--extension', 'png', tmp_file('simple.mscx')])[0]
+            ['export', '--extension', 'png', helper.tmp_file('simple.mscx')]
+        )[0]
         self.assertTrue(
             os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
 
@@ -409,30 +322,6 @@ class TestExport(unittest.TestCase):
         self.export('mid')
 
 
-class TestHelp(unittest.TestCase):
-
-    def test_all(self):
-        with self.assertRaises(SystemExit):
-            with Capturing() as output:
-                mscxyz.execute(['help', 'all'])
-
-        self.assertTrue(len(output) > 150)
-
-    def test_restructuredtext(self):
-        with self.assertRaises(SystemExit):
-            with Capturing() as output:
-                mscxyz.execute(['help', '--rst', 'all'])
-
-        self.assertTrue('.. code-block:: text' in output)
-
-    def test_markdown(self):
-        with self.assertRaises(SystemExit):
-            with Capturing() as output:
-                mscxyz.execute(['help', '--markdown', 'all'])
-
-        self.assertTrue('```' in output)
-
-
 class TestUtils(unittest.TestCase):
 
     def test_is_mscore(self):
@@ -450,10 +339,10 @@ class TestVersion(unittest.TestCase):
     def test_version(self):
         with self.assertRaises(SystemExit):
             if six.PY2:
-                with Capturing('err') as output:
+                with helper.Capturing('err') as output:
                     mscxyz.execute(['--version'])
             else:
-                with Capturing() as output:
+                with helper.Capturing() as output:
                     mscxyz.execute(['--version'])
 
         result = re.search('[^ ]* [^ ]*', output[0])

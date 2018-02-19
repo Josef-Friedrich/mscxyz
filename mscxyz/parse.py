@@ -204,21 +204,10 @@ class Parse(object):
             'rename',
             help='Rename the "*.mscx" files.',
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            description=textwrap.dedent('''\
-            Tokens and functions you can use in the format string (-f, --format):
-
-            Tokens
-            ======
-
-            ''' + format_token() +
-
-            '''
-
-            Functions
-            =========
-
-            ''' + tmep.doc.Doc().get()
-            ))
+            description='Tokens and functions you can use in the format '
+            'string (-f, --format):\n\n'
+            'Tokens\n======\n\n' + format_token() + '\n\n'
+            'Functions\n=========\n' + tmep.doc.Doc().get())
 
         self.sub['rename'].add_argument(
             '-d',

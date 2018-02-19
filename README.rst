@@ -166,20 +166,19 @@ Usage
     mscx-manager rename
     usage: mscx-manager rename [-h] [-d] [-f FORMAT] [-a] [-n]
     
-                Tokens and functions you can use in the format string (-f, --format):
+    Tokens and functions you can use in the format string (-f, --format):
     
-                Tokens
-                ======
+    Tokens
+    ======
     
-                - composer
+    - composer
     - lyricist
     - subtitle
     - title
     
-                Functions
-                =========
-    
-                    asciify
+    Functions
+    =========
+        asciify
         -------
     
         %asciify{text}
