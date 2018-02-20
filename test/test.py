@@ -19,34 +19,6 @@ else:
     mscore = False
 
 
-class TestMeta(unittest.TestCase):
-    def setUp(self):
-        from mscxyz.meta import Meta
-        self.meta = Meta(helper.get_file('simple'))
-
-    def test_get(self):
-        self.assertEqual(self.meta.get('title'), 'Title')
-        self.assertEqual(self.meta.get('composer'), 'Composer')
-
-    def test_show(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(['meta', '-s', helper.get_file('simple')])
-
-        compare = [
-            '',
-            '\x1b[31msimple.mscx\x1b[0m',
-            '\x1b[34mfilename\x1b[0m: simple',
-            '\x1b[33mworkTitle\x1b[0m: Title',
-            '\x1b[33mplatform\x1b[0m: Linux',
-            '\x1b[33mcomposer\x1b[0m: Composer',
-            '\x1b[32mComposer\x1b[0m: Composer',
-            '\x1b[32mTitle\x1b[0m: Title'
-        ]
-
-        self.assertTrue('\x1b[33mworkTitle\x1b[0m: Title' in output)
-        self.assertEqual(output.sort(), compare.sort())
-
-
 class TestFile(unittest.TestCase):
     def setUp(self):
         from mscxyz.fileloader import File

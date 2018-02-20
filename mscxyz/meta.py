@@ -9,6 +9,53 @@ import lxml.etree as et
 import six
 
 
+class MetaTag(object):
+
+    """The available metaTag fields are:
+
+        * `arranger`
+        * `composer`
+        * `copyright`
+        * `creationDate`
+        * `lyricist`
+        * `movementNumber`
+        * `movementTitle`
+        * `originalFormat`
+        * `platform`
+        * `poet`
+        * `source`
+        * `translator`
+        * `workNumber`
+        * `workTitle`
+
+        """
+
+    def __init__(self, xml_root):
+        self.xml_root = xml_root
+
+    def _get_element(self, name):
+        for element in self.xml_root.xpath('//metaTag[@name="' + name + '"]'):
+            return element
+
+    def _get_text(self, name):
+        element = self._get_element(name)
+        if hasattr(element, 'text'):
+            return element.text
+
+    def __getattr__(self, name):
+        if name == 'xml_root':
+            return getattr(self, name)
+        else:
+            return self._get_text(name)
+
+    def __setattr__(self, name, value):
+        if name == 'xml_root':
+            self.__dict__[name] = value
+        else:
+            self._get_element(name).text = value
+
+
+
 class Meta(Tree):
 
     def __init__(self, fullpath):
