@@ -7,7 +7,7 @@ files of the notation software MuseScore
 from mscxyz.batch import Batch
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz.parse import Parse
+from mscxyz import parse
 from mscxyz.rename import Rename
 from mscxyz.tree import Tree
 import six
@@ -22,12 +22,58 @@ if six.PY2:
     sys.setdefaultencoding('utf8')
 
 
+def heading(args, text, level=1):
+    length = len(text)
+    if args.markdown:
+        print('\n' + ('#' * level) + ' ' + text + '\n')
+    elif args.rst:
+        if level == 1:
+            underline = '='
+        elif level == 2:
+            underline = '-'
+        elif level == 2:
+            underline = '^'
+        elif level == 2:
+            underline = '"'
+        else:
+            underline = '-'
+        print('\n' + text + '\n' + (underline * length) + '\n')
+    else:
+        print(text)
+
+
+def code_block(args, text):
+    if args.markdown:
+        print('```\n' + text + '\n```')
+    elif args.rst:
+        print('.. code-block:: text\n\n  ' + text.replace('\n', '\n  '))
+    else:
+        print(text)
+
+
+def show_all_help(args):
+    subcommands = ('clean', 'meta', 'lyrics', 'rename', 'export', 'help')
+
+    if args.path == 'all':
+        heading(args, 'mscxyz', 1)
+        code_block(args, parse.parser.format_help())
+
+        heading(args, 'Subcommands', 1)
+
+        for subcommand in subcommands:
+            command = getattr(parse, subcommand)
+            heading(args, command.prog, 2)
+            code_block(args, command.format_help())
+
+    else:
+        code_block(args, getattr(parse, args.path).format_help())
+
+
 def execute(args=None):
-    parse = Parse()
-    args = parse.parse(args)
+    args = parse.parser.parse_args(args)
 
     if args.subcommand == 'help':
-        parse.show_all_help()
+        show_all_help(args)
         sys.exit()
 
     batch = Batch(args.path, args.glob)
