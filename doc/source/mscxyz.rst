@@ -44,10 +44,10 @@ mscxyz.meta module
     :undoc-members:
     :show-inheritance:
 
-mscxyz.parse module
-^^^^^^^^^^^^^^^^^^^
+mscxyz.cli module
+^^^^^^^^^^^^^^^^^
 
-.. automodule:: mscxyz.parse
+.. automodule:: mscxyz.cli
     :members:
     :undoc-members:
     :show-inheritance:

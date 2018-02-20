@@ -7,7 +7,7 @@ files of the notation software MuseScore
 from mscxyz.batch import Batch
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz import parse
+from mscxyz import cli
 from mscxyz.rename import Rename
 from mscxyz.tree import Tree
 import six
@@ -56,21 +56,21 @@ def show_all_help(args):
 
     if args.path == 'all':
         heading(args, 'mscxyz', 1)
-        code_block(args, parse.parser.format_help())
+        code_block(args, cli.parser.format_help())
 
         heading(args, 'Subcommands', 1)
 
         for subcommand in subcommands:
-            command = getattr(parse, subcommand)
+            command = getattr(cli, subcommand)
             heading(args, command.prog, 2)
             code_block(args, command.format_help())
 
     else:
-        code_block(args, getattr(parse, args.path).format_help())
+        code_block(args, getattr(cli, args.path).format_help())
 
 
 def execute(args=None):
-    args = parse.parser.parse_args(args)
+    args = cli.parser.parse_args(args)
 
     if args.subcommand == 'help':
         show_all_help(args)
