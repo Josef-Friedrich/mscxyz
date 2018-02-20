@@ -1,4 +1,6 @@
-"""File for various tests"""
+# -*- coding: utf-8 -*-
+
+"""Test module “lyrics.py”."""
 
 
 import os

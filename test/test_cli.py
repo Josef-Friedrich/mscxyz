@@ -1,4 +1,6 @@
-"""File for various tests"""
+# -*- coding: utf-8 -*-
+
+"""Test module “cli.py”."""
 
 
 import helper
