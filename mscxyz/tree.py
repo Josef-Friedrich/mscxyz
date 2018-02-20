@@ -4,16 +4,15 @@
 
 from mscxyz.fileloader import File
 from mscxyz.utils import re_open
-import lxml.etree as et
-
+import lxml
 
 class Tree(File):
 
     def __init__(self, fullpath):
         super(Tree, self).__init__(fullpath)
         try:
-            self.tree = et.parse(self.fullpath)
-        except et.XMLSyntaxError as e:
+            self.tree = lxml.etree.parse(self.fullpath)
+        except lxml.etree.XMLSyntaxError as e:
             print('Error!!! ' + str(e))
             self.error = True
         else:
@@ -22,12 +21,12 @@ class Tree(File):
 
     def add_sub_element(self, root_tag, tag, text):
         if not self.error:
-            tag = et.SubElement(root_tag, tag)
+            tag = lxml.etree.SubElement(root_tag, tag)
             tag.text = text
 
     def strip_tags(self, *tags):
         if not self.error:
-            et.strip_tags(self.tree, tags)
+            lxml.etree.strip_tags(self.tree, tags)
 
     def remove_tags_by_xpath(self, *xpath_strings):
         if not self.error:
@@ -36,7 +35,7 @@ class Tree(File):
                     rm.getparent().remove(rm)
 
     def merge_style(self, style_file):
-        style = et.parse(style_file).getroot()
+        style = lxml.etree.parse(style_file).getroot()
 
         for score in self.tree.xpath('/museScore/Score'):
             score.insert(0, style[0])
