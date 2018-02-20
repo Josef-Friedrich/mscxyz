@@ -7,6 +7,7 @@ import mscxyz
 
 
 class TestCommandlineInterface(unittest.TestCase):
+
     def test_help_short(self):
         with self.assertRaises(SystemExit) as cm:
             with helper.Capturing():
@@ -28,15 +29,11 @@ class TestCommandlineInterface(unittest.TestCase):
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '2')
 
-    @unittest.skip('No working in tox')
     def test_help_text(self):
         with self.assertRaises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(['-h'])
-        self.assertEqual(
-            output[0],
-            'usage: test.py [-h] [-b] [-g GLOB] [-p PICK] \
-[-c CYCLE_LENGTH] [-v]')
+        self.assertTrue('[-h]' in output[0])
 
 
 class TestHelp(unittest.TestCase):
