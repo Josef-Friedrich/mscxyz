@@ -181,27 +181,28 @@ class Meta(Tree):
             self.meta = MetaTag(self.root)
             self.vbox = Vbox(self.root)
 
-    # Get a value by key.
-    #
-    # This function searches for values in this order: vbox, meta, filename.
-    # Possible "key"s are: title, subtitle, composer, lyricist
-    def get(self, key):
-        if key == 'title':
+
+    def get(self, field):
+        """Get a value by field.
+        This function searches for values in this order: vbox, meta, filename.
+        Possible fields are: title, subtitle, composer, lyricist
+        """
+        if field == 'title':
             values = [
                 self.vbox.Title,
                 self.meta.workTitle,
                 self.meta.movementTitle,
                 self.basename
             ]
-        elif key == 'subtitle':
+        elif field == 'subtitle':
             values = [
                 self.vbox.Subtitle,
                 self.meta.movementTitle,
             ]
         else:
             values = [
-                getattr(self.vbox, key.title()),
-                getattr(self.meta, key),
+                getattr(self.vbox, field.title()),
+                getattr(self.meta, field),
             ]
 
         for value in values:
@@ -210,14 +211,14 @@ class Meta(Tree):
 
         return value
 
-    def sync(self, key):
-        if key == 'title':
-            self.vbox.Title = self.meta.workTitle = self.get(key)
-        elif key == 'subtitle':
-            self.vbox.Subtitle = self.meta.movementTitle = self.get(key)
+    def sync(self, field):
+        if field == 'title':
+            self.vbox.Title = self.meta.workTitle = self.get(field)
+        elif field == 'subtitle':
+            self.vbox.Subtitle = self.meta.movementTitle = self.get(field)
         else:
-            setattr(self.vbox, key.title(), self.get(key))
-            setattr(self.meta, key, self.get(key))
+            setattr(self.vbox, field.title(), self.get(field))
+            setattr(self.meta, field, self.get(field))
 
     def clean_meta(self):
         tags = [
@@ -234,8 +235,8 @@ class Meta(Tree):
 
     def sync_meta_tags(self):
         if not self.error:
-            for key in ['title', 'subtitle', 'composer', 'lyricist']:
-                self.sync(key)
+            for field in ['title', 'subtitle', 'composer', 'lyricist']:
+                self.sync(field)
             self.clean_meta()
 
     def show(self):
