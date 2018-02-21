@@ -6,6 +6,8 @@
 import helper
 import unittest
 import mscxyz
+import six
+import re
 
 
 class TestCommandlineInterface(unittest.TestCase):
@@ -69,6 +71,21 @@ class TestHelp(unittest.TestCase):
             with helper.Capturing() as output:
                 mscxyz.execute(['rename', '--help'])
         self.assertTrue('%asciify{text}' in '\n'.join(output))
+
+
+class TestVersion(unittest.TestCase):
+
+    def test_version(self):
+        with self.assertRaises(SystemExit):
+            if six.PY2:
+                with helper.Capturing('err') as output:
+                    mscxyz.execute(['--version'])
+            else:
+                with helper.Capturing() as output:
+                    mscxyz.execute(['--version'])
+
+        result = re.search('[^ ]* [^ ]*', output[0])
+        self.assertTrue(result)
 
 
 if __name__ == '__main__':

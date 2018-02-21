@@ -4,7 +4,6 @@
 
 
 import os
-import re
 import helper
 import unittest
 import mscxyz
@@ -31,31 +30,6 @@ class TestFile(unittest.TestCase):
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
-
-
-class TestRename(unittest.TestCase):
-    def setUp(self):
-        from mscxyz.rename import Rename
-        self.simple = Rename(helper.get_file('simple.mscx'))
-        self.unicode = Rename(helper.get_file('unicode.mscx'))
-
-    def test_option_format_default(self):
-        self.simple.apply_format_string()
-        self.assertEqual(self.simple.workname, u'Title (Composer)')
-
-    def test_option_format_given(self):
-        self.simple.apply_format_string('${composer}_${title}')
-        self.assertEqual(self.simple.workname, u'Composer_Title')
-
-    def test_option_asciify(self):
-        self.unicode.apply_format_string()
-        self.unicode.asciify()
-        self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
-
-    def test_option_no_whitespace(self):
-        self.simple.apply_format_string()
-        self.simple.no_whitespace()
-        self.assertEqual(self.simple.workname, 'Title_Composer')
 
 
 class TestBatch(unittest.TestCase):
@@ -138,21 +112,6 @@ class TestUtils(unittest.TestCase):
             self.assertEqual(type(output), bytes)
         self.assertTrue(is_mscore('ls'))
         self.assertFalse(is_mscore('nooooooooooooooot'))
-
-
-class TestVersion(unittest.TestCase):
-
-    def test_version(self):
-        with self.assertRaises(SystemExit):
-            if six.PY2:
-                with helper.Capturing('err') as output:
-                    mscxyz.execute(['--version'])
-            else:
-                with helper.Capturing() as output:
-                    mscxyz.execute(['--version'])
-
-        result = re.search('[^ ]* [^ ]*', output[0])
-        self.assertTrue(result)
 
 
 if __name__ == '__main__':
