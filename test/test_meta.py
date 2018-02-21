@@ -48,6 +48,16 @@ class TestClassMetaTag(unittest.TestCase):
         self.assertEqual(meta.arranger, None)
         self.assertEqual(meta.composer, 'Composer')
 
+    def test_set(self):
+        tmp = helper.tmp_file('simple.mscx')
+        tree = Tree(tmp)
+        meta = MetaTag(tree.root)
+        meta.workTitle = 'lol'
+        tree.write()
+        tree = Tree(tmp)
+        meta = MetaTag(tree.root)
+        self.assertEqual(meta.workTitle, 'lol')
+
 
 if __name__ == '__main__':
     unittest.main()
