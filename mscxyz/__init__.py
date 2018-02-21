@@ -114,7 +114,7 @@ def execute(args=None):
             else:
                 if args.json:
                     score.export_json()
-                score.sync_meta_tags()
+                score.sync_fields()
                 score.save()
 
         elif args.subcommand == 'rename':

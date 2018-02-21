@@ -221,7 +221,7 @@ class Meta(Tree):
             setattr(self.meta, field, self.get(field))
 
     def clean_meta(self):
-        tags = [
+        fields = [
             "arranger",
             "copyright",
             "movementNumber",
@@ -230,10 +230,10 @@ class Meta(Tree):
             "translator",
             "workNumber"
         ]
-        for tag in tags:
-            setattr(self.meta, tag, '')
+        for field in fields:
+            setattr(self.meta, field, '')
 
-    def sync_meta_tags(self):
+    def sync_fields(self):
         if not self.error:
             for field in ['title', 'subtitle', 'composer', 'lyricist']:
                 self.sync(field)
@@ -243,15 +243,15 @@ class Meta(Tree):
         print_desc('\n' + colored(self.filename, 'red'))
         print_desc(self.basename, 'filename', 'blue')
         if not self.error:
-            for tag in self.meta.fields:
-                text = getattr(self.meta, tag)
+            for field in self.meta.fields:
+                text = getattr(self.meta, field)
                 if text:
-                    print_desc(text, tag, 'yellow')
+                    print_desc(text, field, 'yellow')
 
-            for tag in self.vbox.fields:
-                text = getattr(self.vbox, tag)
+            for field in self.vbox.fields:
+                text = getattr(self.vbox, field)
                 if text:
-                    print_desc(text, tag, 'green')
+                    print_desc(text, field, 'green')
 
     def export_json(self):
         data = {}
