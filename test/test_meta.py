@@ -57,6 +57,9 @@ class TestClassMetaTag(unittest.TestCase):
         tree = Tree(tmp)
         meta = MetaTag(tree.root)
         self.assertEqual(meta.workTitle, 'lol')
+        xml_string = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="workTitle">lol</metaTag>' in
+                        xml_string)
 
 
 if __name__ == '__main__':
