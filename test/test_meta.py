@@ -14,7 +14,7 @@ import helper
 class TestClassMeta(unittest.TestCase):
 
     def setUp(self):
-        self.meta = Meta(helper.get_file('simple'))
+        self.meta = Meta(helper.get_file('simple.mscx'))
 
     def test_get(self):
         self.assertEqual(self.meta.get('title'), 'Title')
@@ -22,7 +22,7 @@ class TestClassMeta(unittest.TestCase):
 
     def test_show(self):
         with helper.Capturing() as output:
-            mscxyz.execute(['meta', '-s', helper.get_file('simple')])
+            mscxyz.execute(['meta', '-s', helper.get_file('simple.mscx')])
 
         compare = [
             '',
@@ -42,7 +42,7 @@ class TestClassMeta(unittest.TestCase):
 class TestClassMetaTag(unittest.TestCase):
 
     def test_get(self):
-        tree = Tree(helper.get_file('simple'))
+        tree = Tree(helper.get_file('simple.mscx'))
         meta = MetaTag(tree.root)
         self.assertEqual(meta.workTitle, 'Title')
         self.assertEqual(meta.arranger, None)

@@ -20,7 +20,7 @@ else:
 
 
 def get_file(filename):
-    return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
+    return os.path.join(os.path.dirname(__file__), 'files', filename)
 
 
 def tmp_file(filename):

@@ -22,12 +22,12 @@ else:
 class TestFile(unittest.TestCase):
     def setUp(self):
         from mscxyz.fileloader import File
-        self.file = File(helper.get_file('simple'))
+        self.file = File(helper.get_file('simple.mscx'))
 
     def test_file_object_initialisation(self):
-        self.assertEqual(self.file.fullpath, helper.get_file('simple'))
+        self.assertEqual(self.file.fullpath, helper.get_file('simple.mscx'))
         self.assertEqual(self.file.dirname,
-                         os.path.dirname(helper.get_file('simple')))
+                         os.path.dirname(helper.get_file('simple.mscx')))
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
@@ -36,8 +36,8 @@ class TestFile(unittest.TestCase):
 class TestRename(unittest.TestCase):
     def setUp(self):
         from mscxyz.rename import Rename
-        self.simple = Rename(helper.get_file('simple'))
-        self.unicode = Rename(helper.get_file('unicode'))
+        self.simple = Rename(helper.get_file('simple.mscx'))
+        self.unicode = Rename(helper.get_file('unicode.mscx'))
 
     def test_option_format_default(self):
         self.simple.apply_format_string()
