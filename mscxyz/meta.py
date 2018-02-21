@@ -43,10 +43,7 @@ class MetaTag(object):
             return element.text
 
     def __getattr__(self, name):
-        if name == 'xml_root':
-            return getattr(self, name)
-        else:
-            return self._get_text(name)
+        return self._get_text(name)
 
     def __setattr__(self, name, value):
         if name == 'xml_root':
