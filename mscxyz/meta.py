@@ -55,6 +55,53 @@ class MetaTag(object):
             self._get_element(name).text = value
 
 
+class Vbox(object):
+    """The first vertical box of a score.
+
+    Available fields:
+
+    * `Title`
+    * `Subtitle`
+    * `Composer`
+    * `Lyricist`
+
+    """
+
+    def __init__(self, xml_root):
+        xpath = '/museScore/Score/Staff[@id="1"]'
+        if not xml_root.xpath(xpath + '/VBox'):
+            vbox = lxml.etree.Element('VBox')
+            height = lxml.etree.SubElement(vbox, 'height')
+            height.text = '10'
+
+            for element in xml_root.xpath(xpath):
+                element.insert(0, vbox)
+
+    def get_vbox_tag(self, style):
+        for element in self.root.xpath('//VBox/Text'):
+            if element.find('style').text == style:
+                return element.find('text')
+
+    def insert_in_vbox(self, style, text):
+        tag = lxml.etree.Element('Text')
+        self.add_sub_element(tag, 'text', text)
+        self.add_sub_element(tag, 'style', style)
+        for element in self.root.xpath('//VBox'):
+            element.append(tag)
+
+    def get_vbox_text(self, style):
+        element = self.get_vbox_tag(style)
+        if hasattr(element, 'text'):
+            return element.text
+
+    def set_vbox(self, style, text):
+        self.create_vbox()
+        element = self.get_vbox_tag(style)
+        if hasattr(element, 'text'):
+            element.text = text
+        else:
+            self.insert_in_vbox(style, text)
+
 
 class Meta(Tree):
 

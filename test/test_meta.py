@@ -5,8 +5,7 @@
 
 import unittest
 import mscxyz
-from mscxyz.meta import MetaTag
-from mscxyz.meta import Meta
+from mscxyz.meta import MetaTag, Meta, Vbox
 from mscxyz.tree import Tree
 import helper
 
@@ -60,6 +59,17 @@ class TestClassMetaTag(unittest.TestCase):
         xml_string = helper.read_file(tmp)
         self.assertTrue('<metaTag name="workTitle">lol</metaTag>' in
                         xml_string)
+
+
+class TestClassVbox(unittest.TestCase):
+
+    def test_init(self):
+        tmp = helper.tmp_file('no-vbox.mscx')
+        tree = Tree(tmp)
+        Vbox(tree.root)
+        tree.save()
+        xml_string = helper.read_file(tmp)
+        self.assertTrue('<VBox>' in xml_string)
 
 
 if __name__ == '__main__':
