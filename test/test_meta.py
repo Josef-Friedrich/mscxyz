@@ -53,7 +53,7 @@ class TestClassMetaTag(unittest.TestCase):
         tree = Tree(tmp)
         meta = MetaTag(tree.root)
         meta.workTitle = 'lol'
-        tree.write()
+        tree.save()
         tree = Tree(tmp)
         meta = MetaTag(tree.root)
         self.assertEqual(meta.workTitle, 'lol')

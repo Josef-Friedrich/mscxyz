@@ -46,7 +46,7 @@ class Tree(File):
                 '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
             self.strip_tags('font', 'b', 'i', 'pos')
 
-    def write(self, new_name=''):
+    def save(self, new_name=''):
         if new_name:
             filename = new_name
         else:

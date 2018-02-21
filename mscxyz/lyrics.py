@@ -88,7 +88,7 @@ class Lyrics(Tree):
                 if element['number'] == int(old):
                     element['element'].find('no').text = str(int(new) - 1)
 
-        self.write()
+        self.save()
 
     def extract_one_lyrics_verse(self, number):
         """Extract a lyric verse by verse number.
@@ -107,7 +107,7 @@ class Lyrics(Tree):
 
         ext = '.' + self.extension
         new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
-        score.write(new_name)
+        score.save(new_name)
 
     def extract_lyrics(self, number=None):
         """Extract one lyric verse or all lyric verses.
@@ -184,4 +184,4 @@ class Lyrics(Tree):
         for verse_number in range(1, self.max + 1):
             self.fix_lyrics_verse(verse_number)
 
-        self.write()
+        self.save()

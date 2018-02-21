@@ -96,7 +96,7 @@ def execute(args=None):
             score.clean()
             if args.style:
                 score.merge_style(args.style.name)
-            score.write()
+            score.save()
 
         elif args.subcommand == 'lyrics':
             score = Lyrics(file)
@@ -115,7 +115,7 @@ def execute(args=None):
                 if args.json:
                     score.export_json()
                 score.sync_meta_tags()
-                score.write()
+                score.save()
 
         elif args.subcommand == 'rename':
             score = Rename(file)
