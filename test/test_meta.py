@@ -60,11 +60,17 @@ class TestClassMetaTag(unittest.TestCase):
         self.assertTrue('<metaTag name="workTitle">lol</metaTag>' in
                         xml_string)
 
-    def test_exception(self):
+    def test_get_exception(self):
         tree = Tree(helper.get_file('simple.mscx'))
         meta_tag = MetaTag(tree.root)
         with self.assertRaises(AttributeError):
             meta_tag.lol
+
+    def test_set_exception(self):
+        tree = Tree(helper.get_file('simple.mscx'))
+        meta_tag = MetaTag(tree.root)
+        with self.assertRaises(AttributeError):
+            meta_tag.lol = 'lol'
 
 
 class TestClassVbox(unittest.TestCase):
