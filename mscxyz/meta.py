@@ -119,11 +119,17 @@ class Vbox(object):
                 element.insert(0, vbox)
 
     def _get_tag(self, style):
+        """
+        :param string style: String inside the `<style>` tags
+        """
         for element in self.xml_root.xpath('//VBox/Text'):
             if element.find('style').text == style:
                 return element.find('text')
 
     def _get_text(self, style):
+        """
+        :param string style: String inside the `<style>` tags
+        """
         element = self._get_tag(style)
         if hasattr(element, 'text'):
             return element.text
@@ -134,20 +140,33 @@ class Vbox(object):
         else:
             return self._get_text(name)
 
-    def insert_in_vbox(self, style, text):
-        tag = lxml.etree.Element('Text')
-        self.add_sub_element(tag, 'text', text)
-        self.add_sub_element(tag, 'style', style)
-        for element in self.root.xpath('//VBox'):
-            element.append(tag)
+    def _create_text_tag(self, style, text):
+        """
+        :param string style: String inside the `<style>` tags
+        """
+        Text_tag = lxml.etree.Element('Text')
+        style_tag = lxml.etree.SubElement(Text_tag, 'style')
+        style_tag.text = style
+        text_tag = lxml.etree.SubElement(Text_tag, 'text')
+        text_tag.text = text
+        for element in self.xml_root.xpath('//VBox'):
+            element.append(Text_tag)
 
-    def set_vbox(self, style, text):
-        self.create_vbox()
-        element = self.get_vbox_tag(style)
+    def _set_text(self, style, text):
+        """
+        :param string style: String inside the `<style>` tags
+        """
+        element = self._get_tag(style)
         if hasattr(element, 'text'):
             element.text = text
         else:
-            self.insert_in_vbox(style, text)
+            self._create_text_tag(style, text)
+
+    def __setattr__(self, name, value):
+        if name == 'xml_root' or name == 'attributes':
+            self.__dict__[name] = value
+        else:
+            self._set_text(name, value)
 
 
 class Meta(Tree):

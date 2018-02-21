@@ -66,6 +66,7 @@ class TestClassMetaTag(unittest.TestCase):
         with self.assertRaises(AttributeError):
             meta_tag.lol
 
+
 class TestClassVbox(unittest.TestCase):
 
     def test_init(self):
@@ -90,6 +91,30 @@ class TestClassVbox(unittest.TestCase):
         vbox = Vbox(tree.root)
         with self.assertRaises(AttributeError):
             vbox.lol
+
+    def test_set(self):
+        tmp = helper.tmp_file('simple.mscx')
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        vbox.Title = 'lol'
+        tree.save()
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        self.assertEqual(vbox.Title, 'lol')
+        xml_string = helper.read_file(tmp)
+        self.assertTrue('<text>lol</text>' in xml_string)
+
+    def test_set_no_inital_vbox(self):
+        tmp = helper.tmp_file('no-vbox.mscx')
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        vbox.Title = 'lol'
+        tree.save()
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        self.assertEqual(vbox.Title, 'lol')
+        xml_string = helper.read_file(tmp)
+        self.assertTrue('<text>lol</text>' in xml_string)
 
 
 if __name__ == '__main__':
