@@ -69,26 +69,26 @@ class TestClassMetaTag(unittest.TestCase):
 
 class TestClassVbox(unittest.TestCase):
 
-    def test_init(self):
-        tmp = helper.tmp_file('no-vbox.mscx')
+    def _init_class(self, filename):
+        tmp = helper.tmp_file(filename)
         tree = Tree(tmp)
-        Vbox(tree.root)
+        vbox = Vbox(tree.root)
+        return vbox, tree, tmp
+
+    def test_init(self):
+        vbox, tree, tmp = self._init_class('no-vbox.mscx')
         tree.save()
         xml_string = helper.read_file(tmp)
         self.assertTrue('<VBox>' in xml_string)
 
     def test_get(self):
-        tmp = helper.tmp_file('simple.mscx')
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        vbox, tree, tmp = self._init_class('simple.mscx')
         self.assertEqual(vbox.Title, 'Title')
         self.assertEqual(vbox.Composer, 'Composer')
         self.assertEqual(vbox.Subtitle, None)
 
     def test_exception(self):
-        tmp = helper.tmp_file('simple.mscx')
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        vbox, tree, tmp = self._init_class('simple.mscx')
         with self.assertRaises(AttributeError):
             vbox.lol
 
