@@ -65,9 +65,26 @@ class Vbox(object):
     * `Composer`
     * `Lyricist`
 
+    .. code-block:: xml
+
+        <Staff id="1">
+          <VBox>
+            <height>10</height>
+            <Text>
+              <style>Title</style>
+              <text>Title</text>
+              </Text>
+            <Text>
+              <style>Composer</style>
+              <text>Composer</text>
+              </Text>
+            </VBox>
+          </Staff>
+
     """
 
     def __init__(self, xml_root):
+        self.xml_root = xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
         if not xml_root.xpath(xpath + '/VBox'):
             vbox = lxml.etree.Element('VBox')
@@ -77,10 +94,18 @@ class Vbox(object):
             for element in xml_root.xpath(xpath):
                 element.insert(0, vbox)
 
-    def get_vbox_tag(self, style):
-        for element in self.root.xpath('//VBox/Text'):
+    def _get_tag(self, style):
+        for element in self.xml_root.xpath('//VBox/Text'):
             if element.find('style').text == style:
                 return element.find('text')
+
+    def _get_text(self, style):
+        element = self._get_tag(style)
+        if hasattr(element, 'text'):
+            return element.text
+
+    def __getattr__(self, name):
+        return self._get_text(name)
 
     def insert_in_vbox(self, style, text):
         tag = lxml.etree.Element('Text')
@@ -88,11 +113,6 @@ class Vbox(object):
         self.add_sub_element(tag, 'style', style)
         for element in self.root.xpath('//VBox'):
             element.append(tag)
-
-    def get_vbox_text(self, style):
-        element = self.get_vbox_tag(style)
-        if hasattr(element, 'text'):
-            return element.text
 
     def set_vbox(self, style, text):
         self.create_vbox()

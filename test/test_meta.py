@@ -71,6 +71,14 @@ class TestClassVbox(unittest.TestCase):
         xml_string = helper.read_file(tmp)
         self.assertTrue('<VBox>' in xml_string)
 
+    def test_get(self):
+        tmp = helper.get_file('simple.mscx')
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        self.assertEqual(vbox.Title, 'Title')
+        self.assertEqual(vbox.Composer, 'Composer')
+        self.assertEqual(vbox.Subtitle, None)
+
 
 if __name__ == '__main__':
     unittest.main()
