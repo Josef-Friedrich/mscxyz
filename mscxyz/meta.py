@@ -191,7 +191,6 @@ class Meta(Tree):
             values = [
                 self.vbox.Title,
                 self.meta.workTitle,
-                self.meta.movementTitle,
                 self.basename
             ]
         elif field == 'subtitle':
@@ -207,9 +206,7 @@ class Meta(Tree):
 
         for value in values:
             if value:
-                break
-
-        return value
+                return value
 
     def sync(self, field):
         if field == 'title':
