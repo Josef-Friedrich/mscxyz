@@ -19,12 +19,16 @@ else:
     mscore = False
 
 
-def tmp_file(test_file):
+def get_file(filename):
+    return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
+
+
+def tmp_file(filename):
     orig = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'files',
-        test_file)
+        filename)
     tmp_dir = tempfile.mkdtemp()
-    tmp = os.path.join(tmp_dir, test_file)
+    tmp = os.path.join(tmp_dir, filename)
     shutil.copyfile(orig, tmp)
     return tmp
 
@@ -37,8 +41,8 @@ def tmp_dir(relative_dir):
     return tmp
 
 
-def read_file(test_file):
-    tmp = open(test_file)
+def read_file(filename):
+    tmp = open(filename)
     output = tmp.read()
     tmp.close()
     return output
@@ -63,7 +67,3 @@ class Capturing(list):
             sys.stdout = self._pipe
         elif self.channel == 'err':
             sys.stderr = self._pipe
-
-
-def get_file(filename):
-    return os.path.join(os.path.dirname(__file__), 'files', filename + '.mscx')
