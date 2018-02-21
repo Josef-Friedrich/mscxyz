@@ -5,7 +5,7 @@
 
 import unittest
 import mscxyz
-from mscxyz.meta import MetaTag, Meta, Vbox
+from mscxyz.meta import MetaTag, Meta, Vbox, MetaNG
 from mscxyz.tree import Tree
 import helper
 
@@ -121,6 +121,36 @@ class TestClassVbox(unittest.TestCase):
         vbox, tree, tmp = self._init_class('simple.mscx')
         with self.assertRaises(AttributeError):
             vbox.lol = 'lol'
+
+
+class TestClassMetaNG(unittest.TestCase):
+
+    def test_getter(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        meta = MetaNG(tmp)
+        self.assertEqual(meta.title, 'Title')
+        self.assertEqual(meta.subtitle, None)
+        self.assertEqual(meta.composer, 'Composer')
+        self.assertEqual(meta.lyricist, None)
+
+    def test_setter(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        meta = MetaNG(tmp)
+        meta.title = 'T'
+        meta.subtitle = 'S'
+        meta.composer = 'C'
+        meta.lyricist = 'L'
+        meta.save()
+        meta = MetaNG(tmp)
+        self.assertEqual(meta.meta.workTitle, 'T')
+        self.assertEqual(meta.meta.movementTitle, 'S')
+        self.assertEqual(meta.meta.composer, 'C')
+        self.assertEqual(meta.meta.lyricist, 'L')
+
+        self.assertEqual(meta.vbox.Title, 'T')
+        self.assertEqual(meta.vbox.Subtitle, 'S')
+        self.assertEqual(meta.vbox.Composer, 'C')
+        self.assertEqual(meta.vbox.Lyricist, 'L')
 
 
 if __name__ == '__main__':

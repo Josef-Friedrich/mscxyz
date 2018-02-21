@@ -172,6 +172,53 @@ class Vbox(object):
             self._set_text(name, value)
 
 
+class MetaNG(Tree):
+
+    def __init__(self, fullpath):
+        super(MetaNG, self).__init__(fullpath)
+        if not self.error:
+            self.meta = MetaTag(self.root)
+            self.vbox = Vbox(self.root)
+
+    def _pick_value(self, *values):
+        for value in values:
+            if value:
+                return value
+
+    @property
+    def title(self):
+        return self._pick_value(self.vbox.Title, self.meta.workTitle,
+                                self.basename)
+
+    @title.setter
+    def title(self, value):
+        self.vbox.Title = self.meta.workTitle = value
+
+    @property
+    def subtitle(self):
+        return self._pick_value(self.vbox.Subtitle, self.meta.movementTitle)
+
+    @subtitle.setter
+    def subtitle(self, value):
+        self.vbox.Subtitle = self.meta.movementTitle = value
+
+    @property
+    def composer(self):
+        return self._pick_value(self.vbox.Composer, self.meta.composer)
+
+    @composer.setter
+    def composer(self, value):
+        self.vbox.Composer = self.meta.composer = value
+
+    @property
+    def lyricist(self):
+        return self._pick_value(self.vbox.Lyricist, self.meta.lyricist)
+
+    @lyricist.setter
+    def lyricist(self, value):
+        self.vbox.Lyricist = self.meta.lyricist = value
+
+
 class Meta(Tree):
 
     def __init__(self, fullpath):
@@ -180,7 +227,6 @@ class Meta(Tree):
         if not self.error:
             self.meta = MetaTag(self.root)
             self.vbox = Vbox(self.root)
-
 
     def get(self, field):
         """Get a value by field.
