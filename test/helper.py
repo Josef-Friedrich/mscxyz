@@ -19,11 +19,7 @@ else:
     mscore = False
 
 
-def get_file(filename):
-    return os.path.join(os.path.dirname(__file__), 'files', filename)
-
-
-def tmp_file(filename):
+def get_tmpfile_path(filename):
     orig = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'files',
         filename)

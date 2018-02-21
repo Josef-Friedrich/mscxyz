@@ -13,7 +13,7 @@ import helper
 class TestClassMeta(unittest.TestCase):
 
     def setUp(self):
-        self.meta = Meta(helper.get_file('simple.mscx'))
+        self.meta = Meta(helper.get_tmpfile_path('simple.mscx'))
 
     def test_get(self):
         self.assertEqual(self.meta.get('title'), 'Title')
@@ -21,7 +21,8 @@ class TestClassMeta(unittest.TestCase):
 
     def test_show(self):
         with helper.Capturing() as output:
-            mscxyz.execute(['meta', '-s', helper.get_file('simple.mscx')])
+            mscxyz.execute(['meta', '-s',
+                           helper.get_tmpfile_path('simple.mscx')])
 
         compare = [
             '',
@@ -41,14 +42,14 @@ class TestClassMeta(unittest.TestCase):
 class TestClassMetaTag(unittest.TestCase):
 
     def test_get(self):
-        tree = Tree(helper.get_file('simple.mscx'))
+        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
         meta = MetaTag(tree.root)
         self.assertEqual(meta.workTitle, 'Title')
         self.assertEqual(meta.arranger, None)
         self.assertEqual(meta.composer, 'Composer')
 
     def test_set(self):
-        tmp = helper.tmp_file('simple.mscx')
+        tmp = helper.get_tmpfile_path('simple.mscx')
         tree = Tree(tmp)
         meta = MetaTag(tree.root)
         meta.workTitle = 'lol'
@@ -61,13 +62,13 @@ class TestClassMetaTag(unittest.TestCase):
                         xml_string)
 
     def test_get_exception(self):
-        tree = Tree(helper.get_file('simple.mscx'))
+        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
         meta_tag = MetaTag(tree.root)
         with self.assertRaises(AttributeError):
             meta_tag.lol
 
     def test_set_exception(self):
-        tree = Tree(helper.get_file('simple.mscx'))
+        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
         meta_tag = MetaTag(tree.root)
         with self.assertRaises(AttributeError):
             meta_tag.lol = 'lol'
@@ -76,7 +77,7 @@ class TestClassMetaTag(unittest.TestCase):
 class TestClassVbox(unittest.TestCase):
 
     def _init_class(self, filename):
-        tmp = helper.tmp_file(filename)
+        tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         return vbox, tree, tmp
@@ -99,7 +100,7 @@ class TestClassVbox(unittest.TestCase):
             vbox.lol
 
     def _assert_set(self, filename):
-        tmp = helper.tmp_file(filename)
+        tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         vbox.Title = 'lol'

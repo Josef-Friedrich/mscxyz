@@ -10,8 +10,8 @@ import unittest
 class TestRename(unittest.TestCase):
     def setUp(self):
         from mscxyz.rename import Rename
-        self.simple = Rename(helper.get_file('simple.mscx'))
-        self.unicode = Rename(helper.get_file('unicode.mscx'))
+        self.simple = Rename(helper.get_tmpfile_path('simple.mscx'))
+        self.unicode = Rename(helper.get_tmpfile_path('unicode.mscx'))
 
     def test_option_format_default(self):
         self.simple.apply_format_string()

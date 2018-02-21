@@ -10,7 +10,8 @@ import mscxyz
 class TestClean(unittest.TestCase):
 
     def setUp(self):
-        clean = mscxyz.execute(['clean', helper.tmp_file('formats.mscx')])[0]
+        clean = mscxyz.execute(['clean',
+                                helper.get_tmpfile_path('formats.mscx')])[0]
         self.clean_file = helper.read_file(clean.fullpath)
 
     def test_font(self):
@@ -39,8 +40,8 @@ class TestCleanAddStyle(unittest.TestCase):
             [
                 'clean',
                 '--style',
-                helper.tmp_file('style.mss'),
-                helper.tmp_file('simple.mscx')
+                helper.get_tmpfile_path('style.mss'),
+                helper.get_tmpfile_path('simple.mscx')
             ])[0]
         self.style = helper.read_file(self.score.fullpath)
 

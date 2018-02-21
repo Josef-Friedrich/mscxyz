@@ -20,7 +20,8 @@ class TestLyrics(unittest.TestCase):
 
     def setUp(self):
         self.file = 'lyrics.mscx'
-        self.lyrics = mscxyz.execute(['lyrics', helper.tmp_file(self.file)])[0]
+        self.lyrics = mscxyz.execute(['lyrics',
+                                     helper.get_tmpfile_path(self.file)])[0]
 
     def test_files_exist(self):
         tmpdir = os.path.dirname(self.lyrics.fullpath)
@@ -41,7 +42,8 @@ class TestLyricsExtractAll(unittest.TestCase):
     def setUp(self):
         self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', 'all', helper.tmp_file(self.file)])[0]
+            ['lyrics', '--extract', 'all',
+             helper.get_tmpfile_path(self.file)])[0]
 
     def tmpFile(self, number):
         return os.path.join(
@@ -67,7 +69,8 @@ class TestLyricsExtractByNumber(unittest.TestCase):
     def setUp(self):
         self.file = 'lyrics.mscx'
         self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', '2', helper.tmp_file(self.file)])[0]
+            ['lyrics', '--extract', '2',
+             helper.get_tmpfile_path(self.file)])[0]
 
     def tmpFile(self, number):
         return os.path.join(
@@ -94,7 +97,7 @@ class TestLyricsFix(unittest.TestCase):
         tmp = mscxyz.execute([
             'lyrics',
             '--fix',
-            helper.tmp_file('lyrics-fix.mscx')
+            helper.get_tmpfile_path('lyrics-fix.mscx')
         ])[0]
         self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
         self.lyrics = self.tree.lyrics
@@ -125,7 +128,7 @@ class TestLyricsRemap(unittest.TestCase):
             'lyrics',
             '--remap',
             '2:6',
-            helper.tmp_file('lyrics-remap.mscx')
+            helper.get_tmpfile_path('lyrics-remap.mscx')
         ])[0]
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics

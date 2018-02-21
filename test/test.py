@@ -21,12 +21,11 @@ else:
 class TestFile(unittest.TestCase):
     def setUp(self):
         from mscxyz.fileloader import File
-        self.file = File(helper.get_file('simple.mscx'))
+        self.file = File(helper.get_tmpfile_path('simple.mscx'))
 
     def test_file_object_initialisation(self):
-        self.assertEqual(self.file.fullpath, helper.get_file('simple.mscx'))
-        self.assertEqual(self.file.dirname,
-                         os.path.dirname(helper.get_file('simple.mscx')))
+        self.assertTrue(self.file.fullpath)
+        self.assertTrue(self.file.dirname)
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
@@ -46,7 +45,8 @@ class TestBackup(unittest.TestCase):
     def setUp(self):
         with helper.Capturing():
             self.score = mscxyz.execute(
-                ['-b', 'meta', '-s', helper.tmp_file('simple.mscx')])[0]
+                ['-b', 'meta', '-s',
+                 helper.get_tmpfile_path('simple.mscx')])[0]
             self.fullpath = self.score.fullpath
             self.fullpath_backup = self.score.fullpath_backup
 
@@ -68,19 +68,21 @@ class TestBackup(unittest.TestCase):
 class TestExport(unittest.TestCase):
     def export(self, extension):
         score = mscxyz.execute(['export', '--extension', extension,
-                               helper.tmp_file('simple.mscx')])[0]
+                               helper.get_tmpfile_path('simple.mscx')])[0]
         export = score.fullpath.replace('mscx', extension)
         self.assertTrue(os.path.isfile(export))
 
     @unittest.skipIf(not mscore, 'export not working in travis')
     def test_pdf(self):
-        score = mscxyz.execute(['export', helper.tmp_file('simple.mscx')])[0]
+        score = mscxyz.execute(['export',
+                               helper.get_tmpfile_path('simple.mscx')])[0]
         self.assertTrue(os.path.isfile(score.fullpath.replace('mscx', 'pdf')))
 
     @unittest.skipIf(not mscore, 'export not working in travis')
     def test_png(self):
         score = mscxyz.execute(
-            ['export', '--extension', 'png', helper.tmp_file('simple.mscx')]
+            ['export', '--extension', 'png',
+             helper.get_tmpfile_path('simple.mscx')]
         )[0]
         self.assertTrue(
             os.path.isfile(score.fullpath.replace('.mscx', '-1.png')))
