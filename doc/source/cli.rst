@@ -9,7 +9,7 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-g GLOB] [-p PICK] [-c CYCLE_LENGTH] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-g GLOB] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -29,18 +29,6 @@ mscxyz
                           glob patterns (e. g. "*.mscx", "* - *"). If you omit
                           this option, the standard glob pattern "*.mscx" is
                           used.
-    -p PICK, --pick PICK  The --pick option can be used to run multiple
-                          mscxyz.py commands in parallel on multiple consoles.
-                          If you like so, using this option a "poor man's
-                          multithreading" can be accomplished. Multicore CPUs
-                          can be used to full capacity. By default every fourth
-                          file gets picked up. The option "-p N" begins the
-                          picking on the Nth file of a cycle. The corresponding
-                          option is named "-c" or "--cycle-length".
-    -c CYCLE_LENGTH, --cycle-length CYCLE_LENGTH
-                          This option specifies the distance between the picked
-                          files. The option "-c N" picks every Nth file. The
-                          corresponding options is named "-p" or "--pick".
     -v, --verbose         Make commands more verbose. You can specifiy multiple
                           arguments (. g.: -vvv) to make the command more
                           verbose.

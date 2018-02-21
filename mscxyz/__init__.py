@@ -77,10 +77,6 @@ def execute(args=None):
         sys.exit()
 
     batch = Batch(args.path, args.glob)
-
-    if args.pick:
-        batch.pick(args.pick, args.cycle_length)
-
     files = batch.get_files()
 
     output = []

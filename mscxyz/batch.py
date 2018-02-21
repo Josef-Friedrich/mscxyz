@@ -20,20 +20,6 @@ class Batch(object):
 
         self.files.sort()
 
-    def pick(self, pick=1, cycle_length=4):
-        hit = int(pick)
-        counter = 0
-
-        output = []
-        for score in self.files:
-
-            counter += 1
-            if hit == counter:
-                output.append(score)
-                hit = hit + pick
-
-        self.files = output
-
     def get_files(self):
         if os.path.isdir(self.path):
             return self.files
