@@ -78,7 +78,7 @@ class TestClassVbox(unittest.TestCase):
         self.assertTrue('<VBox>' in xml_string)
 
     def test_get(self):
-        tmp = helper.get_file('simple.mscx')
+        tmp = helper.tmp_file('simple.mscx')
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         self.assertEqual(vbox.Title, 'Title')
@@ -86,14 +86,14 @@ class TestClassVbox(unittest.TestCase):
         self.assertEqual(vbox.Subtitle, None)
 
     def test_exception(self):
-        tmp = helper.get_file('simple.mscx')
+        tmp = helper.tmp_file('simple.mscx')
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         with self.assertRaises(AttributeError):
             vbox.lol
 
-    def test_set(self):
-        tmp = helper.tmp_file('simple.mscx')
+    def _assert_set(self, filename):
+        tmp = helper.tmp_file(filename)
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         vbox.Title = 'lol'
@@ -104,17 +104,11 @@ class TestClassVbox(unittest.TestCase):
         xml_string = helper.read_file(tmp)
         self.assertTrue('<text>lol</text>' in xml_string)
 
+    def test_set_with_existing_vbox(self):
+        self._assert_set('simple.mscx')
+
     def test_set_no_inital_vbox(self):
-        tmp = helper.tmp_file('no-vbox.mscx')
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
-        vbox.Title = 'lol'
-        tree.save()
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
-        self.assertEqual(vbox.Title, 'lol')
-        xml_string = helper.read_file(tmp)
-        self.assertTrue('<text>lol</text>' in xml_string)
+        self._assert_set('no-vbox.mscx')
 
 
 if __name__ == '__main__':
