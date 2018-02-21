@@ -87,7 +87,7 @@ class TestClassVbox(unittest.TestCase):
         self.assertEqual(vbox.Composer, 'Composer')
         self.assertEqual(vbox.Subtitle, None)
 
-    def test_exception(self):
+    def test_get_exception(self):
         vbox, tree, tmp = self._init_class('simple.mscx')
         with self.assertRaises(AttributeError):
             vbox.lol
@@ -109,6 +109,11 @@ class TestClassVbox(unittest.TestCase):
 
     def test_set_no_inital_vbox(self):
         self._assert_set('no-vbox.mscx')
+
+    def test_set_exception(self):
+        vbox, tree, tmp = self._init_class('simple.mscx')
+        with self.assertRaises(AttributeError):
+            vbox.lol = 'lol'
 
 
 if __name__ == '__main__':

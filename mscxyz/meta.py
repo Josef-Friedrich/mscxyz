@@ -165,6 +165,8 @@ class Vbox(object):
     def __setattr__(self, name, value):
         if name == 'xml_root' or name == 'attributes':
             self.__dict__[name] = value
+        elif name not in self.attributes:
+            raise AttributeError
         else:
             self._set_text(name, value)
 
