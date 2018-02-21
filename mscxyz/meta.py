@@ -31,7 +31,7 @@ class MetaTag(object):
 
         """
 
-    attributes = (
+    fields = (
         'arranger',
         'composer',
         'copyright',
@@ -61,13 +61,13 @@ class MetaTag(object):
             return element.text
 
     def __getattr__(self, name):
-        if name not in self.attributes:
+        if name not in self.fields:
             raise AttributeError
         else:
             return self._get_text(name)
 
     def __setattr__(self, name, value):
-        if name == 'xml_root' or name == 'attributes':
+        if name == 'xml_root' or name == 'fields':
             self.__dict__[name] = value
         else:
             self._get_element(name).text = value
@@ -101,7 +101,7 @@ class Vbox(object):
 
     """
 
-    attributes = (
+    fields = (
         'Composer',
         'Lyricist',
         'Subtitle',
@@ -136,7 +136,7 @@ class Vbox(object):
             return element.text
 
     def __getattr__(self, name):
-        if name not in self.attributes:
+        if name not in self.fields:
             raise AttributeError
         else:
             return self._get_text(name)
@@ -164,9 +164,9 @@ class Vbox(object):
             self._create_text_tag(style, text)
 
     def __setattr__(self, name, value):
-        if name == 'xml_root' or name == 'attributes':
+        if name == 'xml_root' or name == 'fields':
             self.__dict__[name] = value
-        elif name not in self.attributes:
+        elif name not in self.fields:
             raise AttributeError
         else:
             self._set_text(name, value)
@@ -243,12 +243,12 @@ class Meta(Tree):
         print_desc('\n' + colored(self.filename, 'red'))
         print_desc(self.basename, 'filename', 'blue')
         if not self.error:
-            for tag in self.meta.attributes:
+            for tag in self.meta.fields:
                 text = getattr(self.meta, tag)
                 if text:
                     print_desc(text, tag, 'yellow')
 
-            for tag in self.vbox.attributes:
+            for tag in self.vbox.fields:
                 text = getattr(self.vbox, tag)
                 if text:
                     print_desc(text, tag, 'green')
