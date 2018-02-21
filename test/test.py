@@ -35,7 +35,7 @@ class TestBatch(unittest.TestCase):
     def setUp(self):
         with helper.Capturing():
             self.batch = mscxyz.execute(['meta', '-s',
-                                        helper.tmp_dir('batch')])
+                                        helper.get_tmpdir_path('batch')])
 
     def test_batch(self):
         self.assertEqual(len(self.batch), 3)

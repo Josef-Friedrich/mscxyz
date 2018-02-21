@@ -29,7 +29,7 @@ def get_tmpfile_path(filename):
     return tmp
 
 
-def tmp_dir(relative_dir):
+def get_tmpdir_path(relative_dir):
     orig = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'files', relative_dir)
     tmp = tempfile.mkdtemp()
