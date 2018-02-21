@@ -60,6 +60,11 @@ class TestClassMetaTag(unittest.TestCase):
         self.assertTrue('<metaTag name="workTitle">lol</metaTag>' in
                         xml_string)
 
+    def test_exception(self):
+        tree = Tree(helper.get_file('simple.mscx'))
+        meta_tag = MetaTag(tree.root)
+        with self.assertRaises(AttributeError):
+            meta_tag.lol
 
 class TestClassVbox(unittest.TestCase):
 
@@ -78,6 +83,13 @@ class TestClassVbox(unittest.TestCase):
         self.assertEqual(vbox.Title, 'Title')
         self.assertEqual(vbox.Composer, 'Composer')
         self.assertEqual(vbox.Subtitle, None)
+
+    def test_exception(self):
+        tmp = helper.get_file('simple.mscx')
+        tree = Tree(tmp)
+        vbox = Vbox(tree.root)
+        with self.assertRaises(AttributeError):
+            vbox.lol
 
 
 if __name__ == '__main__':

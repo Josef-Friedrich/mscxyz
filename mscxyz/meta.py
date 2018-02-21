@@ -30,6 +30,23 @@ class MetaTag(object):
 
         """
 
+    attributes = (
+        'arranger',
+        'composer',
+        'copyright',
+        'creationDate',
+        'lyricist',
+        'movementNumber',
+        'movementTitle',
+        'originalFormat',
+        'platform',
+        'poet',
+        'source',
+        'translator',
+        'workNumber',
+        'workTitle',
+    )
+
     def __init__(self, xml_root):
         self.xml_root = xml_root
 
@@ -43,10 +60,13 @@ class MetaTag(object):
             return element.text
 
     def __getattr__(self, name):
-        return self._get_text(name)
+        if name not in self.attributes:
+            raise AttributeError
+        else:
+            return self._get_text(name)
 
     def __setattr__(self, name, value):
-        if name == 'xml_root':
+        if name == 'xml_root' or name == 'attributes':
             self.__dict__[name] = value
         else:
             self._get_element(name).text = value
@@ -57,10 +77,10 @@ class Vbox(object):
 
     Available fields:
 
-    * `Title`
-    * `Subtitle`
     * `Composer`
     * `Lyricist`
+    * `Subtitle`
+    * `Title`
 
     .. code-block:: xml
 
@@ -79,6 +99,13 @@ class Vbox(object):
           </Staff>
 
     """
+
+    attributes = (
+        'Composer',
+        'Lyricist',
+        'Subtitle',
+        'Title',
+    )
 
     def __init__(self, xml_root):
         self.xml_root = xml_root
@@ -102,7 +129,10 @@ class Vbox(object):
             return element.text
 
     def __getattr__(self, name):
-        return self._get_text(name)
+        if name not in self.attributes:
+            raise AttributeError
+        else:
+            return self._get_text(name)
 
     def insert_in_vbox(self, style, text):
         tag = lxml.etree.Element('Text')
