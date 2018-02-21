@@ -5,7 +5,7 @@
 from mscxyz.tree import Tree
 from mscxyz.utils import print_desc
 from termcolor import colored
-import lxml.etree as et
+import lxml
 import six
 
 
@@ -123,7 +123,7 @@ class Meta(Tree):
     def create_vbox(self):
         xpath = '/museScore/Score/Staff[@id="1"]'
         if not self.root.xpath(xpath + '/VBox'):
-            tag = et.Element('VBox')
+            tag = lxml.etree.Element('VBox')
             self.add_sub_element(tag, 'height', '10')
             for element in self.root.xpath(xpath):
                 element.insert(0, tag)
@@ -134,7 +134,7 @@ class Meta(Tree):
                 return element.find('text')
 
     def insert_in_vbox(self, style, text):
-        tag = et.Element('Text')
+        tag = lxml.etree.Element('Text')
         self.add_sub_element(tag, 'text', text)
         self.add_sub_element(tag, 'style', style)
         for element in self.root.xpath('//VBox'):
