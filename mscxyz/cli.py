@@ -2,16 +2,16 @@
 """Wrapper for the command line interface"""
 
 from mscxyz._version import get_versions
-from mscxyz.rename import TOKEN
+from mscxyz.rename import FIELDS
 import argparse
 import textwrap
 import tmep
 
 
-def format_token():
+def format_field():
     out = []
-    for token in TOKEN:
-        out.append('- ' + token)
+    for field in FIELDS:
+        out.append('- ' + field)
 
     return '\n'.join(out)
 
@@ -169,7 +169,7 @@ rename = subparser.add_parser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Tokens and functions you can use in the format '
     'string (-f, --format):\n\n'
-    'Tokens\n======\n\n' + format_token() + '\n\n'
+    'Tokens\n======\n\n' + format_field() + '\n\n'
     'Functions\n=========\n' + tmep.doc.Doc().get())
 
 rename.add_argument(

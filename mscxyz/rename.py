@@ -12,7 +12,7 @@ import tmep
 import unidecode
 
 
-TOKEN = (
+FIELDS = (
     'composer',
     'lyricist',
     'subtitle',
@@ -74,13 +74,13 @@ class Rename(File):
     def debug(self):
         print(self.workname)
 
-    def get_token(self, token):
-        return self.score.get(token)
+    def get_field(self, field):
+        return self.score.get(field)
 
     def apply_format_string(self, format_string='$title ($composer)'):
         values = {}
-        for key in TOKEN:
-            values[key] = self.get_token(key)
+        for key in FIELDS:
+            values[key] = self.get_field(key)
 
         self.workname = tmep.parse(format_string, values)
 
