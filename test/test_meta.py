@@ -133,23 +133,27 @@ class TestClassVbox(unittest.TestCase):
 
 class TestClassCombined(unittest.TestCase):
 
+    def _init_class(self, filename):
+        tmp = helper.get_tmpfile_path(filename)
+        tree = Tree(tmp)
+        combined = Combined(tree.root)
+        return combined, tree, tmp
+
     def test_getter(self):
-        tmp = helper.get_tmpfile_path('simple.mscx')
-        combined = Combined(tmp)
+        combined, tree, tmp = self._init_class('simple.mscx')
         self.assertEqual(combined.title, 'Title')
         self.assertEqual(combined.subtitle, None)
         self.assertEqual(combined.composer, 'Composer')
         self.assertEqual(combined.lyricist, None)
 
     def test_setter(self):
-        tmp = helper.get_tmpfile_path('simple.mscx')
-        combined = Combined(tmp)
+        combined, tree, tmp = self._init_class('simple.mscx')
         combined.title = 'T'
         combined.subtitle = 'S'
         combined.composer = 'C'
         combined.lyricist = 'L'
-        combined.save()
-        combined = Combined(tmp)
+        tree.save()
+        combined = Combined(tree.root)
         self.assertEqual(combined.metatag.workTitle, 'T')
         self.assertEqual(combined.metatag.movementTitle, 'S')
         self.assertEqual(combined.metatag.composer, 'C')

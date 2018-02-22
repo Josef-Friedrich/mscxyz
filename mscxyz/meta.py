@@ -188,11 +188,10 @@ class Vbox(object):
 
 class Combined(Tree):
 
-    def __init__(self, fullpath):
-        super(Combined, self).__init__(fullpath)
-        if not self.error:
-            self.metatag = MetaTag(self.root)
-            self.vbox = Vbox(self.root)
+    def __init__(self, xml_root):
+        self.xml_root = xml_root
+        self.metatag = MetaTag(xml_root)
+        self.vbox = Vbox(xml_root)
 
     def _pick_value(self, *values):
         for value in values:
@@ -201,8 +200,7 @@ class Combined(Tree):
 
     @property
     def title(self):
-        return self._pick_value(self.vbox.Title, self.metatag.workTitle,
-                                self.basename)
+        return self._pick_value(self.vbox.Title, self.metatag.workTitle)
 
     @title.setter
     def title(self, value):
@@ -231,6 +229,17 @@ class Combined(Tree):
     @lyricist.setter
     def lyricist(self, value):
         self.vbox.Lyricist = self.metatag.lyricist = value
+
+
+class UnifedInterface(object):
+
+    def __init__(self, xml_root):
+        self.metatag = MetaTag(xml_root)
+        self.vbox = Vbox(xml_root)
+        self.combined = Combined(xml_root)
+
+        # re.sub('(?!^)([A-Z]+)', r'_\1','CamelCase').lower()
+        #re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
 
 
 class Meta(Tree):
