@@ -136,6 +136,8 @@ class TestClassVbox(unittest.TestCase):
         self.assertEqual(vbox.Title, 'Title')
         self.assertEqual(vbox.Composer, 'Composer')
         self.assertEqual(vbox.Subtitle, None)
+        self.assertEqual(vbox.title, 'Title')
+        self.assertEqual(vbox.composer, 'Composer')
 
     def test_get_exception(self):
         vbox, tree, tmp = self._init_class('simple.mscx')
@@ -147,10 +149,12 @@ class TestClassVbox(unittest.TestCase):
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
         vbox.Title = 'lol'
+        vbox.composer = 'lol'
         tree.save()
         tree = Tree(tmp)
         vbox = Vbox(tree.root)
-        self.assertEqual(vbox.Title, 'lol')
+        self.assertEqual(vbox.title, 'lol')
+        self.assertEqual(vbox.Composer, 'lol')
         xml_string = helper.read_file(tmp)
         self.assertTrue('<text>lol</text>' in xml_string)
 

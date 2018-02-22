@@ -56,6 +56,22 @@ class MetaTag(object):
         'workTitle',
     )
 
+    aliases = (
+        'arranger',
+        'composer',
+        'copyright',
+        'creation_date',
+        'lyricist',
+        'movement_number',
+        'movement_title',
+        'platform',
+        'poet',
+        'source',
+        'translator',
+        'work_number',
+        'work_title',
+    )
+
     def __init__(self, xml_root):
         self.xml_root = xml_root
 
@@ -158,11 +174,12 @@ class Vbox(object):
         if hasattr(element, 'text'):
             return element.text
 
-    def __getattr__(self, name):
-        if name not in self.fields:
+    def __getattr__(self, field):
+        field = field.title()
+        if field not in self.fields:
             raise AttributeError
         else:
-            return self._get_text(name)
+            return self._get_text(field)
 
     def _create_text_tag(self, style, text):
         """
@@ -186,13 +203,13 @@ class Vbox(object):
         else:
             self._create_text_tag(style, text)
 
-    def __setattr__(self, name, value):
-        if name == 'xml_root' or name == 'fields':
-            self.__dict__[name] = value
-        elif name not in self.fields:
+    def __setattr__(self, field, value):
+        if field == 'xml_root' or field == 'fields':
+            self.__dict__[field] = value
+        elif field.title() not in self.fields:
             raise AttributeError
         else:
-            self._set_text(name, value)
+            self._set_text(field.title(), value)
 
 
 class Combined(Tree):
@@ -259,7 +276,7 @@ class UnifedInterface(object):
     def __getattr__(self, field):
         parts = self._split(field)
         obj = getattr(self, parts['object'])
-        return getattr(obj, parts['field'].title())
+        return getattr(obj, parts['field'])
 
 
 class Meta(Tree):
