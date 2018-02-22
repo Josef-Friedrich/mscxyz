@@ -103,6 +103,33 @@ class TestClassUnifiedInterface(unittest.TestCase):
         _assert('metatag_work_number')
         _assert('metatag_work_title')
 
+    def test_method_get_all_fields(self):
+        fields = UnifedInterface.get_all_fields()
+        self.assertEqual(fields, [
+                'combined_composer',
+                'combined_lyricist',
+                'combined_subtitle',
+                'combined_title',
+                'metatag_arranger',
+                'metatag_composer',
+                'metatag_copyright',
+                'metatag_creation_date',
+                'metatag_lyricist',
+                'metatag_movement_number',
+                'metatag_movement_title',
+                'metatag_platform',
+                'metatag_poet',
+                'metatag_source',
+                'metatag_translator',
+                'metatag_work_number',
+                'metatag_work_title',
+                'vbox_composer',
+                'vbox_lyricist',
+                'vbox_subtitle',
+                'vbox_title',
+            ]
+        )
+
 
 class TestClassMeta(unittest.TestCase):
 

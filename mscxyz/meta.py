@@ -19,6 +19,10 @@ def copy_field(source, destination):
     return dict(zip(fields, values))
 
 
+def to_underscore(field):
+    return re.sub('([A-Z]+)', r'_\1', field).lower()
+
+
 class MetaTag(object):
 
     """The available metaTag fields are:
@@ -205,6 +209,13 @@ class Vbox(object):
 
 class Combined(Tree):
 
+    fields = (
+        'composer',
+        'lyricist',
+        'subtitle',
+        'title',
+    )
+
     def __init__(self, xml_root):
         self.xml_root = xml_root
         self.metatag = MetaTag(xml_root)
@@ -254,6 +265,17 @@ class UnifedInterface(object):
         self.metatag = MetaTag(xml_root)
         self.vbox = Vbox(xml_root)
         self.combined = Combined(xml_root)
+
+    @staticmethod
+    def get_all_fields():
+        fields = []
+        for field in MetaTag.fields:
+            fields.append('metatag_' + to_underscore(field))
+        for field in Vbox.fields:
+            fields.append('vbox_' + field.lower())
+        for field in Combined.fields:
+            fields.append('combined_' + field)
+        return sorted(fields)
 
     @staticmethod
     def _split(field):
