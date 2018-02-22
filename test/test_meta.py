@@ -65,6 +65,44 @@ class TestClassUnifiedInterface(unittest.TestCase):
         _assert('metatag_work_number')
         _assert('metatag_work_title')
 
+    def test_set_all_values(self):
+        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+
+        def _set(field):
+            setattr(interface, field, field + '_test')
+            self.assertEqual(getattr(interface, field), field + '_test')
+
+        def _assert(field):
+            self.assertEqual(getattr(interface, field), field + '_test')
+
+        _set('metatag_arranger')
+        _set('metatag_composer')
+        _set('metatag_copyright')
+        _set('metatag_creation_date')
+        _set('metatag_lyricist')
+        _set('metatag_movement_number')
+        _set('metatag_movement_title')
+        _set('metatag_platform')
+        _set('metatag_poet')
+        _set('metatag_source')
+        _set('metatag_translator')
+        _set('metatag_work_number')
+        _set('metatag_work_title')
+
+        _assert('metatag_arranger')
+        _assert('metatag_composer')
+        _assert('metatag_copyright')
+        _assert('metatag_creation_date')
+        _assert('metatag_lyricist')
+        _assert('metatag_movement_number')
+        _assert('metatag_movement_title')
+        _assert('metatag_platform')
+        _assert('metatag_poet')
+        _assert('metatag_source')
+        _assert('metatag_translator')
+        _assert('metatag_work_number')
+        _assert('metatag_work_title')
+
 
 class TestClassMeta(unittest.TestCase):
 

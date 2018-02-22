@@ -269,6 +269,14 @@ class UnifedInterface(object):
         obj = getattr(self, parts['object'])
         return getattr(obj, parts['field'])
 
+    def __setattr__(self, field, value):
+        if field in ('metatag', 'vbox', 'combined'):
+            self.__dict__[field] = value
+        else:
+            parts = self._split(field)
+            obj = getattr(self, parts['object'])
+            return setattr(obj, parts['field'], value)
+
 
 class Meta(Tree):
 
