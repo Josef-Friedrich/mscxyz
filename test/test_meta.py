@@ -135,30 +135,30 @@ class TestClassCombined(unittest.TestCase):
 
     def test_getter(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        meta = Combined(tmp)
-        self.assertEqual(meta.title, 'Title')
-        self.assertEqual(meta.subtitle, None)
-        self.assertEqual(meta.composer, 'Composer')
-        self.assertEqual(meta.lyricist, None)
+        combined = Combined(tmp)
+        self.assertEqual(combined.title, 'Title')
+        self.assertEqual(combined.subtitle, None)
+        self.assertEqual(combined.composer, 'Composer')
+        self.assertEqual(combined.lyricist, None)
 
     def test_setter(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        meta = Combined(tmp)
-        meta.title = 'T'
-        meta.subtitle = 'S'
-        meta.composer = 'C'
-        meta.lyricist = 'L'
-        meta.save()
-        meta = Combined(tmp)
-        self.assertEqual(meta.meta.workTitle, 'T')
-        self.assertEqual(meta.meta.movementTitle, 'S')
-        self.assertEqual(meta.meta.composer, 'C')
-        self.assertEqual(meta.meta.lyricist, 'L')
+        combined = Combined(tmp)
+        combined.title = 'T'
+        combined.subtitle = 'S'
+        combined.composer = 'C'
+        combined.lyricist = 'L'
+        combined.save()
+        combined = Combined(tmp)
+        self.assertEqual(combined.metatag.workTitle, 'T')
+        self.assertEqual(combined.metatag.movementTitle, 'S')
+        self.assertEqual(combined.metatag.composer, 'C')
+        self.assertEqual(combined.metatag.lyricist, 'L')
 
-        self.assertEqual(meta.vbox.Title, 'T')
-        self.assertEqual(meta.vbox.Subtitle, 'S')
-        self.assertEqual(meta.vbox.Composer, 'C')
-        self.assertEqual(meta.vbox.Lyricist, 'L')
+        self.assertEqual(combined.vbox.Title, 'T')
+        self.assertEqual(combined.vbox.Subtitle, 'S')
+        self.assertEqual(combined.vbox.Composer, 'C')
+        self.assertEqual(combined.vbox.Lyricist, 'L')
 
 
 if __name__ == '__main__':

@@ -191,7 +191,7 @@ class Combined(Tree):
     def __init__(self, fullpath):
         super(Combined, self).__init__(fullpath)
         if not self.error:
-            self.meta = MetaTag(self.root)
+            self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
 
     def _pick_value(self, *values):
@@ -201,36 +201,36 @@ class Combined(Tree):
 
     @property
     def title(self):
-        return self._pick_value(self.vbox.Title, self.meta.workTitle,
+        return self._pick_value(self.vbox.Title, self.metatag.workTitle,
                                 self.basename)
 
     @title.setter
     def title(self, value):
-        self.vbox.Title = self.meta.workTitle = value
+        self.vbox.Title = self.metatag.workTitle = value
 
     @property
     def subtitle(self):
-        return self._pick_value(self.vbox.Subtitle, self.meta.movementTitle)
+        return self._pick_value(self.vbox.Subtitle, self.metatag.movementTitle)
 
     @subtitle.setter
     def subtitle(self, value):
-        self.vbox.Subtitle = self.meta.movementTitle = value
+        self.vbox.Subtitle = self.metatag.movementTitle = value
 
     @property
     def composer(self):
-        return self._pick_value(self.vbox.Composer, self.meta.composer)
+        return self._pick_value(self.vbox.Composer, self.metatag.composer)
 
     @composer.setter
     def composer(self, value):
-        self.vbox.Composer = self.meta.composer = value
+        self.vbox.Composer = self.metatag.composer = value
 
     @property
     def lyricist(self):
-        return self._pick_value(self.vbox.Lyricist, self.meta.lyricist)
+        return self._pick_value(self.vbox.Lyricist, self.metatag.lyricist)
 
     @lyricist.setter
     def lyricist(self, value):
-        self.vbox.Lyricist = self.meta.lyricist = value
+        self.vbox.Lyricist = self.metatag.lyricist = value
 
 
 class Meta(Tree):
@@ -239,29 +239,29 @@ class Meta(Tree):
         super(Meta, self).__init__(fullpath)
 
         if not self.error:
-            self.meta = MetaTag(self.root)
+            self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
 
     def get(self, field):
         """Get a value by field.
-        This function searches for values in this order: vbox, meta, filename.
+        This function searches for values in this order: vbox, metatag, filename.
         Possible fields are: title, subtitle, composer, lyricist
         """
         if field == 'title':
             values = [
                 self.vbox.Title,
-                self.meta.workTitle,
+                self.metatag.workTitle,
                 self.basename
             ]
         elif field == 'subtitle':
             values = [
                 self.vbox.Subtitle,
-                self.meta.movementTitle,
+                self.metatag.movementTitle,
             ]
         else:
             values = [
                 getattr(self.vbox, field.title()),
-                getattr(self.meta, field),
+                getattr(self.metatag, field),
             ]
 
         for value in values:
@@ -270,25 +270,25 @@ class Meta(Tree):
 
     def sync(self, field):
         if field == 'title':
-            self.vbox.Title = self.meta.workTitle = self.get(field)
+            self.vbox.Title = self.metatag.workTitle = self.get(field)
         elif field == 'subtitle':
-            self.vbox.Subtitle = self.meta.movementTitle = self.get(field)
+            self.vbox.Subtitle = self.metatag.movementTitle = self.get(field)
         else:
             setattr(self.vbox, field.title(), self.get(field))
-            setattr(self.meta, field, self.get(field))
+            setattr(self.metatag, field, self.get(field))
 
     def sync_fields(self):
         if not self.error:
             for field in ['title', 'subtitle', 'composer', 'lyricist']:
                 self.sync(field)
-            self.meta.clean()
+            self.metatag.clean()
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))
         print_desc(self.basename, 'filename', 'blue')
         if not self.error:
-            for field in self.meta.fields:
-                text = getattr(self.meta, field)
+            for field in self.metatag.fields:
+                text = getattr(self.metatag, field)
                 if text:
                     print_desc(text, field, 'yellow')
 
