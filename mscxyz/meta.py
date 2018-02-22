@@ -308,6 +308,8 @@ class Meta(Tree):
         if not self.error:
             self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
+            self.combined = Combined(self.root)
+            self.interface = UnifedInterface(self.root)
 
     def get(self, field):
         """Get a value by field.
