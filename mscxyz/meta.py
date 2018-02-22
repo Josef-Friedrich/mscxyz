@@ -39,7 +39,6 @@ class MetaTag(object):
         'lyricist',
         'movementNumber',
         'movementTitle',
-        'originalFormat',
         'platform',
         'poet',
         'source',
@@ -71,6 +70,21 @@ class MetaTag(object):
             self.__dict__[name] = value
         else:
             self._get_element(name).text = value
+
+    def clean(self):
+        fields = (
+            'arranger',
+            'copyright',
+            'creationDate',
+            'movementNumber',
+            'platform',
+            'poet',
+            'source',
+            'translator',
+            'workNumber',
+        )
+        for field in fields:
+            setattr(self, field, '')
 
 
 class Vbox(object):
@@ -263,24 +277,11 @@ class Meta(Tree):
             setattr(self.vbox, field.title(), self.get(field))
             setattr(self.meta, field, self.get(field))
 
-    def clean_meta(self):
-        fields = [
-            "arranger",
-            "copyright",
-            "movementNumber",
-            "movementTitle",
-            "poet",
-            "translator",
-            "workNumber"
-        ]
-        for field in fields:
-            setattr(self.meta, field, '')
-
     def sync_fields(self):
         if not self.error:
             for field in ['title', 'subtitle', 'composer', 'lyricist']:
                 self.sync(field)
-            self.clean_meta()
+            self.meta.clean()
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))

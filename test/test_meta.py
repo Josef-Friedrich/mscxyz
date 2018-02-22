@@ -41,17 +41,20 @@ class TestClassMeta(unittest.TestCase):
 
 class TestClassMetaTag(unittest.TestCase):
 
-    def test_get(self):
-        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
+    def _init_class(self, filename):
+        tmp = helper.get_tmpfile_path(filename)
+        tree = Tree(tmp)
         meta = MetaTag(tree.root)
+        return meta, tree, tmp
+
+    def test_get(self):
+        meta, tree, tmp = self._init_class('simple.mscx')
         self.assertEqual(meta.workTitle, 'Title')
         self.assertEqual(meta.arranger, None)
         self.assertEqual(meta.composer, 'Composer')
 
     def test_set(self):
-        tmp = helper.get_tmpfile_path('simple.mscx')
-        tree = Tree(tmp)
-        meta = MetaTag(tree.root)
+        meta, tree, tmp = self._init_class('simple.mscx')
         meta.workTitle = 'lol'
         tree.save()
         tree = Tree(tmp)
@@ -62,16 +65,21 @@ class TestClassMetaTag(unittest.TestCase):
                         xml_string)
 
     def test_get_exception(self):
-        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
-        meta_tag = MetaTag(tree.root)
+        meta, tree, tmp = self._init_class('simple.mscx')
         with self.assertRaises(AttributeError):
-            meta_tag.lol
+            meta.lol
 
     def test_set_exception(self):
-        tree = Tree(helper.get_tmpfile_path('simple.mscx'))
-        meta_tag = MetaTag(tree.root)
+        meta, tree, tmp = self._init_class('simple.mscx')
         with self.assertRaises(AttributeError):
-            meta_tag.lol = 'lol'
+            meta.lol = 'lol'
+
+    def test_clean(self):
+        meta, tree, tmp = self._init_class('simple.mscx')
+        meta.arranger = 'A'
+        self.assertEqual(meta.arranger, 'A')
+        meta.clean()
+        self.assertEqual(meta.arranger, '')
 
 
 class TestClassVbox(unittest.TestCase):
