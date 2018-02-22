@@ -119,13 +119,25 @@ meta = subparser.add_parser(
     '''))
 
 meta.add_argument(
+    '-c',
+    '--clean',
+    action='store_true',
+    dest='meta_clean',
+    help='Clean the meta data.')
+
+meta.add_argument(
     '-j',
     '--json',
     action='store_true',
-    help='Additionally write the metadata to a json file.')
+    dest='meta_json',
+    help='Additionally write the meta data to a json file.')
 
 meta.add_argument(
-    '-s', '--show', action='store_true', help='Show all metadata.')
+    '-s',
+    '--show',
+    action='store_true',
+    dest='meta_show',
+    help='Show all metadata.')
 
 # lyrics
 

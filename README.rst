@@ -107,7 +107,7 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-j] [-s]
+  usage: mscx-manager meta [-h] [-c] [-j] [-s]
   
   # XML structure of a meta tag:
   
@@ -146,9 +146,10 @@ mscx-manager meta
       - Lyricis
   
   optional arguments:
-    -h, --help  show this help message and exit
-    -j, --json  Additionally write the metadata to a json file.
-    -s, --show  Show all metadata.
+    -h, --help   show this help message and exit
+    -c, --clean  Clean the meta data.
+    -j, --json   Additionally write the meta data to a json file.
+    -s, --show   Show all metadata.
   
 
 mscx-manager lyrics

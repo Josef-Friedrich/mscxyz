@@ -105,10 +105,10 @@ def execute(args=None):
 
         elif args.subcommand == 'meta':
             score = Meta(file)
-            if args.show:
+            if args.meta_show:
                 score.show()
             else:
-                if args.json:
+                if args.meta_json:
                     score.export_json()
                 score.sync_fields()
                 score.save()
