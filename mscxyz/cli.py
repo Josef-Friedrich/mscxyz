@@ -76,9 +76,7 @@ sub_clean.add_argument(
 
 sub_meta = subparser.add_parser(
     'meta',
-    help='Synchronize the values of the first vertical frame \
-    (title, composer, lyricist) with the corresponding \
-    metadata fields.',
+    help='Deal with meta data informations stored in the MuseScore file.',
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''\
     # XML structure of a meta tag:
@@ -87,20 +85,19 @@ sub_meta = subparser.add_parser(
 
     # All meta tags:
 
-        - arranger
-        - composer
-        - copyright
-        - creationDate
-        - lyricist
-        - movementNumber
-        - movementTitle
-        - originalFormat
-        - platform
-        - poet
-        - source
-        - translator
-        - workNumber
-        - workTitle
+        - meta_arranger
+        - meta_composer
+        - meta_copyright
+        - meta_creationDate
+        - meta_lyricist
+        - meta_movementNumber
+        - meta_movementTitle
+        - meta_platform
+        - meta_poet
+        - meta_source
+        - meta_translator
+        - meta_workNumber
+        - meta_workTitle
 
     # XML structure of a vbox tag:
 
@@ -112,10 +109,17 @@ sub_meta = subparser.add_parser(
 
     # All vbox tags:
 
-        - Title
-        - Subtitle
-        - Composer
-        - Lyricis
+        - vbox_Title
+        - vbox_Subtitle
+        - vbox_Composer
+        - vbox_Lyricist
+
+    # Combined meta data fields:
+
+        - combined_title
+        - combined_subtitle
+        - combined_composer
+        - combined_lyricist
     '''))
 
 sub_meta.add_argument(
@@ -134,10 +138,19 @@ sub_meta.add_argument(
 
 sub_meta.add_argument(
     '-s',
-    '--show',
+    '--synchronize',
     action='store_true',
-    dest='meta_show',
-    help='Show all metadata.')
+    dest='meta_sync',
+    help='Synchronize the values of the first vertical frame (vbox) \
+    (title, subtitle, composer, lyricist) with the corresponding \
+    metadata fields')
+
+sub_meta.add_argument(
+    '-S',
+    '--set',
+    action='store_true',
+    dest='meta_set',
+    help='Set value to meta data fields.')
 
 # lyrics
 

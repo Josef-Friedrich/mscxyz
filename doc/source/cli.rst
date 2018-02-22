@@ -37,9 +37,8 @@ mscxyz
     {clean,meta,lyrics,rename,export,help}
                           Run "subcommand --help" for more informations.
       clean               Clean and reset the formating of the "*.mscx" file
-      meta                Synchronize the values of the first vertical frame
-                          (title, composer, lyricist) with the corresponding
-                          metadata fields.
+      meta                Deal with meta data informations stored in the
+                          MuseScore file.
       lyrics              Extract lyrics. Without any option this subcommand
                           extracts all lyrics verses into separate mscx files.
                           This generated mscx files contain only one verse. The
@@ -77,7 +76,7 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c] [-j] [-s]
+  usage: mscx-manager meta [-h] [-c] [-j] [-s] [-S]
   
   # XML structure of a meta tag:
   
@@ -85,20 +84,19 @@ mscx-manager meta
   
   # All meta tags:
   
-      - arranger
-      - composer
-      - copyright
-      - creationDate
-      - lyricist
-      - movementNumber
-      - movementTitle
-      - originalFormat
-      - platform
-      - poet
-      - source
-      - translator
-      - workNumber
-      - workTitle
+      - meta_arranger
+      - meta_composer
+      - meta_copyright
+      - meta_creationDate
+      - meta_lyricist
+      - meta_movementNumber
+      - meta_movementTitle
+      - meta_platform
+      - meta_poet
+      - meta_source
+      - meta_translator
+      - meta_workNumber
+      - meta_workTitle
   
   # XML structure of a vbox tag:
   
@@ -110,16 +108,26 @@ mscx-manager meta
   
   # All vbox tags:
   
-      - Title
-      - Subtitle
-      - Composer
-      - Lyricis
+      - vbox_Title
+      - vbox_Subtitle
+      - vbox_Composer
+      - vbox_Lyricist
+  
+  # Combined meta data fields:
+  
+      - combined_title
+      - combined_subtitle
+      - combined_composer
+      - combined_lyricist
   
   optional arguments:
-    -h, --help   show this help message and exit
-    -c, --clean  Clean the meta data.
-    -j, --json   Additionally write the meta data to a json file.
-    -s, --show   Show all metadata.
+    -h, --help         show this help message and exit
+    -c, --clean        Clean the meta data.
+    -j, --json         Additionally write the meta data to a json file.
+    -s, --synchronize  Synchronize the values of the first vertical frame (vbox)
+                       (title, subtitle, composer, lyricist) with the
+                       corresponding metadata fields
+    -S, --set          Set value to meta data fields.
   
 
 mscx-manager lyrics

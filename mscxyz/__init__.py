@@ -105,13 +105,15 @@ def execute(args=None):
 
         elif args.subcommand == 'meta':
             score = Meta(file)
-            if args.meta_show:
-                score.show()
-            else:
-                if args.meta_json:
-                    score.export_json()
+
+            if args.meta_json:
+                score.export_json()
+
+            if args.meta_sync:
                 score.sync_fields()
-                score.save()
+
+            score.show()
+            score.save()
 
         elif args.subcommand == 'rename':
             score = Rename(file)
