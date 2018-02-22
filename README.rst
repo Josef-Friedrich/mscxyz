@@ -78,9 +78,9 @@ mscxyz
       rename              Rename the "*.mscx" files.
       export              Export the scores to PDFs or to the specified
                           extension.
-      help                Show help. Use "mscxyz.py help all" to show help
-                          messages of all subcommands. Use "mscxyz.py help
-                          <subcommand>" to show only help messages for the given
+      help                Show help. Use “mscx-manager help all” to show help
+                          messages of all subcommands. Use “mscx-manager help
+                          <subcommand>” to show only help messages for the given
                           subcommand.
   
 

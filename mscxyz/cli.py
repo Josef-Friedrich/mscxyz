@@ -62,10 +62,10 @@ subparser = parser.add_subparsers(
 
 # clean
 
-clean = subparser.add_parser(
+sub_clean = subparser.add_parser(
     'clean', help='Clean and reset the formating of the "*.mscx" file')
 
-clean.add_argument(
+sub_clean.add_argument(
     '-s',
     '--style',
     type=open,
@@ -74,7 +74,7 @@ clean.add_argument(
 
 # meta
 
-meta = subparser.add_parser(
+sub_meta = subparser.add_parser(
     'meta',
     help='Synchronize the values of the first vertical frame \
     (title, composer, lyricist) with the corresponding \
@@ -118,21 +118,21 @@ meta = subparser.add_parser(
         - Lyricis
     '''))
 
-meta.add_argument(
+sub_meta.add_argument(
     '-c',
     '--clean',
     action='store_true',
     dest='meta_clean',
     help='Clean the meta data.')
 
-meta.add_argument(
+sub_meta.add_argument(
     '-j',
     '--json',
     action='store_true',
     dest='meta_json',
     help='Additionally write the meta data to a json file.')
 
-meta.add_argument(
+sub_meta.add_argument(
     '-s',
     '--show',
     action='store_true',
@@ -141,7 +141,7 @@ meta.add_argument(
 
 # lyrics
 
-lyrics = subparser.add_parser(
+sub_lyrics = subparser.add_parser(
     'lyrics',
     help='Extract lyrics. Without any option this subcommand \
     extracts all lyrics verses into separate mscx files. \
@@ -149,14 +149,14 @@ lyrics = subparser.add_parser(
     verse number is appended to the file name, e. g.: \
     score_1.mscx.')
 
-lyrics.add_argument(
+sub_lyrics.add_argument(
     '-e',
     '--extract',
     default='all',
     help='The lyric verse number to extract or "all".'
 )
 
-lyrics.add_argument(
+sub_lyrics.add_argument(
     '-r',
     '--remap',
     help='Remap lyrics. Example: "--remap 3:2,5:3". This \
@@ -166,7 +166,7 @@ lyrics.add_argument(
     stands for the old verse number. "new" stands for the new \
     verse number.')
 
-lyrics.add_argument(
+sub_lyrics.add_argument(
     '-f',
     '--fix',
     action='store_true',
@@ -175,7 +175,7 @@ lyrics.add_argument(
 
 # rename
 
-rename = subparser.add_parser(
+sub_rename = subparser.add_parser(
     'rename',
     help='Rename the "*.mscx" files.',
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -184,25 +184,25 @@ rename = subparser.add_parser(
     'Tokens\n======\n\n' + format_field() + '\n\n'
     'Functions\n=========\n' + tmep.doc.Doc().get())
 
-rename.add_argument(
+sub_rename.add_argument(
     '-d',
     '--dry-run',
     action='store_true',
     help='Do not rename the scores')
 
-rename.add_argument(
+sub_rename.add_argument(
     '-f',
     '--format',
     default='$title ($composer)',
     help='Format string.')
 
-rename.add_argument(
+sub_rename.add_argument(
     '-a',
     '--ascii',
     action='store_true',
     help='Use only ASCII characters.')
 
-rename.add_argument(
+sub_rename.add_argument(
     '-n',
     '--no-whitespace',
     action='store_true',
@@ -211,12 +211,12 @@ rename.add_argument(
 
 # export
 
-export = subparser.add_parser(
+sub_export = subparser.add_parser(
     'export',
     help='Export the scores to PDFs or to the specified \
     extension.')
 
-export.add_argument(
+sub_export.add_argument(
     '-e',
     '--extension',
     default='pdf',
@@ -225,14 +225,14 @@ export.add_argument(
 
 # help
 
-help = subparser.add_parser(
+sub_help = subparser.add_parser(
     'help',
-    help='Show help. Use "mscxyz.py help all" to show help \
+    help='Show help. Use “' + parser.prog + ' help all” to show help \
     messages of all subcommands. Use \
-    "mscxyz.py help <subcommand>" to show only help messages \
+    “' + parser.prog + ' help <subcommand>” to show only help messages \
     for the given subcommand.')
 
-help.add_argument(
+sub_help.add_argument(
     '-m',
     '--markdown',
     action='store_true',
@@ -240,7 +240,7 @@ help.add_argument(
     This option enables to generate the README file directly \
     form the command line output.')
 
-help.add_argument(
+sub_help.add_argument(
     '-r',
     '--rst',
     action='store_true',

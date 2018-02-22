@@ -61,7 +61,7 @@ def show_all_help(args):
         heading(args, 'Subcommands', 1)
 
         for subcommand in subcommands:
-            command = getattr(cli, subcommand)
+            command = getattr(cli, 'sub_' + subcommand)
             heading(args, command.prog, 2)
             code_block(args, command.format_help())
 
