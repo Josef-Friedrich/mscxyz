@@ -40,9 +40,30 @@ class TestClassUnifiedInterface(unittest.TestCase):
         with self.assertRaises(ValueError):
             UnifedInterface._split('metatag')
 
-    def test_get(self):
+    def test_get_simple(self):
         interface, tree, tmp = self._init_class('simple.mscx')
         self.assertEqual(interface.vbox_title, 'Title')
+        self.assertEqual(interface.metatag_work_title, 'Title')
+
+    def test_get_all_values(self):
+        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+
+        def _assert(field):
+            self.assertEqual(getattr(interface, field), field)
+
+        _assert('metatag_arranger')
+        _assert('metatag_composer')
+        _assert('metatag_copyright')
+        _assert('metatag_creation_date')
+        _assert('metatag_lyricist')
+        _assert('metatag_movement_number')
+        _assert('metatag_movement_title')
+        _assert('metatag_platform')
+        _assert('metatag_poet')
+        _assert('metatag_source')
+        _assert('metatag_translator')
+        _assert('metatag_work_number')
+        _assert('metatag_work_title')
 
 
 class TestClassMeta(unittest.TestCase):

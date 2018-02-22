@@ -76,7 +76,7 @@ class MetaTag(object):
     def __getattr__(self, name):
         name = self._to_camel_case(name)
         if name not in self.fields:
-            raise AttributeError
+            raise AttributeError(name)
         else:
             return self._get_text(name)
 
@@ -198,7 +198,7 @@ class Vbox(object):
         if field == 'xml_root' or field == 'fields':
             self.__dict__[field] = value
         elif field.title() not in self.fields:
-            raise AttributeError
+            raise AttributeError(field)
         else:
             self._set_text(field.title(), value)
 

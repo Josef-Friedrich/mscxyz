@@ -43,7 +43,7 @@
     <metaTag name="poet">metatag_poet</metaTag>
     <metaTag name="source">metatag_source</metaTag>
     <metaTag name="translator">metatag_translator</metaTag>
-    <metaTag name="workNumber">metatag_number</metaTag>
+    <metaTag name="workNumber">metatag_work_number</metaTag>
     <metaTag name="workTitle">metatag_work_title</metaTag>
     <PageList>
       <Page>
@@ -107,20 +107,20 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>vbox_title</style>
-          <text>Title</text>
+          <style>Title</style>
+          <text>vbox_title</text>
           </Text>
         <Text>
-          <style>vbox_subtitle</style>
-          <text>Subtitle</text>
+          <style>Subtitle</style>
+          <text>vbox_subtitle</text>
           </Text>
         <Text>
-          <style>vbox_composer</style>
-          <text>Composer</text>
+          <style>Composer</style>
+          <text>vbox_composer</text>
           </Text>
         <Text>
-          <style>vbox_lyricist</style>
-          <text>Lyricist</text>
+          <style>Lyricist</style>
+          <text>vbox_lyricist</text>
           </Text>
         </VBox>
       <Measure number="1">
