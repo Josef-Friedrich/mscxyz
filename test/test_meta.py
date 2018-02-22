@@ -296,5 +296,23 @@ class TestClassCombined(unittest.TestCase):
         self.assertEqual(combined.vbox.Lyricist, 'L')
 
 
+class TestIntegration(unittest.TestCase):
+
+    def test_distribute_field(self):
+        tmp = helper.get_tmpfile_path('meta-distribute-field.mscx')
+        mscxyz.execute(
+            ['meta', '--distribute-field', 'vbox_title',
+             '$combined_title - $combined_composer', tmp]
+        )
+
+        meta = Meta(tmp)
+        iface = meta.interface
+
+        self.assertEqual(iface.vbox_composer, 'Composer')
+        self.assertEqual(iface.metatag_composer, 'Composer')
+        self.assertEqual(iface.vbox_title, 'Title')
+        self.assertEqual(iface.metatag_work_title, 'Title')
+
+
 if __name__ == '__main__':
     unittest.main()

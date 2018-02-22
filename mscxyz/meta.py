@@ -11,9 +11,9 @@ import json
 import re
 
 
-def distribute_field(source, destination):
-    fields = re.findall(r'\$([a-z_]*)', destination)
-    regex = re.sub(r'\$[a-z_]*', '(.*)', destination)
+def distribute_field(source, format_string):
+    fields = re.findall(r'\$([a-z_]*)', format_string)
+    regex = re.sub(r'\$[a-z_]*', '(.*)', format_string)
     match = re.search(regex, source)
     values = match.groups()
     return dict(zip(fields, values))
@@ -317,6 +317,12 @@ class Meta(Tree):
             self.combined.subtitle = self.combined.subtitle
             self.combined.composer = self.combined.composer
             self.combined.lyricist = self.combined.lyricist
+
+    def distribute_field(self, source_field, format_string):
+        source = getattr(self.interface, source_field)
+        results = distribute_field(source, format_string)
+        for field, value in results.items():
+            setattr(self.interface, field, value)
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))

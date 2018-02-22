@@ -112,6 +112,9 @@ def execute(args=None):
             if args.meta_sync:
                 score.sync_fields()
 
+            if args.meta_dist:
+                score.distribute_field(args.meta_dist[0], args.meta_dist[1])
+
             score.show()
             score.save()
 
