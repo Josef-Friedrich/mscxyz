@@ -31,9 +31,9 @@ def heading(args, text, level=1):
             underline = '='
         elif level == 2:
             underline = '-'
-        elif level == 2:
+        elif level == 3:
             underline = '^'
-        elif level == 2:
+        elif level == 4:
             underline = '"'
         else:
             underline = '-'
