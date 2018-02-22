@@ -5,7 +5,8 @@
 
 import unittest
 import mscxyz
-from mscxyz.meta import MetaTag, Meta, Vbox, Combined, copy_field
+from mscxyz.meta import MetaTag, Meta, Vbox, Combined, copy_field, \
+                        UnifedInterface
 from mscxyz.tree import Tree
 import helper
 
@@ -17,6 +18,31 @@ class TestFunctionExtractFields(unittest.TestCase):
                            '$title - $composer')
         self.assertEqual(match, {'composer': 'Queen', 'title':
                          'We are the champions'})
+
+
+class TestClassUnifiedInterface(unittest.TestCase):
+
+    def _init_class(self, filename):
+        tmp = helper.get_tmpfile_path(filename)
+        tree = Tree(tmp)
+        interface = UnifedInterface(tree.root)
+        return interface, tree, tmp
+
+    def test_subclasses(self):
+        interface, tree, tmp = self._init_class('simple.mscx')
+        self.assertTrue(interface.metatag)
+        self.assertTrue(interface.vbox)
+        self.assertTrue(interface.combined)
+
+    def test_static_method_split(self):
+        result = UnifedInterface._split('metatag_work_title')
+        self.assertEqual(result, {'field': 'work_title', 'object': 'metatag'})
+        with self.assertRaises(ValueError):
+            UnifedInterface._split('metatag')
+
+    def test_get(self):
+        interface, tree, tmp = self._init_class('simple.mscx')
+        self.assertEqual(interface.vbox_title, 'Title')
 
 
 class TestClassMeta(unittest.TestCase):

@@ -247,8 +247,19 @@ class UnifedInterface(object):
         self.vbox = Vbox(xml_root)
         self.combined = Combined(xml_root)
 
-        # re.sub('(?!^)([A-Z]+)', r'_\1','CamelCase').lower()
-        #re.sub(r'(?!^)_([a-zA-Z])', lambda m: m.group(1).upper(), s)
+    @staticmethod
+    def _split(field):
+        match = re.search(r'([^_]*)_(.*)', field)
+        if not match:
+            raise ValueError('Field “' + field + '” can’t be split!')
+        matches = match.groups()
+
+        return {'object': matches[0], 'field': matches[1]}
+
+    def __getattr__(self, field):
+        parts = self._split(field)
+        obj = getattr(self, parts['object'])
+        return getattr(obj, parts['field'].title())
 
 
 class Meta(Tree):
