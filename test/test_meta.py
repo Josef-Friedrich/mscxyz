@@ -82,21 +82,31 @@ class TestClassMetaTag(unittest.TestCase):
         meta = MetaTag(tree.root)
         return meta, tree, tmp
 
+    def test_static_method_to_camel_case(self):
+        camel_case = MetaTag._to_camel_case
+        self.assertEqual(camel_case('work_title'), 'workTitle')
+        self.assertEqual(camel_case('composer'), 'composer')
+        self.assertEqual(camel_case('work_title_lol'), 'workTitleLol')
+        self.assertEqual(camel_case('workTitle'), 'workTitle')
+
     def test_get(self):
         meta, tree, tmp = self._init_class('simple.mscx')
         self.assertEqual(meta.workTitle, 'Title')
+        self.assertEqual(meta.work_title, 'Title')
         self.assertEqual(meta.arranger, None)
         self.assertEqual(meta.composer, 'Composer')
 
     def test_set(self):
         meta, tree, tmp = self._init_class('simple.mscx')
-        meta.workTitle = 'lol'
+        meta.workTitle = 'WT'
+        meta.movement_title = 'MT'
         tree.save()
         tree = Tree(tmp)
         meta = MetaTag(tree.root)
-        self.assertEqual(meta.workTitle, 'lol')
+        self.assertEqual(meta.work_title, 'WT')
+        self.assertEqual(meta.movementTitle, 'MT')
         xml_string = helper.read_file(tmp)
-        self.assertTrue('<metaTag name="workTitle">lol</metaTag>' in
+        self.assertTrue('<metaTag name="workTitle">WT</metaTag>' in
                         xml_string)
 
     def test_get_exception(self):

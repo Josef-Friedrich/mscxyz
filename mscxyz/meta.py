@@ -56,21 +56,10 @@ class MetaTag(object):
         'workTitle',
     )
 
-    aliases = (
-        'arranger',
-        'composer',
-        'copyright',
-        'creation_date',
-        'lyricist',
-        'movement_number',
-        'movement_title',
-        'platform',
-        'poet',
-        'source',
-        'translator',
-        'work_number',
-        'work_title',
-    )
+    @staticmethod
+    def _to_camel_case(field):
+        return re.sub(r'(?!^)_([a-zA-Z])',
+                      lambda match: match.group(1).upper(), field)
 
     def __init__(self, xml_root):
         self.xml_root = xml_root
@@ -85,6 +74,7 @@ class MetaTag(object):
             return element.text
 
     def __getattr__(self, name):
+        name = self._to_camel_case(name)
         if name not in self.fields:
             raise AttributeError
         else:
@@ -94,6 +84,7 @@ class MetaTag(object):
         if name == 'xml_root' or name == 'fields':
             self.__dict__[name] = value
         else:
+            name = self._to_camel_case(name)
             self._get_element(name).text = value
 
     def clean(self):
