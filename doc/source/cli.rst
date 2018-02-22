@@ -76,7 +76,8 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c] [-j] [-s] [-S]
+  usage: mscx-manager meta [-h] [-c] [-d SOURCE_FIELD FORMAT_STRING] [-j] [-s]
+                           [-S]
   
   # XML structure of a meta tag:
   
@@ -121,13 +122,16 @@ mscx-manager meta
       - combined_lyricist
   
   optional arguments:
-    -h, --help         show this help message and exit
-    -c, --clean        Clean the meta data.
-    -j, --json         Additionally write the meta data to a json file.
-    -s, --synchronize  Synchronize the values of the first vertical frame (vbox)
-                       (title, subtitle, composer, lyricist) with the
-                       corresponding metadata fields
-    -S, --set          Set value to meta data fields.
+    -h, --help            show this help message and exit
+    -c, --clean           Clean the meta data.
+    -d SOURCE_FIELD FORMAT_STRING, --distribute-fields SOURCE_FIELD FORMAT_STRING
+                          Distribute a source field to target fields applying a
+                          format string on the source field.
+    -j, --json            Additionally write the meta data to a json file.
+    -s, --synchronize     Synchronize the values of the first vertical frame
+                          (vbox) (title, subtitle, composer, lyricist) with the
+                          corresponding metadata fields
+    -S, --set             Set value to meta data fields.
   
 
 mscx-manager lyrics

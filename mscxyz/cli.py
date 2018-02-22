@@ -130,6 +130,15 @@ sub_meta.add_argument(
     help='Clean the meta data.')
 
 sub_meta.add_argument(
+    '-d',
+    '--distribute-fields',
+    dest='meta_dist',
+    nargs=2,
+    metavar=('SOURCE_FIELD', 'FORMAT_STRING'),
+    help='Distribute a source field to target fields applying a format string \
+    on the source field.')
+
+sub_meta.add_argument(
     '-j',
     '--json',
     action='store_true',
