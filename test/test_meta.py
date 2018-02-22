@@ -136,10 +136,6 @@ class TestClassMeta(unittest.TestCase):
     def setUp(self):
         self.meta = Meta(helper.get_tmpfile_path('simple.mscx'))
 
-    def test_get(self):
-        self.assertEqual(self.meta.get('title'), 'Title')
-        self.assertEqual(self.meta.get('composer'), 'Composer')
-
     def test_show(self):
         with helper.Capturing() as output:
             mscxyz.execute(['meta', '-s',

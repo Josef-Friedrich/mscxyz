@@ -311,46 +311,12 @@ class Meta(Tree):
             self.combined = Combined(self.root)
             self.interface = UnifedInterface(self.root)
 
-    def get(self, field):
-        """Get a value by field.
-        This function searches for values in this order: vbox, metatag, filename.
-        Possible fields are: title, subtitle, composer, lyricist
-        """
-        if field == 'title':
-            values = [
-                self.vbox.Title,
-                self.metatag.workTitle,
-                self.basename
-            ]
-        elif field == 'subtitle':
-            values = [
-                self.vbox.Subtitle,
-                self.metatag.movementTitle,
-            ]
-        else:
-            values = [
-                getattr(self.vbox, field.title()),
-                getattr(self.metatag, field),
-            ]
-
-        for value in values:
-            if value:
-                return value
-
-    def sync(self, field):
-        if field == 'title':
-            self.vbox.Title = self.metatag.workTitle = self.get(field)
-        elif field == 'subtitle':
-            self.vbox.Subtitle = self.metatag.movementTitle = self.get(field)
-        else:
-            setattr(self.vbox, field.title(), self.get(field))
-            setattr(self.metatag, field, self.get(field))
-
     def sync_fields(self):
         if not self.error:
-            for field in ['title', 'subtitle', 'composer', 'lyricist']:
-                self.sync(field)
-            self.metatag.clean()
+            self.combined.title = self.combined.title
+            self.combined.subtitle = self.combined.subtitle
+            self.combined.composer = self.combined.composer
+            self.combined.lyricist = self.combined.lyricist
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))

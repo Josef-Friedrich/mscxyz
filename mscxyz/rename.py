@@ -75,7 +75,7 @@ class Rename(File):
         print(self.workname)
 
     def get_field(self, field):
-        return self.score.get(field)
+        return getattr(self.score.interface, 'combined_' + field)
 
     def apply_format_string(self, format_string='$title ($composer)'):
         values = {}
