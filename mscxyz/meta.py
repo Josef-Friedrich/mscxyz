@@ -8,6 +8,15 @@ from termcolor import colored
 import lxml
 import six
 import json
+import re
+
+
+def copy_field(source, destination):
+    fields = re.findall(r'\$([a-z_]*)', destination)
+    regex = re.sub(r'\$[a-z_]*', '(.*)', destination)
+    match = re.search(regex, source)
+    values = match.groups()
+    return dict(zip(fields, values))
 
 
 class MetaTag(object):
