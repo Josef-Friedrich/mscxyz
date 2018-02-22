@@ -5,17 +5,17 @@
 
 import unittest
 import mscxyz
-from mscxyz.meta import MetaTag, Meta, Vbox, Combined, copy_field, \
+from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         UnifedInterface
 from mscxyz.tree import Tree
 import helper
 
 
-class TestFunctionExtractFields(unittest.TestCase):
+class TestFunctionDistributeField(unittest.TestCase):
 
     def test_simple(self):
-        match = copy_field('We are the champions - Queen',
-                           '$title - $composer')
+        match = distribute_field('We are the champions - Queen',
+                                 '$title - $composer')
         self.assertEqual(match, {'composer': 'Queen', 'title':
                          'We are the champions'})
 

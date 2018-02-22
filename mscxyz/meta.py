@@ -11,7 +11,7 @@ import json
 import re
 
 
-def copy_field(source, destination):
+def distribute_field(source, destination):
     fields = re.findall(r'\$([a-z_]*)', destination)
     regex = re.sub(r'\$[a-z_]*', '(.*)', destination)
     match = re.search(regex, source)
