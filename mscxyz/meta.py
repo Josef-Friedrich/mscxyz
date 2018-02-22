@@ -64,28 +64,28 @@ class MetaTag(object):
     def __init__(self, xml_root):
         self.xml_root = xml_root
 
-    def _get_element(self, name):
-        for element in self.xml_root.xpath('//metaTag[@name="' + name + '"]'):
+    def _get_element(self, field):
+        for element in self.xml_root.xpath('//metaTag[@name="' + field + '"]'):
             return element
 
-    def _get_text(self, name):
-        element = self._get_element(name)
+    def _get_text(self, field):
+        element = self._get_element(field)
         if hasattr(element, 'text'):
             return element.text
 
-    def __getattr__(self, name):
-        name = self._to_camel_case(name)
-        if name not in self.fields:
-            raise AttributeError(name)
+    def __getattr__(self, field):
+        field = self._to_camel_case(field)
+        if field not in self.fields:
+            raise AttributeError(field)
         else:
-            return self._get_text(name)
+            return self._get_text(field)
 
-    def __setattr__(self, name, value):
-        if name == 'xml_root' or name == 'fields':
-            self.__dict__[name] = value
+    def __setattr__(self, field, value):
+        if field == 'xml_root' or field == 'fields':
+            self.__dict__[field] = value
         else:
-            name = self._to_camel_case(name)
-            self._get_element(name).text = value
+            field = self._to_camel_case(field)
+            self._get_element(field).text = value
 
     def clean(self):
         fields = (
