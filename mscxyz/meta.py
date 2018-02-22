@@ -186,10 +186,10 @@ class Vbox(object):
             self._set_text(name, value)
 
 
-class MetaNG(Tree):
+class Combined(Tree):
 
     def __init__(self, fullpath):
-        super(MetaNG, self).__init__(fullpath)
+        super(Combined, self).__init__(fullpath)
         if not self.error:
             self.meta = MetaTag(self.root)
             self.vbox = Vbox(self.root)

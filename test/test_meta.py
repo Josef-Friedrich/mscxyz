@@ -5,7 +5,7 @@
 
 import unittest
 import mscxyz
-from mscxyz.meta import MetaTag, Meta, Vbox, MetaNG
+from mscxyz.meta import MetaTag, Meta, Vbox, Combined
 from mscxyz.tree import Tree
 import helper
 
@@ -131,11 +131,11 @@ class TestClassVbox(unittest.TestCase):
             vbox.lol = 'lol'
 
 
-class TestClassMetaNG(unittest.TestCase):
+class TestClassCombined(unittest.TestCase):
 
     def test_getter(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        meta = MetaNG(tmp)
+        meta = Combined(tmp)
         self.assertEqual(meta.title, 'Title')
         self.assertEqual(meta.subtitle, None)
         self.assertEqual(meta.composer, 'Composer')
@@ -143,13 +143,13 @@ class TestClassMetaNG(unittest.TestCase):
 
     def test_setter(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        meta = MetaNG(tmp)
+        meta = Combined(tmp)
         meta.title = 'T'
         meta.subtitle = 'S'
         meta.composer = 'C'
         meta.lyricist = 'L'
         meta.save()
-        meta = MetaNG(tmp)
+        meta = Combined(tmp)
         self.assertEqual(meta.meta.workTitle, 'T')
         self.assertEqual(meta.meta.movementTitle, 'S')
         self.assertEqual(meta.meta.composer, 'C')
