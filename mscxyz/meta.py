@@ -76,7 +76,7 @@ class MetaTag(object):
     def __getattr__(self, field):
         field = self._to_camel_case(field)
         if field not in self.fields:
-            raise AttributeError(field)
+            raise AttributeError('No field named: “' + field + '”!')
         else:
             return self._get_text(field)
 
@@ -198,7 +198,7 @@ class Vbox(object):
         if field == 'xml_root' or field == 'fields':
             self.__dict__[field] = value
         elif field.title() not in self.fields:
-            raise AttributeError(field)
+            raise AttributeError('No field named: “' + field + '”!')
         else:
             self._set_text(field.title(), value)
 
@@ -259,7 +259,7 @@ class UnifedInterface(object):
     def _split(field):
         match = re.search(r'([^_]*)_(.*)', field)
         if not match:
-            raise ValueError('Field “' + field + '” can’t be split!')
+            raise ValueError('Field “' + field + '” can’t be splitted!')
         matches = match.groups()
 
         return {'object': matches[0], 'field': matches[1]}
