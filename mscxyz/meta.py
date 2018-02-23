@@ -261,6 +261,8 @@ class Combined(Tree):
 
 class UnifedInterface(object):
 
+    objects = ('metatag', 'vbox', 'combined')
+
     def __init__(self, xml_root):
         self.metatag = MetaTag(xml_root)
         self.vbox = Vbox(xml_root)
@@ -285,6 +287,8 @@ class UnifedInterface(object):
             raise ValueError('Field “' + field + '” can’t be splitted!')
         matches = match.groups()
 
+        if not matches[0] in UnifedInterface.objects:
+            raise ValueError(matches[0] + ': Not a supported object!')
         return {'object': matches[0], 'field': matches[1]}
 
     def __getattr__(self, field):
@@ -293,7 +297,7 @@ class UnifedInterface(object):
         return getattr(obj, parts['field'])
 
     def __setattr__(self, field, value):
-        if field in ('fields', 'metatag', 'vbox', 'combined'):
+        if field in ('fields', 'metatag', 'objects', 'vbox', 'combined'):
             self.__dict__[field] = value
         else:
             parts = self._split(field)

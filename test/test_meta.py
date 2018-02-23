@@ -64,6 +64,8 @@ class TestClassUnifiedInterface(unittest.TestCase):
         self.assertEqual(result, {'field': 'work_title', 'object': 'metatag'})
         with self.assertRaises(ValueError):
             UnifedInterface._split('metatag')
+        with self.assertRaises(ValueError):
+            UnifedInterface._split('lol_work_title')
 
     def test_get_simple(self):
         interface, tree, tmp = self._init_class('simple.mscx')
