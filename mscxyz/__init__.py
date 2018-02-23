@@ -105,6 +105,8 @@ def execute(args=None):
 
         elif args.subcommand == 'meta':
             score = Meta(file)
+            if args.meta_clean:
+                score.clean(args.meta_clean)
             if args.meta_json:
                 score.export_json()
             if args.meta_dist:

@@ -338,6 +338,14 @@ class Meta(Tree):
         for field, value in results.items():
             setattr(self.interface, field, value)
 
+    def clean(self, fields):
+        if fields == 'all':
+            fields = self.interface.fields
+        else:
+            fields = fields.split(',')
+        for field in fields:
+            setattr(self.interface, field, '')
+
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))
         print_desc(self.basename, 'filename', 'blue')

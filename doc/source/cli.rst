@@ -77,8 +77,8 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c] [-d SOURCE_FIELD FORMAT_STRING] [-j] [-s]
-                           [-S]
+  usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELD FORMAT_STRING]
+                           [-j] [-s] [-S]
   
   # XML structure of a meta tag:
   
@@ -124,7 +124,8 @@ mscx-manager meta
   
   optional arguments:
     -h, --help            show this help message and exit
-    -c, --clean           Clean the meta data.
+    -c META_CLEAN, --clean META_CLEAN
+                          Possible values: „all“ or „field_one,field_two“.
     -d SOURCE_FIELD FORMAT_STRING, --distribute-fields SOURCE_FIELD FORMAT_STRING
                           Distribute a source field to target fields applying a
                           format string on the source field.

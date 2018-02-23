@@ -139,9 +139,9 @@ sub_meta = subparser.add_parser(
 sub_meta.add_argument(
     '-c',
     '--clean',
-    action='store_true',
+    nargs=1,
     dest='meta_clean',
-    help='Clean the meta data.')
+    help='Possible values: „all“ or „field_one,field_two“.')
 
 sub_meta.add_argument(
     '-d',
