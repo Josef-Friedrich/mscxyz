@@ -106,6 +106,33 @@ class TestClassUnifiedInterface(unittest.TestCase):
         fields = UnifedInterface.get_all_fields()
         self.assertEqual(fields, self.fields)
 
+    def test_method_export_to_dict(self):
+        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+        result = interface.export_to_dict()
+        self.assertEqual(result, {
+            'combined_composer': 'vbox_composer',
+            'combined_lyricist': 'vbox_lyricist',
+            'combined_subtitle': 'vbox_subtitle',
+            'combined_title': 'vbox_title',
+            'metatag_arranger': 'metatag_arranger',
+            'metatag_composer': 'metatag_composer',
+            'metatag_copyright': 'metatag_copyright',
+            'metatag_creation_date': 'metatag_creation_date',
+            'metatag_lyricist': 'metatag_lyricist',
+            'metatag_movement_number': 'metatag_movement_number',
+            'metatag_movement_title': 'metatag_movement_title',
+            'metatag_platform': 'metatag_platform',
+            'metatag_poet': 'metatag_poet',
+            'metatag_source': 'metatag_source',
+            'metatag_translator': 'metatag_translator',
+            'metatag_work_number': 'metatag_work_number',
+            'metatag_work_title': 'metatag_work_title',
+            'vbox_composer': 'vbox_composer',
+            'vbox_lyricist': 'vbox_lyricist',
+            'vbox_subtitle': 'vbox_subtitle',
+            'vbox_title': 'vbox_title',
+        })
+
     def test_attribute_fields(self):
         interface, tree, tmp = self._init_class('meta-all-values.mscx')
         self.assertEqual(interface.fields, self.fields)

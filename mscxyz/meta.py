@@ -291,6 +291,15 @@ class UnifedInterface(object):
             raise ValueError(matches[0] + ': Not a supported object!')
         return {'object': matches[0], 'field': matches[1]}
 
+    def export_to_dict(self):
+        out = {}
+        for field in self.fields:
+            value = getattr(self, field)
+            if not value:
+                value = ''
+            out[field] = value
+        return out
+
     def __getattr__(self, field):
         parts = self._split(field)
         obj = getattr(self, parts['object'])
