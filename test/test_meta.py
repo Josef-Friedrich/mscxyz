@@ -320,16 +320,36 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_title, 'Title')
         self.assertEqual(iface.metatag_work_title, 'Title')
 
-    def test_clean(self):
+    def test_clean_all(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')
         mscxyz.execute(
             ['meta', '--clean', 'all', tmp]
         )
-
         meta = Meta(tmp)
         iface = meta.interface
         for field in iface.fields:
             self.assertEqual(getattr(iface, field), None, field)
+
+    def test_clean_single_field(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(
+            ['meta', '--clean', 'vbox_title', tmp]
+        )
+        meta = Meta(tmp)
+        iface = meta.interface
+        self.assertEqual(iface.vbox_title, None, 'vbox_title')
+        self.assertEqual(iface.vbox_composer, 'vbox_composer', 'vbox_composer')
+
+    def test_clean_some_fields(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(
+            ['meta', '--clean', 'vbox_title,vbox_composer', tmp]
+        )
+        meta = Meta(tmp)
+        iface = meta.interface
+        self.assertEqual(iface.vbox_title, None, 'vbox_title')
+        self.assertEqual(iface.vbox_composer, None, 'vbox_composer')
+        self.assertEqual(iface.vbox_subtitle, 'vbox_subtitle', 'vbox_subtitle')
 
 
 if __name__ == '__main__':
