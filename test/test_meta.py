@@ -22,6 +22,31 @@ class TestFunctionDistributeField(unittest.TestCase):
 
 class TestClassUnifiedInterface(unittest.TestCase):
 
+    def setUp(self):
+        self.fields = [
+            'combined_composer',
+            'combined_lyricist',
+            'combined_subtitle',
+            'combined_title',
+            'metatag_arranger',
+            'metatag_composer',
+            'metatag_copyright',
+            'metatag_creation_date',
+            'metatag_lyricist',
+            'metatag_movement_number',
+            'metatag_movement_title',
+            'metatag_platform',
+            'metatag_poet',
+            'metatag_source',
+            'metatag_translator',
+            'metatag_work_number',
+            'metatag_work_title',
+            'vbox_composer',
+            'vbox_lyricist',
+            'vbox_subtitle',
+            'vbox_title',
+        ]
+
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
@@ -68,67 +93,29 @@ class TestClassUnifiedInterface(unittest.TestCase):
     def test_set_all_values(self):
         interface, tree, tmp = self._init_class('meta-all-values.mscx')
 
-        def _set(field):
+        for field in self.fields:
             setattr(interface, field, field + '_test')
             self.assertEqual(getattr(interface, field), field + '_test')
 
-        def _assert(field):
+        tree.save()
+        tree = Tree(tmp)
+        interface = UnifedInterface(tree.root)
+
+        self.assertEqual(interface.combined_composer, 'vbox_composer_test')
+        self.assertEqual(interface.combined_lyricist, 'vbox_lyricist_test')
+        self.assertEqual(interface.combined_subtitle, 'vbox_subtitle_test')
+        self.assertEqual(interface.combined_title, 'vbox_title_test')
+
+        for field in self.fields[4:]:
             self.assertEqual(getattr(interface, field), field + '_test')
-
-        _set('metatag_arranger')
-        _set('metatag_composer')
-        _set('metatag_copyright')
-        _set('metatag_creation_date')
-        _set('metatag_lyricist')
-        _set('metatag_movement_number')
-        _set('metatag_movement_title')
-        _set('metatag_platform')
-        _set('metatag_poet')
-        _set('metatag_source')
-        _set('metatag_translator')
-        _set('metatag_work_number')
-        _set('metatag_work_title')
-
-        _assert('metatag_arranger')
-        _assert('metatag_composer')
-        _assert('metatag_copyright')
-        _assert('metatag_creation_date')
-        _assert('metatag_lyricist')
-        _assert('metatag_movement_number')
-        _assert('metatag_movement_title')
-        _assert('metatag_platform')
-        _assert('metatag_poet')
-        _assert('metatag_source')
-        _assert('metatag_translator')
-        _assert('metatag_work_number')
-        _assert('metatag_work_title')
 
     def test_method_get_all_fields(self):
         fields = UnifedInterface.get_all_fields()
-        self.assertEqual(fields, [
-                'combined_composer',
-                'combined_lyricist',
-                'combined_subtitle',
-                'combined_title',
-                'metatag_arranger',
-                'metatag_composer',
-                'metatag_copyright',
-                'metatag_creation_date',
-                'metatag_lyricist',
-                'metatag_movement_number',
-                'metatag_movement_title',
-                'metatag_platform',
-                'metatag_poet',
-                'metatag_source',
-                'metatag_translator',
-                'metatag_work_number',
-                'metatag_work_title',
-                'vbox_composer',
-                'vbox_lyricist',
-                'vbox_subtitle',
-                'vbox_title',
-            ]
-        )
+        self.assertEqual(fields, self.fields)
+
+    def test_attribute_fields(self):
+        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+        self.assertEqual(interface.fields, self.fields)
 
 
 class TestClassMeta(unittest.TestCase):

@@ -265,6 +265,7 @@ class UnifedInterface(object):
         self.metatag = MetaTag(xml_root)
         self.vbox = Vbox(xml_root)
         self.combined = Combined(xml_root)
+        self.fields = self.get_all_fields()
 
     @staticmethod
     def get_all_fields():
@@ -292,7 +293,7 @@ class UnifedInterface(object):
         return getattr(obj, parts['field'])
 
     def __setattr__(self, field, value):
-        if field in ('metatag', 'vbox', 'combined'):
+        if field in ('fields', 'metatag', 'vbox', 'combined'):
             self.__dict__[field] = value
         else:
             parts = self._split(field)
