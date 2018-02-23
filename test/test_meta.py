@@ -73,22 +73,13 @@ class TestClassUnifiedInterface(unittest.TestCase):
     def test_get_all_values(self):
         interface, tree, tmp = self._init_class('meta-all-values.mscx')
 
-        def _assert(field):
-            self.assertEqual(getattr(interface, field), field)
+        self.assertEqual(interface.combined_composer, 'vbox_composer')
+        self.assertEqual(interface.combined_lyricist, 'vbox_lyricist')
+        self.assertEqual(interface.combined_subtitle, 'vbox_subtitle')
+        self.assertEqual(interface.combined_title, 'vbox_title')
 
-        _assert('metatag_arranger')
-        _assert('metatag_composer')
-        _assert('metatag_copyright')
-        _assert('metatag_creation_date')
-        _assert('metatag_lyricist')
-        _assert('metatag_movement_number')
-        _assert('metatag_movement_title')
-        _assert('metatag_platform')
-        _assert('metatag_poet')
-        _assert('metatag_source')
-        _assert('metatag_translator')
-        _assert('metatag_work_number')
-        _assert('metatag_work_title')
+        for field in self.fields[4:]:
+            self.assertEqual(getattr(interface, field), field)
 
     def test_set_all_values(self):
         interface, tree, tmp = self._init_class('meta-all-values.mscx')
