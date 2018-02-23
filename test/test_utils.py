@@ -9,6 +9,10 @@ import unittest
 
 class TestIsMscore(unittest.TestCase):
 
+    def test_output(self):
+        output = is_mscore('which')
+        self.assertTrue('which' in str(output), output)
+
     def test_output_type(self):
         output = is_mscore('ls')
         if six.PY2:
