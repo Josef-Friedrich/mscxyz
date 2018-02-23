@@ -2,15 +2,12 @@
 
 """File for various tests"""
 
-
 import os
 import helper
 import unittest
 import mscxyz
-from mscxyz.utils import is_mscore
 import sys
 import six
-
 
 if sys.prefix == '/usr':
     mscore = True
@@ -102,18 +99,6 @@ class TestExport(unittest.TestCase):
     @unittest.skipIf(not mscore, 'export not working in travis')
     def test_mid(self):
         self.export('mid')
-
-
-class TestUtils(unittest.TestCase):
-
-    def test_is_mscore(self):
-        output = is_mscore('ls')
-        if six.PY2:
-            self.assertEqual(type(output), str)
-        else:
-            self.assertEqual(type(output), bytes)
-        self.assertTrue(is_mscore('ls'))
-        self.assertFalse(is_mscore('nooooooooooooooot'))
 
 
 if __name__ == '__main__':
