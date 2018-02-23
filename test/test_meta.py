@@ -6,7 +6,7 @@
 import unittest
 import mscxyz
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
-                        UnifedInterface, InterfaceReadOnly
+                        UnifedInterface, InterfaceReadOnly, Interface
 from mscxyz.tree import Tree
 import helper
 import os
@@ -177,6 +177,47 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
     def test_field_readonly_fullpath_backup(self):
         self.assertEqual(self.interface.readonly_fullpath_backup,
                          self.tmp.replace('.mscx', '_bak.mscx'))
+
+
+class TestClassInterface(unittest.TestCase):
+
+    def setUp(self):
+        self.fields = [
+            'combined_composer',
+            'combined_lyricist',
+            'combined_subtitle',
+            'combined_title',
+            'metatag_arranger',
+            'metatag_composer',
+            'metatag_copyright',
+            'metatag_creation_date',
+            'metatag_lyricist',
+            'metatag_movement_number',
+            'metatag_movement_title',
+            'metatag_platform',
+            'metatag_poet',
+            'metatag_source',
+            'metatag_translator',
+            'metatag_work_number',
+            'metatag_work_title',
+            'readonly_basename',
+            'readonly_dirname',
+            'readonly_extension',
+            'readonly_filename',
+            'readonly_fullpath',
+            'readonly_fullpath_backup',
+            'vbox_composer',
+            'vbox_lyricist',
+            'vbox_subtitle',
+            'vbox_title',
+        ]
+
+        self.tmp = helper.get_tmpfile_path('simple.mscx')
+        self.tree = Tree(self.tmp)
+        self.interface = Interface(self.tree)
+
+    def test_static_method_get_all_fields(self):
+        self.assertEqual(Interface.get_all_fields(), self.fields)
 
 
 class TestClassMeta(unittest.TestCase):

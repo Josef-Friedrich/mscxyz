@@ -316,14 +316,14 @@ class UnifedInterface(object):
 
 class InterfaceReadOnly(object):
 
-    fields = (
+    fields = [
         'readonly_basename',
         'readonly_dirname',
         'readonly_extension',
         'readonly_filename',
         'readonly_fullpath',
         'readonly_fullpath_backup',
-    )
+    ]
 
     def __init__(self, tree):
         self.tree = tree
@@ -351,6 +351,17 @@ class InterfaceReadOnly(object):
     @property
     def readonly_basename(self):
         return self.tree.basename
+
+
+class Interface(object):
+
+    def __init__(self, tree):
+        self.xml_tree = tree
+
+    @staticmethod
+    def get_all_fields():
+        return sorted(InterfaceReadOnly.fields +
+                      UnifedInterface.get_all_fields())
 
 
 class Meta(Tree):
