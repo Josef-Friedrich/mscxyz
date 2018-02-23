@@ -23,6 +23,16 @@ def to_underscore(field):
     return re.sub('([A-Z]+)', r'_\1', field).lower()
 
 
+def export_to_dict(obj, fields):
+    out = {}
+    for field in fields:
+        value = getattr(obj, field)
+        if not value:
+            value = ''
+        out[field] = value
+    return out
+
+
 class MetaTag(object):
 
     """The available metaTag fields are:
@@ -292,13 +302,7 @@ class InterfaceReadWrite(object):
         return {'object': matches[0], 'field': matches[1]}
 
     def export_to_dict(self):
-        out = {}
-        for field in self.fields:
-            value = getattr(self, field)
-            if not value:
-                value = ''
-            out[field] = value
-        return out
+        return export_to_dict(self, self.fields)
 
     def __getattr__(self, field):
         parts = self._split(field)
@@ -359,11 +363,15 @@ class Interface(object):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
         self.read_write = InterfaceReadWrite(tree.root)
+        self.fields = self.get_all_fields()
 
     @staticmethod
     def get_all_fields():
         return sorted(InterfaceReadOnly.fields +
                       InterfaceReadWrite.get_all_fields())
+
+    def export_to_dict(self):
+        return export_to_dict(self, self.fields)
 
     def __getattr__(self, field):
         if re.match(r'^readonly_', field):
@@ -372,7 +380,7 @@ class Interface(object):
             return getattr(self.read_write, field)
 
     def __setattr__(self, field, value):
-        if field in ('xml_tree', 'read_only', 'read_write'):
+        if field in ('xml_tree', 'read_only', 'read_write', 'fields'):
             self.__dict__[field] = value
         elif not re.match(r'^readonly_', field):
             return setattr(self.read_write, field, value)
@@ -389,7 +397,9 @@ class Meta(Tree):
             self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
             self.combined = Combined(self.root)
+            # TODO: Use class “Interface()”
             self.interface = InterfaceReadWrite(self.root)
+            self.iface = Interface(self)
 
     def sync_fields(self):
         if not self.error:

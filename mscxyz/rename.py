@@ -77,12 +77,10 @@ class Rename(File):
     def get_field(self, field):
         return getattr(self.score.interface, 'combined_' + field)
 
-    def apply_format_string(self, format_string='$title ($composer)'):
-        values = {}
-        for key in FIELDS:
-            values[key] = self.get_field(key)
-
-        self.workname = tmep.parse(format_string, values)
+    def apply_format_string(self,
+                            format_string='$vbox_title ($vbox_composer)'):
+        self.workname = tmep.parse(format_string,
+                                   self.score.iface.export_to_dict())
 
     def execute(self, dry_run=False, verbose=0):
         if dry_run or verbose > 0:

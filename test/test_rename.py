@@ -5,11 +5,12 @@
 
 import helper
 import unittest
+from mscxyz.rename import Rename
 
 
 class TestRename(unittest.TestCase):
+
     def setUp(self):
-        from mscxyz.rename import Rename
         self.simple = Rename(helper.get_tmpfile_path('simple.mscx'))
         self.unicode = Rename(helper.get_tmpfile_path('unicode.mscx'))
 
@@ -18,7 +19,7 @@ class TestRename(unittest.TestCase):
         self.assertEqual(self.simple.workname, u'Title (Composer)')
 
     def test_option_format_given(self):
-        self.simple.apply_format_string('${composer}_${title}')
+        self.simple.apply_format_string('${vbox_composer}_${vbox_title}')
         self.assertEqual(self.simple.workname, u'Composer_Title')
 
     def test_option_asciify(self):
