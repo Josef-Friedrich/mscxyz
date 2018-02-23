@@ -320,6 +320,17 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_title, 'Title')
         self.assertEqual(iface.metatag_work_title, 'Title')
 
+    def test_clean(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(
+            ['meta', '--clean', 'all', tmp]
+        )
+
+        meta = Meta(tmp)
+        iface = meta.interface
+        for field in iface.fields:
+            self.assertEqual(getattr(iface, field), None, field)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -339,6 +339,7 @@ class Meta(Tree):
             setattr(self.interface, field, value)
 
     def clean(self, fields):
+        fields = fields[0]
         if fields == 'all':
             fields = self.interface.fields
         else:
