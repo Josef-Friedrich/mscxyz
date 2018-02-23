@@ -314,6 +314,45 @@ class UnifedInterface(object):
             return setattr(obj, parts['field'], value)
 
 
+class InterfaceReadOnly(object):
+
+    fields = (
+        'readonly_basename',
+        'readonly_dirname',
+        'readonly_extension',
+        'readonly_filename',
+        'readonly_fullpath',
+        'readonly_fullpath_backup',
+    )
+
+    def __init__(self, tree):
+        self.tree = tree
+
+    @property
+    def readonly_fullpath(self):
+        return self.tree.fullpath
+
+    @property
+    def readonly_extension(self):
+        return self.tree.extension
+
+    @property
+    def readonly_fullpath_backup(self):
+        return self.tree.fullpath_backup
+
+    @property
+    def readonly_dirname(self):
+        return self.tree.dirname
+
+    @property
+    def readonly_filename(self):
+        return self.tree.filename
+
+    @property
+    def readonly_basename(self):
+        return self.tree.basename
+
+
 class Meta(Tree):
 
     def __init__(self, fullpath):

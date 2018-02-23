@@ -6,9 +6,10 @@
 import unittest
 import mscxyz
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
-                        UnifedInterface
+                        UnifedInterface, InterfaceReadOnly
 from mscxyz.tree import Tree
 import helper
+import os
 
 
 class TestFunctionDistributeField(unittest.TestCase):
@@ -136,6 +137,46 @@ class TestClassUnifiedInterface(unittest.TestCase):
     def test_attribute_fields(self):
         interface, tree, tmp = self._init_class('meta-all-values.mscx')
         self.assertEqual(interface.fields, self.fields)
+
+
+class TestClassInterfaceReadOnly(unittest.TestCase):
+
+    def setUp(self):
+        self.fields = (
+            'readonly_basename',
+            'readonly_dirname',
+            'readonly_extension',
+            'readonly_filename',
+            'readonly_fullpath',
+            'readonly_fullpath_backup',
+        )
+        self.tmp = helper.get_tmpfile_path('simple.mscx')
+        self.tree = Tree(self.tmp)
+        self.interface = InterfaceReadOnly(self.tree)
+
+    def test_exception(self):
+        with self.assertRaises(AttributeError):
+            self.interface.readonly_fullpath = 'lol'
+
+    def test_field_readonly_basename(self):
+        self.assertEqual(self.interface.readonly_basename, 'simple')
+
+    def test_field_readonly_dirname(self):
+        self.assertEqual(self.interface.readonly_dirname,
+                         os.path.dirname(self.tmp))
+
+    def test_field_readonly_extension(self):
+        self.assertEqual(self.interface.readonly_extension, 'mscx')
+
+    def test_field_readonly_filename(self):
+        self.assertEqual(self.interface.readonly_filename, 'simple.mscx')
+
+    def test_field_readonly_fullpath(self):
+        self.assertEqual(self.interface.readonly_fullpath, self.tmp)
+
+    def test_field_readonly_fullpath_backup(self):
+        self.assertEqual(self.interface.readonly_fullpath_backup,
+                         self.tmp.replace('.mscx', '_bak.mscx'))
 
 
 class TestClassMeta(unittest.TestCase):
