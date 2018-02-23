@@ -3,16 +3,16 @@
 
 from mscxyz._version import get_versions
 from mscxyz.rename import FIELDS
+from mscxyz.meta import UnifedInterface
 import argparse
 import textwrap
 import tmep
 
 
-def format_field():
+def list_fields(fields, prefix='', suffix=''):
     out = []
-    for field in FIELDS:
-        out.append('- ' + field)
-
+    for field in fields:
+        out.append(prefix + '- ' + field + suffix)
     return '\n'.join(out)
 
 
@@ -93,27 +93,33 @@ sub_meta = subparser.add_parser(
     help='Deal with meta data informations stored in the MuseScore file.',
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''\
-    # XML structure of a meta tag:
+    MuseScore can store meta data informations in different places:
+
+    # metatag
+
+    ## XML structure of a meta tag:
 
         <metaTag name="tag"></metaTag>
 
-    # All meta tags:
+    ## All meta tags:
 
-        - meta_arranger
-        - meta_composer
-        - meta_copyright
-        - meta_creationDate
-        - meta_lyricist
-        - meta_movementNumber
-        - meta_movementTitle
-        - meta_platform
-        - meta_poet
-        - meta_source
-        - meta_translator
-        - meta_workNumber
-        - meta_workTitle
+        - arranger
+        - composer
+        - copyright
+        - creationDate
+        - lyricist
+        - movementNumber
+        - movementTitle
+        - platform
+        - poet
+        - source
+        - translator
+        - workNumber
+        - workTitle
 
-    # XML structure of a vbox tag:
+    # vbox
+
+    ## XML structure of a vbox tag:
 
         <VBox>
           <Text>
@@ -121,20 +127,25 @@ sub_meta = subparser.add_parser(
             <text>Some title text</text>
             </Text>
 
-    # All vbox tags:
+    ## All vbox tags:
 
-        - vbox_Title
-        - vbox_Subtitle
-        - vbox_Composer
-        - vbox_Lyricist
+        - Title
+        - Subtitle
+        - Composer
+        - Lyricist
+
+    This command line tool bundles some meta data informations:
 
     # Combined meta data fields:
 
-        - combined_title
-        - combined_subtitle
-        - combined_composer
-        - combined_lyricist
-    '''))
+        - title (1. vbox_title 2. metatag_work_title)
+        - subtitle (1. vbox_subtitle 2. metatag_movement_title)
+        - composer (1. vbox_composer 2. metatag_composer)
+        - lyricist (1. vbox_lyricist 2. metatag_lyricist)
+
+    You have access to all this metadata fields through following fields:'''
+
+    ) + '\n\n' + list_fields(UnifedInterface.get_all_fields(), prefix='    '))
 
 sub_meta.add_argument(
     '-c',
@@ -221,7 +232,7 @@ sub_rename = subparser.add_parser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description='Tokens and functions you can use in the format '
     'string (-f, --format):\n\n'
-    'Tokens\n======\n\n' + format_field() + '\n\n'
+    'Tokens\n======\n\n' + list_fields(FIELDS) + '\n\n'
     'Functions\n=========\n' + tmep.doc.Doc().get())
 
 sub_rename.add_argument(

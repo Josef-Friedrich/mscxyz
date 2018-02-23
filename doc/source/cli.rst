@@ -80,27 +80,33 @@ mscx-manager meta
   usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELD FORMAT_STRING]
                            [-j] [-s] [-S]
   
-  # XML structure of a meta tag:
+  MuseScore can store meta data informations in different places:
+  
+  # metatag
+  
+  ## XML structure of a meta tag:
   
       <metaTag name="tag"></metaTag>
   
-  # All meta tags:
+  ## All meta tags:
   
-      - meta_arranger
-      - meta_composer
-      - meta_copyright
-      - meta_creationDate
-      - meta_lyricist
-      - meta_movementNumber
-      - meta_movementTitle
-      - meta_platform
-      - meta_poet
-      - meta_source
-      - meta_translator
-      - meta_workNumber
-      - meta_workTitle
+      - arranger
+      - composer
+      - copyright
+      - creationDate
+      - lyricist
+      - movementNumber
+      - movementTitle
+      - platform
+      - poet
+      - source
+      - translator
+      - workNumber
+      - workTitle
   
-  # XML structure of a vbox tag:
+  # vbox
+  
+  ## XML structure of a vbox tag:
   
       <VBox>
         <Text>
@@ -108,19 +114,45 @@ mscx-manager meta
           <text>Some title text</text>
           </Text>
   
-  # All vbox tags:
+  ## All vbox tags:
   
-      - vbox_Title
-      - vbox_Subtitle
-      - vbox_Composer
-      - vbox_Lyricist
+      - Title
+      - Subtitle
+      - Composer
+      - Lyricist
+  
+  This command line tool bundles some meta data informations:
   
   # Combined meta data fields:
   
-      - combined_title
-      - combined_subtitle
+      - title (1. vbox_title 2. metatag_work_title)
+      - subtitle (1. vbox_subtitle 2. metatag_movement_title)
+      - composer (1. vbox_composer 2. metatag_composer)
+      - lyricist (1. vbox_lyricist 2. metatag_lyricist)
+  
+  You have access to all this metadata fields through following fields:
+  
       - combined_composer
       - combined_lyricist
+      - combined_subtitle
+      - combined_title
+      - metatag_arranger
+      - metatag_composer
+      - metatag_copyright
+      - metatag_creation_date
+      - metatag_lyricist
+      - metatag_movement_number
+      - metatag_movement_title
+      - metatag_platform
+      - metatag_poet
+      - metatag_source
+      - metatag_translator
+      - metatag_work_number
+      - metatag_work_title
+      - vbox_composer
+      - vbox_lyricist
+      - vbox_subtitle
+      - vbox_title
   
   optional arguments:
     -h, --help            show this help message and exit
