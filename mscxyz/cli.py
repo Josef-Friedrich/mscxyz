@@ -20,6 +20,9 @@ parser = argparse.ArgumentParser(description='A command \
     line tool to manipulate the XML based "*.mscX" and "*.mscZ" \
     files of the notation software MuseScore.')
 
+###############################################################################
+# Global options
+###############################################################################
 
 parser.add_argument(
     '-V',
@@ -35,6 +38,13 @@ parser.add_argument(
     '--backup',
     action='store_true',
     help='Create a backup file.')
+
+
+parser.add_argument(
+    '-d',
+    '--dry-run',
+    action='store_true',
+    help='Simulate the actions.')
 
 parser.add_argument(
     '-g',
@@ -60,7 +70,9 @@ subparser = parser.add_subparsers(
     help='Run "subcommand --help" for more \
     informations.')
 
+###############################################################################
 # clean
+###############################################################################
 
 sub_clean = subparser.add_parser(
     'clean', help='Clean and reset the formating of the "*.mscx" file')
@@ -72,7 +84,9 @@ sub_clean.add_argument(
     help='Load a "*.mss" style file and include the contents of \
     this file.')
 
+###############################################################################
 # meta
+###############################################################################
 
 sub_meta = subparser.add_parser(
     'meta',
@@ -161,7 +175,9 @@ sub_meta.add_argument(
     dest='meta_set',
     help='Set value to meta data fields.')
 
+###############################################################################
 # lyrics
+###############################################################################
 
 sub_lyrics = subparser.add_parser(
     'lyrics',
@@ -195,7 +211,9 @@ sub_lyrics.add_argument(
     help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
     to a correct hyphenation ("la - la - la")')
 
+###############################################################################
 # rename
+###############################################################################
 
 sub_rename = subparser.add_parser(
     'rename',
@@ -205,12 +223,6 @@ sub_rename = subparser.add_parser(
     'string (-f, --format):\n\n'
     'Tokens\n======\n\n' + format_field() + '\n\n'
     'Functions\n=========\n' + tmep.doc.Doc().get())
-
-sub_rename.add_argument(
-    '-d',
-    '--dry-run',
-    action='store_true',
-    help='Do not rename the scores')
 
 sub_rename.add_argument(
     '-f',
@@ -231,7 +243,9 @@ sub_rename.add_argument(
     help='Replace all whitespaces with dashes or \
     sometimes underlines.')
 
+###############################################################################
 # export
+###############################################################################
 
 sub_export = subparser.add_parser(
     'export',
@@ -245,7 +259,9 @@ sub_export.add_argument(
     help='Extension to export. If this option \
     is omitted, then the default extension is "pdf".')
 
+###############################################################################
 # help
+###############################################################################
 
 sub_help = subparser.add_parser(
     'help',

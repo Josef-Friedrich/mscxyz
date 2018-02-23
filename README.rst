@@ -39,7 +39,7 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-g GLOB] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GLOB] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -55,6 +55,7 @@ mscxyz
     -h, --help            show this help message and exit
     -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
+    -d, --dry-run         Simulate the actions.
     -g GLOB, --glob GLOB  Handle only files which matches against Unix style
                           glob patterns (e. g. "*.mscx", "* - *"). If you omit
                           this option, the standard glob pattern "*.mscx" is
@@ -191,7 +192,7 @@ mscx-manager rename
 
 .. code-block:: text
 
-  usage: mscx-manager rename [-h] [-d] [-f FORMAT] [-a] [-n]
+  usage: mscx-manager rename [-h] [-f FORMAT] [-a] [-n]
   
   Tokens and functions you can use in the format string (-f, --format):
   
@@ -333,7 +334,6 @@ mscx-manager rename
   
   optional arguments:
     -h, --help            show this help message and exit
-    -d, --dry-run         Do not rename the scores
     -f FORMAT, --format FORMAT
                           Format string.
     -a, --ascii           Use only ASCII characters.
