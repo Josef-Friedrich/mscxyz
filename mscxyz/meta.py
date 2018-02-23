@@ -357,11 +357,27 @@ class Interface(object):
 
     def __init__(self, tree):
         self.xml_tree = tree
+        self.read_only = InterfaceReadOnly(tree)
+        self.read_write = UnifedInterface(tree.root)
 
     @staticmethod
     def get_all_fields():
         return sorted(InterfaceReadOnly.fields +
                       UnifedInterface.get_all_fields())
+
+    def __getattr__(self, field):
+        if re.match(r'^readonly_', field):
+            return getattr(self.read_only, field)
+        else:
+            return getattr(self.read_write, field)
+
+    def __setattr__(self, field, value):
+        if field in ('xml_tree', 'read_only', 'read_write'):
+            self.__dict__[field] = value
+        elif not re.match(r'^readonly_', field):
+            return setattr(self.read_write, field, value)
+        else:
+            raise AttributeError('The field “' + field + '” is read only!')
 
 
 class Meta(Tree):

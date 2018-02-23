@@ -212,12 +212,24 @@ class TestClassInterface(unittest.TestCase):
             'vbox_title',
         ]
 
-        self.tmp = helper.get_tmpfile_path('simple.mscx')
+        self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
         self.tree = Tree(self.tmp)
         self.interface = Interface(self.tree)
 
     def test_static_method_get_all_fields(self):
         self.assertEqual(Interface.get_all_fields(), self.fields)
+
+    def test_get(self):
+        for field in self.fields:
+            self.assertTrue(getattr(self.interface, field), field)
+
+    def test_set(self):
+        self.interface.vbox_title = 'lol'
+        self.assertEqual(self.interface.vbox_title, 'lol')
+
+    def test_exception(self):
+        with self.assertRaises(AttributeError):
+            self.interface.readonly_extension = 'lol'
 
 
 class TestClassMeta(unittest.TestCase):
