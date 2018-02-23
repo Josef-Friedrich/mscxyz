@@ -6,7 +6,7 @@
 import unittest
 import mscxyz
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
-                        UnifedInterface, InterfaceReadOnly, Interface
+                        InterfaceReadWrite, InterfaceReadOnly, Interface
 from mscxyz.tree import Tree
 import helper
 import os
@@ -51,7 +51,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        interface = UnifedInterface(tree.root)
+        interface = InterfaceReadWrite(tree.root)
         return interface, tree, tmp
 
     def test_subclasses(self):
@@ -61,12 +61,12 @@ class TestClassUnifiedInterface(unittest.TestCase):
         self.assertTrue(interface.combined)
 
     def test_static_method_split(self):
-        result = UnifedInterface._split('metatag_work_title')
+        result = InterfaceReadWrite._split('metatag_work_title')
         self.assertEqual(result, {'field': 'work_title', 'object': 'metatag'})
         with self.assertRaises(ValueError):
-            UnifedInterface._split('metatag')
+            InterfaceReadWrite._split('metatag')
         with self.assertRaises(ValueError):
-            UnifedInterface._split('lol_work_title')
+            InterfaceReadWrite._split('lol_work_title')
 
     def test_get_simple(self):
         interface, tree, tmp = self._init_class('simple.mscx')
@@ -93,7 +93,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
 
         tree.save()
         tree = Tree(tmp)
-        interface = UnifedInterface(tree.root)
+        interface = InterfaceReadWrite(tree.root)
 
         self.assertEqual(interface.combined_composer, 'vbox_composer_test')
         self.assertEqual(interface.combined_lyricist, 'vbox_lyricist_test')
@@ -104,7 +104,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
             self.assertEqual(getattr(interface, field), field + '_test')
 
     def test_method_get_all_fields(self):
-        fields = UnifedInterface.get_all_fields()
+        fields = InterfaceReadWrite.get_all_fields()
         self.assertEqual(fields, self.fields)
 
     def test_method_export_to_dict(self):

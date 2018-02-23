@@ -259,7 +259,7 @@ class Combined(Tree):
         self.vbox.Lyricist = self.metatag.lyricist = value
 
 
-class UnifedInterface(object):
+class InterfaceReadWrite(object):
 
     objects = ('metatag', 'vbox', 'combined')
 
@@ -287,7 +287,7 @@ class UnifedInterface(object):
             raise ValueError('Field “' + field + '” can’t be splitted!')
         matches = match.groups()
 
-        if not matches[0] in UnifedInterface.objects:
+        if not matches[0] in InterfaceReadWrite.objects:
             raise ValueError(matches[0] + ': Not a supported object!')
         return {'object': matches[0], 'field': matches[1]}
 
@@ -358,12 +358,12 @@ class Interface(object):
     def __init__(self, tree):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
-        self.read_write = UnifedInterface(tree.root)
+        self.read_write = InterfaceReadWrite(tree.root)
 
     @staticmethod
     def get_all_fields():
         return sorted(InterfaceReadOnly.fields +
-                      UnifedInterface.get_all_fields())
+                      InterfaceReadWrite.get_all_fields())
 
     def __getattr__(self, field):
         if re.match(r'^readonly_', field):
@@ -389,7 +389,7 @@ class Meta(Tree):
             self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
             self.combined = Combined(self.root)
-            self.interface = UnifedInterface(self.root)
+            self.interface = InterfaceReadWrite(self.root)
 
     def sync_fields(self):
         if not self.error:

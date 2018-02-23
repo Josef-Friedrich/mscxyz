@@ -3,7 +3,7 @@
 
 from mscxyz._version import get_versions
 from mscxyz.rename import FIELDS
-from mscxyz.meta import UnifedInterface
+from mscxyz.meta import InterfaceReadWrite
 import argparse
 import textwrap
 import tmep
@@ -145,7 +145,7 @@ sub_meta = subparser.add_parser(
 
     You have access to all this metadata fields through following fields:'''
 
-    ) + '\n\n' + list_fields(UnifedInterface.get_all_fields(), prefix='    '))
+    ) + '\n\n' + list_fields(InterfaceReadWrite.get_all_fields(), prefix='    '))
 
 sub_meta.add_argument(
     '-c',
