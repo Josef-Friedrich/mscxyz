@@ -230,7 +230,7 @@ class Vbox(object):
         if field == 'xml_root' or field == 'fields':
             self.__dict__[field] = value
         elif field.title() not in self.fields:
-            raise AttributeError('No field named: “' + field + '”!')
+            raise UnkownFieldError(field, self.fields)
         else:
             self._set_text(field.title(), value)
 

@@ -346,7 +346,7 @@ class TestClassVbox(unittest.TestCase):
 
     def test_set_exception(self):
         vbox, tree, tmp = self._init_class('simple.mscx')
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(meta.UnkownFieldError):
             vbox.lol = 'lol'
 
 
