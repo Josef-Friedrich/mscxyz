@@ -105,6 +105,7 @@ def execute(args=None):
 
         elif args.subcommand == 'meta':
             score = Meta(file)
+            pre = score.interface.export_to_dict()
             if args.meta_clean:
                 score.clean(args.meta_clean)
             if args.meta_json:
@@ -113,7 +114,8 @@ def execute(args=None):
                 score.distribute_field(args.meta_dist[0], args.meta_dist[1])
             if args.meta_sync:
                 score.sync_fields()
-            score.show()
+            post = score.interface.export_to_dict()
+            score.show(pre, post)
             if not args.dry_run:
                 score.save()
 

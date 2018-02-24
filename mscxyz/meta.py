@@ -422,19 +422,31 @@ class Meta(Tree):
         for field in fields:
             setattr(self.interface_read_write, field, '')
 
-    def show(self):
+    def show(self, pre, post):
         print_desc('\n' + colored(self.filename, 'red'))
-        print_desc(self.basename, 'filename', 'blue')
-        if not self.error:
-            for field in self.metatag.fields:
-                text = getattr(self.metatag, field)
-                if text:
-                    print_desc(text, field, 'yellow')
 
-            for field in self.vbox.fields:
-                text = getattr(self.vbox, field)
-                if text:
-                    print_desc(text, field, 'green')
+        for field in self.interface.fields:
+
+            if re.match(r'^combined_',  field):
+                color = 'green'
+            elif re.match(r'^metatag_',  field):
+                color = 'blue'
+            elif re.match(r'^readonly_',  field):
+                color = 'red'
+            elif re.match(r'^vbox_',  field):
+                color = 'cyan'
+            else:
+                color = 'white'
+
+            line = []
+            if pre[field]:
+                line.append('“' + pre[field] + '”')
+
+            if pre[field] != post[field]:
+                line.append('->')
+                line.append(colored('“' + post[field] + '”', 'yellow'))
+
+            print_desc(' '.join(line), field, color)
 
     def export_json(self):
         data = {}

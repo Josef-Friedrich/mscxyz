@@ -232,31 +232,6 @@ class TestClassInterface(unittest.TestCase):
             self.interface.readonly_extension = 'lol'
 
 
-class TestClassMeta(unittest.TestCase):
-
-    def setUp(self):
-        self.meta = Meta(helper.get_tmpfile_path('simple.mscx'))
-
-    def test_show(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(['meta', '-s',
-                           helper.get_tmpfile_path('simple.mscx')])
-
-        compare = [
-            '',
-            '\x1b[31msimple.mscx\x1b[0m',
-            '\x1b[34mfilename\x1b[0m: simple',
-            '\x1b[33mworkTitle\x1b[0m: Title',
-            '\x1b[33mplatform\x1b[0m: Linux',
-            '\x1b[33mcomposer\x1b[0m: Composer',
-            '\x1b[32mComposer\x1b[0m: Composer',
-            '\x1b[32mTitle\x1b[0m: Title'
-        ]
-
-        self.assertTrue('\x1b[33mworkTitle\x1b[0m: Title' in output)
-        self.assertEqual(output.sort(), compare.sort())
-
-
 class TestClassMetaTag(unittest.TestCase):
 
     def _init_class(self, filename):
@@ -444,6 +419,17 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_title, None, 'vbox_title')
         self.assertEqual(iface.vbox_composer, None, 'vbox_composer')
         self.assertEqual(iface.vbox_subtitle, 'vbox_subtitle', 'vbox_subtitle')
+
+    def test_show(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['meta', '--clean', 'all',
+                           helper.get_tmpfile_path('meta-all-values.mscx')])
+
+        self.assertEqual(output[0], '')
+        # self.assertEqual(output[1], '\x1b[31mmeta-all-values.mscx\x1b[0m')
+        # self.assertEqual(output[-1], '\x1b[36mvbox_title\x1b[0m: '
+        #                  '\xe2\x80\x9cvbox_title\xe2\x80\x9d -> '
+        #                  '\x1b[33m\xe2\x80\x9c\xe2\x80\x9d\x1b[0m')
 
 
 if __name__ == '__main__':
