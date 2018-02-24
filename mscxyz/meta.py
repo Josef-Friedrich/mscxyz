@@ -15,32 +15,32 @@ import tmep
 class ReadOnlyFieldError(Exception):
 
     def __init__(self, field):
-        msg = 'The field “{}” is read only!'.format(field)
-        Exception.__init__(self, msg)
+        self.msg = 'The field “{}” is read only!'.format(field)
+        Exception.__init__(self, self.msg)
 
 
 class UnkownFieldError(Exception):
 
     def __init__(self, field, valid_fields):
-        msg = 'Unkown field of name “{}”! Valid field names are: {}' \
+        self.msg = 'Unkown field of name “{}”! Valid field names are: {}' \
               .format(field, ', '.join(valid_fields))
-        Exception.__init__(self, msg)
+        Exception.__init__(self, self.msg)
 
 
 class UnmatchedFormatStringError(Exception):
 
     def __init__(self, format_string, input_string):
-        msg = 'Your format string “{}” doesn’t match on this ' \
+        self.msg = 'Your format string “{}” doesn’t match on this ' \
               'input string: “{}”'.format(format_string, input_string)
-        Exception.__init__(self, msg)
+        Exception.__init__(self, self.msg)
 
 
 class FormatStringNoFieldError(Exception):
 
     def __init__(self, format_string):
-        msg = 'No fields found in your format string “{}”!' \
+        self.msg = 'No fields found in your format string “{}”!' \
               .format(format_string)
-        Exception.__init__(self, msg)
+        Exception.__init__(self, self.msg)
 
 
 def distribute_field(source, format_string):
@@ -448,8 +448,8 @@ class Meta(Tree):
             results = distribute_field(source, format_string)
             for field, value in results.items():
                 setattr(self.interface, field, value)
-        except ValueError as e:
-            self.errors.append(e)
+        except UnmatchedFormatStringError as error:
+            self.errors.append(error)
 
     def set_field(self, destination_field, format_string):
         field_value = tmep.parse(format_string,

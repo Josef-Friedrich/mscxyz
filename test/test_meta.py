@@ -436,12 +436,18 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.metatag_movement_title, 'Title')
         self.assertEqual(iface.metatag_work_title, 'Title')
 
-    @unittest.skip('needs work')
     def test_distribute_field_invalid_format_string(self):
         tmp = helper.get_tmpfile_path('meta-distribute-field.mscx')
-        with self.assertRaises(ValueError):
+        with self.assertRaises(meta.FormatStringNoFieldError):
             mscxyz.execute(['meta', '--distribute-field', 'vbox_title', 'lol',
                             tmp])
+
+    def test_distribute_field_exception_unmatched(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        with helper.Capturing() as output:
+            mscxyz.execute(['meta', '--distribute-field', 'vbox_title',
+                            '$metatag_work_title - $metatag_composer', tmp])
+        self.assertTrue('UnmatchedFormatStringError' in output[-1])
 
     def test_clean_all(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')

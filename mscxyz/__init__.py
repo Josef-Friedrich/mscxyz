@@ -72,10 +72,9 @@ def show_all_help(args):
 
 def report_errors(errors):
     for error in errors:
-        print('Error: {}; message: {}; code: {}'.format(
+        print('Error: {}; message: {}'.format(
             error.__class__.__name__,
-            error.msg,
-            error.code,
+            error.msg
         ))
 
 def no_error(error, errors):

@@ -14,8 +14,7 @@ class TestBrokenFile(unittest.TestCase):
             mscxyz.execute(['meta', helper.get_tmpfile_path('broken.mscx')])
 
         self.assertEqual(output[0], 'Error: XMLSyntaxError; message: Start '
-                         'tag expected, \'<\' not found, line 1, column 1; '
-                         'code: 4')
+                         'tag expected, \'<\' not found, line 1, column 1')
 
 
 if __name__ == '__main__':
