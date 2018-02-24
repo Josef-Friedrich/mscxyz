@@ -5,11 +5,23 @@
 
 import unittest
 import mscxyz
+from mscxyz import meta
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
 from mscxyz.tree import Tree
 import helper
 import os
+
+
+class TestExceptions(unittest.TestCase):
+
+    def test_unkown_field_error(self):
+        valid_fields = ('troll', 'trill')
+        with self.assertRaises(meta.UnkownFieldError) as context:
+            raise meta.UnkownFieldError('lol', valid_fields)
+        self.assertEqual(str(context.exception),
+                         'Unkown field of name “lol”! Valid field names are: '
+                         'troll, trill')
 
 
 class TestFunctionDistributeField(unittest.TestCase):
@@ -228,7 +240,7 @@ class TestClassInterface(unittest.TestCase):
         self.assertEqual(self.interface.vbox_title, 'lol')
 
     def test_exception(self):
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(mscxyz.meta.ReadOnlyFieldError):
             self.interface.readonly_extension = 'lol'
 
 
@@ -269,7 +281,7 @@ class TestClassMetaTag(unittest.TestCase):
 
     def test_get_exception(self):
         meta, tree, tmp = self._init_class('simple.mscx')
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(mscxyz.meta.UnkownFieldError):
             meta.lol
 
     def test_set_exception(self):
@@ -309,7 +321,7 @@ class TestClassVbox(unittest.TestCase):
 
     def test_get_exception(self):
         vbox, tree, tmp = self._init_class('simple.mscx')
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(meta.UnkownFieldError):
             vbox.lol
 
     def _assert_set(self, filename):

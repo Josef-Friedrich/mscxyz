@@ -12,6 +12,18 @@ import re
 import tmep
 
 
+class ReadOnlyFieldError(Exception):
+    pass
+
+
+class UnkownFieldError(Exception):
+
+    def __init__(self, field, valid_fields):
+        msg = 'Unkown field of name “{}”! Valid field names are: {}' \
+              .format(field, ', '.join(valid_fields))
+        Exception.__init__(self, msg)
+
+
 def distribute_field(source, format_string):
     fields = re.findall(r'\$([a-z_]*)', format_string)
     if not fields:
@@ -96,7 +108,7 @@ class MetaTag(object):
     def __getattr__(self, field):
         field = self._to_camel_case(field)
         if field not in self.fields:
-            raise AttributeError('No field named: “' + field + '”!')
+            raise UnkownFieldError(field, self.fields)
         else:
             return self._get_text(field)
 
@@ -188,7 +200,7 @@ class Vbox(object):
     def __getattr__(self, field):
         field = field.title()
         if field not in self.fields:
-            raise AttributeError
+            raise UnkownFieldError(field, self.fields)
         else:
             return self._get_text(field)
 
@@ -391,7 +403,8 @@ class Interface(object):
         elif not re.match(r'^readonly_', field):
             return setattr(self.read_write, field, value)
         else:
-            raise AttributeError('The field “' + field + '” is read only!')
+            raise ReadOnlyFieldError('The field “{}” is read only!'
+                                     .format(field))
 
 
 class Meta(Tree):
