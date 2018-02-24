@@ -12,6 +12,7 @@ from mscxyz.rename import Rename
 from mscxyz.tree import Tree
 import six
 import sys
+import lxml
 
 from ._version import get_versions
 __version__ = get_versions()['version']
@@ -69,6 +70,21 @@ def show_all_help(args):
         code_block(args, getattr(cli, args.path).format_help())
 
 
+def report_errors(errors):
+    for error in errors:
+        print('Error: {}; message: {}; code: {}'.format(
+            error.__class__.__name__,
+            error.msg,
+            error.code,
+        ))
+
+def no_error(error, errors):
+    for e in errors:
+        if isinstance(e, error):
+            return False
+    return True
+
+
 def execute(args=None):
     args = cli.parser.parse_args(args)
 
@@ -105,21 +121,22 @@ def execute(args=None):
 
         elif args.subcommand == 'meta':
             score = Meta(file)
-            pre = score.interface.export_to_dict()
-            if args.meta_clean:
-                score.clean(args.meta_clean)
-            if args.meta_json:
-                score.export_json()
-            if args.meta_dist:
-                for a in args.meta_dist:
-                    score.distribute_field(a[0], a[1])
-            if args.meta_set:
-                for a in args.meta_set:
-                    score.set_field(a[0], a[1])
-            if args.meta_sync:
-                score.sync_fields()
-            post = score.interface.export_to_dict()
-            score.show(pre, post)
+            if no_error(lxml.etree.XMLSyntaxError, score.errors):
+                pre = score.interface.export_to_dict()
+                if args.meta_clean:
+                    score.clean(args.meta_clean)
+                if args.meta_json:
+                    score.export_json()
+                if args.meta_dist:
+                    for a in args.meta_dist:
+                        score.distribute_field(a[0], a[1])
+                if args.meta_set:
+                    for a in args.meta_set:
+                        score.set_field(a[0], a[1])
+                if args.meta_sync:
+                    score.sync_fields()
+                post = score.interface.export_to_dict()
+                score.show(pre, post)
             if not args.dry_run and not score.errors:
                 score.save()
 
@@ -139,6 +156,8 @@ def execute(args=None):
             from mscxyz.fileloader import File
             score = File(file)
             score.export(args.extension)
+
+        report_errors(score.errors)
 
         output.append(score)
 
