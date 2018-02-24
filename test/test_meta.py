@@ -23,6 +23,18 @@ class TestExceptions(unittest.TestCase):
                          'Unkown field of name “lol”! Valid field names are: '
                          'troll, trill')
 
+    def test_unmatched_format_string_error(self):
+        with self.assertRaises(meta.UnmatchedFormatStringError) as context:
+            raise meta.UnmatchedFormatStringError('test', 'test')
+        self.assertEqual(str(context.exception), 'Your format string “test” '
+                         'doesn’t match on this input string: “test”')
+
+    def test_format_string_no_field_error(self):
+        with self.assertRaises(meta.FormatStringNoFieldError) as context:
+            raise meta.FormatStringNoFieldError('test')
+        self.assertEqual(str(context.exception), 'No fields found in your '
+                         'format string “test”!')
+
 
 class TestFunctionDistributeField(unittest.TestCase):
 

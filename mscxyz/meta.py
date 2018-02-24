@@ -24,16 +24,30 @@ class UnkownFieldError(Exception):
         Exception.__init__(self, msg)
 
 
+class UnmatchedFormatStringError(Exception):
+
+    def __init__(self, format_string, input_string):
+        msg = 'Your format string “{}” doesn’t match on this ' \
+              'input string: “{}”'.format(format_string, input_string)
+        Exception.__init__(self, msg)
+
+
+class FormatStringNoFieldError(Exception):
+
+    def __init__(self, format_string):
+        msg = 'No fields found in your format string “{}”!' \
+              .format(format_string)
+        Exception.__init__(self, msg)
+
+
 def distribute_field(source, format_string):
     fields = re.findall(r'\$([a-z_]*)', format_string)
     if not fields:
-        raise ValueError('No fields found in your format string “{}”!'
-                         .format(format_string))
+        raise FormatStringNoFieldError(format_string)
     regex = re.sub(r'\$[a-z_]*', '(.*)', format_string)
     match = re.search(regex, source)
     if not match:
-        raise ValueError('Your format_string “{}” doesn’t match on this '
-                          'input string: “{}”'.format(format_string, source))
+        raise UnmatchedFormatStringError(format_string, source)
     values = match.groups()
     return dict(zip(fields, values))
 
