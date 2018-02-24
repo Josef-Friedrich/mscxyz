@@ -18,19 +18,16 @@ class Tree(File):
             self.root = self.tree.getroot()
 
     def add_sub_element(self, root_tag, tag, text):
-        if not self.errors:
-            tag = lxml.etree.SubElement(root_tag, tag)
-            tag.text = text
+        tag = lxml.etree.SubElement(root_tag, tag)
+        tag.text = text
 
     def strip_tags(self, *tags):
-        if not self.errors:
-            lxml.etree.strip_tags(self.tree, tags)
+        lxml.etree.strip_tags(self.tree, tags)
 
     def remove_tags_by_xpath(self, *xpath_strings):
-        if not self.errors:
-            for xpath_string in xpath_strings:
-                for rm in self.tree.xpath(xpath_string):
-                    rm.getparent().remove(rm)
+        for xpath_string in xpath_strings:
+            for rm in self.tree.xpath(xpath_string):
+                rm.getparent().remove(rm)
 
     def merge_style(self, style_file):
         style = lxml.etree.parse(style_file).getroot()
@@ -39,10 +36,9 @@ class Tree(File):
             score.insert(0, style[0])
 
     def clean(self):
-        if not self.errors:
-            self.remove_tags_by_xpath(
-                '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-            self.strip_tags('font', 'b', 'i', 'pos')
+        self.remove_tags_by_xpath(
+            '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
+        self.strip_tags('font', 'b', 'i', 'pos')
 
     def save(self, new_name=''):
         if new_name:
