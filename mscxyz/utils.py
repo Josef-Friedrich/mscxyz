@@ -33,7 +33,6 @@ def mscore(commands):
         OUT = open(os.devnull, 'wb')
         subprocess.call(commands, stdout=OUT, stderr=OUT)
         OUT.close()
-        return commands
 
 
 def re_open(input_file):
