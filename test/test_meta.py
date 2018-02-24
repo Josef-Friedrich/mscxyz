@@ -431,6 +431,28 @@ class TestIntegration(unittest.TestCase):
         #                  '\xe2\x80\x9cvbox_title\xe2\x80\x9d -> '
         #                  '\x1b[33m\xe2\x80\x9c\xe2\x80\x9d\x1b[0m')
 
+    def test_set_field_simple_string(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(['meta', '--set-field', 'vbox_title', 'lol', tmp])
+        meta = Meta(tmp)
+        self.assertEqual(meta.interface.vbox_title, 'lol')
+
+    def test_set_field_multiple_times(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(['meta', '--set-field', 'vbox_title', 'lol',
+                        '--set-field', 'vbox_composer', 'troll', tmp])
+        meta = Meta(tmp)
+        self.assertEqual(meta.interface.vbox_title, 'lol')
+        self.assertEqual(meta.interface.vbox_composer, 'troll')
+
+    def test_set_field_with_templating(self):
+        tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+        mscxyz.execute(['meta', '--set-field', 'vbox_title',
+                        '$vbox_title ($vbox_composer)', tmp])
+        meta = Meta(tmp)
+        self.assertEqual(meta.interface.vbox_title,
+                         'vbox_title (vbox_composer)')
+
 
 if __name__ == '__main__':
     unittest.main()

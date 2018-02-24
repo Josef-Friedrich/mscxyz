@@ -181,8 +181,10 @@ sub_meta.add_argument(
 
 sub_meta.add_argument(
     '-S',
-    '--set',
-    action='store_true',
+    '--set-field',
+    nargs=2,
+    action='append',
+    metavar=('DESTINATION_FIELD', 'FORMAT_STRING'),
     dest='meta_set',
     help='Set value to meta data fields.')
 

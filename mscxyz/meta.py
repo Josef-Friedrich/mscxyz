@@ -9,6 +9,7 @@ import lxml
 import six
 import json
 import re
+import tmep
 
 
 def distribute_field(source, format_string):
@@ -412,6 +413,11 @@ class Meta(Tree):
         results = distribute_field(source, format_string)
         for field, value in results.items():
             setattr(self.interface, field, value)
+
+    def set_field(self, destination_field, format_string):
+        field_value = tmep.parse(format_string,
+                                 self.interface.export_to_dict())
+        setattr(self.interface, destination_field, field_value)
 
     def clean(self, fields):
         fields = fields[0]

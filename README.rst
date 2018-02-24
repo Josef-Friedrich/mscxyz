@@ -108,7 +108,7 @@ mscx-manager meta
 .. code-block:: text
 
   usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELD FORMAT_STRING]
-                           [-j] [-s] [-S]
+                           [-j] [-s] [-S DESTINATION_FIELD FORMAT_STRING]
   
   MuseScore can store meta data informations in different places:
   
@@ -195,7 +195,8 @@ mscx-manager meta
     -s, --synchronize     Synchronize the values of the first vertical frame
                           (vbox) (title, subtitle, composer, lyricist) with the
                           corresponding metadata fields
-    -S, --set             Set value to meta data fields.
+    -S DESTINATION_FIELD FORMAT_STRING, --set-field DESTINATION_FIELD FORMAT_STRING
+                          Set value to meta data fields.
   
 
 mscx-manager lyrics
