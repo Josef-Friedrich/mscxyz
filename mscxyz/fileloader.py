@@ -11,6 +11,7 @@ import six
 class File(object):
 
     def __init__(self, fullpath):
+        self.errors = []
         self.fullpath = fullpath
         self.extension = self.fullpath.split('.')[-1]
         self.fullpath_backup = self.fullpath.replace(

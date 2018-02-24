@@ -22,7 +22,6 @@ def distribute_field(source, format_string):
     if not match:
         raise ValueError('Your format_string “{}” doesn’t match on this '
                           'input string: “{}”'.format(format_string, source))
-    print(source)
     values = match.groups()
     return dict(zip(fields, values))
 
@@ -400,7 +399,7 @@ class Meta(Tree):
     def __init__(self, fullpath):
         super(Meta, self).__init__(fullpath)
 
-        if not self.error:
+        if not self.errors:
             self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
             self.combined = Combined(self.root)
@@ -408,17 +407,20 @@ class Meta(Tree):
             self.interface = Interface(self)
 
     def sync_fields(self):
-        if not self.error:
+        if not self.errors:
             self.combined.title = self.combined.title
             self.combined.subtitle = self.combined.subtitle
             self.combined.composer = self.combined.composer
             self.combined.lyricist = self.combined.lyricist
 
     def distribute_field(self, source_field, format_string):
-        source = getattr(self.interface, source_field)
-        results = distribute_field(source, format_string)
-        for field, value in results.items():
-            setattr(self.interface, field, value)
+        try:
+            source = getattr(self.interface, source_field)
+            results = distribute_field(source, format_string)
+            for field, value in results.items():
+                setattr(self.interface, field, value)
+        except ValueError as e:
+            self.errors.append(e)
 
     def set_field(self, destination_field, format_string):
         field_value = tmep.parse(format_string,

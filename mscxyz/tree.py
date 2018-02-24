@@ -13,23 +13,21 @@ class Tree(File):
         try:
             self.tree = lxml.etree.parse(self.fullpath)
         except lxml.etree.XMLSyntaxError as e:
-            print('Error!!! ' + str(e))
-            self.error = True
+            self.errors.append(e)
         else:
-            self.error = False
             self.root = self.tree.getroot()
 
     def add_sub_element(self, root_tag, tag, text):
-        if not self.error:
+        if not self.errors:
             tag = lxml.etree.SubElement(root_tag, tag)
             tag.text = text
 
     def strip_tags(self, *tags):
-        if not self.error:
+        if not self.errors:
             lxml.etree.strip_tags(self.tree, tags)
 
     def remove_tags_by_xpath(self, *xpath_strings):
-        if not self.error:
+        if not self.errors:
             for xpath_string in xpath_strings:
                 for rm in self.tree.xpath(xpath_string):
                     rm.getparent().remove(rm)
@@ -41,7 +39,7 @@ class Tree(File):
             score.insert(0, style[0])
 
     def clean(self):
-        if not self.error:
+        if not self.errors:
             self.remove_tags_by_xpath(
                 '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
             self.strip_tags('font', 'b', 'i', 'pos')
@@ -51,6 +49,6 @@ class Tree(File):
             filename = new_name
         else:
             filename = self.fullpath
-        if not self.error:
+        if not self.errors:
             self.tree.write(filename, encoding='UTF-8')
             re_open(filename)

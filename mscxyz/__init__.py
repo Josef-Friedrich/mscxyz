@@ -120,7 +120,7 @@ def execute(args=None):
                 score.sync_fields()
             post = score.interface.export_to_dict()
             score.show(pre, post)
-            if not args.dry_run:
+            if not args.dry_run and not score.errors:
                 score.save()
 
         elif args.subcommand == 'rename':
