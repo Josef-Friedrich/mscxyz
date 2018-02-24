@@ -397,9 +397,8 @@ class Meta(Tree):
             self.metatag = MetaTag(self.root)
             self.vbox = Vbox(self.root)
             self.combined = Combined(self.root)
-            # TODO: Use class “Interface()”
-            self.interface = InterfaceReadWrite(self.root)
-            self.iface = Interface(self)
+            self.interface_read_write = InterfaceReadWrite(self.root)
+            self.interface = Interface(self)
 
     def sync_fields(self):
         if not self.error:
@@ -417,11 +416,11 @@ class Meta(Tree):
     def clean(self, fields):
         fields = fields[0]
         if fields == 'all':
-            fields = self.interface.fields
+            fields = self.interface_read_write.fields
         else:
             fields = fields.split(',')
         for field in fields:
-            setattr(self.interface, field, '')
+            setattr(self.interface_read_write, field, '')
 
     def show(self):
         print_desc('\n' + colored(self.filename, 'red'))

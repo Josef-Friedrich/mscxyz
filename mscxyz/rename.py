@@ -80,7 +80,7 @@ class Rename(File):
     def apply_format_string(self,
                             format_string='$vbox_title ($vbox_composer)'):
         self.workname = tmep.parse(format_string,
-                                   self.score.iface.export_to_dict())
+                                   self.score.interface.export_to_dict())
 
     def execute(self, dry_run=False, verbose=0):
         if dry_run or verbose > 0:

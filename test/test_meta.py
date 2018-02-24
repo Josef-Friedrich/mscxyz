@@ -420,7 +420,7 @@ class TestIntegration(unittest.TestCase):
             ['meta', '--clean', 'all', tmp]
         )
         meta = Meta(tmp)
-        iface = meta.interface
+        iface = meta.interface_read_write
         for field in iface.fields:
             self.assertEqual(getattr(iface, field), None, field)
 
