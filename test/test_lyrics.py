@@ -7,6 +7,7 @@ import os
 import helper
 import unittest
 import mscxyz
+import mock
 
 
 class TestLyrics(unittest.TestCase):
@@ -41,12 +42,9 @@ class TestLyrics(unittest.TestCase):
 class TestLyricsFix(unittest.TestCase):
 
     def setUp(self):
-        tmp = mscxyz.execute([
-            'lyrics',
-            '--fix',
-            helper.get_tmpfile_path('lyrics-fix.mscx')
-        ])[0]
-        self.tree = mscxyz.lyrics.Lyrics(tmp.fullpath)
+        self.tmp = helper.get_tmpfile_path('lyrics-fix.mscx')
+        mscxyz.execute(['lyrics', '--fix', self.tmp])
+        self.tree = mscxyz.lyrics.Lyrics(self.tmp)
         self.lyrics = self.tree.lyrics
 
     def test_fix(self):
@@ -71,16 +69,13 @@ class TestLyricsFix(unittest.TestCase):
 class TestLyricsRemap(unittest.TestCase):
 
     def setUp(self):
-        self.score = mscxyz.execute([
-            'lyrics',
-            '--remap',
-            '2:6',
-            helper.get_tmpfile_path('lyrics-remap.mscx')
-        ])[0]
-        self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
+        self.tmp = helper.get_tmpfile_path('lyrics-remap.mscx')
+        mscxyz.execute(['lyrics', '--remap', '2:6', self.tmp])
+        self.tree = mscxyz.lyrics.Lyrics(self.tmp)
         self.lyrics = self.tree.lyrics
 
-    def test_remap(self):
+    @mock.patch('mscxyz.fileloader.mscore')
+    def test_remap(self, mscore):
         text = []
         for element in self.lyrics:
             tag = element['element']
