@@ -15,6 +15,12 @@ import os
 
 class TestExceptions(unittest.TestCase):
 
+    def test_read_only_field_error(self):
+        with self.assertRaises(meta.ReadOnlyFieldError) as context:
+            raise meta.ReadOnlyFieldError('lol')
+        self.assertEqual(str(context.exception),
+                         'The field “lol” is read only!')
+
     def test_unkown_field_error(self):
         valid_fields = ('troll', 'trill')
         with self.assertRaises(meta.UnkownFieldError) as context:

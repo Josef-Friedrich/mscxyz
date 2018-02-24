@@ -13,7 +13,10 @@ import tmep
 
 
 class ReadOnlyFieldError(Exception):
-    pass
+
+    def __init__(self, field):
+        msg = 'The field “{}” is read only!'.format(field)
+        Exception.__init__(self, msg)
 
 
 class UnkownFieldError(Exception):
@@ -417,8 +420,7 @@ class Interface(object):
         elif not re.match(r'^readonly_', field):
             return setattr(self.read_write, field, value)
         else:
-            raise ReadOnlyFieldError('The field “{}” is read only!'
-                                     .format(field))
+            raise ReadOnlyFieldError(field)
 
 
 class Meta(Tree):
