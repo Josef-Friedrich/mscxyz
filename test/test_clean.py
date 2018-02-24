@@ -9,44 +9,20 @@ import mscxyz
 
 class TestClean(unittest.TestCase):
 
-    def setUp(self):
-        clean = mscxyz.execute(['clean',
-                                helper.get_tmpfile_path('formats.mscx')])[0]
-        self.clean_file = helper.read_file(clean.fullpath)
+    def test_clean(self):
+        tmp = helper.get_tmpfile_path('formats.mscx')
+        mscxyz.execute(['clean', tmp])
+        cleaned = helper.read_file(tmp)
+        self.assertFalse('<font' in cleaned)
+        self.assertFalse('<b>' in cleaned)
+        self.assertFalse('<i>' in cleaned)
+        self.assertFalse('<pos' in cleaned)
+        self.assertFalse('<LayoutBreak>' in cleaned)
+        self.assertFalse('<StemDirection>' in cleaned)
 
-    def test_font(self):
-        self.assertFalse('<font' in self.clean_file)
-
-    def test_b(self):
-        self.assertFalse('<b>' in self.clean_file)
-
-    def test_i(self):
-        self.assertFalse('<i>' in self.clean_file)
-
-    def test_pos(self):
-        self.assertFalse('<pos' in self.clean_file)
-
-    def test_layout_break(self):
-        self.assertFalse('<LayoutBreak>' in self.clean_file)
-
-    def test_stem_direction(self):
-        self.assertFalse('<StemDirection>' in self.clean_file)
-
-
-class TestCleanAddStyle(unittest.TestCase):
-
-    def setUp(self):
-        self.score = mscxyz.execute(
-            [
-                'clean',
-                '--style',
-                helper.get_tmpfile_path('style.mss'),
-                helper.get_tmpfile_path('simple.mscx')
-            ])[0]
-        self.style = helper.read_file(self.score.fullpath)
-
-    def test_style(self):
-        self.assertTrue(
-            '<staffUpperBorder>77</staffUpperBorder>'
-            in self.style
-        )
+    def test_clean_add_style(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        mscxyz.execute(['clean', '--style',
+                        helper.get_tmpfile_path('style.mss'), tmp])
+        style = helper.read_file(tmp)
+        self.assertTrue('<staffUpperBorder>77</staffUpperBorder>' in style)

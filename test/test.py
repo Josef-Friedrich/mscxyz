@@ -23,13 +23,12 @@ class TestFile(unittest.TestCase):
 
 
 class TestBatch(unittest.TestCase):
-    def setUp(self):
-        with helper.Capturing():
-            self.batch = mscxyz.execute(['meta', '-s',
-                                        helper.get_tmpdir_path('batch')])
 
-    def test_batch(self):
-        self.assertEqual(len(self.batch), 3)
+    @mock.patch('mscxyz.Meta')
+    def test_batch(self, Meta):
+        with helper.Capturing():
+            mscxyz.execute(['meta', helper.get_tmpdir_path('batch')])
+        self.assertEqual(Meta.call_count, 3)
 
 
 class TestBackup(unittest.TestCase):
