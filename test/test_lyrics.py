@@ -7,88 +7,35 @@ import os
 import helper
 import unittest
 import mscxyz
-import sys
-
-
-if sys.prefix == '/usr':
-    mscore = True
-else:
-    mscore = False
 
 
 class TestLyrics(unittest.TestCase):
 
     def setUp(self):
-        self.file = 'lyrics.mscx'
-        self.lyrics = mscxyz.execute(['lyrics',
-                                     helper.get_tmpfile_path(self.file)])[0]
+        self.tmp = helper.get_tmpfile_path('lyrics.mscx')
 
-    def test_files_exist(self):
-        tmpdir = os.path.dirname(self.lyrics.fullpath)
-
-        def check(number):
-            lyrics_file = os.path.join(
-                tmpdir,
-                self.file.replace('.mscx', '_' + str(number) + '.mscx'))
-            self.assertTrue(os.path.isfile(lyrics_file))
-
-        check(1)
-        check(2)
-        check(3)
-
-
-class TestLyricsExtractAll(unittest.TestCase):
-
-    def setUp(self):
-        self.file = 'lyrics.mscx'
-        self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', 'all',
-             helper.get_tmpfile_path(self.file)])[0]
-
-    def tmpFile(self, number):
-        return os.path.join(
-            os.path.dirname(self.lyrics.fullpath),
-            self.file.replace('.mscx', '_' + str(number) + '.mscx')
+    def assertLyricsFileExists(self, number):
+        self.assertTrue(
+            os.path.isfile(
+                self.tmp.replace('.mscx', '_{}.mscx'.format(number))
+            )
         )
 
-    def isFile(self, number):
-        return os.path.isfile(self.tmpFile(number))
+    def test_without_arguments(self):
+        mscxyz.execute(['lyrics', self.tmp])
+        self.assertLyricsFileExists(1)
+        self.assertLyricsFileExists(2)
+        self.assertLyricsFileExists(3)
 
-    def test_1(self):
-        self.assertTrue(self.isFile(1))
+    def test_extract_all(self):
+        mscxyz.execute(['lyrics', '--extract', 'all', self.tmp])
+        self.assertLyricsFileExists(1)
+        self.assertLyricsFileExists(2)
+        self.assertLyricsFileExists(3)
 
-    def test_2(self):
-        self.assertTrue(self.isFile(2))
-
-    def test_3(self):
-        self.assertTrue(self.isFile(3))
-
-
-class TestLyricsExtractByNumber(unittest.TestCase):
-
-    def setUp(self):
-        self.file = 'lyrics.mscx'
-        self.lyrics = mscxyz.execute(
-            ['lyrics', '--extract', '2',
-             helper.get_tmpfile_path(self.file)])[0]
-
-    def tmpFile(self, number):
-        return os.path.join(
-            os.path.dirname(self.lyrics.fullpath),
-            self.file.replace('.mscx', '_' + str(number) + '.mscx')
-        )
-
-    def isFile(self, number):
-        return os.path.isfile(self.tmpFile(number))
-
-    def test_1(self):
-        self.assertFalse(self.isFile(1))
-
-    def test_2(self):
-        self.assertTrue(self.isFile(2))
-
-    def test_3(self):
-        self.assertFalse(self.isFile(3))
+    def test_extract_by_number(self):
+        mscxyz.execute(['lyrics', '--extract', '2',  self.tmp])
+        self.assertLyricsFileExists(2)
 
 
 class TestLyricsFix(unittest.TestCase):
@@ -133,7 +80,6 @@ class TestLyricsRemap(unittest.TestCase):
         self.tree = mscxyz.lyrics.Lyrics(self.score.fullpath)
         self.lyrics = self.tree.lyrics
 
-    @unittest.skipIf(not mscore, 'export not working in travis')
     def test_remap(self):
         text = []
         for element in self.lyrics:
