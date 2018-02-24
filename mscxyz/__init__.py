@@ -94,7 +94,6 @@ def execute(args=None):
     batch = Batch(args.path, args.glob)
     files = batch.get_files()
 
-    output = []
     for file in files:
 
         if args.backup:
@@ -157,10 +156,6 @@ def execute(args=None):
             score.export(args.extension)
 
         report_errors(score.errors)
-
-        output.append(score)
-
-    return output
 
 
 if __name__ == '__main__':

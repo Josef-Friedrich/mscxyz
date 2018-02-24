@@ -7,7 +7,6 @@ import helper
 import unittest
 import mscxyz
 import sys
-import six
 
 if sys.prefix == '/usr':
     mscore = True
@@ -39,30 +38,23 @@ class TestBatch(unittest.TestCase):
 
 
 class TestBackup(unittest.TestCase):
+
     def setUp(self):
+        self.tmp = helper.get_tmpfile_path('simple.mscx')
+        self.backup = self.tmp.replace('.mscx', '_bak.mscx')
         with helper.Capturing():
-            self.score = mscxyz.execute(
-                ['-b', 'meta', '-s',
-                 helper.get_tmpfile_path('simple.mscx')])[0]
-            self.fullpath = self.score.fullpath
-            self.fullpath_backup = self.score.fullpath_backup
+            mscxyz.execute(['--backup', 'meta', self.tmp])
 
-    def test_path_not_empty(self):
-        self.assertTrue(os.path.isfile(self.fullpath_backup))
-
-    def test_path_attribute(self):
-        if six.PY2:
-            self.assertRegexpMatches(self.fullpath_backup, '_bak')
-        else:
-            self.assertRegex(self.fullpath_backup, '_bak')
+    def test_exists(self):
+        self.assertTrue(os.path.isfile(self.backup))
 
     def test_size(self):
-        self.assertEqual(
-            os.path.getsize(self.fullpath_backup),
-            os.path.getsize(self.fullpath_backup))
+        self.assertEqual(os.path.getsize(self.tmp),
+                         os.path.getsize(self.backup))
 
 
 class TestExport(unittest.TestCase):
+
     def export(self, extension):
         score = mscxyz.execute(['export', '--extension', extension,
                                helper.get_tmpfile_path('simple.mscx')])[0]
