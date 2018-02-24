@@ -15,9 +15,14 @@ import tmep
 def distribute_field(source, format_string):
     fields = re.findall(r'\$([a-z_]*)', format_string)
     if not fields:
-        raise ValueError('No fields found in your format string')
+        raise ValueError('No fields found in your format string “{}”!'
+                         .format(format_string))
     regex = re.sub(r'\$[a-z_]*', '(.*)', format_string)
     match = re.search(regex, source)
+    if not match:
+        raise ValueError('Your format_string “{}” doesn’t match on this '
+                          'input string: “{}”'.format(format_string, source))
+    print(source)
     values = match.groups()
     return dict(zip(fields, values))
 
