@@ -158,6 +158,7 @@ sub_meta.add_argument(
     '-d',
     '--distribute-fields',
     dest='meta_dist',
+    action='append',
     nargs=2,
     metavar=('SOURCE_FIELD', 'FORMAT_STRING'),
     help='Distribute a source field to target fields applying a format string \

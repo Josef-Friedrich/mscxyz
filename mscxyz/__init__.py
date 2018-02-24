@@ -111,7 +111,8 @@ def execute(args=None):
             if args.meta_json:
                 score.export_json()
             if args.meta_dist:
-                score.distribute_field(args.meta_dist[0], args.meta_dist[1])
+                for a in args.meta_dist:
+                    score.distribute_field(a[0], a[1])
             if args.meta_set:
                 for a in args.meta_set:
                     score.set_field(a[0], a[1])
