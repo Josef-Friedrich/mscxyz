@@ -14,11 +14,12 @@ import tmep
 
 def distribute_field(source, format_string):
     fields = re.findall(r'\$([a-z_]*)', format_string)
+    if not fields:
+        raise ValueError('No fields found in your format string')
     regex = re.sub(r'\$[a-z_]*', '(.*)', format_string)
     match = re.search(regex, source)
     values = match.groups()
     return dict(zip(fields, values))
-
 
 def to_underscore(field):
     return re.sub('([A-Z]+)', r'_\1', field).lower()

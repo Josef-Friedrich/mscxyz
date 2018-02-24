@@ -389,6 +389,12 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_title, 'Title')
         self.assertEqual(iface.metatag_work_title, 'Title')
 
+    def test_distribute_field_invalid_format_string(self):
+        tmp = helper.get_tmpfile_path('meta-distribute-field.mscx')
+        with self.assertRaises(ValueError):
+            mscxyz.execute(['meta', '--distribute-field', 'vbox_title', 'lol',
+                            tmp])
+
     def test_clean_all(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')
         mscxyz.execute(
