@@ -12,14 +12,6 @@ import tmep
 import unidecode
 
 
-FIELDS = (
-    'composer',
-    'lyricist',
-    'subtitle',
-    'title',
-)
-
-
 def create_dir(path):
     try:
         os.makedirs(path)

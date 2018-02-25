@@ -236,16 +236,40 @@ mscx-manager rename
   
   Tokens and functions you can use in the format string (-f, --format):
   
-  Tokens
+  Fields
   ======
   
-  - composer
-  - lyricist
-  - subtitle
-  - title
+      - combined_composer
+      - combined_lyricist
+      - combined_subtitle
+      - combined_title
+      - metatag_arranger
+      - metatag_composer
+      - metatag_copyright
+      - metatag_creation_date
+      - metatag_lyricist
+      - metatag_movement_number
+      - metatag_movement_title
+      - metatag_platform
+      - metatag_poet
+      - metatag_source
+      - metatag_translator
+      - metatag_work_number
+      - metatag_work_title
+      - readonly_basename
+      - readonly_dirname
+      - readonly_extension
+      - readonly_filename
+      - readonly_fullpath
+      - readonly_fullpath_backup
+      - vbox_composer
+      - vbox_lyricist
+      - vbox_subtitle
+      - vbox_title
   
   Functions
   =========
+  
       asciify
       -------
   
