@@ -469,32 +469,36 @@ class Meta(Tree):
         for field in fields:
             setattr(self.interface_read_write, field, '')
 
-    def show(self, pre, post, colorize=False):
+    def show(self, pre, post):
+        args = get_settings('args')
 
         print('\n' + color(self.filename, 'red'))
 
         for field in self.interface.fields:
+            if (args.general_verbose == 0 and (pre[field] or post[field])) or \
+               args.general_verbose > 0:
 
-            if re.match(r'^combined_',  field):
-                field_color = 'green'
-            elif re.match(r'^metatag_',  field):
-                field_color = 'blue'
-            elif re.match(r'^readonly_',  field):
-                field_color = 'red'
-            elif re.match(r'^vbox_',  field):
-                field_color = 'cyan'
-            else:
-                field_color = 'white'
+                if re.match(r'^combined_',  field):
+                    field_color = 'green'
+                elif re.match(r'^metatag_',  field):
+                    field_color = 'blue'
+                elif re.match(r'^readonly_',  field):
+                    field_color = 'red'
+                elif re.match(r'^vbox_',  field):
+                    field_color = 'cyan'
+                else:
+                    field_color = 'white'
 
-            line = []
-            if pre[field]:
-                line.append('“{}”'.format(pre[field]))
+                line = []
+                if pre[field]:
+                    line.append('“{}”'.format(pre[field]))
 
-            if pre[field] != post[field]:
-                line.append('->')
-                line.append(color('“{}”'.format(post[field]), 'yellow'))
+                if pre[field] != post[field]:
+                    line.append('->')
+                    line.append(color('“{}”'.format(post[field]), 'yellow'))
 
-            print('{}: {}'.format(color(field, field_color), ' '.join(line)))
+                print('{}: {}'.format(color(field, field_color),
+                                      ' '.join(line)))
 
 
     def export_json(self):

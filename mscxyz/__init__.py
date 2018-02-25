@@ -141,7 +141,7 @@ def execute(args=None):
                 if args.meta_sync:
                     score.sync_fields()
                 post = score.interface.export_to_dict()
-                score.show(pre, post, colorize= args.general_colorize)
+                score.show(pre, post)
             if not args.general_dry_run and not score.errors and pre != post:
                 score.save(mscore=args.general_mscore)
 

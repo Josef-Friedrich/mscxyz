@@ -502,6 +502,27 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(output[1], 'meta-all-values.mscx')
         self.assertEqual(output[-1], 'vbox_title: “vbox_title” -> “”')
 
+    def test_show_simple_unverbose(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['meta', '--clean', 'all',
+                           helper.get_tmpfile_path('simple.mscx')])
+        self.assertEqual(output[0], '')
+        self.assertEqual(output[1], 'simple.mscx')
+        self.assertEqual(output[2], 'combined_composer: “Composer” -> “”')
+        self.assertEqual(output[3], 'combined_title: “Title” -> “”')
+        self.assertEqual(output[-1], 'vbox_title: “Title” -> “”')
+
+    def test_show_verbose(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['--verbose', 'meta', '--clean', 'all',
+                           helper.get_tmpfile_path('simple.mscx')])
+        self.assertEqual(output[0], '')
+        self.assertEqual(output[1], 'simple.mscx')
+        self.assertEqual(output[2], 'combined_composer: “Composer” -> “”')
+        self.assertEqual(output[3], 'combined_lyricist: ')
+        self.assertEqual(output[-2], 'vbox_subtitle: ')
+        self.assertEqual(output[-1], 'vbox_title: “Title” -> “”')
+
     def test_set_field_simple_string(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')
         mscxyz.execute(['meta', '--set-field', 'vbox_title', 'lol', tmp])
