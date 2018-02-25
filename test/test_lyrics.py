@@ -7,7 +7,6 @@ import os
 import helper
 import unittest
 import mscxyz
-import mock
 
 
 class TestLyrics(unittest.TestCase):
@@ -68,21 +67,21 @@ class TestLyricsFix(unittest.TestCase):
 
 class TestLyricsRemap(unittest.TestCase):
 
-    def setUp(self):
-        self.tmp = helper.get_tmpfile_path('lyrics-remap.mscx')
-        mscxyz.execute(['lyrics', '--remap', '2:6', self.tmp])
-        self.tree = mscxyz.lyrics.Lyrics(self.tmp)
-        self.lyrics = self.tree.lyrics
-
-    @mock.patch('mscxyz.fileloader.mscore')
-    def test_remap(self, mscore):
+    def test_remap(self):
+        tmp = helper.get_tmpfile_path('lyrics-remap.mscx')
+        mscxyz.execute(['lyrics', '--remap', '2:6', tmp])
+        tree = mscxyz.lyrics.Lyrics(tmp)
         text = []
-        for element in self.lyrics:
+        for element in tree.lyrics:
             tag = element['element']
-            tag_text = tag.find('text')
-            text.append(tag_text.text)
+            tag_text = tag.find('no')
+            if hasattr(tag_text, 'text'):
+                no = tag_text.text
+            else:
+                no = '0'
+            text.append(no)
 
-        self.assertEqual(text, ['1', '3', '4', '5', '2'])
+        self.assertEqual(text, ['0', '5', '2', '3', '4'])
 
 
 if __name__ == '__main__':
