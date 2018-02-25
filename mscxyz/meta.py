@@ -465,8 +465,12 @@ class Meta(Tree):
         for field in fields:
             setattr(self.interface_read_write, field, '')
 
-    def show(self, pre, post):
-        print_desc('\n' + colored(self.filename, 'red'))
+    def show(self, pre, post, colorize=False):
+        # if colorize:
+        #     def colored(text, color):
+        #         return text
+
+        print('\n' + colored(self.filename, 'red'))
 
         for field in self.interface.fields:
 
@@ -489,7 +493,7 @@ class Meta(Tree):
                 line.append('->')
                 line.append(colored('“' + post[field] + '”', 'yellow'))
 
-            print_desc(' '.join(line), field, color)
+            print(colored(field, color) + ': ' + ' '.join(line))
 
     def export_json(self):
         data = {}

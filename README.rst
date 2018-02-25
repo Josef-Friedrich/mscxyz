@@ -39,7 +39,7 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GENERAL_GLOB] [-m] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-c] [-d] [-g GENERAL_GLOB] [-m] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -55,6 +55,7 @@ mscxyz
     -h, --help            show this help message and exit
     -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
+    -c, --colorize        Colorize the command line print statements.
     -d, --dry-run         Simulate the actions.
     -g GENERAL_GLOB, --glob GENERAL_GLOB
                           Handle only files which matches against Unix style

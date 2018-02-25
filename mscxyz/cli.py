@@ -42,6 +42,14 @@ parser.add_argument(
 
 
 parser.add_argument(
+    '-c',
+    '--colorize',
+    action='store_true',
+    dest='general_colorize',
+    help='Colorize the command line print statements.')
+
+
+parser.add_argument(
     '-d',
     '--dry-run',
     action='store_true',
