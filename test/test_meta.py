@@ -486,10 +486,8 @@ class TestIntegration(unittest.TestCase):
                            helper.get_tmpfile_path('meta-all-values.mscx')])
 
         self.assertEqual(output[0], '')
-        # self.assertEqual(output[1], '\x1b[31mmeta-all-values.mscx\x1b[0m')
-        # self.assertEqual(output[-1], '\x1b[36mvbox_title\x1b[0m: '
-        #                  '\xe2\x80\x9cvbox_title\xe2\x80\x9d -> '
-        #                  '\x1b[33m\xe2\x80\x9c\xe2\x80\x9d\x1b[0m')
+        self.assertEqual(output[1], 'meta-all-values.mscx')
+        self.assertEqual(output[-1], 'vbox_title: “vbox_title” -> “”')
 
     def test_set_field_simple_string(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')
