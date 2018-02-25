@@ -22,9 +22,9 @@ def create_dir(path):
 
 class Rename(File):
 
-    def __init__(self, fullpath):
-        super(Rename, self).__init__(fullpath)
-        self.score = Meta(self.fullpath)
+    def __init__(self, relpath):
+        super(Rename, self).__init__(relpath)
+        self.score = Meta(self.relpath)
         self.workname = self.basename
 
     def asciify(self):
@@ -84,4 +84,4 @@ class Rename(File):
             newdir = os.path.dirname(newpath)
             if newdir:
                 create_dir(os.path.dirname(newpath))
-            os.rename(self.fullpath, newpath)
+            os.rename(self.relpath, newpath)

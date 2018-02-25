@@ -177,8 +177,8 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
             'readonly_dirname',
             'readonly_extension',
             'readonly_filename',
-            'readonly_fullpath',
-            'readonly_fullpath_backup',
+            'readonly_relpath',
+            'readonly_relpath_backup',
         )
         self.tmp = helper.get_tmpfile_path('simple.mscx')
         self.tree = Tree(self.tmp)
@@ -186,7 +186,7 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
 
     def test_exception(self):
         with self.assertRaises(AttributeError):
-            self.interface.readonly_fullpath = 'lol'
+            self.interface.readonly_relpath = 'lol'
 
     def test_field_readonly_basename(self):
         self.assertEqual(self.interface.readonly_basename, 'simple')
@@ -201,11 +201,11 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
     def test_field_readonly_filename(self):
         self.assertEqual(self.interface.readonly_filename, 'simple.mscx')
 
-    def test_field_readonly_fullpath(self):
-        self.assertEqual(self.interface.readonly_fullpath, self.tmp)
+    def test_field_readonly_relpath(self):
+        self.assertEqual(self.interface.readonly_relpath, self.tmp)
 
-    def test_field_readonly_fullpath_backup(self):
-        self.assertEqual(self.interface.readonly_fullpath_backup,
+    def test_field_readonly_relpath_backup(self):
+        self.assertEqual(self.interface.readonly_relpath_backup,
                          self.tmp.replace('.mscx', '_bak.mscx'))
 
 
@@ -230,12 +230,13 @@ class TestClassInterface(unittest.TestCase):
             'metatag_translator',
             'metatag_work_number',
             'metatag_work_title',
+            'readonly_abspath',
             'readonly_basename',
             'readonly_dirname',
             'readonly_extension',
             'readonly_filename',
-            'readonly_fullpath',
-            'readonly_fullpath_backup',
+            'readonly_relpath',
+            'readonly_relpath_backup',
             'vbox_composer',
             'vbox_lyricist',
             'vbox_subtitle',

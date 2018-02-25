@@ -232,12 +232,13 @@ mscx-manager rename
       - metatag_translator
       - metatag_work_number
       - metatag_work_title
+      - readonly_abspath
       - readonly_basename
       - readonly_dirname
       - readonly_extension
       - readonly_filename
-      - readonly_fullpath
-      - readonly_fullpath_backup
+      - readonly_relpath
+      - readonly_relpath_backup
       - vbox_composer
       - vbox_lyricist
       - vbox_subtitle

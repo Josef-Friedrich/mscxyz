@@ -8,10 +8,10 @@ import lxml
 
 class Tree(File):
 
-    def __init__(self, fullpath):
-        super(Tree, self).__init__(fullpath)
+    def __init__(self, relpath):
+        super(Tree, self).__init__(relpath)
         try:
-            self.tree = lxml.etree.parse(self.fullpath)
+            self.tree = lxml.etree.parse(self.relpath)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
@@ -44,7 +44,7 @@ class Tree(File):
         if new_name:
             filename = new_name
         else:
-            filename = self.fullpath
+            filename = self.relpath
         if not self.errors:
             self.tree.write(filename, encoding='UTF-8')
             if mscore:

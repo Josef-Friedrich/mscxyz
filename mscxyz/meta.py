@@ -356,40 +356,45 @@ class InterfaceReadWrite(object):
 class InterfaceReadOnly(object):
 
     fields = [
+        'readonly_abspath',
         'readonly_basename',
         'readonly_dirname',
         'readonly_extension',
         'readonly_filename',
-        'readonly_fullpath',
-        'readonly_fullpath_backup',
+        'readonly_relpath',
+        'readonly_relpath_backup',
     ]
 
     def __init__(self, tree):
         self.tree = tree
 
     @property
-    def readonly_fullpath(self):
-        return self.tree.fullpath
+    def readonly_abspath(self):
+        return self.tree.abspath
 
     @property
-    def readonly_extension(self):
-        return self.tree.extension
-
-    @property
-    def readonly_fullpath_backup(self):
-        return self.tree.fullpath_backup
+    def readonly_basename(self):
+        return self.tree.basename
 
     @property
     def readonly_dirname(self):
         return self.tree.dirname
 
     @property
+    def readonly_extension(self):
+        return self.tree.extension
+
+    @property
     def readonly_filename(self):
         return self.tree.filename
 
     @property
-    def readonly_basename(self):
-        return self.tree.basename
+    def readonly_relpath(self):
+        return self.tree.relpath
+
+    @property
+    def readonly_relpath_backup(self):
+        return self.tree.relpath_backup
 
 
 class Interface(object):
@@ -425,8 +430,8 @@ class Interface(object):
 
 class Meta(Tree):
 
-    def __init__(self, fullpath):
-        super(Meta, self).__init__(fullpath)
+    def __init__(self, relpath):
+        super(Meta, self).__init__(relpath)
 
         if not self.errors:
             self.metatag = MetaTag(self.root)
@@ -505,7 +510,7 @@ class Meta(Tree):
         data = {}
         data['title'] = self.get('title')
 
-        output = open(self.fullpath.replace(
+        output = open(self.relpath.replace(
             '.' + self.extension, '.json'), 'w')
         json.dump(data, output, indent=4)
         output.close()

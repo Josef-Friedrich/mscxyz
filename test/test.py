@@ -15,7 +15,7 @@ class TestFile(unittest.TestCase):
         self.file = File(helper.get_tmpfile_path('simple.mscx'))
 
     def test_file_object_initialisation(self):
-        self.assertTrue(self.file.fullpath)
+        self.assertTrue(self.file.relpath)
         self.assertTrue(self.file.dirname)
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')

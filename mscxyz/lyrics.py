@@ -8,8 +8,8 @@ import lxml.etree as etree
 
 class Lyrics(Tree):
 
-    def __init__(self, fullpath):
-        super(Lyrics, self).__init__(fullpath)
+    def __init__(self, relpath):
+        super(Lyrics, self).__init__(relpath)
         self.lyrics = self.normalize_lyrics()
         self.max = self.get_max()
 
@@ -95,7 +95,7 @@ class Lyrics(Tree):
 
         :param int number: The number of the lyrics verse starting by 1
         """
-        score = Lyrics(self.fullpath)
+        score = Lyrics(self.relpath)
 
         for element in score.lyrics:
             tag = element['element']
@@ -106,7 +106,7 @@ class Lyrics(Tree):
                 tag.find('no').text = '0'
 
         ext = '.' + self.extension
-        new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
+        new_name = score.relpath.replace(ext, '_' + str(number) + ext)
         score.save(new_name, mscore)
 
     def extract_lyrics(self, number=None, mscore=False):
