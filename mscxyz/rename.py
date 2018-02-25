@@ -4,7 +4,7 @@
 
 from mscxyz.fileloader import File
 from mscxyz.meta import Meta
-from mscxyz.utils import color
+from mscxyz.utils import color, get_settings
 import errno
 import os
 import re
@@ -124,12 +124,13 @@ class Rename(File):
         self.workname = tmep.parse(format_string,
                                    self.score.interface.export_to_dict())
 
-    def execute(self, dry_run=False, verbose=0):
-        if dry_run or verbose > 0:
+    def execute(self):
+        args = get_settings('args')
+        if args.general_dry_run or args.general_verbose > 0:
             print('{} -> {}'.format(color(self.basename, 'red'),
                                     color(self.workname, 'yellow')))
 
-        if not dry_run:
+        if not args.general_dry_run:
             newpath = self.workname + '.' + self.extension
             newdir = os.path.dirname(newpath)
             if newdir:

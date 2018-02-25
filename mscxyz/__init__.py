@@ -153,8 +153,7 @@ def execute(args=None):
                 score.asciify()
             if args.rename_no_whitespace:
                 score.no_whitespace()
-            score.execute(dry_run=args.general_dry_run,
-                          verbose=args.general_verbose)
+            score.execute()
 
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File
