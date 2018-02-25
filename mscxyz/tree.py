@@ -40,11 +40,12 @@ class Tree(File):
             '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
         self.strip_tags('font', 'b', 'i', 'pos')
 
-    def save(self, new_name=''):
+    def save(self, new_name='', mscore=False):
         if new_name:
             filename = new_name
         else:
             filename = self.fullpath
         if not self.errors:
             self.tree.write(filename, encoding='UTF-8')
-            re_open(filename)
+            if mscore:
+                re_open(filename)

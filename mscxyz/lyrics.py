@@ -80,7 +80,7 @@ class Lyrics(Tree):
 
         return max_lyric
 
-    def remap(self, remap_string):
+    def remap(self, remap_string, mscore=False):
         for pair in remap_string.split(','):
             old = pair.split(':')[0]
             new = pair.split(':')[1]
@@ -88,9 +88,9 @@ class Lyrics(Tree):
                 if element['number'] == int(old):
                     element['element'].find('no').text = str(int(new) - 1)
 
-        self.save()
+        self.save(mscore)
 
-    def extract_one_lyrics_verse(self, number):
+    def extract_one_lyrics_verse(self, number, mscore=False):
         """Extract a lyric verse by verse number.
 
         :param int number: The number of the lyrics verse starting by 1
@@ -107,9 +107,9 @@ class Lyrics(Tree):
 
         ext = '.' + self.extension
         new_name = score.fullpath.replace(ext, '_' + str(number) + ext)
-        score.save(new_name)
+        score.save(new_name, mscore)
 
-    def extract_lyrics(self, number=None):
+    def extract_lyrics(self, number=None, mscore=False):
         """Extract one lyric verse or all lyric verses.
 
         :param mixed number: The lyric verse number or 'all'
@@ -180,8 +180,8 @@ class Lyrics(Tree):
                 if not isinstance(tag_syl, bool):
                     tag.append(tag_syl)
 
-    def fix_lyrics(self):
+    def fix_lyrics(self, mscore=False):
         for verse_number in range(1, self.max + 1):
             self.fix_lyrics_verse(verse_number)
 
-        self.save()
+        self.save(mscore=False)

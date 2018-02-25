@@ -9,7 +9,7 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GLOB] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GLOB] [-v] [-m]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -33,6 +33,9 @@ mscxyz
     -v, --verbose         Make commands more verbose. You can specifiy multiple
                           arguments (. g.: -vvv) to make the command more
                           verbose.
+    -m, --mscore          Open and save the XML file in MuseScore after
+                          manipulating the XML with lxml to avoid differences in
+                          the XML structure.
   
   Subcommands:
     {clean,meta,lyrics,rename,export,help}

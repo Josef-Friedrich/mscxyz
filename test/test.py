@@ -42,8 +42,7 @@ class TestBackup(unittest.TestCase):
     def test_exists(self):
         self.assertTrue(os.path.isfile(self.backup))
 
-    @mock.patch('mscxyz.fileloader.mscore')
-    def test_size(self, mscore):
+    def test_size(self):
         self.assertEqual(os.path.getsize(self.tmp),
                          os.path.getsize(self.backup))
 

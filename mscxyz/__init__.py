@@ -106,16 +106,16 @@ def execute(args=None):
             score.clean()
             if args.style:
                 score.merge_style(args.style.name)
-            score.save()
+            score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'lyrics':
             score = Lyrics(file)
             if args.remap:
-                score.remap(args.remap)
+                score.remap(args.remap, mscore=args.general_mscore)
             elif args.fix:
-                score.fix_lyrics()
+                score.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.extract_lyrics(args.extract)
+                score.extract_lyrics(args.extract, mscore=args.general_mscore)
 
         elif args.subcommand == 'meta':
             score = Meta(file)
@@ -135,8 +135,8 @@ def execute(args=None):
                     score.sync_fields()
                 post = score.interface.export_to_dict()
                 score.show(pre, post)
-            if not args.dry_run and not score.errors:
-                score.save()
+            if not args.dry_run and not score.errors and pre != post:
+                score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'rename':
             score = Rename(file)

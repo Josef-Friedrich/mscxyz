@@ -63,6 +63,17 @@ parser.add_argument(
     multiple arguments (. g.: -vvv) to make the command more \
     verbose.')
 
+parser.add_argument(
+    '-m',
+    '--mscore',
+    action='store_true',
+    dest='general_mscore',
+    help='Open and save the XML file in MuseScore after manipulating the XML \
+    with lxml to avoid differences in the XML structure.')
+
+###############################################################################
+# subparser
+###############################################################################
 
 subparser = parser.add_subparsers(
     title='Subcommands',
