@@ -97,11 +97,11 @@ mscx-manager clean
 
 .. code-block:: text
 
-  usage: mscx-manager clean [-h] [-s STYLE]
+  usage: mscx-manager clean [-h] [-s CLEAN_STYLE]
   
   optional arguments:
     -h, --help            show this help message and exit
-    -s STYLE, --style STYLE
+    -s CLEAN_STYLE, --style CLEAN_STYLE
                           Load a "*.mss" style file and include the contents of
                           this file.
   
@@ -191,7 +191,8 @@ mscx-manager meta
   optional arguments:
     -h, --help            show this help message and exit
     -c META_CLEAN, --clean META_CLEAN
-                          Possible values: „all“ or „field_one,field_two“.
+                          Clean the meta data fields. Possible values: „all“ or
+                          „field_one,field_two“.
     -d SOURCE_FIELD FORMAT_STRING, --distribute-fields SOURCE_FIELD FORMAT_STRING
                           Distribute a source field to target fields applying a
                           format string on the source field.

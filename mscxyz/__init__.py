@@ -104,8 +104,8 @@ def execute(args=None):
         if args.subcommand == 'clean':
             score = Tree(file)
             score.clean()
-            if args.style:
-                score.merge_style(args.style.name)
+            if args.clean_style:
+                score.merge_style(args.clean_style.name)
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'lyrics':
@@ -135,7 +135,7 @@ def execute(args=None):
                     score.sync_fields()
                 post = score.interface.export_to_dict()
                 score.show(pre, post)
-            if not args.dry_run and not score.errors and pre != post:
+            if not args.general_dry_run and not score.errors and pre != post:
                 score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'rename':
@@ -148,7 +148,8 @@ def execute(args=None):
 
             if args.no_whitespace:
                 score.no_whitespace()
-            score.execute(args.dry_run, args.general_verbose)
+            score.execute(dry_run=args.general_dry_run,
+                          verbose=args.general_verbose)
 
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File

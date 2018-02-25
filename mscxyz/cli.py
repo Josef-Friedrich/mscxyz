@@ -45,6 +45,7 @@ parser.add_argument(
     '-d',
     '--dry-run',
     action='store_true',
+    dest='general_dry_run',
     help='Simulate the actions.')
 
 parser.add_argument(
@@ -94,6 +95,7 @@ sub_clean = subparser.add_parser(
 sub_clean.add_argument(
     '-s',
     '--style',
+    dest='clean_style',
     type=open,
     help='Load a "*.mss" style file and include the contents of \
     this file.')
@@ -166,7 +168,8 @@ sub_meta.add_argument(
     '--clean',
     nargs=1,
     dest='meta_clean',
-    help='Possible values: „all“ or „field_one,field_two“.')
+    help='Clean the meta data fields. Possible values: „all“ or \
+    „field_one,field_two“.')
 
 sub_meta.add_argument(
     '-d',
