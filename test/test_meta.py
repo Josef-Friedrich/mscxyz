@@ -417,6 +417,19 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_title, 'Title')
         self.assertEqual(iface.metatag_work_title, 'Title')
 
+    def test_distribute_field_multple_source_fields(self):
+        tmp = helper.get_tmpfile_path('Title - Composer.mscx')
+        mscxyz.execute(
+            ['meta', '--distribute-field', 'vbox_title,readonly_basename',
+             '$combined_title - $combined_composer', tmp]
+        )
+        meta = Meta(tmp)
+        iface = meta.interface
+        self.assertEqual(iface.vbox_composer, 'Composer')
+        self.assertEqual(iface.metatag_composer, 'Composer')
+        self.assertEqual(iface.vbox_title, 'Title')
+        self.assertEqual(iface.metatag_work_title, 'Title')
+
     def test_distribute_field_multiple_values(self):
         tmp = helper.get_tmpfile_path('meta-distribute-field.mscx')
         mscxyz.execute(

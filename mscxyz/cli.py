@@ -184,9 +184,13 @@ sub_meta.add_argument(
     dest='meta_dist',
     action='append',
     nargs=2,
-    metavar=('SOURCE_FIELD', 'FORMAT_STRING'),
-    help='Distribute a source field to target fields applying a format string \
-    on the source field.')
+    metavar=('SOURCE_FIELDS', 'FORMAT_STRING'),
+    help='Distribute source fields to target fields applying a format string \
+    on the source fields. It is possible to apply multiple \
+    --distribute-fields options. SOURCE_FIELDS can be a single field or a \
+    comma separated list of fields: field_one,field_two. The program \
+    tries first to match the FORMAT_STRING on the first source field. If this\
+    fails, it tries the second source field ... an so on.')
 
 sub_meta.add_argument(
     '-j',

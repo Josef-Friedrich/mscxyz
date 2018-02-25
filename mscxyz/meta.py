@@ -442,14 +442,18 @@ class Meta(Tree):
             self.combined.composer = self.combined.composer
             self.combined.lyricist = self.combined.lyricist
 
-    def distribute_field(self, source_field, format_string):
-        try:
-            source = getattr(self.interface, source_field)
-            results = distribute_field(source, format_string)
-            for field, value in results.items():
-                setattr(self.interface, field, value)
-        except UnmatchedFormatStringError as error:
-            self.errors.append(error)
+    def distribute_field(self, source_fields, format_string):
+        source_fields = source_fields.split(',')
+        for source_field in source_fields:
+            try:
+                source = getattr(self.interface, source_field)
+                results = distribute_field(source, format_string)
+                if results:
+                    for field, value in results.items():
+                        setattr(self.interface, field, value)
+                return
+            except UnmatchedFormatStringError as error:
+                self.errors.append(error)
 
     def set_field(self, destination_field, format_string):
         field_value = tmep.parse(format_string,

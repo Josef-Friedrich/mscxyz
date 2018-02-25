@@ -82,7 +82,7 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELD FORMAT_STRING]
+  usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELDS FORMAT_STRING]
                            [-j] [-s] [-S DESTINATION_FIELD FORMAT_STRING]
   
   MuseScore can store meta data informations in different places:
@@ -164,9 +164,15 @@ mscx-manager meta
     -c META_CLEAN, --clean META_CLEAN
                           Clean the meta data fields. Possible values: „all“ or
                           „field_one,field_two“.
-    -d SOURCE_FIELD FORMAT_STRING, --distribute-fields SOURCE_FIELD FORMAT_STRING
-                          Distribute a source field to target fields applying a
-                          format string on the source field.
+    -d SOURCE_FIELDS FORMAT_STRING, --distribute-fields SOURCE_FIELDS FORMAT_STRING
+                          Distribute source fields to target fields applying a
+                          format string on the source fields. It is possible to
+                          apply multiple --distribute-fields options.
+                          SOURCE_FIELDS can be a single field or a comma
+                          separated list of fields: field_one,field_two. The
+                          program tries first to match the FORMAT_STRING on the
+                          first source field. If this fails, it tries the second
+                          source field ... an so on.
     -j, --json            Additionally write the meta data to a json file.
     -s, --synchronize     Synchronize the values of the first vertical frame
                           (vbox) (title, subtitle, composer, lyricist) with the
