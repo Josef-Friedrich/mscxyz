@@ -2,7 +2,7 @@
 
 """A collection of useful utility functions"""
 
-from termcolor import colored
+import termcolor
 import os
 import platform
 import signal
@@ -86,3 +86,11 @@ def get_settings(key):
 def set_settings(key, value):
     from mscxyz import settings
     return setattr(settings, key, value)
+
+
+def color(*args):
+    settings = get_settings('args')
+    if settings.general_colorize:
+        return termcolor.colored(*args)
+    else:
+        return args[0]

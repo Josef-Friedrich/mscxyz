@@ -3,7 +3,7 @@
 """Class for metadata maniplation"""
 
 from mscxyz.tree import Tree
-from mscxyz.utils import print_desc, get_settings
+from mscxyz.utils import print_desc, get_settings, color
 from termcolor import colored
 import lxml
 import six
@@ -467,30 +467,31 @@ class Meta(Tree):
 
     def show(self, pre, post, colorize=False):
 
-        print('\n' + colored(self.filename, 'red'))
+        print('\n' + color(self.filename, 'red'))
 
         for field in self.interface.fields:
 
             if re.match(r'^combined_',  field):
-                color = 'green'
+                field_color = 'green'
             elif re.match(r'^metatag_',  field):
-                color = 'blue'
+                field_color = 'blue'
             elif re.match(r'^readonly_',  field):
-                color = 'red'
+                field_color = 'red'
             elif re.match(r'^vbox_',  field):
-                color = 'cyan'
+                field_color = 'cyan'
             else:
-                color = 'white'
+                field_color = 'white'
 
             line = []
             if pre[field]:
-                line.append('“' + pre[field] + '”')
+                line.append('“{}”'.format(pre[field]))
 
             if pre[field] != post[field]:
                 line.append('->')
-                line.append(colored('“' + post[field] + '”', 'yellow'))
+                line.append(color('“{}”'.format(post[field]), 'yellow'))
 
-            print(colored(field, color) + ': ' + ' '.join(line))
+            print('{}: {}'.format(color(field, field_color), ' '.join(line)))
+
 
     def export_json(self):
         data = {}
