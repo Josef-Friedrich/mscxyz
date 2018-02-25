@@ -260,10 +260,12 @@ sub_rename = subparser.add_parser(
     'rename',
     help='Rename the "*.mscx" files.',
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description='Tokens and functions you can use in the format '
+    description='Fields and functions you can use in the format '
     'string (-f, --format):\n\n'
-    'Fields\n======\n\n' +  list_fields(Interface.get_all_fields(), prefix='    ') + '\n\n'
-    'Functions\n=========\n\n' + tmep.doc.Doc().get())
+    'Fields\n======\n\n{}\n\n'
+    'Functions\n=========\n\n{}'
+    .format(list_fields(Interface.get_all_fields(), prefix='    '),
+            tmep.doc.Doc().get()))
 
 sub_rename.add_argument(
     '-f',
@@ -310,10 +312,10 @@ sub_export.add_argument(
 
 sub_help = subparser.add_parser(
     'help',
-    help='Show help. Use “' + parser.prog + ' help all” to show help \
+    help='Show help. Use “{} help all” to show help \
     messages of all subcommands. Use \
-    “' + parser.prog + ' help <subcommand>” to show only help messages \
-    for the given subcommand.')
+    “{} help <subcommand>” to show only help messages \
+    for the given subcommand.'.format(parser.prog, parser.prog))
 
 sub_help.add_argument(
     '-m',

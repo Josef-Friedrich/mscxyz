@@ -234,7 +234,7 @@ mscx-manager rename
 
   usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-a] [-n]
   
-  Tokens and functions you can use in the format string (-f, --format):
+  Fields and functions you can use in the format string (-f, --format):
   
   Fields
   ======
