@@ -479,7 +479,19 @@ class Meta(Tree):
 
         print('\n' + color(self.filename, 'red'))
 
-        for field in self.interface.fields:
+        fields = list(self.interface.fields)
+
+        if args.general_verbose < 1:
+            fields.remove('readonly_abspath')
+            fields.remove('readonly_dirname')
+            fields.remove('readonly_extension')
+            fields.remove('readonly_filename')
+            fields.remove('readonly_relpath')
+
+        if args.general_verbose < 2:
+            fields.remove('readonly_relpath_backup')
+
+        for field in fields:
             if (args.general_verbose == 0 and (pre[field] or post[field])) or \
                args.general_verbose > 0:
 

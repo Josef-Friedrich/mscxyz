@@ -524,6 +524,30 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(output[-2], 'vbox_subtitle: ')
         self.assertEqual(output[-1], 'vbox_title: “Title” -> “”')
 
+    def test_show_verbose_zero(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['meta', '--clean', 'all',
+                           helper.get_tmpfile_path('simple.mscx')])
+        output = ' '.join(output)
+        self.assertTrue('readonly_basename' in output)
+        self.assertFalse('readonly_abspath' in output)
+        self.assertFalse('readonly_relpath_backup' in output)
+
+    def test_show_verbose_one(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['-v', 'meta', '--clean', 'all',
+                           helper.get_tmpfile_path('simple.mscx')])
+        output = ' '.join(output)
+        self.assertTrue('readonly_abspath' in output)
+        self.assertFalse('readonly_relpath_backup' in output)
+
+    def test_show_verbose_two(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['-vv', 'meta', '--clean', 'all',
+                           helper.get_tmpfile_path('simple.mscx')])
+        output = ' '.join(output)
+        self.assertTrue('readonly_relpath_backup' in output)
+
     def test_set_field_simple_string(self):
         tmp = helper.get_tmpfile_path('meta-all-values.mscx')
         mscxyz.execute(['meta', '--set-field', 'vbox_title', 'lol', tmp])
