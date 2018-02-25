@@ -261,18 +261,21 @@ sub_rename = subparser.add_parser(
 sub_rename.add_argument(
     '-f',
     '--format',
+    dest='rename_format',
     default='$title ($composer)',
     help='Format string.')
 
 sub_rename.add_argument(
     '-a',
     '--ascii',
+    dest='rename_ascii',
     action='store_true',
     help='Use only ASCII characters.')
 
 sub_rename.add_argument(
     '-n',
     '--no-whitespace',
+    dest='rename_no_whitespace',
     action='store_true',
     help='Replace all whitespaces with dashes or \
     sometimes underlines.')
@@ -289,6 +292,7 @@ sub_export = subparser.add_parser(
 sub_export.add_argument(
     '-e',
     '--extension',
+    dest='export_extension',
     default='pdf',
     help='Extension to export. If this option \
     is omitted, then the default extension is "pdf".')
@@ -307,6 +311,7 @@ sub_help = subparser.add_parser(
 sub_help.add_argument(
     '-m',
     '--markdown',
+    dest='help_markdown',
     action='store_true',
     help='Show help in markdown format. \
     This option enables to generate the README file directly \
@@ -315,10 +320,15 @@ sub_help.add_argument(
 sub_help.add_argument(
     '-r',
     '--rst',
+    dest='help_rst',
     action='store_true',
     help='Show help in reStructuresText \
     format. This option enables to generate the README file \
     directly form the command line output.')
+
+###############################################################################
+# help
+###############################################################################
 
 parser.add_argument(
     'path',

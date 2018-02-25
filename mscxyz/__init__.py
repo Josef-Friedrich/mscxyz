@@ -25,9 +25,9 @@ if six.PY2:
 
 def heading(args, text, level=1):
     length = len(text)
-    if args.markdown:
+    if args.help_markdown:
         print('\n' + ('#' * level) + ' ' + text + '\n')
-    elif args.rst:
+    elif args.help_rst:
         if level == 1:
             underline = '='
         elif level == 2:
@@ -44,9 +44,9 @@ def heading(args, text, level=1):
 
 
 def code_block(args, text):
-    if args.markdown:
+    if args.help_markdown:
         print('```\n' + text + '\n```')
-    elif args.rst:
+    elif args.help_rst:
         print('.. code-block:: text\n\n  ' + text.replace('\n', '\n  '))
     else:
         print(text)
@@ -144,13 +144,11 @@ def execute(args=None):
 
         elif args.subcommand == 'rename':
             score = Rename(file)
-            if args.format:
-                score.apply_format_string(format_string=args.format)
-
-            if args.ascii:
+            if args.rename_format:
+                score.apply_format_string(format_string=args.rename_format)
+            if args.rename_ascii:
                 score.asciify()
-
-            if args.no_whitespace:
+            if args.rename_no_whitespace:
                 score.no_whitespace()
             score.execute(dry_run=args.general_dry_run,
                           verbose=args.general_verbose)
@@ -158,7 +156,7 @@ def execute(args=None):
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File
             score = File(file)
-            score.export(extension=args.extension)
+            score.export(extension=args.export_extension)
 
         report_errors(score.errors)
 

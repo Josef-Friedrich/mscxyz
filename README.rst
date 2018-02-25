@@ -231,7 +231,7 @@ mscx-manager rename
 
 .. code-block:: text
 
-  usage: mscx-manager rename [-h] [-f FORMAT] [-a] [-n]
+  usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-a] [-n]
   
   Tokens and functions you can use in the format string (-f, --format):
   
@@ -373,7 +373,7 @@ mscx-manager rename
   
   optional arguments:
     -h, --help            show this help message and exit
-    -f FORMAT, --format FORMAT
+    -f RENAME_FORMAT, --format RENAME_FORMAT
                           Format string.
     -a, --ascii           Use only ASCII characters.
     -n, --no-whitespace   Replace all whitespaces with dashes or sometimes
@@ -385,11 +385,11 @@ mscx-manager export
 
 .. code-block:: text
 
-  usage: mscx-manager export [-h] [-e EXTENSION]
+  usage: mscx-manager export [-h] [-e EXPORT_EXTENSION]
   
   optional arguments:
     -h, --help            show this help message and exit
-    -e EXTENSION, --extension EXTENSION
+    -e EXPORT_EXTENSION, --extension EXPORT_EXTENSION
                           Extension to export. If this option is omitted, then
                           the default extension is "pdf".
   
