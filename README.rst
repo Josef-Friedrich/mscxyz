@@ -209,13 +209,13 @@ mscx-manager lyrics
 
 .. code-block:: text
 
-  usage: mscx-manager lyrics [-h] [-e EXTRACT] [-r REMAP] [-f]
+  usage: mscx-manager lyrics [-h] [-e LYRICS_EXTRACT] [-r LYRICS_REMAP] [-f]
   
   optional arguments:
     -h, --help            show this help message and exit
-    -e EXTRACT, --extract EXTRACT
+    -e LYRICS_EXTRACT, --extract LYRICS_EXTRACT
                           The lyric verse number to extract or "all".
-    -r REMAP, --remap REMAP
+    -r LYRICS_REMAP, --remap LYRICS_REMAP
                           Remap lyrics. Example: "--remap 3:2,5:3". This example
                           remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
                           commas to specify multiple remap pairs. One remap pair

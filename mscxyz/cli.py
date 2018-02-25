@@ -221,6 +221,7 @@ sub_lyrics = subparser.add_parser(
 sub_lyrics.add_argument(
     '-e',
     '--extract',
+    dest='lyrics_extract',
     default='all',
     help='The lyric verse number to extract or "all".'
 )
@@ -228,6 +229,7 @@ sub_lyrics.add_argument(
 sub_lyrics.add_argument(
     '-r',
     '--remap',
+    dest='lyrics_remap',
     help='Remap lyrics. Example: "--remap 3:2,5:3". This \
     example remaps lyrics verse 3 to verse 2 and verse 5 to 3. \
     Use commas to specify multiple remap pairs. One remap pair \
@@ -239,6 +241,7 @@ sub_lyrics.add_argument(
     '-f',
     '--fix',
     action='store_true',
+    dest='lyrics_fix',
     help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
     to a correct hyphenation ("la - la - la")')
 

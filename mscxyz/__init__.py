@@ -110,12 +110,13 @@ def execute(args=None):
 
         elif args.subcommand == 'lyrics':
             score = Lyrics(file)
-            if args.remap:
-                score.remap(args.remap, mscore=args.general_mscore)
-            elif args.fix:
+            if args.lyrics_remap:
+                score.remap(args.lyrics_remap, mscore=args.general_mscore)
+            elif args.lyrics_fix:
                 score.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.extract_lyrics(args.extract, mscore=args.general_mscore)
+                score.extract_lyrics(args.lyrics_extract,
+                                     mscore=args.general_mscore)
 
         elif args.subcommand == 'meta':
             score = Meta(file)
