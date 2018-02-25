@@ -3,7 +3,7 @@
 """Class for metadata maniplation"""
 
 from mscxyz.tree import Tree
-from mscxyz.utils import print_desc
+from mscxyz.utils import print_desc, get_settings
 from termcolor import colored
 import lxml
 import six
@@ -466,9 +466,6 @@ class Meta(Tree):
             setattr(self.interface_read_write, field, '')
 
     def show(self, pre, post, colorize=False):
-        # if colorize:
-        #     def colored(text, color):
-        #         return text
 
         print('\n' + colored(self.filename, 'red'))
 

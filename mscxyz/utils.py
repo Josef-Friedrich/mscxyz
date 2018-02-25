@@ -76,3 +76,13 @@ def print_desc(text, description='', color='red'):
 def verbose(text, description='', color='red', verbosity=1):
     if verbose >= 1:
         print_desc(text=text, description=description, color=color)
+
+
+def get_settings(key):
+    from mscxyz import settings
+    return getattr(settings, key)
+
+
+def set_settings(key, value):
+    from mscxyz import settings
+    return setattr(settings, key, value)

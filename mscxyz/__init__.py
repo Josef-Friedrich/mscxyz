@@ -13,6 +13,7 @@ from mscxyz.tree import Tree
 import six
 import sys
 import lxml
+from mscxyz.utils import set_settings
 
 from ._version import get_versions
 __version__ = get_versions()['version']
@@ -86,6 +87,7 @@ def no_error(error, errors):
 
 def execute(args=None):
     args = cli.parser.parse_args(args)
+    set_settings('args', args)
 
     if args.subcommand == 'help':
         show_all_help(args)
