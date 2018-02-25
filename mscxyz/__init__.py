@@ -91,7 +91,7 @@ def execute(args=None):
         show_all_help(args)
         sys.exit()
 
-    batch = Batch(args.path, glob=args.general_glob)
+    batch = Batch(path=args.path, glob=args.general_glob)
     files = batch.get_files()
 
     for file in files:
@@ -105,17 +105,18 @@ def execute(args=None):
             score = Tree(file)
             score.clean()
             if args.clean_style:
-                score.merge_style(args.clean_style.name)
+                score.merge_style(style_file=args.clean_style.name)
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'lyrics':
             score = Lyrics(file)
             if args.lyrics_remap:
-                score.remap(args.lyrics_remap, mscore=args.general_mscore)
+                score.remap(remap_string=args.lyrics_remap,
+                            mscore=args.general_mscore)
             elif args.lyrics_fix:
                 score.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.extract_lyrics(args.lyrics_extract,
+                score.extract_lyrics(number=args.lyrics_extract,
                                      mscore=args.general_mscore)
 
         elif args.subcommand == 'meta':
@@ -123,15 +124,17 @@ def execute(args=None):
             if no_error(lxml.etree.XMLSyntaxError, score.errors):
                 pre = score.interface.export_to_dict()
                 if args.meta_clean:
-                    score.clean(args.meta_clean)
+                    score.clean(fields=args.meta_clean)
                 if args.meta_json:
                     score.export_json()
                 if args.meta_dist:
                     for a in args.meta_dist:
-                        score.distribute_field(a[0], a[1])
+                        score.distribute_field(source_field=a[0],
+                                               format_string=a[1])
                 if args.meta_set:
                     for a in args.meta_set:
-                        score.set_field(a[0], a[1])
+                        score.set_field(destination_field=a[0],
+                                        format_string=a[1])
                 if args.meta_sync:
                     score.sync_fields()
                 post = score.interface.export_to_dict()
@@ -142,7 +145,7 @@ def execute(args=None):
         elif args.subcommand == 'rename':
             score = Rename(file)
             if args.format:
-                score.apply_format_string(args.format)
+                score.apply_format_string(format_string=args.format)
 
             if args.ascii:
                 score.asciify()
@@ -155,7 +158,7 @@ def execute(args=None):
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File
             score = File(file)
-            score.export(args.extension)
+            score.export(extension=args.extension)
 
         report_errors(score.errors)
 
