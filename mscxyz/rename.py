@@ -20,6 +20,56 @@ def create_dir(path):
             raise
 
 
+def prepare_fields(fields):
+    def prepare(value):
+        value = value.strip()
+        return value.replace('/', '-')
+    out = {}
+    for field, value in fields.items():
+        out[field] = prepare(value)
+    return out
+
+
+def asciify(name):
+    umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü',
+               'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
+    for replace, search in umlaute.items():
+        name = name.replace(search, replace)
+    return unidecode.unidecode(name)
+
+
+def replace_to_dash(name, *characters):
+    for character in characters:
+        name = name.replace(character, '-')
+    return name
+
+
+def delete_characters(name, *characters):
+    for character in characters:
+        name = name.replace(character, '')
+    return name
+
+
+def clean_up(name):
+    name = name.replace('(', '_')
+    name = name.replace('-_', '_')
+    # Replace two or more dashes with one.
+    name = re.sub('-{2,}', '_', name)
+    name = re.sub('_{2,}', '_', name)
+    # Remove dash at the begining
+    name = re.sub('^-', '', name)
+    # Remove the dash from the end
+    name = re.sub('-$', '', name)
+    return name
+
+
+def generate_filename(name):
+    name = replace_to_dash(name, ' ', ';', '?', '!', '_', '#', '&', '+', ':')
+    name = delete_characters(name, ',', '.', '\'', '`', ')')
+    name = clean_up(name)
+    return name
+
+
 class Rename(File):
 
     def __init__(self, relpath):
