@@ -91,12 +91,12 @@ def execute(args=None):
         show_all_help(args)
         sys.exit()
 
-    batch = Batch(args.path, args.glob)
+    batch = Batch(args.path, glob=args.general_glob)
     files = batch.get_files()
 
     for file in files:
 
-        if args.backup:
+        if args.general_backup:
             from mscxyz.fileloader import File
             score = File(file)
             score.backup()
@@ -148,7 +148,7 @@ def execute(args=None):
 
             if args.no_whitespace:
                 score.no_whitespace()
-            score.execute(args.dry_run, args.verbose)
+            score.execute(args.dry_run, args.general_verbose)
 
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File

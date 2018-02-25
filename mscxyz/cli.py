@@ -36,6 +36,7 @@ parser.add_argument(
 parser.add_argument(
     '-b',
     '--backup',
+    dest='general_backup',
     action='store_true',
     help='Create a backup file.')
 
@@ -49,19 +50,11 @@ parser.add_argument(
 parser.add_argument(
     '-g',
     '--glob',
+    dest='general_glob',
     default='*.mscx',
     help='Handle only files which matches against Unix style \
     glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
     option, the standard glob pattern "*.mscx" is used.')
-
-parser.add_argument(
-    '-v',
-    '--verbose',
-    action='count',
-    default=0,
-    help='Make commands more verbose. You can specifiy \
-    multiple arguments (. g.: -vvv) to make the command more \
-    verbose.')
 
 parser.add_argument(
     '-m',
@@ -70,6 +63,16 @@ parser.add_argument(
     dest='general_mscore',
     help='Open and save the XML file in MuseScore after manipulating the XML \
     with lxml to avoid differences in the XML structure.')
+
+parser.add_argument(
+    '-v',
+    '--verbose',
+    action='count',
+    dest='general_verbose',
+    default=0,
+    help='Make commands more verbose. You can specifiy \
+    multiple arguments (. g.: -vvv) to make the command more \
+    verbose.')
 
 ###############################################################################
 # subparser

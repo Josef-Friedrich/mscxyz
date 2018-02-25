@@ -9,7 +9,7 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GLOB] [-v] [-m]
+  usage: mscx-manager [-h] [-V] [-b] [-d] [-g GENERAL_GLOB] [-m] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -26,16 +26,17 @@ mscxyz
     -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
     -d, --dry-run         Simulate the actions.
-    -g GLOB, --glob GLOB  Handle only files which matches against Unix style
+    -g GENERAL_GLOB, --glob GENERAL_GLOB
+                          Handle only files which matches against Unix style
                           glob patterns (e. g. "*.mscx", "* - *"). If you omit
                           this option, the standard glob pattern "*.mscx" is
                           used.
-    -v, --verbose         Make commands more verbose. You can specifiy multiple
-                          arguments (. g.: -vvv) to make the command more
-                          verbose.
     -m, --mscore          Open and save the XML file in MuseScore after
                           manipulating the XML with lxml to avoid differences in
                           the XML structure.
+    -v, --verbose         Make commands more verbose. You can specifiy multiple
+                          arguments (. g.: -vvv) to make the command more
+                          verbose.
   
   Subcommands:
     {clean,meta,lyrics,rename,export,help}
