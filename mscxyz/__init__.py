@@ -13,7 +13,7 @@ from mscxyz.tree import Tree
 import six
 import sys
 import lxml
-from mscxyz.utils import set_settings
+from mscxyz.utils import set_settings, color
 
 from ._version import get_versions
 __version__ = get_versions()['version']
@@ -73,8 +73,9 @@ def show_all_help(args):
 
 def report_errors(errors):
     for error in errors:
-        print('Error: {}; message: {}'.format(
-            error.__class__.__name__,
+        print('{}: {}; message: {}'.format(
+            color('Error', 'white', 'on_red'),
+            color(error.__class__.__name__, 'red'),
             error.msg
         ))
 

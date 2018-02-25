@@ -4,7 +4,7 @@
 
 from mscxyz.fileloader import File
 from mscxyz.meta import Meta
-from termcolor import colored
+from mscxyz.utils import color
 import errno
 import os
 import re
@@ -84,8 +84,8 @@ class Rename(File):
 
     def execute(self, dry_run=False, verbose=0):
         if dry_run or verbose > 0:
-            print(colored(self.basename, 'red') + ' -> ' +
-                  colored(self.workname, 'yellow'))
+            print('{} -> {}'.format(color(self.basename, 'red'),
+                                    colored(self.workname, 'yellow')))
 
         if not dry_run:
             newpath = self.workname + '.' + self.extension
