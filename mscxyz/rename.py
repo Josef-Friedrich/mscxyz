@@ -77,7 +77,7 @@ class Rename(File):
     def execute(self, dry_run=False, verbose=0):
         if dry_run or verbose > 0:
             print('{} -> {}'.format(color(self.basename, 'red'),
-                                    colored(self.workname, 'yellow')))
+                                    color(self.workname, 'yellow')))
 
         if not dry_run:
             newpath = self.workname + '.' + self.extension
