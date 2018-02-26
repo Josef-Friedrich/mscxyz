@@ -19,6 +19,7 @@ class TestArgs(unittest.TestCase):
         self.assertEqual(args.general_colorize, False)
         self.assertEqual(args.general_dry_run, False)
         self.assertEqual(args.general_glob, '*.mscx')
+        self.assertEqual(args.general_mscore, False)
         self.assertEqual(args.general_verbose, 0)
         self.assertEqual(args.path, '.')
 
