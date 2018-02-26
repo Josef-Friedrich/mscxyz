@@ -7,6 +7,7 @@ import helper
 import unittest
 from mscxyz.rename import Rename
 from mscxyz import rename
+import mscxyz
 
 
 class TestFunctions(unittest.TestCase):
@@ -32,6 +33,34 @@ class TestFunctions(unittest.TestCase):
 
     def test_function_delete_characters(self):
         self.assertEqual(rename.delete_characters('abc', 'a', 'b', 'c'), '')
+
+    def test_function_clean_up(self):
+        clean = rename.clean_up
+        self.assertEqual(clean('-abc-'), 'abc')
+        self.assertEqual(clean('a-b-c'), 'a-b-c')
+        self.assertEqual(clean('a--b'), 'a_b')
+        self.assertEqual(clean('a---b'), 'a_b')
+        self.assertEqual(clean('a__b'), 'a_b')
+        self.assertEqual(clean('a___b'), 'a_b')
+
+    def test_function_apply_format_string(self):
+        from mscxyz import settings
+        settings.args = settings.DefaultArguments()
+        meta = mscxyz.meta.Meta(
+            helper.get_tmpfile_path('meta-all-values.mscx'))
+        fields = meta.interface.export_to_dict()
+        name = rename.apply_format_string(fields)
+        self.assertEqual(name, 'vbox_title (vbox_composer)')
+
+    def test_function_format_filename(self):
+        from mscxyz import settings
+        settings.args = settings.DefaultArguments()
+        settings.args.rename_ascii = True
+        settings.args.rename_no_whitespace = True
+
+        f = rename.format_filename
+        self.assertEqual(f('  Löl   '), 'Loel')
+        self.assertEqual(f('folder/file'), 'folder/file')
 
 
 class TestRename(unittest.TestCase):

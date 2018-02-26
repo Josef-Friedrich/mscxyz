@@ -63,10 +63,16 @@ def clean_up(name):
     return name
 
 
-def generate_filename(fields):
+def apply_format_string(fields):
     args = get_settings('args')
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
+    return name
+
+
+def format_filename(name):
+    args = get_settings('args')
+    name = name.strip()
     if args.rename_ascii:
         name = asciify(name)
     if args.rename_no_whitespace:
