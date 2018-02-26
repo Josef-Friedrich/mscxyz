@@ -275,7 +275,7 @@ sub_rename.add_argument(
     '-f',
     '--format',
     dest='rename_format',
-    default='$title ($composer)',
+    default='$combined_title ($combined_composer)',
     help='Format string.')
 
 sub_rename.add_argument(

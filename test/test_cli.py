@@ -8,6 +8,57 @@ import unittest
 import mscxyz
 import six
 import re
+from mscxyz import cli
+
+
+class TestArgs(unittest.TestCase):
+
+    def test_args_general(self):
+        args = cli.parser.parse_args(['help', '.'])
+        self.assertEqual(args.general_backup, False)
+        self.assertEqual(args.general_colorize, False)
+        self.assertEqual(args.general_dry_run, False)
+        self.assertEqual(args.general_glob, '*.mscx')
+        self.assertEqual(args.general_verbose, 0)
+        self.assertEqual(args.path, '.')
+
+    def test_args_clean(self):
+        args = cli.parser.parse_args(['clean', '.'])
+        self.assertEqual(args.clean_style, None)
+        self.assertEqual(args.subcommand, 'clean')
+
+    def test_args_export(self):
+        args = cli.parser.parse_args(['export', '.'])
+        self.assertEqual(args.export_extension, 'pdf')
+        self.assertEqual(args.subcommand, 'export')
+
+    def test_args_help(self):
+        args = cli.parser.parse_args(['help', '.'])
+        self.assertEqual(args.help_markdown, False)
+        self.assertEqual(args.help_rst, False)
+        self.assertEqual(args.subcommand, 'help')
+
+    def test_args_general_lyrics(self):
+        args = cli.parser.parse_args(['lyrics', '.'])
+        self.assertEqual(args.lyrics_extract, 'all')
+        self.assertEqual(args.lyrics_fix, False)
+        self.assertEqual(args.lyrics_remap, None)
+        self.assertEqual(args.subcommand, 'lyrics')
+
+    def test_args_general_meta(self):
+        args = cli.parser.parse_args(['meta', '.'])
+        self.assertEqual(args.meta_clean, None)
+        self.assertEqual(args.meta_json, False)
+        self.assertEqual(args.meta_set, None)
+        self.assertEqual(args.meta_sync, False)
+        self.assertEqual(args.subcommand, 'meta')
+
+    def test_args_general_rename(self):
+        args = cli.parser.parse_args(['rename', '.'])
+        self.assertEqual(args.rename_ascii, False)
+        self.assertEqual(args.rename_format,
+                         '$combined_title ($combined_composer)')
+        self.assertEqual(args.subcommand, 'rename')
 
 
 class TestCommandlineInterface(unittest.TestCase):
