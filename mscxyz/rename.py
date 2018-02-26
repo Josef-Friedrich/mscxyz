@@ -63,10 +63,17 @@ def clean_up(name):
     return name
 
 
-def generate_filename(name):
-    name = replace_to_dash(name, ' ', ';', '?', '!', '_', '#', '&', '+', ':')
-    name = delete_characters(name, ',', '.', '\'', '`', ')')
-    name = clean_up(name)
+def generate_filename(fields):
+    args = get_settings('args')
+    fields = prepare_fields(fields)
+    name = tmep.parse(args.rename_format, fields)
+    if args.rename_ascii:
+        name = asciify(name)
+    if args.rename_no_whitespace:
+        name = replace_to_dash(name, ' ', ';', '?', '!', '_', '#', '&', '+',
+                               ':')
+        name = delete_characters(name, ',', '.', '\'', '`', ')')
+        name = clean_up(name)
     return name
 
 
