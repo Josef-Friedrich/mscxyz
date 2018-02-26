@@ -293,6 +293,13 @@ sub_rename.add_argument(
     help='Replace all whitespaces with dashes or \
     sometimes underlines.')
 
+sub_rename.add_argument(
+    '-t',
+    '--target',
+    dest='rename_target',
+    help='Target directory',
+)
+
 ###############################################################################
 # export
 ###############################################################################

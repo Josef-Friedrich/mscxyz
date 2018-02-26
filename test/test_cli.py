@@ -59,6 +59,7 @@ class TestArgs(unittest.TestCase):
         self.assertEqual(args.rename_ascii, False)
         self.assertEqual(args.rename_format,
                          '$combined_title ($combined_composer)')
+        self.assertEqual(args.rename_target, None)
         self.assertEqual(args.subcommand, 'rename')
 
 

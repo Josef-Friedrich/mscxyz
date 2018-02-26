@@ -209,6 +209,7 @@ mscx-manager rename
 .. code-block:: text
 
   usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-a] [-n]
+                             [-t RENAME_TARGET]
   
   Fields and functions you can use in the format string (-f, --format):
   
@@ -380,6 +381,8 @@ mscx-manager rename
     -a, --ascii           Use only ASCII characters.
     -n, --no-whitespace   Replace all whitespaces with dashes or sometimes
                           underlines.
+    -t RENAME_TARGET, --target RENAME_TARGET
+                          Target directory
   
 
 mscx-manager export

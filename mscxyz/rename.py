@@ -83,6 +83,35 @@ def format_filename(name):
     return name
 
 
+def show(old, new):
+    args = get_settings('args')
+    if args.general_dry_run or args.general_verbose > 0:
+        print('{} -> {}'.format(color(old, 'red'),
+                                color(new, 'yellow')))
+
+
+def rename(source):
+    args = get_settings('args')
+
+    meta = Meta(source)
+    target_filename = apply_format_string(meta.interface.export_to_dict())
+
+    target_filename = format_filename(target_filename)
+
+    if args.rename_target:
+        target_base = os.path.abspath(args.rename_target)
+    else:
+        target_base = os.getcwd()
+
+    show(source, target_filename)
+
+    if not args.general_dry_run:
+        target = os.path.join(target_base,
+                              target_filename + '.' + meta.extension)
+        create_dir(target)
+        os.rename(source, target)
+
+
 class Rename(File):
 
     def __init__(self, relpath):
@@ -136,6 +165,8 @@ class Rename(File):
                             format_string='$vbox_title ($vbox_composer)'):
         self.workname = tmep.parse(format_string,
                                    self.score.interface.export_to_dict())
+
+
 
     def execute(self):
         args = get_settings('args')
