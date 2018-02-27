@@ -63,35 +63,11 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(f('folder/file'), 'folder/file')
 
 
-# class TestRename(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.simple = Rename(helper.get_tmpfile_path('simple.mscx'))
-#         self.unicode = Rename(helper.get_tmpfile_path('unicode.mscx'))
-#
-#     def test_option_format_default(self):
-#         self.simple.apply_format_string()
-#         self.assertEqual(self.simple.workname, u'Title (Composer)')
-#
-#     def test_option_format_given(self):
-#         self.simple.apply_format_string('${vbox_composer}_${vbox_title}')
-#         self.assertEqual(self.simple.workname, u'Composer_Title')
-#
-#     def test_option_asciify(self):
-#         self.unicode.apply_format_string()
-#         self.unicode.asciify()
-#         self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
-#
-#     def test_option_no_whitespace(self):
-#         self.simple.apply_format_string()
-#         self.simple.no_whitespace()
-#         self.assertEqual(self.simple.workname, 'Title_Composer')
-
-
 class TestIntegration(unittest.TestCase):
 
-    def setUp(self):
-        self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
+    @staticmethod
+    def _get(filename):
+        return helper.get_tmpfile_path(filename)
 
     @staticmethod
     def _target_path_cwd(filename):
@@ -103,14 +79,45 @@ class TestIntegration(unittest.TestCase):
             mscxyz.execute(args)
         return output
 
-    def test_rename(self):
-        output = self._execute(['rename', self.tmp])
-        target = self._target_path_cwd('vbox_title (vbox_composer).mscx')
-
+    def test_simple(self):
+        output = self._execute(['rename', self._get('simple.mscx')])
+        target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
+        self.assertTrue('simple.mscx -> ' in output[0])
+        self.assertTrue('Title (Composer).mscx' in output[0])
         os.remove(target)
-        self.assertTrue('meta-all-values.mscx -> ' in output[0])
+
+    def test_without_arguments(self):
+        output = self._execute(['rename', self._get('meta-all-values.mscx')])
+        target = self._target_path_cwd('vbox_title (vbox_composer).mscx')
+        self.assertTrue(os.path.exists(target))
         self.assertTrue('vbox_title (vbox_composer).mscx' in output[0])
+        os.remove(target)
+
+    def test_format(self):
+        output = self._execute(['rename', '--format',
+                                '${vbox_composer}_${vbox_title}',
+                                self._get('simple.mscx')])
+        target = self._target_path_cwd('Composer_Title.mscx')
+        self.assertTrue(os.path.exists(target))
+        self.assertTrue('Composer_Title.mscx' in output[0])
+        os.remove(target)
+
+    def test_no_whitespace(self):
+        output = self._execute(['rename', '--no-whitespace',
+                                self._get('simple.mscx')])
+        target = self._target_path_cwd('Title_Composer.mscx')
+        self.assertTrue(os.path.exists(target))
+        self.assertTrue('Title_Composer.mscx' in output[0])
+        os.remove(target)
+
+    def test_unicode(self):
+        output = self._execute(['rename', '--ascii',
+                                self._get('unicode.mscx')])
+        target = self._target_path_cwd('Tuetlae (Coempoesser).mscx')
+        self.assertTrue(os.path.exists(target))
+        self.assertTrue('Tuetlae (Coempoesser).mscx' in output[0])
+        os.remove(target)
 
 
 if __name__ == '__main__':
