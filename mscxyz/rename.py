@@ -100,6 +100,14 @@ def get_checksum(filename):
     return hasher.hexdigest()
 
 
+def create_increment_copy(target):
+    i = 0
+    while os.path.exists("sample%s.xml" % i):
+        i += 1
+
+    fh = open("sample%s.xml" % i, "w")
+
+
 def rename_filename(source):
     args = get_settings('args')
 
