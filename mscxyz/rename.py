@@ -77,8 +77,7 @@ def format_filename(name):
     if args.rename_ascii:
         name = asciify(name)
     if args.rename_no_whitespace:
-        name = replace_to_dash(name, ' ', ';', '?', '!', '_', '#', '&', '+',
-                               ':')
+        name = replace_to_dash(name, ' ', ';', '?', '!', '#', '&', '+', ':')
         name = delete_characters(name, ',', '.', '\'', '`', ')')
         name = clean_up(name)
     return name
