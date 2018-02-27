@@ -93,16 +93,24 @@ class TestIntegration(unittest.TestCase):
     def setUp(self):
         self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
 
-    def test_rename(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(['rename', self.tmp])
+    @staticmethod
+    def _target_path_cwd(filename):
+        return os.path.join(os.getcwd(), filename)
 
-        target = os.path.join(os.getcwd(), 'vbox_title (vbox_composer).mscx')
+    @staticmethod
+    def _execute(args):
+        with helper.Capturing() as output:
+            mscxyz.execute(args)
+        return output
+
+    def test_rename(self):
+        output = self._execute(['rename', self.tmp])
+        target = self._target_path_cwd('vbox_title (vbox_composer).mscx')
 
         self.assertTrue(os.path.exists(target))
         os.remove(target)
-
-        print(output)
+        self.assertTrue('meta-all-values.mscx -> ' in output[0])
+        self.assertTrue('vbox_title (vbox_composer).mscx' in output[0])
 
 
 if __name__ == '__main__':

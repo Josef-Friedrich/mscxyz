@@ -85,9 +85,7 @@ def format_filename(name):
 
 def show(old, new):
     args = get_settings('args')
-    if args.general_dry_run or args.general_verbose > 0:
-        print('{} -> {}'.format(color(old, 'red'),
-                                color(new, 'yellow')))
+    print('{} -> {}'.format(color(old, 'red'), color(new, 'yellow')))
 
 
 def rename_filename(source):
@@ -103,11 +101,12 @@ def rename_filename(source):
     else:
         target_base = os.getcwd()
 
-    show(source, target_filename)
+    target = os.path.join(target_base,
+                          target_filename + '.' + meta.extension)
+    show(source, target)
 
     if not args.general_dry_run:
-        target = os.path.join(target_base,
-                              target_filename + '.' + meta.extension)
+
         create_dir(target)
         os.rename(source, target)
 
