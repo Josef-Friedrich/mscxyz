@@ -100,14 +100,6 @@ def get_checksum(filename):
     return hasher.hexdigest()
 
 
-def create_increment_copy(target):
-    i = 0
-    while os.path.exists("sample%s.xml" % i):
-        i += 1
-
-    fh = open("sample%s.xml" % i, "w")
-
-
 def rename_filename(source):
     args = get_settings('args')
 
@@ -124,10 +116,21 @@ def rename_filename(source):
     target = os.path.join(target_base,
                           target_filename + '.' + meta.extension)
 
-    if os.path.exists(target) and get_checksum(source) == get_checksum(target):
-        print(color('The file “{}” with the same checksum (sha1) already '
-              'exists in the target path “{}”!'.format(source, target), 'red'))
-        return meta
+    if os.path.exists(target):
+        target_format = target.replace('.mscx', '{}.mscx')
+        i = ''
+        while os.path.exists(target_format.format(i)):
+            target = target_format.format(i)
+            if get_checksum(source) == get_checksum(target):
+               print(color('The file “{}” with the same checksum (sha1) '
+                           'already exists in the target path “{}”!'
+                           .format(source, target), 'red'))
+               return meta
+            if i == '':
+                i = 1
+            i += 1
+
+        target = target_format.format(i)
 
     show(source, target)
 
