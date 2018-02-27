@@ -62,6 +62,11 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(f('  Löl   '), 'Loel')
         self.assertEqual(f('folder/file'), 'folder/file')
 
+    def test_function_get_checksum(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        self.assertEqual(rename.get_checksum(tmp),
+                         'dacd912aa0f6a1a67c3b13bb947395509e19dce2')
+
 
 class TestIntegration(unittest.TestCase):
 
@@ -117,6 +122,13 @@ class TestIntegration(unittest.TestCase):
         target = self._target_path_cwd('Tuetlae (Coempoesser).mscx')
         self.assertTrue(os.path.exists(target))
         self.assertTrue('Tuetlae (Coempoesser).mscx' in output[0])
+        os.remove(target)
+
+    def test_rename_file_twice(self):
+        self._execute(['rename', self._get('simple.mscx')])
+        output = self._execute(['rename', self._get('simple.mscx')])
+        target = self._target_path_cwd('Title (Composer).mscx')
+        self.assertTrue('with the same checksum (sha1) already' in output[0])
         os.remove(target)
 
 

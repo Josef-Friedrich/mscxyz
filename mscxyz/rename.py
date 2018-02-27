@@ -10,6 +10,7 @@ import os
 import re
 import tmep
 import unidecode
+import hashlib
 
 
 def create_dir(path):
@@ -88,6 +89,17 @@ def show(old, new):
     print('{} -> {}'.format(color(old, 'red'), color(new, 'yellow')))
 
 
+def get_checksum(filename):
+    BLOCKSIZE = 65536
+    hasher = hashlib.sha1()
+    with open(filename, 'rb') as afile:
+        buf = afile.read(BLOCKSIZE)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(BLOCKSIZE)
+    return hasher.hexdigest()
+
+
 def rename_filename(source):
     args = get_settings('args')
 
@@ -103,6 +115,12 @@ def rename_filename(source):
 
     target = os.path.join(target_base,
                           target_filename + '.' + meta.extension)
+
+    if os.path.exists(target) and get_checksum(source) == get_checksum(target):
+        print(color('The file “{}” with the same checksum (sha1) already '
+              'exists in the target path “{}”!'.format(source, target), 'red'))
+        return meta
+
     show(source, target)
 
     if not args.general_dry_run:
