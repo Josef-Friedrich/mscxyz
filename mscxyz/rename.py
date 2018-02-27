@@ -85,7 +85,7 @@ def format_filename(name):
 
 def show(old, new):
     args = get_settings('args')
-    print('{} -> {}'.format(color(old, 'red'), color(new, 'yellow')))
+    print('{} -> {}'.format(color(old, 'yellow'), color(new, 'green')))
 
 
 def get_checksum(filename):
