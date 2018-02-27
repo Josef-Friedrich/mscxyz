@@ -8,7 +8,7 @@ from mscxyz.batch import Batch
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz import cli
-from mscxyz.rename import Rename
+from mscxyz.rename import rename_filename
 from mscxyz.tree import Tree
 import six
 import sys
@@ -146,14 +146,7 @@ def execute(args=None):
                 score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'rename':
-            score = Rename(file)
-            if args.rename_format:
-                score.apply_format_string(format_string=args.rename_format)
-            if args.rename_ascii:
-                score.asciify()
-            if args.rename_no_whitespace:
-                score.no_whitespace()
-            score.execute()
+            score = rename_filename(file)
 
         elif args.subcommand == 'export':
             from mscxyz.fileloader import File

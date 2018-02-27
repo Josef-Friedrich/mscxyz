@@ -5,9 +5,9 @@
 
 import helper
 import unittest
-from mscxyz.rename import Rename
 from mscxyz import rename
 import mscxyz
+import os
 
 
 class TestFunctions(unittest.TestCase):
@@ -63,29 +63,46 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(f('folder/file'), 'folder/file')
 
 
-class TestRename(unittest.TestCase):
+# class TestRename(unittest.TestCase):
+#
+#     def setUp(self):
+#         self.simple = Rename(helper.get_tmpfile_path('simple.mscx'))
+#         self.unicode = Rename(helper.get_tmpfile_path('unicode.mscx'))
+#
+#     def test_option_format_default(self):
+#         self.simple.apply_format_string()
+#         self.assertEqual(self.simple.workname, u'Title (Composer)')
+#
+#     def test_option_format_given(self):
+#         self.simple.apply_format_string('${vbox_composer}_${vbox_title}')
+#         self.assertEqual(self.simple.workname, u'Composer_Title')
+#
+#     def test_option_asciify(self):
+#         self.unicode.apply_format_string()
+#         self.unicode.asciify()
+#         self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
+#
+#     def test_option_no_whitespace(self):
+#         self.simple.apply_format_string()
+#         self.simple.no_whitespace()
+#         self.assertEqual(self.simple.workname, 'Title_Composer')
+
+
+class TestIntegration(unittest.TestCase):
 
     def setUp(self):
-        self.simple = Rename(helper.get_tmpfile_path('simple.mscx'))
-        self.unicode = Rename(helper.get_tmpfile_path('unicode.mscx'))
+        self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
 
-    def test_option_format_default(self):
-        self.simple.apply_format_string()
-        self.assertEqual(self.simple.workname, u'Title (Composer)')
+    def test_rename(self):
+        with helper.Capturing() as output:
+            mscxyz.execute(['rename', self.tmp])
 
-    def test_option_format_given(self):
-        self.simple.apply_format_string('${vbox_composer}_${vbox_title}')
-        self.assertEqual(self.simple.workname, u'Composer_Title')
+        target = os.path.join(os.getcwd(), 'vbox_title (vbox_composer).mscx')
 
-    def test_option_asciify(self):
-        self.unicode.apply_format_string()
-        self.unicode.asciify()
-        self.assertEqual(self.unicode.workname, 'Tuetlae (Coempoesser)')
+        self.assertTrue(os.path.exists(target))
+        os.remove(target)
 
-    def test_option_no_whitespace(self):
-        self.simple.apply_format_string()
-        self.simple.no_whitespace()
-        self.assertEqual(self.simple.workname, 'Title_Composer')
+        print(output)
 
 
 if __name__ == '__main__':
