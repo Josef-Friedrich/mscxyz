@@ -7,7 +7,7 @@ import unittest
 import mscxyz
 
 
-class TestBrokenFile(unittest.TestCase):
+class TestBrokenScoreFile(unittest.TestCase):
 
     def test_broken_file(self):
         with helper.Capturing() as output:

@@ -4,16 +4,15 @@
 files of the notation software MuseScore
 """
 
-from mscxyz.batch import Batch
+from mscxyz import cli
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz import cli
 from mscxyz.rename import rename_filename
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import XMLTree, Batch
+from mscxyz.utils import set_settings, color
+import lxml
 import six
 import sys
-import lxml
-from mscxyz.utils import set_settings, color
 
 from ._version import get_versions
 __version__ = get_versions()['version']
@@ -100,12 +99,12 @@ def execute(args=None):
     for file in files:
 
         if args.general_backup:
-            from mscxyz.fileloader import File
-            score = File(file)
+            from mscxyz.score_file_classes import ScoreFile
+            score = ScoreFile(file)
             score.backup()
 
         if args.subcommand == 'clean':
-            score = Tree(file)
+            score = XMLTree(file)
             score.clean()
             if args.clean_style:
                 score.merge_style(style_file=args.clean_style.name)
@@ -149,8 +148,8 @@ def execute(args=None):
             score = rename_filename(file)
 
         elif args.subcommand == 'export':
-            from mscxyz.fileloader import File
-            score = File(file)
+            from mscxyz.score_file_classes import ScoreFile
+            score = ScoreFile(file)
             score.export(extension=args.export_extension)
 
         report_errors(score.errors)

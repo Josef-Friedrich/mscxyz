@@ -110,8 +110,8 @@
     <lowerCaseBassNotes>0</lowerCaseBassNotes>
     <allCapsNoteNames>0</allCapsNoteNames>
     <chordStyle>std</chordStyle>
-    <chordsXmlFile>0</chordsXmlFile>
-    <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
+    <chordsXmlScoreFile>0</chordsXmlScoreFile>
+    <chordDescriptionScoreFile>chords_std.xml</chordDescriptionScoreFile>
     <concertPitch>0</concertPitch>
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>

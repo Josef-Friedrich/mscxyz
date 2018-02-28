@@ -1,4 +1,4 @@
-"""File for various tests"""
+"""ScoreFile for various tests"""
 
 
 import os

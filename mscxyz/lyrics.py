@@ -2,11 +2,11 @@
 
 """Manipulate the lyrics"""
 
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import XMLTree
 import lxml.etree as etree
 
 
-class Lyrics(Tree):
+class Lyrics(XMLTree):
 
     def __init__(self, relpath):
         super(Lyrics, self).__init__(relpath)
@@ -44,7 +44,7 @@ class Lyrics(Tree):
                 ]
         """
         lyrics = []
-        for lyric in self.tree.findall('.//Lyrics'):
+        for lyric in self.xml_tree.findall('.//Lyrics'):
             safe = {}
             safe['element'] = lyric
             number = lyric.find('no')

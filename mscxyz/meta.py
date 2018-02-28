@@ -2,7 +2,7 @@
 
 """Class for metadata maniplation"""
 
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import XMLTree
 from mscxyz.utils import print_desc, get_settings, color
 from termcolor import colored
 import lxml
@@ -252,7 +252,7 @@ class Vbox(object):
             self._set_text(field.title(), value)
 
 
-class Combined(Tree):
+class Combined(XMLTree):
 
     fields = (
         'composer',
@@ -366,35 +366,35 @@ class InterfaceReadOnly(object):
     ]
 
     def __init__(self, tree):
-        self.tree = tree
+        self.xml_tree = tree
 
     @property
     def readonly_abspath(self):
-        return self.tree.abspath
+        return self.xml_tree.abspath
 
     @property
     def readonly_basename(self):
-        return self.tree.basename
+        return self.xml_tree.basename
 
     @property
     def readonly_dirname(self):
-        return self.tree.dirname
+        return self.xml_tree.dirname
 
     @property
     def readonly_extension(self):
-        return self.tree.extension
+        return self.xml_tree.extension
 
     @property
     def readonly_filename(self):
-        return self.tree.filename
+        return self.xml_tree.filename
 
     @property
     def readonly_relpath(self):
-        return self.tree.relpath
+        return self.xml_tree.relpath
 
     @property
     def readonly_relpath_backup(self):
-        return self.tree.relpath_backup
+        return self.xml_tree.relpath_backup
 
 
 class Interface(object):
@@ -402,7 +402,7 @@ class Interface(object):
     def __init__(self, tree):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
-        self.read_write = InterfaceReadWrite(tree.root)
+        self.read_write = InterfaceReadWrite(tree.xml_root)
         self.fields = self.get_all_fields()
 
     @staticmethod
@@ -428,16 +428,16 @@ class Interface(object):
             raise ReadOnlyFieldError(field)
 
 
-class Meta(Tree):
+class Meta(XMLTree):
 
     def __init__(self, relpath):
         super(Meta, self).__init__(relpath)
 
         if not self.errors:
-            self.metatag = MetaTag(self.root)
-            self.vbox = Vbox(self.root)
-            self.combined = Combined(self.root)
-            self.interface_read_write = InterfaceReadWrite(self.root)
+            self.metatag = MetaTag(self.xml_root)
+            self.vbox = Vbox(self.xml_root)
+            self.combined = Combined(self.xml_root)
+            self.interface_read_write = InterfaceReadWrite(self.xml_root)
             self.interface = Interface(self)
 
     def sync_fields(self):

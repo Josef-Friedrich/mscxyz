@@ -8,7 +8,7 @@ import mscxyz
 from mscxyz import meta
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import XMLTree
 import helper
 import os
 
@@ -80,8 +80,8 @@ class TestClassUnifiedInterface(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
-        interface = InterfaceReadWrite(tree.root)
+        tree = XMLTree(tmp)
+        interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
     def test_subclasses(self):
@@ -122,8 +122,8 @@ class TestClassUnifiedInterface(unittest.TestCase):
             self.assertEqual(getattr(interface, field), field + '_test')
 
         tree.save()
-        tree = Tree(tmp)
-        interface = InterfaceReadWrite(tree.root)
+        tree = XMLTree(tmp)
+        interface = InterfaceReadWrite(tree.xml_root)
 
         self.assertEqual(interface.combined_composer, 'vbox_composer_test')
         self.assertEqual(interface.combined_lyricist, 'vbox_lyricist_test')
@@ -181,8 +181,8 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
             'readonly_relpath_backup',
         )
         self.tmp = helper.get_tmpfile_path('simple.mscx')
-        self.tree = Tree(self.tmp)
-        self.interface = InterfaceReadOnly(self.tree)
+        self.xml_tree = XMLTree(self.tmp)
+        self.interface = InterfaceReadOnly(self.xml_tree)
 
     def test_exception(self):
         with self.assertRaises(AttributeError):
@@ -244,8 +244,8 @@ class TestClassInterface(unittest.TestCase):
         ]
 
         self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
-        self.tree = Tree(self.tmp)
-        self.interface = Interface(self.tree)
+        self.xml_tree = XMLTree(self.tmp)
+        self.interface = Interface(self.xml_tree)
 
     def test_static_method_get_all_fields(self):
         self.assertEqual(Interface.get_all_fields(), self.fields)
@@ -267,8 +267,8 @@ class TestClassMetaTag(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
-        meta = MetaTag(tree.root)
+        tree = XMLTree(tmp)
+        meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
 
     def test_static_method_to_camel_case(self):
@@ -290,8 +290,8 @@ class TestClassMetaTag(unittest.TestCase):
         meta.workTitle = 'WT'
         meta.movement_title = 'MT'
         tree.save()
-        tree = Tree(tmp)
-        meta = MetaTag(tree.root)
+        tree = XMLTree(tmp)
+        meta = MetaTag(tree.xml_root)
         self.assertEqual(meta.work_title, 'WT')
         self.assertEqual(meta.movementTitle, 'MT')
         xml_string = helper.read_file(tmp)
@@ -320,8 +320,8 @@ class TestClassVbox(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        tree = XMLTree(tmp)
+        vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
     def test_init(self):
@@ -345,13 +345,13 @@ class TestClassVbox(unittest.TestCase):
 
     def _assert_set(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        tree = XMLTree(tmp)
+        vbox = Vbox(tree.xml_root)
         vbox.Title = 'lol'
         vbox.composer = 'lol'
         tree.save()
-        tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        tree = XMLTree(tmp)
+        vbox = Vbox(tree.xml_root)
         self.assertEqual(vbox.title, 'lol')
         self.assertEqual(vbox.Composer, 'lol')
         xml_string = helper.read_file(tmp)
@@ -373,8 +373,8 @@ class TestClassCombined(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
-        combined = Combined(tree.root)
+        tree = XMLTree(tmp)
+        combined = Combined(tree.xml_root)
         return combined, tree, tmp
 
     def test_getter(self):
@@ -391,7 +391,7 @@ class TestClassCombined(unittest.TestCase):
         combined.composer = 'C'
         combined.lyricist = 'L'
         tree.save()
-        combined = Combined(tree.root)
+        combined = Combined(tree.xml_root)
         self.assertEqual(combined.metatag.workTitle, 'T')
         self.assertEqual(combined.metatag.movementTitle, 'S')
         self.assertEqual(combined.metatag.composer, 'C')

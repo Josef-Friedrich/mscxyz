@@ -2,7 +2,7 @@
 
 """Rename MuseScore files"""
 
-from mscxyz.fileloader import File
+from mscxyz.score_file_classes import ScoreFile
 from mscxyz.meta import Meta
 from mscxyz.utils import color, get_settings
 import errno
@@ -66,7 +66,7 @@ def format_filename(name):
 
 def show(old, new):
     args = get_settings('args')
-    print('{} -> {}'.format(color(old, 'red'), color(new, 'yellow')))
+    print('{} -> {}'.format(color(old, 'yellow'), color(new, 'green')))
 
 
 def get_checksum(filename):
