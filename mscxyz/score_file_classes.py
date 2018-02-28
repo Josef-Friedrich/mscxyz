@@ -23,6 +23,29 @@ import lxml
 import os
 import shutil
 import six
+import fnmatch
+
+
+class Batch(object):
+    """Load multiple MuseScore files"""
+    def __init__(self, path, glob='*.mscx'):
+        self.path = path
+        self.files = []
+
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if fnmatch.fnmatch(file, glob):
+                    file_path = os.path.join(root, file)
+                    self.files.append(file_path)
+
+        self.files.sort()
+
+    def get_files(self):
+        if os.path.isdir(self.path):
+            return self.files
+        else:
+            return [self.path]
+
 
 
 class ScoreFile(object):

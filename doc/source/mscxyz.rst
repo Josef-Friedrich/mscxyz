@@ -12,14 +12,6 @@ Module contents
 Submodules
 ----------
 
-mscxyz.batch module
-^^^^^^^^^^^^^^^^^^^
-
-.. automodule:: mscxyz.batch
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 mscxyz.score_file_classes module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

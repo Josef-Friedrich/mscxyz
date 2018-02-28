@@ -4,16 +4,15 @@
 files of the notation software MuseScore
 """
 
-from mscxyz.batch import Batch
+from mscxyz import cli
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz import cli
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import XMLTree
+from mscxyz.score_file_classes import XMLTree, Batch
+from mscxyz.utils import set_settings, color
+import lxml
 import six
 import sys
-import lxml
-from mscxyz.utils import set_settings, color
 
 from ._version import get_versions
 __version__ = get_versions()['version']
