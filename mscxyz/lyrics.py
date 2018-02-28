@@ -2,11 +2,11 @@
 
 """Manipulate the lyrics"""
 
-from mscxyz.score_file_classes import Tree
+from mscxyz.score_file_classes import XMLTree
 import lxml.etree as etree
 
 
-class Lyrics(Tree):
+class Lyrics(XMLTree):
 
     def __init__(self, relpath):
         super(Lyrics, self).__init__(relpath)

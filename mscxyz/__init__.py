@@ -9,7 +9,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz import cli
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import Tree
+from mscxyz.score_file_classes import XMLTree
 import six
 import sys
 import lxml
@@ -105,7 +105,7 @@ def execute(args=None):
             score.backup()
 
         if args.subcommand == 'clean':
-            score = Tree(file)
+            score = XMLTree(file)
             score.clean()
             if args.clean_style:
                 score.merge_style(style_file=args.clean_style.name)

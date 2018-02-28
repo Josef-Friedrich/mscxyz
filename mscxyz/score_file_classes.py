@@ -7,7 +7,7 @@ The classes build on each other hierarchically. The class hierarchy:
 .. code ::
 
     ScoreFile
-        XMLTree
+        XMLXMLTree
             Meta
             Lyrics
             Rename
@@ -55,11 +55,11 @@ class File(object):
         mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
 
 
-class Tree(File):
+class XMLTree(File):
     """XML tree manipulation"""
 
     def __init__(self, relpath):
-        super(Tree, self).__init__(relpath)
+        super(XMLTree, self).__init__(relpath)
         try:
             self.xml_tree = lxml.etree.parse(self.relpath)
         except lxml.etree.XMLSyntaxError as e:

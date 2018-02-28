@@ -8,7 +8,7 @@ import mscxyz
 from mscxyz import meta
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
-from mscxyz.score_file_classes import Tree
+from mscxyz.score_file_classes import XMLTree
 import helper
 import os
 
@@ -80,7 +80,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
@@ -122,7 +122,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
             self.assertEqual(getattr(interface, field), field + '_test')
 
         tree.save()
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
 
         self.assertEqual(interface.combined_composer, 'vbox_composer_test')
@@ -181,7 +181,7 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
             'readonly_relpath_backup',
         )
         self.tmp = helper.get_tmpfile_path('simple.mscx')
-        self.xml_tree = Tree(self.tmp)
+        self.xml_tree = XMLTree(self.tmp)
         self.interface = InterfaceReadOnly(self.xml_tree)
 
     def test_exception(self):
@@ -244,7 +244,7 @@ class TestClassInterface(unittest.TestCase):
         ]
 
         self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
-        self.xml_tree = Tree(self.tmp)
+        self.xml_tree = XMLTree(self.tmp)
         self.interface = Interface(self.xml_tree)
 
     def test_static_method_get_all_fields(self):
@@ -267,7 +267,7 @@ class TestClassMetaTag(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
 
@@ -290,7 +290,7 @@ class TestClassMetaTag(unittest.TestCase):
         meta.workTitle = 'WT'
         meta.movement_title = 'MT'
         tree.save()
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         meta = MetaTag(tree.xml_root)
         self.assertEqual(meta.work_title, 'WT')
         self.assertEqual(meta.movementTitle, 'MT')
@@ -320,7 +320,7 @@ class TestClassVbox(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
@@ -345,12 +345,12 @@ class TestClassVbox(unittest.TestCase):
 
     def _assert_set(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         vbox = Vbox(tree.xml_root)
         vbox.Title = 'lol'
         vbox.composer = 'lol'
         tree.save()
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         vbox = Vbox(tree.xml_root)
         self.assertEqual(vbox.title, 'lol')
         self.assertEqual(vbox.Composer, 'lol')
@@ -373,7 +373,7 @@ class TestClassCombined(unittest.TestCase):
 
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
-        tree = Tree(tmp)
+        tree = XMLTree(tmp)
         combined = Combined(tree.xml_root)
         return combined, tree, tmp
 
