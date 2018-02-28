@@ -141,6 +141,24 @@ class TestIntegration(unittest.TestCase):
         self._rm_in_cwd('same2.mscx')
         self._rm_in_cwd('same3.mscx')
 
+    def test_rename_skips(self):
+        output = self._execute(['rename', '--skip-if-empty',
+                                'metatag_composer,metatag_source',
+                                self._get('simple.mscx')])
+
+        self.assertTrue('Field “metatag_source” is empty! Skipping', output[0])
+
+    def test_rename_skip_pass(self):
+        output = self._execute(['rename', '--skip-if-empty',
+                                'metatag_composer,metatag_work_title',
+                                self._get('simple.mscx')])
+
+        target = self._target_path_cwd('Title (Composer).mscx')
+        self.assertTrue(os.path.exists(target))
+        self.assertTrue('simple.mscx -> ' in output[0])
+        self.assertTrue('Title (Composer).mscx' in output[0])
+        os.remove(target)
+
 
 if __name__ == '__main__':
     unittest.main()

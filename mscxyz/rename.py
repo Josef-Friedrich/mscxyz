@@ -84,7 +84,16 @@ def rename_filename(source):
     args = get_settings('args')
 
     meta = Meta(source)
-    target_filename = apply_format_string(meta.interface.export_to_dict())
+    meta_values = meta.interface.export_to_dict()
+    target_filename = apply_format_string(meta_values)
+
+    if args.rename_skip:
+        skips = args.rename_skip.split(',')
+        for skip in skips:
+            if not meta_values[skip]:
+                print(color('Field “{}” is empty! Skipping'.format(skip),
+                            'red'))
+                return meta
 
     target_filename = format_filename(target_filename)
 

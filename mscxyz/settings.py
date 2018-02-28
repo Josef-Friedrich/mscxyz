@@ -22,6 +22,7 @@ class DefaultArguments(object):
     path = '.'
     rename_ascii = False
     rename_format = '$combined_title ($combined_composer)'
+    rename_skip = None
     rename_target = None
     subcommand = None
 

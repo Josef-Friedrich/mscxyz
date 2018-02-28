@@ -294,6 +294,15 @@ sub_rename.add_argument(
     sometimes underlines.')
 
 sub_rename.add_argument(
+    '-s',
+    '--skip-if-empty',
+    dest='rename_skip',
+    metavar='FIELDS',
+    help='Skip rename action if FIELDS are empty. Separate FIELDS using \
+    commas: combined_composer,combined_title',
+)
+
+sub_rename.add_argument(
     '-t',
     '--target',
     dest='rename_target',
