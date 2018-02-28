@@ -47,6 +47,10 @@ class Batch(object):
             return [self.path]
 
 
+###############################################################################
+# Class hierarchy level 1
+###############################################################################
+
 
 class ScoreFile(object):
     """Basic file loading"""
@@ -76,6 +80,11 @@ class ScoreFile(object):
         """
         score = self.relpath
         mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
+
+
+###############################################################################
+# Class hierarchy level 2
+###############################################################################
 
 
 class XMLTree(ScoreFile):
@@ -122,3 +131,8 @@ class XMLTree(ScoreFile):
             self.xml_tree.write(filename, encoding='UTF-8')
             if mscore:
                 re_open(filename)
+
+
+###############################################################################
+# Class hierarchy level 3
+###############################################################################
