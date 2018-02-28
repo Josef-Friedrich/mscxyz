@@ -2,7 +2,7 @@
 
 """Manipulate the lyrics"""
 
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import Tree
 import lxml.etree as etree
 
 

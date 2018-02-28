@@ -9,7 +9,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz import cli
 from mscxyz.rename import rename_filename
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import Tree
 import six
 import sys
 import lxml
@@ -100,7 +100,7 @@ def execute(args=None):
     for file in files:
 
         if args.general_backup:
-            from mscxyz.fileloader import File
+            from mscxyz.score_file_classes import File
             score = File(file)
             score.backup()
 
@@ -149,7 +149,7 @@ def execute(args=None):
             score = rename_filename(file)
 
         elif args.subcommand == 'export':
-            from mscxyz.fileloader import File
+            from mscxyz.score_file_classes import File
             score = File(file)
             score.export(extension=args.export_extension)
 

@@ -11,7 +11,7 @@ import mock
 
 class TestFile(unittest.TestCase):
     def setUp(self):
-        from mscxyz.fileloader import File
+        from mscxyz.score_file_classes import File
         self.file = File(helper.get_tmpfile_path('simple.mscx'))
 
     def test_file_object_initialisation(self):
@@ -49,7 +49,7 @@ class TestBackup(unittest.TestCase):
 
 class TestExport(unittest.TestCase):
 
-    @mock.patch('mscxyz.fileloader.mscore')
+    @mock.patch('mscxyz.score_file_classes.mscore')
     def test_export(self, mscore_function):
         tmp = helper.get_tmpfile_path('simple.mscx')
         mscxyz.execute(['export', '--extension', 'mp3', tmp])

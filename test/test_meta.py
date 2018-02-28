@@ -8,7 +8,7 @@ import mscxyz
 from mscxyz import meta
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import Tree
 import helper
 import os
 

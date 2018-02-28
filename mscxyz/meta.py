@@ -2,7 +2,7 @@
 
 """Class for metadata maniplation"""
 
-from mscxyz.tree import Tree
+from mscxyz.score_file_classes import Tree
 from mscxyz.utils import print_desc, get_settings, color
 from termcolor import colored
 import lxml

@@ -20,10 +20,10 @@ mscxyz.batch module
     :undoc-members:
     :show-inheritance:
 
-mscxyz.fileloader module
-^^^^^^^^^^^^^^^^^^^^^^^^
+mscxyz.score_file_classes module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: mscxyz.fileloader
+.. automodule:: mscxyz.score_file_classes
     :members:
     :undoc-members:
     :show-inheritance:
@@ -56,14 +56,6 @@ mscxyz.rename module
 ^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.rename
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-mscxyz.tree module
-^^^^^^^^^^^^^^^^^^
-
-.. automodule:: mscxyz.tree
     :members:
     :undoc-members:
     :show-inheritance:
