@@ -2,7 +2,7 @@
 
 """Rename MuseScore files"""
 
-from mscxyz.score_file_classes import File
+from mscxyz.score_file_classes import ScoreFile
 from mscxyz.meta import Meta
 from mscxyz.utils import color, get_settings
 import errno

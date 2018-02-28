@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""File for various tests"""
+"""ScoreFile for various tests"""
 
 import os
 import helper
@@ -9,10 +9,10 @@ import mscxyz
 import mock
 
 
-class TestFile(unittest.TestCase):
+class TestScoreFile(unittest.TestCase):
     def setUp(self):
-        from mscxyz.score_file_classes import File
-        self.file = File(helper.get_tmpfile_path('simple.mscx'))
+        from mscxyz.score_file_classes import ScoreFile
+        self.file = ScoreFile(helper.get_tmpfile_path('simple.mscx'))
 
     def test_file_object_initialisation(self):
         self.assertTrue(self.file.relpath)

@@ -6,7 +6,7 @@ The classes build on each other hierarchically. The class hierarchy:
 
 .. code ::
 
-    ScoreFile
+    ScoreScoreFile
         XMLXMLTree
             Meta
             Lyrics
@@ -25,7 +25,7 @@ import shutil
 import six
 
 
-class File(object):
+class ScoreFile(object):
     """Basic file loading"""
 
     def __init__(self, relpath):
@@ -55,7 +55,7 @@ class File(object):
         mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
 
 
-class XMLTree(File):
+class XMLTree(ScoreFile):
     """XML tree manipulation"""
 
     def __init__(self, relpath):

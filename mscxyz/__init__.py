@@ -100,8 +100,8 @@ def execute(args=None):
     for file in files:
 
         if args.general_backup:
-            from mscxyz.score_file_classes import File
-            score = File(file)
+            from mscxyz.score_file_classes import ScoreFile
+            score = ScoreFile(file)
             score.backup()
 
         if args.subcommand == 'clean':
@@ -149,8 +149,8 @@ def execute(args=None):
             score = rename_filename(file)
 
         elif args.subcommand == 'export':
-            from mscxyz.score_file_classes import File
-            score = File(file)
+            from mscxyz.score_file_classes import ScoreFile
+            score = ScoreFile(file)
             score.export(extension=args.export_extension)
 
         report_errors(score.errors)

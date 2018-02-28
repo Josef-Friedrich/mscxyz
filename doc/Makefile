@@ -93,7 +93,7 @@ qthelp:
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
 	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/mscxyz.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/mscxyz.qhc"
+	@echo "# assistant -collectionScoreFile $(BUILDDIR)/qthelp/mscxyz.qhc"
 
 .PHONY: applehelp
 applehelp:
