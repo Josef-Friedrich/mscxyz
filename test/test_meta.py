@@ -81,7 +81,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        interface = InterfaceReadWrite(tree.root)
+        interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
     def test_subclasses(self):
@@ -123,7 +123,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
 
         tree.save()
         tree = Tree(tmp)
-        interface = InterfaceReadWrite(tree.root)
+        interface = InterfaceReadWrite(tree.xml_root)
 
         self.assertEqual(interface.combined_composer, 'vbox_composer_test')
         self.assertEqual(interface.combined_lyricist, 'vbox_lyricist_test')
@@ -268,7 +268,7 @@ class TestClassMetaTag(unittest.TestCase):
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        meta = MetaTag(tree.root)
+        meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
 
     def test_static_method_to_camel_case(self):
@@ -291,7 +291,7 @@ class TestClassMetaTag(unittest.TestCase):
         meta.movement_title = 'MT'
         tree.save()
         tree = Tree(tmp)
-        meta = MetaTag(tree.root)
+        meta = MetaTag(tree.xml_root)
         self.assertEqual(meta.work_title, 'WT')
         self.assertEqual(meta.movementTitle, 'MT')
         xml_string = helper.read_file(tmp)
@@ -321,7 +321,7 @@ class TestClassVbox(unittest.TestCase):
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
     def test_init(self):
@@ -346,12 +346,12 @@ class TestClassVbox(unittest.TestCase):
     def _assert_set(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        vbox = Vbox(tree.xml_root)
         vbox.Title = 'lol'
         vbox.composer = 'lol'
         tree.save()
         tree = Tree(tmp)
-        vbox = Vbox(tree.root)
+        vbox = Vbox(tree.xml_root)
         self.assertEqual(vbox.title, 'lol')
         self.assertEqual(vbox.Composer, 'lol')
         xml_string = helper.read_file(tmp)
@@ -374,7 +374,7 @@ class TestClassCombined(unittest.TestCase):
     def _init_class(self, filename):
         tmp = helper.get_tmpfile_path(filename)
         tree = Tree(tmp)
-        combined = Combined(tree.root)
+        combined = Combined(tree.xml_root)
         return combined, tree, tmp
 
     def test_getter(self):
@@ -391,7 +391,7 @@ class TestClassCombined(unittest.TestCase):
         combined.composer = 'C'
         combined.lyricist = 'L'
         tree.save()
-        combined = Combined(tree.root)
+        combined = Combined(tree.xml_root)
         self.assertEqual(combined.metatag.workTitle, 'T')
         self.assertEqual(combined.metatag.movementTitle, 'S')
         self.assertEqual(combined.metatag.composer, 'C')

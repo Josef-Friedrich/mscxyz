@@ -15,7 +15,7 @@ class Tree(File):
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
-            self.root = self.xml_tree.getroot()
+            self.xml_root = self.xml_tree.getroot()
 
     def add_sub_element(self, root_tag, tag, text):
         tag = lxml.etree.SubElement(root_tag, tag)

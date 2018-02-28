@@ -402,7 +402,7 @@ class Interface(object):
     def __init__(self, tree):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
-        self.read_write = InterfaceReadWrite(tree.root)
+        self.read_write = InterfaceReadWrite(tree.xml_root)
         self.fields = self.get_all_fields()
 
     @staticmethod
@@ -434,10 +434,10 @@ class Meta(Tree):
         super(Meta, self).__init__(relpath)
 
         if not self.errors:
-            self.metatag = MetaTag(self.root)
-            self.vbox = Vbox(self.root)
-            self.combined = Combined(self.root)
-            self.interface_read_write = InterfaceReadWrite(self.root)
+            self.metatag = MetaTag(self.xml_root)
+            self.vbox = Vbox(self.xml_root)
+            self.combined = Combined(self.xml_root)
+            self.interface_read_write = InterfaceReadWrite(self.xml_root)
             self.interface = Interface(self)
 
     def sync_fields(self):
