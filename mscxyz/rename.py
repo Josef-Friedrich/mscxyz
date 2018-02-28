@@ -31,26 +31,6 @@ def prepare_fields(fields):
     return out
 
 
-def asciify(name):
-    umlaute = {'ae': u'ä', 'oe': u'ö', 'ue': u'ü',
-               'Ae': u'Ä', 'Oe': u'Ö', 'Ue': u'Ü'}
-    for replace, search in umlaute.items():
-        name = name.replace(search, replace)
-    return unidecode.unidecode(name)
-
-
-def replace_to_dash(name, *characters):
-    for character in characters:
-        name = name.replace(character, '-')
-    return name
-
-
-def delete_characters(name, *characters):
-    for character in characters:
-        name = name.replace(character, '')
-    return name
-
-
 def clean_up(name):
     name = name.replace('(', '_')
     name = name.replace('-_', '_')
@@ -75,11 +55,11 @@ def format_filename(name):
     args = get_settings('args')
     name = name.strip()
     if args.rename_ascii:
-        name = asciify(name)
+        name = tmep.Functions.tmpl_asciify(name)
     if args.rename_no_whitespace:
-        name = replace_to_dash(name, ' ', ';', '?', '!', '_', '#', '&', '+',
-                               ':')
-        name = delete_characters(name, ',', '.', '\'', '`', ')')
+        name = tmep.Functions.tmpl_replchars(name, '-', (' ', ';', '?', '!',
+                                             '_', '#', '&', '+', ':'))
+        name = tmep.Functions.tmpl_delchars(name, (',', '.', '\'', '`', ')'))
         name = clean_up(name)
     return name
 

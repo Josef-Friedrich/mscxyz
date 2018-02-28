@@ -23,17 +23,6 @@ class TestFunctions(unittest.TestCase):
             'field2': 'Title - Composer',
         })
 
-    def test_function_asciify(self):
-        self.assertEqual(rename.asciify('äöü'), u'aeoeue')
-        self.assertEqual(rename.asciify('ß'), u'ss')
-        self.assertEqual(rename.asciify('Чайко́вский'), 'Chaikovskii')
-
-    def test_function_replace_to_dash(self):
-        self.assertEqual(rename.replace_to_dash('abc', 'a', 'b', 'c'), '---')
-
-    def test_function_delete_characters(self):
-        self.assertEqual(rename.delete_characters('abc', 'a', 'b', 'c'), '')
-
     def test_function_clean_up(self):
         clean = rename.clean_up
         self.assertEqual(clean('-abc-'), 'abc')
