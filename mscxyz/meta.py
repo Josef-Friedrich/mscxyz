@@ -366,35 +366,35 @@ class InterfaceReadOnly(object):
     ]
 
     def __init__(self, tree):
-        self.tree = tree
+        self.xml_tree = tree
 
     @property
     def readonly_abspath(self):
-        return self.tree.abspath
+        return self.xml_tree.abspath
 
     @property
     def readonly_basename(self):
-        return self.tree.basename
+        return self.xml_tree.basename
 
     @property
     def readonly_dirname(self):
-        return self.tree.dirname
+        return self.xml_tree.dirname
 
     @property
     def readonly_extension(self):
-        return self.tree.extension
+        return self.xml_tree.extension
 
     @property
     def readonly_filename(self):
-        return self.tree.filename
+        return self.xml_tree.filename
 
     @property
     def readonly_relpath(self):
-        return self.tree.relpath
+        return self.xml_tree.relpath
 
     @property
     def readonly_relpath_backup(self):
-        return self.tree.relpath_backup
+        return self.xml_tree.relpath_backup
 
 
 class Interface(object):

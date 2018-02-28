@@ -44,7 +44,7 @@ class Lyrics(Tree):
                 ]
         """
         lyrics = []
-        for lyric in self.tree.findall('.//Lyrics'):
+        for lyric in self.xml_tree.findall('.//Lyrics'):
             safe = {}
             safe['element'] = lyric
             number = lyric.find('no')

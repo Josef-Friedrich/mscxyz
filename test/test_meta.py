@@ -181,8 +181,8 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
             'readonly_relpath_backup',
         )
         self.tmp = helper.get_tmpfile_path('simple.mscx')
-        self.tree = Tree(self.tmp)
-        self.interface = InterfaceReadOnly(self.tree)
+        self.xml_tree = Tree(self.tmp)
+        self.interface = InterfaceReadOnly(self.xml_tree)
 
     def test_exception(self):
         with self.assertRaises(AttributeError):
@@ -244,8 +244,8 @@ class TestClassInterface(unittest.TestCase):
         ]
 
         self.tmp = helper.get_tmpfile_path('meta-all-values.mscx')
-        self.tree = Tree(self.tmp)
-        self.interface = Interface(self.tree)
+        self.xml_tree = Tree(self.tmp)
+        self.interface = Interface(self.xml_tree)
 
     def test_static_method_get_all_fields(self):
         self.assertEqual(Interface.get_all_fields(), self.fields)

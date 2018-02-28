@@ -11,28 +11,28 @@ class Tree(File):
     def __init__(self, relpath):
         super(Tree, self).__init__(relpath)
         try:
-            self.tree = lxml.etree.parse(self.relpath)
+            self.xml_tree = lxml.etree.parse(self.relpath)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
-            self.root = self.tree.getroot()
+            self.root = self.xml_tree.getroot()
 
     def add_sub_element(self, root_tag, tag, text):
         tag = lxml.etree.SubElement(root_tag, tag)
         tag.text = text
 
     def strip_tags(self, *tags):
-        lxml.etree.strip_tags(self.tree, tags)
+        lxml.etree.strip_tags(self.xml_tree, tags)
 
     def remove_tags_by_xpath(self, *xpath_strings):
         for xpath_string in xpath_strings:
-            for rm in self.tree.xpath(xpath_string):
+            for rm in self.xml_tree.xpath(xpath_string):
                 rm.getparent().remove(rm)
 
     def merge_style(self, style_file):
         style = lxml.etree.parse(style_file).getroot()
 
-        for score in self.tree.xpath('/museScore/Score'):
+        for score in self.xml_tree.xpath('/museScore/Score'):
             score.insert(0, style[0])
 
     def clean(self):
@@ -46,6 +46,6 @@ class Tree(File):
         else:
             filename = self.relpath
         if not self.errors:
-            self.tree.write(filename, encoding='UTF-8')
+            self.xml_tree.write(filename, encoding='UTF-8')
             if mscore:
                 re_open(filename)

@@ -43,8 +43,8 @@ class TestLyricsFix(unittest.TestCase):
     def setUp(self):
         self.tmp = helper.get_tmpfile_path('lyrics-fix.mscx')
         mscxyz.execute(['lyrics', '--fix', self.tmp])
-        self.tree = mscxyz.lyrics.Lyrics(self.tmp)
-        self.lyrics = self.tree.lyrics
+        self.xml_tree = mscxyz.lyrics.Lyrics(self.tmp)
+        self.lyrics = self.xml_tree.lyrics
 
     def test_fix(self):
         text = []
