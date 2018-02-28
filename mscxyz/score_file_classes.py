@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 
-"""A collection of classes intended to represent one MuseScore file."""
+"""A collection of classes intended to represent one MuseScore file.
+
+The classes build on each other hierarchically. The class hierarchy:
+
+.. code ::
+
+    ScoreFile
+        XMLTree
+            Meta
+            Lyrics
+            Rename
+
+Depending on the subcommand
+
+
+"""
 
 
 from mscxyz.utils import mscore, re_open
