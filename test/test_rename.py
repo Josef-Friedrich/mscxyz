@@ -8,6 +8,7 @@ import unittest
 from mscxyz import rename
 import mscxyz
 import os
+import tempfile
 
 
 class TestFunctions(unittest.TestCase):
@@ -157,6 +158,14 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue(os.path.exists(target))
         self.assertTrue('simple.mscx -> ' in output[0])
         self.assertTrue('Title (Composer).mscx' in output[0])
+        os.remove(target)
+
+    def test_rename_target(self):
+        tmp_dir = tempfile.mkdtemp()
+        self._execute(['rename', '--target', tmp_dir,
+                       self._get('simple.mscx')])
+        target = os.path.join(tmp_dir, 'Title (Composer).mscx')
+        self.assertTrue(os.path.exists(target))
         os.remove(target)
 
 
