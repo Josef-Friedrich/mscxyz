@@ -115,26 +115,23 @@ class TestIntegration(unittest.TestCase):
         os.remove(target)
 
     def test_unicode(self):
-        output = self._execute(['rename', '--ascii',
-                                self._get('unicode.mscx')])
+        output = helper.run('rename', '--ascii', self._get('unicode.mscx'))
         target = self._target_path_cwd('Tuetlae (Coempoesser).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('Tuetlae (Coempoesser).mscx' in ' '.join(output))
+        self.assertTrue('Tuetlae (Coempoesser).mscx' in output)
         os.remove(target)
 
     def test_rename_file_twice(self):
-        self._execute(['rename', self._get('simple.mscx')])
-        output = self._execute(['rename', self._get('simple.mscx')])
+        helper.run('rename', self._get('simple.mscx'))
+        output = helper.run('rename', self._get('simple.mscx'))
         target = self._target_path_cwd('Title (Composer).mscx')
-        self.assertTrue('with the same checksum (sha1) already' in
-                        ' '.join(output))
+        self.assertTrue('with the same checksum (sha1) already' in output)
         os.remove(target)
 
     def test_rename_same_filename(self):
-        self._execute(['rename', '-f', 'same', self._get('simple.mscx')])
-        self._execute(['rename', '-f', 'same', self._get('lyrics.mscx')])
-        self._execute(['rename', '-f', 'same', self._get('no-vbox.mscx')])
-
+        helper.run('rename', '-f', 'same', self._get('simple.mscx'))
+        helper.run('rename', '-f', 'same', self._get('lyrics.mscx'))
+        helper.run('rename', '-f', 'same', self._get('no-vbox.mscx'))
         self.assertTrue(self._exists_in_cwd('same.mscx'))
         self.assertFalse(self._exists_in_cwd('same1.mscx'))
         self.assertTrue(self._exists_in_cwd('same2.mscx'))
