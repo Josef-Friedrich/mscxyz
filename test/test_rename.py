@@ -86,15 +86,15 @@ class TestIntegration(unittest.TestCase):
         output = self._execute(['rename', self._get('simple.mscx')])
         target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('simple.mscx -> ' in output[0])
-        self.assertTrue('Title (Composer).mscx' in output[0])
+        self.assertTrue('simple.mscx -> ' in ' '.join(output))
+        self.assertTrue('Title (Composer).mscx' in ' '.join(output))
         os.remove(target)
 
     def test_without_arguments(self):
         output = self._execute(['rename', self._get('meta-all-values.mscx')])
         target = self._target_path_cwd('vbox_title (vbox_composer).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('vbox_title (vbox_composer).mscx' in output[0])
+        self.assertTrue('vbox_title (vbox_composer).mscx' in ' '.join(output))
         os.remove(target)
 
     def test_format(self):
@@ -103,7 +103,7 @@ class TestIntegration(unittest.TestCase):
                                 self._get('simple.mscx')])
         target = self._target_path_cwd('Composer_Title.mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('Composer_Title.mscx' in output[0])
+        self.assertTrue('Composer_Title.mscx' in ' '.join(output))
         os.remove(target)
 
     def test_no_whitespace(self):
@@ -111,7 +111,7 @@ class TestIntegration(unittest.TestCase):
                                 self._get('simple.mscx')])
         target = self._target_path_cwd('Title_Composer.mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('Title_Composer.mscx' in output[0])
+        self.assertTrue('Title_Composer.mscx' in ' '.join(output))
         os.remove(target)
 
     def test_unicode(self):
@@ -119,14 +119,15 @@ class TestIntegration(unittest.TestCase):
                                 self._get('unicode.mscx')])
         target = self._target_path_cwd('Tuetlae (Coempoesser).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('Tuetlae (Coempoesser).mscx' in output[0])
+        self.assertTrue('Tuetlae (Coempoesser).mscx' in ' '.join(output))
         os.remove(target)
 
     def test_rename_file_twice(self):
         self._execute(['rename', self._get('simple.mscx')])
         output = self._execute(['rename', self._get('simple.mscx')])
         target = self._target_path_cwd('Title (Composer).mscx')
-        self.assertTrue('with the same checksum (sha1) already' in output[0])
+        self.assertTrue('with the same checksum (sha1) already' in
+                        ' '.join(output))
         os.remove(target)
 
     def test_rename_same_filename(self):
@@ -147,7 +148,8 @@ class TestIntegration(unittest.TestCase):
                                 'metatag_composer,metatag_source',
                                 self._get('simple.mscx')])
 
-        self.assertTrue('Field “metatag_source” is empty! Skipping', output[0])
+        self.assertTrue('Field “metatag_source” is empty! Skipping' in
+                        ' '.join(output))
 
     def test_rename_skip_pass(self):
         output = self._execute(['rename', '--skip-if-empty',
@@ -156,8 +158,8 @@ class TestIntegration(unittest.TestCase):
 
         target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('simple.mscx -> ' in output[0])
-        self.assertTrue('Title (Composer).mscx' in output[0])
+        self.assertTrue('simple.mscx -> ' in ' '.join(output))
+        self.assertTrue('Title (Composer).mscx' in ' '.join(output))
         os.remove(target)
 
     def test_rename_target(self):

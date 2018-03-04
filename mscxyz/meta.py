@@ -477,8 +477,6 @@ class Meta(XMLTree):
     def show(self, pre, post):
         args = get_settings('args')
 
-        print('\n' + color(self.filename, 'red'))
-
         fields = list(self.interface.fields)
 
         if args.general_verbose < 1:

@@ -98,6 +98,8 @@ def execute(args=None):
 
     for file in files:
 
+        print('\n' + color(file, 'red'))
+
         if args.general_backup:
             from mscxyz.score_file_classes import ScoreFile
             score = ScoreFile(file)
@@ -105,6 +107,7 @@ def execute(args=None):
 
         if args.subcommand == 'clean':
             score = XMLTree(file)
+            print(score.filename)
             score.clean()
             if args.clean_style:
                 score.merge_style(style_file=args.clean_style.name)

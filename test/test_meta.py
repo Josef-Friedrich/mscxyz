@@ -500,7 +500,7 @@ class TestIntegration(unittest.TestCase):
                            helper.get_tmpfile_path('meta-all-values.mscx')])
 
         self.assertEqual(output[0], '')
-        self.assertEqual(output[1], 'meta-all-values.mscx')
+        self.assertTrue('meta-all-values.mscx' in ' '.join(output))
         self.assertEqual(output[-1], 'vbox_title: “vbox_title” -> “”')
 
     def test_show_simple_unverbose(self):
@@ -508,7 +508,7 @@ class TestIntegration(unittest.TestCase):
             mscxyz.execute(['meta', '--clean', 'all',
                            helper.get_tmpfile_path('simple.mscx')])
         self.assertEqual(output[0], '')
-        self.assertEqual(output[1], 'simple.mscx')
+        self.assertTrue('simple.mscx' in ' '.join(output))
         self.assertEqual(output[2], 'combined_composer: “Composer” -> “”')
         self.assertEqual(output[3], 'combined_title: “Title” -> “”')
         self.assertEqual(output[-1], 'vbox_title: “Title” -> “”')
@@ -518,7 +518,7 @@ class TestIntegration(unittest.TestCase):
             mscxyz.execute(['--verbose', 'meta', '--clean', 'all',
                            helper.get_tmpfile_path('simple.mscx')])
         self.assertEqual(output[0], '')
-        self.assertEqual(output[1], 'simple.mscx')
+        self.assertTrue('simple.mscx' in ' '.join(output))
         self.assertEqual(output[2], 'combined_composer: “Composer” -> “”')
         self.assertEqual(output[3], 'combined_lyricist: ')
         self.assertEqual(output[-2], 'vbox_subtitle: ')
