@@ -112,8 +112,9 @@ mscx-manager meta
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c META_CLEAN] [-d SOURCE_FIELDS FORMAT_STRING]
-                           [-j] [-s] [-S DESTINATION_FIELD FORMAT_STRING]
+  usage: mscx-manager meta [-h] [-c META_CLEAN] [-D]
+                           [-d SOURCE_FIELDS FORMAT_STRING] [-j] [-s]
+                           [-S DESTINATION_FIELD FORMAT_STRING]
   
   MuseScore can store meta data informations in different places:
   
@@ -194,6 +195,12 @@ mscx-manager meta
     -c META_CLEAN, --clean META_CLEAN
                           Clean the meta data fields. Possible values: „all“ or
                           „field_one,field_two“.
+    -D, --delete-duplicates
+                          Deletes combined_lyricist if this field is equal to
+                          combined_composer. Deletes combined_subtitle if this
+                          field is equal tocombined_title. Move
+                          combined_subtitle to combimed_title if combined_title
+                          is empty.
     -d SOURCE_FIELDS FORMAT_STRING, --distribute-fields SOURCE_FIELDS FORMAT_STRING
                           Distribute source fields to target fields applying a
                           format string on the source fields. It is possible to

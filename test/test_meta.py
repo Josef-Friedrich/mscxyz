@@ -570,6 +570,21 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(meta.interface.vbox_title,
                          'vbox_title (vbox_composer)')
 
+    def test_delete_duplicates(self):
+        tmp = helper.get_tmpfile_path('meta-duplicates.mscx')
+        mscxyz.execute(['meta', '--delete-duplicates', tmp])
+        meta = Meta(tmp)
+        self.assertFalse(meta.interface.combined_lyricist)
+        self.assertFalse(meta.interface.combined_subtitle)
+
+    def test_delete_duplicates_move_subtitle(self):
+        tmp = helper.get_tmpfile_path('meta-duplicates-move-subtitle.mscx')
+        mscxyz.execute(['meta', '--delete-duplicates', tmp])
+        meta = Meta(tmp)
+        self.assertFalse(meta.interface.combined_lyricist)
+        self.assertFalse(meta.interface.combined_subtitle)
+        self.assertEqual(meta.interface.combined_title, 'Title')
+
 
 if __name__ == '__main__':
     unittest.main()

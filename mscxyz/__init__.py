@@ -140,6 +140,8 @@ def execute(args=None):
                     for a in args.meta_set:
                         score.set_field(destination_field=a[0],
                                         format_string=a[1])
+                if args.meta_delete:
+                    score.delete_duplicates()
                 if args.meta_sync:
                     score.sync_fields()
                 post = score.interface.export_to_dict()

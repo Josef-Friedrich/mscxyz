@@ -179,6 +179,16 @@ sub_meta.add_argument(
     „field_one,field_two“.')
 
 sub_meta.add_argument(
+    '-D',
+    '--delete-duplicates',
+    dest='meta_delete',
+    action='store_true',
+    help='Deletes combined_lyricist if this field is equal to '
+    'combined_composer. Deletes combined_subtitle if this field is equal to'
+    'combined_title. Move combined_subtitle to combimed_title if '
+    'combined_title is empty.' )
+
+sub_meta.add_argument(
     '-d',
     '--distribute-fields',
     dest='meta_dist',

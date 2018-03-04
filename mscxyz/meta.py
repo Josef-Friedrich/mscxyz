@@ -474,6 +474,17 @@ class Meta(XMLTree):
         for field in fields:
             setattr(self.interface_read_write, field, '')
 
+    def delete_duplicates(self):
+        iface = self.interface
+        if iface.combined_lyricist == iface.combined_composer:
+            iface.combined_lyricist = ''
+
+        if not iface.combined_title and iface.combined_subtitle:
+            iface.combined_title = iface.combined_subtitle
+
+        if iface.combined_subtitle == iface.combined_title:
+            iface.combined_subtitle = ''
+
     def show(self, pre, post):
         args = get_settings('args')
 
