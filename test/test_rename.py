@@ -144,28 +144,24 @@ class TestIntegration(unittest.TestCase):
         self._rm_in_cwd('same3.mscx')
 
     def test_rename_skips(self):
-        output = self._execute(['rename', '--skip-if-empty',
-                                'metatag_composer,metatag_source',
-                                self._get('simple.mscx')])
-
-        self.assertTrue('Field “metatag_source” is empty! Skipping' in
-                        ' '.join(output))
+        output = helper.run('rename', '--skip-if-empty',
+                            'metatag_composer,metatag_source',
+                            self._get('simple.mscx'))
+        self.assertTrue('Field “metatag_source” is empty! Skipping' in output)
 
     def test_rename_skip_pass(self):
-        output = self._execute(['rename', '--skip-if-empty',
-                                'metatag_composer,metatag_work_title',
-                                self._get('simple.mscx')])
-
+        output = helper.run('rename', '--skip-if-empty',
+                            'metatag_composer,metatag_work_title',
+                            self._get('simple.mscx'))
         target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('simple.mscx -> ' in ' '.join(output))
-        self.assertTrue('Title (Composer).mscx' in ' '.join(output))
+        self.assertTrue('simple.mscx -> ' in output)
+        self.assertTrue('Title (Composer).mscx' in output)
         os.remove(target)
 
     def test_rename_target(self):
         tmp_dir = tempfile.mkdtemp()
-        self._execute(['rename', '--target', tmp_dir,
-                       self._get('simple.mscx')])
+        helper.run('rename', '--target', tmp_dir, self._get('simple.mscx'))
         target = os.path.join(tmp_dir, 'Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
         os.remove(target)

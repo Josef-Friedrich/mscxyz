@@ -5,6 +5,7 @@ import os
 import sys
 import shutil
 import tempfile
+import subprocess
 from distutils.dir_util import copy_tree
 import six
 if six.PY2:
@@ -42,6 +43,11 @@ def read_file(filename):
     output = tmp.read()
     tmp.close()
     return output
+
+
+def run(*args):
+    args = ['mscx-manager'] + list(args)
+    return subprocess.check_output(args).decode('utf-8')
 
 
 class Capturing(list):
