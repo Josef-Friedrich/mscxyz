@@ -144,6 +144,8 @@ def execute(args=None):
                     score.delete_duplicates()
                 if args.meta_sync:
                     score.sync_fields()
+                if args.meta_log:
+                    score.write_to_log_file(args.meta_log[0], args.meta_log[1])
                 post = score.interface.export_to_dict()
                 score.show(pre, post)
             if not args.general_dry_run and not score.errors and pre != post:

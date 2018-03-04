@@ -3,6 +3,7 @@
 """Test module “meta.py”."""
 
 
+import tempfile
 import unittest
 import mscxyz
 from mscxyz import meta
@@ -584,6 +585,14 @@ class TestIntegration(unittest.TestCase):
         self.assertFalse(meta.interface.combined_lyricist)
         self.assertFalse(meta.interface.combined_subtitle)
         self.assertEqual(meta.interface.combined_title, 'Title')
+
+    def test_log(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        log = tempfile.mktemp()
+        mscxyz.execute(['meta', '--log',  log,
+                        '$combined_title-$combined_composer', tmp])
+        log_file = open(log, 'r')
+        self.assertEqual(log_file.readline(), 'Title-Composer\n')
 
 
 if __name__ == '__main__':

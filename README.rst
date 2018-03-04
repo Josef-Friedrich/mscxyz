@@ -113,7 +113,8 @@ mscx-manager meta
 .. code-block:: text
 
   usage: mscx-manager meta [-h] [-c META_CLEAN] [-D]
-                           [-d SOURCE_FIELDS FORMAT_STRING] [-j] [-s]
+                           [-d SOURCE_FIELDS FORMAT_STRING] [-j]
+                           [-l DESTINATION FORMAT_STRING] [-s]
                            [-S DESTINATION_FIELD FORMAT_STRING]
   
   MuseScore can store meta data informations in different places:
@@ -211,6 +212,9 @@ mscx-manager meta
                           first source field. If this fails, it tries the second
                           source field ... an so on.
     -j, --json            Additionally write the meta data to a json file.
+    -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
+                          Write one line per file to a text file. e. g. --log
+                          /tmp/mscx-manager.log '$title $composer'
     -s, --synchronize     Synchronize the values of the first vertical frame
                           (vbox) (title, subtitle, composer, lyricist) with the
                           corresponding metadata fields

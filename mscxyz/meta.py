@@ -460,6 +460,12 @@ class Meta(XMLTree):
             except UnmatchedFormatStringError as error:
                 self.errors.append(error)
 
+    def write_to_log_file(self, log_file, format_string):
+        log = open(log_file, 'w')
+        log.write(tmep.parse(format_string, self.interface.export_to_dict()) +
+                  '\n')
+        log.close()
+
     def set_field(self, destination_field, format_string):
         field_value = tmep.parse(format_string,
                                  self.interface.export_to_dict())

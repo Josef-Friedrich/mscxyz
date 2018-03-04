@@ -210,6 +210,15 @@ sub_meta.add_argument(
     help='Additionally write the meta data to a json file.')
 
 sub_meta.add_argument(
+    '-l',
+    '--log',
+    nargs=2,
+    metavar=('DESTINATION', 'FORMAT_STRING'),
+    dest='meta_log',
+    help='Write one line per file to a text file. e. g. --log '
+    '/tmp/mscx-manager.log \'$title $composer\'')
+
+sub_meta.add_argument(
     '-s',
     '--synchronize',
     action='store_true',
