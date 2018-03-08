@@ -2,15 +2,15 @@
 
 """Rename MuseScore files"""
 
-from mscxyz.score_file_classes import ScoreFile
 from mscxyz.meta import Meta
+from mscxyz.score_file_classes import ScoreFile
 from mscxyz.utils import color, get_settings
 import errno
+import hashlib
 import os
 import re
 import tmep
 import unidecode
-import hashlib
 
 
 def create_dir(path):

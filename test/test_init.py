@@ -3,8 +3,8 @@
 """Test file “__init__.py”"""
 
 import helper
-import unittest
 import mscxyz
+import unittest
 
 
 class TestBrokenScoreFile(unittest.TestCase):

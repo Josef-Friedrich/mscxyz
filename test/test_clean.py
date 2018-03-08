@@ -3,8 +3,8 @@
 """Test module “clean.py”."""
 
 import helper
-import unittest
 import mscxyz
+import unittest
 
 
 class TestClean(unittest.TestCase):

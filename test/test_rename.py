@@ -3,12 +3,12 @@
 """Test module “lyrics.py”."""
 
 
-import helper
-import unittest
 from mscxyz import rename
+import helper
 import mscxyz
 import os
 import tempfile
+import unittest
 
 
 class TestFunctions(unittest.TestCase):

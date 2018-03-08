@@ -3,15 +3,15 @@
 """Test module “meta.py”."""
 
 
-import tempfile
-import unittest
-import mscxyz
 from mscxyz import meta
 from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
 from mscxyz.score_file_classes import XMLTree
 import helper
+import mscxyz
 import os
+import tempfile
+import unittest
 
 
 class TestExceptions(unittest.TestCase):

@@ -5,10 +5,10 @@
 from mscxyz.score_file_classes import XMLTree
 from mscxyz.utils import print_desc, get_settings, color
 from termcolor import colored
-import lxml
-import six
 import json
+import lxml
 import re
+import six
 import tmep
 
 

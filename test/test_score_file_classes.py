@@ -2,11 +2,11 @@
 
 """ScoreFile for various tests"""
 
-import helper
-import unittest
-import mscxyz
-import mock
 from mscxyz.score_file_classes import ScoreFile
+import helper
+import mock
+import mscxyz
+import unittest
 
 
 class TestBatch(unittest.TestCase):

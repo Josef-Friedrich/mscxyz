@@ -3,10 +3,10 @@
 """Test module “lyrics.py”."""
 
 
-import os
 import helper
-import unittest
 import mscxyz
+import os
+import unittest
 
 
 class TestLyrics(unittest.TestCase):

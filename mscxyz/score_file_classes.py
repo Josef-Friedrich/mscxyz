@@ -19,11 +19,11 @@ Depending on the subcommand
 
 
 from mscxyz.utils import mscore, re_open
+import fnmatch
 import lxml
 import os
 import shutil
 import six
-import fnmatch
 
 
 class Batch(object):
