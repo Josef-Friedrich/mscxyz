@@ -14,12 +14,6 @@ else:
     from io import StringIO
 
 
-if sys.prefix == '/usr':
-    mscore = True
-else:
-    mscore = False
-
-
 def get_tmpfile_path(filename):
     orig = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'files',
