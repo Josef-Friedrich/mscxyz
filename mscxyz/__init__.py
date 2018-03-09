@@ -8,7 +8,7 @@ from mscxyz import cli
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import XMLTree, Batch
+from mscxyz.score_file_classes import XMLTree, Batch, list_scores
 from mscxyz.utils import set_settings, color
 import lxml
 import six

@@ -24,6 +24,34 @@ import lxml
 import os
 import shutil
 import six
+import string
+
+
+def list_scores(path, extension='both'):
+    if extension == 'both':
+        glob='*.msc[xz]'
+    elif extension in ('mscx', 'mscy'):
+        glob='*.{}'.format(extension)
+    else:
+        raise ValueError('Possible values for the argument “extension” are: '
+                         '“both”, “mscx”, “mscz”')
+    if os.path.isfile(path):
+        return [path]
+    out = []
+    for root, dirs, scores in os.walk(path):
+        for score in scores:
+            if fnmatch.fnmatch(score, glob):
+                scores_path = os.path.join(root, score)
+                out.append(scores_path)
+    out.sort()
+    return out
+
+
+def list_scores_grouped_by_alphabet():
+    score_dirs = ['0']
+    for char in string.lowercase:
+        score_dirs.append(char)
+    return score_dirs
 
 
 class Batch(object):
