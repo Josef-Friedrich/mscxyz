@@ -38,9 +38,9 @@ def clean_up(name):
     name = re.sub('-{2,}', '_', name)
     name = re.sub('_{2,}', '_', name)
     # Remove dash at the begining
-    name = re.sub('^-', '', name)
+    name = re.sub('^[^a-zA-Z0-9]*', '', name)
     # Remove the dash from the end
-    name = re.sub('-$', '', name)
+    name = re.sub('[^a-zA-Z0-9]*$', '', name)
     return name
 
 
@@ -58,8 +58,8 @@ def format_filename(name):
         name = tmep.Functions.tmpl_asciify(name)
     if args.rename_no_whitespace:
         name = tmep.Functions.tmpl_replchars(name, '-', (' ', ';', '?', '!',
-                                             '_', '#', '&', '+', ':'))
-        name = tmep.Functions.tmpl_delchars(name, (',', '.', '\'', '`', ')'))
+                                             '_', '#', '&', '+', ':', '\''))
+        name = tmep.Functions.tmpl_delchars(name, (',', '.', '`', ')'))
         name = clean_up(name)
     return name
 

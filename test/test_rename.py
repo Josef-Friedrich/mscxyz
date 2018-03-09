@@ -32,6 +32,9 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(clean('a---b'), 'a_b')
         self.assertEqual(clean('a__b'), 'a_b')
         self.assertEqual(clean('a___b'), 'a_b')
+        self.assertEqual(clean('--abc--'), 'abc')
+        self.assertEqual(clean('__abc__'), 'abc')
+        self.assertEqual(clean(' abc  '), 'abc')
 
     def test_function_apply_format_string(self):
         from mscxyz import settings
