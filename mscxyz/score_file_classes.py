@@ -51,9 +51,9 @@ def list_scores(path, extension='both', glob=None):
     return out
 
 
-def list_scores_grouped_by_alphabet():
+def list_zero_alphabet():
     score_dirs = ['0']
-    for char in string.lowercase:
+    for char in string.ascii_lowercase:
         score_dirs.append(char)
     return score_dirs
 

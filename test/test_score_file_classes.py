@@ -2,14 +2,15 @@
 
 """ScoreFile for various tests"""
 
-from mscxyz.score_file_classes import ScoreFile, list_scores
+from mscxyz.score_file_classes import ScoreFile, list_scores, \
+                                      list_zero_alphabet
 import helper
 import mock
 import mscxyz
 import unittest
 
 
-class TestBatch(unittest.TestCase):
+class TestFunctions(unittest.TestCase):
 
     @staticmethod
     def _list_scores(path, extension='both', glob=None):
@@ -67,6 +68,11 @@ class TestBatch(unittest.TestCase):
     def test_arg_glob_lol(self):
         result = self._list_scores('/test', glob='*.lol')
         self.assertEqual(result, [])
+
+    def test_function_list_zero_alphabet(self):
+        result = list_zero_alphabet()
+        self.assertEqual(result[0], '0')
+        self.assertEqual(result[26], 'z')
 
 
 class TestScoreFile(unittest.TestCase):
