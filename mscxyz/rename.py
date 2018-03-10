@@ -5,6 +5,7 @@
 from mscxyz.meta import Meta
 from mscxyz.score_file_classes import ScoreFile
 from mscxyz.utils import color, get_settings
+from tmep.format import asciify, delchars, replchars
 import errno
 import hashlib
 import os
@@ -55,11 +56,11 @@ def format_filename(name):
     args = get_settings('args')
     name = name.strip()
     if args.rename_ascii:
-        name = tmep.Functions.tmpl_asciify(name)
+        name = asciify(name)
     if args.rename_no_whitespace:
-        name = tmep.Functions.tmpl_replchars(name, '-', (' ', ';', '?', '!',
+        name = replchars(name, '-', (' ', ';', '?', '!',
                                              '_', '#', '&', '+', ':', '\''))
-        name = tmep.Functions.tmpl_delchars(name, (',', '.', '`', ')'))
+        name = delchars(name, (',', '.', '`', ')'))
         name = clean_up(name)
     return name
 
