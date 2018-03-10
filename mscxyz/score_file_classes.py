@@ -30,13 +30,16 @@ import string
 def list_scores(path, extension='both'):
     if extension == 'both':
         glob='*.msc[xz]'
-    elif extension in ('mscx', 'mscy'):
+    elif extension in ('mscx', 'mscz'):
         glob='*.{}'.format(extension)
     else:
         raise ValueError('Possible values for the argument “extension” are: '
                          '“both”, “mscx”, “mscz”')
     if os.path.isfile(path):
-        return [path]
+        if fnmatch.fnmatch(path, glob):
+            return [path]
+        else:
+            return []
     out = []
     for root, dirs, scores in os.walk(path):
         for score in scores:
