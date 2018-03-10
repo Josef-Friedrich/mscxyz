@@ -1,13 +1,20 @@
 #! /usr/bin/env python
 
 
-from mscxyz.score_file_classes import list_scores, list_scores_grouped_by_alphabet
+from collections import OrderedDict
 
-# scores = list_scores('/home/jf/git-repositories/alias/bitbucket/davklein/musescore-leadsheet-collection',
-#                      'mscx')
-#
+dirs = [
+    '/tmp/1.mscx',
+    '/tmp/2.mscx',
+    '/tmp/a/1.mscx',
+    '/tmp/b/1.mscx',
+]
 
-scores = list_scores_grouped_by_alphabet()
+ordered = OrderedDict()
 
-for score in scores:
+for score in dirs:
     print(score)
+    segments = score.split('/')
+    for segment in segments:
+        if segment:
+            print(segment)
