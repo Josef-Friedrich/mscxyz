@@ -34,8 +34,8 @@ def list_scores(path, extension='both', glob=None):
         elif extension in ('mscx', 'mscz'):
             glob='*.{}'.format(extension)
         else:
-            raise ValueError('Possible values for the argument “extension” are: '
-                             '“both”, “mscx”, “mscz”')
+            raise ValueError('Possible values for the argument “extension” '
+                             'are: “both”, “mscx”, “mscz”')
     if os.path.isfile(path):
         if fnmatch.fnmatch(path, glob):
             return [path]
