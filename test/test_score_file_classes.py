@@ -12,13 +12,13 @@ import unittest
 class TestBatch(unittest.TestCase):
 
     @staticmethod
-    def _list_scores(path, extension='both'):
+    def _list_scores(path, extension='both', glob=None):
         with mock.patch('os.walk') as mockwalk:
             mockwalk.return_value = [
                 ('/a', ('bar',), ('lorem.mscx',)),
                 ('/a/b', (), ('impsum.mscz', 'dolor.mscx', 'sit.txt')),
             ]
-            return list_scores(path, extension)
+            return list_scores(path, extension, glob)
 
     @mock.patch('mscxyz.Meta')
     def test_batch(self, Meta):
@@ -59,6 +59,14 @@ class TestBatch(unittest.TestCase):
             mock_isfile.return_value = True
             result = list_scores('/a/b/lorem.lol')
             self.assertEqual(result, [])
+
+    def test_arg_glob_txt(self):
+        result = self._list_scores('/test', glob='*.txt')
+        self.assertEqual(result, ['/a/b/sit.txt'])
+
+    def test_arg_glob_lol(self):
+        result = self._list_scores('/test', glob='*.lol')
+        self.assertEqual(result, [])
 
 
 class TestScoreFile(unittest.TestCase):

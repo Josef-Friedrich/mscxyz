@@ -27,14 +27,15 @@ import six
 import string
 
 
-def list_scores(path, extension='both'):
-    if extension == 'both':
-        glob='*.msc[xz]'
-    elif extension in ('mscx', 'mscz'):
-        glob='*.{}'.format(extension)
-    else:
-        raise ValueError('Possible values for the argument “extension” are: '
-                         '“both”, “mscx”, “mscz”')
+def list_scores(path, extension='both', glob=None):
+    if not glob:
+        if extension == 'both':
+            glob='*.msc[xz]'
+        elif extension in ('mscx', 'mscz'):
+            glob='*.{}'.format(extension)
+        else:
+            raise ValueError('Possible values for the argument “extension” are: '
+                             '“both”, “mscx”, “mscz”')
     if os.path.isfile(path):
         if fnmatch.fnmatch(path, glob):
             return [path]
@@ -55,27 +56,6 @@ def list_scores_grouped_by_alphabet():
     for char in string.lowercase:
         score_dirs.append(char)
     return score_dirs
-
-
-class Batch(object):
-    """Load multiple MuseScore files"""
-    def __init__(self, path, glob='*.mscx'):
-        self.path = path
-        self.files = []
-
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                if fnmatch.fnmatch(file, glob):
-                    file_path = os.path.join(root, file)
-                    self.files.append(file_path)
-
-        self.files.sort()
-
-    def get_files(self):
-        if os.path.isdir(self.path):
-            return self.files
-        else:
-            return [self.path]
 
 
 ###############################################################################
