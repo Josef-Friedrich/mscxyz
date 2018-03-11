@@ -29,6 +29,7 @@ def prepare_fields(fields):
         if value:
             if args.rename_alphanum:
                 value = alphanum(value)
+                value = value.strip()
             if args.rename_ascii:
                 value = asciify(value)
             if args.rename_no_whitespace:
