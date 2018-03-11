@@ -20,6 +20,7 @@ class DefaultArguments(object):
     meta_set = None
     meta_sync = False
     path = '.'
+    rename_alphanum = False
     rename_ascii = False
     rename_format = '$combined_title ($combined_composer)'
     rename_skip = None

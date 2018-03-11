@@ -56,6 +56,7 @@ class TestArgs(unittest.TestCase):
 
     def test_args_general_rename(self):
         args = cli.parser.parse_args(['rename', '.'])
+        self.assertEqual(args.rename_alphanum, False)
         self.assertEqual(args.rename_ascii, False)
         self.assertEqual(args.rename_format,
                          '$combined_title ($combined_composer)')

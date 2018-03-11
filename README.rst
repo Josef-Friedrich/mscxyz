@@ -249,7 +249,7 @@ mscx-manager rename
 
 .. code-block:: text
 
-  usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-a] [-n] [-s FIELDS]
+  usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-A] [-a] [-n] [-s FIELDS]
                              [-t RENAME_TARGET]
   
   Fields and functions you can use in the format string (-f, --format):
@@ -288,6 +288,13 @@ mscx-manager rename
   
   Functions
   =========
+  
+      alpha
+      -----
+  
+      %alpha{text}
+          This function first ASCIIfies the given text, then all non alphabet
+          characters are replaced with whitespaces.
   
       alphanum
       --------
@@ -433,6 +440,7 @@ mscx-manager rename
     -h, --help            show this help message and exit
     -f RENAME_FORMAT, --format RENAME_FORMAT
                           Format string.
+    -A, --alphanum        Use only alphanumeric characters.
     -a, --ascii           Use only ASCII characters.
     -n, --no-whitespace   Replace all whitespaces with dashes or sometimes
                           underlines.

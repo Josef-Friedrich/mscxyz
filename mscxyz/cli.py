@@ -298,6 +298,13 @@ sub_rename.add_argument(
     help='Format string.')
 
 sub_rename.add_argument(
+    '-A',
+    '--alphanum',
+    dest='rename_alphanum',
+    action='store_true',
+    help='Use only alphanumeric characters.')
+
+sub_rename.add_argument(
     '-a',
     '--ascii',
     dest='rename_ascii',

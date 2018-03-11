@@ -117,7 +117,15 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue('Title_Composer.mscx' in ' '.join(output))
         os.remove(target)
 
-    def test_unicode(self):
+    def test_alphanum(self):
+        output = helper.run('rename', '--alphanum',
+                            self._get('meta-all-values.mscx'))
+        target = self._target_path_cwd('vbox title (vbox composer).mscx')
+        self.assertTrue(os.path.exists(target))
+        self.assertTrue('vbox title (vbox composer).mscx' in output)
+        os.remove(target)
+
+    def test_ascii(self):
         output = helper.run('rename', '--ascii', self._get('unicode.mscx'))
         target = self._target_path_cwd('Tuetlae (Coempoesser).mscx')
         self.assertTrue(os.path.exists(target))

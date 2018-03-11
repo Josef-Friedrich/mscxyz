@@ -5,7 +5,7 @@
 from mscxyz.meta import Meta
 from mscxyz.score_file_classes import ScoreFile
 from mscxyz.utils import color, get_settings
-from tmep.format import asciify, delchars, replchars
+from tmep.format import alphanum, asciify, delchars, replchars
 import errno
 import hashlib
 import os
@@ -23,12 +23,15 @@ def create_dir(path):
 
 
 def prepare_fields(fields):
-    def prepare(value):
-        value = value.strip()
-        return value.replace('/', '-')
+    args = get_settings('args')
     out = {}
     for field, value in fields.items():
-        out[field] = prepare(value)
+        if value:
+            if args.rename_alphanum:
+                value = alphanum(value)
+            value = value.strip()
+            value = value.replace('/', '-')
+        out[field] = value
     return out
 
 
