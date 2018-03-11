@@ -5,7 +5,7 @@
 from mscxyz.meta import Meta
 from mscxyz.score_file_classes import ScoreFile
 from mscxyz.utils import color, get_settings
-from tmep.format import alphanum, asciify, delchars, replchars
+from tmep.format import alphanum, asciify, delchars, replchars, nowhitespace
 import errno
 import hashlib
 import os
@@ -29,42 +29,20 @@ def prepare_fields(fields):
         if value:
             if args.rename_alphanum:
                 value = alphanum(value)
+            if args.rename_ascii:
+                value = asciify(value)
+            if args.rename_no_whitespace:
+                value = nowhitespace(value)
             value = value.strip()
             value = value.replace('/', '-')
         out[field] = value
     return out
 
 
-def clean_up(name):
-    name = name.replace('(', '_')
-    name = name.replace('-_', '_')
-    # Replace two or more dashes with one.
-    name = re.sub('-{2,}', '_', name)
-    name = re.sub('_{2,}', '_', name)
-    # Remove dash at the begining
-    name = re.sub('^[^a-zA-Z0-9]*', '', name)
-    # Remove the dash from the end
-    name = re.sub('[^a-zA-Z0-9]*$', '', name)
-    return name
-
-
 def apply_format_string(fields):
     args = get_settings('args')
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
-    return name
-
-
-def format_filename(name):
-    args = get_settings('args')
-    name = name.strip()
-    if args.rename_ascii:
-        name = asciify(name)
-    if args.rename_no_whitespace:
-        name = replchars(name, '-', (' ', ';', '?', '!',
-                                             '_', '#', '&', '+', ':', '\''))
-        name = delchars(name, (',', '.', '`', ')'))
-        name = clean_up(name)
     return name
 
 
@@ -98,8 +76,6 @@ def rename_filename(source):
                 print(color('Field “{}” is empty! Skipping'.format(skip),
                             'red'))
                 return meta
-
-    target_filename = format_filename(target_filename)
 
     if args.rename_target:
         target_base = os.path.abspath(args.rename_target)

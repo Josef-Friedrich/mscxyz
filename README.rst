@@ -383,6 +383,13 @@ mscx-manager rename
       %lower{text}
           Convert “text” to lowercase.
   
+      nowhitespace
+      ------------
+  
+      %nowhitespace{text,replace}
+          Replace all whitespace characters with replace. By default: a dash (-)
+          %nowhitespace{$track,_}
+  
       num
       ---
   

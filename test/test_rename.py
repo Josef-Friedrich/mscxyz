@@ -24,18 +24,6 @@ class TestFunctions(unittest.TestCase):
             'field2': 'Title - Composer',
         })
 
-    def test_function_clean_up(self):
-        clean = rename.clean_up
-        self.assertEqual(clean('-abc-'), 'abc')
-        self.assertEqual(clean('a-b-c'), 'a-b-c')
-        self.assertEqual(clean('a--b'), 'a_b')
-        self.assertEqual(clean('a---b'), 'a_b')
-        self.assertEqual(clean('a__b'), 'a_b')
-        self.assertEqual(clean('a___b'), 'a_b')
-        self.assertEqual(clean('--abc--'), 'abc')
-        self.assertEqual(clean('__abc__'), 'abc')
-        self.assertEqual(clean(' abc  '), 'abc')
-
     def test_function_apply_format_string(self):
         from mscxyz import settings
         settings.args = settings.DefaultArguments()
@@ -44,16 +32,6 @@ class TestFunctions(unittest.TestCase):
         fields = meta.interface.export_to_dict()
         name = rename.apply_format_string(fields)
         self.assertEqual(name, 'vbox_title (vbox_composer)')
-
-    def test_function_format_filename(self):
-        from mscxyz import settings
-        settings.args = settings.DefaultArguments()
-        settings.args.rename_ascii = True
-        settings.args.rename_no_whitespace = True
-
-        f = rename.format_filename
-        self.assertEqual(f('  Löl   '), 'Loel')
-        self.assertEqual(f('folder/file'), 'folder/file')
 
     def test_function_get_checksum(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
@@ -111,10 +89,11 @@ class TestIntegration(unittest.TestCase):
 
     def test_no_whitespace(self):
         output = self._execute(['rename', '--no-whitespace',
-                                self._get('simple.mscx')])
-        target = self._target_path_cwd('Title_Composer.mscx')
+                                self._get('meta-real-world.mscx')])
+        n = 'Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx'
+        target = self._target_path_cwd(n)
         self.assertTrue(os.path.exists(target))
-        self.assertTrue('Title_Composer.mscx' in ' '.join(output))
+        self.assertTrue(n in ' '.join(output))
         os.remove(target)
 
     def test_alphanum(self):
