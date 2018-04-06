@@ -1,3 +1,4 @@
 include LICENSE
 include versioneer.py
 include mscxyz/_version.py
+prune test
