@@ -109,7 +109,7 @@ def execute(args=None):
             print(score.filename)
             score.clean()
             if args.clean_style:
-                score.merge_style(style_file=args.clean_style.name)
+                score.merge_style(styles=args.clean_style.name)
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'lyrics':
