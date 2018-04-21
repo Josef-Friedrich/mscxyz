@@ -79,7 +79,6 @@ class MetaTag(object):
         * `lyricist`
         * `movementNumber`
         * `movementTitle`
-        * `originalFormat`
         * `platform`
         * `poet`
         * `source`
