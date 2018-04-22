@@ -167,6 +167,15 @@ class TestFileCompare(unittest.TestCase):
     def test_real_world_zum_tanze(self):
         self.assertDiff('Zum-Tanze-da-geht-ein-Maedel.mscx')
 
+    def test_real_world_all_dudes(self):
+        self.assertDiff('All_Dudes.mscx')
+
+    def test_real_world_reunion(self):
+        self.assertDiff('Reunion.mscx')
+
+    def test_real_world_triumph(self):
+        self.assertDiff('Triumph.mscx')
+
 
 if __name__ == '__main__':
     unittest.main()

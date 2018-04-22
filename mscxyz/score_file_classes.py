@@ -221,6 +221,8 @@ class XMLTree(ScoreFile):
                           '//oddFooterR',
                           '//chord/name',
                           '//chord/render',
+                          '//StaffText/text',
+                          '//Jump/continueAt',
                           ):
 
                 for tag in self.xml_tree.xpath(xpath):
