@@ -207,6 +207,8 @@ class XMLTree(ScoreFile):
         else:
             filename = self.relpath
         if not self.errors:
+            # To get the same xml tag structure as the original score file
+            # has.
             for xpath in ('//LayerTag', '//metaTag', '//font', '//i'):
                 for tag in self.xml_tree.xpath(xpath):
                     if not tag.text:

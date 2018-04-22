@@ -135,18 +135,31 @@ class TestClassXMLTree(unittest.TestCase):
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
 
-    def test_method_save_diff(self):
-        home = os.path.expanduser('~')
-        filename = 'Getting_Started_English.mscx'
-        orig = os.path.join(home, filename)
+
+class TestFileCompare(unittest.TestCase):
+
+    def assertDiff(self, filename):
+        orig = os.path.join(os.path.expanduser('~'), filename)
         saved = orig.replace('.mscx', '_saved.mscx')
         tmp = helper.get_tmpfile_path(filename)
         shutil.copy2(tmp, orig)
         tree = XMLTree(tmp)
         tree.save(new_name=saved)
-        result = helper.read_file(saved)
-        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
         self.assertTrue(filecmp.cmp(orig, saved))
+        os.remove(orig)
+        os.remove(saved)
+
+    def test_getting_started(self):
+        self.assertDiff('Getting_Started_English.mscx')
+
+    def test_lyrics(self):
+        self.assertDiff('lyrics.mscx')
+
+    def test_chords(self):
+        self.assertDiff('chords.mscx')
+
+    def test_unicode(self):
+        self.assertDiff('unicode.mscx')
 
 
 if __name__ == '__main__':
