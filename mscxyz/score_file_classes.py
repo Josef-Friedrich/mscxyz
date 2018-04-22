@@ -207,7 +207,13 @@ class XMLTree(ScoreFile):
         else:
             filename = self.relpath
         if not self.errors:
-            self.xml_tree.write(filename, encoding='UTF-8')
+            #self.xml_tree.write(filename, encoding='UTF-8')
+            score = open(filename, 'w')
+            score.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            score.write(lxml.etree.tostring(self.xml_root, method='html')
+                        .decode('utf-8'))
+            score.write('\n')
+            score.close()
             if mscore:
                 re_open(filename)
 

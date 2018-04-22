@@ -118,6 +118,20 @@ class TestClassXMLTree(unittest.TestCase):
         self.assertEqual(result[0][0][0].tag, 'halign')
         self.assertEqual(result[0][0][0].text, 'center')
 
+    def test_method_save(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        tree = XMLTree(tmp)
+        tree.save()
+        result = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+    def test_method_save_new_name(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        tree = XMLTree(tmp)
+        tree.save(new_name=tmp)
+        result = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
 
 if __name__ == '__main__':
     unittest.main()
