@@ -7,7 +7,10 @@ from mscxyz.score_file_classes import ScoreFile, list_scores, \
 import helper
 import mock
 import mscxyz
+import os
+import shutil
 import unittest
+import filecmp
 
 
 class TestFunctions(unittest.TestCase):
@@ -131,6 +134,19 @@ class TestClassXMLTree(unittest.TestCase):
         tree.save(new_name=tmp)
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+    def test_method_save_diff(self):
+        home = os.path.expanduser('~')
+        filename = 'Getting_Started_English.mscx'
+        orig = os.path.join(home, filename)
+        saved = orig.replace('.mscx', '_saved.mscx')
+        tmp = helper.get_tmpfile_path(filename)
+        shutil.copy2(tmp, orig)
+        tree = XMLTree(tmp)
+        tree.save(new_name=saved)
+        result = helper.read_file(saved)
+        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+        self.assertTrue(filecmp.cmp(orig, saved))
 
 
 if __name__ == '__main__':

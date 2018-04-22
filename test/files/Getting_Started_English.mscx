@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.06">
+  <programVersion>2.1.0</programVersion>
+  <programRevision>871c8ce</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      <master>
+        <val id="0">Zita1</val>
+        <val id="1">NoEffect</val>
+        <val id="2">0.1</val>
+        <val id="3">440</val>
+        </master>
+      <Fluid>
+        <val id="0">040_Florestan_String_Quartet.sf2</val>
+        <val id="0">FluidR3Mono_GM.sf3</val>
+        </Fluid>
+      <Zerberus>
+        </Zerberus>
+      <Zita1>
+        <val id="0">0.25</val>
+        <val id="1">0.462756</val>
+        <val id="2">0.528321</val>
+        <val id="3">0.333333</val>
+        <val id="4">0.25</val>
+        <val id="5">0.335245</val>
+        <val id="6">0.5</val>
+        <val id="7">0.664755</val>
+        <val id="8">0.5</val>
+        <val id="9">0.5</val>
+        </Zita1>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <lastSystemFillLimit>0</lastSystemFillLimit>
+      <oddFooterC>
+These instructions have focused on keyboard entry. If you find it easier, you can also point-and-click while in note input mode.
+It is also possible to use a MIDI keyboard, or you can go the &lt;i&gt;View&lt;/i&gt; menu and choose &lt;i&gt;Piano Keyboard&lt;/i&gt; or press &lt;i&gt;P&lt;/i&gt;.</oddFooterC>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>top</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-4</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Staff</name>
+        <family>Times New Roman</family>
+        <size>10</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        </TextStyle>
+      <TextStyle>
+        <halign>center</halign>
+        <valign>bottom</valign>
+        <xoffset>0</xoffset>
+        <yoffset>8</yoffset>
+        <offsetType>absolute</offsetType>
+        <name>Footer</name>
+        <family>FreeSerif</family>
+        <size>10</size>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>top</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-4</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>General hints—green</name>
+        <family>FreeSerif</family>
+        <size>10</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <foregroundColor r="0" g="128" b="0" a="255"/>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>top</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-4</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Score editing hints—red</name>
+        <family>FreeSerif</family>
+        <size>10</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <foregroundColor r="255" g="0" b="0" a="255"/>
+        </TextStyle>
+      <TextStyle>
+        <halign>left</halign>
+        <valign>top</valign>
+        <xoffset>0</xoffset>
+        <yoffset>-4</yoffset>
+        <offsetType>spatium</offsetType>
+        <name>Note input instructions—blue</name>
+        <family>FreeSerif</family>
+        <size>10</size>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <foregroundColor r="0" g="51" b="204" a="255"/>
+        </TextStyle>
+      <page-layout>
+        <page-height>1683.78</page-height>
+        <page-width>1190.55</page-width>
+        <page-margins type="even">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        <page-margins type="odd">
+          <left-margin>56.6929</left-margin>
+          <right-margin>56.6929</right-margin>
+          <top-margin>56.6929</top-margin>
+          <bottom-margin>113.386</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>0</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Isaac Weiss (https://musescore.com/isaacweiss)</metaTag>
+    <metaTag name="copyright">© CC NC-SA Isaac Weiss for MuseScore BVBA 2016</metaTag>
+    <metaTag name="creationDate"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source">http://musescore.com/isaacweiss/getting-started</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Getting Started</metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>Getting Started</text>
+          </Text>
+        <Text>
+          <style>Composer</style>
+          <text>MuseScore Team</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>An introduction to note entry in MuseScore.</text>
+          </Text>
+        <Text>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Instrument Name (Part)</style>
+          <foregroundColor r="255" g="0" b="0" a="255"/>
+          <text><font size="12"></font>Double-click to edit title, --&gt;
+subtitle, and composer.</text>
+          </Text>
+        <Text>
+          <pos x="0" y="-4.41113"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>Subtitle</style>
+          <foregroundColor r="0" g="128" b="0" a="255"/>
+          <text><font size="17"></font>Can't see? Zoom in with the shortcut <i>Ctrl +</i> (Mac: <i>Cmd +</i>).</text>
+          </Text>
+        </VBox>
+      <Measure number="1">
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <StaffText>
+          <pos x="0" y="-2.5"/>
+          <text>(Example measure)</text>
+          </StaffText>
+        <StaffText>
+          <pos x="-7.58287" y="-7.40899"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want to save this score for future reference? Go to
+the <i>File</i> menu and choose <i>Save a Copy…</i> right now.</text>
+          </StaffText>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>62</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <StaffText>
+          <pos x="0" y="-2.5"/>
+          <text>(Practice measure)</text>
+          </StaffText>
+        <StaffText>
+          <pos x="-0.56847" y="5.37387"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>1. Let's learn to enter notes.</i></b><i></i> Look at the first measure on the left. To produce that result,
+^ click on the measure above ^, press <i>N</i> to enter note input mode, and type <i>C, D, E, F.
+<b>Congratulations—you just entered your first melody!
+</b></i>Press the <i>Escape</i> key to leave note input mode.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="3">
+        <StaffText>
+          <pos x="-1" y="-2.6"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text><i><u>Score editing hints are red.</u></i></text>
+          </StaffText>
+        <StaffText>
+          <pos x="-1" y="-4.98"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text><i><u><font face="Times New Roman"></font>General hints are green.</u></i></text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="4">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <StaffText>
+          <pos x="-2.82933" y="-5"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <frame>1</frame>
+          <paddingWidthS>0.2</paddingWidthS>
+          <text><i><u>The step-by-step guide
+to note entry is blue.</u></i></text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="5">
+        <StaffText>
+          <pos x="-4.19143" y="-10.72"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want to get started writing music?
+Press<i> N</i> or click the <i>N</i> at the left of
+the toolbar to enter note input mode.</text>
+          </StaffText>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Rest>
+          <durationType>eighth</durationType>
+          </Rest>
+        </Measure>
+      <Measure number="6">
+        <StaffText>
+          <pos x="-0.4" y="4.49999"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>2. Let's try another.</i></b><i></i> Click on the rest above, press <i>N</i> to enter note input mode, select
+the 8th note duration in the toolbar OR press <i>4</i>, and type <i>F, G, A, 0</i> (meaning <i>rest</i>)<i>,
+A, G, F.<b> Always remember!</b></i> Press <i>Escape</i> to leave note input mode.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="7">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="8">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="9">
+        <StaffText>
+          <pos x="-5.83489" y="-10.9888"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>The note values in the toolbar, starting with
+the 64th note, are assigned to the row of
+numbers <i>1 – 9</i> at the top of your keyboard.</text>
+          </StaffText>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          <Note>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="10">
+        <StaffText>
+          <pos x="-0.4" y="4.19999"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>3. </i></b><i></i>Click on the rest, press <i>N</i>, and select the whole note duration in the toolbar
+OR press <i>7</i>. Type C. Then hold down the <i>Shift</i> key to add notes to the chord,
+and type <i>E, G</i>. Press <i>Escape</i> to leave note input mode.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="11">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="12">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <StaffText>
+          <pos x="-4.6" y="-5"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want to undo what you just did?
+Hit <i>Ctrl</i> (Mac: <i>Cmd</i>) <i>Z</i>.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="13">
+        <StaffText>
+          <pos x="6.66133e-16" y="-5.1"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want to play back what you've written? Click where you want to start
+and press the <i>Space</i> bar, or click the triangular <i>Play</i> button in the toolbar.</text>
+          </StaffText>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <tick>23040</tick>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="14">
+        <StaffText>
+          <pos x="0" y="5.44234"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>4. </i></b><i></i>Click on the rest, press <i>N</i>, and select the whole note duration in the toolbar or press <i>7</i>.
+Type <i>E</i>. Go back with the left arrow key and select 2 instead of 1 in the voice selector at
+the right of the toolbar (where the numbers 1, 2, 3, and 4 are in a row). In voice 2, select
+the quarter note duration and type <i>A, G, A, G</i>. <b><i>Don't forget:</i></b><i></i> Press the <i>Escape</i> key.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="15">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="16">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <StaffText>
+          <pos x="1.55196" y="-4.94467"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text>This is a line break. --&gt;</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="17">
+        <StaffText>
+          <pos x="-1.8" y="-6.4"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text>Want to delete this text? 
+Click it and press the <i>Delete</i> key.</text>
+          </StaffText>
+        <Chord>
+          <dots>1</dots>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="18">
+        <StaffText>
+          <pos x="-0.4" y="4.19999"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>5.</i></b><i></i> Click on the rest, press <i>N</i>, and select the quarter note duration or press <i>5</i>.
+Type <i>A, A, F, A.</i> Press the <i>Escape</i> key to leave note input mode. Click once
+on the first note in the measure and press . or select the dot in the toolbar.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="19">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="20">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="21">
+        <StaffText>
+          <pos x="-3.30578" y="-10.4463"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want a new perspective? Go to the
+<i>View</i> menu and choose <i>Full Screen</i>.</text>
+          </StaffText>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <Accidental>
+              <subtype>sharp</subtype>
+              </Accidental>
+            <Tie id="2">
+              </Tie>
+            <pitch>78</pitch>
+            <tpc>20</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <endSpanner id="2"/>
+            <pitch>78</pitch>
+            <tpc>20</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="22">
+        <StaffText>
+          <pos x="-0.4" y="4.59999"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i>6. </i></b><i></i>Click on the rest, press <i>N</i>, and select the quarter note duration. Type <i>D, F,
+</i>and press the up arrow key to raise the pitch to an F-sharp. Continue typing
+<i>F, E.</i> Press the <i>Escape</i> key. Click once on the second note in the measure and
+type <i>+,</i> which is <i>Shift=,</i> or click on the tie near the middle of the toolbar.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="23">
+        <StaffText>
+          <pos x="-27.59" y="-5.5"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text>Want to hide a rest? Select it and press <i>V</i>, or uncheck <i>Visible</i> in the Inspector (on the right).</text>
+          </StaffText>
+        <StaffText>
+          <pos x="-27.59" y="-3.4"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>This works with basically everything. Invisible elements won't appear in print, PDFs, or images.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="24">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="25">
+        <vspacerDown>16.8802</vspacerDown>
+        <StaffText>
+          <pos x="11" y="-7.7057"/>
+          <halign>center</halign>
+          <text><font face="FreeSans"></font>v  <font face="Times New Roman"></font>(This is a big one! Follow the <font face="FreeSans"></font> v
+V  <font face="Times New Roman"></font>instructions below carefully.)<font face="FreeSans"></font>  V</text>
+          </StaffText>
+        <Slur id="3">
+          <track>0</track>
+          </Slur>
+        <Chord>
+          <durationType>16th</durationType>
+          <Slur type="start" id="3"/>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <Accidental>
+              <subtype>flat</subtype>
+              </Accidental>
+            <pitch>70</pitch>
+            <tpc>12</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Note>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>16th</durationType>
+          <Slur type="stop" id="3"/>
+          <Note>
+            <pitch>77</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Articulation>
+            <subtype>staccato</subtype>
+            </Articulation>
+          <Note>
+            <pitch>77</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>eighth</durationType>
+          <Articulation>
+            <subtype>staccato</subtype>
+            </Articulation>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            </Note>
+          </Chord>
+        <StaffText>
+          <pos x="0.699999" y="4.59999"/>
+          <color r="0" g="51" b="204" a="255"/>
+          <style>Note input instructions—blue</style>
+          <text><b><i><font face="Times New Roman"></font>7. </i></b><i></i>Click on the rest, press <i>N</i>, and select the 16th note duration or press <i>3.</i> Type <i>F, G, A, B,</i> and
+press the <i>Down</i> arrow key to move a half-step down. Type <i>C, D, E, F.</i> Press <i>Escape</i>, select all
+eight notes, and press <i>S</i> to slur them. Click the rest. Press <i>N</i>, select 8th note duration, type <i>F,
+C.</i> Select the quarter note duration, type <i>F,</i> and press <i>Ctrl+Down </i>(Mac: <i>Cmd+Down</i>) to move
+an octave down. Open the <i>Articulations &amp; Ornaments</i> palette on the left. Drag the stacattos
+directly onto the note heads, or select the two notes and double-click the staccato symbol.</text>
+          </StaffText>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="26">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="27">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="28">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="29">
+        <StaffText>
+          <pos x="-3.5" y="-10.8"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text>&lt;-- This is a spacer. It adds more room
+between two lines. Find it in the palettes!</text>
+          </StaffText>
+        <StaffText>
+          <pos x="-6.23403" y="6.32324"/>
+          <color r="255" g="0" b="0" a="255"/>
+          <style>Score editing hints—red</style>
+          <text>Want to edit the footer text below? From the <i>Style</i> menu,
+choose <i>General…</i> and find <i>Header, Footer, Numbers</i> in the sidebar.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="30">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="31">
+        <StaffText>
+          <pos x="-9" y="4.2"/>
+          <color r="0" g="128" b="0" a="255"/>
+          <style>General hints—green</style>
+          <text>Want to learn more? Click on anything in the score and press the <i>F1</i> key
+(Mac: <i>Fn+F1</i>). Or, go up to the <i>Help</i> menu and choose <i>Online Handbook</i>.</text>
+          </StaffText>
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        </Measure>
+      <Measure number="32">
+        <Rest>
+          <durationType>measure</durationType>
+          <duration z="4" n="4"/>
+          </Rest>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
