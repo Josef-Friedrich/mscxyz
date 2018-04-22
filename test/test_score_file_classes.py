@@ -3,11 +3,14 @@
 """ScoreFile for various tests"""
 
 from mscxyz.score_file_classes import ScoreFile, list_scores, \
-                                      list_zero_alphabet
+                                      list_zero_alphabet, XMLTree
 import helper
 import mock
 import mscxyz
+import os
+import shutil
 import unittest
+import filecmp
 
 
 class TestFunctions(unittest.TestCase):
@@ -85,6 +88,82 @@ class TestScoreFile(unittest.TestCase):
         self.assertEqual(self.file.filename, 'simple.mscx')
         self.assertEqual(self.file.basename, 'simple')
         self.assertEqual(self.file.extension, 'mscx')
+
+
+class TestClassXMLTree(unittest.TestCase):
+
+    def test_method_merge_style(self):
+        tree = XMLTree(helper.get_tmpfile_path('simple.mscx'))
+        styles = """
+            <TextStyle>
+              <halign>center</halign>
+              <valign>bottom</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-1</yoffset>
+              <offsetType>spatium</offsetType>
+              <name>Form Section</name>
+              <family>Alegreya Sans</family>
+              <size>12</size>
+              <bold>1</bold>
+              <italic>1</italic>
+              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+              <frameWidthS>0.1</frameWidthS>
+              <paddingWidthS>0.2</paddingWidthS>
+              <frameRound>0</frameRound>
+              <frameColor r="0" g="0" b="0" a="255"/>
+              </TextStyle>
+        """
+        tree.clean()
+        tree.merge_style(styles)
+
+        xml_tree = tree.xml_tree
+        result = xml_tree.xpath('/museScore/Score/Style')
+        self.assertEqual(result[0][0][0].tag, 'halign')
+        self.assertEqual(result[0][0][0].text, 'center')
+
+    def test_method_save(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        tree = XMLTree(tmp)
+        tree.save()
+        result = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+    def test_method_save_new_name(self):
+        tmp = helper.get_tmpfile_path('simple.mscx')
+        tree = XMLTree(tmp)
+        tree.save(new_name=tmp)
+        result = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+
+class TestFileCompare(unittest.TestCase):
+
+    def assertDiff(self, filename):
+        orig = os.path.join(os.path.expanduser('~'), filename)
+        saved = orig.replace('.mscx', '_saved.mscx')
+        tmp = helper.get_tmpfile_path(filename)
+        shutil.copy2(tmp, orig)
+        tree = XMLTree(tmp)
+        tree.save(new_name=saved)
+        self.assertTrue(filecmp.cmp(orig, saved))
+        os.remove(orig)
+        os.remove(saved)
+
+    def test_getting_started(self):
+        self.assertDiff('Getting_Started_English.mscx')
+
+    def test_lyrics(self):
+        self.assertDiff('lyrics.mscx')
+
+    def test_chords(self):
+        self.assertDiff('chords.mscx')
+
+    def test_unicode(self):
+        self.assertDiff('unicode.mscx')
+
+    @unittest.skip('Should be fixed')
+    def test_real_world_ragtime_3(self):
+        self.assertDiff('Ragtime_3.mscx')
 
 
 if __name__ == '__main__':
