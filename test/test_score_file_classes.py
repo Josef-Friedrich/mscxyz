@@ -161,9 +161,11 @@ class TestFileCompare(unittest.TestCase):
     def test_unicode(self):
         self.assertDiff('unicode.mscx')
 
-    @unittest.skip('Should be fixed')
     def test_real_world_ragtime_3(self):
         self.assertDiff('Ragtime_3.mscx')
+
+    def test_real_world_zum_tanze(self):
+        self.assertDiff('Zum-Tanze-da-geht-ein-Maedel.mscx')
 
 
 if __name__ == '__main__':
