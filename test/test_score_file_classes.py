@@ -153,6 +153,12 @@ class TestClassStyle(unittest.TestCase):
         style2 = Style(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
+    def test_method_set_create(self):
+        self.style.set('lol', 'lol')
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('lol'), 'lol')
+
     def test_method_get_text_style(self):
         title = self.style.get_text_style('Title')
         self.assertEqual(title, {'halign': 'center',

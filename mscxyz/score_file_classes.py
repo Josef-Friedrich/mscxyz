@@ -247,8 +247,8 @@ class Style(XMLTree):
         super(Style, self).__init__(relpath)
         self.style = self.xml_tree.xpath('/museScore/Score/Style')[0]
 
-    def create(self, tag):
-        return etree.SubElement(self.style, tag)
+    def _create(self, tag):
+        return lxml.etree.SubElement(self.style, tag)
 
     def get(self, element_path):
         """
@@ -263,7 +263,7 @@ class Style(XMLTree):
         """
         element = self.style.find(element_path)
         if element is None:
-            element = self.create(element_path)
+            element = self._create(element_path)
         element.text = str(value)
 
     def _get_text_style_element(self, name):
