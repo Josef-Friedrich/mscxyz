@@ -10,22 +10,28 @@ import sys
 import termcolor
 
 
-def is_mscore(executable='mscore'):
+def get_mscore_bin():
     """Check the existance of the executable mscore
 
     :return: Path of the executable if true, else false.
     """
-    cmd = 'where' if platform.system() == 'Windows' else 'which'
-    try:
-        executable = subprocess.check_output([cmd, executable])
-    except:
-        return False
+    system = platform.system()
+    if system == 'Darwin':
+        bin = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
     else:
-        return executable.replace(b'\n', b'')
+        cmd = 'where' if system == 'Windows' else 'which'
+        bin = subprocess.check_output([cmd, 'mscore'])
+        bin = bin.replace(b'\n', b'')
+
+    if os.path.exists(bin):
+        return bin
+    else:
+        raise FileNotFoundError('mscore binary could not be found.')
+
 
 
 def mscore(commands):
-    executable = is_mscore()
+    executable = get_mscore_bin()
     if executable:
         commands.insert(0, executable)
 
