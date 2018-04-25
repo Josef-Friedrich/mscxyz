@@ -3,7 +3,7 @@
 """ScoreFile for various tests"""
 
 from mscxyz.score_file_classes import ScoreFile, list_scores, \
-                                      list_zero_alphabet, XMLTree
+                                      list_zero_alphabet, XMLTree, Style
 import helper
 import mock
 import mscxyz
@@ -134,6 +134,41 @@ class TestClassXMLTree(unittest.TestCase):
         tree.save(new_name=tmp)
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+
+class TestClassStyle(unittest.TestCase):
+
+    def setUp(self):
+        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx'))
+
+    def test_attributes_style(self):
+        self.assertEqual(self.style.style.tag, 'Style')
+
+    def test_method_get(self):
+        self.assertEqual(self.style.get('staffUpperBorder'), '6.5')
+
+    def test_method_set(self):
+        self.style.set('staffUpperBorder', 99)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('staffUpperBorder'), '99')
+
+    def test_method_get_text_style(self):
+        title = self.style.get_text_style('Title')
+        self.assertEqual(title, {'halign': 'center',
+                                 'size': '28',
+                                 'family': 'MuseJazz',
+                                 'bold': '1',
+                                 'valign': 'top',
+                                 'name': 'Title',
+                                 'offsetType': 'absolute'})
+
+    def test_method_set_text_style(self):
+        self.style.set_text_style('Title', {'size': 99})
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        title = style2.get_text_style('Title')
+        self.assertEqual(title['size'], '99')
 
 
 class TestFileCompare(unittest.TestCase):

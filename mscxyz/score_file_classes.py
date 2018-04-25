@@ -178,9 +178,6 @@ class XMLTree(ScoreFile):
                 </Style>
               </museScore>
 
-
-
-
         """
         if os.path.exists(styles):
             style = lxml.etree.parse(styles).getroot()
@@ -242,3 +239,45 @@ class XMLTree(ScoreFile):
 ###############################################################################
 # Class hierarchy level 3
 ###############################################################################
+
+
+class Style(XMLTree):
+
+    def __init__(self, relpath):
+        super(Style, self).__init__(relpath)
+        self.style = self.xml_tree.xpath('/museScore/Score/Style')[0]
+
+    def create(self, tag):
+        return etree.SubElement(self.style, tag)
+
+    def get(self, element_path):
+        """
+        :param string element_path: see http://lxml.de/tutorial.html#elementpath
+        """
+        element = self.style.find(element_path)
+        return element.text
+
+    def set(self, element_path, value):
+        """
+        :param string element_path: see http://lxml.de/tutorial.html#elementpath
+        """
+        element = self.style.find(element_path)
+        if element is None:
+            element = self.create(element_path)
+        element.text = str(value)
+
+    def _get_text_style_element(self, name):
+        xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
+        return self.xml_tree.xpath(xpath)[0].getparent()
+
+    def get_text_style(self, name):
+        text_style = self._get_text_style_element(name)
+        out = {}
+        for child in text_style.iterchildren():
+            out[child.tag] = child.text
+        return out
+
+    def set_text_style(self, name, values):
+        text_style = self._get_text_style_element(name)
+        for element_name, value in values.items():
+            text_style.find(element_name).text = str(value)
