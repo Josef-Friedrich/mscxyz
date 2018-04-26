@@ -147,6 +147,9 @@ class TestClassStyle(unittest.TestCase):
     def test_method_get(self):
         self.assertEqual(self.style.get('staffUpperBorder'), '6.5')
 
+    def test_method_get_muliple_element_path(self):
+        self.assertEqual(self.style.get('page-layout/page-height'), '1584')
+
     def test_method_set(self):
         self.style.set('staffUpperBorder', 99)
         self.style.save()
@@ -158,6 +161,12 @@ class TestClassStyle(unittest.TestCase):
         self.style.save()
         style2 = Style(self.style.abspath)
         self.assertEqual(style2.get('lol'), 'lol')
+
+    def test_method_set_muliple_element_path(self):
+        self.style.set('page-layout/page-height', 99)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('page-layout/page-height'), '99')
 
     def test_method_get_text_style(self):
         title = self.style.get_text_style('Title')
