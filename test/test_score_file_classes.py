@@ -177,6 +177,21 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(title['size'], '99')
 
 
+class TestClassStyleWithoutTags(unittest.TestCase):
+
+    def setUp(self):
+        self.style = Style(helper.get_tmpfile_path('without-style.mscx'))
+
+    def test_load(self):
+        self.assertEqual(self.style.style.tag, 'Style')
+
+    def test_method_set(self):
+        self.style.set('staffUpperBorder', 99)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('staffUpperBorder'), '99')
+
+
 class TestFileCompare(unittest.TestCase):
 
     def assertDiff(self, filename):

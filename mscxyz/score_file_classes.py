@@ -245,7 +245,15 @@ class Style(XMLTree):
 
     def __init__(self, relpath):
         super(Style, self).__init__(relpath)
-        self.style = self.xml_tree.xpath('/museScore/Score/Style')[0]
+        styles = self.xml_tree.xpath('/museScore/Score/Style')
+        if styles:
+            self.style = styles[0]
+        else:
+            self.style = self._create_parent_style()
+
+    def _create_parent_style(self):
+        score = self.xml_tree.xpath('/museScore/Score')
+        return lxml.etree.SubElement(score[0], 'Style')
 
     def _create(self, tag):
         return lxml.etree.SubElement(self.style, tag)
