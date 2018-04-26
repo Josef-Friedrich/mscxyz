@@ -168,6 +168,16 @@ class TestClassStyle(unittest.TestCase):
         style2 = Style(self.style.abspath)
         self.assertEqual(style2.get('page-layout/page-height'), '99')
 
+    def test_method_set_muliple_element_path_multiple_times(self):
+        self.style.set('page-layout/page-height', 99)
+        self.style.set('page-layout/page-width', 100)
+        self.style.set('page-layout/page-depth', 101)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('page-layout/page-depth'), '101')
+        self.assertEqual(style2.get('page-layout/page-height'), '99')
+        self.assertEqual(style2.get('page-layout/page-width'), '100')
+
     def test_method_get_text_style(self):
         title = self.style.get_text_style('Title')
         self.assertEqual(title, {'halign': 'center',

@@ -9,6 +9,8 @@ The classes build on each other hierarchically. The class hierarchy:
     ScoreFile
         XMLTree
             Style
+            Lyrics
+            Rename
 
 Depending on the subcommand
 
@@ -260,6 +262,8 @@ class Style(XMLTree):
             elm = parent.find(tag)
             if elm is None:
                 parent = lxml.etree.SubElement(parent, tag)
+            else:
+                parent = elm
         return parent
 
     def get(self, element_path):
