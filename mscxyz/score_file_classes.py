@@ -6,11 +6,9 @@ The classes build on each other hierarchically. The class hierarchy:
 
 .. code ::
 
-    ScoreScoreFile
-        XMLXMLTree
-            Meta
-            Lyrics
-            Rename
+    ScoreFile
+        XMLTree
+            Style
 
 Depending on the subcommand
 
