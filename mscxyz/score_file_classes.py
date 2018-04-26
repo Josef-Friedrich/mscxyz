@@ -256,7 +256,13 @@ class Style(XMLTree):
         return lxml.etree.SubElement(score[0], 'Style')
 
     def _create(self, tag):
-        return lxml.etree.SubElement(self.style, tag)
+        tags = tag.split('/')
+        parent = self.style
+        for tag in tags:
+            elm = parent.find(tag)
+            if elm is None:
+                parent = lxml.etree.SubElement(parent, tag)
+        return parent
 
     def get(self, element_path):
         """

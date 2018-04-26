@@ -200,6 +200,12 @@ class TestClassStyleWithoutTags(unittest.TestCase):
         style2 = Style(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
+    def test_method_set_element_path_multiple(self):
+        self.style.set('lol/troll', 99)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('lol/troll'), '99')
+
     def test_method_get_text_style_unkown(self):
         unkown = self.style.get_text_style('Unkown')
         self.assertEqual(unkown, {'name': 'Unkown'})
