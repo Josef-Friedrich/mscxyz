@@ -276,7 +276,14 @@ class Style(XMLTree):
 
     def _get_text_style_element(self, name):
         xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
-        return self.xml_tree.xpath(xpath)[0].getparent()
+        child = self.xml_tree.xpath(xpath)
+        if child:
+            return child[0].getparent()
+        else:
+            el_text_style = lxml.etree.SubElement(self.style, 'TextStyle')
+            el_name = lxml.etree.SubElement(el_text_style, 'name')
+            el_name.text = name
+            return el_text_style
 
     def get_text_style(self, name):
         text_style = self._get_text_style_element(name)
@@ -288,4 +295,7 @@ class Style(XMLTree):
     def set_text_style(self, name, values):
         text_style = self._get_text_style_element(name)
         for element_name, value in values.items():
-            text_style.find(element_name).text = str(value)
+            el = text_style.find(element_name)
+            if el is None:
+                el = lxml.etree.SubElement(text_style, element_name)
+            el.text = str(value)

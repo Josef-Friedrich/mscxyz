@@ -200,6 +200,17 @@ class TestClassStyleWithoutTags(unittest.TestCase):
         style2 = Style(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
+    def test_method_get_text_style_unkown(self):
+        unkown = self.style.get_text_style('Unkown')
+        self.assertEqual(unkown, {'name': 'Unkown'})
+
+    def test_method_set_text_style_unkown(self):
+        self.style.set_text_style('Unkown', {'size': 99})
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        unkown = style2.get_text_style('Unkown')
+        self.assertEqual(unkown['size'], '99')
+
 
 class TestFileCompare(unittest.TestCase):
 
