@@ -11,7 +11,6 @@ else:
     import mock
 
 
-# @unittest.skipIf('rewritten')
 class TestFunctionGetMscoreBin(unittest.TestCase):
 
     @mock.patch('platform.system')
