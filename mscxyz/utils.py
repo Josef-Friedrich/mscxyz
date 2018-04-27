@@ -32,8 +32,6 @@ def mscore(commands):
     executable = get_mscore_bin()
     if executable:
         commands.insert(0, executable)
-
-        # OUT=None
         OUT = open(os.devnull, 'wb')
         subprocess.call(commands, stdout=OUT, stderr=OUT)
         OUT.close()
