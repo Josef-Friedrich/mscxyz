@@ -30,11 +30,15 @@ def get_mscore_bin():
 
 def mscore(commands):
     executable = get_mscore_bin()
-    if executable:
-        commands.insert(0, executable)
-        OUT = open(os.devnull, 'wb')
-        subprocess.call(commands, stdout=OUT, stderr=OUT)
-        OUT.close()
+    commands.insert(0, executable)
+    p = subprocess.Popen(commands, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    p.wait()
+    if p.returncode != 0:
+        for line in p.stderr:
+            print(line.decode('utf-8'))
+        raise ValueError('mscore exit with returncode != 0')
+    return p
 
 
 def re_open(input_file):
