@@ -79,15 +79,39 @@ class TestFunctions(unittest.TestCase):
 
 
 class TestScoreFile(unittest.TestCase):
+
     def setUp(self):
         self.file = ScoreFile(helper.get_tmpfile_path('simple.mscx'))
 
-    def test_file_object_initialisation(self):
+    def test_attribute_relpath(self):
         self.assertTrue(self.file.relpath)
+
+    def test_attribute_dirname(self):
         self.assertTrue(self.file.dirname)
+
+    def test_attribute_filename(self):
         self.assertEqual(self.file.filename, 'simple.mscx')
+
+    def test_attribute_basename(self):
         self.assertEqual(self.file.basename, 'simple')
+
+    def test_attribute_extension(self):
         self.assertEqual(self.file.extension, 'mscx')
+
+    def test_attribute_abspath(self):
+        self.assertEqual(self.file.abspath, self.file.loadpath)
+
+
+class TestScoreFileMscz(unittest.TestCase):
+
+    def setUp(self):
+        self.file = ScoreFile(helper.get_tmpfile_path('simple.mscz'))
+
+    def test_attribute_extension(self):
+        self.assertEqual(self.file.extension, 'mscz')
+
+    def test_attribute_loadpath(self):
+        self.assertIn('simple.mscx', self.file.loadpath)
 
 
 class TestClassXMLTree(unittest.TestCase):
@@ -134,6 +158,12 @@ class TestClassXMLTree(unittest.TestCase):
         tree.save(new_name=tmp)
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
+
+    def test_mscz(self):
+        tmp = helper.get_tmpfile_path('simple.mscz')
+        tree = XMLTree(tmp)
+        result = tree.xml_tree.xpath('/museScore/Score/Style')
+        self.assertEqual(result[0].tag, 'Style')
 
 
 class TestClassStyle(unittest.TestCase):

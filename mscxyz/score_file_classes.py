@@ -25,6 +25,8 @@ import os
 import shutil
 import six
 import string
+import zipfile
+import tempfile
 
 
 def list_scores(path, extension='both', glob=None):
@@ -70,7 +72,7 @@ class ScoreFile(object):
         self.errors = []
         self.relpath = relpath
         self.abspath = os.path.abspath(relpath)
-        self.extension = relpath.split('.')[-1]
+        self.extension = relpath.split('.')[-1].lower()
         self.relpath_backup = relpath.replace(
             '.' + self.extension, '_bak.' + self.extension)
         self.dirname = os.path.dirname(relpath)
@@ -79,6 +81,23 @@ class ScoreFile(object):
             self.basename = self.filename.replace('.mscx', '').decode('utf-8')
         else:
             self.basename = self.filename.replace('.mscx', '')
+
+        if self.extension == 'mscz':
+            self.loadpath = self._unzip(self.abspath)
+        else:
+            self.loadpath = self.abspath
+
+    @staticmethod
+    def _unzip(abspath):
+        tmp_zipdir = tempfile.mkdtemp()
+        zip_ref = zipfile.ZipFile(abspath, 'r')
+        zip_ref.extractall(tmp_zipdir)
+        zip_ref.close()
+        con = os.path.join(tmp_zipdir, 'META-INF', 'container.xml')
+        container_info = lxml.etree.parse(con)
+        mscx = container_info \
+            .xpath('string(/container/rootfiles/rootfile/@full-path)')
+        return os.path.join(tmp_zipdir, mscx)
 
     def backup(self):
         """Make a copy of the MuseScore"""
@@ -104,7 +123,7 @@ class XMLTree(ScoreFile):
     def __init__(self, relpath):
         super(XMLTree, self).__init__(relpath)
         try:
-            self.xml_tree = lxml.etree.parse(self.relpath)
+            self.xml_tree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
