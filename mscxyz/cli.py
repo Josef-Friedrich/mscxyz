@@ -166,9 +166,8 @@ sub_meta = subparser.add_parser(
         - composer (1. vbox_composer 2. metatag_composer)
         - lyricist (1. vbox_lyricist 2. metatag_lyricist)
 
-    You have access to all this metadata fields through following fields:'''
-
-    ) + '\n\n' + list_fields(InterfaceReadWrite.get_all_fields(), prefix='    '))
+    You have access to all this metadata fields through following fields:''')
+    + '\n\n' + list_fields(InterfaceReadWrite.get_all_fields(), prefix='    '))
 
 sub_meta.add_argument(
     '-c',
@@ -186,7 +185,7 @@ sub_meta.add_argument(
     help='Deletes combined_lyricist if this field is equal to '
     'combined_composer. Deletes combined_subtitle if this field is equal to'
     'combined_title. Move combined_subtitle to combimed_title if '
-    'combined_title is empty.' )
+    'combined_title is empty.')
 
 sub_meta.add_argument(
     '-d',

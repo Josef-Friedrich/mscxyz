@@ -8,7 +8,7 @@ from mscxyz import cli
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import XMLTree, list_scores, list_zero_alphabet
+from mscxyz.score_file_classes import XMLTree, list_scores
 from mscxyz.utils import set_settings, color
 import lxml
 import six
@@ -19,7 +19,7 @@ __version__ = get_versions()['version']
 del get_versions
 
 if six.PY2:
-    reload(sys)
+    reload(sys)  # noqa F821
     sys.setdefaultencoding('utf8')
 
 
@@ -77,6 +77,7 @@ def report_errors(errors):
             color(error.__class__.__name__, 'red'),
             error.msg
         ))
+
 
 def no_error(error, errors):
     for e in errors:

@@ -4,9 +4,7 @@
 
 import os
 import platform
-import signal
 import subprocess
-import sys
 import termcolor
 
 
@@ -26,8 +24,7 @@ def get_mscore_bin():
     if os.path.exists(bin):
         return bin
     else:
-        raise FileNotFoundError('mscore binary could not be found.')
-
+        raise FileNotFoundError('mscore binary could not be found.') # noqa F821
 
 
 def mscore(commands):
@@ -49,39 +46,6 @@ def convert_mxl(input_file):
     output_file = input_file.replace('.mxl', '.mscx')
     mscore(['-o', output_file, input_file])
     os.remove(input_file)
-
-
-def exit_gracefully(signum, frame):
-    original_sigint = signal.getsignal(signal.SIGINT)
-    signal.signal(signal.SIGINT, exit_gracefully)
-    # Restore the original signal handler as otherwise evil things will
-    # happen, in raw_input when CTRL+C is pressed, and our signal
-    # handler is not re-entrant
-    signal.signal(signal.SIGINT, original_sigint)
-
-    try:
-        if raw_input("\nReally quit? (y/n)> ").lower().startswith('y'):
-            print('Quitting ...')
-            sys.exit(1)
-
-    except KeyboardInterrupt:
-        print("Ok ok, quitting")
-        sys.exit(1)
-
-    # restore the exit gracefully handler here
-    signal.signal(signal.SIGINT, exit_gracefully)
-
-
-def print_desc(text, description='', color='red'):
-    prefix = ''
-    if description:
-        prefix = colored(description, color) + ': '
-    print(prefix + text)
-
-
-def verbose(text, description='', color='red', verbosity=1):
-    if verbose >= 1:
-        print_desc(text=text, description=description, color=color)
 
 
 def get_settings(key):

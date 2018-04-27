@@ -32,9 +32,9 @@ import tempfile
 def list_scores(path, extension='both', glob=None):
     if not glob:
         if extension == 'both':
-            glob='*.msc[xz]'
+            glob = '*.msc[xz]'
         elif extension in ('mscx', 'mscz'):
-            glob='*.{}'.format(extension)
+            glob = '*.{}'.format(extension)
         else:
             raise ValueError('Possible values for the argument “extension” '
                              'are: “both”, “mscx”, “mscz”')
@@ -287,14 +287,16 @@ class Style(XMLTree):
 
     def get(self, element_path):
         """
-        :param string element_path: see http://lxml.de/tutorial.html#elementpath
+        :param string element_path: see
+          http://lxml.de/tutorial.html#elementpath
         """
         element = self.style.find(element_path)
         return element.text
 
     def set(self, element_path, value):
         """
-        :param string element_path: see http://lxml.de/tutorial.html#elementpath
+        :param string element_path: see
+          http://lxml.de/tutorial.html#elementpath
         """
         element = self.style.find(element_path)
         if element is None:

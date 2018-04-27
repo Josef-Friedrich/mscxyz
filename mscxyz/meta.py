@@ -3,12 +3,10 @@
 """Class for metadata maniplation"""
 
 from mscxyz.score_file_classes import XMLTree
-from mscxyz.utils import print_desc, get_settings, color
-from termcolor import colored
+from mscxyz.utils import get_settings, color
 import json
 import lxml
 import re
-import six
 import tmep
 
 
@@ -53,6 +51,7 @@ def distribute_field(source, format_string):
         raise UnmatchedFormatStringError(format_string, source)
     values = match.groups()
     return dict(zip(fields, values))
+
 
 def to_underscore(field):
     return re.sub('([A-Z]+)', r'_\1', field).lower()
@@ -530,7 +529,6 @@ class Meta(XMLTree):
 
                 print('{}: {}'.format(color(field, field_color),
                                       ' '.join(line)))
-
 
     def export_json(self):
         data = {}

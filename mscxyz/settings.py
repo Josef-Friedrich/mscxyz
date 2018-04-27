@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class DefaultArguments(object):
 
     clean_style = None
@@ -27,5 +28,6 @@ class DefaultArguments(object):
     rename_skip = None
     rename_target = None
     subcommand = None
+
 
 args = DefaultArguments()

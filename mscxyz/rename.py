@@ -3,15 +3,12 @@
 """Rename MuseScore files"""
 
 from mscxyz.meta import Meta
-from mscxyz.score_file_classes import ScoreFile
 from mscxyz.utils import color, get_settings
-from tmep.format import alphanum, asciify, delchars, replchars, nowhitespace
+from tmep.format import alphanum, asciify, nowhitespace
 import errno
 import hashlib
 import os
-import re
 import tmep
-import unidecode
 
 
 def create_dir(path):
@@ -48,7 +45,6 @@ def apply_format_string(fields):
 
 
 def show(old, new):
-    args = get_settings('args')
     print('{} -> {}'.format(color(old, 'yellow'), color(new, 'green')))
 
 
@@ -92,10 +88,10 @@ def rename_filename(source):
         while os.path.exists(target_format.format(i)):
             target = target_format.format(i)
             if get_checksum(source) == get_checksum(target):
-               print(color('The file “{}” with the same checksum (sha1) '
-                           'already exists in the target path “{}”!'
-                           .format(source, target), 'red'))
-               return meta
+                print(color('The file “{}” with the same checksum (sha1) '
+                            'already exists in the target path “{}”!'
+                            .format(source, target), 'red'))
+                return meta
             if i == '':
                 i = 1
             i += 1
