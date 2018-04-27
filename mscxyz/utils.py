@@ -15,16 +15,17 @@ def get_mscore_bin():
     """
     system = platform.system()
     if system == 'Darwin':
-        bin = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
+        binary = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
     else:
         cmd = 'where' if system == 'Windows' else 'which'
-        bin = subprocess.check_output([cmd, 'mscore'])
-        bin = bin.replace(b'\n', b'')
+        binary = subprocess.check_output([cmd, 'mscore'])
+        binary = binary.decode('utf-8')
+        binary = binary.replace('\n', '')
 
-    if os.path.exists(bin):
-        return bin
+    if os.path.exists(binary):
+        return binary
     else:
-        raise FileNotFoundError('mscore binary could not be found.') # noqa F821
+        raise ValueError('mscore binary could not be found.')
 
 
 def mscore(commands):

@@ -5,27 +5,25 @@
 from mscxyz.utils import get_mscore_bin
 import six
 import unittest
+if six.PY3:
+    from unittest import mock
+else:
+    import mock
 
 
-@unittest.skip('rewritten')
-class TestIsMscore(unittest.TestCase):
+# @unittest.skipIf('rewritten')
+class TestFunctionGetMscoreBin(unittest.TestCase):
 
-    def test_output(self):
-        output = get_mscore_bin('which')
-        self.assertTrue('which' in str(output), output)
-
-    def test_output_type(self):
-        output = get_mscore_bin('ls')
-        if six.PY2:
-            self.assertEqual(type(output), str)
-        else:
-            self.assertEqual(type(output), bytes)
-
-    def test_existent_command(self):
-        self.assertTrue(get_mscore_bin('ls'))
-
-    def test_non_existent(self):
-        self.assertFalse(get_mscore_bin('nooooooooooooooot'))
+    @mock.patch('platform.system')
+    @mock.patch('os.path.exists')
+    @mock.patch('subprocess.check_output')
+    def test_output(self, check_output, exists, system):
+        system.return_value = 'Linux'
+        exists.return_value = True
+        path = bytes('/usr/local/bin/mscore\n'.encode('utf-8'))
+        check_output.return_value = path
+        output = get_mscore_bin()
+        self.assertEqual(output, '/usr/local/bin/mscore')
 
 
 if __name__ == '__main__':

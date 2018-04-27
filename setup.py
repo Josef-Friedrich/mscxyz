@@ -23,6 +23,7 @@ setup(
     install_requires=[
         'lxml', 'termcolor', 'tmep>=1.1.2', 'six',
     ],
+    tests_require=['mock'],
     scripts=['bin/mscx-manager'],
     long_description=read('README.rst'),
     classifiers=[
