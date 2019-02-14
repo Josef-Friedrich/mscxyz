@@ -1,10 +1,17 @@
 import versioneer
 import os
 from setuptools import setup
+import six
+if six.PY2:
+    import io
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    file_path = os.path.join(os.path.dirname(__file__), fname)
+    if six.PY2:
+        return io.open(file_path, encoding='utf8').read()
+    else:
+        return open(file_path, encoding='utf8').read()
 
 
 setup(
