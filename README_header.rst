@@ -18,7 +18,7 @@ From Github
 
 .. code:: Shell
 
-    git clone git@github.com:Josef-Friedrich/mscxyz.git
+    git clone https://github.com/Josef-Friedrich/mscxyz.git
     cd mscxyz
     python setup.py install
 
