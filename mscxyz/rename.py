@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Rename MuseScore files"""
 
 from mscxyz.meta import Meta

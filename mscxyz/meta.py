@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Class for metadata maniplation"""
 
 from mscxyz.score_file_classes import XMLTree

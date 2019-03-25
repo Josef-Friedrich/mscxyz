@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test file “__init__.py”"""
 
 import helper

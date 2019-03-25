@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test module “clean.py”."""
 
 import helper

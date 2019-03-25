@@ -1,14 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Test module “utils.py”."""
 
 from mscxyz.utils import get_mscore_bin, mscore
-import six
 import unittest
-if six.PY3:
-    from unittest import mock
-else:
-    import mock
+from unittest import mock
 
 
 class TestFunctionGetMscoreBin(unittest.TestCase):

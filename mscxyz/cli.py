@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Wrapper for the command line interface"""
 
 from mscxyz._version import get_versions

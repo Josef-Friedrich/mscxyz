@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class DefaultArguments(object):
 
     clean_style = None

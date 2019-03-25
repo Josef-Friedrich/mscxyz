@@ -1,17 +1,12 @@
 """ScoreFile for various tests"""
 
-
 from distutils.dir_util import copy_tree
 import os
 import shutil
-import six
 import subprocess
 import sys
 import tempfile
-if six.PY2:
-    from cStringIO import StringIO
-else:
-    from io import StringIO
+from io import StringIO
 
 
 def get_tmpfile_path(filename):

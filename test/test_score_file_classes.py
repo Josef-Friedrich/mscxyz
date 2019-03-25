@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """ScoreFile for various tests"""
 
 from mscxyz.score_file_classes import ScoreFile, list_scores, \
                                       list_zero_alphabet, XMLTree, Style
 import helper
-import mock
+from unittest import mock
 import mscxyz
 import os
 import shutil

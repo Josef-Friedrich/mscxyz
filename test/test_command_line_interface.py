@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the command line interface using subprocess."""
 
 import subprocess

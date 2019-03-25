@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Manipulate the lyrics"""
 
 from mscxyz.score_file_classes import XMLTree

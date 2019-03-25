@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """ScoreFile for various tests"""
 
 import helper
-import mock
+from unittest import mock
 import mscxyz
 import os
 import unittest

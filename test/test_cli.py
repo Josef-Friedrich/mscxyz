@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Test module “cli.py”."""
-
 
 from mscxyz import cli
 import helper
 import mscxyz
 import re
-import six
 import unittest
 
 
@@ -131,12 +127,8 @@ class TestVersion(unittest.TestCase):
 
     def test_version(self):
         with self.assertRaises(SystemExit):
-            if six.PY2:
-                with helper.Capturing('err') as output:
-                    mscxyz.execute(['--version'])
-            else:
-                with helper.Capturing() as output:
-                    mscxyz.execute(['--version'])
+            with helper.Capturing() as output:
+                mscxyz.execute(['--version'])
 
         result = re.search('[^ ]* [^ ]*', output[0])
         self.assertTrue(result)

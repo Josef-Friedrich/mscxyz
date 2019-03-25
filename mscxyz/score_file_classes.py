@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """A collection of classes intended to represent one MuseScore file.
 
 The classes build on each other hierarchically. The class hierarchy:
@@ -23,7 +21,6 @@ import fnmatch
 import lxml
 import os
 import shutil
-import six
 import string
 import zipfile
 import tempfile
@@ -77,10 +74,7 @@ class ScoreFile(object):
             '.' + self.extension, '_bak.' + self.extension)
         self.dirname = os.path.dirname(relpath)
         self.filename = os.path.basename(relpath)
-        if six.PY2:
-            self.basename = self.filename.replace('.mscx', '').decode('utf-8')
-        else:
-            self.basename = self.filename.replace('.mscx', '')
+        self.basename = self.filename.replace('.mscx', '')
 
         if self.extension == 'mscz':
             self.loadpath = self._unzip(self.abspath)

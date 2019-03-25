@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """A collection of useful utility functions"""
 
 import os
