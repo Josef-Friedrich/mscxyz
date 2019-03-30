@@ -1,11 +1,22 @@
-import versioneer
 import os
-from setuptools import setup
+
+from setuptools import setup, find_packages
+import versioneer
 
 
-def read(fname):
-    file_path = os.path.join(os.path.dirname(__file__), fname)
-    return open(file_path, encoding='utf8').read()
+def read(file_name):
+    """
+    Read the contents of a text file and return its content.
+
+    :param str file_name: The name of the file to read.
+
+    :return: The content of the text file.
+    :rtype: str
+    """
+    return open(
+        os.path.join(os.path.dirname(__file__), file_name),
+        encoding='utf-8'
+    ).read()
 
 
 setup(
@@ -18,7 +29,7 @@ setup(
         'A command line tool to manipulate the XML based *.mscX and \
         *.mscZ files of the notation software MuseScore.'),
     license='MIT',
-    packages=['mscxyz'],
+    packages=find_packages(),
     keywords='audio',
     url='https://github.com/Josef-Friedrich/mscxyz',
     install_requires=[
