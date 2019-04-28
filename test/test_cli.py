@@ -78,7 +78,7 @@ class TestCommandlineInterface(unittest.TestCase):
 
     def test_without_arguments(self):
         with self.assertRaises(SystemExit) as cm:
-            with helper.Capturing('err'):
+            with helper.Capturing('stderr'):
                 mscxyz.execute()
         the_exception = cm.exception
         self.assertEqual(str(the_exception), '2')

@@ -4,9 +4,8 @@ from distutils.dir_util import copy_tree
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
-from io import StringIO
+from jflib import Capturing  # noqa: F401
 
 
 def get_tmpfile_path(filename):
@@ -37,24 +36,3 @@ def read_file(filename):
 def run(*args):
     args = ['mscx-manager'] + list(args)
     return subprocess.check_output(args).decode('utf-8')
-
-
-class Capturing(list):
-    def __init__(self, channel='out'):
-        self.channel = channel
-
-    def __enter__(self):
-        if self.channel == 'out':
-            self._pipe = sys.stdout
-            sys.stdout = self._stringio = StringIO()
-        elif self.channel == 'err':
-            self._pipe = sys.stderr
-            sys.stderr = self._stringio = StringIO()
-        return self
-
-    def __exit__(self, *args):
-        self.extend(self._stringio.getvalue().splitlines())
-        if self.channel == 'out':
-            sys.stdout = self._pipe
-        elif self.channel == 'err':
-            sys.stderr = self._pipe
