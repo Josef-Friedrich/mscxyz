@@ -72,6 +72,12 @@ parser.add_argument(
     with lxml to avoid differences in the XML structure.')
 
 parser.add_argument(
+    '-e',
+    '--executable',
+    dest='general_executable',
+    help='Path of the musescore executable.')
+
+parser.add_argument(
     '-v',
     '--verbose',
     action='count',
