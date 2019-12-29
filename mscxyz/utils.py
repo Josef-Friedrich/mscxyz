@@ -13,7 +13,7 @@ def get_mscore_bin():
     """
     args = get_settings('args')
     system = platform.system()
-    if args.general_executable:
+    if args and args.general_executable:
         binary = args.general_executable
     elif system == 'Darwin':
         binary = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
