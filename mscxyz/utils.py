@@ -6,12 +6,30 @@ import subprocess
 import termcolor
 
 
+def get_args():
+    """Get the ``args`` object (the ``argparse`` object) which is stored in
+    the .settings.py submodule for all other submodules.
+
+    :return: the ``argparse`` object
+    """
+    from mscxyz import settings
+    return getattr(settings, 'args')
+
+
+def set_args(args):
+    """Set the ``args`` object (the ``argparse`` object) which is stored in
+    the .settings.py submodule for all other submodules to import.
+    """
+    from mscxyz import settings
+    return setattr(settings, 'args', args)
+
+
 def get_mscore_bin():
     """Check the existance of the executable mscore
 
     :return: Path of the executable if true, else false.
     """
-    args = get_settings('args')
+    args = get_args()
     system = platform.system()
     if args and args.general_executable:
         binary = args.general_executable
@@ -52,18 +70,8 @@ def convert_mxl(input_file):
     os.remove(input_file)
 
 
-def get_settings(key):
-    from mscxyz import settings
-    return getattr(settings, key)
-
-
-def set_settings(key, value):
-    from mscxyz import settings
-    return setattr(settings, key, value)
-
-
 def color(*args):
-    settings = get_settings('args')
+    settings = get_args()
     if settings.general_colorize:
         return termcolor.colored(*args)
     else:

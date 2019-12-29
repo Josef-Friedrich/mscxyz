@@ -1,7 +1,7 @@
 """Rename MuseScore files"""
 
 from mscxyz.meta import Meta
-from mscxyz.utils import color, get_settings
+from mscxyz.utils import color, get_args
 from tmep.format import alphanum, asciify, nowhitespace
 import errno
 import hashlib
@@ -18,7 +18,7 @@ def create_dir(path):
 
 
 def prepare_fields(fields):
-    args = get_settings('args')
+    args = get_args()
     out = {}
     for field, value in fields.items():
         if value:
@@ -36,7 +36,7 @@ def prepare_fields(fields):
 
 
 def apply_format_string(fields):
-    args = get_settings('args')
+    args = get_args()
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
     return name
@@ -58,7 +58,7 @@ def get_checksum(filename):
 
 
 def rename_filename(source):
-    args = get_settings('args')
+    args = get_args()
 
     meta = Meta(source)
     meta_values = meta.interface.export_to_dict()

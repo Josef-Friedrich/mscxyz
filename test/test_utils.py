@@ -1,20 +1,20 @@
 """Test module “utils.py”."""
 
-from mscxyz.utils import get_mscore_bin, mscore, get_settings
+from mscxyz.utils import get_mscore_bin, mscore, get_args
 import unittest
 from unittest import mock
-args = get_settings('args')
+args = get_args()
 args.general_executable = None
 
 
 class TestFunctionGetMscoreBin(unittest.TestCase):
 
-    @mock.patch('mscxyz.utils.get_settings')
+    @mock.patch('mscxyz.utils.get_args')
     @mock.patch('platform.system')
     @mock.patch('os.path.exists')
     @mock.patch('subprocess.check_output')
-    def test_output(self, check_output, exists, system, get_settings):
-        get_settings.return_value = args
+    def test_output(self, check_output, exists, system, get_args):
+        get_args.return_value = args
         system.return_value = 'Linux'
         exists.return_value = True
         path = bytes('/usr/local/bin/mscore\n'.encode('utf-8'))

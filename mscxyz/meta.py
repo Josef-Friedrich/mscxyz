@@ -1,7 +1,7 @@
 """Class for metadata maniplation"""
 
 from mscxyz.score_file_classes import XMLTree
-from mscxyz.utils import get_settings, color
+from mscxyz.utils import get_args, color
 import json
 import lxml
 import re
@@ -488,7 +488,7 @@ class Meta(XMLTree):
             iface.combined_subtitle = ''
 
     def show(self, pre, post):
-        args = get_settings('args')
+        args = get_args()
 
         fields = list(self.interface.fields)
 

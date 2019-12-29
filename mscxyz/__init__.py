@@ -7,7 +7,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
 from mscxyz.score_file_classes import XMLTree, list_scores
-from mscxyz.utils import set_settings, color
+from mscxyz.utils import set_args, color
 import lxml
 import sys
 import os
@@ -95,7 +95,7 @@ def execute(args=None):
        'executable' in config['general'] and \
        config['general']['executable']:
         args.general_executable = config['general']['executable']
-    set_settings('args', args)
+    set_args(args)
 
     if args.subcommand == 'help':
         show_all_help(args)
