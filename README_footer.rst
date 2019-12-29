@@ -1,4 +1,19 @@
 
+
+Configuration file
+==================
+
+``/etc/mscxyz.ini``
+
+.. code-block:: ini
+
+    [general]
+    executable = /usr/bin/mscore3
+    colorize = True
+
+    [rename]
+    format = '$combined_title ($combined_composer)'
+
 Development
 ===========
 
