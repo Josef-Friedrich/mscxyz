@@ -5,6 +5,7 @@ class DefaultArguments(object):
     general_backup = False
     general_colorize = False
     general_dry_run = False
+    general_executable = None
     general_glob = '*.mscx'
     general_mscore = False
     general_verbose = 0

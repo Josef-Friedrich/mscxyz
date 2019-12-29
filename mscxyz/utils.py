@@ -11,8 +11,11 @@ def get_mscore_bin():
 
     :return: Path of the executable if true, else false.
     """
+    args = get_settings('args')
     system = platform.system()
-    if system == 'Darwin':
+    if args.general_executable:
+        binary = args.general_executable
+    elif system == 'Darwin':
         binary = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
     else:
         cmd = 'where' if system == 'Windows' else 'which'

@@ -21,7 +21,8 @@ ini_file = os.path.abspath(os.path.join(os.sep, 'etc', 'mscxyz.ini'))
 config = configparser.ConfigParser()
 if os.path.exists(ini_file):
     config.read(ini_file)
-# config['general']['mscore_executable']
+else:
+    config = None
 
 
 def heading(args, text, level=1):
@@ -89,6 +90,11 @@ def no_error(error, errors):
 
 def execute(args=None):
     args = cli.parser.parse_args(args)
+    if not args.general_executable and \
+       config and 'general' in config and \
+       'executable' in config['general'] and \
+       config['general']['executable']:
+        args.general_executable = config['general']['executable']
     set_settings('args', args)
 
     if args.subcommand == 'help':
