@@ -10,10 +10,18 @@ from mscxyz.score_file_classes import XMLTree, list_scores
 from mscxyz.utils import set_settings, color
 import lxml
 import sys
+import os
+import configparser
 
 from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
+
+ini_file = os.path.abspath(os.path.join(os.sep, 'etc', 'mscxyz.ini'))
+config = configparser.ConfigParser()
+if os.path.exists(ini_file):
+    config.read(ini_file)
+# config['general']['mscore_executable']
 
 
 def heading(args, text, level=1):
