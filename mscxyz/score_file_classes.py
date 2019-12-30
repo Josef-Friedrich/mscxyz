@@ -239,11 +239,19 @@ class XMLTree(ScoreFile):
             score.insert(0, style[0])
 
     def clean(self):
+        """Remove the style, the layout breaks, the stem directions and the
+        ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
         self.remove_tags_by_xpath(
             '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-        self.strip_tags('font', 'b', 'i', 'pos')
+        self.strip_tags('font', 'b', 'i', 'pos', 'offset')
 
-    def save(self, new_name='', mscore=False):
+    def save(self, new_name: str = '', mscore: bool = False):
+        """Save the MuseScore file.
+
+        :param new_name: Save the MuseScore file under a new name.
+        :param mscore: Save the MuseScore file by opening it with the
+          MuseScore executable and save it there.
+        """
         if new_name:
             filename = new_name
         else:

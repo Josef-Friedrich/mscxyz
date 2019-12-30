@@ -152,6 +152,22 @@ class TestClassXMLTree(unittest.TestCase):
         self.assertEqual(result[0][0][0].tag, 'halign')
         self.assertEqual(result[0][0][0].text, 'center')
 
+    def test_method_clean(self):
+        tmp = helper.get_tmpfile_path('clean.mscx', version=3)
+        tree = XMLTree(tmp)
+        tree.clean()
+        tree.save()
+        tree = XMLTree(tmp)
+        xml_tree = tree.xml_tree
+        self.assertEqual(xml_tree.xpath('/museScore/Score/Style'), [])
+        self.assertEqual(xml_tree.xpath('//LayoutBreak'), [])
+        self.assertEqual(xml_tree.xpath('//StemDirection'), [])
+        self.assertEqual(xml_tree.xpath('//font'), [])
+        self.assertEqual(xml_tree.xpath('//b'), [])
+        self.assertEqual(xml_tree.xpath('//i'), [])
+        self.assertEqual(xml_tree.xpath('//pos'), [])
+        self.assertEqual(xml_tree.xpath('//offset'), [])
+
     def test_method_save(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
         tree = XMLTree(tmp)
