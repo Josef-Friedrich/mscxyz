@@ -264,8 +264,8 @@ class TestClassInterface(unittest.TestCase):
 
 class TestClassMetaTag(unittest.TestCase):
 
-    def _init_class(self, filename):
-        tmp = helper.get_tmpfile_path(filename)
+    def _init_class(self, filename, version=2):
+        tmp = helper.get_tmpfile_path(filename, version)
         tree = XMLTree(tmp)
         meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
@@ -277,15 +277,35 @@ class TestClassMetaTag(unittest.TestCase):
         self.assertEqual(camel_case('work_title_lol'), 'workTitleLol')
         self.assertEqual(camel_case('workTitle'), 'workTitle')
 
-    def test_get(self):
-        meta, tree, tmp = self._init_class('simple.mscx')
+    def test_get2(self):
+        meta, _, _ = self._init_class('simple.mscx', version=2)
         self.assertEqual(meta.workTitle, 'Title')
         self.assertEqual(meta.work_title, 'Title')
         self.assertEqual(meta.arranger, None)
         self.assertEqual(meta.composer, 'Composer')
 
-    def test_set(self):
-        meta, tree, tmp = self._init_class('simple.mscx')
+    def test_get3(self):
+        meta, _, _ = self._init_class('simple.mscx', version=3)
+        self.assertEqual(meta.workTitle, 'Title')
+        self.assertEqual(meta.work_title, 'Title')
+        self.assertEqual(meta.arranger, None)
+        self.assertEqual(meta.composer, 'Composer')
+
+    def test_set2(self):
+        meta, tree, tmp = self._init_class('simple.mscx', version=2)
+        meta.workTitle = 'WT'
+        meta.movement_title = 'MT'
+        tree.save()
+        tree = XMLTree(tmp)
+        meta = MetaTag(tree.xml_root)
+        self.assertEqual(meta.work_title, 'WT')
+        self.assertEqual(meta.movementTitle, 'MT')
+        xml_string = helper.read_file(tmp)
+        self.assertTrue('<metaTag name="workTitle">WT</metaTag>' in
+                        xml_string)
+
+    def test_set3(self):
+        meta, tree, tmp = self._init_class('simple.mscx', version=3)
         meta.workTitle = 'WT'
         meta.movement_title = 'MT'
         tree.save()
@@ -298,7 +318,7 @@ class TestClassMetaTag(unittest.TestCase):
                         xml_string)
 
     def test_get_exception(self):
-        meta, tree, tmp = self._init_class('simple.mscx')
+        meta, _, _ = self._init_class('simple.mscx')
         with self.assertRaises(mscxyz.meta.UnkownFieldError):
             meta.lol
 

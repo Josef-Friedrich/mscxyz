@@ -8,9 +8,13 @@ import tempfile
 from jflib import Capturing  # noqa: F401
 
 
-def get_tmpfile_path(filename):
+def get_tmpfile_path(filename, version=2):
+    if version == 2:
+        folder = 'files_mscore2'
+    else:
+        folder = 'files_mscore3'
     orig = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), 'files',
+        os.path.dirname(os.path.abspath(__file__)), folder,
         filename)
     tmp_dir = tempfile.mkdtemp()
     tmp = os.path.join(tmp_dir, filename)
@@ -18,9 +22,13 @@ def get_tmpfile_path(filename):
     return tmp
 
 
-def get_tmpdir_path(relative_dir):
+def get_tmpdir_path(relative_dir, version=2):
+    if version == 2:
+        folder = 'files_mscore2'
+    else:
+        folder = 'files_mscore3'
     orig = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), 'files', relative_dir)
+        os.path.dirname(os.path.abspath(__file__)), folder, relative_dir)
     tmp = tempfile.mkdtemp()
     copy_tree(orig, tmp)
     return tmp
