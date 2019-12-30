@@ -41,8 +41,8 @@ class TestFunctions(unittest.TestCase):
 class TestIntegration(unittest.TestCase):
 
     @staticmethod
-    def _get(filename):
-        return helper.get_tmpfile_path(filename)
+    def _get(filename, version=2):
+        return helper.get_tmpfile_path(filename, version)
 
     @staticmethod
     def _target_path_cwd(filename):
@@ -62,21 +62,30 @@ class TestIntegration(unittest.TestCase):
     def _rm_in_cwd(filename):
         return os.remove(os.path.join(os.getcwd(), filename))
 
-    def test_simple(self):
+    def _test_simple(self, version):
         output = self._execute(['--config-file', ini_file, 'rename',
-                                self._get('simple.mscx')])
+                                self._get('simple.mscx', version)])
         target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
         self.assertTrue('simple.mscx -> ' in ' '.join(output))
         self.assertTrue('Title (Composer).mscx' in ' '.join(output))
         os.remove(target)
 
-    def test_without_arguments(self):
-        output = self._execute(['rename', self._get('meta-all-values.mscx')])
+    def test_simple(self):
+        self._test_simple(version=2)
+        self._test_simple(version=3)
+
+    def _test_without_arguments(self, version):
+        output = self._execute(['rename', self._get('meta-all-values.mscx',
+                               version)])
         target = self._target_path_cwd('vbox_title (vbox_composer).mscx')
         self.assertTrue(os.path.exists(target))
         self.assertTrue('vbox_title (vbox_composer).mscx' in ' '.join(output))
         os.remove(target)
+
+    def test_without_arguments(self):
+        self._test_without_arguments(version=2)
+        self._test_without_arguments(version=3)
 
     def test_format(self):
         output = self._execute(['rename', '--format',

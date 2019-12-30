@@ -9,7 +9,6 @@ import unittest
 class TestBrokenScoreFile(unittest.TestCase):
 
     def test_broken_file(self):
-        print(ini_file)
         with helper.Capturing() as output:
             mscxyz.execute(['--config-file', ini_file, 'meta',
                             helper.get_tmpfile_path('broken.mscx')])

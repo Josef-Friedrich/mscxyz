@@ -338,33 +338,45 @@ class TestClassMetaTag(unittest.TestCase):
 
 class TestClassVbox(unittest.TestCase):
 
-    def _init_class(self, filename):
-        tmp = helper.get_tmpfile_path(filename)
+    def _init_class(self, filename, version=2):
+        tmp = helper.get_tmpfile_path(filename, version)
         tree = XMLTree(tmp)
         vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
-    def test_init(self):
-        vbox, tree, tmp = self._init_class('no-vbox.mscx')
+    def _test_init(self, version):
+        _, tree, tmp = self._init_class('no-vbox.mscx', version)
         tree.save()
         xml_string = helper.read_file(tmp)
         self.assertTrue('<VBox>' in xml_string)
 
-    def test_get(self):
-        vbox, tree, tmp = self._init_class('simple.mscx')
+    def test_init(self):
+        self._test_init(version=2)
+        self._test_init(version=3)
+
+    def _test_get(self, version):
+        vbox, _, _ = self._init_class('simple.mscx', version)
         self.assertEqual(vbox.Title, 'Title')
         self.assertEqual(vbox.Composer, 'Composer')
         self.assertEqual(vbox.Subtitle, None)
         self.assertEqual(vbox.title, 'Title')
         self.assertEqual(vbox.composer, 'Composer')
 
-    def test_get_exception(self):
-        vbox, tree, tmp = self._init_class('simple.mscx')
+    def test_get(self):
+        self._test_get(version=2)
+        self._test_get(version=3)
+
+    def _test_get_exception(self, version):
+        vbox, _, _ = self._init_class('simple.mscx', version)
         with self.assertRaises(meta.UnkownFieldError):
             vbox.lol
 
-    def _assert_set(self, filename):
-        tmp = helper.get_tmpfile_path(filename)
+    def test_get_exception(self):
+        self._test_get_exception(version=2)
+        self._test_get_exception(version=3)
+
+    def _assert_set(self, filename, version=2):
+        tmp = helper.get_tmpfile_path(filename, version)
         tree = XMLTree(tmp)
         vbox = Vbox(tree.xml_root)
         vbox.Title = 'lol'
@@ -378,15 +390,21 @@ class TestClassVbox(unittest.TestCase):
         self.assertTrue('<text>lol</text>' in xml_string)
 
     def test_set_with_existing_vbox(self):
-        self._assert_set('simple.mscx')
+        self._assert_set('simple.mscx', version=2)
+        self._assert_set('simple.mscx', version=3)
 
     def test_set_no_inital_vbox(self):
-        self._assert_set('no-vbox.mscx')
+        self._assert_set('no-vbox.mscx', version=2)
+        self._assert_set('no-vbox.mscx', version=3)
 
-    def test_set_exception(self):
-        vbox, tree, tmp = self._init_class('simple.mscx')
+    def _test_set_exception(self, version=2):
+        vbox, _, _ = self._init_class('simple.mscx', version)
         with self.assertRaises(meta.UnkownFieldError):
             vbox.lol = 'lol'
+
+    def test_set_exception(self):
+        self._test_set_exception(version=2)
+        self._test_set_exception(version=3)
 
 
 class TestClassCombined(unittest.TestCase):
