@@ -34,7 +34,7 @@
     <lyricsDashPad>0.05</lyricsDashPad>
     <lyricsDashLineThickness>0.15</lyricsDashLineThickness>
     <lyricsDashYposRatio>0.67</lyricsDashYposRatio>
-    <lyricsOddFontFace>FreeSerif</lyricsOddFontFace>
+    <lyricsOddFontFace>Alegreya</lyricsOddFontFace>
     <lyricsOddFontSize>11</lyricsOddFontSize>
     <lyricsOddFontSpatiumDependent>1</lyricsOddFontSpatiumDependent>
     <lyricsOddFontStyle>0</lyricsOddFontStyle>
@@ -45,7 +45,7 @@
     <lyricsOddFrameRound>0</lyricsOddFrameRound>
     <lyricsOddFrameFgColor r="0" g="0" b="0" a="255"/>
     <lyricsOddFrameBgColor r="255" g="255" b="255" a="0"/>
-    <lyricsEvenFontFace>FreeSerif</lyricsEvenFontFace>
+    <lyricsEvenFontFace>Alegreya</lyricsEvenFontFace>
     <lyricsEvenFontSize>11</lyricsEvenFontSize>
     <lyricsEvenFontSpatiumDependent>1</lyricsEvenFontSpatiumDependent>
     <lyricsEvenFontStyle>0</lyricsEvenFontStyle>
@@ -141,7 +141,7 @@
     <hairpinHeight>1.2</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinWidth>0.13</hairpinWidth>
-    <hairpinFontFace>FreeSerif</hairpinFontFace>
+    <hairpinFontFace>Alegreya</hairpinFontFace>
     <hairpinFontSize>12</hairpinFontSize>
     <hairpinFontSpatiumDependent>1</hairpinFontSpatiumDependent>
     <hairpinFontStyle>2</hairpinFontStyle>
@@ -166,7 +166,7 @@
     <pedalListStyle>1</pedalListStyle>
     <pedalBeginTextOffset x="0" y="0.15"/>
     <pedalHookHeight>-1.2</pedalHookHeight>
-    <pedalFontFace>FreeSerif</pedalFontFace>
+    <pedalFontFace>Alegreya</pedalFontFace>
     <pedalFontSize>12</pedalFontSize>
     <pedalFontSpatiumDependent>1</pedalFontSpatiumDependent>
     <pedalFontStyle>0</pedalFontStyle>
@@ -191,7 +191,7 @@
     <chordSymbolPosBelow x="0" y="3.5"/>
     <chordSymbolBPosAbove x="0" y="-5"/>
     <chordSymbolBPosBelow x="0" y="3.5"/>
-    <chordSymbolAFontFace>FreeSerif</chordSymbolAFontFace>
+    <chordSymbolAFontFace>Alegreya</chordSymbolAFontFace>
     <chordSymbolAFontSize>12</chordSymbolAFontSize>
     <chordSymbolAFontSpatiumDependent>1</chordSymbolAFontSpatiumDependent>
     <chordSymbolAFontStyle>0</chordSymbolAFontStyle>
@@ -202,7 +202,7 @@
     <chordSymbolAFrameRound>0</chordSymbolAFrameRound>
     <chordSymbolAFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
-    <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
+    <chordSymbolBFontFace>Alegreya</chordSymbolBFontFace>
     <chordSymbolBFontSize>12</chordSymbolBFontSize>
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
     <chordSymbolBFontStyle>2</chordSymbolBFontStyle>
@@ -302,7 +302,7 @@
     <voltaHook>1.9</voltaHook>
     <voltaLineWidth>0.1</voltaLineWidth>
     <voltaLineStyle>1</voltaLineStyle>
-    <voltaFontFace>FreeSerif</voltaFontFace>
+    <voltaFontFace>Alegreya</voltaFontFace>
     <voltaFontSize>11</voltaFontSize>
     <voltaFontSpatiumDependent>1</voltaFontSpatiumDependent>
     <voltaFontStyle>1</voltaFontStyle>
@@ -339,7 +339,7 @@
     <ottavaLineWidth>0.1</ottavaLineWidth>
     <ottavaLineStyle>2</ottavaLineStyle>
     <ottavaNumbersOnly>1</ottavaNumbersOnly>
-    <ottavaFontFace>FreeSerif</ottavaFontFace>
+    <ottavaFontFace>Alegreya</ottavaFontFace>
     <ottavaFontSize>12</ottavaFontSize>
     <ottavaFontSpatiumDependent>1</ottavaFontSpatiumDependent>
     <ottavaFontStyle>0</ottavaFontStyle>
@@ -371,7 +371,7 @@
     <tupletDirection>0</tupletDirection>
     <tupletNumberType>0</tupletNumberType>
     <tupletBracketType>0</tupletBracketType>
-    <tupletFontFace>FreeSerif</tupletFontFace>
+    <tupletFontFace>Alegreya</tupletFontFace>
     <tupletFontSize>10</tupletFontSize>
     <tupletFontSpatiumDependent>1</tupletFontSpatiumDependent>
     <tupletFontStyle>2</tupletFontStyle>
@@ -407,7 +407,7 @@
     <tremoloBarLineWidth>0.12</tremoloBarLineWidth>
     <jumpPosAbove x="0" y="-2"/>
     <markerPosAbove x="0" y="-2"/>
-    <defaultFontFace>FreeSerif</defaultFontFace>
+    <defaultFontFace>Alegreya</defaultFontFace>
     <defaultFontSize>10</defaultFontSize>
     <defaultFontSpatiumDependent>1</defaultFontSpatiumDependent>
     <defaultFontStyle>0</defaultFontStyle>
@@ -422,7 +422,7 @@
     <defaultOffsetType>1</defaultOffsetType>
     <defaultSystemFlag>0</defaultSystemFlag>
     <defaultText></defaultText>
-    <titleFontFace>FreeSerif</titleFontFace>
+    <titleFontFace>Alegreya</titleFontFace>
     <titleFontSize>24</titleFontSize>
     <titleFontSpatiumDependent>0</titleFontSpatiumDependent>
     <titleFontStyle>0</titleFontStyle>
@@ -435,7 +435,7 @@
     <titleFrameRound>0</titleFrameRound>
     <titleFrameFgColor r="0" g="0" b="0" a="255"/>
     <titleFrameBgColor r="255" g="255" b="255" a="0"/>
-    <subTitleFontFace>FreeSerif</subTitleFontFace>
+    <subTitleFontFace>Alegreya</subTitleFontFace>
     <subTitleFontSize>14</subTitleFontSize>
     <subTitleFontSpatiumDependent>0</subTitleFontSpatiumDependent>
     <subTitleFontStyle>0</subTitleFontStyle>
@@ -448,7 +448,7 @@
     <subTitleFrameRound>0</subTitleFrameRound>
     <subTitleFrameFgColor r="0" g="0" b="0" a="255"/>
     <subTitleFrameBgColor r="255" g="255" b="255" a="0"/>
-    <composerFontFace>FreeSerif</composerFontFace>
+    <composerFontFace>Alegreya</composerFontFace>
     <composerFontSize>12</composerFontSize>
     <composerFontSpatiumDependent>0</composerFontSpatiumDependent>
     <composerFontStyle>0</composerFontStyle>
@@ -461,7 +461,7 @@
     <composerFrameRound>0</composerFrameRound>
     <composerFrameFgColor r="0" g="0" b="0" a="255"/>
     <composerFrameBgColor r="255" g="255" b="255" a="0"/>
-    <lyricistFontFace>FreeSerif</lyricistFontFace>
+    <lyricistFontFace>Alegreya</lyricistFontFace>
     <lyricistFontSize>12</lyricistFontSize>
     <lyricistFontSpatiumDependent>0</lyricistFontSpatiumDependent>
     <lyricistFontStyle>0</lyricistFontStyle>
@@ -474,7 +474,7 @@
     <lyricistFrameRound>0</lyricistFrameRound>
     <lyricistFrameFgColor r="0" g="0" b="0" a="255"/>
     <lyricistFrameBgColor r="255" g="255" b="255" a="0"/>
-    <fingeringFontFace>FreeSerif</fingeringFontFace>
+    <fingeringFontFace>Alegreya</fingeringFontFace>
     <fingeringFontSize>8</fingeringFontSize>
     <fingeringFontSpatiumDependent>1</fingeringFontSpatiumDependent>
     <fingeringFontStyle>0</fingeringFontStyle>
@@ -486,7 +486,7 @@
     <fingeringFrameFgColor r="0" g="0" b="0" a="255"/>
     <fingeringFrameBgColor r="255" g="255" b="255" a="0"/>
     <fingeringOffset x="0" y="0"/>
-    <lhGuitarFingeringFontFace>FreeSerif</lhGuitarFingeringFontFace>
+    <lhGuitarFingeringFontFace>Alegreya</lhGuitarFingeringFontFace>
     <lhGuitarFingeringFontSize>8</lhGuitarFingeringFontSize>
     <lhGuitarFingeringFontSpatiumDependent>1</lhGuitarFingeringFontSpatiumDependent>
     <lhGuitarFingeringFontStyle>0</lhGuitarFingeringFontStyle>
@@ -498,7 +498,7 @@
     <lhGuitarFingeringFrameFgColor r="0" g="0" b="0" a="255"/>
     <lhGuitarFingeringFrameBgColor r="255" g="255" b="255" a="0"/>
     <lhGuitarFingeringOffset x="-0.5" y="0"/>
-    <rhGuitarFingeringFontFace>FreeSerif</rhGuitarFingeringFontFace>
+    <rhGuitarFingeringFontFace>Alegreya</rhGuitarFingeringFontFace>
     <rhGuitarFingeringFontSize>8</rhGuitarFingeringFontSize>
     <rhGuitarFingeringFontSpatiumDependent>1</rhGuitarFingeringFontSpatiumDependent>
     <rhGuitarFingeringFontStyle>0</rhGuitarFingeringFontStyle>
@@ -510,7 +510,7 @@
     <rhGuitarFingeringFrameFgColor r="0" g="0" b="0" a="255"/>
     <rhGuitarFingeringFrameBgColor r="255" g="255" b="255" a="0"/>
     <rhGuitarFingeringOffset x="0" y="0"/>
-    <stringNumberFontFace>FreeSerif</stringNumberFontFace>
+    <stringNumberFontFace>Alegreya</stringNumberFontFace>
     <stringNumberFontSize>8</stringNumberFontSize>
     <stringNumberFontSpatiumDependent>1</stringNumberFontSpatiumDependent>
     <stringNumberFontStyle>0</stringNumberFontStyle>
@@ -522,7 +522,7 @@
     <stringNumberFrameFgColor r="0" g="0" b="0" a="255"/>
     <stringNumberFrameBgColor r="255" g="255" b="255" a="0"/>
     <stringNumberOffset x="0" y="0"/>
-    <longInstrumentFontFace>FreeSerif</longInstrumentFontFace>
+    <longInstrumentFontFace>Alegreya</longInstrumentFontFace>
     <longInstrumentFontSize>12</longInstrumentFontSize>
     <longInstrumentFontSpatiumDependent>1</longInstrumentFontSpatiumDependent>
     <longInstrumentFontStyle>0</longInstrumentFontStyle>
@@ -534,7 +534,7 @@
     <longInstrumentFrameRound>0</longInstrumentFrameRound>
     <longInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <longInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
-    <shortInstrumentFontFace>FreeSerif</shortInstrumentFontFace>
+    <shortInstrumentFontFace>Alegreya</shortInstrumentFontFace>
     <shortInstrumentFontSize>12</shortInstrumentFontSize>
     <shortInstrumentFontSpatiumDependent>1</shortInstrumentFontSpatiumDependent>
     <shortInstrumentFontStyle>0</shortInstrumentFontStyle>
@@ -546,7 +546,7 @@
     <shortInstrumentFrameRound>0</shortInstrumentFrameRound>
     <shortInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <shortInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
-    <partInstrumentFontFace>FreeSerif</partInstrumentFontFace>
+    <partInstrumentFontFace>Alegreya</partInstrumentFontFace>
     <partInstrumentFontSize>18</partInstrumentFontSize>
     <partInstrumentFontSpatiumDependent>0</partInstrumentFontSpatiumDependent>
     <partInstrumentFontStyle>0</partInstrumentFontStyle>
@@ -558,7 +558,7 @@
     <partInstrumentFrameRound>0</partInstrumentFrameRound>
     <partInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <partInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
-    <dynamicsFontFace>FreeSerif</dynamicsFontFace>
+    <dynamicsFontFace>Alegreya</dynamicsFontFace>
     <dynamicsFontSize>12</dynamicsFontSize>
     <dynamicsFontSpatiumDependent>1</dynamicsFontSpatiumDependent>
     <dynamicsFontStyle>2</dynamicsFontStyle>
@@ -569,7 +569,7 @@
     <dynamicsFrameRound>0</dynamicsFrameRound>
     <dynamicsFrameFgColor r="0" g="0" b="0" a="255"/>
     <dynamicsFrameBgColor r="255" g="255" b="255" a="0"/>
-    <expressionFontFace>FreeSerif</expressionFontFace>
+    <expressionFontFace>Alegreya</expressionFontFace>
     <expressionFontSize>11</expressionFontSize>
     <expressionFontSpatiumDependent>1</expressionFontSpatiumDependent>
     <expressionFontStyle>2</expressionFontStyle>
@@ -582,7 +582,7 @@
     <expressionFrameRound>0</expressionFrameRound>
     <expressionFrameFgColor r="0" g="0" b="0" a="255"/>
     <expressionFrameBgColor r="255" g="255" b="255" a="0"/>
-    <tempoFontFace>FreeSerif</tempoFontFace>
+    <tempoFontFace>Alegreya</tempoFontFace>
     <tempoFontSize>12</tempoFontSize>
     <tempoFontSpatiumDependent>1</tempoFontSpatiumDependent>
     <tempoFontStyle>1</tempoFontStyle>
@@ -598,7 +598,7 @@
     <tempoFrameRound>0</tempoFrameRound>
     <tempoFrameFgColor r="0" g="0" b="0" a="255"/>
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
-    <metronomeFontFace>FreeSerif</metronomeFontFace>
+    <metronomeFontFace>Alegreya</metronomeFontFace>
     <metronomeFontSize>12</metronomeFontSize>
     <metronomeFontSpatiumDependent>0</metronomeFontSpatiumDependent>
     <metronomeFontStyle>1</metronomeFontStyle>
@@ -611,7 +611,7 @@
     <metronomeFrameRound>0</metronomeFrameRound>
     <metronomeFrameFgColor r="0" g="0" b="0" a="255"/>
     <metronomeFrameBgColor r="255" g="255" b="255" a="0"/>
-    <measureNumberFontFace>FreeSerif</measureNumberFontFace>
+    <measureNumberFontFace>Alegreya</measureNumberFontFace>
     <measureNumberFontSize>8</measureNumberFontSize>
     <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>
     <measureNumberFontStyle>0</measureNumberFontStyle>
@@ -624,7 +624,7 @@
     <measureNumberFrameRound>0</measureNumberFrameRound>
     <measureNumberFrameFgColor r="0" g="0" b="0" a="255"/>
     <measureNumberFrameBgColor r="255" g="255" b="255" a="0"/>
-    <translatorFontFace>FreeSerif</translatorFontFace>
+    <translatorFontFace>Alegreya</translatorFontFace>
     <translatorFontSize>11</translatorFontSize>
     <translatorFontSpatiumDependent>0</translatorFontSpatiumDependent>
     <translatorFontStyle>0</translatorFontStyle>
@@ -636,7 +636,7 @@
     <translatorFrameRound>0</translatorFrameRound>
     <translatorFrameFgColor r="0" g="0" b="0" a="255"/>
     <translatorFrameBgColor r="255" g="255" b="255" a="0"/>
-    <systemFontFace>FreeSerif</systemFontFace>
+    <systemFontFace>Alegreya</systemFontFace>
     <systemFontSize>10</systemFontSize>
     <systemFontSpatiumDependent>1</systemFontSpatiumDependent>
     <systemFontStyle>0</systemFontStyle>
@@ -652,7 +652,7 @@
     <systemFrameRound>0</systemFrameRound>
     <systemFrameFgColor r="0" g="0" b="0" a="255"/>
     <systemFrameBgColor r="255" g="255" b="255" a="0"/>
-    <staffFontFace>FreeSerif</staffFontFace>
+    <staffFontFace>Alegreya</staffFontFace>
     <staffFontSize>10</staffFontSize>
     <staffFontSpatiumDependent>1</staffFontSpatiumDependent>
     <staffFontStyle>0</staffFontStyle>
@@ -668,7 +668,7 @@
     <staffFrameRound>0</staffFrameRound>
     <staffFrameFgColor r="0" g="0" b="0" a="255"/>
     <staffFrameBgColor r="255" g="255" b="255" a="0"/>
-    <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
+    <rehearsalMarkFontFace>Alegreya</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>14</rehearsalMarkFontSize>
     <rehearsalMarkFontSpatiumDependent>1</rehearsalMarkFontSpatiumDependent>
     <rehearsalMarkFontStyle>1</rehearsalMarkFontStyle>
@@ -683,7 +683,7 @@
     <rehearsalMarkPosAbove x="0" y="-3"/>
     <rehearsalMarkPosBelow x="0" y="4"/>
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
-    <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
+    <repeatLeftFontFace>Alegreya</repeatLeftFontFace>
     <repeatLeftFontSize>20</repeatLeftFontSize>
     <repeatLeftFontSpatiumDependent>1</repeatLeftFontSpatiumDependent>
     <repeatLeftFontStyle>0</repeatLeftFontStyle>
@@ -695,7 +695,7 @@
     <repeatLeftFrameRound>0</repeatLeftFrameRound>
     <repeatLeftFrameFgColor r="0" g="0" b="0" a="255"/>
     <repeatLeftFrameBgColor r="255" g="255" b="255" a="0"/>
-    <repeatRightFontFace>FreeSerif</repeatRightFontFace>
+    <repeatRightFontFace>Alegreya</repeatRightFontFace>
     <repeatRightFontSize>12</repeatRightFontSize>
     <repeatRightFontSpatiumDependent>1</repeatRightFontSpatiumDependent>
     <repeatRightFontStyle>0</repeatRightFontStyle>
@@ -707,7 +707,7 @@
     <repeatRightFrameRound>0</repeatRightFrameRound>
     <repeatRightFrameFgColor r="0" g="0" b="0" a="255"/>
     <repeatRightFrameBgColor r="255" g="255" b="255" a="0"/>
-    <frameFontFace>FreeSerif</frameFontFace>
+    <frameFontFace>Alegreya</frameFontFace>
     <frameFontSize>12</frameFontSize>
     <frameFontSpatiumDependent>0</frameFontSpatiumDependent>
     <frameFontStyle>0</frameFontStyle>
@@ -719,12 +719,12 @@
     <frameFrameRound>0</frameFrameRound>
     <frameFrameFgColor r="0" g="0" b="0" a="255"/>
     <frameFrameBgColor r="255" g="255" b="255" a="0"/>
-    <textLineFontFace>FreeSerif</textLineFontFace>
+    <textLineFontFace>Alegreya</textLineFontFace>
     <textLineFontSize>12</textLineFontSize>
     <textLineFontSpatiumDependent>1</textLineFontSpatiumDependent>
     <textLineFontStyle>0</textLineFontStyle>
     <textLineColor r="0" g="0" b="0" a="255"/>
-    <glissandoFontFace>FreeSerif</glissandoFontFace>
+    <glissandoFontFace>Alegreya</glissandoFontFace>
     <glissandoFontSize>8</glissandoFontSize>
     <glissandoFontSpatiumDependent>1</glissandoFontSpatiumDependent>
     <glissandoFontStyle>2</glissandoFontStyle>
@@ -738,7 +738,7 @@
     <glissandoFrameBgColor r="255" g="255" b="255" a="0"/>
     <glissandoLineWidth>0.15</glissandoLineWidth>
     <glissandoText>gliss.</glissandoText>
-    <bendFontFace>FreeSerif</bendFontFace>
+    <bendFontFace>Alegreya</bendFontFace>
     <bendFontSize>8</bendFontSize>
     <bendFontSpatiumDependent>1</bendFontSpatiumDependent>
     <bendFontStyle>0</bendFontStyle>
@@ -752,7 +752,7 @@
     <bendFrameBgColor r="255" g="255" b="255" a="0"/>
     <bendLineWidth>0.15</bendLineWidth>
     <bendArrowWidth>0.5</bendArrowWidth>
-    <headerFontFace>FreeSerif</headerFontFace>
+    <headerFontFace>Alegreya</headerFontFace>
     <headerFontSize>8</headerFontSize>
     <headerFontSpatiumDependent>0</headerFontSpatiumDependent>
     <headerFontStyle>0</headerFontStyle>
@@ -764,7 +764,7 @@
     <headerFrameRound>0</headerFrameRound>
     <headerFrameFgColor r="0" g="0" b="0" a="255"/>
     <headerFrameBgColor r="255" g="255" b="255" a="0"/>
-    <footerFontFace>FreeSerif</footerFontFace>
+    <footerFontFace>Alegreya</footerFontFace>
     <footerFontSize>8</footerFontSize>
     <footerFontSpatiumDependent>0</footerFontSpatiumDependent>
     <footerFontStyle>0</footerFontStyle>
@@ -776,7 +776,7 @@
     <footerFrameRound>0</footerFrameRound>
     <footerFrameFgColor r="0" g="0" b="0" a="255"/>
     <footerFrameBgColor r="255" g="255" b="255" a="0"/>
-    <instrumentChangeFontFace>FreeSerif</instrumentChangeFontFace>
+    <instrumentChangeFontFace>Alegreya</instrumentChangeFontFace>
     <instrumentChangeFontSize>12</instrumentChangeFontSize>
     <instrumentChangeFontSpatiumDependent>1</instrumentChangeFontSpatiumDependent>
     <instrumentChangeFontStyle>1</instrumentChangeFontStyle>
@@ -792,7 +792,7 @@
     <instrumentChangeFrameRound>0</instrumentChangeFrameRound>
     <instrumentChangeFrameFgColor r="0" g="0" b="0" a="255"/>
     <instrumentChangeFrameBgColor r="255" g="255" b="255" a="0"/>
-    <stickingFontFace>FreeSerif</stickingFontFace>
+    <stickingFontFace>Alegreya</stickingFontFace>
     <stickingFontSize>12</stickingFontSize>
     <stickingFontSpatiumDependent>1</stickingFontSpatiumDependent>
     <stickingFontStyle>0</stickingFontStyle>
@@ -814,7 +814,7 @@
     <figuredBassFontStyle>0</figuredBassFontStyle>
     <figuredBassColor r="0" g="0" b="0" a="255"/>
     <user1Name></user1Name>
-    <user1FontFace>FreeSerif</user1FontFace>
+    <user1FontFace>Alegreya</user1FontFace>
     <user1FontSize>10</user1FontSize>
     <user1FontSpatiumDependent>1</user1FontSpatiumDependent>
     <user1FontStyle>0</user1FontStyle>
@@ -828,7 +828,7 @@
     <user1FrameFgColor r="0" g="0" b="0" a="255"/>
     <user1FrameBgColor r="255" g="255" b="255" a="0"/>
     <user2Name></user2Name>
-    <user2FontFace>FreeSerif</user2FontFace>
+    <user2FontFace>Alegreya</user2FontFace>
     <user2FontSize>10</user2FontSize>
     <user2FontSpatiumDependent>1</user2FontSpatiumDependent>
     <user2FontStyle>0</user2FontStyle>
@@ -842,7 +842,7 @@
     <user2FrameFgColor r="0" g="0" b="0" a="255"/>
     <user2FrameBgColor r="255" g="255" b="255" a="0"/>
     <user3Name></user3Name>
-    <user3FontFace>FreeSerif</user3FontFace>
+    <user3FontFace>Alegreya</user3FontFace>
     <user3FontSize>10</user3FontSize>
     <user3FontSpatiumDependent>1</user3FontSpatiumDependent>
     <user3FontStyle>0</user3FontStyle>
@@ -856,7 +856,7 @@
     <user3FrameFgColor r="0" g="0" b="0" a="255"/>
     <user3FrameBgColor r="255" g="255" b="255" a="0"/>
     <user4Name></user4Name>
-    <user4FontFace>FreeSerif</user4FontFace>
+    <user4FontFace>Alegreya</user4FontFace>
     <user4FontSize>10</user4FontSize>
     <user4FontSpatiumDependent>1</user4FontSpatiumDependent>
     <user4FontStyle>0</user4FontStyle>
@@ -870,7 +870,7 @@
     <user4FrameFgColor r="0" g="0" b="0" a="255"/>
     <user4FrameBgColor r="255" g="255" b="255" a="0"/>
     <user5Name></user5Name>
-    <user5FontFace>FreeSerif</user5FontFace>
+    <user5FontFace>Alegreya</user5FontFace>
     <user5FontSize>10</user5FontSize>
     <user5FontSpatiumDependent>1</user5FontSpatiumDependent>
     <user5FontStyle>0</user5FontStyle>
@@ -884,7 +884,7 @@
     <user5FrameFgColor r="0" g="0" b="0" a="255"/>
     <user5FrameBgColor r="255" g="255" b="255" a="0"/>
     <user6Name></user6Name>
-    <user6FontFace>FreeSerif</user6FontFace>
+    <user6FontFace>Alegreya</user6FontFace>
     <user6FontSize>10</user6FontSize>
     <user6FontSpatiumDependent>1</user6FontSpatiumDependent>
     <user6FontStyle>0</user6FontStyle>
@@ -897,7 +897,7 @@
     <user6FrameRound>0</user6FrameRound>
     <user6FrameFgColor r="0" g="0" b="0" a="255"/>
     <user6FrameBgColor r="255" g="255" b="255" a="0"/>
-    <letRingFontFace>FreeSerif</letRingFontFace>
+    <letRingFontFace>Alegreya</letRingFontFace>
     <letRingFontSize>10</letRingFontSize>
     <letRingFontSpatiumDependent>1</letRingFontSpatiumDependent>
     <letRingFontStyle>0</letRingFontStyle>
@@ -917,7 +917,7 @@
     <letRingFrameFgColor r="0" g="0" b="0" a="255"/>
     <letRingFrameBgColor r="255" g="255" b="255" a="0"/>
     <letRingEndHookType>3</letRingEndHookType>
-    <palmMuteFontFace>FreeSerif</palmMuteFontFace>
+    <palmMuteFontFace>Alegreya</palmMuteFontFace>
     <palmMuteFontSize>10</palmMuteFontSize>
     <palmMuteFontSpatiumDependent>1</palmMuteFontSpatiumDependent>
     <palmMuteFontStyle>0</palmMuteFontStyle>

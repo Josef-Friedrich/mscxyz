@@ -176,7 +176,8 @@ class TestClassXMLTree(unittest.TestCase):
 class TestClassStyle(unittest.TestCase):
 
     def setUp(self):
-        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx'))
+        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx',
+                           version=2))
 
     def test_attributes_style(self):
         self.assertEqual(self.style.style.tag, 'Style')
@@ -233,6 +234,31 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(title['size'], '99')
 
 
+class TestClassStyle3(unittest.TestCase):
+
+    def setUp(self):
+        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx',
+                           version=3))
+
+    def test_attributes_style(self):
+        self.assertEqual(self.style.style.tag, 'Style')
+
+    def test_method_get(self):
+        self.assertEqual(self.style.get('staffUpperBorder'), '6.5')
+
+    def test_method_set(self):
+        self.style.set('staffUpperBorder', 99)
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('staffUpperBorder'), '99')
+
+    def test_method_set_create(self):
+        self.style.set('lol', 'lol')
+        self.style.save()
+        style2 = Style(self.style.abspath)
+        self.assertEqual(style2.get('lol'), 'lol')
+
+
 class TestClassStyleWithoutTags(unittest.TestCase):
 
     def setUp(self):
@@ -267,10 +293,10 @@ class TestClassStyleWithoutTags(unittest.TestCase):
 
 class TestFileCompare(unittest.TestCase):
 
-    def assertDiff(self, filename):
+    def assertDiff(self, filename, version=2):
         orig = os.path.join(os.path.expanduser('~'), filename)
         saved = orig.replace('.mscx', '_saved.mscx')
-        tmp = helper.get_tmpfile_path(filename)
+        tmp = helper.get_tmpfile_path(filename, version=version)
         shutil.copy2(tmp, orig)
         tree = XMLTree(tmp)
         tree.save(new_name=saved)
@@ -279,31 +305,40 @@ class TestFileCompare(unittest.TestCase):
         os.remove(saved)
 
     def test_getting_started(self):
-        self.assertDiff('Getting_Started_English.mscx')
+        self.assertDiff('Getting_Started_English.mscx', version=2)
+        self.assertDiff('Getting_Started_English.mscx', version=3)
 
     def test_lyrics(self):
-        self.assertDiff('lyrics.mscx')
+        self.assertDiff('lyrics.mscx', version=2)
+        self.assertDiff('lyrics.mscx', version=3)
 
     def test_chords(self):
-        self.assertDiff('chords.mscx')
+        self.assertDiff('chords.mscx', version=2)
+        self.assertDiff('chords.mscx', version=3)
 
     def test_unicode(self):
-        self.assertDiff('unicode.mscx')
+        self.assertDiff('unicode.mscx', version=2)
+        self.assertDiff('unicode.mscx', version=3)
 
     def test_real_world_ragtime_3(self):
-        self.assertDiff('Ragtime_3.mscx')
+        self.assertDiff('Ragtime_3.mscx', version=2)
+        # self.assertDiff('Ragtime_3.mscx', version=3)
 
     def test_real_world_zum_tanze(self):
-        self.assertDiff('Zum-Tanze-da-geht-ein-Maedel.mscx')
+        self.assertDiff('Zum-Tanze-da-geht-ein-Maedel.mscx', version=2)
+        self.assertDiff('Zum-Tanze-da-geht-ein-Maedel.mscx', version=3)
 
     def test_real_world_all_dudes(self):
-        self.assertDiff('All_Dudes.mscx')
+        self.assertDiff('All_Dudes.mscx', version=2)
+        self.assertDiff('All_Dudes.mscx', version=3)
 
     def test_real_world_reunion(self):
-        self.assertDiff('Reunion.mscx')
+        self.assertDiff('Reunion.mscx', version=2)
+        self.assertDiff('Reunion.mscx', version=3)
 
     def test_real_world_triumph(self):
-        self.assertDiff('Triumph.mscx')
+        self.assertDiff('Triumph.mscx', version=2)
+        self.assertDiff('Triumph.mscx', version=3)
 
 
 if __name__ == '__main__':
