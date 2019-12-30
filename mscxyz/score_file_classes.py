@@ -295,12 +295,14 @@ class XMLTree(ScoreFile):
 
 
 class Style(XMLTree):
-
     def __init__(self, relpath):
         super(Style, self).__init__(relpath)
         styles = self.xml_tree.xpath('/museScore/Score/Style')
         if styles:
             self.style = styles[0]
+            """The ``/museScore/Score/Style`` element object, see
+            https://lxml.de/tutorial.html#the-element-class
+            """
         else:
             self.style = self._create_parent_style()
 
