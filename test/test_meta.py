@@ -78,17 +78,21 @@ class TestClassUnifiedInterface(unittest.TestCase):
             'vbox_title',
         ]
 
-    def _init_class(self, filename):
-        tmp = helper.get_tmpfile_path(filename)
+    def _init_class(self, filename, version=2):
+        tmp = helper.get_tmpfile_path(filename, version)
         tree = XMLTree(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
-    def test_subclasses(self):
-        interface, tree, tmp = self._init_class('simple.mscx')
+    def _test_subclasses(self, version):
+        interface, _, _ = self._init_class('simple.mscx', version)
         self.assertTrue(interface.metatag)
         self.assertTrue(interface.vbox)
         self.assertTrue(interface.combined)
+
+    def test_subclasses(self):
+        self._test_subclasses(version=2)
+        self._test_subclasses(version=3)
 
     def test_static_method_split(self):
         result = InterfaceReadWrite._split('metatag_work_title')
@@ -98,13 +102,17 @@ class TestClassUnifiedInterface(unittest.TestCase):
         with self.assertRaises(ValueError):
             InterfaceReadWrite._split('lol_work_title')
 
-    def test_get_simple(self):
-        interface, tree, tmp = self._init_class('simple.mscx')
+    def _test_get_simple(self, version):
+        interface, _, _ = self._init_class('simple.mscx', version)
         self.assertEqual(interface.vbox_title, 'Title')
         self.assertEqual(interface.metatag_work_title, 'Title')
 
-    def test_get_all_values(self):
-        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+    def test_get_simple(self):
+        self._test_get_simple(version=2)
+        self._test_get_simple(version=3)
+
+    def _test_get_all_values(self, version):
+        interface, _, _ = self._init_class('meta-all-values.mscx', version)
 
         self.assertEqual(interface.combined_composer, 'vbox_composer')
         self.assertEqual(interface.combined_lyricist, 'vbox_lyricist')
@@ -114,8 +122,13 @@ class TestClassUnifiedInterface(unittest.TestCase):
         for field in self.fields[4:]:
             self.assertEqual(getattr(interface, field), field)
 
-    def test_set_all_values(self):
-        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+    def test_get_all_values(self):
+        self._test_get_all_values(version=2)
+        self._test_get_all_values(version=3)
+
+    def _test_set_all_values(self, version):
+        interface, tree, tmp = self._init_class('meta-all-values.mscx',
+                                                version)
 
         for field in self.fields:
             setattr(interface, field, field + '_test')
@@ -133,12 +146,16 @@ class TestClassUnifiedInterface(unittest.TestCase):
         for field in self.fields[4:]:
             self.assertEqual(getattr(interface, field), field + '_test')
 
+    def test_set_all_values(self):
+        self._test_set_all_values(version=2)
+        self._test_set_all_values(version=3)
+
     def test_method_get_all_fields(self):
         fields = InterfaceReadWrite.get_all_fields()
         self.assertEqual(fields, self.fields)
 
-    def test_method_export_to_dict(self):
-        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+    def _test_method_export_to_dict(self, version):
+        interface, _, _ = self._init_class('meta-all-values.mscx', version)
         result = interface.export_to_dict()
         self.assertEqual(result, {
             'combined_composer': 'vbox_composer',
@@ -164,9 +181,17 @@ class TestClassUnifiedInterface(unittest.TestCase):
             'vbox_title': 'vbox_title',
         })
 
-    def test_attribute_fields(self):
-        interface, tree, tmp = self._init_class('meta-all-values.mscx')
+    def test_method_export_to_dict(self):
+        self._test_method_export_to_dict(version=2)
+        self._test_method_export_to_dict(version=3)
+
+    def _test_attribute_fields(self, version):
+        interface, _, _ = self._init_class('meta-all-values.mscx', version)
         self.assertEqual(interface.fields, self.fields)
+
+    def test_attribute_fields(self):
+        self._test_attribute_fields(version=2)
+        self._test_attribute_fields(version=3)
 
 
 class TestClassInterfaceReadOnly(unittest.TestCase):
