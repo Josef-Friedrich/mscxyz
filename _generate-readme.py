@@ -21,8 +21,9 @@ readme = open_file('README.rst')
 sphinx = open_file('doc', 'source', 'cli.rst')
 
 sphinx_header = (
+    '**********************\n',
     'Comande line interface\n',
-    '======================\n',
+    '**********************\n',
     '\n',
     '.. code-block:: text\n',
     '\n',
