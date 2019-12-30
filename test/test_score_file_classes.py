@@ -114,6 +114,15 @@ class TestScoreFileMscz(unittest.TestCase):
 
 class TestClassXMLTree(unittest.TestCase):
 
+    def test_property_version(self):
+        tree = XMLTree(helper.get_tmpfile_path('simple.mscx', version=2))
+        self.assertEqual(tree.version, 2.06)
+        self.assertEqual(tree.version_major, 2)
+
+        tree = XMLTree(helper.get_tmpfile_path('simple.mscx', version=3))
+        self.assertEqual(tree.version, 3.01)
+        self.assertEqual(tree.version_major, 3)
+
     def test_method_merge_style(self):
         tree = XMLTree(helper.get_tmpfile_path('simple.mscx'))
         styles = """

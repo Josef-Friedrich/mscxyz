@@ -122,6 +122,12 @@ class XMLTree(ScoreFile):
             self.errors.append(e)
         else:
             self.xml_root = self.xml_tree.getroot()
+            musescore = self.xml_tree.xpath('/museScore')
+            version = musescore[0].get('version')
+            self.version_major = int(version.split('.')[0])
+            """The major MuseScore version, for example 2 or 3"""
+            self.version = float(version)
+            """The MuseScore version, for example 2.03 or 3.01"""
 
     def add_sub_element(self, root_tag, tag, text):
         tag = lxml.etree.SubElement(root_tag, tag)
