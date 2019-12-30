@@ -6,6 +6,7 @@ from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
                         InterfaceReadWrite, InterfaceReadOnly, Interface
 from mscxyz.score_file_classes import XMLTree
 import helper
+from helper import ini_file
 import mscxyz
 import os
 import tempfile
@@ -515,8 +516,9 @@ class TestIntegration(unittest.TestCase):
 
     def test_show(self):
         with helper.Capturing() as output:
-            mscxyz.execute(['meta', '--clean', 'all',
-                           helper.get_tmpfile_path('meta-all-values.mscx')])
+            mscxyz.execute(['--config-file', ini_file, 'meta', '--clean',
+                            'all',
+                            helper.get_tmpfile_path('meta-all-values.mscx')])
 
         self.assertEqual(output[0], '')
         self.assertTrue('meta-all-values.mscx' in ' '.join(output))
@@ -524,8 +526,9 @@ class TestIntegration(unittest.TestCase):
 
     def test_show_simple_unverbose(self):
         with helper.Capturing() as output:
-            mscxyz.execute(['meta', '--clean', 'all',
-                           helper.get_tmpfile_path('simple.mscx')])
+            mscxyz.execute(['--config-file', ini_file, 'meta', '--clean',
+                            'all',
+                            helper.get_tmpfile_path('simple.mscx')])
         self.assertEqual(output[0], '')
         self.assertTrue('simple.mscx' in ' '.join(output))
         self.assertEqual(output[2], 'combined_composer: “Composer” -> “”')
@@ -534,7 +537,8 @@ class TestIntegration(unittest.TestCase):
 
     def test_show_verbose(self):
         with helper.Capturing() as output:
-            mscxyz.execute(['--verbose', 'meta', '--clean', 'all',
+            mscxyz.execute(['--config-file', ini_file, '--verbose', 'meta',
+                            '--clean', 'all',
                            helper.get_tmpfile_path('simple.mscx')])
         self.assertEqual(output[0], '')
         self.assertTrue('simple.mscx' in ' '.join(output))

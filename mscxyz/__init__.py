@@ -17,12 +17,40 @@ from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
-ini_file = os.path.abspath(os.path.join(os.sep, 'etc', 'mscxyz.ini'))
-config = configparser.ConfigParser()
-if os.path.exists(ini_file):
-    config.read(ini_file)
-else:
-    config = None
+
+def parse_config_ini(relpath: str = None):
+    """Parse the configuration file. The file format is INI. The default
+    location is ``/etc/mscxyz.ini``."""
+    if not relpath:
+        ini_file = os.path.abspath(os.path.join(os.sep, 'etc', 'mscxyz.ini'))
+    else:
+        ini_file = relpath
+    config = configparser.ConfigParser()
+    if os.path.exists(ini_file):
+        config.read(ini_file)
+        return config
+
+
+def merge_config_into_args(config, args):
+    for section in config.sections():
+        for key, value in config[section].items():
+            arg = '{}_{}'.format(section, key)
+            if not hasattr(args, arg) or not getattr(args, arg):
+                setattr(args, arg, value)
+
+    for arg in ['general_backup', 'general_colorize', 'general_dry_run',
+                'general_mscore', 'help_markdown', 'help_rst',
+                'lyrics_fix', 'meta_json', 'meta_sync',
+                'rename_alphanum', 'rename_ascii',
+                'rename_no_whitespace']:
+        if hasattr(args, arg):
+            value = getattr(args, arg)
+            if value == 1 or value == 'true' or value == 'True':
+                setattr(args, arg, True)
+            else:
+                setattr(args, arg, False)
+
+    return args
 
 
 def heading(args, text, level=1):
@@ -90,11 +118,9 @@ def no_error(error, errors):
 
 def execute(args=None):
     args = cli.parser.parse_args(args)
-    if not args.general_executable and \
-       config and 'general' in config and \
-       'executable' in config['general'] and \
-       config['general']['executable']:
-        args.general_executable = config['general']['executable']
+    config = parse_config_ini(args.general_config_file)
+    if config:
+        args = merge_config_into_args(config, args)
     set_args(args)
 
     if args.subcommand == 'help':

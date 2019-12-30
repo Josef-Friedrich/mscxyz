@@ -45,8 +45,8 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-c] [-d] [-g GENERAL_GLOB] [-m]
-                      [-e GENERAL_EXECUTABLE] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d]
+                      [-g GENERAL_GLOB] [-m] [-e GENERAL_EXECUTABLE] [-v]
                       {clean,meta,lyrics,rename,export,help} ... path
   
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of
@@ -63,6 +63,8 @@ mscxyz
     -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
     -c, --colorize        Colorize the command line print statements.
+    -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
+                          Specify a configuration file in the INI format.
     -d, --dry-run         Simulate the actions.
     -g GENERAL_GLOB, --glob GENERAL_GLOB
                           Handle only files which matches against Unix style

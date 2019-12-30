@@ -1,9 +1,15 @@
+"""This submodule provides default parameters for args. Here is the
+``args`` object stored from ``argparse``. It can be accessed by the other
+submodules using the function `get_args()`."""
+
+
 class DefaultArguments(object):
 
     clean_style = None
     export_extension = None
     general_backup = False
     general_colorize = False
+    general_config_file = None
     general_dry_run = False
     general_executable = None
     general_glob = '*.mscx'

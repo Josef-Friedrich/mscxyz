@@ -3,6 +3,7 @@
 
 from mscxyz import rename
 import helper
+from helper import ini_file
 import mscxyz
 import os
 import tempfile
@@ -62,7 +63,8 @@ class TestIntegration(unittest.TestCase):
         return os.remove(os.path.join(os.getcwd(), filename))
 
     def test_simple(self):
-        output = self._execute(['rename', self._get('simple.mscx')])
+        output = self._execute(['--config-file', ini_file, 'rename',
+                                self._get('simple.mscx')])
         target = self._target_path_cwd('Title (Composer).mscx')
         self.assertTrue(os.path.exists(target))
         self.assertTrue('simple.mscx -> ' in ' '.join(output))
@@ -135,7 +137,8 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue('Field “metatag_source” is empty! Skipping' in output)
 
     def test_rename_skip_pass(self):
-        output = helper.run('rename', '--skip-if-empty',
+        output = helper.run('--config-file', ini_file, 'rename',
+                            '--skip-if-empty',
                             'metatag_composer,metatag_work_title',
                             self._get('simple.mscx'))
         target = self._target_path_cwd('Title (Composer).mscx')

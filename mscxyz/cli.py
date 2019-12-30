@@ -1,4 +1,4 @@
-"""Wrapper for the command line interface"""
+"""Wrapper for the command line interface."""
 
 from mscxyz._version import get_versions
 from mscxyz.meta import InterfaceReadWrite, Interface
@@ -46,6 +46,11 @@ parser.add_argument(
     dest='general_colorize',
     help='Colorize the command line print statements.')
 
+parser.add_argument(
+    '-C',
+    '--config-file',
+    dest='general_config_file',
+    help='Specify a configuration file in the INI format.')
 
 parser.add_argument(
     '-d',

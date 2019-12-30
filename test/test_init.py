@@ -1,6 +1,7 @@
 """Test file “__init__.py”"""
 
 import helper
+from helper import ini_file
 import mscxyz
 import unittest
 
@@ -8,8 +9,12 @@ import unittest
 class TestBrokenScoreFile(unittest.TestCase):
 
     def test_broken_file(self):
+        print(ini_file)
         with helper.Capturing() as output:
-            mscxyz.execute(['meta', helper.get_tmpfile_path('broken.mscx')])
+            mscxyz.execute(['--config-file', ini_file, 'meta',
+                            helper.get_tmpfile_path('broken.mscx')])
+
+        print(output)
 
         self.assertTrue('Error: XMLSyntaxError; message: Start tag expected, '
                         '\'<\' not found, line 1, column 1' in
