@@ -11,8 +11,6 @@ The classes build on each other hierarchically. The class hierarchy:
             Rename
 
 Depending on the subcommand
-
-
 """
 
 
@@ -63,26 +61,54 @@ def list_zero_alphabet():
 
 
 class ScoreFile(object):
-    """Basic file loading"""
+    """This class holds basic file properties of the MuseScore score file.
 
-    def __init__(self, relpath):
+    :param relpath: The relative (or absolute) path of the MuseScore
+        file.
+    """
+
+    def __init__(self, relpath: str):
         self.errors = []
+        """A list to store errors."""
+
         self.relpath = relpath
+        """The relative path of the score file, for example:
+        ``files_mscore2/simple.mscx``.
+        """
+
         self.abspath = os.path.abspath(relpath)
+        """The absolute path of the score file, for example:
+        ``/home/jf/test/files_mscore2/simple.mscx``."""
+
         self.extension = relpath.split('.')[-1].lower()
+        """The extension (``mscx`` or ``mscz``) of the score file, for
+        example: ``mscx``."""
+
         self.relpath_backup = relpath.replace(
             '.' + self.extension, '_bak.' + self.extension)
+        """The backup path of the score file, for example:
+        ``files_mscore2/simple_bak.mscx``."""
+
         self.dirname = os.path.dirname(relpath)
+        """The name of the containing directory of the MuseScore file, for
+        example: ``files_mscore2``."""
+
         self.filename = os.path.basename(relpath)
+        """The filename of the MuseScore file, for example:
+        ``simple.mscx``."""
+
         self.basename = self.filename.replace('.mscx', '')
+        """The basename of the score file, for example: ``simple``."""
 
         if self.extension == 'mscz':
             self.loadpath = self._unzip(self.abspath)
+            """The load path of the score file"""
+
         else:
             self.loadpath = self.abspath
 
     @staticmethod
-    def _unzip(abspath):
+    def _unzip(abspath: str):
         tmp_zipdir = tempfile.mkdtemp()
         zip_ref = zipfile.ZipFile(abspath, 'r')
         zip_ref.extractall(tmp_zipdir)
@@ -97,7 +123,7 @@ class ScoreFile(object):
         """Make a copy of the MuseScore"""
         shutil.copy2(self.relpath, self.relpath_backup)
 
-    def export(self, extension='pdf'):
+    def export(self, extension: str = 'pdf'):
         """Export the score to the specifed file type
 
         :param str extension: The extension (default: pdf)
