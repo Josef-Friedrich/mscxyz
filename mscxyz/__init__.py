@@ -3,7 +3,7 @@ files of the notation software MuseScore.
 
 API Interface:
 
-The classes build on each other hierarchically. The class hierarchy:
+Classes:
 
 .. code ::
 
@@ -12,6 +12,13 @@ The classes build on each other hierarchically. The class hierarchy:
             MscoreLyricsInterface
             MscoreMetaInterface
             MscoreStyleInterface
+
+
+Functions:
+
+.. code ::
+
+    exec_mscore_binary
 """
 
 from mscxyz import cli
