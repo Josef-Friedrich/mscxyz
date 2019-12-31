@@ -8,17 +8,19 @@ from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
 from mscxyz.score_file_classes import MscoreXmlTree, list_scores
 from mscxyz.utils import set_args, color
+from mscxyz.settings import DefaultArguments
 import lxml
 import sys
 import os
 import configparser
+import typing
 
 from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
 
-def parse_config_ini(relpath: str = None):
+def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
     """Parse the configuration file. The file format is INI. The default
     location is ``/etc/mscxyz.ini``."""
     if not relpath:
@@ -31,7 +33,8 @@ def parse_config_ini(relpath: str = None):
         return config
 
 
-def merge_config_into_args(config, args):
+def merge_config_into_args(config: configparser.ConfigParser,
+                           args: DefaultArguments) -> DefaultArguments:
     for section in config.sections():
         for key, value in config[section].items():
             arg = '{}_{}'.format(section, key)
@@ -53,7 +56,7 @@ def merge_config_into_args(config, args):
     return args
 
 
-def heading(args, text, level=1):
+def heading(args: DefaultArguments, text: str, level: int = 1):
     length = len(text)
     if args.help_markdown:
         print('\n' + ('#' * level) + ' ' + text + '\n')
@@ -73,7 +76,7 @@ def heading(args, text, level=1):
         print(text)
 
 
-def code_block(args, text):
+def code_block(args: DefaultArguments, text: str):
     if args.help_markdown:
         print('```\n' + text + '\n```')
     elif args.help_rst:
@@ -82,7 +85,7 @@ def code_block(args, text):
         print(text)
 
 
-def show_all_help(args):
+def show_all_help(args: DefaultArguments):
     subcommands = ('clean', 'meta', 'lyrics', 'rename', 'export', 'help')
 
     if args.path == 'all':
@@ -100,7 +103,7 @@ def show_all_help(args):
         code_block(args, getattr(cli, args.path).format_help())
 
 
-def report_errors(errors):
+def report_errors(errors: typing.Sequence):
     for error in errors:
         print('{}: {}; message: {}'.format(
             color('Error', 'white', 'on_red'),
@@ -116,7 +119,7 @@ def no_error(error, errors):
     return True
 
 
-def execute(args=None):
+def execute(args: typing.Sequence = None):
     args = cli.parser.parse_args(args)
     config = parse_config_ini(args.general_config_file)
     if config:

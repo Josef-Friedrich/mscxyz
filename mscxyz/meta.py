@@ -6,18 +6,19 @@ import json
 import lxml
 import re
 import tmep
+import typing
 
 
 class ReadOnlyFieldError(Exception):
 
-    def __init__(self, field):
+    def __init__(self, field: str):
         self.msg = 'The field “{}” is read only!'.format(field)
         Exception.__init__(self, self.msg)
 
 
 class UnkownFieldError(Exception):
 
-    def __init__(self, field, valid_fields):
+    def __init__(self, field: str, valid_fields: typing.Sequence):
         self.msg = 'Unkown field of name “{}”! Valid field names are: {}' \
               .format(field, ', '.join(valid_fields))
         Exception.__init__(self, self.msg)
@@ -25,7 +26,7 @@ class UnkownFieldError(Exception):
 
 class UnmatchedFormatStringError(Exception):
 
-    def __init__(self, format_string, input_string):
+    def __init__(self, format_string: str, input_string: str):
         self.msg = 'Your format string “{}” doesn’t match on this ' \
               'input string: “{}”'.format(format_string, input_string)
         Exception.__init__(self, self.msg)
@@ -33,13 +34,13 @@ class UnmatchedFormatStringError(Exception):
 
 class FormatStringNoFieldError(Exception):
 
-    def __init__(self, format_string):
+    def __init__(self, format_string: str):
         self.msg = 'No fields found in your format string “{}”!' \
               .format(format_string)
         Exception.__init__(self, self.msg)
 
 
-def distribute_field(source, format_string):
+def distribute_field(source, format_string: str):
     fields = re.findall(r'\$([a-z_]*)', format_string)
     if not fields:
         raise FormatStringNoFieldError(format_string)
@@ -109,11 +110,11 @@ class MetaTag(object):
     def __init__(self, xml_root):
         self.xml_root = xml_root
 
-    def _get_element(self, field):
+    def _get_element(self, field: str):
         for element in self.xml_root.xpath('//metaTag[@name="' + field + '"]'):
             return element
 
-    def _get_text(self, field):
+    def _get_text(self, field: str) -> str:
         element = self._get_element(field)
         if hasattr(element, 'text'):
             return element.text

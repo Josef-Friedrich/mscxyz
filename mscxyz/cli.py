@@ -5,9 +5,11 @@ from mscxyz.meta import InterfaceReadWrite, Interface
 import argparse
 import textwrap
 import tmep
+import typing
 
 
-def list_fields(fields, prefix='', suffix=''):
+def list_fields(fields: typing.Sequence, prefix: str = '',
+                suffix: str = '') -> str:
     out = []
     for field in fields:
         out.append(prefix + '- ' + field + suffix)

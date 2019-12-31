@@ -9,7 +9,7 @@ import os
 import tmep
 
 
-def create_dir(path):
+def create_dir(path: str):
     try:
         os.makedirs(os.path.dirname(path))
     except OSError as exception:
@@ -17,7 +17,7 @@ def create_dir(path):
             raise
 
 
-def prepare_fields(fields):
+def prepare_fields(fields: dict) -> dict:
     args = get_args()
     out = {}
     for field, value in fields.items():
@@ -35,18 +35,18 @@ def prepare_fields(fields):
     return out
 
 
-def apply_format_string(fields):
+def apply_format_string(fields: dict) -> str:
     args = get_args()
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
     return name
 
 
-def show(old, new):
+def show(old: str, new: str):
     print('{} -> {}'.format(color(old, 'yellow'), color(new, 'green')))
 
 
-def get_checksum(filename):
+def get_checksum(filename: str) -> str:
     BLOCKSIZE = 65536
     hasher = hashlib.sha1()
     with open(filename, 'rb') as afile:
@@ -57,7 +57,7 @@ def get_checksum(filename):
     return hasher.hexdigest()
 
 
-def rename_filename(source):
+def rename_filename(source: str) -> Meta:
     args = get_args()
 
     meta = Meta(source)

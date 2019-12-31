@@ -2,11 +2,12 @@
 
 from mscxyz.score_file_classes import MscoreXmlTree
 import lxml.etree as etree
+import typing
 
 
 class MscoreLyricsInterface(MscoreXmlTree):
 
-    def __init__(self, relpath):
+    def __init__(self, relpath: str):
         super(MscoreLyricsInterface, self).__init__(relpath)
         self.lyrics = self.normalize_lyrics()
         self.max = self.get_max()
@@ -78,7 +79,7 @@ class MscoreLyricsInterface(MscoreXmlTree):
 
         return max_lyric
 
-    def remap(self, remap_string, mscore=False):
+    def remap(self, remap_string: str, mscore: bool = False):
         for pair in remap_string.split(','):
             old = pair.split(':')[0]
             new = pair.split(':')[1]
@@ -88,10 +89,10 @@ class MscoreLyricsInterface(MscoreXmlTree):
 
         self.save(mscore)
 
-    def extract_one_lyrics_verse(self, number, mscore=False):
+    def extract_one_lyrics_verse(self, number: int, mscore: bool = False):
         """Extract a lyric verse by verse number.
 
-        :param int number: The number of the lyrics verse starting by 1
+        :param number: The number of the lyrics verse starting by 1
         """
         score = MscoreLyricsInterface(self.relpath)
 
@@ -107,7 +108,8 @@ class MscoreLyricsInterface(MscoreXmlTree):
         new_name = score.relpath.replace(ext, '_' + str(number) + ext)
         score.save(new_name, mscore)
 
-    def extract_lyrics(self, number=None, mscore=False):
+    def extract_lyrics(self, number: typing.Union[int, str] = None,
+                       mscore: bool = False):
         """Extract one lyric verse or all lyric verses.
 
         :param mixed number: The lyric verse number or 'all'
@@ -119,7 +121,7 @@ class MscoreLyricsInterface(MscoreXmlTree):
         else:
             self.extract_one_lyrics_verse(int(number))
 
-    def fix_lyrics_verse(self, verse_number):
+    def fix_lyrics_verse(self, verse_number: int):
         """
         from:
 
@@ -178,7 +180,7 @@ class MscoreLyricsInterface(MscoreXmlTree):
                 if not isinstance(tag_syl, bool):
                     tag.append(tag_syl)
 
-    def fix_lyrics(self, mscore=False):
+    def fix_lyrics(self, mscore: bool = False):
         for verse_number in range(1, self.max + 1):
             self.fix_lyrics_verse(verse_number)
 
