@@ -19,6 +19,7 @@ Functions:
 .. code ::
 
     exec_mscore_binary
+    list_scores
 """
 
 from mscxyz import cli
@@ -72,6 +73,9 @@ MscoreStyleInterface
 
 exec_mscore_binary = mscore
 """see submodule ``utils.py``"""
+
+list_scores
+"""see submodule ``score_file_classes.py``"""
 
 ###############################################################################
 # API INTERFACE END
