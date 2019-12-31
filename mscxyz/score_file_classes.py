@@ -341,14 +341,6 @@ class MscoreStyleInterface(MscoreXmlTree):
                 parent = element
         return parent
 
-    def get(self, element_path: str) -> str:
-        """
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
-        """
-        element = self.style.find(element_path)
-        return element.text
-
     def get_element(self, element_path: str,
                     create: bool = False) -> lxml.etree.Element:
         """
@@ -398,7 +390,7 @@ class MscoreStyleInterface(MscoreXmlTree):
             element.attrib[name] = str(value)
         return element
 
-    def set(self, element_path: str, value: str):
+    def set_value(self, element_path: str, value: str):
         """
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath

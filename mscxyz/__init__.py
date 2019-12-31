@@ -6,7 +6,8 @@ from mscxyz import cli
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import MscoreXmlTree, list_scores
+from mscxyz.score_file_classes import MscoreXmlTree, MscoreStyleInterface, \
+                                      list_scores
 from mscxyz.utils import set_args, color
 from mscxyz.settings import DefaultArguments
 import lxml
@@ -18,6 +19,9 @@ import typing
 from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
+
+MscoreStyleInterface
+"""see submodule score_file_classes"""
 
 
 def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:

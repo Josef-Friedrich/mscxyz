@@ -230,10 +230,11 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(self.style.style.tag, 'Style')
 
     def test_method_get(self):
-        self.assertEqual(self.style.get('staffUpperBorder'), '6.5')
+        self.assertEqual(self.style.get_value('staffUpperBorder'), '6.5')
 
     def test_method_get_muliple_element_path(self):
-        self.assertEqual(self.style.get('page-layout/page-height'), '1584')
+        self.assertEqual(self.style.get_value('page-layout/page-height'),
+                         '1584')
 
     def test_method_get_element(self):
         self.assertEqual(self.style.get_element('voltaY').tag, 'voltaY')
@@ -254,33 +255,33 @@ class TestClassStyle(unittest.TestCase):
     def test_method_get_value(self):
         self.assertEqual(self.style.get_value('voltaY'), '-2')
 
-    def test_method_set(self):
-        self.style.set('staffUpperBorder', 99)
+    def test_method_set_value(self):
+        self.style.set_value('staffUpperBorder', 99)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('staffUpperBorder'), '99')
+        self.assertEqual(style2.get_value('staffUpperBorder'), '99')
 
-    def test_method_set_create(self):
-        self.style.set('lol', 'lol')
+    def test_method_set_value_create(self):
+        self.style.set_value('lol', 'lol')
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('lol'), 'lol')
+        self.assertEqual(style2.get_value('lol'), 'lol')
 
-    def test_method_set_muliple_element_path(self):
-        self.style.set('page-layout/page-height', 99)
+    def test_method_set_value_muliple_element_path(self):
+        self.style.set_value('page-layout/page-height', 99)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('page-layout/page-height'), '99')
+        self.assertEqual(style2.get_value('page-layout/page-height'), '99')
 
     def test_method_set_muliple_element_path_multiple_times(self):
-        self.style.set('page-layout/page-height', 99)
-        self.style.set('page-layout/page-width', 100)
-        self.style.set('page-layout/page-depth', 101)
+        self.style.set_value('page-layout/page-height', 99)
+        self.style.set_value('page-layout/page-width', 100)
+        self.style.set_value('page-layout/page-depth', 101)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('page-layout/page-depth'), '101')
-        self.assertEqual(style2.get('page-layout/page-height'), '99')
-        self.assertEqual(style2.get('page-layout/page-width'), '100')
+        self.assertEqual(style2.get_value('page-layout/page-depth'), '101')
+        self.assertEqual(style2.get_value('page-layout/page-height'), '99')
+        self.assertEqual(style2.get_value('page-layout/page-width'), '100')
 
     def test_method_set_attributes(self):
         dudes = MscoreStyleInterface(
@@ -320,19 +321,19 @@ class TestClassMscoreStyleInterface3(unittest.TestCase):
         self.assertEqual(self.style.style.tag, 'Style')
 
     def test_method_get(self):
-        self.assertEqual(self.style.get('staffUpperBorder'), '6.5')
+        self.assertEqual(self.style.get_value('staffUpperBorder'), '6.5')
 
     def test_method_set(self):
-        self.style.set('staffUpperBorder', 99)
+        self.style.set_value('staffUpperBorder', 99)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('staffUpperBorder'), '99')
+        self.assertEqual(style2.get_value('staffUpperBorder'), '99')
 
     def test_method_set_create(self):
-        self.style.set('lol', 'lol')
+        self.style.set_value('lol', 'lol')
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('lol'), 'lol')
+        self.assertEqual(style2.get_value('lol'), 'lol')
 
 
 class TestClassMscoreStyleInterfaceWithoutTags(unittest.TestCase):
@@ -346,16 +347,16 @@ class TestClassMscoreStyleInterfaceWithoutTags(unittest.TestCase):
         self.assertEqual(self.style.style.tag, 'Style')
 
     def test_method_set(self):
-        self.style.set('staffUpperBorder', 99)
+        self.style.set_value('staffUpperBorder', 99)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('staffUpperBorder'), '99')
+        self.assertEqual(style2.get_value('staffUpperBorder'), '99')
 
     def test_method_set_element_path_multiple(self):
-        self.style.set('lol/troll', 99)
+        self.style.set_value('lol/troll', 99)
         self.style.save()
         style2 = MscoreStyleInterface(self.style.abspath)
-        self.assertEqual(style2.get('lol/troll'), '99')
+        self.assertEqual(style2.get_value('lol/troll'), '99')
 
     def test_method_get_text_style_unkown(self):
         unkown = self.style.get_text_style('Unkown')
