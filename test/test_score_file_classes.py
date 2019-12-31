@@ -235,6 +235,25 @@ class TestClassStyle(unittest.TestCase):
     def test_method_get_muliple_element_path(self):
         self.assertEqual(self.style.get('page-layout/page-height'), '1584')
 
+    def test_method_get_element(self):
+        self.assertEqual(self.style.get_element('voltaY').tag, 'voltaY')
+
+    def test_method_get_element_create(self):
+        dudes = MscoreStyleInterface(
+            helper.get_tmpfile_path('All_Dudes.mscx', version=3)
+        )
+        self.assertEqual(dudes.get_element('XXX'), None)
+        element = dudes.get_element('XXX', create=True)
+        element.attrib['y'] = 'YYY'
+        self.assertEqual(element.tag, 'XXX')
+        dudes.save()
+
+        dudes2 = MscoreStyleInterface(dudes.abspath)
+        self.assertEqual(dudes2.get_element('XXX').attrib['y'], 'YYY')
+
+    def test_method_get_value(self):
+        self.assertEqual(self.style.get_value('voltaY'), '-2')
+
     def test_method_set(self):
         self.style.set('staffUpperBorder', 99)
         self.style.save()
@@ -262,6 +281,15 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(style2.get('page-layout/page-depth'), '101')
         self.assertEqual(style2.get('page-layout/page-height'), '99')
         self.assertEqual(style2.get('page-layout/page-width'), '100')
+
+    def test_method_set_attributes(self):
+        dudes = MscoreStyleInterface(
+            helper.get_tmpfile_path('All_Dudes.mscx', version=3)
+        )
+        dudes.set_attributes('XXX', {'one': 1, 'two': 2})
+        dudes.save()
+        dudes2 = MscoreStyleInterface(dudes.abspath)
+        self.assertEqual(dudes2.get_element('XXX').attrib['one'], '1')
 
     def test_method_get_text_style(self):
         title = self.style.get_text_style('Title')

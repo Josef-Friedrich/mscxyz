@@ -12,6 +12,7 @@ The classes build on each other hierarchically. The class hierarchy:
 
 
 from mscxyz.utils import mscore, re_open
+import lxml.etree  # Needed for type hints
 import fnmatch
 import lxml
 import os
@@ -326,24 +327,76 @@ class MscoreStyleInterface(MscoreXmlTree):
         score = self.xml_tree.xpath('/museScore/Score')
         return lxml.etree.SubElement(score[0], 'Style')
 
-    def _create(self, tag):
+    def _create(self, tag: str) -> lxml.etree.Element:
+        """
+        :param tag: Nested tags are supported, for example ``TextStyle/halign``
+        """
         tags = tag.split('/')
         parent = self.style
         for tag in tags:
-            elm = parent.find(tag)
-            if elm is None:
+            element = parent.find(tag)
+            if element is None:
                 parent = lxml.etree.SubElement(parent, tag)
             else:
-                parent = elm
+                parent = element
         return parent
 
-    def get(self, element_path: str):
+    def get(self, element_path: str) -> str:
         """
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
         element = self.style.find(element_path)
         return element.text
+
+    def get_element(self, element_path: str,
+                    create: bool = False) -> lxml.etree.Element:
+        """
+        Get a lxml element which is parent to the ``Style`` tag.
+
+        :param element_path: see
+          http://lxml.de/tutorial.html#elementpath
+        :param create: Create the element if not present in the parent
+          ``Style`` tag.
+
+        Example code:
+
+        .. code:: Python
+
+            # Set attributes on a maybe non-existent style tag.
+            # <measureNumberOffset x="0.5" y="-2"/>
+            test = MscoreStyleInterface('text.mscx')
+            element = test.get_element('measureNumberOffset', create=True)
+            element.attrib['x'] = '0.5'
+            element.attrib['y'] = '-2'
+            test.save()
+        """
+        element = self.style.find(element_path)
+        if element is None and create:
+            element = self._create(element_path)
+        return element
+
+    def get_value(self, element_path: str) -> str:
+        """
+        Get the value (text) of a style tag.
+
+        :param element_path: see
+          http://lxml.de/tutorial.html#elementpath
+        """
+        element = self.get_element(element_path)
+        return element.text
+
+    def set_attributes(self, element_path: str,
+                       attributes: dict) -> lxml.etree.Element:
+        """Set attributes on a style child tag.
+
+        :param element_path: see
+          http://lxml.de/tutorial.html#elementpath
+        """
+        element = self.get_element(element_path, create=True)
+        for name, value in attributes.items():
+            element.attrib[name] = str(value)
+        return element
 
     def set(self, element_path: str, value: str):
         """
@@ -355,7 +408,7 @@ class MscoreStyleInterface(MscoreXmlTree):
             element = self._create(element_path)
         element.text = str(value)
 
-    def _get_text_style_element(self, name: str):
+    def _get_text_style_element(self, name: str) -> lxml.etree.Element:
         if self.version_major != 2:
             raise ValueError(
                 'This operation is only allowed for MuseScore 2 score files'
@@ -370,7 +423,7 @@ class MscoreStyleInterface(MscoreXmlTree):
             el_name.text = name
             return el_text_style
 
-    def get_text_style(self, name: str):
+    def get_text_style(self, name: str) -> dict:
         """Get text styles. Only MuseScore2!
 
         :param name: The name of the text style.
