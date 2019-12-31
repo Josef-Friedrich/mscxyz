@@ -1,4 +1,4 @@
-"""MscoreFile for various tests"""
+"""Test submodules “score_file_classes.py”"""
 
 from mscxyz.score_file_classes import MscoreFile, list_scores, \
                                       list_zero_alphabet, MscoreXmlTree, \
@@ -188,6 +188,35 @@ class TestClassMscoreXmlTree(unittest.TestCase):
         tree = MscoreXmlTree(tmp)
         result = tree.xml_tree.xpath('/museScore/Score/Style')
         self.assertEqual(result[0].tag, 'Style')
+
+
+class TestClean(unittest.TestCase):
+
+    def _test_clean(self, version=2):
+        tmp = helper.get_tmpfile_path('formats.mscx', version)
+        mscxyz.execute(['clean', tmp])
+        cleaned = helper.read_file(tmp)
+        self.assertFalse('<font' in cleaned)
+        self.assertFalse('<b>' in cleaned)
+        self.assertFalse('<i>' in cleaned)
+        self.assertFalse('<pos' in cleaned)
+        self.assertFalse('<LayoutBreak>' in cleaned)
+        self.assertFalse('<StemDirection>' in cleaned)
+
+    def test_clean(self):
+        self._test_clean(version=2)
+        self._test_clean(version=3)
+
+    def _test_clean_add_style(self, version=2):
+        tmp = helper.get_tmpfile_path('simple.mscx', version)
+        mscxyz.execute(['clean', '--style',
+                        helper.get_tmpfile_path('style.mss', version), tmp])
+        style = helper.read_file(tmp)
+        self.assertTrue('<staffUpperBorder>77</staffUpperBorder>' in style)
+
+    def test_clean_add_style(self):
+        self._test_clean_add_style(version=2)
+        self._test_clean_add_style(version=3)
 
 
 class TestClassStyle(unittest.TestCase):

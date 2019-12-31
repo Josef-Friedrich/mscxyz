@@ -1,4 +1,4 @@
-"""Test module “utils.py”."""
+"""Test submodule “utils.py”."""
 
 from mscxyz.utils import get_mscore_bin, mscore, get_args
 import unittest

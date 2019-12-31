@@ -1,4 +1,4 @@
-"""Test module “lyrics.py”."""
+"""Test submodule “rename.py”."""
 
 
 from mscxyz import rename

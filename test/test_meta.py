@@ -1,4 +1,4 @@
-"""Test module “meta.py”."""
+"""Test submodule “meta.py”."""
 
 
 from mscxyz import meta

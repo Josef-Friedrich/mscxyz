@@ -1,4 +1,4 @@
-"""Test module “lyrics.py”."""
+"""Test submodule “lyrics.py”."""
 
 
 import helper

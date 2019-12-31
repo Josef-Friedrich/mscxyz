@@ -12,9 +12,6 @@ class TestBrokenMscoreFile(unittest.TestCase):
         with helper.Capturing() as output:
             mscxyz.execute(['--config-file', ini_file, 'meta',
                             helper.get_tmpfile_path('broken.mscx')])
-
-        print(output)
-
         self.assertTrue('Error: XMLSyntaxError; message: Start tag expected, '
                         '\'<\' not found, line 1, column 1' in
                         ' '.join(output))

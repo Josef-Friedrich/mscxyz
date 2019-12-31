@@ -11,7 +11,7 @@
     <pageOddTopMargin>0.393701</pageOddTopMargin>
     <pageOddBottomMargin>0.787402</pageOddBottomMargin>
     <pageTwosided>1</pageTwosided>
-    <staffUpperBorder>7</staffUpperBorder>
+    <staffUpperBorder>77</staffUpperBorder>
     <staffLowerBorder>7</staffLowerBorder>
     <staffDistance>6.5</staffDistance>
     <akkoladeDistance>6.5</akkoladeDistance>
