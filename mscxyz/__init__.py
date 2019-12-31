@@ -1,14 +1,28 @@
 """A command line tool to manipulate the XML based mscX and mscZ
-files of the notation software MuseScore
+files of the notation software MuseScore.
+
+API Interface:
+
+The classes build on each other hierarchically. The class hierarchy:
+
+.. code ::
+
+    MscoreFile
+        MscoreXmlTree
+            MscoreLyricsInterface
+            MscoreMetaInterface
+            MscoreStyleInterface
 """
 
 from mscxyz import cli
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import MscoreXmlTree, MscoreStyleInterface, \
+from mscxyz.score_file_classes import MscoreFile, \
+                                      MscoreXmlTree, \
+                                      MscoreStyleInterface, \
                                       list_scores
-from mscxyz.utils import set_args, color
+from mscxyz.utils import set_args, color, mscore
 from mscxyz.settings import DefaultArguments
 import lxml
 import sys
@@ -20,8 +34,41 @@ from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
+###############################################################################
+# API INTERFACE BEGIN
+###############################################################################
+
+# Classes
+
+# Level 1
+
+MscoreFile
+"""see submodule ``score_file_classes.py``"""
+
+# Level 2
+
+MscoreXmlTree
+"""see submodule ``score_file_classes.py``"""
+
+# Level 3
+
+MscoreLyricsInterface
+"""see submodule ``lyrics.py``"""
+
+MscoreMetaInterface = Meta
+"""see submodule ``meta.py``"""
+
 MscoreStyleInterface
-"""see submodule score_file_classes"""
+"""see submodule ``score_file_classes.py``"""
+
+# Functions
+
+exec_mscore_binary = mscore
+"""see submodule ``utils.py``"""
+
+###############################################################################
+# API INTERFACE END
+###############################################################################
 
 
 def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
