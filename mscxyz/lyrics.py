@@ -1,13 +1,13 @@
 """Manipulate the lyrics"""
 
-from mscxyz.score_file_classes import XMLTree
+from mscxyz.score_file_classes import MscoreXmlTree
 import lxml.etree as etree
 
 
-class Lyrics(XMLTree):
+class MscoreLyricsInterface(MscoreXmlTree):
 
     def __init__(self, relpath):
-        super(Lyrics, self).__init__(relpath)
+        super(MscoreLyricsInterface, self).__init__(relpath)
         self.lyrics = self.normalize_lyrics()
         self.max = self.get_max()
 
@@ -93,7 +93,7 @@ class Lyrics(XMLTree):
 
         :param int number: The number of the lyrics verse starting by 1
         """
-        score = Lyrics(self.relpath)
+        score = MscoreLyricsInterface(self.relpath)
 
         for element in score.lyrics:
             tag = element['element']

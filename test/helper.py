@@ -1,4 +1,4 @@
-"""ScoreFile for various tests"""
+"""MscoreFile for various tests"""
 
 from distutils.dir_util import copy_tree
 import os

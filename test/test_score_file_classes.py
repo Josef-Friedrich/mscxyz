@@ -1,7 +1,8 @@
-"""ScoreFile for various tests"""
+"""MscoreFile for various tests"""
 
-from mscxyz.score_file_classes import ScoreFile, list_scores, \
-                                      list_zero_alphabet, XMLTree, Style
+from mscxyz.score_file_classes import MscoreFile, list_scores, \
+                                      list_zero_alphabet, MscoreXmlTree, \
+                                      MscoreStyleInterface
 import helper
 from unittest import mock
 import mscxyz
@@ -76,10 +77,10 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(result[26], 'z')
 
 
-class TestScoreFile(unittest.TestCase):
+class TestMscoreFile(unittest.TestCase):
 
     def setUp(self):
-        self.file = ScoreFile(helper.get_tmpfile_path('simple.mscx'))
+        self.file = MscoreFile(helper.get_tmpfile_path('simple.mscx'))
 
     def test_attribute_relpath(self):
         self.assertTrue(self.file.relpath)
@@ -100,10 +101,10 @@ class TestScoreFile(unittest.TestCase):
         self.assertEqual(self.file.abspath, self.file.loadpath)
 
 
-class TestScoreFileMscz(unittest.TestCase):
+class TestMscoreFileMscz(unittest.TestCase):
 
     def setUp(self):
-        self.file = ScoreFile(helper.get_tmpfile_path('simple.mscz'))
+        self.file = MscoreFile(helper.get_tmpfile_path('simple.mscz'))
 
     def test_attribute_extension(self):
         self.assertEqual(self.file.extension, 'mscz')
@@ -112,19 +113,19 @@ class TestScoreFileMscz(unittest.TestCase):
         self.assertIn('simple.mscx', self.file.loadpath)
 
 
-class TestClassXMLTree(unittest.TestCase):
+class TestClassMscoreXmlTree(unittest.TestCase):
 
     def test_property_version(self):
-        tree = XMLTree(helper.get_tmpfile_path('simple.mscx', version=2))
+        tree = MscoreXmlTree(helper.get_tmpfile_path('simple.mscx', version=2))
         self.assertEqual(tree.version, 2.06)
         self.assertEqual(tree.version_major, 2)
 
-        tree = XMLTree(helper.get_tmpfile_path('simple.mscx', version=3))
+        tree = MscoreXmlTree(helper.get_tmpfile_path('simple.mscx', version=3))
         self.assertEqual(tree.version, 3.01)
         self.assertEqual(tree.version_major, 3)
 
     def test_method_merge_style(self):
-        tree = XMLTree(helper.get_tmpfile_path('simple.mscx'))
+        tree = MscoreXmlTree(helper.get_tmpfile_path('simple.mscx'))
         styles = """
             <TextStyle>
               <halign>center</halign>
@@ -154,10 +155,10 @@ class TestClassXMLTree(unittest.TestCase):
 
     def test_method_clean(self):
         tmp = helper.get_tmpfile_path('clean.mscx', version=3)
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         tree.clean()
         tree.save()
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         xml_tree = tree.xml_tree
         self.assertEqual(xml_tree.xpath('/museScore/Score/Style'), [])
         self.assertEqual(xml_tree.xpath('//LayoutBreak'), [])
@@ -170,21 +171,21 @@ class TestClassXMLTree(unittest.TestCase):
 
     def test_method_save(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         tree.save()
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
 
     def test_method_save_new_name(self):
         tmp = helper.get_tmpfile_path('simple.mscx')
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         tree.save(new_name=tmp)
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
 
     def test_mscz(self):
         tmp = helper.get_tmpfile_path('simple.mscz')
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         result = tree.xml_tree.xpath('/museScore/Score/Style')
         self.assertEqual(result[0].tag, 'Style')
 
@@ -192,8 +193,9 @@ class TestClassXMLTree(unittest.TestCase):
 class TestClassStyle(unittest.TestCase):
 
     def setUp(self):
-        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx',
-                           version=2))
+        self.style = MscoreStyleInterface(
+            helper.get_tmpfile_path('All_Dudes.mscx', version=2)
+        )
 
     def test_attributes_style(self):
         self.assertEqual(self.style.style.tag, 'Style')
@@ -207,19 +209,19 @@ class TestClassStyle(unittest.TestCase):
     def test_method_set(self):
         self.style.set('staffUpperBorder', 99)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
     def test_method_set_create(self):
         self.style.set('lol', 'lol')
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('lol'), 'lol')
 
     def test_method_set_muliple_element_path(self):
         self.style.set('page-layout/page-height', 99)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('page-layout/page-height'), '99')
 
     def test_method_set_muliple_element_path_multiple_times(self):
@@ -227,7 +229,7 @@ class TestClassStyle(unittest.TestCase):
         self.style.set('page-layout/page-width', 100)
         self.style.set('page-layout/page-depth', 101)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('page-layout/page-depth'), '101')
         self.assertEqual(style2.get('page-layout/page-height'), '99')
         self.assertEqual(style2.get('page-layout/page-width'), '100')
@@ -245,16 +247,17 @@ class TestClassStyle(unittest.TestCase):
     def test_method_set_text_style(self):
         self.style.set_text_style('Title', {'size': 99})
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         title = style2.get_text_style('Title')
         self.assertEqual(title['size'], '99')
 
 
-class TestClassStyle3(unittest.TestCase):
+class TestClassMscoreStyleInterface3(unittest.TestCase):
 
     def setUp(self):
-        self.style = Style(helper.get_tmpfile_path('All_Dudes.mscx',
-                           version=3))
+        self.style = MscoreStyleInterface(
+            helper.get_tmpfile_path('All_Dudes.mscx', version=3)
+        )
 
     def test_attributes_style(self):
         self.assertEqual(self.style.style.tag, 'Style')
@@ -265,20 +268,22 @@ class TestClassStyle3(unittest.TestCase):
     def test_method_set(self):
         self.style.set('staffUpperBorder', 99)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
     def test_method_set_create(self):
         self.style.set('lol', 'lol')
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('lol'), 'lol')
 
 
-class TestClassStyleWithoutTags(unittest.TestCase):
+class TestClassMscoreStyleInterfaceWithoutTags(unittest.TestCase):
 
     def setUp(self):
-        self.style = Style(helper.get_tmpfile_path('without-style.mscx'))
+        self.style = MscoreStyleInterface(
+            helper.get_tmpfile_path('without-style.mscx')
+        )
 
     def test_load(self):
         self.assertEqual(self.style.style.tag, 'Style')
@@ -286,13 +291,13 @@ class TestClassStyleWithoutTags(unittest.TestCase):
     def test_method_set(self):
         self.style.set('staffUpperBorder', 99)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('staffUpperBorder'), '99')
 
     def test_method_set_element_path_multiple(self):
         self.style.set('lol/troll', 99)
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         self.assertEqual(style2.get('lol/troll'), '99')
 
     def test_method_get_text_style_unkown(self):
@@ -302,7 +307,7 @@ class TestClassStyleWithoutTags(unittest.TestCase):
     def test_method_set_text_style_unkown(self):
         self.style.set_text_style('Unkown', {'size': 99})
         self.style.save()
-        style2 = Style(self.style.abspath)
+        style2 = MscoreStyleInterface(self.style.abspath)
         unkown = style2.get_text_style('Unkown')
         self.assertEqual(unkown['size'], '99')
 
@@ -314,7 +319,7 @@ class TestFileCompare(unittest.TestCase):
         saved = orig.replace('.mscx', '_saved.mscx')
         tmp = helper.get_tmpfile_path(filename, version=version)
         shutil.copy2(tmp, orig)
-        tree = XMLTree(tmp)
+        tree = MscoreXmlTree(tmp)
         tree.save(new_name=saved)
         self.assertTrue(filecmp.cmp(orig, saved))
         os.remove(orig)

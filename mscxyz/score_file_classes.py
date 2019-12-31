@@ -4,10 +4,10 @@ The classes build on each other hierarchically. The class hierarchy:
 
 .. code ::
 
-    ScoreFile
-        XMLTree
-            Style
-            Lyrics
+    MscoreFile
+        MscoreXmlTree
+            MscoreStyleInterface
+            MscoreLyricsInterface
             Rename
 
 Depending on the subcommand
@@ -60,7 +60,7 @@ def list_zero_alphabet():
 ###############################################################################
 
 
-class ScoreFile(object):
+class MscoreFile(object):
     """This class holds basic file properties of the MuseScore score file.
 
     :param relpath: The relative (or absolute) path of the MuseScore
@@ -137,11 +137,11 @@ class ScoreFile(object):
 ###############################################################################
 
 
-class XMLTree(ScoreFile):
+class MscoreXmlTree(MscoreFile):
     """XML tree manipulation"""
 
     def __init__(self, relpath):
-        super(XMLTree, self).__init__(relpath)
+        super(MscoreXmlTree, self).__init__(relpath)
         try:
             self.xml_tree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
@@ -293,10 +293,9 @@ class XMLTree(ScoreFile):
 # Class hierarchy level 3
 ###############################################################################
 
-
-class Style(XMLTree):
+class MscoreStyleInterface(MscoreXmlTree):
     def __init__(self, relpath):
-        super(Style, self).__init__(relpath)
+        super(MscoreStyleInterface, self).__init__(relpath)
         styles = self.xml_tree.xpath('/museScore/Score/Style')
         if styles:
             self.style = styles[0]

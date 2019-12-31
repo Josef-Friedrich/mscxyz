@@ -1,4 +1,4 @@
-"""ScoreFile for various tests"""
+"""MscoreFile for various tests"""
 
 import helper
 from unittest import mock

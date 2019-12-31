@@ -1,6 +1,6 @@
 """Class for metadata maniplation"""
 
-from mscxyz.score_file_classes import XMLTree
+from mscxyz.score_file_classes import MscoreXmlTree
 from mscxyz.utils import get_args, color
 import json
 import lxml
@@ -248,7 +248,7 @@ class Vbox(object):
             self._set_text(field.title(), value)
 
 
-class Combined(XMLTree):
+class Combined(MscoreXmlTree):
 
     fields = (
         'composer',
@@ -424,7 +424,7 @@ class Interface(object):
             raise ReadOnlyFieldError(field)
 
 
-class Meta(XMLTree):
+class Meta(MscoreXmlTree):
 
     def __init__(self, relpath):
         super(Meta, self).__init__(relpath)

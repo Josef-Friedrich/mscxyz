@@ -3,10 +3,10 @@ files of the notation software MuseScore
 """
 
 from mscxyz import cli
-from mscxyz.lyrics import Lyrics
+from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import XMLTree, list_scores
+from mscxyz.score_file_classes import MscoreXmlTree, list_scores
 from mscxyz.utils import set_args, color
 import lxml
 import sys
@@ -134,12 +134,12 @@ def execute(args=None):
         print('\n' + color(file, 'red'))
 
         if args.general_backup:
-            from mscxyz.score_file_classes import ScoreFile
-            score = ScoreFile(file)
+            from mscxyz.score_file_classes import MscoreFile
+            score = MscoreFile(file)
             score.backup()
 
         if args.subcommand == 'clean':
-            score = XMLTree(file)
+            score = MscoreXmlTree(file)
             print(score.filename)
             score.clean()
             if args.clean_style:
@@ -147,7 +147,7 @@ def execute(args=None):
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == 'lyrics':
-            score = Lyrics(file)
+            score = MscoreLyricsInterface(file)
             if args.lyrics_remap:
                 score.remap(remap_string=args.lyrics_remap,
                             mscore=args.general_mscore)
@@ -188,8 +188,8 @@ def execute(args=None):
             score = rename_filename(file)
 
         elif args.subcommand == 'export':
-            from mscxyz.score_file_classes import ScoreFile
-            score = ScoreFile(file)
+            from mscxyz.score_file_classes import MscoreFile
+            score = MscoreFile(file)
             score.export(extension=args.export_extension)
 
         report_errors(score.errors)
