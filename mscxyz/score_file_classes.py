@@ -8,9 +8,6 @@ The classes build on each other hierarchically. The class hierarchy:
         MscoreXmlTree
             MscoreStyleInterface
             MscoreLyricsInterface
-            Rename
-
-Depending on the subcommand
 """
 
 
@@ -63,7 +60,7 @@ def list_zero_alphabet():
 class MscoreFile(object):
     """This class holds basic file properties of the MuseScore score file.
 
-    :param relpath: The relative (or absolute) path of the MuseScore
+    :param relpath: The relative (or absolute) path of a MuseScore
         file.
     """
 
@@ -138,9 +135,12 @@ class MscoreFile(object):
 
 
 class MscoreXmlTree(MscoreFile):
-    """XML tree manipulation"""
+    """XML tree manipulation
 
-    def __init__(self, relpath):
+    :param relpath: The relative (or absolute) path of a MuseScore file.
+    """
+
+    def __init__(self, relpath: str):
         super(MscoreXmlTree, self).__init__(relpath)
         try:
             self.xml_tree = lxml.etree.parse(self.loadpath)
@@ -155,22 +155,34 @@ class MscoreXmlTree(MscoreFile):
             self.version = float(version)
             """The MuseScore version, for example 2.03 or 3.01"""
 
-    def add_sub_element(self, root_tag, tag, text):
+    def add_sub_element(self, root_tag, tag, text: str):
         tag = lxml.etree.SubElement(root_tag, tag)
         tag.text = text
 
-    def strip_tags(self, *tags):
-        lxml.etree.strip_tags(self.xml_tree, tags)
+    def strip_tags(self, *tag_names: str):
+        """Delete / strip some tag names."""
+        lxml.etree.strip_tags(self.xml_tree, tag_names)
 
-    def remove_tags_by_xpath(self, *xpath_strings):
+    def remove_tags_by_xpath(self, *xpath_strings: str):
+        """Remove tags by xpath strings.
+
+        :param xpath_strings: A xpath string.
+
+        .. code:: Python
+
+            tree.remove_tags_by_xpath(
+                '/museScore/Score/Style', '//LayoutBreak', '//StemDirection'
+            )
+
+        """
         for xpath_string in xpath_strings:
             for rm in self.xml_tree.xpath(xpath_string):
                 rm.getparent().remove(rm)
 
-    def merge_style(self, styles):
+    def merge_style(self, styles: str):
         """Merge styles into the XML tree.
 
-        :param str styles: The path of the style file or a string containing
+        :param styles: The path of the style file or a string containing
           the XML style markup.
 
         ``styles`` may not contain surrounding ``<Style>`` tags. This input is
@@ -294,7 +306,12 @@ class MscoreXmlTree(MscoreFile):
 ###############################################################################
 
 class MscoreStyleInterface(MscoreXmlTree):
-    def __init__(self, relpath):
+    """
+    Interface specialized for the style manipulation.
+
+    :param relpath: The relative (or absolute) path of a MuseScore file.
+    """
+    def __init__(self, relpath: str):
         super(MscoreStyleInterface, self).__init__(relpath)
         styles = self.xml_tree.xpath('/museScore/Score/Style')
         if styles:
@@ -320,17 +337,17 @@ class MscoreStyleInterface(MscoreXmlTree):
                 parent = elm
         return parent
 
-    def get(self, element_path):
+    def get(self, element_path: str):
         """
-        :param string element_path: see
+        :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
         element = self.style.find(element_path)
         return element.text
 
-    def set(self, element_path, value):
+    def set(self, element_path: str, value: str):
         """
-        :param string element_path: see
+        :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
         element = self.style.find(element_path)
@@ -338,7 +355,11 @@ class MscoreStyleInterface(MscoreXmlTree):
             element = self._create(element_path)
         element.text = str(value)
 
-    def _get_text_style_element(self, name):
+    def _get_text_style_element(self, name: str):
+        if self.version_major != 2:
+            raise ValueError(
+                'This operation is only allowed for MuseScore 2 score files'
+            )
         xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
         child = self.xml_tree.xpath(xpath)
         if child:
@@ -349,14 +370,25 @@ class MscoreStyleInterface(MscoreXmlTree):
             el_name.text = name
             return el_text_style
 
-    def get_text_style(self, name):
+    def get_text_style(self, name: str):
+        """Get text styles. Only MuseScore2!
+
+        :param name: The name of the text style.
+        """
         text_style = self._get_text_style_element(name)
         out = {}
         for child in text_style.iterchildren():
             out[child.tag] = child.text
         return out
 
-    def set_text_style(self, name, values):
+    def set_text_style(self, name: str, values: dict):
+        """Set text styles. Only MuseScore2!
+
+        :param name: The name of the text style.
+        :param values: A dictionary. The keys are the tag names, values are
+          the text values of the child tags, for example
+          ``{size: 14, bold: 1}``.
+        """
         text_style = self._get_text_style_element(name)
         for element_name, value in values.items():
             el = text_style.find(element_name)
