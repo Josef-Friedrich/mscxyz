@@ -22,7 +22,13 @@ import zipfile
 import tempfile
 
 
-def list_scores(path, extension='both', glob=None):
+def list_scores(path: str, extension: str = 'both', glob: str = None) -> list:
+    """List all scores in path.
+
+    :param path: The path so search for score files.
+    :param extension: Possible values: “both”, “mscz” or “mscx”.
+    :param glob: A glob string, see fnmatch
+    """
     if not glob:
         if extension == 'both':
             glob = '*.msc[xz]'
@@ -37,7 +43,7 @@ def list_scores(path, extension='both', glob=None):
         else:
             return []
     out = []
-    for root, dirs, scores in os.walk(path):
+    for root, _, scores in os.walk(path):
         for score in scores:
             if fnmatch.fnmatch(score, glob):
                 scores_path = os.path.join(root, score)
@@ -46,7 +52,8 @@ def list_scores(path, extension='both', glob=None):
     return out
 
 
-def list_zero_alphabet():
+def list_zero_alphabet() -> list:
+    """Build a list: 0, a, b, c etc."""
     score_dirs = ['0']
     for char in string.ascii_lowercase:
         score_dirs.append(char)
@@ -118,13 +125,13 @@ class MscoreFile(object):
         return os.path.join(tmp_zipdir, mscx)
 
     def backup(self):
-        """Make a copy of the MuseScore"""
+        """Make a copy of the MuseScore file."""
         shutil.copy2(self.relpath, self.relpath_backup)
 
     def export(self, extension: str = 'pdf'):
-        """Export the score to the specifed file type
+        """Export the score to the specifed file type.
 
-        :param str extension: The extension (default: pdf)
+        :param extension: The extension (default: pdf)
         """
         score = self.relpath
         mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
