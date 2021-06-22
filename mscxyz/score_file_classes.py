@@ -134,7 +134,8 @@ class MscoreFile(object):
         :param extension: The extension (default: pdf)
         """
         score = self.relpath
-        mscore(['--export-to', score.replace('.mscx', '.' + extension), score])
+        mscore(['--export-to',
+                score.replace('.' + self.extension, '.' + extension), score])
 
 
 ###############################################################################
