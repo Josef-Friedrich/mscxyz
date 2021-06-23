@@ -2,10 +2,6 @@
     :target: https://pypi.python.org/pypi/mscxyz
     :alt: This package on the Python Package Index
 
-.. image:: https://travis-ci.org/Josef-Friedrich/mscxyz.svg?branch=master
-    :target: https://travis-ci.org/Josef-Friedrich/mscxyz
-    :alt: Continuous integration
-
 .. image:: https://readthedocs.org/projects/mscxyz/badge/?version=latest
     :target: https://mscxyz.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
@@ -69,7 +65,7 @@ mscxyz
     -g GENERAL_GLOB, --glob GENERAL_GLOB
                           Handle only files which matches against Unix style
                           glob patterns (e. g. "*.mscx", "* - *"). If you omit
-                          this option, the standard glob pattern "*.msc[xz]" is
+                          this option, the standard glob pattern "*.mscx" is
                           used.
     -m, --mscore          Open and save the XML file in MuseScore after
                           manipulating the XML with lxml to avoid differences in

@@ -2,10 +2,6 @@
     :target: https://pypi.python.org/pypi/mscxyz
     :alt: This package on the Python Package Index
 
-.. image:: https://travis-ci.org/Josef-Friedrich/mscxyz.svg?branch=master
-    :target: https://travis-ci.org/Josef-Friedrich/mscxyz
-    :alt: Continuous integration
-
 .. image:: https://readthedocs.org/projects/mscxyz/badge/?version=latest
     :target: https://mscxyz.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
