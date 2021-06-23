@@ -7,6 +7,7 @@ import errno
 import hashlib
 import os
 import tmep
+import shutil
 
 
 def create_dir(path: str):
@@ -101,6 +102,8 @@ def rename_filename(source: str) -> Meta:
     if not args.general_dry_run:
 
         create_dir(target)
-        os.rename(source, target)
+        # Invalid cross-device link:
+        # os.rename(source, target)
+        shutil.move(source, target)
 
     return meta
