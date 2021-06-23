@@ -65,10 +65,10 @@ parser.add_argument(
     '-g',
     '--glob',
     dest='general_glob',
-    default='*.mscx',
+    default='*.msc[xz]',
     help='Handle only files which matches against Unix style \
     glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
-    option, the standard glob pattern "*.mscx" is used.')
+    option, the standard glob pattern "*.msc[xz]" is used.')
 
 parser.add_argument(
     '-m',
