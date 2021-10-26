@@ -112,6 +112,8 @@ class MscoreFile(object):
         else:
             self.loadpath = self.abspath
 
+        self.tmpvar = "temp"
+
     @staticmethod
     def _unzip(abspath: str):
         tmp_zipdir = tempfile.mkdtemp()
@@ -275,6 +277,8 @@ class MscoreXmlTree(MscoreFile):
         """
         if new_name:
             filename = new_name
+        elif self.extension == 'mscz':
+            filename = self.loadpath
         else:
             filename = self.relpath
         if not self.errors:
@@ -299,13 +303,23 @@ class MscoreXmlTree(MscoreFile):
                 for tag in self.xml_tree.xpath(xpath):
                     if not tag.text:
                         tag.text = ''
-
+            
             score = open(filename, 'w')
             score.write('<?xml version="1.0" encoding="UTF-8"?>\n')
             score.write(lxml.etree.tostring(self.xml_root, encoding='UTF-8')
                         .decode('utf-8'))
             score.write('\n')
             score.close()
+
+            if self.extension == 'mscz':
+                # Need some tmp directory cleanup for working with mscz files
+                    tmpdir = os.path.dirname(filename)
+                    zip_ref = zipfile.ZipFile(self.abspath, 'w') 
+                    for root, _, files in os.walk(tmpdir):
+                        for file in files:
+                            arcname = os.path.join(root.replace(tmpdir, ""), file)
+                            zip_ref.write(os.path.join(root, file), arcname)
+
             if mscore:
                 re_open(filename)
 
