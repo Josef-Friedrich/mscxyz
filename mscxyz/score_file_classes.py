@@ -313,12 +313,12 @@ class MscoreXmlTree(MscoreFile):
 
             if self.extension == 'mscz':
                 # Need some tmp directory cleanup for working with mscz files
-                    tmpdir = os.path.dirname(filename)
-                    zip_ref = zipfile.ZipFile(self.abspath, 'w') 
-                    for root, _, files in os.walk(tmpdir):
-                        for file in files:
-                            arcname = os.path.join(root.replace(tmpdir, ""), file)
-                            zip_ref.write(os.path.join(root, file), arcname)
+                tmpdir = os.path.dirname(filename)
+                zip_ref = zipfile.ZipFile(self.abspath, 'w') 
+                for root, _, files in os.walk(tmpdir):
+                    for file in files:
+                        arcname = os.path.join(root.replace(tmpdir, ""), file)
+                        zip_ref.write(os.path.join(root, file), arcname)
 
             if mscore:
                 re_open(filename)
