@@ -112,8 +112,6 @@ class MscoreFile(object):
         else:
             self.loadpath = self.abspath
 
-        self.tmpvar = "temp"
-
     @staticmethod
     def _unzip(abspath: str):
         tmp_zipdir = tempfile.mkdtemp()
