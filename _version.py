@@ -44,8 +44,8 @@ def get_config():
     cfg.VCS = "git"
     cfg.style = "pep440"
     cfg.tag_prefix = ""
-    cfg.parentdir_prefix = "mscxyz-"
-    cfg.versionfile_source = "mscxyz/_version.py"
+    cfg.parentdir_prefix = "audiorename-"
+    cfg.versionfile_source = "audiorename/_version.py"
     cfg.verbose = False
     return cfg
 
