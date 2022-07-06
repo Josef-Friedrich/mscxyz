@@ -22,23 +22,24 @@ Functions:
     list_scores
 """
 
+import configparser
+import os
+import sys
+import typing
+
+import lxml
+
 from mscxyz import cli
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import MscoreFile, \
-                                      MscoreXmlTree, \
-                                      MscoreStyleInterface, \
-                                      list_scores
-from mscxyz.utils import set_args, color, mscore
+from mscxyz.score_file_classes import (MscoreFile, MscoreStyleInterface,
+                                       MscoreXmlTree, list_scores)
 from mscxyz.settings import DefaultArguments
-import lxml
-import sys
-import os
-import configparser
-import typing
+from mscxyz.utils import color, mscore, set_args
 
 from ._version import get_versions
+
 __version__ = get_versions()['version']
 del get_versions
 

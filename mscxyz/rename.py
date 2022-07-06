@@ -1,13 +1,15 @@
 """Rename MuseScore files"""
 
-from mscxyz.meta import Meta
-from mscxyz.utils import color, get_args
-from tmep.format import alphanum, asciify, nowhitespace
 import errno
 import hashlib
 import os
-import tmep
 import shutil
+
+import tmep
+from tmep.format import alphanum, asciify, nowhitespace
+
+from mscxyz.meta import Meta
+from mscxyz.utils import color, get_args
 
 
 def create_dir(path: str):

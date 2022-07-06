@@ -1,12 +1,14 @@
 """Class for metadata maniplation"""
 
-from mscxyz.score_file_classes import MscoreXmlTree
-from mscxyz.utils import get_args, color
 import json
-import lxml
 import re
-import tmep
 import typing
+
+import lxml
+import tmep
+
+from mscxyz.score_file_classes import MscoreXmlTree
+from mscxyz.utils import color, get_args
 
 
 class ReadOnlyFieldError(Exception):

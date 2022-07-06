@@ -1,8 +1,10 @@
 """Manipulate the lyrics"""
 
-from mscxyz.score_file_classes import MscoreXmlTree
-import lxml.etree as etree
 import typing
+
+import lxml.etree as etree
+
+from mscxyz.score_file_classes import MscoreXmlTree
 
 
 class MscoreLyricsInterface(MscoreXmlTree):

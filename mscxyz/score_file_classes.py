@@ -11,15 +11,17 @@ The classes build on each other hierarchically. The class hierarchy:
 """
 
 
-from mscxyz.utils import mscore, re_open
-import lxml.etree  # Needed for type hints
 import fnmatch
-import lxml
 import os
 import shutil
 import string
-import zipfile
 import tempfile
+import zipfile
+
+import lxml
+import lxml.etree  # Needed for type hints
+
+from mscxyz.utils import mscore, re_open
 
 
 def list_scores(path: str, extension: str = 'both', glob: str = None) -> list:

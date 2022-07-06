@@ -3,8 +3,10 @@
 import os
 import platform
 import subprocess
-import termcolor
 from typing import Sequence
+
+import termcolor
+
 from mscxyz.settings import DefaultArguments
 
 

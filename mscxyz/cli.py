@@ -1,11 +1,13 @@
 """Wrapper for the command line interface."""
 
-from mscxyz._version import get_versions
-from mscxyz.meta import InterfaceReadWrite, Interface
 import argparse
 import textwrap
-import tmep
 import typing
+
+import tmep
+
+from mscxyz._version import get_versions
+from mscxyz.meta import Interface, InterfaceReadWrite
 
 
 def list_fields(fields: typing.Sequence, prefix: str = '',
