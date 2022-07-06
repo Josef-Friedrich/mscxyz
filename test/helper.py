@@ -1,10 +1,11 @@
 """MscoreFile for various tests"""
 
-from distutils.dir_util import copy_tree
 import os
 import shutil
 import subprocess
 import tempfile
+from distutils.dir_util import copy_tree
+
 from jflib import Capturing  # noqa: F401
 
 test_dir = os.path.dirname(os.path.abspath(__file__))

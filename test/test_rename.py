@@ -1,13 +1,15 @@
 """Test submodule “rename.py”."""
 
 
-from mscxyz import rename
-import helper
-from helper import ini_file
-import mscxyz
 import os
 import tempfile
 import unittest
+
+import helper
+from helper import ini_file
+
+import mscxyz
+from mscxyz import rename
 
 
 class TestFunctions(unittest.TestCase):

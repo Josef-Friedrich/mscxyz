@@ -1,8 +1,10 @@
 """Test submodule “utils.py”."""
 
-from mscxyz.utils import get_mscore_bin, mscore, get_args
 import unittest
 from unittest import mock
+
+from mscxyz.utils import get_args, get_mscore_bin, mscore
+
 args = get_args()
 args.general_executable = None
 

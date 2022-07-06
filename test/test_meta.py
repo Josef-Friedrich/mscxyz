@@ -1,16 +1,19 @@
 """Test submodule “meta.py”."""
 
 
-from mscxyz import meta
-from mscxyz.meta import MetaTag, Meta, Vbox, Combined, distribute_field, \
-                        InterfaceReadWrite, InterfaceReadOnly, Interface
-from mscxyz.score_file_classes import MscoreXmlTree
-import helper
-from helper import ini_file
-import mscxyz
 import os
 import tempfile
 import unittest
+
+import helper
+from helper import ini_file
+
+import mscxyz
+from mscxyz import meta
+from mscxyz.meta import (Combined, Interface, InterfaceReadOnly,
+                         InterfaceReadWrite, Meta, MetaTag, Vbox,
+                         distribute_field)
+from mscxyz.score_file_classes import MscoreXmlTree
 
 
 class TestExceptions(unittest.TestCase):

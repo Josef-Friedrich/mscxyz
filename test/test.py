@@ -1,10 +1,12 @@
 """MscoreFile for various tests"""
 
-import helper
-from unittest import mock
-import mscxyz
 import os
 import unittest
+from unittest import mock
+
+import helper
+
+import mscxyz
 
 
 class TestBackup(unittest.TestCase):

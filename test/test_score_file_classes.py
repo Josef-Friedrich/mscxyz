@@ -1,15 +1,17 @@
 """Test submodules “score_file_classes.py”"""
 
-from mscxyz.score_file_classes import MscoreFile, list_scores, \
-                                      list_zero_alphabet, MscoreXmlTree, \
-                                      MscoreStyleInterface
-import helper
-from unittest import mock
-import mscxyz
+import filecmp
 import os
 import shutil
 import unittest
-import filecmp
+from unittest import mock
+
+import helper
+
+import mscxyz
+from mscxyz.score_file_classes import (MscoreFile, MscoreStyleInterface,
+                                       MscoreXmlTree, list_scores,
+                                       list_zero_alphabet)
 
 
 class TestFunctions(unittest.TestCase):

@@ -1,9 +1,11 @@
 """Test file “__init__.py”"""
 
+import unittest
+
 import helper
 from helper import ini_file
+
 import mscxyz
-import unittest
 
 
 class TestBrokenMscoreFile(unittest.TestCase):

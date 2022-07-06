@@ -1,10 +1,12 @@
 """Test module “cli.py”."""
 
-from mscxyz import cli
-import helper
-import mscxyz
 import re
 import unittest
+
+import helper
+
+import mscxyz
+from mscxyz import cli
 
 
 class TestArgs(unittest.TestCase):

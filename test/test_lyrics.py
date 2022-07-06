@@ -1,10 +1,12 @@
 """Test submodule “lyrics.py”."""
 
 
-import helper
-import mscxyz
 import os
 import unittest
+
+import helper
+
+import mscxyz
 
 
 class TestMscoreLyricsInterface(unittest.TestCase):

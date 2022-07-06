@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-import subprocess
 import os
+import subprocess
 
 
 def path(*path_segments):

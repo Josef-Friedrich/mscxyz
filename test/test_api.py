@@ -2,13 +2,9 @@
 command line."""
 
 import unittest
-from mscxyz import \
-    MscoreFile, \
-    MscoreXmlTree, \
-    MscoreLyricsInterface, \
-    MscoreMetaInterface, \
-    MscoreStyleInterface, \
-    exec_mscore_binary
+
+from mscxyz import (MscoreFile, MscoreLyricsInterface, MscoreMetaInterface,
+                    MscoreStyleInterface, MscoreXmlTree, exec_mscore_binary)
 
 
 class TestApi(unittest.TestCase):
