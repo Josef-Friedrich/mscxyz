@@ -17,6 +17,7 @@ import shutil
 import string
 import tempfile
 import zipfile
+from typing import List, Optional
 
 import lxml
 import lxml.etree  # Needed for type hints
@@ -24,7 +25,8 @@ import lxml.etree  # Needed for type hints
 from mscxyz.utils import mscore, re_open
 
 
-def list_scores(path: str, extension: str = 'both', glob: str = None) -> list:
+def list_scores(path: str, extension: str = 'both',
+                glob: Optional[str] = None) -> List[str]:
     """List all scores in path.
 
     :param path: The path so search for score files.
@@ -44,7 +46,7 @@ def list_scores(path: str, extension: str = 'both', glob: str = None) -> list:
             return [path]
         else:
             return []
-    out = []
+    out: List[str] = []
     for root, _, scores in os.walk(path):
         for score in scores:
             if fnmatch.fnmatch(score, glob):
@@ -54,7 +56,7 @@ def list_scores(path: str, extension: str = 'both', glob: str = None) -> list:
     return out
 
 
-def list_zero_alphabet() -> list:
+def list_zero_alphabet() -> List[str]:
     """Build a list: 0, a, b, c etc."""
     score_dirs = ['0']
     for char in string.ascii_lowercase:
@@ -74,48 +76,56 @@ class MscoreFile(object):
         file.
     """
 
+    errors: List[Exception]
+    """A list to store errors."""
+
+    relpath: str
+    """The relative path of the score file, for example:
+    ``files_mscore2/simple.mscx``.
+    """
+
+    abspath: str
+    """The absolute path of the score file, for example:
+    ``/home/jf/test/files_mscore2/simple.mscx``."""
+
+    extension: str
+    """The extension (``mscx`` or ``mscz``) of the score file, for
+    example: ``mscx``."""
+
+    relpath_backup: str
+
+    dirname: str
+    """The name of the containing directory of the MuseScore file, for
+    example: ``files_mscore2``."""
+
+    filename: str
+    """The filename of the MuseScore file, for example:
+    ``simple.mscx``."""
+
+    basename: str
+    """The basename of the score file, for example: ``simple``."""
+
+    loadpath: str
+    """The load path of the score file"""
+
     def __init__(self, relpath: str):
         self.errors = []
-        """A list to store errors."""
-
         self.relpath = relpath
-        """The relative path of the score file, for example:
-        ``files_mscore2/simple.mscx``.
-        """
-
         self.abspath = os.path.abspath(relpath)
-        """The absolute path of the score file, for example:
-        ``/home/jf/test/files_mscore2/simple.mscx``."""
-
         self.extension = relpath.split('.')[-1].lower()
-        """The extension (``mscx`` or ``mscz``) of the score file, for
-        example: ``mscx``."""
-
         self.relpath_backup = relpath.replace(
             '.' + self.extension, '_bak.' + self.extension)
-        """The backup path of the score file, for example:
-        ``files_mscore2/simple_bak.mscx``."""
-
         self.dirname = os.path.dirname(relpath)
-        """The name of the containing directory of the MuseScore file, for
-        example: ``files_mscore2``."""
-
         self.filename = os.path.basename(relpath)
-        """The filename of the MuseScore file, for example:
-        ``simple.mscx``."""
-
         self.basename = self.filename.replace('.mscx', '')
-        """The basename of the score file, for example: ``simple``."""
 
         if self.extension == 'mscz':
             self.loadpath = self._unzip(self.abspath)
-            """The load path of the score file"""
-
         else:
             self.loadpath = self.abspath
 
     @staticmethod
-    def _unzip(abspath: str):
+    def _unzip(abspath: str) -> str:
         tmp_zipdir = tempfile.mkdtemp()
         zip_ref = zipfile.ZipFile(abspath, 'r')
         zip_ref.extractall(tmp_zipdir)
@@ -124,7 +134,7 @@ class MscoreFile(object):
         container_info = lxml.etree.parse(con)
         mscx = container_info \
             .xpath('string(/container/rootfiles/rootfile/@full-path)')
-        return os.path.join(tmp_zipdir, mscx)
+        return os.path.join(tmp_zipdir, str(mscx))
 
     def backup(self):
         """Make a copy of the MuseScore file."""

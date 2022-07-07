@@ -3,7 +3,7 @@
 submodules using the function `get_args()`."""
 
 
-class DefaultArguments(object):
+class DefaultArguments:
 
     clean_style = None
     export_extension = None

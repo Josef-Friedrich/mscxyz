@@ -1,9 +1,11 @@
 """A collection of useful utility functions"""
 
+from __future__ import annotations  # For subprocess.Popen[Any]
+
 import os
 import platform
 import subprocess
-from typing import Sequence
+from typing import Any, List, Optional
 
 import termcolor
 
@@ -20,7 +22,7 @@ def get_args() -> DefaultArguments:
     return getattr(settings, 'args')
 
 
-def set_args(args) -> DefaultArguments:
+def set_args(args: DefaultArguments) -> DefaultArguments:
     """Set the ``args`` object (the ``argparse`` object) which is stored in
     the .settings.py submodule for all other submodules to import.
     """
@@ -52,7 +54,7 @@ def get_mscore_bin() -> str:
         raise ValueError('mscore binary could not be found.')
 
 
-def mscore(cli_args: Sequence[str]) -> subprocess.Popen:
+def mscore(cli_args: List[str]) -> subprocess.Popen[Any]:
     """
     :param cli_args: Command line arguments to call the mscore binary with.
     """
@@ -62,13 +64,14 @@ def mscore(cli_args: Sequence[str]) -> subprocess.Popen:
                          stderr=subprocess.PIPE)
     p.wait()
     if p.returncode != 0:
-        for line in p.stderr:
-            print(line.decode('utf-8'))
-        raise ValueError('mscore exits with returncode != 0')
+        if p.stderr is not None:
+            for line in p.stderr:
+                print(line.decode('utf-8'))
+            raise ValueError('mscore exits with returncode != 0')
     return p
 
 
-def re_open(input_file: str):
+def re_open(input_file: str) -> None:
     """Open and save a MuseScore file with the ``mscore`` binary under the same
     file path.
 
@@ -77,7 +80,7 @@ def re_open(input_file: str):
     mscore(['-o', input_file, input_file])
 
 
-def convert_mxl(input_file: str):
+def convert_mxl(input_file: str) -> None:
     """
     Convert a MusicXML file into a MuseScore file.
 
@@ -88,12 +91,10 @@ def convert_mxl(input_file: str):
     os.remove(input_file)
 
 
-def color(*args) -> str:
+def color(text: str, color: Optional[str] = None,
+          on_color: Optional[str] = None) -> str:
     """Wrapper function around ``termcolor.colored()`` to easily turn off and
     on colorized terminal output on the command line.
-
-    :param args: First arg must be an string to print out, second arg a color
-      name.
 
     Example usage:
 
@@ -103,6 +104,6 @@ def color(*args) -> str:
     """
     settings = get_args()
     if settings.general_colorize:
-        return termcolor.colored(*args)
+        return termcolor.colored(text, color, on_color)
     else:
-        return args[0]
+        return text

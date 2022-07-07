@@ -34,7 +34,7 @@ setup(
     keywords='audio',
     url='https://github.com/Josef-Friedrich/mscxyz',
     install_requires=[
-        'lxml', 'termcolor', 'tmep>=2.0.1'
+        'lxml', 'termcolor', 'tmep>=2.0.1', 'lxml-stubs==0.4.0'
     ],
     tests_require=['mock'],
     scripts=['bin/mscx-manager'],
@@ -42,8 +42,6 @@ setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3',
