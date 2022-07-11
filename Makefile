@@ -2,7 +2,6 @@ all: test
 
 build:
 	rm -rf dist
-	# No bdist_wheel: problems with versioneer.
 	python3 setup.py sdist
 
 doc:
