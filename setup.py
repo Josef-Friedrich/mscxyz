@@ -2,8 +2,6 @@ import os
 
 from setuptools import find_packages, setup
 
-import versioneer
-
 
 def read(file_name):
     """
@@ -22,8 +20,7 @@ def read(file_name):
 
 setup(
     name='mscxyz',
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
+    version='0.0.0',
     author='Josef Friedrich',
     author_email='josef@friedrich.rocks',
     description=(

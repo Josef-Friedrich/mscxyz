@@ -6,7 +6,6 @@ import typing
 
 import tmep
 
-from mscxyz._version import get_versions
 from mscxyz.meta import Interface, InterfaceReadWrite
 
 
@@ -31,7 +30,7 @@ parser.add_argument(
     '--version',
     action='version',
     version='%(prog)s {version}'.format(
-        version=get_versions()['version']
+        version='0.0.0'
     )
 )
 

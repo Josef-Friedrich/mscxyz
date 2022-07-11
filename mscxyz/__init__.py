@@ -38,10 +38,8 @@ from mscxyz.score_file_classes import (MscoreFile, MscoreStyleInterface,
 from mscxyz.settings import DefaultArguments
 from mscxyz.utils import color, mscore, set_args
 
-from ._version import get_versions
 
-__version__ = get_versions()['version']
-del get_versions
+__version__ = '0.0.0'
 
 ###############################################################################
 # API INTERFACE BEGIN
