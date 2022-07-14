@@ -14,9 +14,9 @@ source_suffix = '.rst'
 
 master_doc = 'index'
 
-project = u'mscxyz'
-copyright = u'2016, Josef Friedrich'
-author = u'Josef Friedrich'
+project = 'mscxyz'
+copyright = '2016, Josef Friedrich'
+author = 'Josef Friedrich'
 version = mscxyz.__version__
 release = mscxyz.__version__
 language = 'en'

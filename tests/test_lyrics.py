@@ -72,7 +72,7 @@ class TestMscoreLyricsInterfaceFix(unittest.TestCase):
                 syllabic.append(tag_syllabic.text)
 
         self.assertEqual(text,
-                         ['Al', u'K\xf6pf', 'le', 'chen', 'mei', 'un', 'ne',
+                         ['Al', 'K\xf6pf', 'le', 'chen', 'mei', 'un', 'ne',
                           'ters', 'En', 'Was', 'te', 'si', 'lein.', 'lein.'])
         self.assertEqual(syllabic, ['begin', 'begin', 'end', 'end', 'begin',
                                     'begin', 'end', 'end', 'begin', 'begin',
