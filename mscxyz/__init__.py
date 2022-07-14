@@ -25,6 +25,7 @@ Functions:
 import configparser
 import os
 import sys
+from importlib import metadata
 import typing
 
 import lxml
@@ -39,7 +40,8 @@ from mscxyz.settings import DefaultArguments
 from mscxyz.utils import color, mscore, set_args
 
 
-__version__ = '0.0.0'
+__version__: str = metadata.version('mscxyz')
+
 
 ###############################################################################
 # API INTERFACE BEGIN
