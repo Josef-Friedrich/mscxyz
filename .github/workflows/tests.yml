@@ -1,6 +1,6 @@
 ---
-# https://hynek.me/articles/python-github-actions/
-name: Test
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+name: Tests
 
 on:
   push:
@@ -16,18 +16,19 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11-dev']
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v3
+      # https://github.com/marketplace/actions/setup-python
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -VV
-          python -m site
           python -m pip install --upgrade pip setuptools wheel virtualenv tox tox-gh-actions
 
+      # https://github.com/ymyzk/tox-gh-actions
       - name: Run tox targets for ${{ matrix.python-version }}
         run: python -m tox
