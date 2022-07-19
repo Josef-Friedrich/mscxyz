@@ -39,7 +39,6 @@ From PyPI
 Usage
 =====
 
-
 mscxyz
 ======
 
@@ -58,7 +57,7 @@ mscxyz
                           "help" this positional parameter accepts the names of
                           all other subcommands or the word "all".
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -V, --version         show program's version number and exit
     -b, --backup          Create a backup file.
@@ -99,10 +98,8 @@ mscxyz
                           <subcommand>” to show only help messages for the given
                           subcommand.
 
-
 Subcommands
 ===========
-
 
 mscx-manager clean
 ------------------
@@ -111,12 +108,11 @@ mscx-manager clean
 
   usage: mscx-manager clean [-h] [-s CLEAN_STYLE]
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -s CLEAN_STYLE, --style CLEAN_STYLE
                           Load a "*.mss" style file and include the contents of
                           this file.
-
 
 mscx-manager meta
 -----------------
@@ -202,7 +198,7 @@ mscx-manager meta
       - vbox_subtitle
       - vbox_title
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -c META_CLEAN, --clean META_CLEAN
                           Clean the meta data fields. Possible values: „all“ or
@@ -232,7 +228,6 @@ mscx-manager meta
     -S DESTINATION_FIELD FORMAT_STRING, --set-field DESTINATION_FIELD FORMAT_STRING
                           Set value to meta data fields.
 
-
 mscx-manager lyrics
 -------------------
 
@@ -240,7 +235,7 @@ mscx-manager lyrics
 
   usage: mscx-manager lyrics [-h] [-e LYRICS_EXTRACT] [-r LYRICS_REMAP] [-f]
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -e LYRICS_EXTRACT, --extract LYRICS_EXTRACT
                           The lyric verse number to extract or "all".
@@ -253,7 +248,6 @@ mscx-manager lyrics
                           new verse number.
     -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to
                           a correct hyphenation ("la - la - la")
-
 
 mscx-manager rename
 -------------------
@@ -454,7 +448,7 @@ mscx-manager rename
       %upper{text}
           Convert “text” to UPPERCASE.
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -f RENAME_FORMAT, --format RENAME_FORMAT
                           Format string.
@@ -468,7 +462,6 @@ mscx-manager rename
     -t RENAME_TARGET, --target RENAME_TARGET
                           Target directory
 
-
 mscx-manager export
 -------------------
 
@@ -476,12 +469,11 @@ mscx-manager export
 
   usage: mscx-manager export [-h] [-e EXPORT_EXTENSION]
 
-  optional arguments:
+  options:
     -h, --help            show this help message and exit
     -e EXPORT_EXTENSION, --extension EXPORT_EXTENSION
                           Extension to export. If this option is omitted, then
                           the default extension is "pdf".
-
 
 mscx-manager help
 -----------------
@@ -490,7 +482,7 @@ mscx-manager help
 
   usage: mscx-manager help [-h] [-m] [-r]
 
-  optional arguments:
+  options:
     -h, --help      show this help message and exit
     -m, --markdown  Show help in markdown format. This option enables to
                     generate the README file directly form the command line
@@ -498,7 +490,6 @@ mscx-manager help
     -r, --rst       Show help in reStructuresText format. This option enables to
                     generate the README file directly form the command line
                     output.
-
 
 API Usage
 =========
@@ -551,7 +542,6 @@ Test
 
     tox
 
-
 Publish a new version
 ---------------------
 
@@ -560,7 +550,6 @@ Publish a new version
     git tag 1.1.1
     git push --tags
     python setup.py sdist upload
-
 
 Package documentation
 ---------------------

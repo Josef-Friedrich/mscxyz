@@ -22,9 +22,21 @@ termcolor = "^1.1.0"
 tmep = "^2.3.3"
 lxml-stubs = "^0.4.0"
 
+[tool.poetry.dev-dependencies]
+readme-patcher = "^0.3.0"
+# readme-patcher = { path = "../readme_patcher" }
+
 [build-system]
 requires = ["poetry>=1.2.0b2"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
 "mscx-manager" = "mscxyz:execute"
+
+[[tool.readme_patcher.file]]
+src = "README_template.rst"
+dest = "README.rst"
+
+[[tool.readme_patcher.file]]
+src = "cli_template.rst"
+dest = "doc/source/cli.rst"
