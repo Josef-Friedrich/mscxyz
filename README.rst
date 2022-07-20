@@ -1,5 +1,5 @@
 .. image:: http://img.shields.io/pypi/v/mscxyz.svg
-    :target: https://pypi.python.org/pypi/mscxyz
+    :target: https://pypi.org/project/mscxyz
     :alt: This package on the Python Package Index
 
 .. image:: https://github.com/Josef-Friedrich/mscxyz/actions/workflows/tests.yml/badge.svg
