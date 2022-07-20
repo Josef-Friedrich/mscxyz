@@ -23,7 +23,7 @@ tmep = "^2.3.3"
 lxml-stubs = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
-readme-patcher = "^0.3.0"
+readme-patcher = "^0.5.0"
 # readme-patcher = { path = "../readme_patcher" }
 
 [build-system]
