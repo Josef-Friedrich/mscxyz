@@ -12,41 +12,39 @@ from mscxyz.utils import color, get_args
 
 
 class ReadOnlyFieldError(Exception):
-
     def __init__(self, field: str):
-        self.msg = 'The field “{}” is read only!'.format(field)
+        self.msg = "The field “{}” is read only!".format(field)
         Exception.__init__(self, self.msg)
 
 
 class UnkownFieldError(Exception):
-
     def __init__(self, field: str, valid_fields: typing.Sequence):
-        self.msg = 'Unkown field of name “{}”! Valid field names are: {}' \
-              .format(field, ', '.join(valid_fields))
+        self.msg = "Unkown field of name “{}”! Valid field names are: {}".format(
+            field, ", ".join(valid_fields)
+        )
         Exception.__init__(self, self.msg)
 
 
 class UnmatchedFormatStringError(Exception):
-
     def __init__(self, format_string: str, input_string: str):
-        self.msg = 'Your format string “{}” doesn’t match on this ' \
-              'input string: “{}”'.format(format_string, input_string)
+        self.msg = (
+            "Your format string “{}” doesn’t match on this "
+            "input string: “{}”".format(format_string, input_string)
+        )
         Exception.__init__(self, self.msg)
 
 
 class FormatStringNoFieldError(Exception):
-
     def __init__(self, format_string: str):
-        self.msg = 'No fields found in your format string “{}”!' \
-              .format(format_string)
+        self.msg = "No fields found in your format string “{}”!".format(format_string)
         Exception.__init__(self, self.msg)
 
 
 def distribute_field(source, format_string: str):
-    fields = re.findall(r'\$([a-z_]*)', format_string)
+    fields = re.findall(r"\$([a-z_]*)", format_string)
     if not fields:
         raise FormatStringNoFieldError(format_string)
-    regex = re.sub(r'\$[a-z_]*', '(.*)', format_string)
+    regex = re.sub(r"\$[a-z_]*", "(.*)", format_string)
     match = re.search(regex, source)
     if not match:
         raise UnmatchedFormatStringError(format_string, source)
@@ -55,7 +53,7 @@ def distribute_field(source, format_string: str):
 
 
 def to_underscore(field):
-    return re.sub('([A-Z]+)', r'_\1', field).lower()
+    return re.sub("([A-Z]+)", r"_\1", field).lower()
 
 
 def export_to_dict(obj, fields):
@@ -63,7 +61,7 @@ def export_to_dict(obj, fields):
     for field in fields:
         value = getattr(obj, field)
         if not value:
-            value = ''
+            value = ""
         out[field] = value
     return out
 
@@ -72,42 +70,41 @@ class MetaTag(object):
 
     """The available metaTag fields are:
 
-        * `arranger`
-        * `composer`
-        * `copyright`
-        * `creationDate`
-        * `lyricist`
-        * `movementNumber`
-        * `movementTitle`
-        * `platform`
-        * `poet`
-        * `source`
-        * `translator`
-        * `workNumber`
-        * `workTitle`
+    * `arranger`
+    * `composer`
+    * `copyright`
+    * `creationDate`
+    * `lyricist`
+    * `movementNumber`
+    * `movementTitle`
+    * `platform`
+    * `poet`
+    * `source`
+    * `translator`
+    * `workNumber`
+    * `workTitle`
 
-        """
+    """
 
     fields = (
-        'arranger',
-        'composer',
-        'copyright',
-        'creationDate',
-        'lyricist',
-        'movementNumber',
-        'movementTitle',
-        'platform',
-        'poet',
-        'source',
-        'translator',
-        'workNumber',
-        'workTitle',
+        "arranger",
+        "composer",
+        "copyright",
+        "creationDate",
+        "lyricist",
+        "movementNumber",
+        "movementTitle",
+        "platform",
+        "poet",
+        "source",
+        "translator",
+        "workNumber",
+        "workTitle",
     )
 
     @staticmethod
     def _to_camel_case(field):
-        return re.sub(r'(?!^)_([a-zA-Z])',
-                      lambda match: match.group(1).upper(), field)
+        return re.sub(r"(?!^)_([a-zA-Z])", lambda match: match.group(1).upper(), field)
 
     def __init__(self, xml_root):
         self.xml_root = xml_root
@@ -118,7 +115,7 @@ class MetaTag(object):
 
     def _get_text(self, field: str) -> str:
         element = self._get_element(field)
-        if hasattr(element, 'text'):
+        if hasattr(element, "text"):
             return element.text
 
     def __getattr__(self, field):
@@ -129,7 +126,7 @@ class MetaTag(object):
             return self._get_text(field)
 
     def __setattr__(self, field, value):
-        if field == 'xml_root' or field == 'fields':
+        if field == "xml_root" or field == "fields":
             self.__dict__[field] = value
         else:
             field = self._to_camel_case(field)
@@ -137,18 +134,18 @@ class MetaTag(object):
 
     def clean(self):
         fields = (
-            'arranger',
-            'copyright',
-            'creationDate',
-            'movementNumber',
-            'platform',
-            'poet',
-            'source',
-            'translator',
-            'workNumber',
+            "arranger",
+            "copyright",
+            "creationDate",
+            "movementNumber",
+            "platform",
+            "poet",
+            "source",
+            "translator",
+            "workNumber",
         )
         for field in fields:
-            setattr(self, field, '')
+            setattr(self, field, "")
 
 
 class Vbox(object):
@@ -180,19 +177,19 @@ class Vbox(object):
     """
 
     fields = (
-        'Composer',
-        'Lyricist',
-        'Subtitle',
-        'Title',
+        "Composer",
+        "Lyricist",
+        "Subtitle",
+        "Title",
     )
 
     def __init__(self, xml_root):
         self.xml_root = xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
-        if not xml_root.xpath(xpath + '/VBox'):
-            vbox = lxml.etree.Element('VBox')
-            height = lxml.etree.SubElement(vbox, 'height')
-            height.text = '10'
+        if not xml_root.xpath(xpath + "/VBox"):
+            vbox = lxml.etree.Element("VBox")
+            height = lxml.etree.SubElement(vbox, "height")
+            height.text = "10"
 
             for element in xml_root.xpath(xpath):
                 element.insert(0, vbox)
@@ -201,16 +198,16 @@ class Vbox(object):
         """
         :param string style: String inside the `<style>` tags
         """
-        for element in self.xml_root.xpath('//VBox/Text'):
-            if element.find('style').text == style:
-                return element.find('text')
+        for element in self.xml_root.xpath("//VBox/Text"):
+            if element.find("style").text == style:
+                return element.find("text")
 
     def _get_text(self, style):
         """
         :param string style: String inside the `<style>` tags
         """
         element = self._get_tag(style)
-        if hasattr(element, 'text'):
+        if hasattr(element, "text"):
             return element.text
 
     def __getattr__(self, field):
@@ -224,12 +221,12 @@ class Vbox(object):
         """
         :param string style: String inside the `<style>` tags
         """
-        Text_tag = lxml.etree.Element('Text')
-        style_tag = lxml.etree.SubElement(Text_tag, 'style')
+        Text_tag = lxml.etree.Element("Text")
+        style_tag = lxml.etree.SubElement(Text_tag, "style")
         style_tag.text = style
-        text_tag = lxml.etree.SubElement(Text_tag, 'text')
+        text_tag = lxml.etree.SubElement(Text_tag, "text")
         text_tag.text = text
-        for element in self.xml_root.xpath('//VBox'):
+        for element in self.xml_root.xpath("//VBox"):
             element.append(Text_tag)
 
     def _set_text(self, style, text):
@@ -237,13 +234,13 @@ class Vbox(object):
         :param string style: String inside the `<style>` tags
         """
         element = self._get_tag(style)
-        if hasattr(element, 'text'):
+        if hasattr(element, "text"):
             element.text = text
         else:
             self._create_text_tag(style, text)
 
     def __setattr__(self, field, value):
-        if field == 'xml_root' or field == 'fields':
+        if field == "xml_root" or field == "fields":
             self.__dict__[field] = value
         elif field.title() not in self.fields:
             raise UnkownFieldError(field, self.fields)
@@ -254,10 +251,10 @@ class Vbox(object):
 class Combined(MscoreXmlTree):
 
     fields = (
-        'composer',
-        'lyricist',
-        'subtitle',
-        'title',
+        "composer",
+        "lyricist",
+        "subtitle",
+        "title",
     )
 
     def __init__(self, xml_root):
@@ -305,7 +302,7 @@ class Combined(MscoreXmlTree):
 
 class InterfaceReadWrite(object):
 
-    objects = ('metatag', 'vbox', 'combined')
+    objects = ("metatag", "vbox", "combined")
 
     def __init__(self, xml_root):
         self.metatag = MetaTag(xml_root)
@@ -317,51 +314,51 @@ class InterfaceReadWrite(object):
     def get_all_fields():
         fields = []
         for field in MetaTag.fields:
-            fields.append('metatag_' + to_underscore(field))
+            fields.append("metatag_" + to_underscore(field))
         for field in Vbox.fields:
-            fields.append('vbox_' + field.lower())
+            fields.append("vbox_" + field.lower())
         for field in Combined.fields:
-            fields.append('combined_' + field)
+            fields.append("combined_" + field)
         return sorted(fields)
 
     @staticmethod
     def _split(field):
-        match = re.search(r'([^_]*)_(.*)', field)
+        match = re.search(r"([^_]*)_(.*)", field)
         if not match:
-            raise ValueError('Field “' + field + '” can’t be splitted!')
+            raise ValueError("Field “" + field + "” can’t be splitted!")
         matches = match.groups()
 
         if not matches[0] in InterfaceReadWrite.objects:
-            raise ValueError(matches[0] + ': Not a supported object!')
-        return {'object': matches[0], 'field': matches[1]}
+            raise ValueError(matches[0] + ": Not a supported object!")
+        return {"object": matches[0], "field": matches[1]}
 
     def export_to_dict(self):
         return export_to_dict(self, self.fields)
 
     def __getattr__(self, field):
         parts = self._split(field)
-        obj = getattr(self, parts['object'])
-        return getattr(obj, parts['field'])
+        obj = getattr(self, parts["object"])
+        return getattr(obj, parts["field"])
 
     def __setattr__(self, field, value):
-        if field in ('fields', 'metatag', 'objects', 'vbox', 'combined'):
+        if field in ("fields", "metatag", "objects", "vbox", "combined"):
             self.__dict__[field] = value
         else:
             parts = self._split(field)
-            obj = getattr(self, parts['object'])
-            return setattr(obj, parts['field'], value)
+            obj = getattr(self, parts["object"])
+            return setattr(obj, parts["field"], value)
 
 
 class InterfaceReadOnly(object):
 
     fields = [
-        'readonly_abspath',
-        'readonly_basename',
-        'readonly_dirname',
-        'readonly_extension',
-        'readonly_filename',
-        'readonly_relpath',
-        'readonly_relpath_backup',
+        "readonly_abspath",
+        "readonly_basename",
+        "readonly_dirname",
+        "readonly_extension",
+        "readonly_filename",
+        "readonly_relpath",
+        "readonly_relpath_backup",
     ]
 
     def __init__(self, tree):
@@ -397,7 +394,6 @@ class InterfaceReadOnly(object):
 
 
 class Interface(object):
-
     def __init__(self, tree):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
@@ -406,29 +402,27 @@ class Interface(object):
 
     @staticmethod
     def get_all_fields():
-        return sorted(InterfaceReadOnly.fields +
-                      InterfaceReadWrite.get_all_fields())
+        return sorted(InterfaceReadOnly.fields + InterfaceReadWrite.get_all_fields())
 
     def export_to_dict(self):
         return export_to_dict(self, self.fields)
 
     def __getattr__(self, field):
-        if re.match(r'^readonly_', field):
+        if re.match(r"^readonly_", field):
             return getattr(self.read_only, field)
         else:
             return getattr(self.read_write, field)
 
     def __setattr__(self, field, value):
-        if field in ('xml_tree', 'read_only', 'read_write', 'fields'):
+        if field in ("xml_tree", "read_only", "read_write", "fields"):
             self.__dict__[field] = value
-        elif not re.match(r'^readonly_', field):
+        elif not re.match(r"^readonly_", field):
             return setattr(self.read_write, field, value)
         else:
             raise ReadOnlyFieldError(field)
 
 
 class Meta(MscoreXmlTree):
-
     def __init__(self, relpath):
         super(Meta, self).__init__(relpath)
 
@@ -447,7 +441,7 @@ class Meta(MscoreXmlTree):
             self.combined.lyricist = self.combined.lyricist
 
     def distribute_field(self, source_fields, format_string):
-        source_fields = source_fields.split(',')
+        source_fields = source_fields.split(",")
         for source_field in source_fields:
             try:
                 source = getattr(self.interface, source_field)
@@ -460,35 +454,33 @@ class Meta(MscoreXmlTree):
                 self.errors.append(error)
 
     def write_to_log_file(self, log_file, format_string):
-        log = open(log_file, 'w')
-        log.write(tmep.parse(format_string, self.interface.export_to_dict()) +
-                  '\n')
+        log = open(log_file, "w")
+        log.write(tmep.parse(format_string, self.interface.export_to_dict()) + "\n")
         log.close()
 
     def set_field(self, destination_field, format_string):
-        field_value = tmep.parse(format_string,
-                                 self.interface.export_to_dict())
+        field_value = tmep.parse(format_string, self.interface.export_to_dict())
         setattr(self.interface, destination_field, field_value)
 
     def clean(self, fields):
         fields = fields[0]
-        if fields == 'all':
+        if fields == "all":
             fields = self.interface_read_write.fields
         else:
-            fields = fields.split(',')
+            fields = fields.split(",")
         for field in fields:
-            setattr(self.interface_read_write, field, '')
+            setattr(self.interface_read_write, field, "")
 
     def delete_duplicates(self):
         iface = self.interface
         if iface.combined_lyricist == iface.combined_composer:
-            iface.combined_lyricist = ''
+            iface.combined_lyricist = ""
 
         if not iface.combined_title and iface.combined_subtitle:
             iface.combined_title = iface.combined_subtitle
 
         if iface.combined_subtitle == iface.combined_title:
-            iface.combined_subtitle = ''
+            iface.combined_subtitle = ""
 
     def show(self, pre, post):
         args = get_args()
@@ -496,46 +488,45 @@ class Meta(MscoreXmlTree):
         fields = list(self.interface.fields)
 
         if args.general_verbose < 1:
-            fields.remove('readonly_abspath')
-            fields.remove('readonly_dirname')
-            fields.remove('readonly_extension')
-            fields.remove('readonly_filename')
-            fields.remove('readonly_relpath')
+            fields.remove("readonly_abspath")
+            fields.remove("readonly_dirname")
+            fields.remove("readonly_extension")
+            fields.remove("readonly_filename")
+            fields.remove("readonly_relpath")
 
         if args.general_verbose < 2:
-            fields.remove('readonly_relpath_backup')
+            fields.remove("readonly_relpath_backup")
 
         for field in fields:
-            if (args.general_verbose == 0 and (pre[field] or post[field])) or \
-               args.general_verbose > 0:
+            if (
+                args.general_verbose == 0 and (pre[field] or post[field])
+            ) or args.general_verbose > 0:
 
-                if re.match(r'^combined_',  field):
-                    field_color = 'green'
-                elif re.match(r'^metatag_',  field):
-                    field_color = 'blue'
-                elif re.match(r'^readonly_',  field):
-                    field_color = 'red'
-                elif re.match(r'^vbox_',  field):
-                    field_color = 'cyan'
+                if re.match(r"^combined_", field):
+                    field_color = "green"
+                elif re.match(r"^metatag_", field):
+                    field_color = "blue"
+                elif re.match(r"^readonly_", field):
+                    field_color = "red"
+                elif re.match(r"^vbox_", field):
+                    field_color = "cyan"
                 else:
-                    field_color = 'white'
+                    field_color = "white"
 
                 line = []
                 if pre[field]:
-                    line.append('“{}”'.format(pre[field]))
+                    line.append("“{}”".format(pre[field]))
 
                 if pre[field] != post[field]:
-                    line.append('->')
-                    line.append(color('“{}”'.format(post[field]), 'yellow'))
+                    line.append("->")
+                    line.append(color("“{}”".format(post[field]), "yellow"))
 
-                print('{}: {}'.format(color(field, field_color),
-                                      ' '.join(line)))
+                print("{}: {}".format(color(field, field_color), " ".join(line)))
 
     def export_json(self):
         data = {}
-        data['title'] = self.get('title')
+        data["title"] = self.get("title")
 
-        output = open(self.relpath.replace(
-            '.' + self.extension, '.json'), 'w')
+        output = open(self.relpath.replace("." + self.extension, ".json"), "w")
         json.dump(data, output, indent=4)
         output.close()

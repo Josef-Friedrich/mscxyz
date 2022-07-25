@@ -8,7 +8,6 @@ from mscxyz.score_file_classes import MscoreXmlTree
 
 
 class MscoreLyricsInterface(MscoreXmlTree):
-
     def __init__(self, relpath: str):
         super(MscoreLyricsInterface, self).__init__(relpath)
         self.lyrics = self.normalize_lyrics()
@@ -45,16 +44,16 @@ class MscoreLyricsInterface(MscoreXmlTree):
                 ]
         """
         lyrics = []
-        for lyric in self.xml_tree.findall('.//Lyrics'):
+        for lyric in self.xml_tree.findall(".//Lyrics"):
             safe = {}
-            safe['element'] = lyric
-            number = lyric.find('no')
+            safe["element"] = lyric
+            number = lyric.find("no")
 
-            if hasattr(number, 'text'):
+            if hasattr(number, "text"):
                 no = int(number.text) + 1
             else:
                 no = 1
-            safe['number'] = no
+            safe["number"] = no
 
             lyrics.append(safe)
 
@@ -76,18 +75,18 @@ class MscoreLyricsInterface(MscoreXmlTree):
         """
         max_lyric = 0
         for element in self.lyrics:
-            if element['number'] > max_lyric:
-                max_lyric = element['number']
+            if element["number"] > max_lyric:
+                max_lyric = element["number"]
 
         return max_lyric
 
     def remap(self, remap_string: str, mscore: bool = False):
-        for pair in remap_string.split(','):
-            old = pair.split(':')[0]
-            new = pair.split(':')[1]
+        for pair in remap_string.split(","):
+            old = pair.split(":")[0]
+            new = pair.split(":")[1]
             for element in self.lyrics:
-                if element['number'] == int(old):
-                    element['element'].find('no').text = str(int(new) - 1)
+                if element["number"] == int(old):
+                    element["element"].find("no").text = str(int(new) - 1)
 
         self.save(mscore)
 
@@ -99,25 +98,26 @@ class MscoreLyricsInterface(MscoreXmlTree):
         score = MscoreLyricsInterface(self.relpath)
 
         for element in score.lyrics:
-            tag = element['element']
+            tag = element["element"]
 
-            if element['number'] != number:
+            if element["number"] != number:
                 tag.getparent().remove(tag)
             elif number != 1:
-                tag.find('no').text = '0'
+                tag.find("no").text = "0"
 
-        ext = '.' + self.extension
-        new_name = score.relpath.replace(ext, '_' + str(number) + ext)
+        ext = "." + self.extension
+        new_name = score.relpath.replace(ext, "_" + str(number) + ext)
         score.save(new_name, mscore)
 
-    def extract_lyrics(self, number: typing.Union[int, str] = None,
-                       mscore: bool = False):
+    def extract_lyrics(
+        self, number: typing.Union[int, str] = None, mscore: bool = False
+    ):
         """Extract one lyric verse or all lyric verses.
 
         :param mixed number: The lyric verse number or 'all'
         """
 
-        if number == 'all':
+        if number == "all":
             for n in range(1, self.max + 1):
                 self.extract_one_lyrics_verse(n)
         else:
@@ -160,21 +160,21 @@ class MscoreLyricsInterface(MscoreXmlTree):
 
         syllabic = False
         for element in self.lyrics:
-            if element['number'] == verse_number:
-                tag = element['element']
-                tag_text = tag.find('text')
+            if element["number"] == verse_number:
+                tag = element["element"]
+                tag_text = tag.find("text")
                 text = tag_text.text
-                tag_syl = etree.Element('syllabic')
-                if text.endswith('-'):
+                tag_syl = etree.Element("syllabic")
+                if text.endswith("-"):
                     tag_text.text = text[:-1]
                     if not syllabic:
-                        tag_syl.text = 'begin'
+                        tag_syl.text = "begin"
                         syllabic = True
                     else:
-                        tag_syl.text = 'middle'
+                        tag_syl.text = "middle"
                 else:
                     if syllabic:
-                        tag_syl.text = 'end'
+                        tag_syl.text = "end"
                         syllabic = False
                     else:
                         tag_syl = False

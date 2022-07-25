@@ -9,14 +9,14 @@ from distutils.dir_util import copy_tree
 from jflib import Capturing  # noqa: F401
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
-ini_file = os.path.join(test_dir, 'mscxyz.ini')
+ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
 def get_tmpfile_path(filename, version=2):
     if version == 2:
-        folder = 'files_mscore2'
+        folder = "files_mscore2"
     else:
-        folder = 'files_mscore3'
+        folder = "files_mscore3"
     orig = os.path.join(test_dir, folder, filename)
     tmp_dir = tempfile.mkdtemp()
     tmp = os.path.join(tmp_dir, filename)
@@ -26,9 +26,9 @@ def get_tmpfile_path(filename, version=2):
 
 def get_tmpdir_path(relative_dir, version=2):
     if version == 2:
-        folder = 'files_mscore2'
+        folder = "files_mscore2"
     else:
-        folder = 'files_mscore3'
+        folder = "files_mscore3"
     orig = os.path.join(test_dir, folder, relative_dir)
     tmp = tempfile.mkdtemp()
     copy_tree(orig, tmp)
@@ -43,5 +43,5 @@ def read_file(filename):
 
 
 def run(*args):
-    args = ['mscx-manager'] + list(args)
-    return subprocess.check_output(args).decode('utf-8')
+    args = ["mscx-manager"] + list(args)
+    return subprocess.check_output(args).decode("utf-8")

@@ -25,8 +25,8 @@ Functions:
 import configparser
 import os
 import sys
-from importlib import metadata
 import typing
+from importlib import metadata
 
 import lxml
 
@@ -34,13 +34,16 @@ from mscxyz import cli
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import (MscoreFile, MscoreStyleInterface,
-                                       MscoreXmlTree, list_scores)
+from mscxyz.score_file_classes import (
+    MscoreFile,
+    MscoreStyleInterface,
+    MscoreXmlTree,
+    list_scores,
+)
 from mscxyz.settings import DefaultArguments
 from mscxyz.utils import color, mscore, set_args
 
-
-__version__: str = metadata.version('mscxyz')
+__version__: str = metadata.version("mscxyz")
 
 
 ###############################################################################
@@ -87,7 +90,7 @@ def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
     """Parse the configuration file. The file format is INI. The default
     location is ``/etc/mscxyz.ini``."""
     if not relpath:
-        ini_file = os.path.abspath(os.path.join(os.sep, 'etc', 'mscxyz.ini'))
+        ini_file = os.path.abspath(os.path.join(os.sep, "etc", "mscxyz.ini"))
     else:
         ini_file = relpath
     config = configparser.ConfigParser()
@@ -96,22 +99,32 @@ def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
         return config
 
 
-def merge_config_into_args(config: configparser.ConfigParser,
-                           args: DefaultArguments) -> DefaultArguments:
+def merge_config_into_args(
+    config: configparser.ConfigParser, args: DefaultArguments
+) -> DefaultArguments:
     for section in config.sections():
         for key, value in config[section].items():
-            arg = '{}_{}'.format(section, key)
+            arg = "{}_{}".format(section, key)
             if not hasattr(args, arg) or not getattr(args, arg):
                 setattr(args, arg, value)
 
-    for arg in ['general_backup', 'general_colorize', 'general_dry_run',
-                'general_mscore', 'help_markdown', 'help_rst',
-                'lyrics_fix', 'meta_json', 'meta_sync',
-                'rename_alphanum', 'rename_ascii',
-                'rename_no_whitespace']:
+    for arg in [
+        "general_backup",
+        "general_colorize",
+        "general_dry_run",
+        "general_mscore",
+        "help_markdown",
+        "help_rst",
+        "lyrics_fix",
+        "meta_json",
+        "meta_sync",
+        "rename_alphanum",
+        "rename_ascii",
+        "rename_no_whitespace",
+    ]:
         if hasattr(args, arg):
             value = getattr(args, arg)
-            if value == 1 or value == 'true' or value == 'True':
+            if value == 1 or value == "true" or value == "True":
                 setattr(args, arg, True)
             else:
                 setattr(args, arg, False)
@@ -122,43 +135,43 @@ def merge_config_into_args(config: configparser.ConfigParser,
 def heading(args: DefaultArguments, text: str, level: int = 1):
     length = len(text)
     if args.help_markdown:
-        print('\n' + ('#' * level) + ' ' + text + '\n')
+        print("\n" + ("#" * level) + " " + text + "\n")
     elif args.help_rst:
         if level == 1:
-            underline = '='
+            underline = "="
         elif level == 2:
-            underline = '-'
+            underline = "-"
         elif level == 3:
-            underline = '^'
+            underline = "^"
         elif level == 4:
             underline = '"'
         else:
-            underline = '-'
-        print('\n' + text + '\n' + (underline * length) + '\n')
+            underline = "-"
+        print("\n" + text + "\n" + (underline * length) + "\n")
     else:
         print(text)
 
 
 def code_block(args: DefaultArguments, text: str):
     if args.help_markdown:
-        print('```\n' + text + '\n```')
+        print("```\n" + text + "\n```")
     elif args.help_rst:
-        print('.. code-block:: text\n\n  ' + text.replace('\n', '\n  '))
+        print(".. code-block:: text\n\n  " + text.replace("\n", "\n  "))
     else:
         print(text)
 
 
 def show_all_help(args: DefaultArguments):
-    subcommands = ('clean', 'meta', 'lyrics', 'rename', 'export', 'help')
+    subcommands = ("clean", "meta", "lyrics", "rename", "export", "help")
 
-    if args.path == 'all':
-        heading(args, 'mscxyz', 1)
+    if args.path == "all":
+        heading(args, "mscxyz", 1)
         code_block(args, cli.parser.format_help())
 
-        heading(args, 'Subcommands', 1)
+        heading(args, "Subcommands", 1)
 
         for subcommand in subcommands:
-            command = getattr(cli, 'sub_' + subcommand)
+            command = getattr(cli, "sub_" + subcommand)
             heading(args, command.prog, 2)
             code_block(args, command.format_help())
 
@@ -168,11 +181,13 @@ def show_all_help(args: DefaultArguments):
 
 def report_errors(errors: typing.Sequence):
     for error in errors:
-        print('{}: {}; message: {}'.format(
-            color('Error', 'white', 'on_red'),
-            color(error.__class__.__name__, 'red'),
-            error.msg
-        ))
+        print(
+            "{}: {}; message: {}".format(
+                color("Error", "white", "on_red"),
+                color(error.__class__.__name__, "red"),
+                error.msg,
+            )
+        )
 
 
 def no_error(error, errors):
@@ -189,7 +204,7 @@ def execute(args: typing.Sequence = None):
         args = merge_config_into_args(config, args)
     set_args(args)
 
-    if args.subcommand == 'help':
+    if args.subcommand == "help":
         show_all_help(args)
         sys.exit()
 
@@ -197,14 +212,15 @@ def execute(args: typing.Sequence = None):
 
     for file in files:
 
-        print('\n' + color(file, 'red'))
+        print("\n" + color(file, "red"))
 
         if args.general_backup:
             from mscxyz.score_file_classes import MscoreFile
+
             score = MscoreFile(file)
             score.backup()
 
-        if args.subcommand == 'clean':
+        if args.subcommand == "clean":
             score = MscoreXmlTree(file)
             print(score.filename)
             score.clean()
@@ -212,18 +228,18 @@ def execute(args: typing.Sequence = None):
                 score.merge_style(styles=args.clean_style.name)
             score.save(mscore=args.general_mscore)
 
-        elif args.subcommand == 'lyrics':
+        elif args.subcommand == "lyrics":
             score = MscoreLyricsInterface(file)
             if args.lyrics_remap:
-                score.remap(remap_string=args.lyrics_remap,
-                            mscore=args.general_mscore)
+                score.remap(remap_string=args.lyrics_remap, mscore=args.general_mscore)
             elif args.lyrics_fix:
                 score.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.extract_lyrics(number=args.lyrics_extract,
-                                     mscore=args.general_mscore)
+                score.extract_lyrics(
+                    number=args.lyrics_extract, mscore=args.general_mscore
+                )
 
-        elif args.subcommand == 'meta':
+        elif args.subcommand == "meta":
             score = Meta(file)
             if no_error(lxml.etree.XMLSyntaxError, score.errors):
                 pre = score.interface.export_to_dict()
@@ -233,12 +249,10 @@ def execute(args: typing.Sequence = None):
                     score.export_json()
                 if args.meta_dist:
                     for a in args.meta_dist:
-                        score.distribute_field(source_fields=a[0],
-                                               format_string=a[1])
+                        score.distribute_field(source_fields=a[0], format_string=a[1])
                 if args.meta_set:
                     for a in args.meta_set:
-                        score.set_field(destination_field=a[0],
-                                        format_string=a[1])
+                        score.set_field(destination_field=a[0], format_string=a[1])
                 if args.meta_delete:
                     score.delete_duplicates()
                 if args.meta_sync:
@@ -250,16 +264,17 @@ def execute(args: typing.Sequence = None):
             if not args.general_dry_run and not score.errors and pre != post:
                 score.save(mscore=args.general_mscore)
 
-        elif args.subcommand == 'rename':
+        elif args.subcommand == "rename":
             score = rename_filename(file)
 
-        elif args.subcommand == 'export':
+        elif args.subcommand == "export":
             from mscxyz.score_file_classes import MscoreFile
+
             score = MscoreFile(file)
             score.export(extension=args.export_extension)
 
         report_errors(score.errors)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     execute()

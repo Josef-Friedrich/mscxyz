@@ -19,7 +19,8 @@ def get_args() -> DefaultArguments:
     :return: the ``argparse`` object
     """
     from mscxyz import settings
-    return getattr(settings, 'args')
+
+    return getattr(settings, "args")
 
 
 def set_args(args: DefaultArguments) -> DefaultArguments:
@@ -27,7 +28,8 @@ def set_args(args: DefaultArguments) -> DefaultArguments:
     the .settings.py submodule for all other submodules to import.
     """
     from mscxyz import settings
-    setattr(settings, 'args', args)
+
+    setattr(settings, "args", args)
     return args
 
 
@@ -40,18 +42,18 @@ def get_mscore_bin() -> str:
     system = platform.system()
     if args and args.general_executable:
         binary = args.general_executable
-    elif system == 'Darwin':
-        binary = '/Applications/MuseScore 2.app/Contents/MacOS/mscore'
+    elif system == "Darwin":
+        binary = "/Applications/MuseScore 2.app/Contents/MacOS/mscore"
     else:
-        cmd = 'where' if system == 'Windows' else 'which'
-        binary = subprocess.check_output([cmd, 'mscore'])
-        binary = binary.decode('utf-8')
-        binary = binary.replace('\n', '')
+        cmd = "where" if system == "Windows" else "which"
+        binary = subprocess.check_output([cmd, "mscore"])
+        binary = binary.decode("utf-8")
+        binary = binary.replace("\n", "")
 
     if os.path.exists(binary):
         return binary
     else:
-        raise ValueError('mscore binary could not be found.')
+        raise ValueError("mscore binary could not be found.")
 
 
 def mscore(cli_args: List[str]) -> subprocess.Popen[Any]:
@@ -60,14 +62,13 @@ def mscore(cli_args: List[str]) -> subprocess.Popen[Any]:
     """
     executable = get_mscore_bin()
     cli_args.insert(0, executable)
-    p = subprocess.Popen(cli_args, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+    p = subprocess.Popen(cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
     if p.returncode != 0:
         if p.stderr is not None:
             for line in p.stderr:
-                print(line.decode('utf-8'))
-            raise ValueError('mscore exits with returncode != 0')
+                print(line.decode("utf-8"))
+            raise ValueError("mscore exits with returncode != 0")
     return p
 
 
@@ -77,7 +78,7 @@ def re_open(input_file: str) -> None:
 
     :param input_file: The path (relative or absolute) of a MuseScore file.
     """
-    mscore(['-o', input_file, input_file])
+    mscore(["-o", input_file, input_file])
 
 
 def convert_mxl(input_file: str) -> None:
@@ -86,13 +87,14 @@ def convert_mxl(input_file: str) -> None:
 
     :param input_file: The path (relative or absolute) of a MusicXML file.
     """
-    output_file = input_file.replace('.mxl', '.mscx')
-    mscore(['-o', output_file, input_file])
+    output_file = input_file.replace(".mxl", ".mscx")
+    mscore(["-o", output_file, input_file])
     os.remove(input_file)
 
 
-def color(text: str, color: Optional[str] = None,
-          on_color: Optional[str] = None) -> str:
+def color(
+    text: str, color: Optional[str] = None, on_color: Optional[str] = None
+) -> str:
     """Wrapper function around ``termcolor.colored()`` to easily turn off and
     on colorized terminal output on the command line.
 

@@ -25,8 +25,9 @@ import lxml.etree  # Needed for type hints
 from mscxyz.utils import mscore, re_open
 
 
-def list_scores(path: str, extension: str = 'both',
-                glob: Optional[str] = None) -> List[str]:
+def list_scores(
+    path: str, extension: str = "both", glob: Optional[str] = None
+) -> List[str]:
     """List all scores in path.
 
     :param path: The path so search for score files.
@@ -34,13 +35,15 @@ def list_scores(path: str, extension: str = 'both',
     :param glob: A glob string, see fnmatch
     """
     if not glob:
-        if extension == 'both':
-            glob = '*.msc[xz]'
-        elif extension in ('mscx', 'mscz'):
-            glob = '*.{}'.format(extension)
+        if extension == "both":
+            glob = "*.msc[xz]"
+        elif extension in ("mscx", "mscz"):
+            glob = "*.{}".format(extension)
         else:
-            raise ValueError('Possible values for the argument “extension” '
-                             'are: “both”, “mscx”, “mscz”')
+            raise ValueError(
+                "Possible values for the argument “extension” "
+                "are: “both”, “mscx”, “mscz”"
+            )
     if os.path.isfile(path):
         if fnmatch.fnmatch(path, glob):
             return [path]
@@ -58,7 +61,7 @@ def list_scores(path: str, extension: str = 'both',
 
 def list_zero_alphabet() -> List[str]:
     """Build a list: 0, a, b, c etc."""
-    score_dirs = ['0']
+    score_dirs = ["0"]
     for char in string.ascii_lowercase:
         score_dirs.append(char)
     return score_dirs
@@ -112,14 +115,15 @@ class MscoreFile(object):
         self.errors = []
         self.relpath = relpath
         self.abspath = os.path.abspath(relpath)
-        self.extension = relpath.split('.')[-1].lower()
+        self.extension = relpath.split(".")[-1].lower()
         self.relpath_backup = relpath.replace(
-            '.' + self.extension, '_bak.' + self.extension)
+            "." + self.extension, "_bak." + self.extension
+        )
         self.dirname = os.path.dirname(relpath)
         self.filename = os.path.basename(relpath)
-        self.basename = self.filename.replace('.mscx', '')
+        self.basename = self.filename.replace(".mscx", "")
 
-        if self.extension == 'mscz':
+        if self.extension == "mscz":
             self.loadpath = self._unzip(self.abspath)
         else:
             self.loadpath = self.abspath
@@ -127,27 +131,27 @@ class MscoreFile(object):
     @staticmethod
     def _unzip(abspath: str) -> str:
         tmp_zipdir = tempfile.mkdtemp()
-        zip_ref = zipfile.ZipFile(abspath, 'r')
+        zip_ref = zipfile.ZipFile(abspath, "r")
         zip_ref.extractall(tmp_zipdir)
         zip_ref.close()
-        con = os.path.join(tmp_zipdir, 'META-INF', 'container.xml')
+        con = os.path.join(tmp_zipdir, "META-INF", "container.xml")
         container_info = lxml.etree.parse(con)
-        mscx = container_info \
-            .xpath('string(/container/rootfiles/rootfile/@full-path)')
+        mscx = container_info.xpath("string(/container/rootfiles/rootfile/@full-path)")
         return os.path.join(tmp_zipdir, str(mscx))
 
     def backup(self):
         """Make a copy of the MuseScore file."""
         shutil.copy2(self.relpath, self.relpath_backup)
 
-    def export(self, extension: str = 'pdf'):
+    def export(self, extension: str = "pdf"):
         """Export the score to the specifed file type.
 
         :param extension: The extension (default: pdf)
         """
         score = self.relpath
-        mscore(['--export-to',
-                score.replace('.' + self.extension, '.' + extension), score])
+        mscore(
+            ["--export-to", score.replace("." + self.extension, "." + extension), score]
+        )
 
 
 ###############################################################################
@@ -169,9 +173,9 @@ class MscoreXmlTree(MscoreFile):
             self.errors.append(e)
         else:
             self.xml_root = self.xml_tree.getroot()
-            musescore = self.xml_tree.xpath('/museScore')
-            version = musescore[0].get('version')
-            self.version_major = int(version.split('.')[0])
+            musescore = self.xml_tree.xpath("/museScore")
+            version = musescore[0].get("version")
+            self.version_major = int(version.split(".")[0])
             """The major MuseScore version, for example 2 or 3"""
             self.version = float(version)
             """The MuseScore version, for example 2.03 or 3.01"""
@@ -265,20 +269,21 @@ class MscoreXmlTree(MscoreFile):
             # not supported. Please use bytes input or XML fragments without
             # declaration.
             pre = '<?xml version="1.0"?><museScore version="2.06"><Style>'
-            post = '</Style></museScore>'
+            post = "</Style></museScore>"
             style = lxml.etree.XML(pre + styles + post)
 
-        for score in self.xml_tree.xpath('/museScore/Score'):
+        for score in self.xml_tree.xpath("/museScore/Score"):
             score.insert(0, style[0])
 
     def clean(self):
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
         self.remove_tags_by_xpath(
-            '/museScore/Score/Style', '//LayoutBreak', '//StemDirection')
-        self.strip_tags('font', 'b', 'i', 'pos', 'offset')
+            "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
+        )
+        self.strip_tags("font", "b", "i", "pos", "offset")
 
-    def save(self, new_name: str = '', mscore: bool = False):
+    def save(self, new_name: str = "", mscore: bool = False):
         """Save the MuseScore file.
 
         :param new_name: Save the MuseScore file under a new name.
@@ -287,44 +292,46 @@ class MscoreXmlTree(MscoreFile):
         """
         if new_name:
             filename = new_name
-        elif self.extension == 'mscz':
+        elif self.extension == "mscz":
             filename = self.loadpath
         else:
             filename = self.relpath
         if not self.errors:
             # To get the same xml tag structure as the original score file
             # has.
-            for xpath in ('//LayerTag',
-                          '//metaTag',
-                          '//font',
-                          '//i',
-                          '//evenFooterL',
-                          '//evenFooterC',
-                          '//evenFooterR',
-                          '//oddFooterL',
-                          '//oddFooterC',
-                          '//oddFooterR',
-                          '//chord/name',
-                          '//chord/render',
-                          '//StaffText/text',
-                          '//Jump/continueAt',
-                          ):
+            for xpath in (
+                "//LayerTag",
+                "//metaTag",
+                "//font",
+                "//i",
+                "//evenFooterL",
+                "//evenFooterC",
+                "//evenFooterR",
+                "//oddFooterL",
+                "//oddFooterC",
+                "//oddFooterR",
+                "//chord/name",
+                "//chord/render",
+                "//StaffText/text",
+                "//Jump/continueAt",
+            ):
 
                 for tag in self.xml_tree.xpath(xpath):
                     if not tag.text:
-                        tag.text = ''
+                        tag.text = ""
 
-            score = open(filename, 'w')
+            score = open(filename, "w")
             score.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            score.write(lxml.etree.tostring(self.xml_root, encoding='UTF-8')
-                        .decode('utf-8'))
-            score.write('\n')
+            score.write(
+                lxml.etree.tostring(self.xml_root, encoding="UTF-8").decode("utf-8")
+            )
+            score.write("\n")
             score.close()
 
-            if self.extension == 'mscz':
+            if self.extension == "mscz":
                 # Need some tmp directory cleanup for working with mscz files
                 tmpdir = os.path.dirname(filename)
-                zip_ref = zipfile.ZipFile(self.abspath, 'w')
+                zip_ref = zipfile.ZipFile(self.abspath, "w")
                 for root, _, files in os.walk(tmpdir):
                     for file in files:
                         arcname = os.path.join(root.replace(tmpdir, ""), file)
@@ -338,15 +345,17 @@ class MscoreXmlTree(MscoreFile):
 # Class hierarchy level 3
 ###############################################################################
 
+
 class MscoreStyleInterface(MscoreXmlTree):
     """
     Interface specialized for the style manipulation.
 
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
+
     def __init__(self, relpath: str):
         super(MscoreStyleInterface, self).__init__(relpath)
-        styles = self.xml_tree.xpath('/museScore/Score/Style')
+        styles = self.xml_tree.xpath("/museScore/Score/Style")
         if styles:
             self.style = styles[0]
             """The ``/museScore/Score/Style`` element object, see
@@ -356,14 +365,14 @@ class MscoreStyleInterface(MscoreXmlTree):
             self.style = self._create_parent_style()
 
     def _create_parent_style(self):
-        score = self.xml_tree.xpath('/museScore/Score')
-        return lxml.etree.SubElement(score[0], 'Style')
+        score = self.xml_tree.xpath("/museScore/Score")
+        return lxml.etree.SubElement(score[0], "Style")
 
     def _create(self, tag: str) -> lxml.etree.Element:
         """
         :param tag: Nested tags are supported, for example ``TextStyle/halign``
         """
-        tags = tag.split('/')
+        tags = tag.split("/")
         parent = self.style
         for tag in tags:
             element = parent.find(tag)
@@ -373,8 +382,9 @@ class MscoreStyleInterface(MscoreXmlTree):
                 parent = element
         return parent
 
-    def get_element(self, element_path: str,
-                    create: bool = False) -> lxml.etree.Element:
+    def get_element(
+        self, element_path: str, create: bool = False
+    ) -> lxml.etree.Element:
         """
         Get a lxml element which is parent to the ``Style`` tag.
 
@@ -410,8 +420,7 @@ class MscoreStyleInterface(MscoreXmlTree):
         element = self.get_element(element_path)
         return element.text
 
-    def set_attributes(self, element_path: str,
-                       attributes: dict) -> lxml.etree.Element:
+    def set_attributes(self, element_path: str, attributes: dict) -> lxml.etree.Element:
         """Set attributes on a style child tag.
 
         :param element_path: see
@@ -435,15 +444,15 @@ class MscoreStyleInterface(MscoreXmlTree):
     def _get_text_style_element(self, name: str) -> lxml.etree.Element:
         if self.version_major != 2:
             raise ValueError(
-                'This operation is only allowed for MuseScore 2 score files'
+                "This operation is only allowed for MuseScore 2 score files"
             )
         xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
         child = self.xml_tree.xpath(xpath)
         if child:
             return child[0].getparent()
         else:
-            el_text_style = lxml.etree.SubElement(self.style, 'TextStyle')
-            el_name = lxml.etree.SubElement(el_text_style, 'name')
+            el_text_style = lxml.etree.SubElement(self.style, "TextStyle")
+            el_name = lxml.etree.SubElement(el_text_style, "name")
             el_name.text = name
             return el_text_style
 

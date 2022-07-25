@@ -33,7 +33,7 @@ def prepare_fields(fields: dict) -> dict:
             if args.rename_no_whitespace:
                 value = nowhitespace(value)
             value = value.strip()
-            value = value.replace('/', '-')
+            value = value.replace("/", "-")
         out[field] = value
     return out
 
@@ -46,13 +46,13 @@ def apply_format_string(fields: dict) -> str:
 
 
 def show(old: str, new: str):
-    print('{} -> {}'.format(color(old, 'yellow'), color(new, 'green')))
+    print("{} -> {}".format(color(old, "yellow"), color(new, "green")))
 
 
 def get_checksum(filename: str) -> str:
     BLOCKSIZE = 65536
     hasher = hashlib.sha1()
-    with open(filename, 'rb') as afile:
+    with open(filename, "rb") as afile:
         buf = afile.read(BLOCKSIZE)
         while len(buf) > 0:
             hasher.update(buf)
@@ -68,11 +68,10 @@ def rename_filename(source: str) -> Meta:
     target_filename = apply_format_string(meta_values)
 
     if args.rename_skip:
-        skips = args.rename_skip.split(',')
+        skips = args.rename_skip.split(",")
         for skip in skips:
             if not meta_values[skip]:
-                print(color('Field “{}” is empty! Skipping'.format(skip),
-                            'red'))
+                print(color("Field “{}” is empty! Skipping".format(skip), "red"))
                 return meta
 
     if args.rename_target:
@@ -80,20 +79,25 @@ def rename_filename(source: str) -> Meta:
     else:
         target_base = os.getcwd()
 
-    target = os.path.join(target_base,
-                          target_filename + '.' + meta.extension)
+    target = os.path.join(target_base, target_filename + "." + meta.extension)
 
     if os.path.exists(target):
-        target_format = target.replace('.mscx', '{}.mscx')
-        i = ''
+        target_format = target.replace(".mscx", "{}.mscx")
+        i = ""
         while os.path.exists(target_format.format(i)):
             target = target_format.format(i)
             if get_checksum(source) == get_checksum(target):
-                print(color('The file “{}” with the same checksum (sha1) '
-                            'already exists in the target path “{}”!'
-                            .format(source, target), 'red'))
+                print(
+                    color(
+                        "The file “{}” with the same checksum (sha1) "
+                        "already exists in the target path “{}”!".format(
+                            source, target
+                        ),
+                        "red",
+                    )
+                )
                 return meta
-            if i == '':
+            if i == "":
                 i = 1
             i += 1
 
