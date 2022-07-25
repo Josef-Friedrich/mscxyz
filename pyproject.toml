@@ -22,9 +22,11 @@ termcolor = "^1.1.0"
 tmep = "^2.3.3"
 lxml-stubs = "^0.4.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 readme-patcher = "^0.5.0"
-# readme-patcher = { path = "../readme_patcher" }
+tox = "^3.25.1"
+black = "^22.6.0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry>=1.2.0b2"]
