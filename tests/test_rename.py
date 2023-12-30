@@ -30,13 +30,13 @@ class TestFunctions(unittest.TestCase):
         from mscxyz import settings
 
         settings.args = settings.DefaultArguments()
-        meta = mscxyz.meta.Meta(helper.get_tmpfile_path("meta-all-values.mscx"))
+        meta = mscxyz.meta.Meta(helper.get_file("meta-all-values.mscx"))
         fields = meta.interface.export_to_dict()
         name = rename.apply_format_string(fields)
         self.assertEqual(name, "vbox_title (vbox_composer)")
 
     def test_function_get_checksum(self):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         self.assertEqual(
             rename.get_checksum(tmp), "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
         )
@@ -45,7 +45,7 @@ class TestFunctions(unittest.TestCase):
 class TestIntegration(unittest.TestCase):
     @staticmethod
     def _get(filename, version=2):
-        return helper.get_tmpfile_path(filename, version)
+        return helper.get_file(filename, version)
 
     @staticmethod
     def _target_path_cwd(filename):

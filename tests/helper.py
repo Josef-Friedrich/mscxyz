@@ -11,7 +11,7 @@ test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
-def get_tmpfile_path(filename: str, version: int = 2) -> str:
+def get_file(filename: str, version: int = 2) -> str:
     """
     Returns the path of a temporary file created by copying the original file.
 
@@ -20,14 +20,14 @@ def get_tmpfile_path(filename: str, version: int = 2) -> str:
     :return: The path of the temporary file.
     """
     folder: str = f"files_mscore{version}"
-    orig = os.path.join(test_dir, folder, filename)
-    tmp_dir = tempfile.mkdtemp()
-    tmp = os.path.join(tmp_dir, filename)
+    orig: str = os.path.join(test_dir, folder, filename)
+    tmp_dir: str = tempfile.mkdtemp()
+    tmp: str = os.path.join(tmp_dir, filename)
     shutil.copyfile(orig, tmp)
     return tmp
 
 
-def get_tmpdir_path(relative_dir: str, version: int = 2) -> str:
+def get_dir(relative_dir: str, version: int = 2) -> str:
     if version == 2:
         folder = "files_mscore2"
     else:

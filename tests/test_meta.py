@@ -101,7 +101,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         ]
 
     def _init_class(self, filename: str, version: int = 2):
-        tmp = helper.get_tmpfile_path(filename, version)
+        tmp = helper.get_file(filename, version)
         tree = MscoreXmlTree(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
@@ -228,7 +228,7 @@ class TestClassInterfaceReadOnly(unittest.TestCase):
             "readonly_relpath",
             "readonly_relpath_backup",
         )
-        self.tmp = helper.get_tmpfile_path("simple.mscx")
+        self.tmp = helper.get_file("simple.mscx")
         self.xml_tree = MscoreXmlTree(self.tmp)
         self.interface = InterfaceReadOnly(self.xml_tree)
 
@@ -291,7 +291,7 @@ class TestClassInterface(unittest.TestCase):
             "vbox_title",
         ]
 
-        self.tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        self.tmp = helper.get_file("meta-all-values.mscx")
         self.xml_tree = MscoreXmlTree(self.tmp)
         self.interface = Interface(self.xml_tree)
 
@@ -313,7 +313,7 @@ class TestClassInterface(unittest.TestCase):
 
 class TestClassMetaTag(unittest.TestCase):
     def _init_class(self, filename: str, version: int = 2):
-        tmp = helper.get_tmpfile_path(filename, version)
+        tmp = helper.get_file(filename, version)
         tree = MscoreXmlTree(tmp)
         meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
@@ -383,7 +383,7 @@ class TestClassMetaTag(unittest.TestCase):
 
 class TestClassVbox(unittest.TestCase):
     def _init_class(self, filename: str, version: int = 2):
-        tmp = helper.get_tmpfile_path(filename, version)
+        tmp = helper.get_file(filename, version)
         tree = MscoreXmlTree(tmp)
         vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
@@ -420,7 +420,7 @@ class TestClassVbox(unittest.TestCase):
         self._test_get_exception(version=3)
 
     def _assert_set(self, filename: str, version: int = 2):
-        tmp = helper.get_tmpfile_path(filename, version)
+        tmp = helper.get_file(filename, version)
         tree = MscoreXmlTree(tmp)
         vbox = Vbox(tree.xml_root)
         vbox.Title = "lol"
@@ -453,7 +453,7 @@ class TestClassVbox(unittest.TestCase):
 
 class TestClassCombined(unittest.TestCase):
     def _init_class(self, filename: str):
-        tmp = helper.get_tmpfile_path(filename)
+        tmp = helper.get_file(filename)
         tree = MscoreXmlTree(tmp)
         combined = Combined(tree.xml_root)
         return combined, tree, tmp
@@ -486,7 +486,7 @@ class TestClassCombined(unittest.TestCase):
 
 class TestIntegration(unittest.TestCase):
     def test_distribute_field(self):
-        tmp = helper.get_tmpfile_path("meta-distribute-field.mscx")
+        tmp = helper.get_file("meta-distribute-field.mscx")
         mscxyz.execute(
             [
                 "meta",
@@ -504,7 +504,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.metatag_work_title, "Title")
 
     def test_distribute_field_multple_source_fields(self):
-        tmp = helper.get_tmpfile_path("Title - Composer.mscx")
+        tmp = helper.get_file("Title - Composer.mscx")
         mscxyz.execute(
             [
                 "meta",
@@ -522,7 +522,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.metatag_work_title, "Title")
 
     def test_distribute_field_multiple_values(self):
-        tmp = helper.get_tmpfile_path("meta-distribute-field.mscx")
+        tmp = helper.get_file("meta-distribute-field.mscx")
         mscxyz.execute(
             [
                 "meta",
@@ -543,12 +543,12 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.metatag_work_title, "Title")
 
     def test_distribute_field_invalid_format_string(self):
-        tmp = helper.get_tmpfile_path("meta-distribute-field.mscx")
+        tmp = helper.get_file("meta-distribute-field.mscx")
         with self.assertRaises(meta.FormatStringNoFieldError):
             mscxyz.execute(["meta", "--distribute-field", "vbox_title", "lol", tmp])
 
     def test_distribute_field_exception_unmatched(self):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         with helper.Capturing() as output:
             mscxyz.execute(
                 [
@@ -562,7 +562,7 @@ class TestIntegration(unittest.TestCase):
         self.assertTrue("UnmatchedFormatStringError" in output[-1])
 
     def test_clean_all(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "all", tmp])
         meta = Meta(tmp)
         iface = meta.interface_read_write
@@ -570,7 +570,7 @@ class TestIntegration(unittest.TestCase):
             self.assertEqual(getattr(iface, field), None, field)
 
     def test_clean_single_field(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title", tmp])
         meta = Meta(tmp)
         iface = meta.interface
@@ -578,7 +578,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(iface.vbox_composer, "vbox_composer", "vbox_composer")
 
     def test_clean_some_fields(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title,vbox_composer", tmp])
         meta = Meta(tmp)
         iface = meta.interface
@@ -595,7 +595,7 @@ class TestIntegration(unittest.TestCase):
                     "meta",
                     "--clean",
                     "all",
-                    helper.get_tmpfile_path("meta-all-values.mscx"),
+                    helper.get_file("meta-all-values.mscx"),
                 ]
             )
 
@@ -612,7 +612,7 @@ class TestIntegration(unittest.TestCase):
                     "meta",
                     "--clean",
                     "all",
-                    helper.get_tmpfile_path("simple.mscx"),
+                    helper.get_file("simple.mscx"),
                 ]
             )
         self.assertEqual(output[0], "")
@@ -631,7 +631,7 @@ class TestIntegration(unittest.TestCase):
                     "meta",
                     "--clean",
                     "all",
-                    helper.get_tmpfile_path("simple.mscx"),
+                    helper.get_file("simple.mscx"),
                 ]
             )
         self.assertEqual(output[0], "")
@@ -643,9 +643,7 @@ class TestIntegration(unittest.TestCase):
 
     def test_show_verbose_zero(self):
         with helper.Capturing() as output:
-            mscxyz.execute(
-                ["meta", "--clean", "all", helper.get_tmpfile_path("simple.mscx")]
-            )
+            mscxyz.execute(["meta", "--clean", "all", helper.get_file("simple.mscx")])
         output = " ".join(output)
         self.assertTrue("readonly_basename" in output)
         self.assertFalse("readonly_abspath" in output)
@@ -654,7 +652,7 @@ class TestIntegration(unittest.TestCase):
     def test_show_verbose_one(self):
         with helper.Capturing() as output:
             mscxyz.execute(
-                ["-v", "meta", "--clean", "all", helper.get_tmpfile_path("simple.mscx")]
+                ["-v", "meta", "--clean", "all", helper.get_file("simple.mscx")]
             )
         output = " ".join(output)
         self.assertTrue("readonly_abspath" in output)
@@ -668,20 +666,20 @@ class TestIntegration(unittest.TestCase):
                     "meta",
                     "--clean",
                     "all",
-                    helper.get_tmpfile_path("simple.mscx"),
+                    helper.get_file("simple.mscx"),
                 ]
             )
         output = " ".join(output)
         self.assertTrue("readonly_relpath_backup" in output)
 
     def test_set_field_simple_string(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--set-field", "vbox_title", "lol", tmp])
         meta = Meta(tmp)
         self.assertEqual(meta.interface.vbox_title, "lol")
 
     def test_set_field_multiple_times(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(
             [
                 "meta",
@@ -699,7 +697,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(meta.interface.vbox_composer, "troll")
 
     def test_set_field_with_templating(self):
-        tmp = helper.get_tmpfile_path("meta-all-values.mscx")
+        tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(
             ["meta", "--set-field", "vbox_title", "$vbox_title ($vbox_composer)", tmp]
         )
@@ -707,14 +705,14 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(meta.interface.vbox_title, "vbox_title (vbox_composer)")
 
     def test_delete_duplicates(self):
-        tmp = helper.get_tmpfile_path("meta-duplicates.mscx")
+        tmp = helper.get_file("meta-duplicates.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
         meta = Meta(tmp)
         self.assertFalse(meta.interface.combined_lyricist)
         self.assertFalse(meta.interface.combined_subtitle)
 
     def test_delete_duplicates_move_subtitle(self):
-        tmp = helper.get_tmpfile_path("meta-duplicates-move-subtitle.mscx")
+        tmp = helper.get_file("meta-duplicates-move-subtitle.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
         meta = Meta(tmp)
         self.assertFalse(meta.interface.combined_lyricist)
@@ -722,7 +720,7 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(meta.interface.combined_title, "Title")
 
     def test_log(self):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         log = tempfile.mktemp()
         mscxyz.execute(
             ["meta", "--log", log, "$combined_title-$combined_composer", tmp]

@@ -10,7 +10,7 @@ from tests import helper
 
 class TestMscoreLyricsInterface(unittest.TestCase):
     def setUp(self):
-        self.score_path = helper.get_tmpfile_path("lyrics.mscx")
+        self.score_path = helper.get_file("lyrics.mscx")
 
     def assertLyricsFileExists(self, number):
         self.assertTrue(
@@ -18,7 +18,7 @@ class TestMscoreLyricsInterface(unittest.TestCase):
         )
 
     def _test_without_arguments(self, version=2):
-        self.score_path = helper.get_tmpfile_path("lyrics.mscx", version)
+        self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", self.score_path])
         self.assertLyricsFileExists(1)
         self.assertLyricsFileExists(2)
@@ -29,7 +29,7 @@ class TestMscoreLyricsInterface(unittest.TestCase):
         self._test_without_arguments(version=3)
 
     def _test_extract_all(self, version=2):
-        self.score_path = helper.get_tmpfile_path("lyrics.mscx", version)
+        self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "all", self.score_path])
         self.assertLyricsFileExists(1)
         self.assertLyricsFileExists(2)
@@ -40,7 +40,7 @@ class TestMscoreLyricsInterface(unittest.TestCase):
         self._test_extract_all(version=3)
 
     def _test_extract_by_number(self, version=2):
-        self.score_path = helper.get_tmpfile_path("lyrics.mscx", version)
+        self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "2", self.score_path])
         self.assertLyricsFileExists(2)
 
@@ -51,7 +51,7 @@ class TestMscoreLyricsInterface(unittest.TestCase):
 
 class TestMscoreLyricsInterfaceFix(unittest.TestCase):
     def _test_fix(self, version=2):
-        score_path = helper.get_tmpfile_path("lyrics-fix.mscx", version)
+        score_path = helper.get_file("lyrics-fix.mscx", version)
         mscxyz.execute(["lyrics", "--fix", score_path])
         self.xml_tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
         self.lyrics = self.xml_tree.lyrics
@@ -112,7 +112,7 @@ class TestMscoreLyricsInterfaceFix(unittest.TestCase):
 
 class TestMscoreLyricsInterfaceRemap(unittest.TestCase):
     def test_remap(self):
-        score_path = helper.get_tmpfile_path("lyrics-remap.mscx")
+        score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])
         tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
         text = []

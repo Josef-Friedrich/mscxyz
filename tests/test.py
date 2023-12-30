@@ -10,7 +10,7 @@ from tests import helper
 
 class TestBackup(unittest.TestCase):
     def setUp(self):
-        self.tmp = helper.get_tmpfile_path("simple.mscx")
+        self.tmp = helper.get_file("simple.mscx")
         self.backup = self.tmp.replace(".mscx", "_bak.mscx")
         with helper.Capturing():
             mscxyz.execute(["--backup", "meta", self.tmp])
@@ -25,7 +25,7 @@ class TestBackup(unittest.TestCase):
 class TestExport(unittest.TestCase):
     @mock.patch("mscxyz.score_file_classes.mscore")
     def test_export(self, mscore_function):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         mscxyz.execute(["export", "--extension", "mp3", tmp])
         args = mscore_function.call_args_list[0][0][0]
         self.assertEqual(args[0], "--export-to")

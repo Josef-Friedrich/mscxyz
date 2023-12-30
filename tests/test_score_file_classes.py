@@ -32,7 +32,7 @@ class TestFunctions(unittest.TestCase):
     @mock.patch("mscxyz.Meta")
     def test_batch(self, Meta):
         with helper.Capturing():
-            mscxyz.execute(["meta", helper.get_tmpdir_path("batch")])
+            mscxyz.execute(["meta", helper.get_dir("batch")])
         self.assertEqual(Meta.call_count, 3)
 
     def test_without_extension(self):
@@ -87,7 +87,7 @@ class TestFunctions(unittest.TestCase):
 
 class TestMscoreFile(unittest.TestCase):
     def setUp(self):
-        self.file = MscoreFile(helper.get_tmpfile_path("simple.mscx"))
+        self.file = MscoreFile(helper.get_file("simple.mscx"))
 
     def test_attribute_relpath(self) -> None:
         self.assertTrue(self.file.relpath)
@@ -112,7 +112,7 @@ class TestMscoreFile(unittest.TestCase):
 @unittest.skip("Not implemented yet")
 class TestMscoreFileMscz(unittest.TestCase):
     def setUp(self):
-        self.file = MscoreFile(helper.get_tmpfile_path("simple.mscz"))
+        self.file = MscoreFile(helper.get_file("simple.mscz"))
 
     def test_attribute_extension(self):
         self.assertEqual(self.file.extension, "mscz")
@@ -124,7 +124,7 @@ class TestMscoreFileMscz(unittest.TestCase):
 class TestMscoreFileMscz4(unittest.TestCase):
     def setUp(self):
         self.file = MscoreFile(
-            helper.get_tmpfile_path("test.mscz", version=4),
+            helper.get_file("test.mscz", version=4),
         )
 
     def test_attribute_extension(self):
@@ -134,7 +134,7 @@ class TestMscoreFileMscz4(unittest.TestCase):
 class TestZipContainer(unittest.TestCase):
     def setUp(self) -> None:
         self.container = ZipContainer(
-            helper.get_tmpfile_path("test.mscz", version=4),
+            helper.get_file("test.mscz", version=4),
         )
 
     def test_attribute_tmp_zipdir(self) -> None:
@@ -158,8 +158,8 @@ class TestZipContainer(unittest.TestCase):
         self.assertTrue(self.container.viewsettings_path.exists())
 
 
-class TestMscoreXmlTree:
-    tree = MscoreXmlTree(helper.get_tmpfile_path("simple.mscx", 3))
+class TestMscoreXmlTree(unittest.TestCase):
+    tree = MscoreXmlTree(helper.get_file("simple.mscx", 3))
 
     def test_property_version(self) -> None:
         assert self.tree.version == 3.01
@@ -170,16 +170,16 @@ class TestMscoreXmlTree:
 
 class TestClassMscoreXmlTree(unittest.TestCase):
     def test_property_version(self):
-        tree = MscoreXmlTree(helper.get_tmpfile_path("simple.mscx", version=2))
+        tree = MscoreXmlTree(helper.get_file("simple.mscx", version=2))
         self.assertEqual(tree.version, 2.06)
         self.assertEqual(tree.version_major, 2)
 
-        tree = MscoreXmlTree(helper.get_tmpfile_path("simple.mscx", version=3))
+        tree = MscoreXmlTree(helper.get_file("simple.mscx", version=3))
         self.assertEqual(tree.version, 3.01)
         self.assertEqual(tree.version_major, 3)
 
     def test_method_merge_style(self):
-        tree = MscoreXmlTree(helper.get_tmpfile_path("simple.mscx"))
+        tree = MscoreXmlTree(helper.get_file("simple.mscx"))
         styles = """
             <TextStyle>
               <halign>center</halign>
@@ -208,7 +208,7 @@ class TestClassMscoreXmlTree(unittest.TestCase):
         self.assertEqual(result[0][0][0].text, "center")
 
     def test_method_clean(self):
-        tmp = helper.get_tmpfile_path("clean.mscx", version=3)
+        tmp = helper.get_file("clean.mscx", version=3)
         tree = MscoreXmlTree(tmp)
         tree.clean()
         tree.save()
@@ -224,21 +224,21 @@ class TestClassMscoreXmlTree(unittest.TestCase):
         self.assertEqual(xml_tree.xpath("//offset"), [])
 
     def test_method_save(self):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         tree = MscoreXmlTree(tmp)
         tree.save()
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
 
     def test_method_save_new_name(self):
-        tmp = helper.get_tmpfile_path("simple.mscx")
+        tmp = helper.get_file("simple.mscx")
         tree = MscoreXmlTree(tmp)
         tree.save(new_name=tmp)
         result = helper.read_file(tmp)
         self.assertTrue('<metaTag name="arranger"></metaTag>' in result)
 
     def test_mscz(self):
-        tmp = helper.get_tmpfile_path("simple.mscz")
+        tmp = helper.get_file("simple.mscz")
         tree = MscoreXmlTree(tmp)
         result = tree.xml_tree.xpath("/museScore/Score/Style")
         self.assertEqual(result[0].tag, "Style")
@@ -246,7 +246,7 @@ class TestClassMscoreXmlTree(unittest.TestCase):
 
 class TestClean(unittest.TestCase):
     def _test_clean(self, version=2):
-        tmp = helper.get_tmpfile_path("formats.mscx", version)
+        tmp = helper.get_file("formats.mscx", version)
         mscxyz.execute(["clean", tmp])
         cleaned = helper.read_file(tmp)
         self.assertFalse("<font" in cleaned)
@@ -261,10 +261,8 @@ class TestClean(unittest.TestCase):
         self._test_clean(version=3)
 
     def _test_clean_add_style(self, version=2):
-        tmp = helper.get_tmpfile_path("simple.mscx", version)
-        mscxyz.execute(
-            ["clean", "--style", helper.get_tmpfile_path("style.mss", version), tmp]
-        )
+        tmp = helper.get_file("simple.mscx", version)
+        mscxyz.execute(["clean", "--style", helper.get_file("style.mss", version), tmp])
         style = helper.read_file(tmp)
         self.assertTrue("<staffUpperBorder>77</staffUpperBorder>" in style)
 
@@ -275,9 +273,7 @@ class TestClean(unittest.TestCase):
 
 class TestClassStyle(unittest.TestCase):
     def setUp(self):
-        self.style = MscoreStyleInterface(
-            helper.get_tmpfile_path("All_Dudes.mscx", version=2)
-        )
+        self.style = MscoreStyleInterface(helper.get_file("All_Dudes.mscx", version=2))
 
     def test_attributes_style(self):
         self.assertEqual(self.style.style.tag, "Style")
@@ -292,9 +288,7 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(self.style.get_element("voltaY").tag, "voltaY")
 
     def test_method_get_element_create(self):
-        dudes = MscoreStyleInterface(
-            helper.get_tmpfile_path("All_Dudes.mscx", version=3)
-        )
+        dudes = MscoreStyleInterface(helper.get_file("All_Dudes.mscx", version=3))
         self.assertEqual(dudes.get_element("XXX"), None)
         element = dudes.get_element("XXX", create=True)
         element.attrib["y"] = "YYY"
@@ -336,9 +330,7 @@ class TestClassStyle(unittest.TestCase):
         self.assertEqual(style2.get_value("page-layout/page-width"), "100")
 
     def test_method_set_attributes(self):
-        dudes = MscoreStyleInterface(
-            helper.get_tmpfile_path("All_Dudes.mscx", version=3)
-        )
+        dudes = MscoreStyleInterface(helper.get_file("All_Dudes.mscx", version=3))
         dudes.set_attributes("XXX", {"one": 1, "two": 2})
         dudes.save()
         dudes2 = MscoreStyleInterface(dudes.abspath)
@@ -369,9 +361,7 @@ class TestClassStyle(unittest.TestCase):
 
 class TestClassMscoreStyleInterface3(unittest.TestCase):
     def setUp(self):
-        self.style = MscoreStyleInterface(
-            helper.get_tmpfile_path("All_Dudes.mscx", version=3)
-        )
+        self.style = MscoreStyleInterface(helper.get_file("All_Dudes.mscx", version=3))
 
     def test_attributes_style(self):
         self.assertEqual(self.style.style.tag, "Style")
@@ -394,7 +384,7 @@ class TestClassMscoreStyleInterface3(unittest.TestCase):
 
 class TestClassMscoreStyleInterfaceWithoutTags(unittest.TestCase):
     def setUp(self):
-        self.style = MscoreStyleInterface(helper.get_tmpfile_path("without-style.mscx"))
+        self.style = MscoreStyleInterface(helper.get_file("without-style.mscx"))
 
     def test_load(self):
         self.assertEqual(self.style.style.tag, "Style")
@@ -427,7 +417,7 @@ class TestFileCompare(unittest.TestCase):
     def assertDiff(self, filename, version=2):
         orig = os.path.join(os.path.expanduser("~"), filename)
         saved = orig.replace(".mscx", "_saved.mscx")
-        tmp = helper.get_tmpfile_path(filename, version=version)
+        tmp = helper.get_file(filename, version=version)
         shutil.copy2(tmp, orig)
         tree = MscoreXmlTree(tmp)
         tree.save(new_name=saved)

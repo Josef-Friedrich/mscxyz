@@ -15,7 +15,7 @@ class TestBrokenMscoreFile(unittest.TestCase):
                     "--config-file",
                     ini_file,
                     "meta",
-                    helper.get_tmpfile_path("broken.mscx"),
+                    helper.get_file("broken.mscx"),
                 ]
             )
         self.assertTrue(
