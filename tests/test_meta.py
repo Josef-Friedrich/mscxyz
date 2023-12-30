@@ -19,6 +19,8 @@ from mscxyz.meta import (
     MetaTag,
     Vbox,
     distribute_field,
+    export_to_dict,
+    to_underscore,
 )
 from mscxyz.score_file_classes import MscoreXmlTree
 
@@ -54,10 +56,22 @@ class TestExceptions(unittest.TestCase):
         )
 
 
-class TestFunctionDistributeField(unittest.TestCase):
-    def test_simple(self):
+class TestFunctions(unittest.TestCase):
+    def test_distribute_field(self):
         match = distribute_field("We are the champions - Queen", "$title - $composer")
         self.assertEqual(match, {"composer": "Queen", "title": "We are the champions"})
+
+    def test_to_underscore(self) -> None:
+        self.assertEqual(to_underscore("PascalCase"), "_pascal_case")
+        self.assertEqual(to_underscore("lowerCamelCase"), "lower_camel_case")
+
+    def test_export_to_dict(self) -> None:
+        class Data:
+            a = "a"
+            b = "b"
+
+        data = Data()
+        self.assertEqual(export_to_dict(data, ("a")), {"a": "a"})
 
 
 class TestClassUnifiedInterface(unittest.TestCase):
@@ -134,7 +148,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         self._test_get_all_values(version=2)
         self._test_get_all_values(version=3)
 
-    def _test_set_all_values(self, version):
+    def _test_set_all_values(self, version: int):
         interface, tree, tmp = self._init_class("meta-all-values.mscx", version)
 
         for field in self.fields:
@@ -161,7 +175,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         fields = InterfaceReadWrite.get_all_fields()
         self.assertEqual(fields, self.fields)
 
-    def _test_method_export_to_dict(self, version):
+    def _test_method_export_to_dict(self, version: int):
         interface, _, _ = self._init_class("meta-all-values.mscx", version)
         result = interface.export_to_dict()
         self.assertEqual(

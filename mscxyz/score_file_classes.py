@@ -16,13 +16,18 @@ import os
 import shutil
 import string
 import tempfile
+import typing
 import zipfile
 from typing import List, Optional
 
 import lxml
 import lxml.etree  # Needed for type hints
+from lxml.etree import _Element, _ElementTree
 
 from mscxyz.utils import mscore, re_open
+
+if typing.TYPE_CHECKING:
+    from lxml.etree import _XPathObject
 
 
 def list_scores(
@@ -165,15 +170,15 @@ class MscoreXmlTree(MscoreFile):
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
 
-    def __init__(self, relpath: str):
+    def __init__(self, relpath: str) -> None:
         super(MscoreXmlTree, self).__init__(relpath)
         try:
-            self.xml_tree = lxml.etree.parse(self.loadpath)
+            self.xml_tree: _ElementTree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
-            self.xml_root = self.xml_tree.getroot()
-            musescore = self.xml_tree.xpath("/museScore")
+            self.xml_root: _Element = self.xml_tree.getroot()
+            musescore: _XPathObject = self.xml_tree.xpath("/museScore")
             version = musescore[0].get("version")
             self.version_major = int(version.split(".")[0])
             """The major MuseScore version, for example 2 or 3"""
@@ -181,10 +186,10 @@ class MscoreXmlTree(MscoreFile):
             """The MuseScore version, for example 2.03 or 3.01"""
 
     def add_sub_element(self, root_tag, tag, text: str):
-        tag = lxml.etree.SubElement(root_tag, tag)
+        tag: _Element = lxml.etree.SubElement(root_tag, tag)
         tag.text = text
 
-    def strip_tags(self, *tag_names: str):
+    def strip_tags(self, *tag_names: str) -> None:
         """Delete / strip some tag names."""
         lxml.etree.strip_tags(self.xml_tree, tag_names)
 
@@ -262,7 +267,7 @@ class MscoreXmlTree(MscoreFile):
 
         """
         if os.path.exists(styles):
-            style = lxml.etree.parse(styles).getroot()
+            style: _Element = lxml.etree.parse(styles).getroot()
         else:
             # <?xml ... tag without encoding to avoid this error:
             # ValueError: Unicode strings with encoding declaration are
@@ -275,7 +280,7 @@ class MscoreXmlTree(MscoreFile):
         for score in self.xml_tree.xpath("/museScore/Score"):
             score.insert(0, style[0])
 
-    def clean(self):
+    def clean(self) -> None:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
         self.remove_tags_by_xpath(
@@ -291,7 +296,7 @@ class MscoreXmlTree(MscoreFile):
           MuseScore executable and save it there.
         """
         if new_name:
-            filename = new_name
+            filename: str = new_name
         elif self.extension == "mscz":
             filename = self.loadpath
         else:
@@ -352,22 +357,24 @@ class MscoreStyleInterface(MscoreXmlTree):
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
 
+    style: _Element
+
     def __init__(self, relpath: str):
         super(MscoreStyleInterface, self).__init__(relpath)
-        styles = self.xml_tree.xpath("/museScore/Score/Style")
+        styles: _XPathObject = self.xml_tree.xpath("/museScore/Score/Style")
         if styles:
             self.style = styles[0]
             """The ``/museScore/Score/Style`` element object, see
             https://lxml.de/tutorial.html#the-element-class
             """
         else:
-            self.style = self._create_parent_style()
+            self.style: _Element = self._create_parent_style()
 
     def _create_parent_style(self):
-        score = self.xml_tree.xpath("/museScore/Score")
+        score: _XPathObject = self.xml_tree.xpath("/museScore/Score")
         return lxml.etree.SubElement(score[0], "Style")
 
-    def _create(self, tag: str) -> lxml.etree.Element:
+    def _create(self, tag: str) -> _Element:
         """
         :param tag: Nested tags are supported, for example ``TextStyle/halign``
         """
@@ -381,9 +388,7 @@ class MscoreStyleInterface(MscoreXmlTree):
                 parent = element
         return parent
 
-    def get_element(
-        self, element_path: str, create: bool = False
-    ) -> lxml.etree.Element:
+    def get_element(self, element_path: str, create: bool = False) -> _Element:
         """
         Get a lxml element which is parent to the ``Style`` tag.
 
@@ -419,13 +424,13 @@ class MscoreStyleInterface(MscoreXmlTree):
         element = self.get_element(element_path)
         return element.text
 
-    def set_attributes(self, element_path: str, attributes: dict) -> lxml.etree.Element:
+    def set_attributes(self, element_path: str, attributes: dict) -> _Element:
         """Set attributes on a style child tag.
 
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element = self.get_element(element_path, create=True)
+        element: _Element = self.get_element(element_path, create=True)
         for name, value in attributes.items():
             element.attrib[name] = str(value)
         return element
@@ -437,10 +442,10 @@ class MscoreStyleInterface(MscoreXmlTree):
         """
         element = self.style.find(element_path)
         if element is None:
-            element = self._create(element_path)
+            element: _Element = self._create(element_path)
         element.text = str(value)
 
-    def _get_text_style_element(self, name: str) -> lxml.etree.Element:
+    def _get_text_style_element(self, name: str) -> _Element:
         if self.version_major != 2:
             raise ValueError(
                 "This operation is only allowed for MuseScore 2 score files"
@@ -450,8 +455,8 @@ class MscoreStyleInterface(MscoreXmlTree):
         if child:
             return child[0].getparent()
         else:
-            el_text_style = lxml.etree.SubElement(self.style, "TextStyle")
-            el_name = lxml.etree.SubElement(el_text_style, "name")
+            el_text_style: _Element = lxml.etree.SubElement(self.style, "TextStyle")
+            el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
             el_name.text = name
             return el_text_style
 
