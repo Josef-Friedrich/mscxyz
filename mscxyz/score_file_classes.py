@@ -18,6 +18,7 @@ import string
 import tempfile
 import typing
 import zipfile
+from pathlib import Path
 from typing import List, Optional
 
 import lxml
@@ -116,7 +117,7 @@ class MscoreFile:
     loadpath: str
     """The load path of the score file"""
 
-    def __init__(self, relpath: str):
+    def __init__(self, relpath: str) -> None:
         self.errors = []
         self.relpath = relpath
         self.abspath = os.path.abspath(relpath)
@@ -135,28 +136,91 @@ class MscoreFile:
 
     @staticmethod
     def _unzip(abspath: str) -> str:
-        tmp_zipdir = tempfile.mkdtemp()
+        tmp_zipdir: str = tempfile.mkdtemp()
         zip_ref = zipfile.ZipFile(abspath, "r")
         zip_ref.extractall(tmp_zipdir)
         zip_ref.close()
-        con = os.path.join(tmp_zipdir, "META-INF", "container.xml")
-        container_info = lxml.etree.parse(con)
-        mscx = container_info.xpath("string(/container/rootfiles/rootfile/@full-path)")
+        con: str = os.path.join(tmp_zipdir, "META-INF", "container.xml")
+        container_info: _ElementTree = lxml.etree.parse(con)
+        mscx: _XPathObject = container_info.xpath(
+            "string(/container/rootfiles/rootfile/@full-path)"
+        )
         return os.path.join(tmp_zipdir, str(mscx))
 
-    def backup(self):
+    def backup(self) -> None:
         """Make a copy of the MuseScore file."""
         shutil.copy2(self.relpath, self.relpath_backup)
 
-    def export(self, extension: str = "pdf"):
+    def export(self, extension: str = "pdf") -> None:
         """Export the score to the specifed file type.
 
         :param extension: The extension (default: pdf)
         """
-        score = self.relpath
+        score: str = self.relpath
         mscore(
             ["--export-to", score.replace("." + self.extension, "." + extension), score]
         )
+
+
+class ZipContainer:
+    """Container for the file paths of the different files in an unzipped MuseScore file
+
+    .. code :: XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <container>
+            <rootfiles>
+                <rootfile full-path="score_style.mss"/>
+                <rootfile full-path="test.mscx"/>
+                <rootfile full-path="Thumbnails/thumbnail.png"/>
+                <rootfile full-path="audiosettings.json"/>
+                <rootfile full-path="viewsettings.json"/>
+                </rootfiles>
+            </container>
+    """
+
+    tmp_zipdir: Path
+    """Absolute path of the temporary directory"""
+
+    mscx_path: Path
+
+    audiosettings_path: Path
+    """Absolute path of the audio settings file"""
+
+    viewsettings_path: Path
+    """Absolute path of the view settings file"""
+
+    score_style_path: Path
+    """Absolute path of the score style file"""
+
+    def __init__(self, abspath: str) -> None:
+        self.tmp_zipdir = ZipContainer._extract_zip(abspath)
+        container_info: _ElementTree = lxml.etree.parse(
+            self.tmp_zipdir / "META-INF" / "container.xml"
+        )
+        root_files: _XPathObject = container_info.xpath("/container/rootfiles")
+        if isinstance(root_files, list):
+            for root_file in root_files[0]:
+                if isinstance(root_file, _Element):
+                    relpath = root_file.get("full-path")
+                    if isinstance(relpath, str):
+                        abs_path: Path = self.tmp_zipdir / relpath
+                        if relpath.endswith(".mscx"):
+                            self.mscx_path = abs_path
+                        elif relpath.endswith("audiosettings.json"):
+                            self.audiosettings_path = abs_path
+                        elif relpath.endswith("viewsettings.json"):
+                            self.viewsettings_path = abs_path
+                        elif relpath.endswith(".mss"):
+                            self.score_style_path = abs_path
+
+    @staticmethod
+    def _extract_zip(abspath: str) -> Path:
+        tmp_zipdir = Path(tempfile.mkdtemp())
+        zip_ref = zipfile.ZipFile(abspath, "r")
+        zip_ref.extractall(tmp_zipdir)
+        zip_ref.close()
+        return tmp_zipdir
 
 
 ###############################################################################

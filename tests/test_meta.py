@@ -1,5 +1,6 @@
 """Test submodule “meta.py”."""
 
+from __future__ import annotations
 
 import os
 import tempfile
@@ -75,7 +76,7 @@ class TestFunctions(unittest.TestCase):
 
 
 class TestClassUnifiedInterface(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.fields = [
             "combined_composer",
             "combined_lyricist",
@@ -100,13 +101,13 @@ class TestClassUnifiedInterface(unittest.TestCase):
             "vbox_title",
         ]
 
-    def _init_class(self, filename, version=2):
+    def _init_class(self, filename: str, version: int = 2):
         tmp = helper.get_tmpfile_path(filename, version)
         tree = MscoreXmlTree(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
-    def _test_subclasses(self, version):
+    def _test_subclasses(self, version: int) -> None:
         interface, _, _ = self._init_class("simple.mscx", version)
         self.assertTrue(interface.metatag)
         self.assertTrue(interface.vbox)
@@ -116,7 +117,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         self._test_subclasses(version=2)
         self._test_subclasses(version=3)
 
-    def test_static_method_split(self):
+    def test_static_method_split(self) -> None:
         result = InterfaceReadWrite._split("metatag_work_title")
         self.assertEqual(result, {"field": "work_title", "object": "metatag"})
         with self.assertRaises(ValueError):
@@ -124,7 +125,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         with self.assertRaises(ValueError):
             InterfaceReadWrite._split("lol_work_title")
 
-    def _test_get_simple(self, version):
+    def _test_get_simple(self, version: int) -> None:
         interface, _, _ = self._init_class("simple.mscx", version)
         self.assertEqual(interface.vbox_title, "Title")
         self.assertEqual(interface.metatag_work_title, "Title")
@@ -133,7 +134,7 @@ class TestClassUnifiedInterface(unittest.TestCase):
         self._test_get_simple(version=2)
         self._test_get_simple(version=3)
 
-    def _test_get_all_values(self, version):
+    def _test_get_all_values(self, version: str) -> None:
         interface, _, _ = self._init_class("meta-all-values.mscx", version)
 
         self.assertEqual(interface.combined_composer, "vbox_composer")
@@ -312,7 +313,7 @@ class TestClassInterface(unittest.TestCase):
 
 
 class TestClassMetaTag(unittest.TestCase):
-    def _init_class(self, filename, version=2):
+    def _init_class(self, filename: str, version: int = 2):
         tmp = helper.get_tmpfile_path(filename, version)
         tree = MscoreXmlTree(tmp)
         meta = MetaTag(tree.xml_root)
@@ -382,13 +383,13 @@ class TestClassMetaTag(unittest.TestCase):
 
 
 class TestClassVbox(unittest.TestCase):
-    def _init_class(self, filename, version=2):
+    def _init_class(self, filename: str, version: int = 2):
         tmp = helper.get_tmpfile_path(filename, version)
         tree = MscoreXmlTree(tmp)
         vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
-    def _test_init(self, version):
+    def _test_init(self, version: int):
         _, tree, tmp = self._init_class("no-vbox.mscx", version)
         tree.save()
         xml_string = helper.read_file(tmp)
@@ -398,7 +399,7 @@ class TestClassVbox(unittest.TestCase):
         self._test_init(version=2)
         self._test_init(version=3)
 
-    def _test_get(self, version):
+    def _test_get(self, version: int):
         vbox, _, _ = self._init_class("simple.mscx", version)
         self.assertEqual(vbox.Title, "Title")
         self.assertEqual(vbox.Composer, "Composer")
@@ -419,7 +420,7 @@ class TestClassVbox(unittest.TestCase):
         self._test_get_exception(version=2)
         self._test_get_exception(version=3)
 
-    def _assert_set(self, filename, version=2):
+    def _assert_set(self, filename: str, version: int = 2):
         tmp = helper.get_tmpfile_path(filename, version)
         tree = MscoreXmlTree(tmp)
         vbox = Vbox(tree.xml_root)
@@ -441,7 +442,7 @@ class TestClassVbox(unittest.TestCase):
         self._assert_set("no-vbox.mscx", version=2)
         self._assert_set("no-vbox.mscx", version=3)
 
-    def _test_set_exception(self, version=2):
+    def _test_set_exception(self, version: int = 2):
         vbox, _, _ = self._init_class("simple.mscx", version)
         with self.assertRaises(meta.UnkownFieldError):
             vbox.lol = "lol"
@@ -452,7 +453,7 @@ class TestClassVbox(unittest.TestCase):
 
 
 class TestClassCombined(unittest.TestCase):
-    def _init_class(self, filename):
+    def _init_class(self, filename: str):
         tmp = helper.get_tmpfile_path(filename)
         tree = MscoreXmlTree(tmp)
         combined = Combined(tree.xml_root)

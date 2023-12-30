@@ -22,6 +22,8 @@ Functions:
     list_scores
 """
 
+from __future__ import annotations
+
 import configparser
 import os
 import sys
@@ -197,7 +199,7 @@ def no_error(error, errors):
     return True
 
 
-def execute(args: typing.Sequence = None):
+def execute(args: typing.Sequence[str] | None = None):
     args = cli.parser.parse_args(args)
     config = parse_config_ini(args.general_config_file)
     if config:

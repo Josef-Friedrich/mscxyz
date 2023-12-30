@@ -11,11 +11,8 @@ test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
-def get_tmpfile_path(filename, version=2):
-    if version == 2:
-        folder = "files_mscore2"
-    else:
-        folder = "files_mscore3"
+def get_tmpfile_path(filename: str, version: int = 2) -> str:
+    folder: str = f"files_mscore{version}"
     orig = os.path.join(test_dir, folder, filename)
     tmp_dir = tempfile.mkdtemp()
     tmp = os.path.join(tmp_dir, filename)
@@ -23,7 +20,7 @@ def get_tmpfile_path(filename, version=2):
     return tmp
 
 
-def get_tmpdir_path(relative_dir, version=2):
+def get_tmpdir_path(relative_dir: str, version: int = 2) -> str:
     if version == 2:
         folder = "files_mscore2"
     else:
@@ -34,7 +31,7 @@ def get_tmpdir_path(relative_dir, version=2):
     return tmp
 
 
-def read_file(filename):
+def read_file(filename: str) -> str:
     tmp = open(filename)
     output = tmp.read()
     tmp.close()

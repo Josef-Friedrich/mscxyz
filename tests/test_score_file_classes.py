@@ -2,6 +2,7 @@
 
 import filecmp
 import os
+import pathlib
 import shutil
 import unittest
 from unittest import mock
@@ -13,6 +14,7 @@ from mscxyz.score_file_classes import (
     MscoreFile,
     MscoreStyleInterface,
     MscoreXmlTree,
+    ZipContainer,
     list_scores,
     list_zero_alphabet,
 )
@@ -88,25 +90,27 @@ class TestMscoreFile(unittest.TestCase):
     def setUp(self):
         self.file = MscoreFile(helper.get_tmpfile_path("simple.mscx"))
 
-    def test_attribute_relpath(self):
+    def test_attribute_relpath(self) -> None:
         self.assertTrue(self.file.relpath)
 
-    def test_attribute_dirname(self):
+    def test_attribute_dirname(self) -> None:
         self.assertTrue(self.file.dirname)
 
-    def test_attribute_filename(self):
+    def test_attribute_filename(self) -> None:
         self.assertEqual(self.file.filename, "simple.mscx")
 
-    def test_attribute_basename(self):
+    def test_attribute_basename(self) -> None:
         self.assertEqual(self.file.basename, "simple")
 
-    def test_attribute_extension(self):
+    def test_attribute_extension(self) -> None:
         self.assertEqual(self.file.extension, "mscx")
 
-    def test_attribute_abspath(self):
+    def test_attribute_abspath(self) -> None:
         self.assertEqual(self.file.abspath, self.file.loadpath)
+        pathlib.Path(self.file.abspath).exists()
 
 
+@unittest.skip("Not implemented yet")
 class TestMscoreFileMscz(unittest.TestCase):
     def setUp(self):
         self.file = MscoreFile(helper.get_tmpfile_path("simple.mscz"))
@@ -116,6 +120,43 @@ class TestMscoreFileMscz(unittest.TestCase):
 
     def test_attribute_loadpath(self):
         self.assertIn("simple.mscx", self.file.loadpath)
+
+
+class TestMscoreFileMscz4(unittest.TestCase):
+    def setUp(self):
+        self.file = MscoreFile(
+            helper.get_tmpfile_path("test.mscz", version=4),
+        )
+
+    def test_attribute_extension(self):
+        self.assertEqual(self.file.extension, "mscz")
+
+
+class TestZipContainer(unittest.TestCase):
+    def setUp(self) -> None:
+        self.container = ZipContainer(
+            helper.get_tmpfile_path("test.mscz", version=4),
+        )
+
+    def test_attribute_tmp_zipdir(self) -> None:
+        self.assertTrue(str(self.container.tmp_zipdir).startswith(os.path.sep))
+        self.assertTrue(self.container.tmp_zipdir.exists())
+
+    def test_attribute_mscx_path(self) -> None:
+        self.assertTrue(str(self.container.mscx_path).endswith(".mscx"))
+        self.assertTrue(self.container.mscx_path.exists())
+
+    def test_attribute_audiosettings_path(self) -> None:
+        self.assertTrue(
+            str(self.container.audiosettings_path).endswith("audiosettings.json")
+        )
+        self.assertTrue(self.container.audiosettings_path.exists())
+
+    def test_attribute_viewsettings_path(self) -> None:
+        self.assertTrue(
+            str(self.container.viewsettings_path).endswith("viewsettings.json")
+        )
+        self.assertTrue(self.container.viewsettings_path.exists())
 
 
 class TestClassMscoreXmlTree(unittest.TestCase):
