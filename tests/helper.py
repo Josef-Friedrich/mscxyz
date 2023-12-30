@@ -4,7 +4,6 @@ import os
 import shutil
 import subprocess
 import tempfile
-from distutils.dir_util import copy_tree
 
 from jflib import Capturing  # noqa: F401
 
@@ -31,7 +30,7 @@ def get_tmpdir_path(relative_dir, version=2):
         folder = "files_mscore3"
     orig = os.path.join(test_dir, folder, relative_dir)
     tmp = tempfile.mkdtemp()
-    copy_tree(orig, tmp)
+    shutil.copytree(orig, tmp, dirs_exist_ok=True)
     return tmp
 
 
