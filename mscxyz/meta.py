@@ -249,7 +249,6 @@ class Vbox(object):
 
 
 class Combined(MscoreXmlTree):
-
     fields = (
         "composer",
         "lyricist",
@@ -301,7 +300,6 @@ class Combined(MscoreXmlTree):
 
 
 class InterfaceReadWrite(object):
-
     objects = ("metatag", "vbox", "combined")
 
     def __init__(self, xml_root):
@@ -350,7 +348,6 @@ class InterfaceReadWrite(object):
 
 
 class InterfaceReadOnly(object):
-
     fields = [
         "readonly_abspath",
         "readonly_basename",
@@ -501,7 +498,6 @@ class Meta(MscoreXmlTree):
             if (
                 args.general_verbose == 0 and (pre[field] or post[field])
             ) or args.general_verbose > 0:
-
                 if re.match(r"^combined_", field):
                     field_color = "green"
                 elif re.match(r"^metatag_", field):

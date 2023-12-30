@@ -18,13 +18,13 @@ keywords = ["audio"]
 [tool.poetry.dependencies]
 python = "^3.8"
 lxml = "^4.9.1"
-termcolor = "^1.1.0"
+termcolor = "^2.4.0"
 tmep = "^2.3.3"
 lxml-stubs = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
-readme-patcher = "^0.5.0"
-tox = "^3.25.1"
+readme-patcher = "^0.6.0"
+tox = "^4.11.4"
 black = "^22.6.0"
 isort = "^5.10.1"
 
