@@ -66,7 +66,7 @@ def export_to_dict(obj, fields):
     return out
 
 
-class MetaTag(object):
+class MetaTag:
 
     """The available metaTag fields are:
 
@@ -148,7 +148,7 @@ class MetaTag(object):
             setattr(self, field, "")
 
 
-class Vbox(object):
+class Vbox:
     """The first vertical box of a score.
 
     Available fields:
@@ -299,7 +299,7 @@ class Combined(MscoreXmlTree):
         self.vbox.Lyricist = self.metatag.lyricist = value
 
 
-class InterfaceReadWrite(object):
+class InterfaceReadWrite:
     objects = ("metatag", "vbox", "combined")
 
     def __init__(self, xml_root):
@@ -347,7 +347,7 @@ class InterfaceReadWrite(object):
             return setattr(obj, parts["field"], value)
 
 
-class InterfaceReadOnly(object):
+class InterfaceReadOnly:
     fields = [
         "readonly_abspath",
         "readonly_basename",
@@ -390,7 +390,7 @@ class InterfaceReadOnly(object):
         return self.xml_tree.relpath_backup
 
 
-class Interface(object):
+class Interface:
     def __init__(self, tree):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)

@@ -72,7 +72,7 @@ def list_zero_alphabet() -> List[str]:
 ###############################################################################
 
 
-class MscoreFile(object):
+class MscoreFile:
     """This class holds basic file properties of the MuseScore score file.
 
     :param relpath: The relative (or absolute) path of a MuseScore
