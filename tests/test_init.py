@@ -2,10 +2,9 @@
 
 import unittest
 
-import helper
-from helper import ini_file
-
 import mscxyz
+from tests import helper
+from tests.helper import ini_file
 
 
 class TestBrokenMscoreFile(unittest.TestCase):

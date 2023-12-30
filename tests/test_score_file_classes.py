@@ -7,8 +7,6 @@ import shutil
 import unittest
 from unittest import mock
 
-import helper
-
 import mscxyz
 from mscxyz.score_file_classes import (
     MscoreFile,
@@ -18,6 +16,7 @@ from mscxyz.score_file_classes import (
     list_scores,
     list_zero_alphabet,
 )
+from tests import helper
 
 
 class TestFunctions(unittest.TestCase):
@@ -157,6 +156,16 @@ class TestZipContainer(unittest.TestCase):
             str(self.container.viewsettings_path).endswith("viewsettings.json")
         )
         self.assertTrue(self.container.viewsettings_path.exists())
+
+
+class TestMscoreXmlTree:
+    tree = MscoreXmlTree(helper.get_tmpfile_path("simple.mscx", 3))
+
+    def test_property_version(self) -> None:
+        assert self.tree.version == 3.01
+
+    def test_property_version_major(self) -> None:
+        assert self.tree.version_major == 3
 
 
 class TestClassMscoreXmlTree(unittest.TestCase):

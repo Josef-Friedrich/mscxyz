@@ -4,9 +4,8 @@
 import os
 import unittest
 
-import helper
-
 import mscxyz
+from tests import helper
 
 
 class TestMscoreLyricsInterface(unittest.TestCase):

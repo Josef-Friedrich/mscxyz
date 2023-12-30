@@ -234,6 +234,12 @@ class MscoreXmlTree(MscoreFile):
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
 
+    version_major: int
+    """The major MuseScore version, for example 2 or 3"""
+
+    version: float
+    """The MuseScore version, for example 2.03 or 3.01"""
+
     def __init__(self, relpath: str) -> None:
         super(MscoreXmlTree, self).__init__(relpath)
         try:
@@ -245,11 +251,9 @@ class MscoreXmlTree(MscoreFile):
             musescore: _XPathObject = self.xml_tree.xpath("/museScore")
             version = musescore[0].get("version")
             self.version_major = int(version.split(".")[0])
-            """The major MuseScore version, for example 2 or 3"""
             self.version = float(version)
-            """The MuseScore version, for example 2.03 or 3.01"""
 
-    def add_sub_element(self, root_tag, tag, text: str):
+    def add_sub_element(self, root_tag, tag, text: str) -> None:
         tag: _Element = lxml.etree.SubElement(root_tag, tag)
         tag.text = text
 
@@ -257,7 +261,7 @@ class MscoreXmlTree(MscoreFile):
         """Delete / strip some tag names."""
         lxml.etree.strip_tags(self.xml_tree, tag_names)
 
-    def remove_tags_by_xpath(self, *xpath_strings: str):
+    def remove_tags_by_xpath(self, *xpath_strings: str) -> None:
         """Remove tags by xpath strings.
 
         :param xpath_strings: A xpath string.
@@ -270,8 +274,13 @@ class MscoreXmlTree(MscoreFile):
 
         """
         for xpath_string in xpath_strings:
-            for rm in self.xml_tree.xpath(xpath_string):
-                rm.getparent().remove(rm)
+            x: _XPathObject = self.xml_tree.xpath(xpath_string)
+            if isinstance(x, list):
+                for rm in x:
+                    if isinstance(rm, _Element):
+                        p: _Element | None = rm.getparent()
+                        if isinstance(p, _Element):
+                            p.remove(rm)
 
     def merge_style(self, styles: str):
         """Merge styles into the XML tree.

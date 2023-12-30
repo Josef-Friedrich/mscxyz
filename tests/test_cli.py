@@ -3,10 +3,9 @@
 import re
 import unittest
 
-import helper
-
 import mscxyz
 from mscxyz import cli
+from tests import helper
 
 
 class TestArgs(unittest.TestCase):

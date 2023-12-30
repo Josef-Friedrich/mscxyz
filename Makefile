@@ -1,26 +1,25 @@
-all: test
-
-build:
-	rm -rf dist
-	python3 setup.py sdist
-
-doc:
-	python setup.py build_sphinx
+test:
+	poetry run tox
 
 install:
-	python setup.py install
+	poetry install
 
-develop:
-	python setup.py develop
+install_editable:
+	pip install -e .
 
-upload:
-	pip3 install twine
-	twine upload --skip-existing dist/*
+update:
+	poetry lock
+	poetry install
 
-readme:
-	./_generate-readme.py
+build:
+	poetry build
 
-test:
-	tox
+publish:
+	poetry build
+	poetry publish
 
-.PHONY: all build doc install develop upload readme test
+docs:
+	poetry run tox -e docs
+	xdg-open docs/_build/index.html
+
+.PHONY: test install install_editable update build publish docs

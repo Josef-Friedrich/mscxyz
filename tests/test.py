@@ -4,9 +4,8 @@ import os
 import unittest
 from unittest import mock
 
-import helper
-
 import mscxyz
+from tests import helper
 
 
 class TestBackup(unittest.TestCase):

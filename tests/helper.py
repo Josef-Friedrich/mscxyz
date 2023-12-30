@@ -12,6 +12,13 @@ ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
 def get_tmpfile_path(filename: str, version: int = 2) -> str:
+    """
+    Returns the path of a temporary file created by copying the original file.
+
+    :param filename: The name of the file to be copied.
+    :param version: The version of the file, defaults to 2.
+    :return: The path of the temporary file.
+    """
     folder: str = f"files_mscore{version}"
     orig = os.path.join(test_dir, folder, filename)
     tmp_dir = tempfile.mkdtemp()

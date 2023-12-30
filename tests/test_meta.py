@@ -6,9 +6,6 @@ import os
 import tempfile
 import unittest
 
-import helper
-from helper import ini_file
-
 import mscxyz
 from mscxyz import meta
 from mscxyz.meta import (
@@ -24,6 +21,8 @@ from mscxyz.meta import (
     to_underscore,
 )
 from mscxyz.score_file_classes import MscoreXmlTree
+from tests import helper
+from tests.helper import ini_file
 
 
 class TestExceptions(unittest.TestCase):

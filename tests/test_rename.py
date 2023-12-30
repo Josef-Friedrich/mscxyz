@@ -5,11 +5,10 @@ import os
 import tempfile
 import unittest
 
-import helper
-from helper import ini_file
-
 import mscxyz
 from mscxyz import rename
+from tests import helper
+from tests.helper import ini_file
 
 
 class TestFunctions(unittest.TestCase):
