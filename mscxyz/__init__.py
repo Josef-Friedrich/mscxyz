@@ -211,7 +211,6 @@ def execute(args: typing.Sequence = None):
     files = list_scores(path=args.path, glob=args.general_glob)
 
     for file in files:
-
         print("\n" + color(file, "red"))
 
         if args.general_backup:

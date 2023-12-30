@@ -326,7 +326,7 @@ class InterfaceReadWrite(object):
             raise ValueError("Field “" + field + "” can’t be splitted!")
         matches = match.groups()
 
-        if not matches[0] in InterfaceReadWrite.objects:
+        if matches[0] not in InterfaceReadWrite.objects:
             raise ValueError(matches[0] + ": Not a supported object!")
         return {"object": matches[0], "field": matches[1]}
 

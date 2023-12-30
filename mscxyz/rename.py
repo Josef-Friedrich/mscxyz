@@ -106,7 +106,6 @@ def rename_filename(source: str) -> Meta:
     show(source, target)
 
     if not args.general_dry_run:
-
         create_dir(target)
         # Invalid cross-device link:
         # os.rename(source, target)

@@ -404,9 +404,7 @@ sub_help = subparser.add_parser(
     help="Show help. Use “{} help all” to show help \
     messages of all subcommands. Use \
     “{} help <subcommand>” to show only help messages \
-    for the given subcommand.".format(
-        parser.prog, parser.prog
-    ),
+    for the given subcommand.".format(parser.prog, parser.prog),
 )
 
 sub_help.add_argument(

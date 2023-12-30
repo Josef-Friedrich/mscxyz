@@ -315,7 +315,6 @@ class MscoreXmlTree(MscoreFile):
                 "//StaffText/text",
                 "//Jump/continueAt",
             ):
-
                 for tag in self.xml_tree.xpath(xpath):
                     if not tag.text:
                         tag.text = ""

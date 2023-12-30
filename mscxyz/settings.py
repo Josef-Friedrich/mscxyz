@@ -4,7 +4,6 @@ submodules using the function `get_args()`."""
 
 
 class DefaultArguments:
-
     clean_style = None
     export_extension = None
     general_backup = False
