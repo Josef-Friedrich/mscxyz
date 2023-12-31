@@ -108,11 +108,11 @@ class TestMscoreFile:
     def test_attribute_filename(self) -> None:
         assert self.file.filename == "simple.mscx"
 
-    def test_attribute_basename(self) -> None:
-        assert self.file.basename == "simple"
-
     def test_attribute_extension(self) -> None:
         assert self.file.extension == "mscx"
+
+    def test_attribute_basename(self) -> None:
+        assert self.file.basename == "simple"
 
 
 @pytest.mark.skip("Not implemented yet")
@@ -147,25 +147,25 @@ class TestZipContainer:
         assert str(self.container.tmp_dir).startswith(os.path.sep)
         assert self.container.tmp_dir.exists()
 
-    def test_attribute_mscx_path(self) -> None:
-        assert str(self.container.mscx_path).endswith(".mscx")
-        assert self.container.mscx_path.exists()
+    def test_attribute_mscx_file(self) -> None:
+        assert str(self.container.mscx_file).endswith(".mscx")
+        assert self.container.mscx_file.exists()
 
-    def test_attribute_thumbnail_path(self) -> None:
-        path = self.container.thumbnail_path
+    def test_attribute_thumbnail_file(self) -> None:
+        path = self.container.thumbnail_file
         assert str(path).endswith("thumbnail.png")
         if path:
             assert path.exists()
 
-    def test_attribute_audiosettings_path(self) -> None:
-        path = self.container.audiosettings_path
+    def test_attribute_audiosettings_file(self) -> None:
+        path = self.container.audiosettings_file
         assert str(path).endswith("audiosettings.json")
         if path:
             assert path.exists()
 
-    def test_attribute_viewsettings_path(self) -> None:
-        path = self.container.viewsettings_path
-        assert str(self.container.viewsettings_path).endswith("viewsettings.json")
+    def test_attribute_viewsettings_file(self) -> None:
+        path = self.container.viewsettings_file
+        assert str(path).endswith("viewsettings.json")
         if path:
             assert path.exists()
 

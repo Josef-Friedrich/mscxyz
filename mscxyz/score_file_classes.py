@@ -113,6 +113,8 @@ class MscoreFile:
     loadpath: str
     """The path of the uncompressed MuseScore file in XML format file."""
 
+    zip_container: Optional[ZipContainer]
+
     def __init__(self, relpath: str) -> None:
         self.errors = []
         self.relpath = relpath
@@ -125,7 +127,8 @@ class MscoreFile:
         self.basename = self.filename.replace(".mscx", "")
 
         if self.extension == "mscz":
-            self.loadpath = self._unzip(self.abspath)
+            self.zip_container = ZipContainer(self.path)
+            self.loadpath = str(self.zip_container.mscx_file)
         else:
             self.loadpath = self.abspath
 
@@ -140,19 +143,6 @@ class MscoreFile:
         """The extension (``mscx`` or ``mscz``) of the score file, for
         example: ``mscx``."""
         return self.filename.split(".")[-1].lower()
-
-    @staticmethod
-    def _unzip(abspath: str) -> str:
-        tmp_zipdir: str = tempfile.mkdtemp()
-        zip_ref = zipfile.ZipFile(abspath, "r")
-        zip_ref.extractall(tmp_zipdir)
-        zip_ref.close()
-        con: str = os.path.join(tmp_zipdir, "META-INF", "container.xml")
-        container_info: _ElementTree = lxml.etree.parse(con)
-        mscx: _XPathObject = container_info.xpath(
-            "string(/container/rootfiles/rootfile/@full-path)"
-        )
-        return os.path.join(tmp_zipdir, str(mscx))
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
@@ -189,22 +179,22 @@ class ZipContainer:
     tmp_dir: Path
     """Absolute path of the temporary directory where the unzipped files are stored"""
 
-    mscx_path: Path
+    mscx_file: Path
     """Absolute path of the uncompressed XML score file"""
 
-    score_style_path: Optional[Path]
+    score_style_file: Optional[Path]
     """Absolute path of the score style file"""
 
-    thumbnail_path: Optional[Path]
+    thumbnail_file: Optional[Path]
     """Absolute path of the thumbnail file"""
 
-    audiosettings_path: Optional[Path]
+    audiosettings_file: Optional[Path]
     """Absolute path of the audio settings file"""
 
-    viewsettings_path: Optional[Path]
+    viewsettings_file: Optional[Path]
     """Absolute path of the view settings file"""
 
-    def __init__(self, abspath: str) -> None:
+    def __init__(self, abspath: str | Path) -> None:
         self.tmp_dir = ZipContainer._extract_zip(abspath)
         container_info: _ElementTree = lxml.etree.parse(
             self.tmp_dir / "META-INF" / "container.xml"
@@ -217,18 +207,18 @@ class ZipContainer:
                     if isinstance(relpath, str):
                         abs_path: Path = self.tmp_dir / relpath
                         if relpath.endswith(".mscx"):
-                            self.mscx_path = abs_path
+                            self.mscx_file = abs_path
                         elif relpath.endswith(".mss"):
-                            self.score_style_path = abs_path
+                            self.score_style_file = abs_path
                         elif relpath.endswith(".png"):
-                            self.thumbnail_path = abs_path
+                            self.thumbnail_file = abs_path
                         elif relpath.endswith("audiosettings.json"):
-                            self.audiosettings_path = abs_path
+                            self.audiosettings_file = abs_path
                         elif relpath.endswith("viewsettings.json"):
-                            self.viewsettings_path = abs_path
+                            self.viewsettings_file = abs_path
 
     @staticmethod
-    def _extract_zip(abspath: str) -> Path:
+    def _extract_zip(abspath: str | Path) -> Path:
         tmp_zipdir = Path(tempfile.mkdtemp())
         zip_ref = zipfile.ZipFile(abspath, "r")
         zip_ref.extractall(tmp_zipdir)
