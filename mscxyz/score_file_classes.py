@@ -234,6 +234,8 @@ class MscoreXmlTree(MscoreFile):
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
 
+    xml_tree: _ElementTree
+
     version_major: int
     """The major MuseScore version, for example 2 or 3"""
 
@@ -243,19 +245,38 @@ class MscoreXmlTree(MscoreFile):
     def __init__(self, relpath: str) -> None:
         super(MscoreXmlTree, self).__init__(relpath)
         try:
-            self.xml_tree: _ElementTree = lxml.etree.parse(self.loadpath)
+            self.xml_tree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
             self.xml_root: _Element = self.xml_tree.getroot()
-            musescore: _XPathObject = self.xml_tree.xpath("/museScore")
-            version = musescore[0].get("version")
-            self.version_major = int(version.split(".")[0])
-            self.version = float(version)
+            self.version = self.get_version()
+            self.version_major = int(self.version)
 
-    def add_sub_element(self, root_tag, tag, text: str) -> None:
-        tag: _Element = lxml.etree.SubElement(root_tag, tag)
-        tag.text = text
+    def get_version(self) -> float:
+        """
+        Get the version number of the MuseScore file.
+
+        :return: The version number as a float.
+        :raises ValueError: If the version number cannot be retrieved.
+        """
+        version: _XPathObject = self.xml_tree.xpath("number(/museScore[1]/@version)")
+        if isinstance(version, float):
+            return version
+        raise ValueError("Could not get version number")
+
+    def add_sub_element(self, root_tag: _Element, tag: str, text: str) -> _Element:
+        """
+        Adds a sub-element to the given root element with the specified tag and text.
+
+        :param root_tag: The root element to which the sub-element will be added.
+        :param tag: The tag name of the sub-element.
+        :param text: The text content of the sub-element.
+        :return: The newly created sub-element.
+        """
+        element: _Element = lxml.etree.SubElement(root_tag, tag)
+        element.text = text
+        return element
 
     def strip_tags(self, *tag_names: str) -> None:
         """Delete / strip some tag names."""

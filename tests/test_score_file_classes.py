@@ -158,8 +158,21 @@ class TestZipContainer(unittest.TestCase):
         self.assertTrue(self.container.viewsettings_path.exists())
 
 
-class TestMscoreXmlTree(unittest.TestCase):
-    tree = MscoreXmlTree(helper.get_file("simple.mscx", 3))
+class TestMscoreXmlTreeVersion2(unittest.TestCase):
+    tree = MscoreXmlTree(helper.get_file("simple.mscz", 2))
+
+    def test_property_version(self) -> None:
+        assert self.tree.version == 2.06
+
+    def test_property_version_major(self) -> None:
+        assert self.tree.version_major == 2
+
+    def test_method_get_version(self) -> None:
+        assert self.tree.get_version() == 2.06
+
+
+class TestMscoreXmlTreeVersion3(unittest.TestCase):
+    tree = MscoreXmlTree(helper.get_file("simple.mscz", 3))
 
     def test_property_version(self) -> None:
         assert self.tree.version == 3.01
@@ -167,18 +180,25 @@ class TestMscoreXmlTree(unittest.TestCase):
     def test_property_version_major(self) -> None:
         assert self.tree.version_major == 3
 
+    def test_method_get_version(self) -> None:
+        assert self.tree.get_version() == 3.01
+
+
+class TestMscoreXmlTreeVersion4(unittest.TestCase):
+    tree = MscoreXmlTree(helper.get_file("simple.mscz", 4))
+
+    def test_property_version(self) -> None:
+        assert self.tree.version == 4.2
+
+    def test_property_version_major(self) -> None:
+        assert self.tree.version_major == 4
+
+    def test_method_get_version(self) -> None:
+        assert self.tree.get_version() == 4.2
+
 
 class TestClassMscoreXmlTree(unittest.TestCase):
-    def test_property_version(self):
-        tree = MscoreXmlTree(helper.get_file("simple.mscx", version=2))
-        self.assertEqual(tree.version, 2.06)
-        self.assertEqual(tree.version_major, 2)
-
-        tree = MscoreXmlTree(helper.get_file("simple.mscx", version=3))
-        self.assertEqual(tree.version, 3.01)
-        self.assertEqual(tree.version_major, 3)
-
-    def test_method_merge_style(self):
+    def test_method_merge_style(self) -> None:
         tree = MscoreXmlTree(helper.get_file("simple.mscx"))
         styles = """
             <TextStyle>
@@ -207,7 +227,7 @@ class TestClassMscoreXmlTree(unittest.TestCase):
         self.assertEqual(result[0][0][0].tag, "halign")
         self.assertEqual(result[0][0][0].text, "center")
 
-    def test_method_clean(self):
+    def test_method_clean(self) -> None:
         tmp = helper.get_file("clean.mscx", version=3)
         tree = MscoreXmlTree(tmp)
         tree.clean()
@@ -223,7 +243,7 @@ class TestClassMscoreXmlTree(unittest.TestCase):
         self.assertEqual(xml_tree.xpath("//pos"), [])
         self.assertEqual(xml_tree.xpath("//offset"), [])
 
-    def test_method_save(self):
+    def test_method_save(self) -> None:
         tmp = helper.get_file("simple.mscx")
         tree = MscoreXmlTree(tmp)
         tree.save()
@@ -245,7 +265,7 @@ class TestClassMscoreXmlTree(unittest.TestCase):
 
 
 class TestClean(unittest.TestCase):
-    def _test_clean(self, version=2):
+    def _test_clean(self, version: int = 2) -> None:
         tmp = helper.get_file("formats.mscx", version)
         mscxyz.execute(["clean", tmp])
         cleaned = helper.read_file(tmp)
@@ -260,7 +280,7 @@ class TestClean(unittest.TestCase):
         self._test_clean(version=2)
         self._test_clean(version=3)
 
-    def _test_clean_add_style(self, version=2):
+    def _test_clean_add_style(self, version: int = 2) -> None:
         tmp = helper.get_file("simple.mscx", version)
         mscxyz.execute(["clean", "--style", helper.get_file("style.mss", version), tmp])
         style = helper.read_file(tmp)
