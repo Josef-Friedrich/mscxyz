@@ -92,6 +92,10 @@ class MscoreFile:
     path: Path
     """The absolute path of the input file."""
 
+    loadpath: str
+    """The path of the uncompressed MuseScore file in XML format file. 
+    This path may be located in the temporary directory."""
+
     relpath: str
     """The relative path of the score file, for example:
     ``files_mscore2/simple.mscx``.
@@ -109,9 +113,6 @@ class MscoreFile:
 
     basename: str
     """The basename of the score file, for example: ``simple``."""
-
-    loadpath: str
-    """The path of the uncompressed MuseScore file in XML format file."""
 
     zip_container: Optional[ZipContainer]
 
