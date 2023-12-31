@@ -89,6 +89,9 @@ class MscoreFile:
     errors: List[Exception]
     """A list to store errors."""
 
+    path: Path
+    """The absolute path of the input file."""
+
     relpath: str
     """The relative path of the score file, for example:
     ``files_mscore2/simple.mscx``.
@@ -98,42 +101,45 @@ class MscoreFile:
     """The absolute path of the score file, for example:
     ``/home/jf/test/files_mscore2/simple.mscx``."""
 
-    extension: str
-    """The extension (``mscx`` or ``mscz``) of the score file, for
-    example: ``mscx``."""
-
     relpath_backup: str
 
     dirname: str
     """The name of the containing directory of the MuseScore file, for
     example: ``files_mscore2``."""
 
-    filename: str
-    """The filename of the MuseScore file, for example:
-    ``simple.mscx``."""
-
     basename: str
     """The basename of the score file, for example: ``simple``."""
 
     loadpath: str
-    """The load path of the score file"""
+    """The path of the uncompressed MuseScore file in XML format file."""
 
     def __init__(self, relpath: str) -> None:
         self.errors = []
         self.relpath = relpath
+        self.path = Path(relpath).resolve()
         self.abspath = os.path.abspath(relpath)
-        self.extension = relpath.split(".")[-1].lower()
         self.relpath_backup = relpath.replace(
             "." + self.extension, "_bak." + self.extension
         )
         self.dirname = os.path.dirname(relpath)
-        self.filename = os.path.basename(relpath)
         self.basename = self.filename.replace(".mscx", "")
 
         if self.extension == "mscz":
             self.loadpath = self._unzip(self.abspath)
         else:
             self.loadpath = self.abspath
+
+    @property
+    def filename(self) -> str:
+        """The filename of the MuseScore file, for example:
+        ``simple.mscx``."""
+        return self.path.name
+
+    @property
+    def extension(self) -> str:
+        """The extension (``mscx`` or ``mscz``) of the score file, for
+        example: ``mscx``."""
+        return self.filename.split(".")[-1].lower()
 
     @staticmethod
     def _unzip(abspath: str) -> str:
@@ -180,24 +186,28 @@ class ZipContainer:
             </container>
     """
 
-    tmp_zipdir: Path
-    """Absolute path of the temporary directory"""
+    tmp_dir: Path
+    """Absolute path of the temporary directory where the unzipped files are stored"""
 
     mscx_path: Path
+    """Absolute path of the uncompressed XML score file"""
 
-    audiosettings_path: Path
-    """Absolute path of the audio settings file"""
-
-    viewsettings_path: Path
-    """Absolute path of the view settings file"""
-
-    score_style_path: Path
+    score_style_path: Optional[Path]
     """Absolute path of the score style file"""
 
+    thumbnail_path: Optional[Path]
+    """Absolute path of the thumbnail file"""
+
+    audiosettings_path: Optional[Path]
+    """Absolute path of the audio settings file"""
+
+    viewsettings_path: Optional[Path]
+    """Absolute path of the view settings file"""
+
     def __init__(self, abspath: str) -> None:
-        self.tmp_zipdir = ZipContainer._extract_zip(abspath)
+        self.tmp_dir = ZipContainer._extract_zip(abspath)
         container_info: _ElementTree = lxml.etree.parse(
-            self.tmp_zipdir / "META-INF" / "container.xml"
+            self.tmp_dir / "META-INF" / "container.xml"
         )
         root_files: _XPathObject = container_info.xpath("/container/rootfiles")
         if isinstance(root_files, list):
@@ -205,15 +215,17 @@ class ZipContainer:
                 if isinstance(root_file, _Element):
                     relpath = root_file.get("full-path")
                     if isinstance(relpath, str):
-                        abs_path: Path = self.tmp_zipdir / relpath
+                        abs_path: Path = self.tmp_dir / relpath
                         if relpath.endswith(".mscx"):
                             self.mscx_path = abs_path
+                        elif relpath.endswith(".mss"):
+                            self.score_style_path = abs_path
+                        elif relpath.endswith(".png"):
+                            self.thumbnail_path = abs_path
                         elif relpath.endswith("audiosettings.json"):
                             self.audiosettings_path = abs_path
                         elif relpath.endswith("viewsettings.json"):
                             self.viewsettings_path = abs_path
-                        elif relpath.endswith(".mss"):
-                            self.score_style_path = abs_path
 
     @staticmethod
     def _extract_zip(abspath: str) -> Path:

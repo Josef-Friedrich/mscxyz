@@ -89,11 +89,18 @@ class TestFunctions:
 
 
 class TestMscoreFile:
-    def setup_method(self):
+    def setup_method(self) -> None:
         self.file = MscoreFile(helper.get_file("simple.mscx"))
 
-    def test_attribute_relpath(self) -> None:
+    def test_attribute_path(self) -> None:
         assert self.file.relpath
+
+    def test_attribute_relpath(self) -> None:
+        assert self.file.path.exists()
+
+    def test_attribute_abspath(self) -> None:
+        assert self.file.abspath == self.file.loadpath
+        pathlib.Path(self.file.abspath).exists()
 
     def test_attribute_dirname(self) -> None:
         assert self.file.dirname
@@ -106,10 +113,6 @@ class TestMscoreFile:
 
     def test_attribute_extension(self) -> None:
         assert self.file.extension == "mscx"
-
-    def test_attribute_abspath(self) -> None:
-        assert self.file.abspath == self.file.loadpath
-        pathlib.Path(self.file.abspath).exists()
 
 
 @pytest.mark.skip("Not implemented yet")
@@ -140,21 +143,31 @@ class TestZipContainer:
             helper.get_file("test.mscz", version=4),
         )
 
-    def test_attribute_tmp_zipdir(self) -> None:
-        assert str(self.container.tmp_zipdir).startswith(os.path.sep)
-        assert self.container.tmp_zipdir.exists()
+    def test_attribute_tmp_dir(self) -> None:
+        assert str(self.container.tmp_dir).startswith(os.path.sep)
+        assert self.container.tmp_dir.exists()
 
     def test_attribute_mscx_path(self) -> None:
         assert str(self.container.mscx_path).endswith(".mscx")
         assert self.container.mscx_path.exists()
 
+    def test_attribute_thumbnail_path(self) -> None:
+        path = self.container.thumbnail_path
+        assert str(path).endswith("thumbnail.png")
+        if path:
+            assert path.exists()
+
     def test_attribute_audiosettings_path(self) -> None:
-        assert str(self.container.audiosettings_path).endswith("audiosettings.json")
-        assert self.container.audiosettings_path.exists()
+        path = self.container.audiosettings_path
+        assert str(path).endswith("audiosettings.json")
+        if path:
+            assert path.exists()
 
     def test_attribute_viewsettings_path(self) -> None:
+        path = self.container.viewsettings_path
         assert str(self.container.viewsettings_path).endswith("viewsettings.json")
-        assert self.container.viewsettings_path.exists()
+        if path:
+            assert path.exists()
 
 
 class TestMscoreXmlTreeVersion2:
