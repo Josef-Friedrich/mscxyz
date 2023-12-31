@@ -9,12 +9,13 @@ import typing
 import lxml
 import lxml.etree
 import tmep
+from lxml.etree import _Element
 
 from mscxyz.score_file_classes import MscoreXmlTree
 from mscxyz.utils import color, get_args
 
 if typing.TYPE_CHECKING:
-    from lxml.etree import _Element
+    from lxml.etree import _XPathObject
 
 
 class ReadOnlyFieldError(Exception):
@@ -227,37 +228,41 @@ class Vbox:
             for element in xml_root.xpath(xpath):
                 element.insert(0, vbox)
 
-    def _get_tag(self, style):
+    def _get_tag(self, style: str) -> _Element | None:
         """
-        :param string style: String inside the `<style>` tags
+        :param style: String inside the `<style>` tags
         """
-        for element in self.xml_root.xpath("//VBox/Text"):
-            if element.find("style").text == style:
-                return element.find("text")
+        x: _XPathObject = self.xml_root.xpath("//VBox/Text")
+        if isinstance(x, list):
+            for element in x:
+                if isinstance(element, _Element):
+                    s: _Element | None = element.find("style")
+                    if s is not None and s.text == style:
+                        return element.find("text")
 
-    def _get_text(self, style):
+    def _get_text(self, style: str) -> str | None:
         """
-        :param string style: String inside the `<style>` tags
+        :param style: String inside the `<style>` tags
         """
-        element = self._get_tag(style)
-        if hasattr(element, "text"):
+        element: _Element | None = self._get_tag(style)
+        if element is not None and hasattr(element, "text"):
             return element.text
 
-    def __getattr__(self, field):
+    def __getattr__(self, field: str) -> str | None:
         field = field.title()
         if field not in self.fields:
             raise UnkownFieldError(field, self.fields)
         else:
             return self._get_text(field)
 
-    def _create_text_tag(self, style, text):
+    def _create_text_tag(self, style: str, text: str):
         """
-        :param string style: String inside the `<style>` tags
+        :param style: String inside the `<style>` tags
         """
-        Text_tag = lxml.etree.Element("Text")
-        style_tag = lxml.etree.SubElement(Text_tag, "style")
+        Text_tag: _Element = lxml.etree.Element("Text")
+        style_tag: _Element = lxml.etree.SubElement(Text_tag, "style")
         style_tag.text = style
-        text_tag = lxml.etree.SubElement(Text_tag, "text")
+        text_tag: _Element = lxml.etree.SubElement(Text_tag, "text")
         text_tag.text = text
         for element in self.xml_root.xpath("//VBox"):
             element.append(Text_tag)
