@@ -1,9 +1,13 @@
 """Test submodules “score_file_classes.py”"""
 
+
+from __future__ import annotations
+
 import filecmp
 import os
 import pathlib
 import shutil
+from typing import Optional
 from unittest import mock
 
 import pytest
@@ -22,7 +26,9 @@ from tests import helper
 
 class TestFunctions:
     @staticmethod
-    def _list_scores(path, extension="both", glob=None):
+    def _list_scores(
+        path: str, extension: str = "both", glob: Optional[str] = None
+    ) -> list[str]:
         with mock.patch("os.walk") as mockwalk:
             mockwalk.return_value = [
                 ("/a", ("bar",), ("lorem.mscx",)),

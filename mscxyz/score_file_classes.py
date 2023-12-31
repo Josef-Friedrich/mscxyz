@@ -10,6 +10,7 @@ The classes build on each other hierarchically. The class hierarchy:
             MscoreLyricsInterface
 """
 
+from __future__ import annotations
 
 import fnmatch
 import os
@@ -33,7 +34,7 @@ if typing.TYPE_CHECKING:
 
 def list_scores(
     path: str, extension: str = "both", glob: Optional[str] = None
-) -> List[str]:
+) -> list[str]:
     """List all scores in path.
 
     :param path: The path so search for score files.
