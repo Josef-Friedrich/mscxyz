@@ -1,1 +1,7 @@
 mscxyz/_version.py export-subst
+
+# Github languages CartoCSS 51.1%
+*.mss linguist-vendored
+
+*.mscx linguist-vendored
+*.mscz linguist-vendored
