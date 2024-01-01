@@ -15,7 +15,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 project = "mscxyz"
-copyright = "2016, Josef Friedrich"
+copyright = "2016 - 2023, Josef Friedrich"
 author = "Josef Friedrich"
 version = mscxyz.__version__
 release = mscxyz.__version__
@@ -25,9 +25,18 @@ pygments_style = "sphinx"
 todo_include_todos = False
 html_static_path = []
 htmlhelp_basename = "mscxyzdoc"
-autodoc_default_flags = [
-    "members",
-    "undoc-members",
-    "private-members",
-    "show-inheritance",
-]
+
+autodoc_default_options = {
+    "members": True,
+    "member-order": "bysource",
+    "undoc-members": True,
+    # "private-members": True,
+    # "special-members": True,
+    "inherited-members": True,
+    "show-inheritance": True,
+    "ignore-module-all": True,
+    # "imported-members": False,
+    "exclude-members": True,
+    "class-doc-from": True,
+    "no-value": True,
+}
