@@ -46,3 +46,6 @@ dest = "doc/source/cli.rst"
 
 [tool.pytest]
 python_files = "*_test.py"
+
+[tool.pyright]
+reportPrivateUsage = false
