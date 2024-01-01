@@ -39,8 +39,7 @@ class TestFunctions:
 
     @mock.patch("mscxyz.Meta")
     def test_batch(self, Meta):
-        with helper.Capturing():
-            mscxyz.execute(["meta", helper.get_dir("batch")])
+        mscxyz.execute(["meta", helper.get_dir("batch")])
         assert Meta.call_count == 3
 
     def test_without_extension(self):
