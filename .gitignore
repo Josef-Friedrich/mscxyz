@@ -1,4 +1,4 @@
-*.mscx,
+
 cover/
 
 # Byte-compiled / optimized / DLL files
@@ -73,7 +73,7 @@ target/
 .ipynb_checkpoints
 
 # pyenv
-.python-version
+# .python-version
 
 # celery beat schedule file
 celerybeat-schedule
@@ -95,3 +95,8 @@ ENV/
 _build/
 
 .tex/
+
+*.mscx,
+
+# Sphinx documentation
+docs/_build/

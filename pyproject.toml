@@ -42,7 +42,7 @@ dest = "README.rst"
 
 [[tool.readme_patcher.file]]
 src = "cli_template.rst"
-dest = "doc/source/cli.rst"
+dest = "docs/cli.rst"
 
 [tool.pytest]
 python_files = "*_test.py"

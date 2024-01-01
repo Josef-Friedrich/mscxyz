@@ -20,10 +20,24 @@ ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
 def get_path(filename: str, version: int = 2) -> Path:
+    """
+    Returns the path of a file based on the given filename and version.
+
+    :param filename: The name of the file.
+    :param version: The version of the file (default is 2).
+    :return: The path of the file.
+    """
     return Path(test_dir) / "files" / "by_version" / str(version) / filename
 
 
 def get_dir(dirname: str, version: int = 2) -> str:
+    """
+    Get a temporary directory containing a copy of the specified directory.
+
+    :param dirname: The name of the directory to copy.
+    :param version: The version of the directory to copy (default is 2).
+    :return: The path of the temporary directory.
+    """
     orig: Path = get_path(dirname, version)
     tmp: str = tempfile.mkdtemp()
     shutil.copytree(orig, tmp, dirs_exist_ok=True)

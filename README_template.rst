@@ -84,7 +84,7 @@ Test
 
 ::
 
-    tox
+    make test
 
 
 Publish a new version
@@ -94,7 +94,7 @@ Publish a new version
 
     git tag 1.1.1
     git push --tags
-    python setup.py sdist upload
+    make publish
 
 
 Package documentation
@@ -107,4 +107,4 @@ Generate the package documentation:
 
 ::
 
-    python setup.py build_sphinx
+    make docs
