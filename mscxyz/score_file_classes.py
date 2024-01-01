@@ -23,8 +23,8 @@ from pathlib import Path
 from typing import List, Optional
 
 import lxml
-import lxml.etree  # Needed for type hints
-from lxml.etree import _Element, _ElementTree
+import lxml.etree  # Required for the type hints
+from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz.utils import mscore, re_open
 
@@ -278,23 +278,6 @@ class MscoreXmlTree(MscoreFile):
             return version
         raise ValueError("Could not get version number")
 
-    def add_sub_element(self, root_tag: _Element, tag: str, text: str) -> _Element:
-        """
-        Adds a sub-element to the given root element with the specified tag and text.
-
-        :param root_tag: The root element to which the sub-element will be added.
-        :param tag: The tag name of the sub-element.
-        :param text: The text content of the sub-element.
-        :return: The newly created sub-element.
-        """
-        element: _Element = lxml.etree.SubElement(root_tag, tag)
-        element.text = text
-        return element
-
-    def strip_tags(self, *tag_names: str) -> None:
-        """Delete / strip some tag names."""
-        lxml.etree.strip_tags(self.xml_tree, tag_names)
-
     def remove_tags_by_xpath(self, *xpath_strings: str) -> None:
         """Remove tags by xpath strings.
 
@@ -393,7 +376,7 @@ class MscoreXmlTree(MscoreFile):
         self.remove_tags_by_xpath(
             "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
         )
-        self.strip_tags("font", "b", "i", "pos", "offset")
+        strip_tags(self.xml_tree, "font", "b", "i", "pos", "offset")
 
     def save(self, new_name: str = "", mscore: bool = False):
         """Save the MuseScore file.

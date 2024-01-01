@@ -9,8 +9,10 @@ import tmep
 from mscxyz.meta import Interface, InterfaceReadWrite
 
 
-def list_fields(fields: typing.Sequence, prefix: str = "", suffix: str = "") -> str:
-    out = []
+def list_fields(
+    fields: typing.Sequence[str], prefix: str = "", suffix: str = ""
+) -> str:
+    out: list[str] = []
     for field in fields:
         out.append(prefix + "- " + field + suffix)
     return "\n".join(out)
