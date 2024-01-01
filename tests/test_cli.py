@@ -1,134 +1,135 @@
 """Test module “cli.py”."""
 
 import re
-import unittest
+
+import pytest
+from pytest import CaptureFixture
 
 import mscxyz
 from mscxyz import cli
 from tests import helper
 
 
-class TestArgs(unittest.TestCase):
+class TestArgs:
     def test_args_general(self):
         args = cli.parser.parse_args(["help", "."])
-        self.assertEqual(args.general_backup, False)
-        self.assertEqual(args.general_colorize, False)
-        self.assertEqual(args.general_dry_run, False)
-        self.assertEqual(args.general_glob, "*.msc[xz]")
-        self.assertEqual(args.general_mscore, False)
-        self.assertEqual(args.general_verbose, 0)
-        self.assertEqual(args.path, ".")
+        assert args.general_backup is False
+        assert args.general_colorize is False
+        assert args.general_dry_run is False
+        assert args.general_glob == "*.msc[xz]"
+        assert args.general_mscore is False
+        assert args.general_verbose == 0
+        assert args.path == "."
 
     def test_args_clean(self):
         args = cli.parser.parse_args(["clean", "."])
-        self.assertEqual(args.clean_style, None)
-        self.assertEqual(args.subcommand, "clean")
+        assert args.clean_style is None
+        assert args.subcommand == "clean"
 
     def test_args_export(self):
         args = cli.parser.parse_args(["export", "."])
-        self.assertEqual(args.export_extension, "pdf")
-        self.assertEqual(args.subcommand, "export")
+        assert args.export_extension == "pdf"
+        assert args.subcommand == "export"
 
     def test_args_help(self):
         args = cli.parser.parse_args(["help", "."])
-        self.assertEqual(args.help_markdown, False)
-        self.assertEqual(args.help_rst, False)
-        self.assertEqual(args.subcommand, "help")
+        assert args.help_markdown is False
+        assert args.help_rst is False
+        assert args.subcommand == "help"
 
     def test_args_general_lyrics(self):
         args = cli.parser.parse_args(["lyrics", "."])
-        self.assertEqual(args.lyrics_extract, "all")
-        self.assertEqual(args.lyrics_fix, False)
-        self.assertEqual(args.lyrics_remap, None)
-        self.assertEqual(args.subcommand, "lyrics")
+        assert args.lyrics_extract == "all"
+        assert args.lyrics_fix is False
+        assert args.lyrics_remap is None
+        assert args.subcommand == "lyrics"
 
     def test_args_general_meta(self):
         args = cli.parser.parse_args(["meta", "."])
-        self.assertEqual(args.meta_clean, None)
-        self.assertEqual(args.meta_json, False)
-        self.assertEqual(args.meta_set, None)
-        self.assertEqual(args.meta_sync, False)
-        self.assertEqual(args.subcommand, "meta")
+        assert args.meta_clean is None
+        assert args.meta_json is False
+        assert args.meta_set is None
+        assert args.meta_sync is False
+        assert args.subcommand == "meta"
 
     def test_args_general_rename(self):
         args = cli.parser.parse_args(["rename", "."])
-        self.assertEqual(args.rename_alphanum, False)
-        self.assertEqual(args.rename_ascii, False)
-        self.assertEqual(args.rename_format, "$combined_title ($combined_composer)")
-        self.assertEqual(args.rename_target, None)
-        self.assertEqual(args.subcommand, "rename")
+        assert args.rename_alphanum is False
+        assert args.rename_ascii is False
+        assert args.rename_format == "$combined_title ($combined_composer)"
+        assert args.rename_target is None
+        assert args.subcommand == "rename"
 
 
-class TestCommandlineInterface(unittest.TestCase):
+def test_cap_sys(capsys: CaptureFixture[str]) -> None:
+    print("lol")
+    captured = capsys.readouterr()
+    assert captured.out == "lol\n"
+
+
+class TestCommandlineInterface:
     def test_help_short(self):
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as e:
             with helper.Capturing():
                 mscxyz.execute(["-h"])
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), "0")
+        assert e.value.code == 0
 
     def test_help_long(self):
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as e:
             with helper.Capturing():
                 mscxyz.execute(["--help"])
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), "0")
+        assert e.value.code == 0
 
     def test_without_arguments(self):
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as e:
             with helper.Capturing("stderr"):
                 mscxyz.execute()
-        the_exception = cm.exception
-        self.assertEqual(str(the_exception), "2")
+        assert e.value.code == 2
 
     def test_help_text(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["-h"])
-        self.assertTrue("[-h]" in output[0])
+        assert "[-h]" in output[0]
 
 
-class TestHelp(unittest.TestCase):
+class TestHelp:
     def test_all(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["help", "all"])
-        self.assertTrue(len(output) > 150)
+        assert len(output) > 150
 
     def test_restructuredtext(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["help", "--rst", "all"])
-        self.assertTrue(".. code-block:: text" in output)
+        assert ".. code-block:: text" in output
 
     def test_markdown(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["help", "--markdown", "all"])
-        self.assertTrue("```" in output)
+        assert "```" in output
 
     def test_functions_in_all(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["help", "all"])
-        self.assertTrue("%asciify{text}" in "\n".join(output))
+        assert "%asciify{text}" in "\n".join(output)
 
     def test_functions_in_rename(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["rename", "--help"])
-        self.assertTrue("%asciify{text}" in "\n".join(output))
+        assert "%asciify{text}" in "\n".join(output)
 
 
-class TestVersion(unittest.TestCase):
+class TestVersion:
     def test_version(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             with helper.Capturing() as output:
                 mscxyz.execute(["--version"])
 
         result = re.search("[^ ]* [^ ]*", output[0])
-        self.assertTrue(result)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert result
