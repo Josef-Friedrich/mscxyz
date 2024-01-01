@@ -6,6 +6,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+from pathlib import Path
 
 from jflib import Capturing  # noqa: F401
 from lxml.etree import _ElementTree
@@ -18,13 +19,13 @@ test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
 
-def get_dir(relative_dir: str, version: int = 2) -> str:
-    if version == 2:
-        folder = "files_mscore2"
-    else:
-        folder = "files_mscore3"
-    orig = os.path.join(test_dir, folder, relative_dir)
-    tmp = tempfile.mkdtemp()
+def get_path(filename: str, version: int = 2) -> Path:
+    return Path(test_dir) / "files" / "by_version" / str(version) / filename
+
+
+def get_dir(dirname: str, version: int = 2) -> str:
+    orig: Path = get_path(dirname, version)
+    tmp: str = tempfile.mkdtemp()
     shutil.copytree(orig, tmp, dirs_exist_ok=True)
     return tmp
 
@@ -33,12 +34,11 @@ def get_file(filename: str, version: int = 2) -> str:
     """
     Returns the path of a temporary file created by copying the original file.
 
-    :param filename: The name of the file relative to ``tests/files_mscoreX`` to be copied.
+    :param filename: The name of the file relative to ``tests/files/by_version/X`` to be copied.
     :param version: The version of the file, defaults to 2.
     :return: The path of the temporary file.
     """
-    folder: str = f"files_mscore{version}"
-    orig: str = os.path.join(test_dir, folder, filename)
+    orig: Path = get_path(filename, version)
     tmp_dir: str = tempfile.mkdtemp()
     tmp: str = os.path.join(tmp_dir, filename)
     shutil.copyfile(orig, tmp)
@@ -49,7 +49,7 @@ def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     """
     Get the XML tree from the specified file.
 
-    :param filename: The name of the file relative to ``tests/files_mscoreX`` to be copied.
+    :param filename: The name of the file relative to ``tests/files/by_version/X`` to be copied.
     :param version: The version of the file (default is 2).
     :return: The XML tree.
     """

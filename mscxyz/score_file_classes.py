@@ -98,18 +98,18 @@ class MscoreFile:
 
     relpath: str
     """The relative path of the score file, for example:
-    ``files_mscore2/simple.mscx``.
+    ``files/by_version/2/simple.mscx``.
     """
 
     abspath: str
     """The absolute path of the score file, for example:
-    ``/home/jf/test/files_mscore2/simple.mscx``."""
+    ``/home/jf/test/files/by_version/2/simple.mscx``."""
 
     relpath_backup: str
 
     dirname: str
     """The name of the containing directory of the MuseScore file, for
-    example: ``files_mscore2``."""
+    example: ``files/by_version/2``."""
 
     basename: str
     """The basename of the score file, for example: ``simple``."""
