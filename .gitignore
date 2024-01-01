@@ -97,6 +97,6 @@ _build/
 .tex/
 
 *.mscx,
-
+.mscbackup/
 # Sphinx documentation
 docs/_build/
