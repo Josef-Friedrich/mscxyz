@@ -221,10 +221,19 @@ class ZipContainer:
     @staticmethod
     def _extract_zip(abspath: str | Path) -> Path:
         tmp_zipdir = Path(tempfile.mkdtemp())
-        zip_ref = zipfile.ZipFile(abspath, "r")
-        zip_ref.extractall(tmp_zipdir)
-        zip_ref.close()
+        zip = zipfile.ZipFile(abspath, "r")
+        zip.extractall(tmp_zipdir)
+        zip.close()
         return tmp_zipdir
+
+    def save(self, dest: str | Path) -> None:
+        zip = zipfile.ZipFile(dest, "w")
+        for r, _, files in os.walk(self.tmp_dir):
+            root = Path(r)
+            relpath: Path = root.relative_to(self.tmp_dir)
+            for file_name in files:
+                zip.write(root / file_name, relpath / file_name)
+        zip.close()
 
 
 ###############################################################################
@@ -430,14 +439,8 @@ class MscoreXmlTree(MscoreFile):
             score.write("\n")
             score.close()
 
-            if self.extension == "mscz":
-                # Need some tmp directory cleanup for working with mscz files
-                tmpdir = os.path.dirname(filename)
-                zip_ref = zipfile.ZipFile(self.abspath, "w")
-                for root, _, files in os.walk(tmpdir):
-                    for file in files:
-                        arcname = os.path.join(root.replace(tmpdir, ""), file)
-                        zip_ref.write(os.path.join(root, file), arcname)
+            if self.extension == "mscz" and self.zip_container:
+                self.zip_container.save(filename)
 
             if mscore:
                 re_open(filename)

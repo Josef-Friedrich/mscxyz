@@ -7,6 +7,7 @@ import filecmp
 import os
 import pathlib
 import shutil
+import tempfile
 from typing import Optional
 from unittest import mock
 
@@ -168,6 +169,12 @@ class TestZipContainer:
         assert str(path).endswith("viewsettings.json")
         if path:
             assert path.exists()
+
+    def test_method_save(self) -> None:
+        _, dest = tempfile.mkstemp(suffix=".mscz")
+        self.container.save(dest)
+        container = ZipContainer(dest)
+        assert container.mscx_file.exists()
 
 
 class TestMscoreXmlTreeVersion2:
