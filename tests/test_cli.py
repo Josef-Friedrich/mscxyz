@@ -7,7 +7,6 @@ from pytest import CaptureFixture
 
 import mscxyz
 from mscxyz import cli
-from tests import helper
 
 
 class TestArgs:
@@ -61,75 +60,64 @@ class TestArgs:
         assert args.subcommand == "rename"
 
 
-def test_cap_sys(capsys: CaptureFixture[str]) -> None:
-    print("lol")
-    captured = capsys.readouterr()
-    assert captured.out == "lol\n"
-
-
 class TestCommandlineInterface:
     def test_help_short(self):
         with pytest.raises(SystemExit) as e:
-            with helper.Capturing():
-                mscxyz.execute(["-h"])
+            mscxyz.execute(["-h"])
         assert e.value.code == 0
 
     def test_help_long(self):
         with pytest.raises(SystemExit) as e:
-            with helper.Capturing():
-                mscxyz.execute(["--help"])
+            mscxyz.execute(["--help"])
         assert e.value.code == 0
 
     def test_without_arguments(self):
         with pytest.raises(SystemExit) as e:
-            with helper.Capturing("stderr"):
-                mscxyz.execute()
+            mscxyz.execute()
         assert e.value.code == 2
 
-    def test_help_text(self):
+    def test_help_text(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["-h"])
-        assert "[-h]" in output[0]
+            mscxyz.execute(["-h"])
+        capture = capsys.readouterr()
+        assert "[-h]" in capture.out
 
 
 class TestHelp:
-    def test_all(self):
+    def test_all(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["help", "all"])
-        assert len(output) > 150
+            mscxyz.execute(["help", "all"])
+        capture = capsys.readouterr()
+        assert len(capture.out) > 150
 
-    def test_restructuredtext(self):
+    def test_restructuredtext(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["help", "--rst", "all"])
-        assert ".. code-block:: text" in output
+            mscxyz.execute(["help", "--rst", "all"])
+        capture = capsys.readouterr()
+        assert ".. code-block:: text" in capture.out
 
-    def test_markdown(self):
+    def test_markdown(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["help", "--markdown", "all"])
-        assert "```" in output
+            mscxyz.execute(["help", "--markdown", "all"])
+        capture = capsys.readouterr()
+        assert "```" in capture.out
 
-    def test_functions_in_all(self):
+    def test_functions_in_all(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["help", "all"])
-        assert "%asciify{text}" in "\n".join(output)
+            mscxyz.execute(["help", "all"])
+        capture = capsys.readouterr()
+        assert "%asciify{text}" in capture.out
 
-    def test_functions_in_rename(self):
+    def test_functions_in_rename(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["rename", "--help"])
-        assert "%asciify{text}" in "\n".join(output)
+            mscxyz.execute(["rename", "--help"])
+        capture = capsys.readouterr()
+        assert "%asciify{text}" in capture.out
 
 
 class TestVersion:
-    def test_version(self):
+    def test_version(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
-            with helper.Capturing() as output:
-                mscxyz.execute(["--version"])
-
-        result = re.search("[^ ]* [^ ]*", output[0])
-        assert result
+            mscxyz.execute(["--version"])
+        capture = capsys.readouterr()
+        assert re.search("[^ ]* [^ ]*", capture.out)
