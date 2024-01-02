@@ -7,7 +7,7 @@ import lxml
 import lxml.etree
 from lxml.etree import _Element
 
-from mscxyz.xml import find_safe, xpath
+from mscxyz.utils import find_safe, xpath
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score

@@ -379,9 +379,7 @@ class TestClassMetaTag:
 
 
 class TestClassVbox:
-    def _init_class(
-        self, filename: str, version: int = 2
-    ) -> tuple[Vbox, Score, str]:
+    def _init_class(self, filename: str, version: int = 2) -> tuple[Vbox, Score, str]:
         tmp = helper.get_file(filename, version)
         tree = Score(tmp)
         vbox = Vbox(tree.xml_root)

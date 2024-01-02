@@ -8,83 +8,15 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Optional
-from unittest import mock
 
-import pytest
 from lxml.etree import _Element
 
 import mscxyz
 from mscxyz.score import (
     Score,
     ZipContainer,
-    list_scores,
-    list_zero_alphabet,
 )
 from tests import helper
-
-
-class TestFunctions:
-    @staticmethod
-    def _list_scores(
-        path: str, extension: str = "both", glob: Optional[str] = None
-    ) -> list[str]:
-        with mock.patch("os.walk") as mockwalk:
-            mockwalk.return_value = [
-                ("/a", ("bar",), ("lorem.mscx",)),
-                ("/a/b", (), ("impsum.mscz", "dolor.mscx", "sit.txt")),
-            ]
-            return list_scores(path, extension, glob)
-
-    @mock.patch("mscxyz.Meta")
-    def test_batch(self, Meta: mock.Mock) -> None:
-        mscxyz.execute(["meta", helper.get_dir("batch")])
-        assert Meta.call_count == 3
-
-    def test_without_extension(self) -> None:
-        result: list[str] = self._list_scores("/test")
-        assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
-
-    def test_extension_both(self) -> None:
-        result: list[str] = self._list_scores("/test", extension="both")
-        assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
-
-    def test_extension_mscx(self) -> None:
-        result: list[str] = self._list_scores("/test", extension="mscx")
-        assert result == ["/a/b/dolor.mscx", "/a/lorem.mscx"]
-
-    def test_extension_mscz(self) -> None:
-        result: list[str] = self._list_scores("/test", extension="mscz")
-        assert result == ["/a/b/impsum.mscz"]
-
-    def test_raises_exception(self) -> None:
-        with pytest.raises(ValueError):
-            self._list_scores("/test", extension="lol")
-
-    def test_isfile(self) -> None:
-        with mock.patch("os.path.isfile") as mock_isfile:
-            mock_isfile.return_value = True
-            result = list_scores("/a/b/lorem.mscx")
-            assert result == ["/a/b/lorem.mscx"]
-
-    def test_isfile_no_match(self) -> None:
-        with mock.patch("os.path.isfile") as mock_isfile:
-            mock_isfile.return_value = True
-            result: list[str] = list_scores("/a/b/lorem.lol")
-            assert result == []
-
-    def test_arg_glob_txt(self) -> None:
-        result: list[str] = self._list_scores("/test", glob="*.txt")
-        assert result == ["/a/b/sit.txt"]
-
-    def test_arg_glob_lol(self) -> None:
-        result: list[str] = self._list_scores("/test", glob="*.lol")
-        assert result == []
-
-    def test_function_list_zero_alphabet(self) -> None:
-        result: list[str] = list_zero_alphabet()
-        assert result[0] == "0"
-        assert result[26] == "z"
 
 
 class TestClassScore:

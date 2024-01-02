@@ -48,9 +48,3 @@ mscxyz.utils module
 ^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.utils
-
-
-mscxyz.xml module
-^^^^^^^^^^^^^^^^^
-
-.. automodule:: mscxyz.xml

@@ -39,10 +39,9 @@ from mscxyz.rename import rename_filename
 from mscxyz.score import (
     MscoreStyleInterface,
     Score,
-    list_scores,
 )
 from mscxyz.settings import DefaultArguments
-from mscxyz.utils import color, mscore, set_args
+from mscxyz.utils import color, list_scores, mscore, set_args
 
 __version__: str = metadata.version("mscxyz")
 

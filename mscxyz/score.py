@@ -3,10 +3,8 @@
 
 from __future__ import annotations
 
-import fnmatch
 import os
 import shutil
-import string
 import tempfile
 import typing
 import zipfile
@@ -18,53 +16,10 @@ import lxml.etree  # Required for the type hints
 from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz.style import MscoreStyleInterface
-from mscxyz.utils import mscore, re_open
-from mscxyz.xml import xpathall
+from mscxyz.utils import mscore, re_open, xpathall
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
-
-
-def list_scores(
-    path: str, extension: str = "both", glob: Optional[str] = None
-) -> list[str]:
-    """List all scores in path.
-
-    :param path: The path so search for score files.
-    :param extension: Possible values: “both”, “mscz” or “mscx”.
-    :param glob: A glob string, see fnmatch
-    """
-    if not glob:
-        if extension == "both":
-            glob = "*.msc[xz]"
-        elif extension in ("mscx", "mscz"):
-            glob = "*.{}".format(extension)
-        else:
-            raise ValueError(
-                "Possible values for the argument “extension” "
-                "are: “both”, “mscx”, “mscz”"
-            )
-    if os.path.isfile(path):
-        if fnmatch.fnmatch(path, glob):
-            return [path]
-        else:
-            return []
-    out: List[str] = []
-    for root, _, scores in os.walk(path):
-        for score in scores:
-            if fnmatch.fnmatch(score, glob):
-                scores_path = os.path.join(root, score)
-                out.append(scores_path)
-    out.sort()
-    return out
-
-
-def list_zero_alphabet() -> List[str]:
-    """Build a list: 0, a, b, c etc."""
-    score_dirs = ["0"]
-    for char in string.ascii_lowercase:
-        score_dirs.append(char)
-    return score_dirs
 
 
 class ZipContainer:

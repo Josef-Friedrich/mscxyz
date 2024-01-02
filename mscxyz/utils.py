@@ -2,14 +2,63 @@
 
 from __future__ import annotations  # For subprocess.Popen[Any]
 
+import fnmatch
 import os
 import platform
+import string
 import subprocess
-from typing import Any, List, Optional
+import typing
+from typing import Any, List, Literal, Optional
 
 import termcolor
+from lxml.etree import _Element
 
 from mscxyz.settings import DefaultArguments
+
+if typing.TYPE_CHECKING:
+    from lxml.etree import _XPathObject
+
+
+def list_scores(
+    path: str, extension: str = "both", glob: Optional[str] = None
+) -> list[str]:
+    """List all scores in path.
+
+    :param path: The path so search for score files.
+    :param extension: Possible values: “both”, “mscz” or “mscx”.
+    :param glob: A glob string, see fnmatch
+    """
+    if not glob:
+        if extension == "both":
+            glob = "*.msc[xz]"
+        elif extension in ("mscx", "mscz"):
+            glob = "*.{}".format(extension)
+        else:
+            raise ValueError(
+                "Possible values for the argument “extension” "
+                "are: “both”, “mscx”, “mscz”"
+            )
+    if os.path.isfile(path):
+        if fnmatch.fnmatch(path, glob):
+            return [path]
+        else:
+            return []
+    out: List[str] = []
+    for root, _, scores in os.walk(path):
+        for score in scores:
+            if fnmatch.fnmatch(score, glob):
+                scores_path = os.path.join(root, score)
+                out.append(scores_path)
+    out.sort()
+    return out
+
+
+def list_zero_alphabet() -> List[str]:
+    """Build a list: 0, a, b, c etc."""
+    score_dirs = ["0"]
+    for char in string.ascii_lowercase:
+        score_dirs.append(char)
+    return score_dirs
 
 
 def get_args() -> DefaultArguments:
@@ -92,8 +141,50 @@ def convert_mxl(input_file: str) -> None:
     os.remove(input_file)
 
 
+# https://github.com/termcolor/termcolor/issues/62
+Color = Literal[
+    "black",
+    "grey",
+    "red",
+    "green",
+    "yellow",
+    "blue",
+    "magenta",
+    "cyan",
+    "light_grey",
+    "dark_grey",
+    "light_red",
+    "light_green",
+    "light_yellow",
+    "light_blue",
+    "light_magenta",
+    "light_cyan",
+    "white",
+]
+
+Highlight = Literal[
+    "on_black",
+    "on_grey",
+    "on_red",
+    "on_green",
+    "on_yellow",
+    "on_blue",
+    "on_magenta",
+    "on_cyan",
+    "on_light_grey",
+    "on_dark_grey",
+    "on_light_red",
+    "on_light_green",
+    "on_light_yellow",
+    "on_light_blue",
+    "on_light_magenta",
+    "on_light_cyan",
+    "on_white",
+]
+
+
 def color(
-    text: str, color: Optional[str] = None, on_color: Optional[str] = None
+    text: str, color: Optional[Color] = None, on_color: Optional[Highlight] = None
 ) -> str:
     """Wrapper function around ``termcolor.colored()`` to easily turn off and
     on colorized terminal output on the command line.
@@ -109,3 +200,43 @@ def color(
         return termcolor.colored(text, color, on_color)
     else:
         return text
+
+
+def find_safe(element: _Element, path: str) -> _Element:
+    result: _Element | None = element.find(path)
+    if result is None:
+        raise ValueError(f"Path {path} not found in element {element}!")
+    return result
+
+
+def xpath(element: _Element, path: str) -> _Element | None:
+    output: list[_Element] | None = xpathall(element, path)
+    if output and len(output) > 0:
+        return output[0]
+
+
+def xpath_safe(element: _Element, path: str) -> _Element:
+    output: list[_Element] = xpathall_safe(element, path)
+    if len(output) > 1:
+        raise ValueError(f"XPath “{path}” found more than one element in {element}!")
+    return output[0]
+
+
+def xpathall(element: _Element, path: str) -> list[_Element] | None:
+    result: _XPathObject = element.xpath(path)
+    output: list[_Element] = []
+
+    if isinstance(result, list):
+        for item in result:
+            if isinstance(item, _Element):
+                output.append(item)
+
+    if len(output) > 0:
+        return output
+
+
+def xpathall_safe(element: _Element, path: str) -> list[_Element]:
+    output: list[_Element] | None = xpathall(element, path)
+    if output is None:
+        raise ValueError(f"XPath “{path}” not found in element {element}!")
+    return output
