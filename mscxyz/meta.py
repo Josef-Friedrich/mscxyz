@@ -11,7 +11,7 @@ import lxml.etree
 import tmep
 from lxml.etree import _Element
 
-from mscxyz.score_file_classes import MscoreXmlTree
+from mscxyz.score_file_classes import MuseScoreFile
 from mscxyz.utils import color, get_args
 
 if typing.TYPE_CHECKING:
@@ -286,7 +286,7 @@ class Vbox:
             self._set_text(field.title(), value)
 
 
-class Combined(MscoreXmlTree):
+class Combined(MuseScoreFile):
     fields = (
         "composer",
         "lyricist",
@@ -398,9 +398,9 @@ class InterfaceReadOnly:
         "readonly_relpath_backup",
     ]
 
-    xml_tree: MscoreXmlTree
+    xml_tree: MuseScoreFile
 
-    def __init__(self, tree: MscoreXmlTree):
+    def __init__(self, tree: MuseScoreFile):
         self.xml_tree = tree
 
     @property
@@ -433,9 +433,9 @@ class InterfaceReadOnly:
 
 
 class Interface:
-    xml_tree: MscoreXmlTree
+    xml_tree: MuseScoreFile
 
-    def __init__(self, tree: MscoreXmlTree):
+    def __init__(self, tree: MuseScoreFile):
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
         self.read_write = InterfaceReadWrite(tree.xml_root)
@@ -463,7 +463,7 @@ class Interface:
             raise ReadOnlyFieldError(field)
 
 
-class Meta(MscoreXmlTree):
+class Meta(MuseScoreFile):
     def __init__(self, relpath: str):
         super(Meta, self).__init__(relpath)
 

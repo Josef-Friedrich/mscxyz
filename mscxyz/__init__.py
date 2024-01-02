@@ -7,8 +7,8 @@ Classes:
 
 .. code ::
 
-    MscoreFile
-        MscoreXmlTree
+    MuseScoreFile
+        MuseScoreFile
             MscoreLyricsInterface
             MscoreMetaInterface
             MscoreStyleInterface
@@ -37,9 +37,8 @@ from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
 from mscxyz.score_file_classes import (
-    MscoreFile,
     MscoreStyleInterface,
-    MscoreXmlTree,
+    MuseScoreFile,
     list_scores,
 )
 from mscxyz.settings import DefaultArguments
@@ -54,17 +53,10 @@ __version__: str = metadata.version("mscxyz")
 
 # Classes
 
-# Level 1
 
-MscoreFile
+MuseScoreFile
 """see submodule ``score_file_classes.py``"""
 
-# Level 2
-
-MscoreXmlTree
-"""see submodule ``score_file_classes.py``"""
-
-# Level 3
 
 MscoreLyricsInterface
 """see submodule ``lyrics.py``"""
@@ -216,13 +208,11 @@ def execute(args: typing.Sequence[str] | None = None):
         print("\n" + color(file, "red"))
 
         if args.general_backup:
-            from mscxyz.score_file_classes import MscoreFile
-
-            score = MscoreFile(file)
+            score = MuseScoreFile(file)
             score.backup()
 
         if args.subcommand == "clean":
-            score = MscoreXmlTree(file)
+            score = MuseScoreFile(file)
             print(score.filename)
             score.clean()
             if args.clean_style:
@@ -269,9 +259,7 @@ def execute(args: typing.Sequence[str] | None = None):
             score = rename_filename(file)
 
         elif args.subcommand == "export":
-            from mscxyz.score_file_classes import MscoreFile
-
-            score = MscoreFile(file)
+            score = MuseScoreFile(file)
             score.export(extension=args.export_extension)
 
         report_errors(score.errors)

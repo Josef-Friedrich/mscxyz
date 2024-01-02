@@ -4,10 +4,10 @@ import typing
 
 import lxml.etree as etree
 
-from mscxyz.score_file_classes import MscoreXmlTree
+from mscxyz.score_file_classes import MuseScoreFile
 
 
-class MscoreLyricsInterface(MscoreXmlTree):
+class MscoreLyricsInterface(MuseScoreFile):
     def __init__(self, relpath: str):
         super(MscoreLyricsInterface, self).__init__(relpath)
         self.lyrics = self.normalize_lyrics()

@@ -15,9 +15,8 @@ import pytest
 
 import mscxyz
 from mscxyz.score_file_classes import (
-    MscoreFile,
     MscoreStyleInterface,
-    MscoreXmlTree,
+    MuseScoreFile,
     ZipContainer,
     list_scores,
     list_zero_alphabet,
@@ -88,9 +87,9 @@ class TestFunctions:
         assert result[26] == "z"
 
 
-class TestMscoreFile:
+class TestClassMuseScoreFile:
     def setup_method(self) -> None:
-        self.file = MscoreFile(helper.get_file("simple.mscx"))
+        self.file = MuseScoreFile(helper.get_file("simple.mscx"))
 
     def test_attribute_path(self) -> None:
         assert self.file.relpath
@@ -114,11 +113,76 @@ class TestMscoreFile:
     def test_attribute_basename(self) -> None:
         assert self.file.basename == "simple"
 
+    def test_method_merge_style(self) -> None:
+        tree = MuseScoreFile(helper.get_file("simple.mscx"))
+        styles = """
+            <TextStyle>
+              <halign>center</halign>
+              <valign>bottom</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-1</yoffset>
+              <offsetType>spatium</offsetType>
+              <name>Form Section</name>
+              <family>Alegreya Sans</family>
+              <size>12</size>
+              <bold>1</bold>
+              <italic>1</italic>
+              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+              <frameWidthS>0.1</frameWidthS>
+              <paddingWidthS>0.2</paddingWidthS>
+              <frameRound>0</frameRound>
+              <frameColor r="0" g="0" b="0" a="255"/>
+              </TextStyle>
+        """
+        tree.clean()
+        tree.merge_style(styles)
+
+        xml_tree = tree.xml_tree
+        result = xml_tree.xpath("/museScore/Score/Style")
+        assert result[0][0][0].tag == "halign"
+        assert result[0][0][0].text == "center"
+
+    def test_method_clean(self) -> None:
+        tmp = helper.get_file("clean.mscx", version=3)
+        tree = MuseScoreFile(tmp)
+        tree.clean()
+        tree.save()
+        tree = MuseScoreFile(tmp)
+        xml_tree = tree.xml_tree
+        assert xml_tree.xpath("/museScore/Score/Style") == []
+        assert xml_tree.xpath("//LayoutBreak") == []
+        assert xml_tree.xpath("//StemDirection") == []
+        assert xml_tree.xpath("//font") == []
+        assert xml_tree.xpath("//b") == []
+        assert xml_tree.xpath("//i") == []
+        assert xml_tree.xpath("//pos") == []
+        assert xml_tree.xpath("//offset") == []
+
+    def test_method_save(self) -> None:
+        tmp = helper.get_file("simple.mscx")
+        tree = MuseScoreFile(tmp)
+        tree.save()
+        result = helper.read_file(tmp)
+        assert '<metaTag name="arranger"></metaTag>' in result
+
+    def test_method_save_new_name(self):
+        tmp = helper.get_file("simple.mscx")
+        tree = MuseScoreFile(tmp)
+        tree.save(new_name=tmp)
+        result = helper.read_file(tmp)
+        assert '<metaTag name="arranger"></metaTag>' in result
+
+    def test_mscz(self):
+        tmp = helper.get_file("simple.mscz")
+        tree = MuseScoreFile(tmp)
+        result = tree.xml_tree.xpath("/museScore/Score/Style")
+        assert result[0].tag == "Style"
+
 
 @pytest.mark.skip("Not implemented yet")
-class TestMscoreFileMscz:
+class TestMuseScoreFileMscz:
     def setup_method(self):
-        self.file = MscoreFile(helper.get_file("simple.mscz"))
+        self.file = MuseScoreFile(helper.get_file("simple.mscz"))
 
     def test_attribute_extension(self):
         assert self.file.extension == "mscz"
@@ -127,9 +191,9 @@ class TestMscoreFileMscz:
         assert "simple.mscx" in self.file.loadpath
 
 
-class TestMscoreFileMscz4:
+class TestMuseScoreFileMscz4:
     def setup_method(self):
-        self.file = MscoreFile(
+        self.file = MuseScoreFile(
             helper.get_file("test.mscz", version=4),
         )
 
@@ -176,8 +240,8 @@ class TestZipContainer:
         assert container.mscx_file.exists()
 
 
-class TestMscoreXmlTreeVersion2:
-    tree = MscoreXmlTree(helper.get_file("simple.mscz", 2))
+class TestMuseScoreFileVersion2:
+    tree = MuseScoreFile(helper.get_file("simple.mscz", 2))
 
     def test_property_version(self) -> None:
         assert self.tree.version == 2.06
@@ -189,8 +253,8 @@ class TestMscoreXmlTreeVersion2:
         assert self.tree.get_version() == 2.06
 
 
-class TestMscoreXmlTreeVersion3:
-    tree = MscoreXmlTree(helper.get_file("simple.mscz", 3))
+class TestMuseScoreFileVersion3:
+    tree = MuseScoreFile(helper.get_file("simple.mscz", 3))
 
     def test_property_version(self) -> None:
         assert self.tree.version == 3.01
@@ -202,8 +266,8 @@ class TestMscoreXmlTreeVersion3:
         assert self.tree.get_version() == 3.01
 
 
-class TestMscoreXmlTreeVersion4:
-    tree = MscoreXmlTree(helper.get_file("simple.mscz", 4))
+class TestMuseScoreFileVersion4:
+    tree = MuseScoreFile(helper.get_file("simple.mscz", 4))
 
     def test_property_version(self) -> None:
         assert self.tree.version == 4.2
@@ -213,73 +277,6 @@ class TestMscoreXmlTreeVersion4:
 
     def test_method_get_version(self) -> None:
         assert self.tree.get_version() == 4.2
-
-
-class TestClassMscoreXmlTree:
-    def test_method_merge_style(self) -> None:
-        tree = MscoreXmlTree(helper.get_file("simple.mscx"))
-        styles = """
-            <TextStyle>
-              <halign>center</halign>
-              <valign>bottom</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-1</yoffset>
-              <offsetType>spatium</offsetType>
-              <name>Form Section</name>
-              <family>Alegreya Sans</family>
-              <size>12</size>
-              <bold>1</bold>
-              <italic>1</italic>
-              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-              <frameWidthS>0.1</frameWidthS>
-              <paddingWidthS>0.2</paddingWidthS>
-              <frameRound>0</frameRound>
-              <frameColor r="0" g="0" b="0" a="255"/>
-              </TextStyle>
-        """
-        tree.clean()
-        tree.merge_style(styles)
-
-        xml_tree = tree.xml_tree
-        result = xml_tree.xpath("/museScore/Score/Style")
-        assert result[0][0][0].tag == "halign"
-        assert result[0][0][0].text == "center"
-
-    def test_method_clean(self) -> None:
-        tmp = helper.get_file("clean.mscx", version=3)
-        tree = MscoreXmlTree(tmp)
-        tree.clean()
-        tree.save()
-        tree = MscoreXmlTree(tmp)
-        xml_tree = tree.xml_tree
-        assert xml_tree.xpath("/museScore/Score/Style") == []
-        assert xml_tree.xpath("//LayoutBreak") == []
-        assert xml_tree.xpath("//StemDirection") == []
-        assert xml_tree.xpath("//font") == []
-        assert xml_tree.xpath("//b") == []
-        assert xml_tree.xpath("//i") == []
-        assert xml_tree.xpath("//pos") == []
-        assert xml_tree.xpath("//offset") == []
-
-    def test_method_save(self) -> None:
-        tmp = helper.get_file("simple.mscx")
-        tree = MscoreXmlTree(tmp)
-        tree.save()
-        result = helper.read_file(tmp)
-        assert '<metaTag name="arranger"></metaTag>' in result
-
-    def test_method_save_new_name(self):
-        tmp = helper.get_file("simple.mscx")
-        tree = MscoreXmlTree(tmp)
-        tree.save(new_name=tmp)
-        result = helper.read_file(tmp)
-        assert '<metaTag name="arranger"></metaTag>' in result
-
-    def test_mscz(self):
-        tmp = helper.get_file("simple.mscz")
-        tree = MscoreXmlTree(tmp)
-        result = tree.xml_tree.xpath("/museScore/Score/Style")
-        assert result[0].tag == "Style"
 
 
 class TestClean:
@@ -454,7 +451,7 @@ class TestFileCompare:
         saved = orig.replace(".mscx", "_saved.mscx")
         tmp = helper.get_file(filename, version=version)
         shutil.copy2(tmp, orig)
-        tree = MscoreXmlTree(tmp)
+        tree = MuseScoreFile(tmp)
         tree.save(new_name=saved)
         assert filecmp.cmp(orig, saved)
         os.remove(orig)

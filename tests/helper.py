@@ -1,4 +1,4 @@
-"""MscoreFile for various tests"""
+"""MuseScoreFile for various tests"""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 from lxml.etree import _ElementTree
 
-from mscxyz import MscoreXmlTree
+from mscxyz import MuseScoreFile
 
 # if typing.TYPE_CHECKING:
 
@@ -66,7 +66,7 @@ def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     :param version: The version of the file (default is 2).
     :return: The XML tree.
     """
-    return MscoreXmlTree(get_file(filename, version)).xml_tree
+    return MuseScoreFile(get_file(filename, version)).xml_tree
 
 
 def read_file(filename: str) -> str:

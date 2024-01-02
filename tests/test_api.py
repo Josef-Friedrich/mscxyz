@@ -3,19 +3,18 @@ command line."""
 
 
 from mscxyz import (
-    MscoreFile,
     MscoreLyricsInterface,
     MscoreMetaInterface,
     MscoreStyleInterface,
-    MscoreXmlTree,
+    MuseScoreFile,
     exec_mscore_binary,
 )
 
 
 class TestApi:
     def test_api(self):
-        assert MscoreFile
-        assert MscoreXmlTree
+        assert MuseScoreFile
+        assert MuseScoreFile
         assert MscoreLyricsInterface
         assert MscoreMetaInterface
         assert MscoreStyleInterface

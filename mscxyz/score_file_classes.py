@@ -1,13 +1,10 @@
 """A collection of classes intended to represent one MuseScore file.
 
-The classes build on each other hierarchically. The class hierarchy:
-
 .. code ::
 
-    MscoreFile
-        MscoreXmlTree
-            MscoreStyleInterface
-            MscoreLyricsInterface
+    MuseScoreFile
+        MscoreStyleInterface
+        MscoreLyricsInterface
 """
 
 from __future__ import annotations
@@ -72,92 +69,6 @@ def list_zero_alphabet() -> List[str]:
     for char in string.ascii_lowercase:
         score_dirs.append(char)
     return score_dirs
-
-
-###############################################################################
-# Class hierarchy level 1
-###############################################################################
-
-
-class MscoreFile:
-    """This class holds basic file properties of the MuseScore score file.
-
-    :param relpath: The relative (or absolute) path of a MuseScore
-        file.
-    """
-
-    errors: List[Exception]
-    """A list to store errors."""
-
-    path: Path
-    """The absolute path of the input file."""
-
-    loadpath: str
-    """The path of the uncompressed MuseScore file in XML format file. 
-    This path may be located in the temporary directory."""
-
-    relpath: str
-    """The relative path of the score file, for example:
-    ``files/by_version/2/simple.mscx``.
-    """
-
-    abspath: str
-    """The absolute path of the score file, for example:
-    ``/home/jf/test/files/by_version/2/simple.mscx``."""
-
-    relpath_backup: str
-
-    dirname: str
-    """The name of the containing directory of the MuseScore file, for
-    example: ``files/by_version/2``."""
-
-    basename: str
-    """The basename of the score file, for example: ``simple``."""
-
-    zip_container: Optional[ZipContainer]
-
-    def __init__(self, relpath: str) -> None:
-        self.errors = []
-        self.relpath = relpath
-        self.path = Path(relpath).resolve()
-        self.abspath = os.path.abspath(relpath)
-        self.relpath_backup = relpath.replace(
-            "." + self.extension, "_bak." + self.extension
-        )
-        self.dirname = os.path.dirname(relpath)
-        self.basename = self.filename.replace(".mscx", "")
-
-        if self.extension == "mscz":
-            self.zip_container = ZipContainer(self.path)
-            self.loadpath = str(self.zip_container.mscx_file)
-        else:
-            self.loadpath = self.abspath
-
-    @property
-    def filename(self) -> str:
-        """The filename of the MuseScore file, for example:
-        ``simple.mscx``."""
-        return self.path.name
-
-    @property
-    def extension(self) -> str:
-        """The extension (``mscx`` or ``mscz``) of the score file, for
-        example: ``mscx``."""
-        return self.filename.split(".")[-1].lower()
-
-    def backup(self) -> None:
-        """Make a copy of the MuseScore file."""
-        shutil.copy2(self.relpath, self.relpath_backup)
-
-    def export(self, extension: str = "pdf") -> None:
-        """Export the score to the specifed file type.
-
-        :param extension: The extension (default: pdf)
-        """
-        score: str = self.relpath
-        mscore(
-            ["--export-to", score.replace("." + self.extension, "." + extension), score]
-        )
 
 
 class ZipContainer:
@@ -236,16 +147,40 @@ class ZipContainer:
         zip.close()
 
 
-###############################################################################
-# Class hierarchy level 2
-###############################################################################
+class MuseScoreFile:
+    """This class holds basic file properties of the MuseScore score file.
 
-
-class MscoreXmlTree(MscoreFile):
-    """XML tree manipulation
-
-    :param relpath: The relative (or absolute) path of a MuseScore file.
+    :param relpath: The relative (or absolute) path of a MuseScore
+        file.
     """
+
+    errors: List[Exception]
+    """A list to store errors."""
+
+    path: Path
+    """The absolute path of the input file."""
+
+    loadpath: str
+    """The path of the uncompressed MuseScore file in XML format file. 
+    This path may be located in the temporary directory."""
+
+    relpath: str
+    """The relative path of the score file, for example:
+    ``files/by_version/2/simple.mscx``.
+    """
+
+    abspath: str
+    """The absolute path of the score file, for example:
+    ``/home/jf/test/files/by_version/2/simple.mscx``."""
+
+    relpath_backup: str
+
+    dirname: str
+    """The name of the containing directory of the MuseScore file, for
+    example: ``files/by_version/2``."""
+
+    basename: str
+    """The basename of the score file, for example: ``simple``."""
 
     xml_tree: _ElementTree
 
@@ -255,8 +190,25 @@ class MscoreXmlTree(MscoreFile):
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
 
+    zip_container: Optional[ZipContainer]
+
     def __init__(self, relpath: str) -> None:
-        super(MscoreXmlTree, self).__init__(relpath)
+        self.errors = []
+        self.relpath = relpath
+        self.path = Path(relpath).resolve()
+        self.abspath = os.path.abspath(relpath)
+        self.relpath_backup = relpath.replace(
+            "." + self.extension, "_bak." + self.extension
+        )
+        self.dirname = os.path.dirname(relpath)
+        self.basename = self.filename.replace(".mscx", "")
+
+        if self.extension == "mscz":
+            self.zip_container = ZipContainer(self.path)
+            self.loadpath = str(self.zip_container.mscx_file)
+        else:
+            self.loadpath = self.abspath
+
         try:
             self.xml_tree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
@@ -265,6 +217,32 @@ class MscoreXmlTree(MscoreFile):
             self.xml_root: _Element = self.xml_tree.getroot()
             self.version = self.get_version()
             self.version_major = int(self.version)
+
+    @property
+    def filename(self) -> str:
+        """The filename of the MuseScore file, for example:
+        ``simple.mscx``."""
+        return self.path.name
+
+    @property
+    def extension(self) -> str:
+        """The extension (``mscx`` or ``mscz``) of the score file, for
+        example: ``mscx``."""
+        return self.filename.split(".")[-1].lower()
+
+    def backup(self) -> None:
+        """Make a copy of the MuseScore file."""
+        shutil.copy2(self.relpath, self.relpath_backup)
+
+    def export(self, extension: str = "pdf") -> None:
+        """Export the score to the specifed file type.
+
+        :param extension: The extension (default: pdf)
+        """
+        score: str = self.relpath
+        mscore(
+            ["--export-to", score.replace("." + self.extension, "." + extension), score]
+        )
 
     def get_version(self) -> float:
         """
@@ -434,7 +412,7 @@ class MscoreXmlTree(MscoreFile):
 ###############################################################################
 
 
-class MscoreStyleInterface(MscoreXmlTree):
+class MscoreStyleInterface(MuseScoreFile):
     """
     Interface specialized for the style manipulation.
 
