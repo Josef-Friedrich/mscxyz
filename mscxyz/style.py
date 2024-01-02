@@ -23,39 +23,42 @@ class MscoreStyleInterface:
     score: "MuseScoreFile"
 
     element: _Element
-    """The ``/museScore/Score/Style`` element object, see
-    https://lxml.de/tutorial.html#the-element-class
+    """The parent ``/museScore/Score/Style`` element that contains all style tags.
     """
 
-    def __init__(self, score: "MuseScoreFile"):
+    def __init__(self, score: "MuseScoreFile") -> None:
         self.score = score
-        element = self.score.xml_tree.find("Score/Style")
+        element: _Element | None = self.score.xml_tree.find("Score/Style")
         if element is not None:
             self.element = element
         else:
             self.element: _Element = self._create_parent_style()
 
-    def _create_parent_style(self):
-        score = self.score.xml_tree.find("Score")
+    def _create_parent_style(self) -> _Element:
+        score: _Element | None = self.score.xml_tree.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
         return lxml.etree.SubElement(score, "Style")
 
-    def _create(self, tag: str) -> _Element:
+    def _create_nested_element(self, tag: str) -> _Element:
         """
-        :param tag: Nested tags are supported, for example ``TextStyle/halign``
+        Create a nested XML element based on the given tag.
+
+        :param tag: The tag for the nested element. Nested tags are supported, for example `TextStyle/halign`.
+
+        :return: The created nested element.
         """
-        tags = tag.split("/")
+        tags: list[str] = tag.split("/")
         parent = self.element
         for tag in tags:
-            element = parent.find(tag)
+            element: _Element | None = parent.find(tag)
             if element is None:
-                parent = lxml.etree.SubElement(parent, tag)
+                parent: _Element = lxml.etree.SubElement(parent, tag)
             else:
                 parent = element
         return parent
 
-    def get_element(self, element_path: str, create: bool = False) -> _Element:
+    def get_element(self, element_path: str) -> _Element:
         """
         Determines an lxml element that is a child to the ``Style`` tag
 
@@ -71,14 +74,14 @@ class MscoreStyleInterface:
             # Set attributes on a maybe non-existent style tag.
             # <measureNumberOffset x="0.5" y="-2"/>
             test = MscoreStyleInterface('text.mscx')
-            element = test.get_element('measureNumberOffset', create=True)
+            element = test.get_element('measureNumberOffset')
             element.attrib['x'] = '0.5'
             element.attrib['y'] = '-2'
             test.save()
         """
-        element = self.element.find(element_path)
-        if element is None and create:
-            element = self._create(element_path)
+        element: _Element | None = self.element.find(element_path)
+        if element is None:
+            element = self._create_nested_element(element_path)
         return element
 
     def get_value(self, element_path: str) -> str:
@@ -88,7 +91,9 @@ class MscoreStyleInterface:
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element = self.get_element(element_path)
+        element: _Element = self.get_element(element_path)
+        if element.text is None:
+            raise ValueError(f"Element {element} has no text!")
         return element.text
 
     def set_attributes(
@@ -99,7 +104,7 @@ class MscoreStyleInterface:
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element: _Element = self.get_element(element_path, create=True)
+        element: _Element = self.get_element(element_path)
         for name, value in attributes.items():
             element.attrib[name] = str(value)
         return element
@@ -111,7 +116,7 @@ class MscoreStyleInterface:
         """
         element = self.element.find(element_path)
         if element is None:
-            element: _Element = self._create(element_path)
+            element: _Element = self._create_nested_element(element_path)
         element.text = str(value)
 
     def _get_text_style_element(self, name: str) -> _Element:
@@ -164,7 +169,8 @@ class MscoreStyleInterface:
                 "offsetType": "absolute",
             }
 
-        :param name: The name of the text style, for example ``Title``, ``Subtitle``, ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.
+        :param name: The name of the text style, for example ``Title``, ``Subtitle``,
+          ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.
         """
         text_style = self._get_text_style_element(name)
         out: dict[str, str] = {}
@@ -176,7 +182,9 @@ class MscoreStyleInterface:
     def set_text_style(self, name: str, values: dict[str, str | int | float]) -> None:
         """Set text styles. Only MuseScore2!
 
-        :param name: The name of the text style, for example ``Title``, ``Subtitle``, ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.        :param values: A dictionary. The keys are the tag names, values are
+        :param name: The name of the text style, for example ``Title``, ``Subtitle``,
+          ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.
+        :param values: A dictionary. The keys are the tag names, values are
           the text values of the child tags, for example
           ``{size: 14, bold: 1}``.
         """

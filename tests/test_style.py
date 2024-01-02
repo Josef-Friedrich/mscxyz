@@ -18,6 +18,15 @@ def reload(score: MuseScoreFile) -> MscoreStyleInterface:
     return score.style
 
 
+def test_method_get_element_create() -> None:
+    score: MuseScoreFile = helper.get_score("All_Dudes.mscx", version=2)
+    element = score.style.get_element("x/y/z")
+    element.attrib["y"] = "YYY"
+    assert element.tag == "z"
+    score.save()
+    assert reload(score).get_element("x/y/z").attrib["y"] == "YYY"
+
+
 class TestClassStyle:
     """Test on MuseScore Version 2"""
 
@@ -37,17 +46,6 @@ class TestClassStyle:
 
     def test_method_get_element(self) -> None:
         assert self.score.style.get_element("voltaY").tag == "voltaY"
-
-    def test_method_get_element_create(self) -> None:
-        score: MuseScoreFile = helper.get_score("All_Dudes.mscx", version=2)
-        assert score.style.get_element("XXX") is None
-        element = score.style.get_element("XXX", create=True)
-        element.attrib["y"] = "YYY"
-        assert element.tag == "XXX"
-        score.save()
-
-        score_new = MuseScoreFile(score.abspath)
-        assert score_new.style.get_element("XXX").attrib["y"] == "YYY"
 
     def test_method_get_value(self) -> None:
         assert self.score.style.get_value("voltaY") == "-2"
