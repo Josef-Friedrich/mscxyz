@@ -63,8 +63,7 @@ mscxyz
                           Run "subcommand --help" for more informations.
       clean               Clean and reset the formating of the "*.mscx" file
       meta                Deal with meta data informations stored in the MuseScore file.
-      lyrics              Extract lyrics. Without any option this subcommand extracts all lyrics verses into separate mscx files. This generated mscx files contain only one verse. The old verse number is appended to the
-                          file name, e. g.: score_1.mscx.
+      lyrics              Extract lyrics. Without any option this subcommand extracts all lyrics verses into separate mscx files. This generated mscx files contain only one verse. The old verse number is appended to the file name, e. g.: score_1.mscx.
       rename              Rename the "*.mscx" files.
       export              Export the scores to PDFs or to the specified extension.
       help                Show help. Use “mscx-manager help all” to show help messages of all subcommands. Use “mscx-manager help <subcommand>” to show only help messages for the given subcommand.
@@ -170,11 +169,10 @@ mscx-manager meta
     -c META_CLEAN, --clean META_CLEAN
                           Clean the meta data fields. Possible values: „all“ or „field_one,field_two“.
     -D, --delete-duplicates
-                          Deletes combined_lyricist if this field is equal to combined_composer. Deletes combined_subtitle if this field is equal tocombined_title. Move combined_subtitle to combimed_title if combined_title
-                          is empty.
+                          Deletes combined_lyricist if this field is equal to combined_composer. Deletes combined_subtitle if this field is equal tocombined_title. Move combined_subtitle to combimed_title if combined_title is empty.
     -d SOURCE_FIELDS FORMAT_STRING, --distribute-fields SOURCE_FIELDS FORMAT_STRING
-                          Distribute source fields to target fields applying a format string on the source fields. It is possible to apply multiple --distribute-fields options. SOURCE_FIELDS can be a single field or a
-                          comma separated list of fields: field_one,field_two. The program tries first to match the FORMAT_STRING on the first source field. If this fails, it tries the second source field ... an so on.
+                          Distribute source fields to target fields applying a format string on the source fields. It is possible to apply multiple --distribute-fields options. SOURCE_FIELDS can be a single field or a comma separated list of fields: field_one,field_two. The program tries first to match the FORMAT_STRING on the first source field. If this fails, it tries the second source field
+                          ... an so on.
     -j, --json            Additionally write the meta data to a json file.
     -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
                           Write one line per file to a text file. e. g. --log /tmp/mscx-manager.log '$title $composer'
@@ -194,8 +192,7 @@ mscx-manager lyrics
     -e LYRICS_EXTRACT, --extract LYRICS_EXTRACT
                           The lyric verse number to extract or "all".
     -r LYRICS_REMAP, --remap LYRICS_REMAP
-                          Remap lyrics. Example: "--remap 3:2,5:3". This example remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use commas to specify multiple remap pairs. One remap pair is separated by a colon in this
-                          form: "old:new": "old" stands for the old verse number. "new" stands for the new verse number.
+                          Remap lyrics. Example: "--remap 3:2,5:3". This example remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use commas to specify multiple remap pairs. One remap pair is separated by a colon in this form: "old:new": "old" stands for the old verse number. "new" stands for the new verse number.
     -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to a correct hyphenation ("la - la - la")
 
 mscx-manager rename

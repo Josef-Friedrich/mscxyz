@@ -149,9 +149,6 @@ class MuseScoreFile:
         file.
     """
 
-    errors: List[Exception]
-    """A list to store errors."""
-
     path: Path
     """The absolute path of the input file."""
 
@@ -163,15 +160,6 @@ class MuseScoreFile:
     """The relative path of the score file, for example:
     ``files/by_version/2/simple.mscx``.
     """
-
-    relpath_backup: str
-
-    dirname: str
-    """The name of the containing directory of the MuseScore file, for
-    example: ``files/by_version/2``."""
-
-    basename: str
-    """The basename of the score file, for example: ``simple``."""
 
     xml_tree: _ElementTree
 
@@ -185,6 +173,9 @@ class MuseScoreFile:
 
     zip_container: Optional[ZipContainer]
 
+    errors: List[Exception]
+    """A list to store errors."""
+
     __style: Optional[MscoreStyleInterface]
 
     def __init__(self, relpath: str) -> None:
@@ -192,11 +183,6 @@ class MuseScoreFile:
         self.errors = []
         self.relpath = relpath
         self.path = Path(relpath).resolve()
-        self.relpath_backup = relpath.replace(
-            "." + self.extension, "_bak." + self.extension
-        )
-        self.dirname = os.path.dirname(relpath)
-        self.basename = self.filename.replace(".mscx", "")
 
         if self.extension == "mscz":
             self.zip_container = ZipContainer(self.path)
@@ -224,6 +210,21 @@ class MuseScoreFile:
         """The extension (``mscx`` or ``mscz``) of the score file, for
         example: ``mscx``."""
         return self.filename.split(".")[-1].lower()
+
+    @property
+    def relpath_backup(self) -> str:
+        return self.relpath.replace("." + self.extension, "_bak." + self.extension)
+
+    @property
+    def dirname(self) -> str:
+        """The name of the containing directory of the MuseScore file, for
+        example: ``/home/xyz/score_files``."""
+        return os.path.dirname(self.path)
+
+    @property
+    def basename(self) -> str:
+        """The basename of the score file, for example: ``simple``."""
+        return self.filename.replace("." + self.extension, "")
 
     @property
     def style(self) -> MscoreStyleInterface:

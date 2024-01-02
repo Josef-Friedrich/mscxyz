@@ -7,6 +7,7 @@ import filecmp
 import os
 import shutil
 import tempfile
+from pathlib import Path
 from typing import Optional
 from unittest import mock
 
@@ -97,7 +98,9 @@ class TestClassMuseScoreFile:
         assert self.score.relpath
 
     def test_attribute_dirname(self) -> None:
-        assert self.score.dirname
+        path = Path(self.score.dirname)
+        assert path.is_dir()
+        assert path.exists()
 
     def test_attribute_filename(self) -> None:
         assert self.score.filename == "simple.mscx"
