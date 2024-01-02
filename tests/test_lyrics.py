@@ -5,41 +5,42 @@ import os
 import unittest
 
 import mscxyz
+import mscxyz.lyrics
 from tests import helper
 
 
-class TestMscoreLyricsInterface(unittest.TestCase):
-    def setUp(self):
+class TestMscoreLyricsInterface:
+    def setup_method(self) -> None:
         self.score_path = helper.get_file("lyrics.mscx")
 
-    def assertLyricsFileExists(self, number):
-        self.assertTrue(
-            os.path.isfile(self.score_path.replace(".mscx", "_{}.mscx".format(number)))
+    def assertLyricsFileExists(self, number: int) -> None:
+        assert os.path.isfile(
+            self.score_path.replace(".mscx", "_{}.mscx".format(number))
         )
 
-    def _test_without_arguments(self, version=2):
+    def _test_without_arguments(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", self.score_path])
         self.assertLyricsFileExists(1)
         self.assertLyricsFileExists(2)
         self.assertLyricsFileExists(3)
 
-    def test_without_arguments(self):
+    def test_without_arguments(self) -> None:
         self._test_without_arguments(version=2)
         self._test_without_arguments(version=3)
 
-    def _test_extract_all(self, version=2):
+    def _test_extract_all(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "all", self.score_path])
         self.assertLyricsFileExists(1)
         self.assertLyricsFileExists(2)
         self.assertLyricsFileExists(3)
 
-    def test_extract_all(self):
+    def test_extract_all(self) -> None:
         self._test_extract_all(version=2)
         self._test_extract_all(version=3)
 
-    def _test_extract_by_number(self, version=2):
+    def _test_extract_by_number(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "2", self.score_path])
         self.assertLyricsFileExists(2)
@@ -49,8 +50,8 @@ class TestMscoreLyricsInterface(unittest.TestCase):
         self._test_extract_by_number(version=3)
 
 
-class TestMscoreLyricsInterfaceFix(unittest.TestCase):
-    def _test_fix(self, version=2):
+class TestMscoreLyricsInterfaceFix:
+    def _test_fix(self, version: int = 2):
         score_path = helper.get_file("lyrics-fix.mscx", version)
         mscxyz.execute(["lyrics", "--fix", score_path])
         self.xml_tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
@@ -66,51 +67,45 @@ class TestMscoreLyricsInterfaceFix(unittest.TestCase):
             if hasattr(tag_syllabic, "text"):
                 syllabic.append(tag_syllabic.text)
 
-        self.assertEqual(
-            text,
-            [
-                "Al",
-                "K\xf6pf",
-                "le",
-                "chen",
-                "mei",
-                "un",
-                "ne",
-                "ters",
-                "En",
-                "Was",
-                "te",
-                "si",
-                "lein.",
-                "lein.",
-            ],
-        )
-        self.assertEqual(
-            syllabic,
-            [
-                "begin",
-                "begin",
-                "end",
-                "end",
-                "begin",
-                "begin",
-                "end",
-                "end",
-                "begin",
-                "begin",
-                "middle",
-                "middle",
-                "end",
-                "end",
-            ],
-        )
+        assert text == [
+            "Al",
+            "K\xf6pf",
+            "le",
+            "chen",
+            "mei",
+            "un",
+            "ne",
+            "ters",
+            "En",
+            "Was",
+            "te",
+            "si",
+            "lein.",
+            "lein.",
+        ]
+        assert syllabic == [
+            "begin",
+            "begin",
+            "end",
+            "end",
+            "begin",
+            "begin",
+            "end",
+            "end",
+            "begin",
+            "begin",
+            "middle",
+            "middle",
+            "end",
+            "end",
+        ]
 
     def test_fix(self):
         self._test_fix(version=2)
         self._test_fix(version=3)
 
 
-class TestMscoreLyricsInterfaceRemap(unittest.TestCase):
+class TestMscoreLyricsInterfaceRemap:
     def test_remap(self):
         score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])
@@ -125,7 +120,7 @@ class TestMscoreLyricsInterfaceRemap(unittest.TestCase):
                 no = "0"
             text.append(no)
 
-        self.assertEqual(text, ["0", "5", "2", "3", "4"])
+        assert text == ["0", "5", "2", "3", "4"]
 
 
 if __name__ == "__main__":
