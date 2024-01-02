@@ -9,6 +9,7 @@ import unittest
 import pytest
 
 import mscxyz
+import mscxyz.meta
 from mscxyz import meta
 from mscxyz.meta import (
     Combined,
@@ -130,11 +131,11 @@ class TestClassUnifiedInterface:
         assert interface.vbox_title == "Title"
         assert interface.metatag_work_title == "Title"
 
-    def test_get_simple(self):
+    def test_get_simple(self) -> None:
         self._test_get_simple(version=2)
         self._test_get_simple(version=3)
 
-    def _test_get_all_values(self, version: str) -> None:
+    def _test_get_all_values(self, version: int) -> None:
         interface, _, _ = self._init_class("meta-all-values.mscx", version)
 
         assert interface.combined_composer == "vbox_composer"
@@ -370,7 +371,7 @@ class TestClassMetaTag:
         with pytest.raises(AttributeError):
             meta.lol = "lol"
 
-    def test_clean(self):
+    def test_clean(self) -> None:
         meta, _, _ = self._init_class("simple.mscx")
         meta.arranger = "A"
         assert meta.arranger == "A"
@@ -457,7 +458,7 @@ class TestClassCombined:
         combined = Combined(tree.xml_root)
         return combined, tree, tmp
 
-    def test_getter(self):
+    def test_getter(self) -> None:
         combined, _, _ = self._init_class("simple.mscx")
         assert combined.title == "Title"
         assert combined.subtitle is None
@@ -484,7 +485,7 @@ class TestClassCombined:
 
 
 class TestIntegration:
-    def test_distribute_field(self):
+    def test_distribute_field(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
         mscxyz.execute(
             [
@@ -502,7 +503,7 @@ class TestIntegration:
         assert iface.vbox_title == "Title"
         assert iface.metatag_work_title == "Title"
 
-    def test_distribute_field_multple_source_fields(self):
+    def test_distribute_field_multple_source_fields(self) -> None:
         tmp = helper.get_file("Title - Composer.mscx")
         mscxyz.execute(
             [
@@ -520,7 +521,7 @@ class TestIntegration:
         assert iface.vbox_title == "Title"
         assert iface.metatag_work_title == "Title"
 
-    def test_distribute_field_multiple_values(self):
+    def test_distribute_field_multiple_values(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
         mscxyz.execute(
             [
@@ -546,21 +547,22 @@ class TestIntegration:
         with pytest.raises(meta.FormatStringNoFieldError):
             mscxyz.execute(["meta", "--distribute-field", "vbox_title", "lol", tmp])
 
-    def test_distribute_field_exception_unmatched(self) -> None:
-        tmp = helper.get_file("simple.mscx")
-        with helper.Capturing() as output:
-            mscxyz.execute(
-                [
-                    "meta",
-                    "--distribute-field",
-                    "vbox_title",
-                    "$metatag_work_title - $metatag_composer",
-                    tmp,
-                ]
-            )
-        assert "UnmatchedFormatStringError" in output[-1]
+    def test_distribute_field_exception_unmatched(
+        self, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        mscxyz.execute(
+            [
+                "meta",
+                "--distribute-field",
+                "vbox_title",
+                "$metatag_work_title - $metatag_composer",
+                helper.get_file("simple.mscx"),
+            ]
+        )
+        capture = capsys.readouterr()
+        assert "UnmatchedFormatStringError" in capture.out
 
-    def test_clean_all(self):
+    def test_clean_all(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "all", tmp])
         meta = Meta(tmp)
@@ -568,7 +570,7 @@ class TestIntegration:
         for field in iface.fields:
             assert getattr(iface, field) is None, field
 
-    def test_clean_single_field(self):
+    def test_clean_single_field(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title", tmp])
         meta = Meta(tmp)
@@ -576,7 +578,7 @@ class TestIntegration:
         assert iface.vbox_title is None, "vbox_title"
         assert iface.vbox_composer == "vbox_composer", "vbox_composer"
 
-    def test_clean_some_fields(self):
+    def test_clean_some_fields(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title,vbox_composer", tmp])
         meta = Meta(tmp)
@@ -603,7 +605,7 @@ class TestIntegration:
         assert "meta-all-values.mscx" in capture.out
         assert lines[-1] == "vbox_title: “vbox_title” -> “”"
 
-    def test_show_simple_unverbose(self, capsys: pytest.CaptureFixture[str]):
+    def test_show_simple_unverbose(self, capsys: pytest.CaptureFixture[str]) -> None:
         mscxyz.execute(
             [
                 "--config-file",
@@ -622,7 +624,7 @@ class TestIntegration:
         assert lines[3] == "combined_title: “Title” -> “”"
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
-    def test_show_verbose(self, capsys: pytest.CaptureFixture[str]):
+    def test_show_verbose(self, capsys: pytest.CaptureFixture[str]) -> None:
         mscxyz.execute(
             [
                 "--config-file",
@@ -643,44 +645,39 @@ class TestIntegration:
         assert lines[-2] == "vbox_subtitle: "
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
-    def test_show_verbose_zero(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(["meta", "--clean", "all", helper.get_file("simple.mscx")])
-        output = " ".join(output)
-        assert "readonly_basename" in output
-        assert "readonly_abspath" not in output
-        assert "readonly_relpath_backup" not in output
+    def test_show_verbose_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
+        mscxyz.execute(["meta", "--clean", "all", helper.get_file("simple.mscx")])
+        capture = capsys.readouterr()
+        assert "readonly_basename" in capture.out
+        assert "readonly_abspath" not in capture.out
+        assert "readonly_relpath_backup" not in capture.out
 
-    def test_show_verbose_one(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(
-                ["-v", "meta", "--clean", "all", helper.get_file("simple.mscx")]
-            )
-        output = " ".join(output)
-        assert "readonly_abspath" in output
-        assert "readonly_relpath_backup" not in output
+    def test_show_verbose_one(self, capsys: pytest.CaptureFixture[str]) -> None:
+        mscxyz.execute(["-v", "meta", "--clean", "all", helper.get_file("simple.mscx")])
+        capture = capsys.readouterr()
+        assert "readonly_abspath" in capture.out
+        assert "readonly_relpath_backup" not in capture.out
 
-    def test_show_verbose_two(self):
-        with helper.Capturing() as output:
-            mscxyz.execute(
-                [
-                    "-vv",
-                    "meta",
-                    "--clean",
-                    "all",
-                    helper.get_file("simple.mscx"),
-                ]
-            )
-        output = " ".join(output)
-        assert "readonly_relpath_backup" in output
+    def test_show_verbose_two(self, capsys: pytest.CaptureFixture[str]) -> None:
+        mscxyz.execute(
+            [
+                "-vv",
+                "meta",
+                "--clean",
+                "all",
+                helper.get_file("simple.mscx"),
+            ]
+        )
+        capture = capsys.readouterr()
+        assert "readonly_relpath_backup" in capture.out
 
-    def test_set_field_simple_string(self):
+    def test_set_field_simple_string(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--set-field", "vbox_title", "lol", tmp])
         meta = Meta(tmp)
         assert meta.interface.vbox_title == "lol"
 
-    def test_set_field_multiple_times(self):
+    def test_set_field_multiple_times(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(
             [
@@ -698,7 +695,7 @@ class TestIntegration:
         assert meta.interface.vbox_title == "lol"
         assert meta.interface.vbox_composer == "troll"
 
-    def test_set_field_with_templating(self):
+    def test_set_field_with_templating(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(
             ["meta", "--set-field", "vbox_title", "$vbox_title ($vbox_composer)", tmp]
@@ -706,14 +703,14 @@ class TestIntegration:
         meta = Meta(tmp)
         assert meta.interface.vbox_title == "vbox_title (vbox_composer)"
 
-    def test_delete_duplicates(self):
+    def test_delete_duplicates(self) -> None:
         tmp = helper.get_file("meta-duplicates.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
         meta = Meta(tmp)
         assert not meta.interface.combined_lyricist
         assert not meta.interface.combined_subtitle
 
-    def test_delete_duplicates_move_subtitle(self):
+    def test_delete_duplicates_move_subtitle(self) -> None:
         tmp = helper.get_file("meta-duplicates-move-subtitle.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
         meta = Meta(tmp)
@@ -721,7 +718,7 @@ class TestIntegration:
         assert not meta.interface.combined_subtitle
         assert meta.interface.combined_title == "Title"
 
-    def test_log(self):
+    def test_log(self) -> None:
         tmp = helper.get_file("simple.mscx")
         log = tempfile.mktemp()
         mscxyz.execute(
