@@ -164,10 +164,6 @@ class MuseScoreFile:
     ``files/by_version/2/simple.mscx``.
     """
 
-    abspath: str
-    """The absolute path of the score file, for example:
-    ``/home/jf/test/files/by_version/2/simple.mscx``."""
-
     relpath_backup: str
 
     dirname: str
@@ -196,7 +192,6 @@ class MuseScoreFile:
         self.errors = []
         self.relpath = relpath
         self.path = Path(relpath).resolve()
-        self.abspath = os.path.abspath(relpath)
         self.relpath_backup = relpath.replace(
             "." + self.extension, "_bak." + self.extension
         )
@@ -207,7 +202,7 @@ class MuseScoreFile:
             self.zip_container = ZipContainer(self.path)
             self.loadpath = str(self.zip_container.mscx_file)
         else:
-            self.loadpath = self.abspath
+            self.loadpath = str(self.path)
 
         try:
             self.xml_tree = lxml.etree.parse(self.loadpath)

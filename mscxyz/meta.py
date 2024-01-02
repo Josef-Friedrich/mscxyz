@@ -405,7 +405,7 @@ class InterfaceReadOnly:
 
     @property
     def readonly_abspath(self) -> str:
-        return self.xml_tree.abspath
+        return str(self.xml_tree.path)
 
     @property
     def readonly_basename(self) -> str:

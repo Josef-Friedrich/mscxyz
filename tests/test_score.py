@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import filecmp
 import os
-import pathlib
 import shutil
 import tempfile
 from typing import Optional
@@ -91,14 +90,10 @@ class TestClassMuseScoreFile:
         self.file = MuseScoreFile(helper.get_file("simple.mscx"))
 
     def test_attribute_path(self) -> None:
-        assert self.file.relpath
-
-    def test_attribute_relpath(self) -> None:
         assert self.file.path.exists()
 
-    def test_attribute_abspath(self) -> None:
-        assert self.file.abspath == self.file.loadpath
-        pathlib.Path(self.file.abspath).exists()
+    def test_attribute_relpath(self) -> None:
+        assert self.file.relpath
 
     def test_attribute_dirname(self) -> None:
         assert self.file.dirname
@@ -211,42 +206,42 @@ class TestZipContainer:
 
 
 class TestMuseScoreFileVersion2:
-    tree = MuseScoreFile(helper.get_file("simple.mscz", 2))
+    score = helper.get_score("simple.mscz", 2)
 
     def test_property_version(self) -> None:
-        assert self.tree.version == 2.06
+        assert self.score.version == 2.06
 
     def test_property_version_major(self) -> None:
-        assert self.tree.version_major == 2
+        assert self.score.version_major == 2
 
     def test_method_get_version(self) -> None:
-        assert self.tree.get_version() == 2.06
+        assert self.score.get_version() == 2.06
 
 
 class TestMuseScoreFileVersion3:
-    tree = MuseScoreFile(helper.get_file("simple.mscz", 3))
+    score = helper.get_score("simple.mscz", 3)
 
     def test_property_version(self) -> None:
-        assert self.tree.version == 3.01
+        assert self.score.version == 3.01
 
     def test_property_version_major(self) -> None:
-        assert self.tree.version_major == 3
+        assert self.score.version_major == 3
 
     def test_method_get_version(self) -> None:
-        assert self.tree.get_version() == 3.01
+        assert self.score.get_version() == 3.01
 
 
 class TestMuseScoreFileVersion4:
-    tree = MuseScoreFile(helper.get_file("simple.mscz", 4))
+    score = helper.get_score("simple.mscz", 4)
 
     def test_property_version(self) -> None:
-        assert self.tree.version == 4.2
+        assert self.score.version == 4.2
 
     def test_property_version_major(self) -> None:
-        assert self.tree.version_major == 4
+        assert self.score.version_major == 4
 
     def test_method_get_version(self) -> None:
-        assert self.tree.get_version() == 4.2
+        assert self.score.get_version() == 4.2
 
 
 class TestClean:

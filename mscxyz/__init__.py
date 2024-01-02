@@ -57,7 +57,6 @@ __version__: str = metadata.version("mscxyz")
 MuseScoreFile
 """see submodule ``score.py``"""
 
-
 MscoreLyricsInterface
 """see submodule ``lyrics.py``"""
 

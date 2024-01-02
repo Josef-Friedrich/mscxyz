@@ -14,7 +14,7 @@ def reload(score: MuseScoreFile) -> MscoreStyleInterface:
     :param score: The MuseScore file to reload the style from.
     :return: The reloaded style.
     """
-    score = MuseScoreFile(score.abspath)
+    score = MuseScoreFile(str(score.path))
     return score.style
 
 
