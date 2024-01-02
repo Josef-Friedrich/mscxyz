@@ -20,13 +20,13 @@ if typing.TYPE_CHECKING:
 
 
 class ReadOnlyFieldError(Exception):
-    def __init__(self, field: str):
+    def __init__(self, field: str) -> None:
         self.msg = "The field “{}” is read only!".format(field)
         Exception.__init__(self, self.msg)
 
 
 class UnkownFieldError(Exception):
-    def __init__(self, field: str, valid_fields: typing.Sequence[str]):
+    def __init__(self, field: str, valid_fields: typing.Sequence[str]) -> None:
         self.msg = "Unkown field of name “{}”! Valid field names are: {}".format(
             field, ", ".join(valid_fields)
         )
@@ -34,7 +34,7 @@ class UnkownFieldError(Exception):
 
 
 class UnmatchedFormatStringError(Exception):
-    def __init__(self, format_string: str, input_string: str):
+    def __init__(self, format_string: str, input_string: str) -> None:
         self.msg = (
             "Your format string “{}” doesn’t match on this "
             "input string: “{}”".format(format_string, input_string)
@@ -149,21 +149,21 @@ class MetaTag:
         element: _Element | None = self._get_element(field)
         return utils.text(element)
 
-    def _set_text(self, field: str, value: str) -> None:
+    def _set_text(self, field: str, value: str | None) -> None:
         element: _Element | None = self._get_element(field)
         if element is not None:
             element.text = value
         else:
             raise AttributeError(f"Field “{field}” not found!")
 
-    def __getattr__(self, field: str):
+    def __getattr__(self, field: str) -> str | None:
         field = self._to_camel_case(field)
         if field not in self.fields:
             raise UnkownFieldError(field, self.fields)
         else:
             return self._get_text(field)
 
-    def __setattr__(self, field: str, value: str) -> None:
+    def __setattr__(self, field: str, value: str | None) -> None:
         if field == "xml_root" or field == "fields":
             self.__dict__[field] = value
         else:
@@ -223,7 +223,7 @@ class Vbox:
 
     xml_root: _Element
 
-    def __init__(self, xml_root: _Element):
+    def __init__(self, xml_root: _Element) -> None:
         self.xml_root = xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
         if not xml_root.xpath(xpath + "/VBox"):
@@ -259,7 +259,7 @@ class Vbox:
         else:
             return self._get_text(field)
 
-    def _create_text_tag(self, style: str, text: str):
+    def _create_text_tag(self, style: str, text: str) -> None:
         """
         :param style: String inside the `<style>` tags
         """
@@ -315,7 +315,7 @@ class Combined(Score):
         return self._pick_value(self.vbox.Title, self.metatag.workTitle)
 
     @title.setter
-    def title(self, value: str) -> None:
+    def title(self, value: str | None) -> None:
         self.vbox.Title = self.metatag.workTitle = value
 
     @property
@@ -323,7 +323,7 @@ class Combined(Score):
         return self._pick_value(self.vbox.Subtitle, self.metatag.movementTitle)
 
     @subtitle.setter
-    def subtitle(self, value: str) -> None:
+    def subtitle(self, value: str | None) -> None:
         self.vbox.Subtitle = self.metatag.movementTitle = value
 
     @property
@@ -331,7 +331,7 @@ class Combined(Score):
         return self._pick_value(self.vbox.Composer, self.metatag.composer)
 
     @composer.setter
-    def composer(self, value: str) -> None:
+    def composer(self, value: str | None) -> None:
         self.vbox.Composer = self.metatag.composer = value
 
     @property
@@ -339,7 +339,7 @@ class Combined(Score):
         return self._pick_value(self.vbox.Lyricist, self.metatag.lyricist)
 
     @lyricist.setter
-    def lyricist(self, value: str) -> None:
+    def lyricist(self, value: str | None) -> None:
         self.vbox.Lyricist = self.metatag.lyricist = value
 
 
@@ -568,8 +568,8 @@ class Meta(Score):
                 print("{}: {}".format(color(field, field_color), " ".join(line)))
 
     def export_json(self):
-        data = {}
-        data["title"] = self.get("title")
+        data: dict[str, str] = {}
+        data["title"] = self.interface.title
 
         output = open(self.relpath.replace("." + self.extension, ".json"), "w")
         json.dump(data, output, indent=4)
