@@ -36,7 +36,7 @@ from mscxyz import cli
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score_file_classes import (
+from mscxyz.score import (
     MscoreStyleInterface,
     MuseScoreFile,
     list_scores,
@@ -55,7 +55,7 @@ __version__: str = metadata.version("mscxyz")
 
 
 MuseScoreFile
-"""see submodule ``score_file_classes.py``"""
+"""see submodule ``score.py``"""
 
 
 MscoreLyricsInterface
@@ -65,7 +65,7 @@ MscoreMetaInterface = Meta
 """see submodule ``meta.py``"""
 
 MscoreStyleInterface
-"""see submodule ``score_file_classes.py``"""
+"""see submodule ``score.py``"""
 
 # Functions
 
@@ -73,7 +73,7 @@ exec_mscore_binary = mscore
 """see submodule ``utils.py``"""
 
 list_scores
-"""see submodule ``score_file_classes.py``"""
+"""see submodule ``score.py``"""
 
 ###############################################################################
 # API INTERFACE END

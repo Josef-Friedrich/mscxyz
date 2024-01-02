@@ -11,7 +11,7 @@ import lxml.etree
 import tmep
 from lxml.etree import _Element
 
-from mscxyz.score_file_classes import MuseScoreFile
+from mscxyz.score import MuseScoreFile
 from mscxyz.utils import color, get_args
 
 if typing.TYPE_CHECKING:

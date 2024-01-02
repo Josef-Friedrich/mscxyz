@@ -1,10 +1,4 @@
-"""A collection of classes intended to represent one MuseScore file.
-
-.. code ::
-
-    MuseScoreFile
-        MscoreStyleInterface
-        MscoreLyricsInterface
+"""A class that represents one MuseScore file.
 """
 
 from __future__ import annotations
@@ -184,6 +178,8 @@ class MuseScoreFile:
     """The basename of the score file, for example: ``simple``."""
 
     xml_tree: _ElementTree
+
+    xml_root: _Element
 
     version_major: int
     """The major MuseScore version, for example 2 or 3"""

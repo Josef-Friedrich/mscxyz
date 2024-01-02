@@ -22,7 +22,7 @@ from mscxyz.meta import (
     export_to_dict,
     to_underscore,
 )
-from mscxyz.score_file_classes import MuseScoreFile
+from mscxyz.score import MuseScoreFile
 from tests import helper
 from tests.helper import ini_file
 

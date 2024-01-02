@@ -4,7 +4,7 @@ import typing
 
 import lxml.etree as etree
 
-from mscxyz.score_file_classes import MuseScoreFile
+from mscxyz.score import MuseScoreFile
 
 
 class MscoreLyricsInterface(MuseScoreFile):

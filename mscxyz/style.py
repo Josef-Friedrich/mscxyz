@@ -10,7 +10,7 @@ from lxml.etree import _Element
 from mscxyz.xml import find_safe, xpath
 
 if typing.TYPE_CHECKING:
-    from mscxyz.score_file_classes import MuseScoreFile
+    from mscxyz.score import MuseScoreFile
 
 
 class MscoreStyleInterface:

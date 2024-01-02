@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mscxyz.score_file_classes import (
+from mscxyz.score import (
     MscoreStyleInterface,
     MuseScoreFile,
 )

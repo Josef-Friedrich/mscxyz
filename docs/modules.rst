@@ -29,10 +29,10 @@ mscxyz.rename module
 
 .. automodule:: mscxyz.rename
 
-mscxyz.score_file_classes module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mscxyz.score module
+^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: mscxyz.score_file_classes
+.. automodule:: mscxyz.score
 
 mscxyz.settings module
 ^^^^^^^^^^^^^^^^^^^^^^

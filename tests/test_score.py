@@ -1,4 +1,4 @@
-"""Test submodules “score_file_classes.py”"""
+"""Test submodules “score.py”"""
 
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from unittest import mock
 import pytest
 
 import mscxyz
-from mscxyz.score_file_classes import (
+from mscxyz.score import (
     MuseScoreFile,
     ZipContainer,
     list_scores,
