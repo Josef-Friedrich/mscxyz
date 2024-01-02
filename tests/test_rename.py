@@ -1,5 +1,6 @@
 """Test submodule “rename.py”."""
 
+from __future__ import annotations
 
 import os
 import tempfile
@@ -7,90 +8,85 @@ import unittest
 
 import mscxyz
 from mscxyz import rename
+from mscxyz.settings import reset_args
 from tests import helper
 from tests.helper import ini_file
 
 
-class TestFunctions(unittest.TestCase):
-    def test_function_prepare_fields(self):
-        fields = {
+class TestFunctions:
+    def test_function_prepare_fields(self) -> None:
+        reset_args()
+        fields: dict[str, str] = {
             "field1": " Subtitle ",
             "field2": "Title / Composer",
         }
-        result = rename.prepare_fields(fields)
-        self.assertEqual(
-            result,
-            {
-                "field1": "Subtitle",
-                "field2": "Title - Composer",
-            },
-        )
+        result: dict[str, str] = rename.prepare_fields(fields)
+        assert result == {
+            "field1": "Subtitle",
+            "field2": "Title - Composer",
+        }
 
-    def test_function_apply_format_string(self):
-        from mscxyz import settings
-
-        settings.args = settings.DefaultArguments()
+    def test_function_apply_format_string(self) -> None:
+        reset_args()
         meta = mscxyz.meta.Meta(helper.get_file("meta-all-values.mscx"))
         fields = meta.interface.export_to_dict()
         name = rename.apply_format_string(fields)
-        self.assertEqual(name, "vbox_title (vbox_composer)")
+        assert name == "vbox_title (vbox_composer)"
 
-    def test_function_get_checksum(self):
+    def test_function_get_checksum(self) -> None:
         tmp = helper.get_file("simple.mscx")
-        self.assertEqual(
-            rename.get_checksum(tmp), "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
-        )
+        assert rename.get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
 
 
-class TestIntegration(unittest.TestCase):
+class TestIntegration:
     @staticmethod
-    def _get(filename, version=2):
+    def _get(filename: str, version: int = 2) -> str:
         return helper.get_file(filename, version)
 
     @staticmethod
-    def _target_path_cwd(filename):
+    def _target_path_cwd(filename: str) -> str:
         return os.path.join(os.getcwd(), filename)
 
     @staticmethod
-    def _execute(args):
+    def _execute(args: list[str]):
         with helper.Capturing() as output:
             mscxyz.execute(args)
         return output
 
     @staticmethod
-    def _exists_in_cwd(filename):
+    def _exists_in_cwd(filename: str) -> bool:
         return os.path.exists(os.path.join(os.getcwd(), filename))
 
     @staticmethod
-    def _rm_in_cwd(filename):
+    def _rm_in_cwd(filename: str) -> None:
         return os.remove(os.path.join(os.getcwd(), filename))
 
-    def _test_simple(self, version):
+    def _test_simple(self, version: int) -> None:
         output = self._execute(
             ["--config-file", ini_file, "rename", self._get("simple.mscx", version)]
         )
-        target = self._target_path_cwd("Title (Composer).mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("simple.mscx -> " in " ".join(output))
-        self.assertTrue("Title (Composer).mscx" in " ".join(output))
+        target: str = self._target_path_cwd("Title (Composer).mscx")
+        assert os.path.exists(target)
+        assert "simple.mscx -> " in " ".join(output)
+        assert "Title (Composer).mscx" in " ".join(output)
         os.remove(target)
 
-    def test_simple(self):
+    def test_simple(self) -> None:
         self._test_simple(version=2)
         self._test_simple(version=3)
 
-    def _test_without_arguments(self, version):
+    def _test_without_arguments(self, version: int) -> None:
         output = self._execute(["rename", self._get("meta-all-values.mscx", version)])
-        target = self._target_path_cwd("vbox_title (vbox_composer).mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("vbox_title (vbox_composer).mscx" in " ".join(output))
+        target: str = self._target_path_cwd("vbox_title (vbox_composer).mscx")
+        assert os.path.exists(target)
+        assert "vbox_title (vbox_composer).mscx" in " ".join(output)
         os.remove(target)
 
-    def test_without_arguments(self):
+    def test_without_arguments(self) -> None:
         self._test_without_arguments(version=2)
         self._test_without_arguments(version=3)
 
-    def test_format(self):
+    def test_format(self) -> None:
         output = self._execute(
             [
                 "rename",
@@ -100,64 +96,66 @@ class TestIntegration(unittest.TestCase):
             ]
         )
         target = self._target_path_cwd("Composer_Title.mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("Composer_Title.mscx" in " ".join(output))
+        assert os.path.exists(target)
+        assert "Composer_Title.mscx" in " ".join(output)
         os.remove(target)
 
-    def test_no_whitespace(self):
+    def test_no_whitespace(self) -> None:
         output = self._execute(
             ["rename", "--no-whitespace", self._get("meta-real-world.mscx")]
         )
         n = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx"
-        target = self._target_path_cwd(n)
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue(n in " ".join(output))
+        target: str = self._target_path_cwd(n)
+        assert os.path.exists(target)
+        assert n in " ".join(output)
         os.remove(target)
 
-    def test_alphanum(self):
-        output = helper.run("rename", "--alphanum", self._get("meta-all-values.mscx"))
-        target = self._target_path_cwd("vbox title (vbox composer).mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("vbox title (vbox composer).mscx" in output)
+    def test_alphanum(self) -> None:
+        output: str = helper.run(
+            "rename", "--alphanum", self._get("meta-all-values.mscx")
+        )
+        target: str = self._target_path_cwd("vbox title (vbox composer).mscx")
+        assert os.path.exists(target)
+        assert "vbox title (vbox composer).mscx" in output
         os.remove(target)
 
-    def test_ascii(self):
-        output = helper.run("rename", "--ascii", self._get("unicode.mscx"))
-        target = self._target_path_cwd("Tuetlae (Coempoesser).mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("Tuetlae (Coempoesser).mscx" in output)
+    def test_ascii(self) -> None:
+        output: str = helper.run("rename", "--ascii", self._get("unicode.mscx"))
+        target: str = self._target_path_cwd("Tuetlae (Coempoesser).mscx")
+        assert os.path.exists(target)
+        assert "Tuetlae (Coempoesser).mscx" in output
         os.remove(target)
 
-    def test_rename_file_twice(self):
+    def test_rename_file_twice(self) -> None:
         helper.run("rename", self._get("simple.mscx"))
         output = helper.run("rename", self._get("simple.mscx"))
         target = self._target_path_cwd("Title (Composer).mscx")
-        self.assertTrue("with the same checksum (sha1) already" in output)
+        assert "with the same checksum (sha1) already" in output
         os.remove(target)
 
-    def test_rename_same_filename(self):
+    def test_rename_same_filename(self) -> None:
         helper.run("rename", "-f", "same", self._get("simple.mscx"))
         helper.run("rename", "-f", "same", self._get("lyrics.mscx"))
         helper.run("rename", "-f", "same", self._get("no-vbox.mscx"))
-        self.assertTrue(self._exists_in_cwd("same.mscx"))
-        self.assertFalse(self._exists_in_cwd("same1.mscx"))
-        self.assertTrue(self._exists_in_cwd("same2.mscx"))
-        self.assertTrue(self._exists_in_cwd("same3.mscx"))
+        assert self._exists_in_cwd("same.mscx")
+        assert not self._exists_in_cwd("same1.mscx")
+        assert self._exists_in_cwd("same2.mscx")
+        assert self._exists_in_cwd("same3.mscx")
         self._rm_in_cwd("same.mscx")
         self._rm_in_cwd("same2.mscx")
         self._rm_in_cwd("same3.mscx")
 
-    def test_rename_skips(self):
-        output = helper.run(
+    def test_rename_skips(self) -> None:
+        output: str = helper.run(
             "rename",
             "--skip-if-empty",
             "metatag_composer,metatag_source",
             self._get("simple.mscx"),
         )
-        self.assertTrue("Field “metatag_source” is empty! Skipping" in output)
+        assert "Field “metatag_source” is empty! Skipping" in output
 
-    def test_rename_skip_pass(self):
-        output = helper.run(
+    def test_rename_skip_pass(self) -> None:
+        output: str = helper.run(
             "--config-file",
             ini_file,
             "rename",
@@ -165,17 +163,17 @@ class TestIntegration(unittest.TestCase):
             "metatag_composer,metatag_work_title",
             self._get("simple.mscx"),
         )
-        target = self._target_path_cwd("Title (Composer).mscx")
-        self.assertTrue(os.path.exists(target))
-        self.assertTrue("simple.mscx -> " in output)
-        self.assertTrue("Title (Composer).mscx" in output)
+        target: str = self._target_path_cwd("Title (Composer).mscx")
+        assert os.path.exists(target)
+        assert "simple.mscx -> " in output
+        assert "Title (Composer).mscx" in output
         os.remove(target)
 
-    def test_rename_target(self):
-        tmp_dir = tempfile.mkdtemp()
+    def test_rename_target(self) -> None:
+        tmp_dir: str = tempfile.mkdtemp()
         helper.run("rename", "--target", tmp_dir, self._get("simple.mscx"))
-        target = os.path.join(tmp_dir, "Title (Composer).mscx")
-        self.assertTrue(os.path.exists(target))
+        target: str = os.path.join(tmp_dir, "Title (Composer).mscx")
+        assert os.path.exists(target)
         os.remove(target)
 
 

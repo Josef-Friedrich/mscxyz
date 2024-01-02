@@ -18,7 +18,9 @@ def iter(
     Returns a list of XML elements that match the given path or XPath expression.
 
     :param element: The root XML element to search within.
-    :param path: The path to the XML elements, findall is used https://lxml.de/apidoc/lxml.etree.html#lxml.etree._Element.findall see https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath.
+    :param path: The path to the XML elements, findall is
+      used https://lxml.de/apidoc/lxml.etree.html#lxml.etree._Element.findall
+      see https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath.
     :param xpath: The XPath expression to match against the XML elements.
     :return: A list of XML elements that match the XPath expression.
     """

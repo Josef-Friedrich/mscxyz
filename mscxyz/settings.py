@@ -34,3 +34,12 @@ class DefaultArguments:
 
 
 args = DefaultArguments()
+
+
+def reset_args() -> DefaultArguments:
+    """Reset the ``args`` object (the ``argparse`` object) which is stored in
+    the .settings.py submodule for all other submodules to import.
+    """
+    global args
+    args = DefaultArguments()
+    return args

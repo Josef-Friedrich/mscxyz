@@ -77,6 +77,12 @@ def read_file(filename: str) -> str:
     return output
 
 
-def run(*args):
-    args: list[str] = ["mscx-manager"] + list(args)
-    return subprocess.check_output(args).decode("utf-8")
+def run(*args: str) -> str:
+    """
+    Run the mscx-manager command on the command line with the given arguments
+    and return the output as a string.
+
+    :param args: The arguments to pass to the mscx-manager command.
+    :return: The output of the mscx-manager command as a string.
+    """
+    return subprocess.check_output(["mscx-manager"] + list(args)).decode("utf-8")

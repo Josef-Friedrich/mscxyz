@@ -1,5 +1,7 @@
 """Rename MuseScore files"""
 
+from __future__ import annotations
+
 import errno
 import hashlib
 import os
@@ -20,9 +22,9 @@ def create_dir(path: str):
             raise
 
 
-def prepare_fields(fields: dict) -> dict:
+def prepare_fields(fields: dict[str, str]) -> dict[str, str]:
     args = get_args()
-    out = {}
+    out: dict[str, str] = {}
     for field, value in fields.items():
         if value:
             if args.rename_alphanum:
@@ -38,7 +40,7 @@ def prepare_fields(fields: dict) -> dict:
     return out
 
 
-def apply_format_string(fields: dict) -> str:
+def apply_format_string(fields: dict[str, str]) -> str:
     args = get_args()
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
