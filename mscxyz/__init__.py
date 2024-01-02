@@ -126,7 +126,7 @@ def merge_config_into_args(
     return args
 
 
-def heading(args: DefaultArguments, text: str, level: int = 1):
+def heading(args: DefaultArguments, text: str, level: int = 1) -> None:
     length = len(text)
     if args.help_markdown:
         print("\n" + ("#" * level) + " " + text + "\n")
@@ -146,7 +146,7 @@ def heading(args: DefaultArguments, text: str, level: int = 1):
         print(text)
 
 
-def code_block(args: DefaultArguments, text: str):
+def code_block(args: DefaultArguments, text: str) -> None:
     if args.help_markdown:
         print("```\n" + text + "\n```")
     elif args.help_rst:
@@ -155,7 +155,7 @@ def code_block(args: DefaultArguments, text: str):
         print(text)
 
 
-def show_all_help(args: DefaultArguments):
+def show_all_help(args: DefaultArguments) -> None:
     subcommands = ("clean", "meta", "lyrics", "rename", "export", "help")
 
     if args.path == "all":
@@ -191,11 +191,14 @@ def no_error(error, errors):
     return True
 
 
-def execute(args: typing.Sequence[str] | None = None):
-    args = cli.parser.parse_args(args)
-    config = parse_config_ini(args.general_config_file)
-    if config:
-        args = merge_config_into_args(config, args)
+def execute(cli_args: typing.Sequence[str] | None = None):
+    args: DefaultArguments = typing.cast(
+        DefaultArguments, cli.parser.parse_args(cli_args)
+    )
+    if args.general_config_file:
+        config = parse_config_ini(args.general_config_file)
+        if config:
+            args = merge_config_into_args(config, args)
     set_args(args)
 
     if args.subcommand == "help":
@@ -260,7 +263,10 @@ def execute(args: typing.Sequence[str] | None = None):
 
         elif args.subcommand == "export":
             score = MuseScoreFile(file)
-            score.export(extension=args.export_extension)
+            if args.export_extension:
+                score.export(extension=args.export_extension)
+            else:
+                score.export()
 
         report_errors(score.errors)
 
