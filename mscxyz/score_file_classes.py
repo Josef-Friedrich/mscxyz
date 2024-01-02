@@ -23,6 +23,7 @@ import lxml
 import lxml.etree  # Required for the type hints
 from lxml.etree import _Element, _ElementTree, strip_tags
 
+from mscxyz.style import MscoreStyleInterface
 from mscxyz.utils import mscore, re_open
 
 if typing.TYPE_CHECKING:
@@ -192,7 +193,10 @@ class MuseScoreFile:
 
     zip_container: Optional[ZipContainer]
 
+    __style: Optional[MscoreStyleInterface]
+
     def __init__(self, relpath: str) -> None:
+        self.__style = None
         self.errors = []
         self.relpath = relpath
         self.path = Path(relpath).resolve()
@@ -229,6 +233,12 @@ class MuseScoreFile:
         """The extension (``mscx`` or ``mscz``) of the score file, for
         example: ``mscx``."""
         return self.filename.split(".")[-1].lower()
+
+    @property
+    def style(self) -> MscoreStyleInterface:
+        if self.__style is None:
+            self.__style = MscoreStyleInterface(self)
+        return self.__style
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
@@ -405,145 +415,3 @@ class MuseScoreFile:
 
             if mscore:
                 re_open(filename)
-
-
-###############################################################################
-# Class hierarchy level 3
-###############################################################################
-
-
-class MscoreStyleInterface(MuseScoreFile):
-    """
-    Interface specialized for the style manipulation.
-
-    :param relpath: The relative (or absolute) path of a MuseScore file.
-    """
-
-    style: _Element
-
-    def __init__(self, relpath: str):
-        super(MscoreStyleInterface, self).__init__(relpath)
-        styles: _XPathObject = self.xml_tree.xpath("/museScore/Score/Style")
-        if styles:
-            self.style = styles[0]
-            """The ``/museScore/Score/Style`` element object, see
-            https://lxml.de/tutorial.html#the-element-class
-            """
-        else:
-            self.style: _Element = self._create_parent_style()
-
-    def _create_parent_style(self):
-        score: _XPathObject = self.xml_tree.xpath("/museScore/Score")
-        return lxml.etree.SubElement(score[0], "Style")
-
-    def _create(self, tag: str) -> _Element:
-        """
-        :param tag: Nested tags are supported, for example ``TextStyle/halign``
-        """
-        tags = tag.split("/")
-        parent = self.style
-        for tag in tags:
-            element = parent.find(tag)
-            if element is None:
-                parent = lxml.etree.SubElement(parent, tag)
-            else:
-                parent = element
-        return parent
-
-    def get_element(self, element_path: str, create: bool = False) -> _Element:
-        """
-        Get a lxml element which is parent to the ``Style`` tag.
-
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
-        :param create: Create the element if not present in the parent
-          ``Style`` tag.
-
-        Example code:
-
-        .. code:: Python
-
-            # Set attributes on a maybe non-existent style tag.
-            # <measureNumberOffset x="0.5" y="-2"/>
-            test = MscoreStyleInterface('text.mscx')
-            element = test.get_element('measureNumberOffset', create=True)
-            element.attrib['x'] = '0.5'
-            element.attrib['y'] = '-2'
-            test.save()
-        """
-        element = self.style.find(element_path)
-        if element is None and create:
-            element = self._create(element_path)
-        return element
-
-    def get_value(self, element_path: str) -> str:
-        """
-        Get the value (text) of a style tag.
-
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
-        """
-        element = self.get_element(element_path)
-        return element.text
-
-    def set_attributes(self, element_path: str, attributes: dict) -> _Element:
-        """Set attributes on a style child tag.
-
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
-        """
-        element: _Element = self.get_element(element_path, create=True)
-        for name, value in attributes.items():
-            element.attrib[name] = str(value)
-        return element
-
-    def set_value(self, element_path: str, value: str):
-        """
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
-        """
-        element = self.style.find(element_path)
-        if element is None:
-            element: _Element = self._create(element_path)
-        element.text = str(value)
-
-    def _get_text_style_element(self, name: str) -> _Element:
-        if self.version_major != 2:
-            raise ValueError(
-                "This operation is only allowed for MuseScore 2 score files"
-            )
-        xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
-        child = self.xml_tree.xpath(xpath)
-        if child:
-            return child[0].getparent()
-        else:
-            el_text_style: _Element = lxml.etree.SubElement(self.style, "TextStyle")
-            el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
-            el_name.text = name
-            return el_text_style
-
-    def get_text_style(self, name: str) -> dict:
-        """Get text styles. Only MuseScore2!
-
-        :param name: The name of the text style.
-        """
-        text_style = self._get_text_style_element(name)
-        out = {}
-        for child in text_style.iterchildren():
-            out[child.tag] = child.text
-        return out
-
-    def set_text_style(self, name: str, values: dict):
-        """Set text styles. Only MuseScore2!
-
-        :param name: The name of the text style.
-        :param values: A dictionary. The keys are the tag names, values are
-          the text values of the child tags, for example
-          ``{size: 14, bold: 1}``.
-        """
-        text_style = self._get_text_style_element(name)
-        for element_name, value in values.items():
-            el = text_style.find(element_name)
-            if el is None:
-                el = lxml.etree.SubElement(text_style, element_name)
-            el.text = str(value)

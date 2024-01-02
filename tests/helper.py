@@ -11,6 +11,7 @@ from pathlib import Path
 from lxml.etree import _ElementTree
 
 from mscxyz import MuseScoreFile
+from mscxyz.style import MscoreStyleInterface
 
 # if typing.TYPE_CHECKING:
 
@@ -58,6 +59,14 @@ def get_file(filename: str, version: int = 2) -> str:
     return tmp
 
 
+def get_score(filename: str, version: int = 2) -> MuseScoreFile:
+    return MuseScoreFile(get_file(filename, version))
+
+
+def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:
+    return get_score(filename, version).style
+
+
 def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     """
     Get the XML tree from the specified file.
@@ -66,7 +75,7 @@ def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     :param version: The version of the file (default is 2).
     :return: The XML tree.
     """
-    return MuseScoreFile(get_file(filename, version)).xml_tree
+    return get_score(filename, version).xml_tree
 
 
 def read_file(filename: str) -> str:

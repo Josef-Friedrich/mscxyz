@@ -1,0 +1,160 @@
+from __future__ import annotations
+
+from mscxyz.score_file_classes import (
+    MscoreStyleInterface,
+    MuseScoreFile,
+)
+from tests import helper
+
+
+def reload(score: MuseScoreFile) -> MscoreStyleInterface:
+    """
+    Reloads the style of the given MuseScore file.
+
+    :param score: The MuseScore file to reload the style from.
+    :return: The reloaded style.
+    """
+    score = MuseScoreFile(score.abspath)
+    return score.style
+
+
+class TestClassStyle:
+    """Test on MuseScore Version 2"""
+
+    score: MuseScoreFile
+
+    def setup_method(self) -> None:
+        self.score = helper.get_score("All_Dudes.mscx", version=2)
+
+    def test_attributes_style(self) -> None:
+        assert self.score.style.style.tag == "Style"
+
+    def test_method_get(self) -> None:
+        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+
+    def test_method_get_muliple_element_path(self) -> None:
+        assert self.score.style.get_value("page-layout/page-height") == "1584"
+
+    def test_method_get_element(self) -> None:
+        assert self.score.style.get_element("voltaY").tag == "voltaY"
+
+    def test_method_get_element_create(self) -> None:
+        score: MuseScoreFile = helper.get_score("All_Dudes.mscx", version=2)
+        assert score.style.get_element("XXX") is None
+        element = score.style.get_element("XXX", create=True)
+        element.attrib["y"] = "YYY"
+        assert element.tag == "XXX"
+        score.save()
+
+        score_new = MuseScoreFile(score.abspath)
+        assert score_new.style.get_element("XXX").attrib["y"] == "YYY"
+
+    def test_method_get_value(self) -> None:
+        assert self.score.style.get_value("voltaY") == "-2"
+
+    def test_method_set_value(self) -> None:
+        self.score.style.set_value("staffUpperBorder", 99)
+        self.score.save()
+        assert reload(self.score).get_value("staffUpperBorder") == "99"
+
+    def test_method_set_value_create(self) -> None:
+        self.score.style.set_value("lol", "lol")
+        self.score.save()
+        assert reload(self.score).get_value("lol") == "lol"
+
+    def test_method_set_value_muliple_element_path(self) -> None:
+        self.score.style.set_value("page-layout/page-height", 99)
+        self.score.save()
+        assert reload(self.score).get_value("page-layout/page-height") == "99"
+
+    def test_method_set_muliple_element_path_multiple_times(self) -> None:
+        style = self.score.style
+        style.set_value("page-layout/page-height", 99)
+        style.set_value("page-layout/page-width", 100)
+        style.set_value("page-layout/page-depth", 101)
+        self.score.save()
+        style_new = reload(self.score)
+        assert style_new.get_value("page-layout/page-depth") == "101"
+        assert style_new.get_value("page-layout/page-height") == "99"
+        assert style_new.get_value("page-layout/page-width") == "100"
+
+    def test_method_set_attributes(self) -> None:
+        helper.get_score
+        score = helper.get_score("All_Dudes.mscx", version=3)
+        score.style.set_attributes("XXX", {"one": 1, "two": 2})
+        score.save()
+        assert reload(score).get_element("XXX").attrib["one"] == "1"
+
+    def test_method_get_text_style(self) -> None:
+        title = self.score.style.get_text_style("Title")
+        assert title == {
+            "halign": "center",
+            "size": "28",
+            "family": "MuseJazz",
+            "bold": "1",
+            "valign": "top",
+            "name": "Title",
+            "offsetType": "absolute",
+        }
+
+    def test_method_set_text_style(self) -> None:
+        self.score.style.set_text_style("Title", {"size": 99})
+        self.score.save()
+
+        title = reload(self.score).get_text_style("Title")
+        assert title["size"] == "99"
+
+
+class TestClassMscoreStyleInterface3:
+    """Test on MuseScore Version 3"""
+
+    score: MuseScoreFile
+
+    def setup_method(self) -> None:
+        self.score = helper.get_score("All_Dudes.mscx", version=3)
+
+    def test_attributes_style(self) -> None:
+        assert self.score.style.style.tag == "Style"
+
+    def test_method_get(self) -> None:
+        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+
+    def test_method_set(self) -> None:
+        self.score.style.set_value("staffUpperBorder", 99)
+        self.score.save()
+        assert reload(self.score).get_value("staffUpperBorder") == "99"
+
+    def test_method_set_create(self) -> None:
+        self.score.style.set_value("lol", "lol")
+        self.score.save()
+        assert reload(self.score).get_value("lol") == "lol"
+
+
+class TestClassMscoreStyleInterfaceWithoutTags:
+    score: MuseScoreFile
+
+    def setup_method(self) -> None:
+        self.score = helper.get_score("without-style.mscx")
+
+    def test_load(self) -> None:
+        assert self.score.style.style.tag == "Style"
+
+    def test_method_set(self) -> None:
+        self.score.style.set_value("staffUpperBorder", 99)
+        self.score.save()
+        assert reload(self.score).get_value("staffUpperBorder") == "99"
+
+    def test_method_set_element_path_multiple(self) -> None:
+        self.score.style.set_value("lol/troll", 99)
+        self.score.save()
+        assert reload(self.score).get_value("lol/troll") == "99"
+
+    def test_method_get_text_style_unkown(self) -> None:
+        unkown = self.score.style.get_text_style("Unkown")
+        assert unkown == {"name": "Unkown"}
+
+    def test_method_set_text_style_unkown(self) -> None:
+        self.score.style.set_text_style("Unkown", {"size": 99})
+        self.score.save()
+        unkown = reload(self.score).get_text_style("Unkown")
+        assert unkown["size"] == "99"
