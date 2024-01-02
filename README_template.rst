@@ -8,27 +8,21 @@
 mscxyz
 ======
 
-Manipulate the XML based mscx files of the notation software MuseScore.
+Manipulate the XML based .mscx and .mscz files of the notation software MuseScore.
 
 Installation
 ============
 
-From Github
------------
-
-.. code:: Shell
-
-    git clone https://github.com/Josef-Friedrich/mscxyz.git
-    cd mscxyz
-    python setup.py install
-
-From PyPI
----------
-
 .. code:: Shell
 
     pip install mscxyz
-    easy_install mscxyz
+
+
+Other MuseScore related projects 
+================================
+
+* https://github.com/johentsch/ms3
+
 
 Usage
 =====
