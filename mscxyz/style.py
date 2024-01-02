@@ -7,9 +7,9 @@ import lxml
 import lxml.etree
 from lxml.etree import _Element
 
-if typing.TYPE_CHECKING:
-    from lxml.etree import _XPathObject
+from mscxyz.xml import find_safe
 
+if typing.TYPE_CHECKING:
     from mscxyz.score_file_classes import MuseScoreFile
 
 
@@ -22,29 +22,31 @@ class MscoreStyleInterface:
 
     score: "MuseScoreFile"
 
-    style: _Element
+    element: _Element
+    """The ``/museScore/Score/Style`` element object, see
+    https://lxml.de/tutorial.html#the-element-class
+    """
 
     def __init__(self, score: "MuseScoreFile"):
         self.score = score
-        styles: _XPathObject = self.score.xml_tree.xpath("/museScore/Score/Style")
-        if styles:
-            self.style = styles[0]
-            """The ``/museScore/Score/Style`` element object, see
-            https://lxml.de/tutorial.html#the-element-class
-            """
+        element = self.score.xml_tree.find("Score/Style")
+        if element is not None:
+            self.element = element
         else:
-            self.style: _Element = self._create_parent_style()
+            self.element: _Element = self._create_parent_style()
 
     def _create_parent_style(self):
-        score: _XPathObject = self.score.xml_tree.xpath("/museScore/Score")
-        return lxml.etree.SubElement(score[0], "Style")
+        score = self.score.xml_tree.find("Score")
+        if score is None:
+            raise ValueError("The score file has no <Score> tag.")
+        return lxml.etree.SubElement(score, "Style")
 
     def _create(self, tag: str) -> _Element:
         """
         :param tag: Nested tags are supported, for example ``TextStyle/halign``
         """
         tags = tag.split("/")
-        parent = self.style
+        parent = self.element
         for tag in tags:
             element = parent.find(tag)
             if element is None:
@@ -55,7 +57,7 @@ class MscoreStyleInterface:
 
     def get_element(self, element_path: str, create: bool = False) -> _Element:
         """
-        Get a lxml element which is parent to the ``Style`` tag.
+        Determines an lxml element that is parent to the ``style`` tag
 
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
@@ -74,7 +76,7 @@ class MscoreStyleInterface:
             element.attrib['y'] = '-2'
             test.save()
         """
-        element = self.style.find(element_path)
+        element = self.element.find(element_path)
         if element is None and create:
             element = self._create(element_path)
         return element
@@ -107,7 +109,7 @@ class MscoreStyleInterface:
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element = self.style.find(element_path)
+        element = self.element.find(element_path)
         if element is None:
             element: _Element = self._create(element_path)
         element.text = str(value)
@@ -117,17 +119,16 @@ class MscoreStyleInterface:
             raise ValueError(
                 "This operation is only allowed for MuseScore 2 score files"
             )
-        xpath = '//TextStyle/name[contains(., "{}")]'.format(name)
-        child = self.score.xml_tree.xpath(xpath)
+        child = self.score.xml_tree.xpath(f'//TextStyle/name[contains(., "{name}")]')
         if child:
             return child[0].getparent()
         else:
-            el_text_style: _Element = lxml.etree.SubElement(self.style, "TextStyle")
+            el_text_style: _Element = lxml.etree.SubElement(self.element, "TextStyle")
             el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
             el_name.text = name
             return el_text_style
 
-    def get_text_style(self, name: str) -> dict[str, str | int | float]:
+    def get_text_style(self, name: str) -> dict[str, str]:
         """Get text styles. Only MuseScore2!
 
         :param name: The name of the text style.
@@ -153,7 +154,7 @@ class MscoreStyleInterface:
                 el = lxml.etree.SubElement(text_style, element_name)
             el.text = str(value)
 
-    def merge(self, styles: str):
+    def merge(self, styles: str) -> None:
         """Merge styles into the XML tree.
 
         :param styles: The path of the style file or a string containing
@@ -221,5 +222,5 @@ class MscoreStyleInterface:
             post = "</Style></museScore>"
             style = lxml.etree.XML(pre + styles + post)
 
-        for score in self.score.xml_tree.xpath("/museScore/Score"):
-            score.insert(0, style[0])
+        parent = find_safe(self.score.xml_root, "Score")
+        parent.insert(0, style[0])

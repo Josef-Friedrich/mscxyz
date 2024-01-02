@@ -27,7 +27,7 @@ class TestClassStyle:
         self.score = helper.get_score("All_Dudes.mscx", version=2)
 
     def test_attributes_style(self) -> None:
-        assert self.score.style.style.tag == "Style"
+        assert self.score.style.element.tag == "Style"
 
     def test_method_get(self) -> None:
         assert self.score.style.get_value("staffUpperBorder") == "6.5"
@@ -114,7 +114,7 @@ class TestClassMscoreStyleInterface3:
         self.score = helper.get_score("All_Dudes.mscx", version=3)
 
     def test_attributes_style(self) -> None:
-        assert self.score.style.style.tag == "Style"
+        assert self.score.style.element.tag == "Style"
 
     def test_method_get(self) -> None:
         assert self.score.style.get_value("staffUpperBorder") == "6.5"
@@ -137,7 +137,7 @@ class TestClassMscoreStyleInterfaceWithoutTags:
         self.score = helper.get_score("without-style.mscx")
 
     def test_load(self) -> None:
-        assert self.score.style.style.tag == "Style"
+        assert self.score.style.element.tag == "Style"
 
     def test_method_set(self) -> None:
         self.score.style.set_value("staffUpperBorder", 99)
