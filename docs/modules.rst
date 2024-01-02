@@ -39,7 +39,18 @@ mscxyz.settings module
 
 .. automodule:: mscxyz.settings
 
+mscxyz.style 
+^^^^^^^^^^^^
+
+.. automodule:: mscxyz.style
+
 mscxyz.utils module
 ^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.utils
+
+
+mscxyz.xml module
+^^^^^^^^^^^^^^^^^
+
+.. automodule:: mscxyz.xml

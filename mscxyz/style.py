@@ -7,7 +7,7 @@ import lxml
 import lxml.etree
 from lxml.etree import _Element
 
-from mscxyz.xml import find_safe
+from mscxyz.xml import find_safe, xpath
 
 if typing.TYPE_CHECKING:
     from mscxyz.score_file_classes import MuseScoreFile
@@ -57,7 +57,7 @@ class MscoreStyleInterface:
 
     def get_element(self, element_path: str, create: bool = False) -> _Element:
         """
-        Determines an lxml element that is parent to the ``style`` tag
+        Determines an lxml element that is a child to the ``Style`` tag
 
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
@@ -119,9 +119,16 @@ class MscoreStyleInterface:
             raise ValueError(
                 "This operation is only allowed for MuseScore 2 score files"
             )
-        child = self.score.xml_tree.xpath(f'//TextStyle/name[contains(., "{name}")]')
-        if child:
-            return child[0].getparent()
+
+        child: _Element | None = xpath(
+            self.score.xml_root, f'//TextStyle/name[contains(., "{name}")]'
+        )
+
+        if child is not None:
+            el: _Element | None = child.getparent()
+            if el is None:
+                raise ValueError(f"Parent not found on element {el}!")
+            return el
         else:
             el_text_style: _Element = lxml.etree.SubElement(self.element, "TextStyle")
             el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
@@ -129,21 +136,47 @@ class MscoreStyleInterface:
             return el_text_style
 
     def get_text_style(self, name: str) -> dict[str, str]:
-        """Get text styles. Only MuseScore2!
+        """Get text styles as a dictonary. Only MuseScore2!
 
-        :param name: The name of the text style.
+        .. code :: XML
+
+            <Style>
+                <TextStyle>
+                    <halign>center</halign>
+                    <valign>top</valign>
+                    <offsetType>absolute</offsetType>
+                    <name>Title</name>
+                    <family>MuseJazz</family>
+                    <size>28</size>
+                    <bold>1</bold>
+                </TextStyle>
+            </Style>
+
+        .. code :: Python
+
+            {
+                "halign": "center",
+                "size": "28",
+                "family": "MuseJazz",
+                "bold": "1",
+                "valign": "top",
+                "name": "Title",
+                "offsetType": "absolute",
+            }
+
+        :param name: The name of the text style, for example ``Title``, ``Subtitle``, ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.
         """
         text_style = self._get_text_style_element(name)
         out: dict[str, str] = {}
         for child in text_style.iterchildren():
-            out[child.tag] = child.text
+            if child.text is not None:
+                out[child.tag] = child.text
         return out
 
     def set_text_style(self, name: str, values: dict[str, str | int | float]) -> None:
         """Set text styles. Only MuseScore2!
 
-        :param name: The name of the text style.
-        :param values: A dictionary. The keys are the tag names, values are
+        :param name: The name of the text style, for example ``Title``, ``Subtitle``, ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.        :param values: A dictionary. The keys are the tag names, values are
           the text values of the child tags, for example
           ``{size: 14, bold: 1}``.
         """

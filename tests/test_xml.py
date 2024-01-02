@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from mscxyz.xml import find_safe, xpath_safe, xpathall_safe
+from mscxyz.xml import find_safe, xpath, xpath_safe, xpathall, xpathall_safe
 from tests import helper
 
 tree = helper.get_xml_tree("simple.mscz", 4)
@@ -17,6 +17,11 @@ def test_find_safe():
     assert element.tag == "Score"
 
 
+def test_xpath():
+    element = xpath(root, ".//xxxxxxx")
+    assert element is None
+
+
 class TestXpathSave:
     def test_xpath_safe(self):
         element = xpath_safe(root, ".//Score")
@@ -26,6 +31,11 @@ class TestXpathSave:
         with pytest.raises(ValueError) as e:
             xpath_safe(root, ".//metaTag")
         assert "XPath “.//metaTag” found more than one element in" in e.value.args[0]
+
+
+def test_xpathall():
+    element = xpathall(root, ".//xxxxxxx")
+    assert element is None
 
 
 def test_xpathall_safe():
