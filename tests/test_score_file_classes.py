@@ -112,35 +112,6 @@ class TestClassMuseScoreFile:
     def test_attribute_basename(self) -> None:
         assert self.file.basename == "simple"
 
-    def test_method_merge_style(self) -> None:
-        tree = MuseScoreFile(helper.get_file("simple.mscx"))
-        styles = """
-            <TextStyle>
-              <halign>center</halign>
-              <valign>bottom</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-1</yoffset>
-              <offsetType>spatium</offsetType>
-              <name>Form Section</name>
-              <family>Alegreya Sans</family>
-              <size>12</size>
-              <bold>1</bold>
-              <italic>1</italic>
-              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-              <frameWidthS>0.1</frameWidthS>
-              <paddingWidthS>0.2</paddingWidthS>
-              <frameRound>0</frameRound>
-              <frameColor r="0" g="0" b="0" a="255"/>
-              </TextStyle>
-        """
-        tree.clean()
-        tree.merge_style(styles)
-
-        xml_tree = tree.xml_tree
-        result = xml_tree.xpath("/museScore/Score/Style")
-        assert result[0][0][0].tag == "halign"
-        assert result[0][0][0].text == "center"
-
     def test_method_clean(self) -> None:
         tmp = helper.get_file("clean.mscx", version=3)
         tree = MuseScoreFile(tmp)

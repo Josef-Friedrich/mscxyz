@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 import typing
 
 import lxml
+import lxml.etree
 from lxml.etree import _Element
 
 if typing.TYPE_CHECKING:
@@ -150,3 +152,74 @@ class MscoreStyleInterface:
             if el is None:
                 el = lxml.etree.SubElement(text_style, element_name)
             el.text = str(value)
+
+    def merge(self, styles: str):
+        """Merge styles into the XML tree.
+
+        :param styles: The path of the style file or a string containing
+          the XML style markup.
+
+        ``styles`` may not contain surrounding ``<Style>`` tags. This input is
+        valid:
+
+        .. code :: XML
+
+            <TextStyle>
+              <halign>center</halign>
+              <valign>bottom</valign>
+              <xoffset>0</xoffset>
+              <yoffset>-1</yoffset>
+              <offsetType>spatium</offsetType>
+              <name>Form Section</name>
+              <family>Alegreya Sans</family>
+              <size>12</size>
+              <bold>1</bold>
+              <italic>1</italic>
+              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+              <frameWidthS>0.1</frameWidthS>
+              <paddingWidthS>0.2</paddingWidthS>
+              <frameRound>0</frameRound>
+              <frameColor r="0" g="0" b="0" a="255"/>
+              </TextStyle>
+
+        This input is invalid:
+
+        .. code :: XML
+
+            <?xml version="1.0"?>
+            <museScore version="2.06">
+              <Style>
+                <TextStyle>
+                  <halign>center</halign>
+                  <valign>bottom</valign>
+                  <xoffset>0</xoffset>
+                  <yoffset>-1</yoffset>
+                  <offsetType>spatium</offsetType>
+                  <name>Form Section</name>
+                  <family>Alegreya Sans</family>
+                  <size>12</size>
+                  <bold>1</bold>
+                  <italic>1</italic>
+                  <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+                  <frameWidthS>0.1</frameWidthS>
+                  <paddingWidthS>0.2</paddingWidthS>
+                  <frameRound>0</frameRound>
+                  <frameColor r="0" g="0" b="0" a="255"/>
+                  </TextStyle>
+                </Style>
+              </museScore>
+
+        """
+        if os.path.exists(styles):
+            style: _Element = lxml.etree.parse(styles).getroot()
+        else:
+            # <?xml ... tag without encoding to avoid this error:
+            # ValueError: Unicode strings with encoding declaration are
+            # not supported. Please use bytes input or XML fragments without
+            # declaration.
+            pre = '<?xml version="1.0"?><museScore version="2.06"><Style>'
+            post = "</Style></museScore>"
+            style = lxml.etree.XML(pre + styles + post)
+
+        for score in self.score.xml_tree.xpath("/museScore/Score"):
+            score.insert(0, style[0])

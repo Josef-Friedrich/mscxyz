@@ -158,3 +158,33 @@ class TestClassMscoreStyleInterfaceWithoutTags:
         self.score.save()
         unkown = reload(self.score).get_text_style("Unkown")
         assert unkown["size"] == "99"
+
+
+def test_method_merge_style() -> None:
+    score = helper.get_score("simple.mscx")
+    styles = """
+        <TextStyle>
+            <halign>center</halign>
+            <valign>bottom</valign>
+            <xoffset>0</xoffset>
+            <yoffset>-1</yoffset>
+            <offsetType>spatium</offsetType>
+            <name>Form Section</name>
+            <family>Alegreya Sans</family>
+            <size>12</size>
+            <bold>1</bold>
+            <italic>1</italic>
+            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+            <frameWidthS>0.1</frameWidthS>
+            <paddingWidthS>0.2</paddingWidthS>
+            <frameRound>0</frameRound>
+            <frameColor r="0" g="0" b="0" a="255"/>
+            </TextStyle>
+    """
+    score.clean()
+    score.style.merge(styles)
+
+    result = score.xml_tree.find("Score/Style")
+    assert result is not None
+    assert result[0][0].tag == "halign"
+    assert result[0][0].text == "center"
