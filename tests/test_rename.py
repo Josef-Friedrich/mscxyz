@@ -48,12 +48,6 @@ class TestIntegration:
         return os.path.join(os.getcwd(), filename)
 
     @staticmethod
-    def _execute(args: list[str]):
-        with helper.Capturing() as output:
-            mscxyz.execute(args)
-        return output
-
-    @staticmethod
     def _exists_in_cwd(filename: str) -> bool:
         return os.path.exists(os.path.join(os.getcwd(), filename))
 
@@ -62,13 +56,13 @@ class TestIntegration:
         return os.remove(os.path.join(os.getcwd(), filename))
 
     def _test_simple(self, version: int) -> None:
-        output = self._execute(
-            ["--config-file", ini_file, "rename", self._get("simple.mscx", version)]
+        output: str = helper.run(
+            "--config-file", ini_file, "rename", self._get("simple.mscx", version)
         )
         target: str = self._target_path_cwd("Title (Composer).mscx")
         assert os.path.exists(target)
-        assert "simple.mscx -> " in " ".join(output)
-        assert "Title (Composer).mscx" in " ".join(output)
+        assert "simple.mscx -> " in output
+        assert "Title (Composer).mscx" in output
         os.remove(target)
 
     def test_simple(self) -> None:
@@ -76,10 +70,10 @@ class TestIntegration:
         self._test_simple(version=3)
 
     def _test_without_arguments(self, version: int) -> None:
-        output = self._execute(["rename", self._get("meta-all-values.mscx", version)])
+        output: str = helper.run("rename", self._get("meta-all-values.mscx", version))
         target: str = self._target_path_cwd("vbox_title (vbox_composer).mscx")
         assert os.path.exists(target)
-        assert "vbox_title (vbox_composer).mscx" in " ".join(output)
+        assert "vbox_title (vbox_composer).mscx" in output
         os.remove(target)
 
     def test_without_arguments(self) -> None:
@@ -87,27 +81,25 @@ class TestIntegration:
         self._test_without_arguments(version=3)
 
     def test_format(self) -> None:
-        output = self._execute(
-            [
-                "rename",
-                "--format",
-                "${vbox_composer}_${vbox_title}",
-                self._get("simple.mscx"),
-            ]
+        output: str = helper.run(
+            "rename",
+            "--format",
+            "${vbox_composer}_${vbox_title}",
+            self._get("simple.mscx"),
         )
         target = self._target_path_cwd("Composer_Title.mscx")
         assert os.path.exists(target)
-        assert "Composer_Title.mscx" in " ".join(output)
+        assert "Composer_Title.mscx" in output
         os.remove(target)
 
     def test_no_whitespace(self) -> None:
-        output = self._execute(
-            ["rename", "--no-whitespace", self._get("meta-real-world.mscx")]
+        output: str = helper.run(
+            "rename", "--no-whitespace", self._get("meta-real-world.mscx")
         )
-        n = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx"
-        target: str = self._target_path_cwd(n)
+        new_name = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx"
+        target: str = self._target_path_cwd(new_name)
         assert os.path.exists(target)
-        assert n in " ".join(output)
+        assert new_name in output
         os.remove(target)
 
     def test_alphanum(self) -> None:

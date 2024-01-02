@@ -8,7 +8,6 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from jflib import Capturing  # noqa: F401
 from lxml.etree import _ElementTree
 
 from mscxyz import MscoreXmlTree
