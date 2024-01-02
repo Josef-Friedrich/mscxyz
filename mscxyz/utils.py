@@ -240,3 +240,11 @@ def xpathall_safe(element: _Element, path: str) -> list[_Element]:
     if output is None:
         raise ValueError(f"XPath “{path}” not found in element {element}!")
     return output
+
+
+def text(element: _Element | None) -> str | None:
+    if element is None:
+        return None
+    if element.text is None:
+        return None
+    return element.text

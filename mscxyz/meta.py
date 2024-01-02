@@ -11,8 +11,9 @@ import lxml.etree
 import tmep
 from lxml.etree import _Element
 
+from mscxyz import utils
 from mscxyz.score import Score
-from mscxyz.utils import color, get_args
+from mscxyz.utils import color, get_args, xpath
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -142,13 +143,18 @@ class MetaTag:
         self.xml_root = xml_root
 
     def _get_element(self, field: str) -> _Element | None:
-        for element in self.xml_root.xpath('//metaTag[@name="' + field + '"]'):
-            return element
+        return xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
 
     def _get_text(self, field: str) -> str | None:
         element: _Element | None = self._get_element(field)
-        if hasattr(element, "text"):
-            return element.text
+        return utils.text(element)
+
+    def _set_text(self, field: str, value: str) -> None:
+        element: _Element | None = self._get_element(field)
+        if element is not None:
+            element.text = value
+        else:
+            raise AttributeError(f"Field “{field}” not found!")
 
     def __getattr__(self, field: str):
         field = self._to_camel_case(field)
@@ -162,7 +168,7 @@ class MetaTag:
             self.__dict__[field] = value
         else:
             field = self._to_camel_case(field)
-            self._get_element(field).text = value
+            self._set_text(field, value)
 
     def clean(self):
         fields = (
@@ -224,9 +230,7 @@ class Vbox:
             vbox = lxml.etree.Element("VBox")
             height = lxml.etree.SubElement(vbox, "height")
             height.text = "10"
-
-            for element in xml_root.xpath(xpath):
-                element.insert(0, vbox)
+            utils.xpath_safe(xml_root, xpath).insert(0, vbox)
 
     def _get_tag(self, style: str) -> _Element | None:
         """
@@ -296,46 +300,46 @@ class Combined(Score):
 
     xml_root: _Element
 
-    def __init__(self, xml_root: _Element):
+    def __init__(self, xml_root: _Element) -> None:
         self.xml_root = xml_root
         self.metatag = MetaTag(xml_root)
         self.vbox = Vbox(xml_root)
 
-    def _pick_value(self, *values):
+    def _pick_value(self, *values: str | None) -> str | None:
         for value in values:
             if value:
                 return value
 
     @property
-    def title(self):
+    def title(self) -> str | None:
         return self._pick_value(self.vbox.Title, self.metatag.workTitle)
 
     @title.setter
-    def title(self, value):
+    def title(self, value: str) -> None:
         self.vbox.Title = self.metatag.workTitle = value
 
     @property
-    def subtitle(self):
+    def subtitle(self) -> str | None:
         return self._pick_value(self.vbox.Subtitle, self.metatag.movementTitle)
 
     @subtitle.setter
-    def subtitle(self, value):
+    def subtitle(self, value: str) -> None:
         self.vbox.Subtitle = self.metatag.movementTitle = value
 
     @property
-    def composer(self):
+    def composer(self) -> str | None:
         return self._pick_value(self.vbox.Composer, self.metatag.composer)
 
     @composer.setter
-    def composer(self, value):
+    def composer(self, value: str) -> None:
         self.vbox.Composer = self.metatag.composer = value
 
     @property
-    def lyricist(self):
+    def lyricist(self) -> str | None:
         return self._pick_value(self.vbox.Lyricist, self.metatag.lyricist)
 
     @lyricist.setter
-    def lyricist(self, value):
+    def lyricist(self, value: str) -> None:
         self.vbox.Lyricist = self.metatag.lyricist = value
 
 
@@ -373,12 +377,12 @@ class InterfaceReadWrite:
     def export_to_dict(self):
         return export_to_dict(self, self.fields)
 
-    def __getattr__(self, field):
+    def __getattr__(self, field: str):
         parts = self._split(field)
         obj = getattr(self, parts["object"])
         return getattr(obj, parts["field"])
 
-    def __setattr__(self, field, value):
+    def __setattr__(self, field: str, value: str):
         if field in ("fields", "metatag", "objects", "vbox", "combined"):
             self.__dict__[field] = value
         else:
@@ -435,17 +439,17 @@ class InterfaceReadOnly:
 class Interface:
     xml_tree: Score
 
-    def __init__(self, tree: Score):
+    def __init__(self, tree: Score) -> None:
         self.xml_tree = tree
         self.read_only = InterfaceReadOnly(tree)
         self.read_write = InterfaceReadWrite(tree.xml_root)
-        self.fields = self.get_all_fields()
+        self.fields: list[str] = self.get_all_fields()
 
     @staticmethod
-    def get_all_fields():
+    def get_all_fields() -> list[str]:
         return sorted(InterfaceReadOnly.fields + InterfaceReadWrite.get_all_fields())
 
-    def export_to_dict(self):
+    def export_to_dict(self) -> dict[str, str]:
         return export_to_dict(self, self.fields)
 
     def __getattr__(self, field: str):
@@ -454,7 +458,7 @@ class Interface:
         else:
             return getattr(self.read_write, field)
 
-    def __setattr__(self, field: str, value):
+    def __setattr__(self, field: str, value: str) -> None:
         if field in ("xml_tree", "read_only", "read_write", "fields"):
             self.__dict__[field] = value
         elif not re.match(r"^readonly_", field):
@@ -464,7 +468,7 @@ class Interface:
 
 
 class Meta(Score):
-    def __init__(self, relpath: str):
+    def __init__(self, relpath: str) -> None:
         super(Meta, self).__init__(relpath)
 
         if not self.errors:
@@ -474,19 +478,19 @@ class Meta(Score):
             self.interface_read_write = InterfaceReadWrite(self.xml_root)
             self.interface = Interface(self)
 
-    def sync_fields(self):
+    def sync_fields(self) -> None:
         if not self.errors:
             self.combined.title = self.combined.title
             self.combined.subtitle = self.combined.subtitle
             self.combined.composer = self.combined.composer
             self.combined.lyricist = self.combined.lyricist
 
-    def distribute_field(self, source_fields, format_string):
-        source_fields = source_fields.split(",")
-        for source_field in source_fields:
+    def distribute_field(self, source_fields: str, format_string: str) -> None:
+        f: list[str] = source_fields.split(",")
+        for source_field in f:
             try:
                 source = getattr(self.interface, source_field)
-                results = distribute_field(source, format_string)
+                results: dict[str, str] = distribute_field(source, format_string)
                 if results:
                     for field, value in results.items():
                         setattr(self.interface, field, value)
@@ -494,12 +498,12 @@ class Meta(Score):
             except UnmatchedFormatStringError as error:
                 self.errors.append(error)
 
-    def write_to_log_file(self, log_file, format_string):
+    def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
         log.write(tmep.parse(format_string, self.interface.export_to_dict()) + "\n")
         log.close()
 
-    def set_field(self, destination_field, format_string):
+    def set_field(self, destination_field: str, format_string: str) -> None:
         field_value = tmep.parse(format_string, self.interface.export_to_dict())
         setattr(self.interface, destination_field, field_value)
 
