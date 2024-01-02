@@ -78,7 +78,7 @@ def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     return get_score(filename, version).xml_tree
 
 
-def read_file(filename: str) -> str:
+def read_file(filename: str | Path) -> str:
     tmp = open(filename)
     output = tmp.read()
     tmp.close()

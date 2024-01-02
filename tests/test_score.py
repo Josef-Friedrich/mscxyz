@@ -11,6 +11,7 @@ from typing import Optional
 from unittest import mock
 
 import pytest
+from lxml.etree import _Element
 
 import mscxyz
 from mscxyz.score import (
@@ -35,85 +36,84 @@ class TestFunctions:
             return list_scores(path, extension, glob)
 
     @mock.patch("mscxyz.Meta")
-    def test_batch(self, Meta):
+    def test_batch(self, Meta: mock.Mock) -> None:
         mscxyz.execute(["meta", helper.get_dir("batch")])
         assert Meta.call_count == 3
 
-    def test_without_extension(self):
-        result = self._list_scores("/test")
+    def test_without_extension(self) -> None:
+        result: list[str] = self._list_scores("/test")
         assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
 
-    def test_extension_both(self):
-        result = self._list_scores("/test", extension="both")
+    def test_extension_both(self) -> None:
+        result: list[str] = self._list_scores("/test", extension="both")
         assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
 
-    def test_extension_mscx(self):
-        result = self._list_scores("/test", extension="mscx")
+    def test_extension_mscx(self) -> None:
+        result: list[str] = self._list_scores("/test", extension="mscx")
         assert result == ["/a/b/dolor.mscx", "/a/lorem.mscx"]
 
-    def test_extension_mscz(self):
-        result = self._list_scores("/test", extension="mscz")
+    def test_extension_mscz(self) -> None:
+        result: list[str] = self._list_scores("/test", extension="mscz")
         assert result == ["/a/b/impsum.mscz"]
 
-    def test_raises_exception(self):
+    def test_raises_exception(self) -> None:
         with pytest.raises(ValueError):
             self._list_scores("/test", extension="lol")
 
-    def test_isfile(self):
+    def test_isfile(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
             result = list_scores("/a/b/lorem.mscx")
             assert result == ["/a/b/lorem.mscx"]
 
-    def test_isfile_no_match(self):
+    def test_isfile_no_match(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
-            result = list_scores("/a/b/lorem.lol")
+            result: list[str] = list_scores("/a/b/lorem.lol")
             assert result == []
 
-    def test_arg_glob_txt(self):
-        result = self._list_scores("/test", glob="*.txt")
+    def test_arg_glob_txt(self) -> None:
+        result: list[str] = self._list_scores("/test", glob="*.txt")
         assert result == ["/a/b/sit.txt"]
 
-    def test_arg_glob_lol(self):
-        result = self._list_scores("/test", glob="*.lol")
+    def test_arg_glob_lol(self) -> None:
+        result: list[str] = self._list_scores("/test", glob="*.lol")
         assert result == []
 
-    def test_function_list_zero_alphabet(self):
-        result = list_zero_alphabet()
+    def test_function_list_zero_alphabet(self) -> None:
+        result: list[str] = list_zero_alphabet()
         assert result[0] == "0"
         assert result[26] == "z"
 
 
 class TestClassMuseScoreFile:
     def setup_method(self) -> None:
-        self.file = MuseScoreFile(helper.get_file("simple.mscx"))
+        self.score = helper.get_score("simple.mscx")
 
     def test_attribute_path(self) -> None:
-        assert self.file.path.exists()
+        assert self.score.path.exists()
 
     def test_attribute_relpath(self) -> None:
-        assert self.file.relpath
+        assert self.score.relpath
 
     def test_attribute_dirname(self) -> None:
-        assert self.file.dirname
+        assert self.score.dirname
 
     def test_attribute_filename(self) -> None:
-        assert self.file.filename == "simple.mscx"
+        assert self.score.filename == "simple.mscx"
 
     def test_attribute_extension(self) -> None:
-        assert self.file.extension == "mscx"
+        assert self.score.extension == "mscx"
 
     def test_attribute_basename(self) -> None:
-        assert self.file.basename == "simple"
+        assert self.score.basename == "simple"
 
     def test_method_clean(self) -> None:
-        tmp = helper.get_file("clean.mscx", version=3)
-        tree = MuseScoreFile(tmp)
-        tree.clean()
-        tree.save()
-        tree = MuseScoreFile(tmp)
-        xml_tree = tree.xml_tree
+        score = helper.get_score("clean.mscx", version=3)
+        score.clean()
+        score.save()
+        score = MuseScoreFile(str(score.path))
+        xml_tree = score.xml_tree
         assert xml_tree.xpath("/museScore/Score/Style") == []
         assert xml_tree.xpath("//LayoutBreak") == []
         assert xml_tree.xpath("//StemDirection") == []
@@ -124,45 +124,44 @@ class TestClassMuseScoreFile:
         assert xml_tree.xpath("//offset") == []
 
     def test_method_save(self) -> None:
-        tmp = helper.get_file("simple.mscx")
-        tree = MuseScoreFile(tmp)
-        tree.save()
-        result = helper.read_file(tmp)
+        score = helper.get_score("simple.mscx")
+        score.save()
+        result = helper.read_file(score.path)
         assert '<metaTag name="arranger"></metaTag>' in result
 
     def test_method_save_new_name(self):
-        tmp = helper.get_file("simple.mscx")
-        tree = MuseScoreFile(tmp)
-        tree.save(new_name=tmp)
-        result = helper.read_file(tmp)
+        score = helper.get_score("simple.mscx")
+        score.save(new_name=str(score.path))
+        result = helper.read_file(score.path)
         assert '<metaTag name="arranger"></metaTag>' in result
 
     def test_mscz(self):
         tmp = helper.get_file("simple.mscz")
         tree = MuseScoreFile(tmp)
         result = tree.xml_tree.xpath("/museScore/Score/Style")
+        assert isinstance(result, list)
+        assert isinstance(result[0], _Element)
         assert result[0].tag == "Style"
 
 
-@pytest.mark.skip("Not implemented yet")
-class TestMuseScoreFileMscz:
-    def setup_method(self):
-        self.file = MuseScoreFile(helper.get_file("simple.mscz"))
+class TestMuseScoreFileMscz3:
+    def setup_method(self) -> None:
+        self.score = helper.get_score("simple.mscz", version=3)
 
-    def test_attribute_extension(self):
-        assert self.file.extension == "mscz"
+    def test_attribute_extension(self) -> None:
+        assert self.score.extension == "mscz"
 
-    def test_attribute_loadpath(self):
-        assert "simple.mscx" in self.file.loadpath
+    def test_attribute_loadpath(self) -> None:
+        assert "simple.mscx" in self.score.loadpath
 
 
 class TestMuseScoreFileMscz4:
-    def setup_method(self):
+    def setup_method(self) -> None:
         self.file = MuseScoreFile(
-            helper.get_file("test.mscz", version=4),
+            helper.get_file("simple.mscz", version=4),
         )
 
-    def test_attribute_extension(self):
+    def test_attribute_extension(self) -> None:
         assert self.file.extension == "mscz"
 
 
@@ -272,10 +271,10 @@ class TestClean:
 
 
 class TestFileCompare:
-    def assertDiff(self, filename: str, version: int = 2):
-        orig = os.path.join(os.path.expanduser("~"), filename)
-        saved = orig.replace(".mscx", "_saved.mscx")
-        tmp = helper.get_file(filename, version=version)
+    def assert_diff(self, filename: str, version: int = 2):
+        orig: str = os.path.join(os.path.expanduser("~"), filename)
+        saved: str = orig.replace(".mscx", "_saved.mscx")
+        tmp: str = helper.get_file(filename, version=version)
         shutil.copy2(tmp, orig)
         tree = MuseScoreFile(tmp)
         tree.save(new_name=saved)
@@ -283,38 +282,38 @@ class TestFileCompare:
         os.remove(orig)
         os.remove(saved)
 
-    def test_getting_started(self):
-        self.assertDiff("Getting_Started_English.mscx", version=2)
-        self.assertDiff("Getting_Started_English.mscx", version=3)
+    def test_getting_started(self) -> None:
+        self.assert_diff("Getting_Started_English.mscx", version=2)
+        self.assert_diff("Getting_Started_English.mscx", version=3)
 
-    def test_lyrics(self):
-        self.assertDiff("lyrics.mscx", version=2)
-        self.assertDiff("lyrics.mscx", version=3)
+    def test_lyrics(self) -> None:
+        self.assert_diff("lyrics.mscx", version=2)
+        self.assert_diff("lyrics.mscx", version=3)
 
-    def test_chords(self):
-        self.assertDiff("chords.mscx", version=2)
-        self.assertDiff("chords.mscx", version=3)
+    def test_chords(self) -> None:
+        self.assert_diff("chords.mscx", version=2)
+        self.assert_diff("chords.mscx", version=3)
 
-    def test_unicode(self):
-        self.assertDiff("unicode.mscx", version=2)
-        self.assertDiff("unicode.mscx", version=3)
+    def test_unicode(self) -> None:
+        self.assert_diff("unicode.mscx", version=2)
+        self.assert_diff("unicode.mscx", version=3)
 
-    def test_real_world_ragtime_3(self):
-        self.assertDiff("Ragtime_3.mscx", version=2)
+    def test_real_world_ragtime_3(self) -> None:
+        self.assert_diff("Ragtime_3.mscx", version=2)
         # self.assertDiff('Ragtime_3.mscx', version=3)
 
-    def test_real_world_zum_tanze(self):
-        self.assertDiff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=2)
-        self.assertDiff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=3)
+    def test_real_world_zum_tanze(self) -> None:
+        self.assert_diff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=2)
+        self.assert_diff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=3)
 
-    def test_real_world_all_dudes(self):
-        self.assertDiff("All_Dudes.mscx", version=2)
-        self.assertDiff("All_Dudes.mscx", version=3)
+    def test_real_world_all_dudes(self) -> None:
+        self.assert_diff("All_Dudes.mscx", version=2)
+        self.assert_diff("All_Dudes.mscx", version=3)
 
-    def test_real_world_reunion(self):
-        self.assertDiff("Reunion.mscx", version=2)
-        self.assertDiff("Reunion.mscx", version=3)
+    def test_real_world_reunion(self) -> None:
+        self.assert_diff("Reunion.mscx", version=2)
+        self.assert_diff("Reunion.mscx", version=3)
 
-    def test_real_world_triumph(self):
-        self.assertDiff("Triumph.mscx", version=2)
-        self.assertDiff("Triumph.mscx", version=3)
+    def test_real_world_triumph(self) -> None:
+        self.assert_diff("Triumph.mscx", version=2)
+        self.assert_diff("Triumph.mscx", version=3)
