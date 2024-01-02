@@ -4,10 +4,10 @@ import subprocess
 import unittest
 
 
-class TestCli(unittest.TestCase):
+class TestCli:
     def test_cli(self):
         output = subprocess.check_output(("mscx-manager", "--help"))
-        self.assertTrue("usage: mscx-manager" in str(output))
+        assert "usage: mscx-manager" in str(output)
 
 
 if __name__ == "__main__":

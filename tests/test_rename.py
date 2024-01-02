@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import os
 import tempfile
-import unittest
 
 import mscxyz
+import mscxyz.meta
 from mscxyz import rename
 from mscxyz.settings import reset_args
 from tests import helper
@@ -29,12 +29,12 @@ class TestFunctions:
     def test_function_apply_format_string(self) -> None:
         reset_args()
         meta = mscxyz.meta.Meta(helper.get_file("meta-all-values.mscx"))
-        fields = meta.interface.export_to_dict()
-        name = rename.apply_format_string(fields)
+        fields: dict[str, str] = meta.interface.export_to_dict()
+        name: str = rename.apply_format_string(fields)
         assert name == "vbox_title (vbox_composer)"
 
     def test_function_get_checksum(self) -> None:
-        tmp = helper.get_file("simple.mscx")
+        tmp: str = helper.get_file("simple.mscx")
         assert rename.get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
 
 
@@ -175,7 +175,3 @@ class TestIntegration:
         target: str = os.path.join(tmp_dir, "Title (Composer).mscx")
         assert os.path.exists(target)
         os.remove(target)
-
-
-if __name__ == "__main__":
-    unittest.main()
