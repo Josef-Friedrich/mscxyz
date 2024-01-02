@@ -1,4 +1,4 @@
-"""MuseScoreFile for various tests"""
+"""Score for various tests"""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 from lxml.etree import _ElementTree
 
-from mscxyz import MuseScoreFile
+from mscxyz import Score
 from mscxyz.style import MscoreStyleInterface
 
 # if typing.TYPE_CHECKING:
@@ -59,8 +59,8 @@ def get_file(filename: str, version: int = 2) -> str:
     return tmp
 
 
-def get_score(filename: str, version: int = 2) -> MuseScoreFile:
-    return MuseScoreFile(get_file(filename, version))
+def get_score(filename: str, version: int = 2) -> Score:
+    return Score(get_file(filename, version))
 
 
 def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:

@@ -16,7 +16,7 @@ from lxml.etree import _Element
 
 import mscxyz
 from mscxyz.score import (
-    MuseScoreFile,
+    Score,
     ZipContainer,
     list_scores,
     list_zero_alphabet,
@@ -87,7 +87,7 @@ class TestFunctions:
         assert result[26] == "z"
 
 
-class TestClassMuseScoreFile:
+class TestClassScore:
     def setup_method(self) -> None:
         self.score = helper.get_score("simple.mscx")
 
@@ -115,7 +115,7 @@ class TestClassMuseScoreFile:
         score = helper.get_score("clean.mscx", version=3)
         score.clean()
         score.save()
-        score = MuseScoreFile(str(score.path))
+        score = Score(str(score.path))
         xml_tree = score.xml_tree
         assert xml_tree.xpath("/museScore/Score/Style") == []
         assert xml_tree.xpath("//LayoutBreak") == []
@@ -140,14 +140,14 @@ class TestClassMuseScoreFile:
 
     def test_mscz(self):
         tmp = helper.get_file("simple.mscz")
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         result = tree.xml_tree.xpath("/museScore/Score/Style")
         assert isinstance(result, list)
         assert isinstance(result[0], _Element)
         assert result[0].tag == "Style"
 
 
-class TestMuseScoreFileMscz3:
+class TestScoreMscz3:
     def setup_method(self) -> None:
         self.score = helper.get_score("simple.mscz", version=3)
 
@@ -158,9 +158,9 @@ class TestMuseScoreFileMscz3:
         assert "simple.mscx" in self.score.loadpath
 
 
-class TestMuseScoreFileMscz4:
+class TestScoreMscz4:
     def setup_method(self) -> None:
-        self.file = MuseScoreFile(
+        self.file = Score(
             helper.get_file("simple.mscz", version=4),
         )
 
@@ -207,7 +207,7 @@ class TestZipContainer:
         assert container.mscx_file.exists()
 
 
-class TestMuseScoreFileVersion2:
+class TestScoreVersion2:
     score = helper.get_score("simple.mscz", 2)
 
     def test_property_version(self) -> None:
@@ -220,7 +220,7 @@ class TestMuseScoreFileVersion2:
         assert self.score.get_version() == 2.06
 
 
-class TestMuseScoreFileVersion3:
+class TestScoreVersion3:
     score = helper.get_score("simple.mscz", 3)
 
     def test_property_version(self) -> None:
@@ -233,7 +233,7 @@ class TestMuseScoreFileVersion3:
         assert self.score.get_version() == 3.01
 
 
-class TestMuseScoreFileVersion4:
+class TestScoreVersion4:
     score = helper.get_score("simple.mscz", 4)
 
     def test_property_version(self) -> None:
@@ -279,7 +279,7 @@ class TestFileCompare:
         saved: str = orig.replace(".mscx", "_saved.mscx")
         tmp: str = helper.get_file(filename, version=version)
         shutil.copy2(tmp, orig)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         tree.save(new_name=saved)
         assert filecmp.cmp(orig, saved)
         os.remove(orig)

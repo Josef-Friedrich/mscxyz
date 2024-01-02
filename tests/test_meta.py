@@ -22,7 +22,7 @@ from mscxyz.meta import (
     export_to_dict,
     to_underscore,
 )
-from mscxyz.score import MuseScoreFile
+from mscxyz.score import Score
 from tests import helper
 from tests.helper import ini_file
 
@@ -103,7 +103,7 @@ class TestClassUnifiedInterface:
 
     def _init_class(self, filename: str, version: int = 2):
         tmp = helper.get_file(filename, version)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
         return interface, tree, tmp
 
@@ -157,7 +157,7 @@ class TestClassUnifiedInterface:
             assert getattr(interface, field) == field + "_test"
 
         tree.save()
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
 
         assert interface.combined_composer == "vbox_composer_test"
@@ -227,7 +227,7 @@ class TestClassInterfaceReadOnly:
             "readonly_relpath_backup",
         )
         self.tmp = helper.get_file("simple.mscx")
-        self.xml_tree = MuseScoreFile(self.tmp)
+        self.xml_tree = Score(self.tmp)
         self.interface = InterfaceReadOnly(self.xml_tree)
 
     def test_exception(self):
@@ -289,7 +289,7 @@ class TestClassInterface:
         ]
 
         self.tmp = helper.get_file("meta-all-values.mscx")
-        self.xml_tree = MuseScoreFile(self.tmp)
+        self.xml_tree = Score(self.tmp)
         self.interface = Interface(self.xml_tree)
 
     def test_static_method_get_all_fields(self):
@@ -311,7 +311,7 @@ class TestClassInterface:
 class TestClassMetaTag:
     def _init_class(self, filename: str, version: int = 2):
         tmp = helper.get_file(filename, version)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         meta = MetaTag(tree.xml_root)
         return meta, tree, tmp
 
@@ -341,7 +341,7 @@ class TestClassMetaTag:
         meta.workTitle = "WT"
         meta.movement_title = "MT"
         tree.save()
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         meta = MetaTag(tree.xml_root)
         assert meta.work_title == "WT"
         assert meta.movementTitle == "MT"
@@ -353,7 +353,7 @@ class TestClassMetaTag:
         meta.workTitle = "WT"
         meta.movement_title = "MT"
         tree.save()
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         meta = MetaTag(tree.xml_root)
         assert meta.work_title == "WT"
         assert meta.movementTitle == "MT"
@@ -381,9 +381,9 @@ class TestClassMetaTag:
 class TestClassVbox:
     def _init_class(
         self, filename: str, version: int = 2
-    ) -> tuple[Vbox, MuseScoreFile, str]:
+    ) -> tuple[Vbox, Score, str]:
         tmp = helper.get_file(filename, version)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         vbox = Vbox(tree.xml_root)
         return vbox, tree, tmp
 
@@ -420,12 +420,12 @@ class TestClassVbox:
 
     def _assert_set(self, filename: str, version: int = 2) -> None:
         tmp = helper.get_file(filename, version)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         vbox = Vbox(tree.xml_root)
         vbox.Title = "lol"
         vbox.composer = "lol"
         tree.save()
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         vbox = Vbox(tree.xml_root)
         assert vbox.title == "lol"
         assert vbox.Composer == "lol"
@@ -451,9 +451,9 @@ class TestClassVbox:
 
 
 class TestClassCombined:
-    def _init_class(self, filename: str) -> tuple[Combined, MuseScoreFile, str]:
+    def _init_class(self, filename: str) -> tuple[Combined, Score, str]:
         tmp = helper.get_file(filename)
-        tree = MuseScoreFile(tmp)
+        tree = Score(tmp)
         combined = Combined(tree.xml_root)
         return combined, tree, tmp
 

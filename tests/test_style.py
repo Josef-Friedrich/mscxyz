@@ -2,24 +2,24 @@ from __future__ import annotations
 
 from mscxyz.score import (
     MscoreStyleInterface,
-    MuseScoreFile,
+    Score,
 )
 from tests import helper
 
 
-def reload(score: MuseScoreFile) -> MscoreStyleInterface:
+def reload(score: Score) -> MscoreStyleInterface:
     """
     Reloads the style of the given MuseScore file.
 
     :param score: The MuseScore file to reload the style from.
     :return: The reloaded style.
     """
-    score = MuseScoreFile(str(score.path))
+    score = Score(str(score.path))
     return score.style
 
 
 def test_method_get_element_create() -> None:
-    score: MuseScoreFile = helper.get_score("All_Dudes.mscx", version=2)
+    score: Score = helper.get_score("All_Dudes.mscx", version=2)
     element = score.style.get_element("x/y/z")
     element.attrib["y"] = "YYY"
     assert element.tag == "z"
@@ -38,7 +38,7 @@ def test_method_set_attributes() -> None:
 class TestClassStyle:
     """Test on MuseScore Version 2"""
 
-    score: MuseScoreFile
+    score: Score
 
     def setup_method(self) -> None:
         self.score = helper.get_score("All_Dudes.mscx", version=2)
@@ -107,7 +107,7 @@ class TestClassStyle:
 class TestClassMscoreStyleInterface3:
     """Test on MuseScore Version 3"""
 
-    score: MuseScoreFile
+    score: Score
 
     def setup_method(self) -> None:
         self.score = helper.get_score("All_Dudes.mscx", version=3)
@@ -130,7 +130,7 @@ class TestClassMscoreStyleInterface3:
 
 
 class TestClassMscoreStyleInterfaceWithoutTags:
-    score: MuseScoreFile
+    score: Score
 
     def setup_method(self) -> None:
         self.score = helper.get_score("without-style.mscx")

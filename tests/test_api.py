@@ -6,15 +6,15 @@ from mscxyz import (
     MscoreLyricsInterface,
     MscoreMetaInterface,
     MscoreStyleInterface,
-    MuseScoreFile,
+    Score,
     exec_mscore_binary,
 )
 
 
 class TestApi:
     def test_api(self):
-        assert MuseScoreFile
-        assert MuseScoreFile
+        assert Score
+        assert Score
         assert MscoreLyricsInterface
         assert MscoreMetaInterface
         assert MscoreStyleInterface

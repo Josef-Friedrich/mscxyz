@@ -143,7 +143,7 @@ class ZipContainer:
         zip.close()
 
 
-class MuseScoreFile:
+class Score:
     """This class holds basic file properties of the MuseScore score file.
 
     :param relpath: The relative (or absolute) path of a MuseScore

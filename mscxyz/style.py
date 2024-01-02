@@ -10,7 +10,7 @@ from lxml.etree import _Element
 from mscxyz.xml import find_safe, xpath
 
 if typing.TYPE_CHECKING:
-    from mscxyz.score import MuseScoreFile
+    from mscxyz.score import Score
 
 
 class MscoreStyleInterface:
@@ -20,13 +20,13 @@ class MscoreStyleInterface:
     :param relpath: The relative (or absolute) path of a MuseScore file.
     """
 
-    score: "MuseScoreFile"
+    score: "Score"
 
     parent_element: _Element
     """The parent ``/museScore/Score/Style`` element that contains all style tags.
     """
 
-    def __init__(self, score: "MuseScoreFile") -> None:
+    def __init__(self, score: "Score") -> None:
         self.score = score
         element: _Element | None = self.score.xml_tree.find("Score/Style")
         if element is not None:
