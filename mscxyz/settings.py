@@ -30,8 +30,8 @@ class DefaultArguments:
     rename_ascii = False
     rename_format: str = "$combined_title ($combined_composer)"
     rename_no_whitespace = False
-    rename_skip = None
-    rename_target = None
+    rename_skip: Optional[str] = None
+    rename_target: Optional[str] = None
     subcommand: Optional[Literal["help", "meta", "lyrics", "rename", "export"]] = None
 
 

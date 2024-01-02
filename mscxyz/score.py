@@ -19,6 +19,7 @@ from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz.style import MscoreStyleInterface
 from mscxyz.utils import mscore, re_open
+from mscxyz.xml import xpathall
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -319,9 +320,11 @@ class MuseScoreFile:
                 "//StaffText/text",
                 "//Jump/continueAt",
             ):
-                for tag in self.xml_tree.xpath(xpath):
-                    if not tag.text:
-                        tag.text = ""
+                x: list[_Element] | None = xpathall(self.xml_root, xpath)
+                if x:
+                    for tag in x:
+                        if not tag.text:
+                            tag.text = ""
 
             score = open(filename, "w")
             score.write('<?xml version="1.0" encoding="UTF-8"?>\n')

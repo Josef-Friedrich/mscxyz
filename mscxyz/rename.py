@@ -14,7 +14,7 @@ from mscxyz.meta import Meta
 from mscxyz.utils import color, get_args
 
 
-def create_dir(path: str):
+def create_dir(path: str) -> None:
     try:
         os.makedirs(os.path.dirname(path))
     except OSError as exception:
@@ -28,7 +28,7 @@ def prepare_fields(fields: dict[str, str]) -> dict[str, str]:
     for field, value in fields.items():
         if value:
             if args.rename_alphanum:
-                value = alphanum(value)
+                value: str = alphanum(value)
                 value = value.strip()
             if args.rename_ascii:
                 value = asciify(value)
@@ -66,25 +66,25 @@ def rename_filename(source: str) -> Meta:
     args = get_args()
 
     meta = Meta(source)
-    meta_values = meta.interface.export_to_dict()
-    target_filename = apply_format_string(meta_values)
+    meta_values: dict[str, str] = meta.interface.export_to_dict()
+    target_filename: str = apply_format_string(meta_values)
 
     if args.rename_skip:
-        skips = args.rename_skip.split(",")
+        skips: list[str] = args.rename_skip.split(",")
         for skip in skips:
             if not meta_values[skip]:
                 print(color("Field “{}” is empty! Skipping".format(skip), "red"))
                 return meta
 
     if args.rename_target:
-        target_base = os.path.abspath(args.rename_target)
+        target_base: str = os.path.abspath(args.rename_target)
     else:
         target_base = os.getcwd()
 
-    target = os.path.join(target_base, target_filename + "." + meta.extension)
+    target: str = os.path.join(target_base, target_filename + "." + meta.extension)
 
     if os.path.exists(target):
-        target_format = target.replace(".mscx", "{}.mscx")
+        target_format: str = target.replace(".mscx", "{}.mscx")
         i = ""
         while os.path.exists(target_format.format(i)):
             target = target_format.format(i)
