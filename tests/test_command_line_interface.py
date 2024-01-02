@@ -2,7 +2,6 @@
 
 import os
 import subprocess
-import unittest
 from unittest import mock
 
 import mscxyz
@@ -39,7 +38,3 @@ def test_export(mscore_function: mock.Mock) -> None:
     assert args[0] == "--export-to"
     assert args[1] == tmp.replace("mscx", "mp3")
     assert args[2] == tmp
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -2,7 +2,6 @@
 
 
 import os
-import unittest
 
 import mscxyz
 import mscxyz.lyrics
@@ -121,7 +120,3 @@ class TestMscoreLyricsInterfaceRemap:
             text.append(no)
 
         assert text == ["0", "5", "2", "3", "4"]
-
-
-if __name__ == "__main__":
-    unittest.main()

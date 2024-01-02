@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import tempfile
-import unittest
 
 import pytest
 
@@ -726,7 +725,3 @@ class TestIntegration:
         )
         log_file = open(log, "r")
         assert log_file.readline() == "Title-Composer\n"
-
-
-if __name__ == "__main__":
-    unittest.main()
