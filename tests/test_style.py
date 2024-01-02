@@ -27,6 +27,14 @@ def test_method_get_element_create() -> None:
     assert reload(score).get_element("x/y/z").attrib["y"] == "YYY"
 
 
+def test_method_set_attributes() -> None:
+    helper.get_score
+    score = helper.get_score("All_Dudes.mscx", version=3)
+    score.style.set_attributes("XXX", {"one": 1, "two": 2})
+    score.save()
+    assert reload(score).get_element("XXX").attrib["one"] == "1"
+
+
 class TestClassStyle:
     """Test on MuseScore Version 2"""
 
@@ -36,7 +44,7 @@ class TestClassStyle:
         self.score = helper.get_score("All_Dudes.mscx", version=2)
 
     def test_attributes_style(self) -> None:
-        assert self.score.style.element.tag == "Style"
+        assert self.score.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
         assert self.score.style.get_value("staffUpperBorder") == "6.5"
@@ -76,13 +84,6 @@ class TestClassStyle:
         assert style_new.get_value("page-layout/page-height") == "99"
         assert style_new.get_value("page-layout/page-width") == "100"
 
-    def test_method_set_attributes(self) -> None:
-        helper.get_score
-        score = helper.get_score("All_Dudes.mscx", version=3)
-        score.style.set_attributes("XXX", {"one": 1, "two": 2})
-        score.save()
-        assert reload(score).get_element("XXX").attrib["one"] == "1"
-
     def test_method_get_text_style(self) -> None:
         title = self.score.style.get_text_style("Title")
         assert title == {
@@ -112,7 +113,7 @@ class TestClassMscoreStyleInterface3:
         self.score = helper.get_score("All_Dudes.mscx", version=3)
 
     def test_attributes_style(self) -> None:
-        assert self.score.style.element.tag == "Style"
+        assert self.score.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
         assert self.score.style.get_value("staffUpperBorder") == "6.5"
@@ -135,7 +136,7 @@ class TestClassMscoreStyleInterfaceWithoutTags:
         self.score = helper.get_score("without-style.mscx")
 
     def test_load(self) -> None:
-        assert self.score.style.element.tag == "Style"
+        assert self.score.style.parent_element.tag == "Style"
 
     def test_method_set(self) -> None:
         self.score.style.set_value("staffUpperBorder", 99)

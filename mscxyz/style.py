@@ -22,7 +22,7 @@ class MscoreStyleInterface:
 
     score: "MuseScoreFile"
 
-    element: _Element
+    parent_element: _Element
     """The parent ``/museScore/Score/Style`` element that contains all style tags.
     """
 
@@ -30,11 +30,16 @@ class MscoreStyleInterface:
         self.score = score
         element: _Element | None = self.score.xml_tree.find("Score/Style")
         if element is not None:
-            self.element = element
+            self.parent_element = element
         else:
-            self.element: _Element = self._create_parent_style()
+            self.parent_element: _Element = self._create_parent_style()
 
     def _create_parent_style(self) -> _Element:
+        """
+        Create the parent style element.
+
+        :return: The created parent style element.
+        """
         score: _Element | None = self.score.xml_tree.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
@@ -49,7 +54,7 @@ class MscoreStyleInterface:
         :return: The created nested element.
         """
         tags: list[str] = tag.split("/")
-        parent = self.element
+        parent = self.parent_element
         for tag in tags:
             element: _Element | None = parent.find(tag)
             if element is None:
@@ -79,7 +84,7 @@ class MscoreStyleInterface:
             element.attrib['y'] = '-2'
             test.save()
         """
-        element: _Element | None = self.element.find(element_path)
+        element: _Element | None = self.parent_element.find(element_path)
         if element is None:
             element = self._create_nested_element(element_path)
         return element
@@ -109,14 +114,18 @@ class MscoreStyleInterface:
             element.attrib[name] = str(value)
         return element
 
-    def set_value(self, element_path: str, value: str | int | float):
+    def set_value(self, element_path: str, value: str | int | float) -> None:
         """
-        :param element_path: see
-          http://lxml.de/tutorial.html#elementpath
+        Sets the value of an XML element identified by the given element path.
+
+        :param element_path: The XPath expression to locate the XML element.
+                             For more information, refer to http://lxml.de/tutorial.html#elementpath
+        :param value: The value to be set for the XML element.
+                      It can be a string, integer, or float.
         """
-        element = self.element.find(element_path)
+        element: _Element | None = self.parent_element.find(element_path)
         if element is None:
-            element: _Element = self._create_nested_element(element_path)
+            element = self._create_nested_element(element_path)
         element.text = str(value)
 
     def _get_text_style_element(self, name: str) -> _Element:
@@ -135,7 +144,9 @@ class MscoreStyleInterface:
                 raise ValueError(f"Parent not found on element {el}!")
             return el
         else:
-            el_text_style: _Element = lxml.etree.SubElement(self.element, "TextStyle")
+            el_text_style: _Element = lxml.etree.SubElement(
+                self.parent_element, "TextStyle"
+            )
             el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
             el_name.text = name
             return el_text_style
@@ -188,12 +199,12 @@ class MscoreStyleInterface:
           the text values of the child tags, for example
           ``{size: 14, bold: 1}``.
         """
-        text_style = self._get_text_style_element(name)
+        text_style: _Element = self._get_text_style_element(name)
         for element_name, value in values.items():
-            el = text_style.find(element_name)
-            if el is None:
-                el = lxml.etree.SubElement(text_style, element_name)
-            el.text = str(value)
+            element: _Element | None = text_style.find(element_name)
+            if element is None:
+                element = lxml.etree.SubElement(text_style, element_name)
+            element.text = str(value)
 
     def merge(self, styles: str) -> None:
         """Merge styles into the XML tree.
