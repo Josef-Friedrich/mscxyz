@@ -2,29 +2,35 @@
 ``args`` object stored from ``argparse``. It can be accessed by the other
 submodules using the function `get_args()`."""
 
+from __future__ import annotations
+
+from io import TextIOWrapper
 from typing import Literal, Optional
 
 
 class DefaultArguments:
-    clean_style = None
+    clean_style: Optional[TextIOWrapper] = None
     export_extension: Optional[str] = None
-    general_backup = False
-    general_colorize = False
+    general_backup: bool = False
+    general_colorize: bool = False
     general_config_file: Optional[str] = None
-    general_dry_run = False
-    general_executable = None
-    general_glob = "*.mscx"
-    general_mscore = False
-    general_verbose = 0
-    help_markdown = False
-    help_rst = False
-    lyrics_extract = "all"
-    lyrics_fix = False
-    lyrics_remap = None
+    general_dry_run: bool = False
+    general_executable: Optional[str] = None
+    general_glob: str = "*.mscx"
+    general_mscore: bool = False
+    general_verbose: int = 0
+    help_markdown: bool = False
+    help_rst: bool = False
+    lyrics_extract: str = "all"
+    lyrics_fix: bool = False
+    lyrics_remap: Optional[str] = None
     meta_clean: Optional[str] = None
-    meta_json = False
-    meta_set = None
-    meta_sync = False
+    meta_delete: bool = False
+    meta_dist: Optional[list[list[str]]] = None
+    meta_log: Optional[list[str]] = None
+    meta_json: bool = False
+    meta_sync: bool = False
+    meta_set: Optional[list[list[str]]] = None
     path: str = "."
     rename_alphanum = False
     rename_ascii = False

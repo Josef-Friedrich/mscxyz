@@ -30,7 +30,7 @@ class TestBackup:
         assert os.path.getsize(self.tmp) == os.path.getsize(self.backup)
 
 
-@mock.patch("mscxyz.score.utils.mscore")
+@mock.patch("mscxyz.score.utils.execute_musescore")
 def test_export(mscore_function: mock.Mock) -> None:
     tmp: str = helper.get_file("simple.mscx")
     mscxyz.execute(["export", "--extension", "mp3", tmp])

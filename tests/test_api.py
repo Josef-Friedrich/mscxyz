@@ -3,18 +3,14 @@ command line."""
 
 
 from mscxyz import (
-    MscoreLyricsInterface,
-    MscoreMetaInterface,
-    MscoreStyleInterface,
     Score,
-    exec_mscore_binary,
+    list_scores,
 )
 
 
-class TestApi:
-    def test_api(self):
-        assert Score
-        assert MscoreLyricsInterface
-        assert MscoreMetaInterface
-        assert MscoreStyleInterface
-        assert exec_mscore_binary
+def test_class_score() -> None:
+    assert Score.__name__ == "Score"
+
+
+def test_function_list_scores() -> None:
+    assert list_scores.__name__ == "list_scores"

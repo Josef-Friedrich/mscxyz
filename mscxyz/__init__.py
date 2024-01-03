@@ -28,55 +28,30 @@ import os
 import sys
 import typing
 from importlib import metadata
+from typing import Optional, Sequence, Type
 
 import lxml
+import lxml.etree
+from lxml.etree import LxmlError
 
+import mscxyz
+import mscxyz.score
 from mscxyz import cli, utils
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
-from mscxyz.score import (
-    MscoreStyleInterface,
-    Score,
-)
 from mscxyz.settings import DefaultArguments
 
 __version__: str = metadata.version("mscxyz")
 
-
-###############################################################################
-# API INTERFACE BEGIN
-###############################################################################
-
-# Classes
-
-
-Score
-"""see submodule ``score.py``"""
-
-MscoreLyricsInterface
-"""see submodule ``lyrics.py``"""
-
-MscoreMetaInterface = Meta
-"""see submodule ``meta.py``"""
-
-MscoreStyleInterface
-"""see submodule ``score.py``"""
-
-# Functions
-
-exec_mscore_binary = utils.mscore
-"""see submodule ``utils.py``"""
+Score = mscxyz.score.Score
 
 list_scores = utils.list_scores
-"""see submodule ``score.py``"""
-
-###############################################################################
-# API INTERFACE END
-###############################################################################
 
 
-def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
+def parse_config_ini(
+    relpath: Optional[str] = None,
+) -> Optional[configparser.ConfigParser]:
     """Parse the configuration file. The file format is INI. The default
     location is ``/etc/mscxyz.ini``."""
     if not relpath:
@@ -87,6 +62,7 @@ def parse_config_ini(relpath: str = None) -> configparser.ConfigParser:
     if os.path.exists(ini_file):
         config.read(ini_file)
         return config
+    return None
 
 
 def merge_config_into_args(
@@ -169,7 +145,7 @@ def show_all_help(args: DefaultArguments) -> None:
         code_block(args, getattr(cli, args.path).format_help())
 
 
-def report_errors(errors: typing.Sequence):
+def report_errors(errors: typing.Sequence[SyntaxError]) -> None:
     for error in errors:
         print(
             "{}: {}; message: {}".format(
@@ -180,14 +156,14 @@ def report_errors(errors: typing.Sequence):
         )
 
 
-def no_error(error, errors):
+def no_error(error: Type[LxmlError], errors: Sequence[SyntaxError]) -> bool:
     for e in errors:
         if isinstance(e, error):
             return False
     return True
 
 
-def execute(cli_args: typing.Sequence[str] | None = None):
+def execute(cli_args: typing.Sequence[str] | None = None) -> None:
     args: DefaultArguments = typing.cast(
         DefaultArguments, cli.parser.parse_args(cli_args)
     )
@@ -251,8 +227,8 @@ def execute(cli_args: typing.Sequence[str] | None = None):
                     score.write_to_log_file(args.meta_log[0], args.meta_log[1])
                 post: dict[str, str] = score.interface.export_to_dict()
                 score.show(pre, post)
-            if not args.general_dry_run and not score.errors and pre != post:
-                score.save(mscore=args.general_mscore)
+                if not args.general_dry_run and not score.errors and pre != post:
+                    score.save(mscore=args.general_mscore)
 
         elif args.subcommand == "rename":
             score = rename_filename(file)
@@ -263,6 +239,8 @@ def execute(cli_args: typing.Sequence[str] | None = None):
                 score.export(extension=args.export_extension)
             else:
                 score.export()
+        else:
+            raise ValueError("Unknown subcommand")
 
         report_errors(score.errors)
 

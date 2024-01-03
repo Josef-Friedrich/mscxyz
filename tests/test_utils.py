@@ -97,17 +97,17 @@ class TestFunctionGetMscoreBin:
         exists.return_value = True
         path = bytes("/usr/local/bin/mscore\n".encode("utf-8"))
         check_output.return_value = path
-        output = utils.get_mscore_bin()
+        output = utils.get_musescore_bin()
         assert output == "/usr/local/bin/mscore"
 
 
 class TestFunctionMscore:
-    @mock.patch("mscxyz.utils.get_mscore_bin")
+    @mock.patch("mscxyz.utils.get_musescore_bin")
     @mock.patch("subprocess.Popen")
     def test_function(self, popen: mock.Mock, get_mscore_bin: mock.Mock) -> None:
         get_mscore_bin.return_value = "/bin/mscore"
         popen.return_value = mock.MagicMock(returncode=0)
-        result = utils.mscore(["--export-to", "troll.mscz", "lol.mscx"])
+        result = utils.execute_musescore(["--export-to", "troll.mscz", "lol.mscx"])
         assert result.returncode == 0
 
 

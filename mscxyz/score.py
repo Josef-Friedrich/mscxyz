@@ -9,7 +9,7 @@ import tempfile
 import typing
 import zipfile
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, Sequence
 
 import lxml
 import lxml.etree  # Required for the type hints
@@ -132,7 +132,7 @@ class Score:
 
     zip_container: Optional[ZipContainer] = None
 
-    errors: List[Exception]
+    errors: Sequence[SyntaxError]
     """A list to store errors."""
 
     __style: Optional[MscoreStyleInterface] = None
@@ -213,7 +213,7 @@ class Score:
         :param extension: The extension (default: pdf)
         """
         score: str = self.relpath
-        utils.mscore(
+        utils.execute_musescore(
             ["--export-to", score.replace("." + self.extension, "." + extension), score]
         )
 

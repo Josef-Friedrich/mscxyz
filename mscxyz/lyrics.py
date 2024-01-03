@@ -96,7 +96,7 @@ class MscoreLyricsInterface(Score):
                 if element.number == int(old):
                     element.element.find("no").text = str(int(new) - 1)
 
-        self.save(mscore)
+        self.save(mscore=mscore)
 
     def extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
         """Extract a lyric verse by verse number.

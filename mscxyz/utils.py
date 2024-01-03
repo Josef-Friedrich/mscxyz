@@ -85,7 +85,7 @@ def set_args(args: DefaultArguments) -> DefaultArguments:
     return args
 
 
-def get_mscore_bin() -> str:
+def get_musescore_bin() -> str:
     """Check the existance of the executable mscore
 
     :return: Path of the executable.
@@ -108,11 +108,11 @@ def get_mscore_bin() -> str:
         raise ValueError("mscore binary could not be found.")
 
 
-def mscore(cli_args: List[str]) -> subprocess.Popen[Any]:
+def execute_musescore(cli_args: list[str]) -> subprocess.Popen[Any]:
     """
     :param cli_args: Command line arguments to call the mscore binary with.
     """
-    executable = get_mscore_bin()
+    executable = get_musescore_bin()
     cli_args.insert(0, executable)
     p = subprocess.Popen(cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
@@ -130,7 +130,7 @@ def re_open(input_file: str) -> None:
 
     :param input_file: The path (relative or absolute) of a MuseScore file.
     """
-    mscore(["-o", input_file, input_file])
+    execute_musescore(["-o", input_file, input_file])
 
 
 def convert_mxl(input_file: str) -> None:
@@ -140,7 +140,7 @@ def convert_mxl(input_file: str) -> None:
     :param input_file: The path (relative or absolute) of a MusicXML file.
     """
     output_file = input_file.replace(".mxl", ".mscx")
-    mscore(["-o", output_file, input_file])
+    execute_musescore(["-o", output_file, input_file])
     os.remove(input_file)
 
 
