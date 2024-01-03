@@ -44,7 +44,7 @@ class UnmatchedFormatStringError(Exception):
 
 
 class FormatStringNoFieldError(Exception):
-    def __init__(self, format_string: str):
+    def __init__(self, format_string: str) -> None:
         self.msg = "No fields found in your format string “{}”!".format(format_string)
         Exception.__init__(self, self.msg)
 
@@ -171,7 +171,7 @@ class MetaTag:
             field = self._to_camel_case(field)
             self._set_text(field, value)
 
-    def clean(self):
+    def clean(self) -> None:
         fields = (
             "arranger",
             "copyright",
@@ -188,7 +188,7 @@ class MetaTag:
 
 
 class Vbox:
-    """The first vertical box of a score.
+    """The first `vertical` box of a score.
 
     Available fields:
 
@@ -235,7 +235,8 @@ class Vbox:
 
     def _get_tag(self, style: str) -> _Element | None:
         """
-        :param style: String inside the `<style>` tags
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer``.
         """
         x: _XPathObject = self.xml_root.xpath("//VBox/Text")
         if isinstance(x, list):
@@ -247,7 +248,8 @@ class Vbox:
 
     def _get_text(self, style: str) -> str | None:
         """
-        :param style: String inside the `<style>` tags
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer``.
         """
         element: _Element | None = self._get_tag(style)
         if element is not None and hasattr(element, "text"):
@@ -262,32 +264,36 @@ class Vbox:
 
     def _create_text_tag(self, style: str, text: str) -> None:
         """
-        :param style: String inside the `<style>` tags
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer``.
+        :param text: The string inside the ``<text>`` tags.
         """
         Text_tag: _Element = lxml.etree.Element("Text")
         style_tag: _Element = lxml.etree.SubElement(Text_tag, "style")
         style_tag.text = style
         text_tag: _Element = lxml.etree.SubElement(Text_tag, "text")
         text_tag.text = text
-        for element in self.xml_root.xpath("//VBox"):
+
+        for element in utils.xpathall_safe(self.xml_root, "//VBox"):
             element.append(Text_tag)
 
-    def _set_text(self, style, text):
+    def _set_text(self, style: str, text: str) -> None:
         """
         :param string style: String inside the `<style>` tags
         """
-        element = self._get_tag(style)
+        element: _Element | None = self._get_tag(style)
         if hasattr(element, "text"):
-            element.text = text
+            if element is not None:
+                element.text = text
         else:
             self._create_text_tag(style, text)
 
-    def __setattr__(self, field, value):
+    def __setattr__(self, field: str, value: _Element | str | None) -> None:
         if field == "xml_root" or field == "fields":
             self.__dict__[field] = value
         elif field.title() not in self.fields:
             raise UnkownFieldError(field, self.fields)
-        else:
+        elif isinstance(value, str):
             self._set_text(field.title(), value)
 
 
@@ -375,7 +381,7 @@ class InterfaceReadWrite:
             raise ValueError(matches[0] + ": Not a supported object!")
         return {"object": matches[0], "field": matches[1]}
 
-    def export_to_dict(self):
+    def export_to_dict(self) -> dict[str, str]:
         return export_to_dict(self, self.fields)
 
     def __getattr__(self, field: str):
@@ -383,7 +389,7 @@ class InterfaceReadWrite:
         obj = getattr(self, parts["object"])
         return getattr(obj, parts["field"])
 
-    def __setattr__(self, field: str, value: str):
+    def __setattr__(self, field: str, value: str) -> None:
         if field in ("fields", "metatag", "objects", "vbox", "combined"):
             self.__dict__[field] = value
         else:
@@ -405,7 +411,7 @@ class InterfaceReadOnly:
 
     xml_tree: Score
 
-    def __init__(self, tree: Score):
+    def __init__(self, tree: Score) -> None:
         self.xml_tree = tree
 
     @property
