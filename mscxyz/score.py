@@ -187,7 +187,7 @@ class Score:
     ) -> Path:
         path = str(self.path)
         if suffix:
-            path: str = path.replace(
+            path = path.replace(
                 f".{self.extension}", f"_{suffix}.{self.extension}"
             )
         if extension:

@@ -6,7 +6,6 @@ import json
 import re
 import typing
 from pathlib import Path
-
 import lxml
 import lxml.etree
 import tmep
@@ -245,6 +244,7 @@ class Vbox:
                     s: _Element | None = element.find("style")
                     if s is not None and s.text == style:
                         return element.find("text")
+        return None
 
     def _get_text(self, style: str) -> str | None:
         """
@@ -254,6 +254,7 @@ class Vbox:
         element: _Element | None = self._get_tag(style)
         if element is not None and hasattr(element, "text"):
             return element.text
+        return None
 
     def __getattr__(self, field: str) -> str | None:
         field = field.title()
@@ -316,6 +317,7 @@ class Combined(Score):
         for value in values:
             if value:
                 return value
+        return None
 
     @property
     def title(self) -> str | None:
@@ -569,6 +571,7 @@ class Meta(Score):
             fields.remove("readonly_relpath_backup")
 
         for field in fields:
+            field_color: utils.Color
             if (
                 args.general_verbose == 0
                 and (field in pre and pre[field] or field in post and post[field])
