@@ -508,12 +508,19 @@ class Meta(Score):
         field_value = tmep.parse(format_string, self.interface.export_to_dict())
         setattr(self.interface, destination_field, field_value)
 
-    def clean(self, fields) -> None:
-        fields = fields[0]
-        if fields == "all":
+    def clean_metadata(self, fields_spec: typing.Literal["all"] | str) -> None:
+        """
+        Clean the metadata fields of the object.
+
+        :param fields_spec: Specification of the fields to clean. It can be either
+            ``all`` to clean all fields, or a comma-separated string specifying
+            individual fields.
+        """
+        fields: list[str]
+        if fields_spec == "all":
             fields = self.interface_read_write.fields
         else:
-            fields = fields.split(",")
+            fields = fields_spec.split(",")
         for field in fields:
             setattr(self.interface_read_write, field, "")
 

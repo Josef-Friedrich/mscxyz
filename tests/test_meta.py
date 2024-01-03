@@ -732,6 +732,11 @@ class TestClassMeta:
     def setup_method(self) -> None:
         self.meta: Meta = helper.get_meta("meta-all-values.mscx")
 
+    def test_method_clean_metadata(self) -> None:
+        self.meta.interface.combined_lyricist = "test"
+        self.meta.clean_metadata("all")
+        assert self.meta.interface.combined_lyricist is None
+
     def test_method_delete_duplicates(self) -> None:
         self.meta.interface.combined_lyricist = "test"
         self.meta.interface.combined_composer = "test"

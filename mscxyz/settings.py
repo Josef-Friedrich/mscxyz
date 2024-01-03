@@ -21,7 +21,7 @@ class DefaultArguments:
     lyrics_extract = "all"
     lyrics_fix = False
     lyrics_remap = None
-    meta_clean = None
+    meta_clean: Optional[str] = None
     meta_json = False
     meta_set = None
     meta_sync = False

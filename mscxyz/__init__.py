@@ -236,7 +236,7 @@ def execute(cli_args: typing.Sequence[str] | None = None):
             if no_error(lxml.etree.XMLSyntaxError, score.errors):
                 pre: dict[str, str] = score.interface.export_to_dict()
                 if args.meta_clean:
-                    score.clean(fields=args.meta_clean)
+                    score.clean_metadata(fields_spec=args.meta_clean)
                 if args.meta_json:
                     score.export_json()
                 if args.meta_dist:

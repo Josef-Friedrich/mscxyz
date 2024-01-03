@@ -201,7 +201,6 @@ sub_meta = subparser.add_parser(
 sub_meta.add_argument(
     "-c",
     "--clean",
-    nargs=1,
     dest="meta_clean",
     help="Clean the meta data fields. Possible values: „all“ or \
     „field_one,field_two“.",
