@@ -1,19 +1,27 @@
 """Manipulate the lyrics"""
 
-import typing
+from __future__ import annotations
+
+from typing import Optional, Union
 
 import lxml.etree as etree
+from lxml.etree import _Element
 
 from mscxyz.score import Score
 
 
+class NumberedLyricsElement:
+    number: int
+    element: _Element
+
+
 class MscoreLyricsInterface(Score):
-    def __init__(self, relpath: str):
+    def __init__(self, relpath: str) -> None:
         super(MscoreLyricsInterface, self).__init__(relpath)
-        self.lyrics = self.normalize_lyrics()
+        self.lyrics: list[NumberedLyricsElement] = self.normalize_lyrics()
         self.max = self.get_max()
 
-    def normalize_lyrics(self):
+    def normalize_lyrics(self) -> list[NumberedLyricsElement]:
         """Normalize numbering of verses to natural numbering (1,2,3).
 
         From
@@ -43,23 +51,23 @@ class MscoreLyricsInterface(Score):
                         {'number': 3, 'element': lyrics_tag},
                 ]
         """
-        lyrics = []
+        lyrics: list[NumberedLyricsElement] = []
         for lyric in self.xml_tree.findall(".//Lyrics"):
-            safe = {}
-            safe["element"] = lyric
-            number = lyric.find("no")
+            safe = NumberedLyricsElement()
+            safe.element = lyric
+            number: _Element | None = lyric.find("no")
 
             if hasattr(number, "text"):
                 no = int(number.text) + 1
             else:
                 no = 1
-            safe["number"] = no
+            safe.number = no
 
             lyrics.append(safe)
 
         return lyrics
 
-    def get_max(self):
+    def get_max(self) -> int:
         """Retrieve the number of verses.
 
         From:
@@ -75,22 +83,22 @@ class MscoreLyricsInterface(Score):
         """
         max_lyric = 0
         for element in self.lyrics:
-            if element["number"] > max_lyric:
-                max_lyric = element["number"]
+            if element.number > max_lyric:
+                max_lyric = element.number
 
         return max_lyric
 
-    def remap(self, remap_string: str, mscore: bool = False):
+    def remap(self, remap_string: str, mscore: bool = False) -> None:
         for pair in remap_string.split(","):
             old = pair.split(":")[0]
             new = pair.split(":")[1]
             for element in self.lyrics:
-                if element["number"] == int(old):
-                    element["element"].find("no").text = str(int(new) - 1)
+                if element.number == int(old):
+                    element.element.find("no").text = str(int(new) - 1)
 
         self.save(mscore)
 
-    def extract_one_lyrics_verse(self, number: int, mscore: bool = False):
+    def extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
         """Extract a lyric verse by verse number.
 
         :param number: The number of the lyrics verse starting by 1
@@ -98,9 +106,9 @@ class MscoreLyricsInterface(Score):
         score = MscoreLyricsInterface(self.relpath)
 
         for element in score.lyrics:
-            tag = element["element"]
+            tag = element.element
 
-            if element["number"] != number:
+            if element.number != number:
                 tag.getparent().remove(tag)
             elif number != 1:
                 tag.find("no").text = "0"
@@ -110,8 +118,8 @@ class MscoreLyricsInterface(Score):
         score.save(new_name, mscore)
 
     def extract_lyrics(
-        self, number: typing.Union[int, str] = None, mscore: bool = False
-    ):
+        self, number: Optional[Union[int, str]] = None, mscore: bool = False
+    ) -> None:
         """Extract one lyric verse or all lyric verses.
 
         :param mixed number: The lyric verse number or 'all'
@@ -123,7 +131,7 @@ class MscoreLyricsInterface(Score):
         else:
             self.extract_one_lyrics_verse(int(number))
 
-    def fix_lyrics_verse(self, verse_number: int):
+    def fix_lyrics_verse(self, verse_number: int) -> None:
         """
         from:
 
@@ -160,11 +168,11 @@ class MscoreLyricsInterface(Score):
 
         syllabic = False
         for element in self.lyrics:
-            if element["number"] == verse_number:
-                tag = element["element"]
-                tag_text = tag.find("text")
+            if element.number == verse_number:
+                tag: _Element = element.element
+                tag_text: _Element | None = tag.find("text")
                 text = tag_text.text
-                tag_syl = etree.Element("syllabic")
+                tag_syl: _Element = etree.Element("syllabic")
                 if text.endswith("-"):
                     tag_text.text = text[:-1]
                     if not syllabic:
@@ -182,8 +190,8 @@ class MscoreLyricsInterface(Score):
                 if not isinstance(tag_syl, bool):
                     tag.append(tag_syl)
 
-    def fix_lyrics(self, mscore: bool = False):
+    def fix_lyrics(self, mscore: bool = False) -> None:
         for verse_number in range(1, self.max + 1):
             self.fix_lyrics_verse(verse_number)
 
-        self.save(mscore=False)
+        self.save(mscore=mscore)

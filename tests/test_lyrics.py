@@ -59,7 +59,7 @@ class TestMscoreLyricsInterfaceFix:
         text = []
         syllabic = []
         for element in self.lyrics:
-            tag = element["element"]
+            tag = element.element
             tag_text = tag.find("text")
             text.append(tag_text.text)
             tag_syllabic = tag.find("syllabic")
@@ -111,7 +111,7 @@ class TestMscoreLyricsInterfaceRemap:
         tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
         text = []
         for element in tree.lyrics:
-            tag = element["element"]
+            tag = element.element
             tag_text = tag.find("no")
             if hasattr(tag_text, "text"):
                 no = tag_text.text
