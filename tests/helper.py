@@ -11,6 +11,7 @@ from pathlib import Path
 from lxml.etree import _ElementTree
 
 from mscxyz import Score
+from mscxyz.meta import Meta
 from mscxyz.style import MscoreStyleInterface
 
 # if typing.TYPE_CHECKING:
@@ -61,6 +62,10 @@ def get_file(filename: str, version: int = 2) -> str:
 
 def get_score(filename: str, version: int = 2) -> Score:
     return Score(get_file(filename, version))
+
+
+def get_meta(filename: str, version: int = 2) -> Meta:
+    return Meta(get_file(filename, version))
 
 
 def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:

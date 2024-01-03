@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 import typing
+from pathlib import Path
 
 import lxml
 import lxml.etree
@@ -507,7 +508,7 @@ class Meta(Score):
         field_value = tmep.parse(format_string, self.interface.export_to_dict())
         setattr(self.interface, destination_field, field_value)
 
-    def clean(self, fields):
+    def clean(self, fields) -> None:
         fields = fields[0]
         if fields == "all":
             fields = self.interface_read_write.fields
@@ -516,8 +517,20 @@ class Meta(Score):
         for field in fields:
             setattr(self.interface_read_write, field, "")
 
-    def delete_duplicates(self):
-        iface = self.interface
+    def delete_duplicates(self) -> None:
+        """
+        Delete duplicates in the metadata.
+
+        This method checks if the ``combined_lyricist`` and ``combined_composer`` are the same,
+        and if so, it sets ``combined_lyricist`` to an empty string.
+
+        It also checks if ``combined_title`` is empty but ``combined_subtitle`` is not,
+        and if so, it sets ``combined_title`` to ``combined_subtitle``.
+
+        Finally, it checks if ``combined_subtitle`` is the same as ``combined_title``,
+        and if so, it sets ``combined_subtitle`` to an empty string.
+        """
+        iface: Interface = self.interface
         if iface.combined_lyricist == iface.combined_composer:
             iface.combined_lyricist = ""
 
@@ -527,7 +540,7 @@ class Meta(Score):
         if iface.combined_subtitle == iface.combined_title:
             iface.combined_subtitle = ""
 
-    def show(self, pre, post):
+    def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
         args = get_args()
 
         fields = list(self.interface.fields)
@@ -544,7 +557,8 @@ class Meta(Score):
 
         for field in fields:
             if (
-                args.general_verbose == 0 and (pre[field] or post[field])
+                args.general_verbose == 0
+                and (field in pre and pre[field] or field in post and post[field])
             ) or args.general_verbose > 0:
                 if re.match(r"^combined_", field):
                     field_color = "green"
@@ -557,7 +571,7 @@ class Meta(Score):
                 else:
                     field_color = "white"
 
-                line = []
+                line: list[str] = []
                 if pre[field]:
                     line.append("“{}”".format(pre[field]))
 
@@ -567,10 +581,17 @@ class Meta(Score):
 
                 print("{}: {}".format(color(field, field_color), " ".join(line)))
 
-    def export_json(self):
-        data: dict[str, str] = {}
-        data["title"] = self.interface.title
+    def export_json(self) -> Path:
+        """
+        Export the data as a JSON file.
 
-        output = open(self.relpath.replace("." + self.extension, ".json"), "w")
+        :return: The path to the exported JSON file.
+        """
+        data: dict[str, str] = {}
+        result_path: Path = self.make_path(extension="json")
+        for field in self.interface.fields:
+            data[field] = self.interface.__getattr__(field)
+        output = open(result_path, "w")
         json.dump(data, output, indent=4)
         output.close()
+        return result_path

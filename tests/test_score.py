@@ -8,6 +8,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
+from typing import Optional
 
 from lxml.etree import _Element
 
@@ -24,23 +25,29 @@ class TestClassScore:
         self.score = helper.get_score("simple.mscx")
 
     def test_attribute_path(self) -> None:
+        assert self.score.path.is_file()
         assert self.score.path.exists()
+
+    def test_property_loadpath(self) -> None:
+        path = Path(self.score.loadpath)
+        assert path.is_file()
+        assert path.exists()
 
     def test_attribute_relpath(self) -> None:
         assert self.score.relpath
 
-    def test_attribute_dirname(self) -> None:
+    def test_property_dirname(self) -> None:
         path = Path(self.score.dirname)
         assert path.is_dir()
         assert path.exists()
 
-    def test_attribute_filename(self) -> None:
+    def test_property_filename(self) -> None:
         assert self.score.filename == "simple.mscx"
 
-    def test_attribute_extension(self) -> None:
+    def test_property_extension(self) -> None:
         assert self.score.extension == "mscx"
 
-    def test_attribute_basename(self) -> None:
+    def test_property_basename(self) -> None:
         assert self.score.basename == "simple"
 
     def test_method_clean(self) -> None:
@@ -59,29 +66,43 @@ class TestClassScore:
         assert xml_tree.xpath("//offset") == []
 
     def test_method_save(self) -> None:
-        score = helper.get_score("simple.mscx")
+        score: Score = helper.get_score("simple.mscx")
         score.save()
         result = helper.read_file(score.path)
         assert '<metaTag name="arranger"></metaTag>' in result
 
-    def test_method_save_new_name(self):
-        score = helper.get_score("simple.mscx")
+    def test_method_save_new_name(self) -> None:
+        score: Score = helper.get_score("simple.mscx")
         score.save(new_name=str(score.path))
         result = helper.read_file(score.path)
         assert '<metaTag name="arranger"></metaTag>' in result
 
-    def test_mscz(self):
-        tmp = helper.get_file("simple.mscz")
-        tree = Score(tmp)
-        result = tree.xml_tree.xpath("/museScore/Score/Style")
+    def test_mscz(self) -> None:
+        score: Score = helper.get_score("simple.mscz")
+        result = score.xml_tree.xpath("/museScore/Score/Style")
         assert isinstance(result, list)
         assert isinstance(result[0], _Element)
         assert result[0].tag == "Style"
 
 
+class TestMethodMakePath:
+    score: Score = helper.get_score("simple.mscz")
+
+    def make_path(
+        self, extension: Optional[str] = None, suffix: Optional[str] = None
+    ) -> str:
+        return str(self.score.make_path(extension=extension, suffix=suffix))
+
+    def test_argument_extension(self) -> None:
+        assert self.make_path(extension="mscx").endswith(".mscx")
+
+    def test_argument_suffix(self) -> None:
+        assert self.make_path(suffix="bak").endswith("_bak.mscz")
+
+
 class TestScoreMscz3:
     def setup_method(self) -> None:
-        self.score = helper.get_score("simple.mscz", version=3)
+        self.score: Score = helper.get_score("simple.mscz", version=3)
 
     def test_attribute_extension(self) -> None:
         assert self.score.extension == "mscz"

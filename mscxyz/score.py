@@ -156,6 +156,16 @@ class Score:
             self.version_major = int(self.version)
 
     @property
+    def relpath_backup(self) -> str:
+        return self.relpath.replace("." + self.extension, "_bak." + self.extension)
+
+    @property
+    def dirname(self) -> str:
+        """The name of the containing directory of the MuseScore file, for
+        example: ``/home/xyz/score_files``."""
+        return os.path.dirname(self.path)
+
+    @property
     def filename(self) -> str:
         """The filename of the MuseScore file, for example:
         ``simple.mscx``."""
@@ -168,19 +178,21 @@ class Score:
         return self.filename.split(".")[-1].lower()
 
     @property
-    def relpath_backup(self) -> str:
-        return self.relpath.replace("." + self.extension, "_bak." + self.extension)
-
-    @property
-    def dirname(self) -> str:
-        """The name of the containing directory of the MuseScore file, for
-        example: ``/home/xyz/score_files``."""
-        return os.path.dirname(self.path)
-
-    @property
     def basename(self) -> str:
         """The basename of the score file, for example: ``simple``."""
         return self.filename.replace("." + self.extension, "")
+
+    def make_path(
+        self, suffix: Optional[str] = None, extension: Optional[str] = None
+    ) -> Path:
+        path = str(self.path)
+        if suffix:
+            path: str = path.replace(
+                f".{self.extension}", f"_{suffix}.{self.extension}"
+            )
+        if extension:
+            path = path.replace(f".{self.extension}", f".{extension}")
+        return Path(path)
 
     @property
     def style(self) -> MscoreStyleInterface:

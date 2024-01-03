@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -256,7 +257,7 @@ class TestClassInterfaceReadOnly:
 
 
 class TestClassInterface:
-    def setup_method(self):
+    def setup_method(self) -> None:
         self.fields = [
             "combined_composer",
             "combined_lyricist",
@@ -292,18 +293,18 @@ class TestClassInterface:
         self.xml_tree = Score(self.tmp)
         self.interface = Interface(self.xml_tree)
 
-    def test_static_method_get_all_fields(self):
+    def test_static_method_get_all_fields(self) -> None:
         assert Interface.get_all_fields() == self.fields
 
-    def test_get(self):
+    def test_get(self) -> None:
         for field in self.fields:
             assert getattr(self.interface, field), field
 
-    def test_set(self):
+    def test_set(self) -> None:
         self.interface.vbox_title = "lol"
         assert self.interface.vbox_title == "lol"
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         with pytest.raises(mscxyz.meta.ReadOnlyFieldError):
             self.interface.readonly_extension = "lol"
 
@@ -723,3 +724,60 @@ class TestIntegration:
         )
         log_file = open(log, "r")
         assert log_file.readline() == "Title-Composer\n"
+
+
+class TestClassMeta:
+    meta: Meta
+
+    def setup_method(self) -> None:
+        self.meta: Meta = helper.get_meta("meta-all-values.mscx")
+
+    def test_method_delete_duplicates(self) -> None:
+        self.meta.interface.combined_lyricist = "test"
+        self.meta.interface.combined_composer = "test"
+        assert self.meta.interface.combined_lyricist == "test"
+        self.meta.delete_duplicates()
+        assert self.meta.interface.combined_lyricist is None
+
+    def test_method_show(self, capsys: pytest.CaptureFixture[str]) -> None:
+        self.meta.show({"combined_title": "pre"}, {"combined_title": "post"})
+        capture = capsys.readouterr()
+        assert capture.out == "combined_title: “pre” -> “post”\n"
+
+    def test_method_export_json(self) -> None:
+        result_path: Path = self.meta.export_json()
+        assert result_path.exists()
+
+        json: str = helper.read_file(result_path)
+        # json = (
+        #     '{\n    "combined_composer": "vbox_composer",\n'
+        #     '    "combined_lyricist": "vbox_lyricist",\n'
+        #     '    "combined_subtitle": "vbox_subtitle",\n'
+        #     '    "combined_title": "vbox_title",\n'
+        #     '    "metatag_arranger": "metatag_arranger",\n'
+        #     '    "metatag_composer": "metatag_composer",\n'
+        #     '    "metatag_copyright": "metatag_copyright",\n'
+        #     '    "metatag_creation_date": "metatag_creation_date",\n'
+        #     '    "metatag_lyricist": "metatag_lyricist",\n'
+        #     '    "metatag_movement_number": "metatag_movement_number",\n'
+        #     '    "metatag_movement_title": "metatag_movement_title",\n'
+        #     '    "metatag_platform": "metatag_platform",\n'
+        #     '    "metatag_poet": "metatag_poet",\n'
+        #     '    "metatag_source": "metatag_source",\n'
+        #     '    "metatag_translator": "metatag_translator",\n'
+        #     '    "metatag_work_number": "metatag_work_number",\n'
+        #     '    "metatag_work_title": "metatag_work_title",\n'
+        #     '    "readonly_abspath": "/tmp/tmp1rv5ybvu/meta-all-values.mscx",\n'
+        #     '    "readonly_basename": "meta-all-values",\n'
+        #     '    "readonly_dirname": "/tmp/tmp1rv5ybvu",\n'
+        #     '    "readonly_extension": "mscx",\n'
+        #     '    "readonly_filename": "meta-all-values.mscx",\n'
+        #     '    "readonly_relpath": "/tmp/tmp1rv5ybvu/meta-all-values.mscx",\n'
+        #     '    "readonly_relpath_backup": "/tmp/tmp1rv5ybvu/meta-all-values_bak.mscx",\n'
+        #     '    "vbox_composer": "vbox_composer",\n'
+        #     '    "vbox_lyricist": "vbox_lyricist",\n'
+        #     '    "vbox_subtitle": "vbox_subtitle",\n'
+        #     '    "vbox_title": "vbox_title"\n}'
+        # )
+        assert '{\n    "combined_composer": "vbox_composer",\n' in json
+        assert '"readonly_basename": "meta-all-values"' in json

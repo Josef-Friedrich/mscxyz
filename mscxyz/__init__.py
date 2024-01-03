@@ -234,7 +234,7 @@ def execute(cli_args: typing.Sequence[str] | None = None):
         elif args.subcommand == "meta":
             score = Meta(file)
             if no_error(lxml.etree.XMLSyntaxError, score.errors):
-                pre = score.interface.export_to_dict()
+                pre: dict[str, str] = score.interface.export_to_dict()
                 if args.meta_clean:
                     score.clean(fields=args.meta_clean)
                 if args.meta_json:
@@ -251,7 +251,7 @@ def execute(cli_args: typing.Sequence[str] | None = None):
                     score.sync_fields()
                 if args.meta_log:
                     score.write_to_log_file(args.meta_log[0], args.meta_log[1])
-                post = score.interface.export_to_dict()
+                post: dict[str, str] = score.interface.export_to_dict()
                 score.show(pre, post)
             if not args.general_dry_run and not score.errors and pre != post:
                 score.save(mscore=args.general_mscore)
