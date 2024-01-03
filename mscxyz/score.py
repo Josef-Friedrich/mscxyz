@@ -15,6 +15,7 @@ import lxml
 import lxml.etree  # Required for the type hints
 from lxml.etree import _Element, _ElementTree, strip_tags
 
+from mscxyz import utils
 from mscxyz.style import MscoreStyleInterface
 from mscxyz.utils import mscore, re_open, xpathall
 
@@ -112,6 +113,9 @@ class Score:
     """The path of the uncompressed MuseScore file in XML format file. 
     This path may be located in the temporary directory."""
 
+    stylepath: Optional[Path] = None
+    """Score files create with MuseScore 4 have a separate style file."""
+
     relpath: str
     """The relative path of the score file, for example:
     ``files/by_version/2/simple.mscx``.
@@ -127,15 +131,14 @@ class Score:
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
 
-    zip_container: Optional[ZipContainer]
+    zip_container: Optional[ZipContainer] = None
 
     errors: List[Exception]
     """A list to store errors."""
 
-    __style: Optional[MscoreStyleInterface]
+    __style: Optional[MscoreStyleInterface] = None
 
     def __init__(self, relpath: str) -> None:
-        self.__style = None
         self.errors = []
         self.relpath = relpath
         self.path = Path(relpath).resolve()
@@ -154,6 +157,9 @@ class Score:
             self.xml_root: _Element = self.xml_tree.getroot()
             self.version = self.get_version()
             self.version_major = int(self.version)
+
+        if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
+            self.stylepath = self.zip_container.score_style_file
 
     @property
     def relpath_backup(self) -> str:
@@ -291,13 +297,7 @@ class Score:
                         if not tag.text:
                             tag.text = ""
 
-            score = open(filename, "w")
-            score.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            score.write(
-                lxml.etree.tostring(self.xml_root, encoding="UTF-8").decode("utf-8")
-            )
-            score.write("\n")
-            score.close()
+            utils.xml.write(filename, self.xml_root)
 
             if self.extension == "mscz" and self.zip_container:
                 self.zip_container.save(filename)

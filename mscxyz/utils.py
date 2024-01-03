@@ -8,10 +8,13 @@ import platform
 import string
 import subprocess
 import typing
+from pathlib import Path
 from typing import Any, List, Literal, Optional
 
+import lxml
+import lxml.etree
 import termcolor
-from lxml.etree import _Element
+from lxml.etree import _Element, _ElementTree
 
 from mscxyz.settings import DefaultArguments
 
@@ -252,3 +255,20 @@ def text(element: _Element | None) -> str | None:
     if element.text is None:
         return None
     return element.text
+
+
+class xml:
+    @staticmethod
+    def read(path: str | Path) -> _Element:
+        return lxml.etree.parse(path).getroot()
+
+    @staticmethod
+    def write(path: str | Path, element: _Element | _ElementTree) -> None:
+        with open(path, "w") as document:
+            # maybe use: xml_declaration=True, pretty_print=True
+            # TestFileCompare not passing ...
+            document.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            document.write(
+                lxml.etree.tostring(element, encoding="UTF-8").decode("utf-8")
+            )
+            document.write("\n")

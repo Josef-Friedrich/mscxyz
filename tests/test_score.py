@@ -10,6 +10,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 
+import pytest
 from lxml.etree import _Element
 
 import mscxyz
@@ -18,6 +19,16 @@ from mscxyz.score import (
     ZipContainer,
 )
 from tests import helper
+
+
+@pytest.fixture()
+def score2x() -> Score:
+    return helper.get_score("simple.mscx", version=2)
+
+
+@pytest.fixture()
+def score4z() -> Score:
+    return helper.get_score("simple.mscz", version=4)
 
 
 class TestClassScore:
@@ -32,6 +43,15 @@ class TestClassScore:
         path = Path(self.score.loadpath)
         assert path.is_file()
         assert path.exists()
+
+    def test_property_stylepath(self, score2x: Score, score4z: Score) -> None:
+        assert not score2x.stylepath
+        assert score4z.stylepath
+        assert score4z.stylepath.exists()
+
+    def test_property_zip_container(self, score4z: Score) -> None:
+        assert not self.score.zip_container
+        assert score4z.zip_container
 
     def test_attribute_relpath(self) -> None:
         assert self.score.relpath

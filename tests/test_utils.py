@@ -1,12 +1,16 @@
 """Test submodule “utils.py”."""
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 from unittest import mock
 
+import lxml
+import lxml.etree
 import pytest
 
 import mscxyz
+from mscxyz import utils
 from mscxyz.utils import (
     find_safe,
     get_args,
@@ -145,12 +149,24 @@ class TestXpathSave:
         assert "XPath “.//metaTag” found more than one element in" in e.value.args[0]
 
 
-def test_xpathall():
+def test_xpathall() -> None:
     element = xpathall(root, ".//xxxxxxx")
     assert element is None
 
 
-def test_xpathall_safe():
+def test_xpathall_safe() -> None:
     element = xpathall_safe(root, ".//metaTag")
     assert isinstance(element, list)
     assert len(element) == 16
+
+
+def test_xml_write(tmp_path: Path) -> None:
+    dest = tmp_path / "test.xml"
+    element = lxml.etree.XML("<root><a><b/><c/></a><d><e/></d></root>")
+    utils.xml.write(dest, element)
+    result: str = helper.read_file(dest)
+    print(result)
+    assert result == (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        "<root><a><b/><c/></a><d><e/></d></root>\n"
+    )

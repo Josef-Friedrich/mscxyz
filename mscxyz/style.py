@@ -7,6 +7,7 @@ import lxml
 import lxml.etree
 from lxml.etree import _Element
 
+from mscxyz import utils
 from mscxyz.utils import find_safe, xpath
 
 if typing.TYPE_CHECKING:
@@ -28,11 +29,15 @@ class MscoreStyleInterface:
 
     def __init__(self, score: "Score") -> None:
         self.score = score
-        element: _Element | None = self.score.xml_tree.find("Score/Style")
-        if element is not None:
-            self.parent_element = element
+
+        if self.score.stylepath:
+            self.parent_element = utils.xml.read(self.score.stylepath)
         else:
-            self.parent_element: _Element = self._create_parent_style()
+            element: _Element | None = self.score.xml_tree.find("Score/Style")
+            if element is not None:
+                self.parent_element = element
+            else:
+                self.parent_element: _Element = self._create_parent_style()
 
     def _create_parent_style(self) -> _Element:
         """
@@ -54,11 +59,11 @@ class MscoreStyleInterface:
         :return: The created nested element.
         """
         tags: list[str] = tag.split("/")
-        parent = self.parent_element
+        parent: _Element = self.parent_element
         for tag in tags:
             element: _Element | None = parent.find(tag)
             if element is None:
-                parent: _Element = lxml.etree.SubElement(parent, tag)
+                parent = lxml.etree.SubElement(parent, tag)
             else:
                 parent = element
         return parent
@@ -276,3 +281,8 @@ class MscoreStyleInterface:
 
         parent = find_safe(self.score.xml_root, "Score")
         parent.insert(0, style[0])
+
+    def save(self) -> None:
+        """Save the XML tree to the style file."""
+        if self.score.stylepath:
+            utils.xml.write(self.score.stylepath, self.parent_element)
