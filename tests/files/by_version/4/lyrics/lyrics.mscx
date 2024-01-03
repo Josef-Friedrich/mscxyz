@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <programVersion>4.2.0</programVersion>
+  <programRevision>eb8d33c</programRevision>
+  <LastEID>22</LastEID>
+  <Score>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-09-13</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="mscVersion">4.20</metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <eid>4294967320</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>8589934707</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>12884901928</eid>
+              <text>1. la</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>17179869224</eid>
+              <text>2. li</text>
+              </Lyrics>
+            <Lyrics>
+              <no>2</no>
+              <eid>21474836520</eid>
+              <text>3. lo</text>
+              </Lyrics>
+            <Note>
+              <eid>25769803796</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>30064771187</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>34359738408</eid>
+              <text>la</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>38654705704</eid>
+              <text>li</text>
+              </Lyrics>
+            <Lyrics>
+              <no>2</no>
+              <eid>42949673000</eid>
+              <text>lo</text>
+              </Lyrics>
+            <Note>
+              <eid>47244640276</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>51539607667</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>55834574888</eid>
+              <text>la</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>60129542184</eid>
+              <text>li</text>
+              </Lyrics>
+            <Lyrics>
+              <no>2</no>
+              <eid>64424509480</eid>
+              <text>lo</text>
+              </Lyrics>
+            <Note>
+              <eid>68719476756</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>73014444147</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>77309411368</eid>
+              <text>la</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>81604378664</eid>
+              <text>li</text>
+              </Lyrics>
+            <Lyrics>
+              <no>2</no>
+              <eid>85899345960</eid>
+              <text>lo</text>
+              </Lyrics>
+            <Note>
+              <eid>90194313236</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>94489280524</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

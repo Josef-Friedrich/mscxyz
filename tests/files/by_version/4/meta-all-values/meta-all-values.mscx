@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <programVersion>4.2.0</programVersion>
+  <programRevision>eb8d33c</programRevision>
+  <LastEID>8</LastEID>
+  <Score>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger">metatag_arranger</metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">metatag_composer</metaTag>
+    <metaTag name="copyright">metatag_copyright</metaTag>
+    <metaTag name="creationDate">metatag_creation_date</metaTag>
+    <metaTag name="lyricist">metatag_lyricist</metaTag>
+    <metaTag name="movementNumber">metatag_movement_number</metaTag>
+    <metaTag name="movementTitle">metatag_movement_title</metaTag>
+    <metaTag name="mscVersion">4.20</metaTag>
+    <metaTag name="platform">metatag_platform</metaTag>
+    <metaTag name="poet">metatag_poet</metaTag>
+    <metaTag name="source">metatag_source</metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator">metatag_translator</metaTag>
+    <metaTag name="workNumber">metatag_work_number</metaTag>
+    <metaTag name="workTitle">metatag_work_title</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <boxAutoSize>0</boxAutoSize>
+        <eid>4294967418</eid>
+        <Text>
+          <eid>8589934598</eid>
+          <style>title</style>
+          <text>vbox_title</text>
+          </Text>
+        <Text>
+          <eid>12884901894</eid>
+          <style>subtitle</style>
+          <text>vbox_subtitle</text>
+          </Text>
+        <Text>
+          <eid>17179869190</eid>
+          <style>composer</style>
+          <text>vbox_composer</text>
+          </Text>
+        <Text>
+          <eid>21474836486</eid>
+          <style>poet</style>
+          <text>vbox_lyricist</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <eid>25769803800</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>30064771097</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <eid>34359738380</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
