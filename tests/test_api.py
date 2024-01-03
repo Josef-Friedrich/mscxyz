@@ -14,7 +14,6 @@ from mscxyz import (
 class TestApi:
     def test_api(self):
         assert Score
-        assert Score
         assert MscoreLyricsInterface
         assert MscoreMetaInterface
         assert MscoreStyleInterface

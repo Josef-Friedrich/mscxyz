@@ -30,7 +30,9 @@ class MscoreStyleInterface:
         self.score = score
 
         if self.score.stylepath:
-            self.parent_element = utils.xml.read(self.score.stylepath)
+            self.parent_element = utils.xml.find_safe(
+                utils.xml.read(self.score.stylepath), "Style"
+            )
         else:
             element: _Element | None = self.score.xml_tree.find("Score/Style")
             if element is not None:
@@ -278,10 +280,14 @@ class MscoreStyleInterface:
             post = "</Style></museScore>"
             style = lxml.etree.XML(pre + styles + post)
 
-        parent = utils.xml.find_safe(self.score.xml_root, "Score")
+        parent: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
         parent.insert(0, style[0])
 
     def save(self) -> None:
         """Save the XML tree to the style file."""
         if self.score.stylepath:
-            utils.xml.write(self.score.stylepath, self.parent_element)
+            element: _Element = lxml.etree.Element(
+                "museScore", {"version": str(self.score.version)}
+            )
+            element.append(self.parent_element)
+            utils.xml.write(self.score.stylepath, element)

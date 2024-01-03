@@ -93,7 +93,7 @@ class TestClassScore:
 
     def test_method_save_new_name(self) -> None:
         score: Score = helper.get_score("simple.mscx")
-        score.save(new_name=str(score.path))
+        score.save(new_dest=str(score.path))
         result = helper.read_file(score.path)
         assert '<metaTag name="arranger"></metaTag>' in result
 
@@ -253,7 +253,7 @@ class TestFileCompare:
         tmp: str = helper.get_file(filename, version=version)
         shutil.copy2(tmp, orig)
         tree = Score(tmp)
-        tree.save(new_name=saved)
+        tree.save(new_dest=saved)
         assert filecmp.cmp(orig, saved)
         os.remove(orig)
         os.remove(saved)

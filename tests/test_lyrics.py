@@ -12,7 +12,7 @@ class TestMscoreLyricsInterface:
     def setup_method(self) -> None:
         self.score_path = helper.get_file("lyrics.mscx")
 
-    def assertLyricsFileExists(self, number: int) -> None:
+    def assert_lyrics_file_exists(self, number: int) -> None:
         assert os.path.isfile(
             self.score_path.replace(".mscx", "_{}.mscx".format(number))
         )
@@ -20,9 +20,9 @@ class TestMscoreLyricsInterface:
     def _test_without_arguments(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", self.score_path])
-        self.assertLyricsFileExists(1)
-        self.assertLyricsFileExists(2)
-        self.assertLyricsFileExists(3)
+        self.assert_lyrics_file_exists(1)
+        self.assert_lyrics_file_exists(2)
+        self.assert_lyrics_file_exists(3)
 
     def test_without_arguments(self) -> None:
         self._test_without_arguments(version=2)
@@ -31,9 +31,9 @@ class TestMscoreLyricsInterface:
     def _test_extract_all(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "all", self.score_path])
-        self.assertLyricsFileExists(1)
-        self.assertLyricsFileExists(2)
-        self.assertLyricsFileExists(3)
+        self.assert_lyrics_file_exists(1)
+        self.assert_lyrics_file_exists(2)
+        self.assert_lyrics_file_exists(3)
 
     def test_extract_all(self) -> None:
         self._test_extract_all(version=2)
@@ -42,7 +42,7 @@ class TestMscoreLyricsInterface:
     def _test_extract_by_number(self, version: int = 2) -> None:
         self.score_path = helper.get_file("lyrics.mscx", version)
         mscxyz.execute(["lyrics", "--extract", "2", self.score_path])
-        self.assertLyricsFileExists(2)
+        self.assert_lyrics_file_exists(2)
 
     def test_extract_by_number(self):
         self._test_extract_by_number(version=2)

@@ -104,13 +104,38 @@ class TestClassStyle:
         assert title["size"] == "99"
 
 
-class TestClassMscoreStyleInterface3:
+class TestVersion3:
     """Test on MuseScore Version 3"""
 
     score: Score
 
     def setup_method(self) -> None:
         self.score = helper.get_score("All_Dudes.mscx", version=3)
+
+    def test_attributes_style(self) -> None:
+        assert self.score.style.parent_element.tag == "Style"
+
+    def test_method_get(self) -> None:
+        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+
+    def test_method_set(self) -> None:
+        self.score.style.set_value("staffUpperBorder", 99)
+        self.score.save()
+        assert reload(self.score).get_value("staffUpperBorder") == "99"
+
+    def test_method_set_create(self) -> None:
+        self.score.style.set_value("lol", "lol")
+        self.score.save()
+        assert reload(self.score).get_value("lol") == "lol"
+
+
+class TestVersion4:
+    """Test on MuseScore Version 4"""
+
+    score: Score
+
+    def setup_method(self) -> None:
+        self.score = helper.get_score("All_Dudes.mscz", version=4)
 
     def test_attributes_style(self) -> None:
         assert self.score.style.parent_element.tag == "Style"

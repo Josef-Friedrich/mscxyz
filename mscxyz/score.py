@@ -258,19 +258,17 @@ class Score:
         )
         strip_tags(self.xml_tree, "font", "b", "i", "pos", "offset")
 
-    def save(self, new_name: str = "", mscore: bool = False):
+    def save(self, new_dest: str = "", mscore: bool = False) -> None:
         """Save the MuseScore file.
 
-        :param new_name: Save the MuseScore file under a new name.
+        :param new_dest: Save the MuseScore file under a new name.
         :param mscore: Save the MuseScore file by opening it with the
           MuseScore executable and save it there.
         """
-        if new_name:
-            filename: str = new_name
-        elif self.extension == "mscz":
-            filename = self.loadpath
+        if new_dest:
+            dest: str = new_dest
         else:
-            filename = self.relpath
+            dest = str(self.path)
         if not self.errors:
             # To get the same xml tag structure as the original score file
             # has.
@@ -296,10 +294,16 @@ class Score:
                         if not tag.text:
                             tag.text = ""
 
-            utils.xml.write(filename, self.xml_root)
+            xml_dest = dest
+
+            if self.extension == "mscz":
+                xml_dest = self.loadpath
+            utils.xml.write(xml_dest, self.xml_root)
+            if self.__style:
+                self.__style.save()
 
             if self.extension == "mscz" and self.zip_container:
-                self.zip_container.save(filename)
+                self.zip_container.save(dest)
 
             if mscore:
-                utils.re_open(filename)
+                utils.re_open(dest)
