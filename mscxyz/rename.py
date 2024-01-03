@@ -85,9 +85,10 @@ def rename_filename(source: str) -> Meta:
 
     if os.path.exists(target):
         target_format: str = target.replace(".mscx", "{}.mscx")
-        i = ""
-        while os.path.exists(target_format.format(i)):
-            target = target_format.format(i)
+        i = 1
+        counter_format: str = ""
+        while os.path.exists(target_format.format(counter_format)):
+            target = target_format.format(counter_format)
             if get_checksum(source) == get_checksum(target):
                 print(
                     color(
@@ -99,11 +100,13 @@ def rename_filename(source: str) -> Meta:
                     )
                 )
                 return meta
-            if i == "":
-                i = 1
+            if i == 1:
+                counter_format = ""
+            else:
+                counter_format = str(i)
             i += 1
 
-        target = target_format.format(i)
+        target = target_format.format(counter_format)
 
     show(source, target)
 
