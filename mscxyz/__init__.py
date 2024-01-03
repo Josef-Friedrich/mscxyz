@@ -31,7 +31,7 @@ from importlib import metadata
 
 import lxml
 
-from mscxyz import cli
+from mscxyz import cli, utils
 from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
@@ -40,7 +40,6 @@ from mscxyz.score import (
     Score,
 )
 from mscxyz.settings import DefaultArguments
-from mscxyz.utils import color, list_scores, mscore, set_args
 
 __version__: str = metadata.version("mscxyz")
 
@@ -66,10 +65,10 @@ MscoreStyleInterface
 
 # Functions
 
-exec_mscore_binary = mscore
+exec_mscore_binary = utils.mscore
 """see submodule ``utils.py``"""
 
-list_scores
+list_scores = utils.list_scores
 """see submodule ``score.py``"""
 
 ###############################################################################
@@ -174,8 +173,8 @@ def report_errors(errors: typing.Sequence):
     for error in errors:
         print(
             "{}: {}; message: {}".format(
-                color("Error", "white", "on_red"),
-                color(error.__class__.__name__, "red"),
+                utils.color("Error", "white", "on_red"),
+                utils.color(error.__class__.__name__, "red"),
                 error.msg,
             )
         )
@@ -196,16 +195,16 @@ def execute(cli_args: typing.Sequence[str] | None = None):
         config = parse_config_ini(args.general_config_file)
         if config:
             args = merge_config_into_args(config, args)
-    set_args(args)
+    utils.set_args(args)
 
     if args.subcommand == "help":
         show_all_help(args)
         sys.exit()
 
-    files = list_scores(path=args.path, glob=args.general_glob)
+    files = utils.list_scores(path=args.path, glob=args.general_glob)
 
     for file in files:
-        print("\n" + color(file, "red"))
+        print("\n" + utils.color(file, "red"))
 
         if args.general_backup:
             score = Score(file)

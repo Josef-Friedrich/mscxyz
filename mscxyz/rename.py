@@ -28,7 +28,7 @@ def prepare_fields(fields: dict[str, str]) -> dict[str, str]:
     for field, value in fields.items():
         if value:
             if args.rename_alphanum:
-                value: str = alphanum(value)
+                value = alphanum(value)
                 value = value.strip()
             if args.rename_ascii:
                 value = asciify(value)

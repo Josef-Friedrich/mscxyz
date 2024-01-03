@@ -205,58 +205,6 @@ def color(
         return text
 
 
-def find_safe(element: _Element, path: str) -> _Element:
-    result: _Element | None = element.find(path)
-    if result is None:
-        raise ValueError(f"Path {path} not found in element {element}!")
-    return result
-
-
-def xpath(element: _Element, path: str) -> _Element | None:
-    output: list[_Element] | None = xpathall(element, path)
-    if output and len(output) > 0:
-        return output[0]
-
-    return None
-
-
-def xpath_safe(element: _Element, path: str) -> _Element:
-    output: list[_Element] = xpathall_safe(element, path)
-    if len(output) > 1:
-        raise ValueError(f"XPath “{path}” found more than one element in {element}!")
-    return output[0]
-
-
-def xpathall(element: _Element, path: str) -> list[_Element] | None:
-    result: _XPathObject = element.xpath(path)
-    output: list[_Element] = []
-
-    if isinstance(result, list):
-        for item in result:
-            if isinstance(item, _Element):
-                output.append(item)
-
-    if len(output) > 0:
-        return output
-
-    return None
-
-
-def xpathall_safe(element: _Element, path: str) -> list[_Element]:
-    output: list[_Element] | None = xpathall(element, path)
-    if output is None:
-        raise ValueError(f"XPath “{path}” not found in element {element}!")
-    return output
-
-
-def text(element: _Element | None) -> str | None:
-    if element is None:
-        return None
-    if element.text is None:
-        return None
-    return element.text
-
-
 class xml:
     @staticmethod
     def read(path: str | Path) -> _Element:
@@ -272,3 +220,57 @@ class xml:
                 lxml.etree.tostring(element, encoding="UTF-8").decode("utf-8")
             )
             document.write("\n")
+
+    @staticmethod
+    def find_safe(element: _Element, path: str) -> _Element:
+        result: _Element | None = element.find(path)
+        if result is None:
+            raise ValueError(f"Path {path} not found in element {element}!")
+        return result
+
+    @staticmethod
+    def xpath(element: _Element, path: str) -> _Element | None:
+        output: list[_Element] | None = xml.xpathall(element, path)
+        if output and len(output) > 0:
+            return output[0]
+
+        return None
+
+    @staticmethod
+    def xpath_safe(element: _Element, path: str) -> _Element:
+        output: list[_Element] = xml.xpathall_safe(element, path)
+        if len(output) > 1:
+            raise ValueError(
+                f"XPath “{path}” found more than one element in {element}!"
+            )
+        return output[0]
+
+    @staticmethod
+    def xpathall(element: _Element, path: str) -> list[_Element] | None:
+        result: _XPathObject = element.xpath(path)
+        output: list[_Element] = []
+
+        if isinstance(result, list):
+            for item in result:
+                if isinstance(item, _Element):
+                    output.append(item)
+
+        if len(output) > 0:
+            return output
+
+        return None
+
+    @staticmethod
+    def xpathall_safe(element: _Element, path: str) -> list[_Element]:
+        output: list[_Element] | None = xml.xpathall(element, path)
+        if output is None:
+            raise ValueError(f"XPath “{path}” not found in element {element}!")
+        return output
+
+    @staticmethod
+    def text(element: _Element | None) -> str | None:
+        if element is None:
+            return None
+        if element.text is None:
+            return None
+        return element.text

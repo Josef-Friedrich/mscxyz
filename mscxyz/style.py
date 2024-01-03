@@ -8,7 +8,6 @@ import lxml.etree
 from lxml.etree import _Element
 
 from mscxyz import utils
-from mscxyz.utils import find_safe, xpath
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -139,7 +138,7 @@ class MscoreStyleInterface:
                 "This operation is only allowed for MuseScore 2 score files"
             )
 
-        child: _Element | None = xpath(
+        child: _Element | None = utils.xml.xpath(
             self.score.xml_root, f'//TextStyle/name[contains(., "{name}")]'
         )
 
@@ -279,7 +278,7 @@ class MscoreStyleInterface:
             post = "</Style></museScore>"
             style = lxml.etree.XML(pre + styles + post)
 
-        parent = find_safe(self.score.xml_root, "Score")
+        parent = utils.xml.find_safe(self.score.xml_root, "Score")
         parent.insert(0, style[0])
 
     def save(self) -> None:

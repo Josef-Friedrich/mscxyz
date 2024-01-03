@@ -17,7 +17,6 @@ from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz import utils
 from mscxyz.style import MscoreStyleInterface
-from mscxyz.utils import mscore, re_open, xpathall
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -214,7 +213,7 @@ class Score:
         :param extension: The extension (default: pdf)
         """
         score: str = self.relpath
-        mscore(
+        utils.mscore(
             ["--export-to", score.replace("." + self.extension, "." + extension), score]
         )
 
@@ -291,7 +290,7 @@ class Score:
                 "//StaffText/text",
                 "//Jump/continueAt",
             ):
-                x: list[_Element] | None = xpathall(self.xml_root, xpath)
+                x: list[_Element] | None = utils.xml.xpathall(self.xml_root, xpath)
                 if x:
                     for tag in x:
                         if not tag.text:
@@ -303,4 +302,4 @@ class Score:
                 self.zip_container.save(filename)
 
             if mscore:
-                re_open(filename)
+                utils.re_open(filename)

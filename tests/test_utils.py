@@ -11,21 +11,9 @@ import pytest
 
 import mscxyz
 from mscxyz import utils
-from mscxyz.utils import (
-    find_safe,
-    get_args,
-    get_mscore_bin,
-    list_scores,
-    list_zero_alphabet,
-    mscore,
-    xpath,
-    xpath_safe,
-    xpathall,
-    xpathall_safe,
-)
 from tests import helper
 
-args = get_args()
+args = utils.get_args()
 args.general_executable = None
 
 
@@ -39,7 +27,7 @@ class TestFunctions:
                 ("/a", ("bar",), ("lorem.mscx",)),
                 ("/a/b", (), ("impsum.mscz", "dolor.mscx", "sit.txt")),
             ]
-            return list_scores(path, extension, glob)
+            return utils.list_scores(path, extension, glob)
 
     @mock.patch("mscxyz.Meta")
     def test_batch(self, Meta: mock.Mock) -> None:
@@ -69,13 +57,13 @@ class TestFunctions:
     def test_isfile(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
-            result = list_scores("/a/b/lorem.mscx")
+            result = utils.list_scores("/a/b/lorem.mscx")
             assert result == ["/a/b/lorem.mscx"]
 
     def test_isfile_no_match(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
-            result: list[str] = list_scores("/a/b/lorem.lol")
+            result: list[str] = utils.list_scores("/a/b/lorem.lol")
             assert result == []
 
     def test_arg_glob_txt(self) -> None:
@@ -87,7 +75,7 @@ class TestFunctions:
         assert result == []
 
     def test_function_list_zero_alphabet(self) -> None:
-        result: list[str] = list_zero_alphabet()
+        result: list[str] = utils.list_zero_alphabet()
         assert result[0] == "0"
         assert result[26] == "z"
 
@@ -109,7 +97,7 @@ class TestFunctionGetMscoreBin:
         exists.return_value = True
         path = bytes("/usr/local/bin/mscore\n".encode("utf-8"))
         check_output.return_value = path
-        output = get_mscore_bin()
+        output = utils.get_mscore_bin()
         assert output == "/usr/local/bin/mscore"
 
 
@@ -119,7 +107,7 @@ class TestFunctionMscore:
     def test_function(self, popen: mock.Mock, get_mscore_bin: mock.Mock) -> None:
         get_mscore_bin.return_value = "/bin/mscore"
         popen.return_value = mock.MagicMock(returncode=0)
-        result = mscore(["--export-to", "troll.mscz", "lol.mscx"])
+        result = utils.mscore(["--export-to", "troll.mscz", "lol.mscx"])
         assert result.returncode == 0
 
 
@@ -129,33 +117,33 @@ root = tree.getroot()
 
 
 def test_find_safe():
-    element = find_safe(root, ".//Score")
+    element = utils.xml.find_safe(root, ".//Score")
     assert element.tag == "Score"
 
 
 def test_xpath():
-    element = xpath(root, ".//xxxxxxx")
+    element = utils.xml.xpath(root, ".//xxxxxxx")
     assert element is None
 
 
 class TestXpathSave:
     def test_xpath_safe(self):
-        element = xpath_safe(root, ".//Score")
+        element = utils.xml.xpath_safe(root, ".//Score")
         assert element.tag == "Score"
 
     def test_xpath_safe_raise(self):
         with pytest.raises(ValueError) as e:
-            xpath_safe(root, ".//metaTag")
+            utils.xml.xpath_safe(root, ".//metaTag")
         assert "XPath “.//metaTag” found more than one element in" in e.value.args[0]
 
 
 def test_xpathall() -> None:
-    element = xpathall(root, ".//xxxxxxx")
+    element = utils.xml.xpathall(root, ".//xxxxxxx")
     assert element is None
 
 
 def test_xpathall_safe() -> None:
-    element = xpathall_safe(root, ".//metaTag")
+    element = utils.xml.xpathall_safe(root, ".//metaTag")
     assert isinstance(element, list)
     assert len(element) == 16
 

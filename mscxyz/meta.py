@@ -14,7 +14,6 @@ from lxml.etree import _Element
 
 from mscxyz import utils
 from mscxyz.score import Score
-from mscxyz.utils import color, get_args, xpath
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -144,11 +143,11 @@ class MetaTag:
         self.xml_root = xml_root
 
     def _get_element(self, field: str) -> _Element | None:
-        return xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
+        return utils.xml.xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
 
     def _get_text(self, field: str) -> str | None:
         element: _Element | None = self._get_element(field)
-        return utils.text(element)
+        return utils.xml.text(element)
 
     def _set_text(self, field: str, value: str | None) -> None:
         element: _Element | None = self._get_element(field)
@@ -231,7 +230,7 @@ class Vbox:
             vbox = lxml.etree.Element("VBox")
             height = lxml.etree.SubElement(vbox, "height")
             height.text = "10"
-            utils.xpath_safe(xml_root, xpath).insert(0, vbox)
+            utils.xml.xpath_safe(xml_root, xpath).insert(0, vbox)
 
     def _get_tag(self, style: str) -> _Element | None:
         """
@@ -276,7 +275,7 @@ class Vbox:
         text_tag: _Element = lxml.etree.SubElement(Text_tag, "text")
         text_tag.text = text
 
-        for element in utils.xpathall_safe(self.xml_root, "//VBox"):
+        for element in utils.xml.xpathall_safe(self.xml_root, "//VBox"):
             element.append(Text_tag)
 
     def _set_text(self, style: str, text: str) -> None:
@@ -557,7 +556,7 @@ class Meta(Score):
             iface.combined_subtitle = ""
 
     def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
-        args = get_args()
+        args = utils.get_args()
 
         fields = list(self.interface.fields)
 
@@ -594,9 +593,9 @@ class Meta(Score):
 
                 if pre[field] != post[field]:
                     line.append("->")
-                    line.append(color("“{}”".format(post[field]), "yellow"))
+                    line.append(utils.color("“{}”".format(post[field]), "yellow"))
 
-                print("{}: {}".format(color(field, field_color), " ".join(line)))
+                print("{}: {}".format(utils.color(field, field_color), " ".join(line)))
 
     def export_json(self) -> Path:
         """
