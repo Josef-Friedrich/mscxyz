@@ -214,6 +214,8 @@ def xpath(element: _Element, path: str) -> _Element | None:
     if output and len(output) > 0:
         return output[0]
 
+    return None
+
 
 def xpath_safe(element: _Element, path: str) -> _Element:
     output: list[_Element] = xpathall_safe(element, path)
@@ -233,6 +235,8 @@ def xpathall(element: _Element, path: str) -> list[_Element] | None:
 
     if len(output) > 0:
         return output
+
+    return None
 
 
 def xpathall_safe(element: _Element, path: str) -> list[_Element]:
