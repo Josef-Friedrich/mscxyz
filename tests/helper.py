@@ -8,7 +8,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from lxml.etree import _ElementTree
+from lxml.etree import _Element
 
 from mscxyz import Score
 from mscxyz.meta import Meta
@@ -70,7 +70,7 @@ def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:
     return get_score(filename, version).style
 
 
-def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
+def get_xml_root(filename: str, version: int = 2) -> _Element:
     """
     Get the XML tree from the specified file.
 
@@ -78,7 +78,7 @@ def get_xml_tree(filename: str, version: int = 2) -> _ElementTree:
     :param version: The version of the file (default is 2).
     :return: The XML tree.
     """
-    return get_score(filename, version).xml_tree
+    return get_score(filename, version).xml_root
 
 
 def read_file(filename: str | Path) -> str:

@@ -53,7 +53,7 @@ class MscoreLyricsInterface(Score):
                 ]
         """
         lyrics: list[NumberedLyricsElement] = []
-        for lyric in self.xml_tree.findall(".//Lyrics"):
+        for lyric in self.xml_root.findall(".//Lyrics"):
             safe = NumberedLyricsElement()
             safe.element = lyric
             number: _Element | None = lyric.find("no")

@@ -206,7 +206,7 @@ def test_method_merge_style() -> None:
     score.clean()
     score.style.merge(styles)
 
-    result = score.xml_tree.find("Score/Style")
+    result = score.xml_root.find("Score/Style")
     assert result is not None
     assert result[0][0].tag == "halign"
     assert result[0][0].text == "center"

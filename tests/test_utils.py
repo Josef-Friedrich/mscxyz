@@ -111,9 +111,7 @@ class TestFunctionMscore:
         assert result.returncode == 0
 
 
-tree = helper.get_xml_tree("simple.mscz", 4)
-
-root = tree.getroot()
+root = helper.get_xml_root("simple.mscz", 4)
 
 
 def test_find_safe() -> None:

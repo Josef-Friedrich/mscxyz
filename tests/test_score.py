@@ -76,7 +76,7 @@ class TestClassScore:
         score.clean()
         score.save()
         score = Score(str(score.path))
-        xml_tree = score.xml_tree
+        xml_tree = score.xml_root
         assert xml_tree.xpath("/museScore/Score/Style") == []
         assert xml_tree.xpath("//LayoutBreak") == []
         assert xml_tree.xpath("//StemDirection") == []
@@ -100,7 +100,7 @@ class TestClassScore:
 
     def test_mscz(self) -> None:
         score: Score = helper.get_score("simple.mscz")
-        result = score.xml_tree.xpath("/museScore/Score/Style")
+        result = score.xml_root.xpath("/museScore/Score/Style")
         assert isinstance(result, list)
         assert isinstance(result[0], _Element)
         assert result[0].tag == "Style"

@@ -34,7 +34,7 @@ class MscoreStyleInterface:
                 utils.xml.read(self.score.style_file), "Style"
             )
         else:
-            element: _Element | None = self.score.xml_tree.find("Score/Style")
+            element: _Element | None = self.score.xml_root.find("Score/Style")
             if element is not None:
                 self.parent_element = element
             else:
@@ -46,7 +46,7 @@ class MscoreStyleInterface:
 
         :return: The created parent style element.
         """
-        score: _Element | None = self.score.xml_tree.find("Score")
+        score: _Element | None = self.score.xml_root.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
         return lxml.etree.SubElement(score, "Style")

@@ -107,8 +107,6 @@ class Score:
 
     path: Path
     """The absolute path of the input file.
-           
-
     """
 
     xml_file: str
@@ -117,8 +115,6 @@ class Score:
 
     style_file: Optional[Path] = None
     """Score files create with MuseScore 4 have a separate style file."""
-
-    xml_tree: _ElementTree
 
     xml_root: _Element
 
@@ -146,11 +142,10 @@ class Score:
 
         self.errors = []
         try:
-            self.xml_tree = lxml.etree.parse(self.xml_file)
+            self.xml_root = lxml.etree.parse(self.xml_file).getroot()
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
-            self.xml_root: _Element = self.xml_tree.getroot()
             self.version = self.get_version()
             self.version_major = int(self.version)
 
@@ -221,7 +216,7 @@ class Score:
         :return: The version number as a float.
         :raises ValueError: If the version number cannot be retrieved.
         """
-        version: _XPathObject = self.xml_tree.xpath("number(/museScore[1]/@version)")
+        version: _XPathObject = self.xml_root.xpath("number(/museScore[1]/@version)")
         if isinstance(version, float):
             return version
         raise ValueError("Could not get version number")
@@ -239,7 +234,7 @@ class Score:
 
         """
         for xpath_string in xpath_strings:
-            x: _XPathObject = self.xml_tree.xpath(xpath_string)
+            x: _XPathObject = self.xml_root.xpath(xpath_string)
             if isinstance(x, list):
                 for rm in x:
                     if isinstance(rm, _Element):
@@ -253,7 +248,7 @@ class Score:
         self.remove_tags_by_xpath(
             "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
         )
-        strip_tags(self.xml_tree, "font", "b", "i", "pos", "offset")
+        strip_tags(self.xml_root, "font", "b", "i", "pos", "offset")
 
     def save(self, new_dest: str = "", mscore: bool = False) -> None:
         """Save the MuseScore file.
