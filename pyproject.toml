@@ -22,7 +22,7 @@ keywords = ["audio"]
 python = "^3.8"
 lxml = "^5.0.0"
 termcolor = "^2.4.0"
-tmep = "^2.3.4"
+tmep = "^2.4.0"
 lxml-stubs = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]

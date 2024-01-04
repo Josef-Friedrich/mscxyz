@@ -793,13 +793,13 @@ tests = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "tmep"
-version = "2.3.4"
+version = "2.4.0"
 description = "Template and Macros Expansion for Path names."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "tmep-2.3.4-py3-none-any.whl", hash = "sha256:f0eb8c838a380c4d50566028f12132ccf9a62398ca64cfe643a758882e8f6e41"},
-    {file = "tmep-2.3.4.tar.gz", hash = "sha256:4ebb45a3c6e528caf3e32b9a1d87387de4693b67fac3b92b66846f379c5b6232"},
+    {file = "tmep-2.4.0-py3-none-any.whl", hash = "sha256:4342c3f95ccedc6aa8c81b0ba3c9f0d49b49aaf53d221bc8c82a71054418e8df"},
+    {file = "tmep-2.4.0.tar.gz", hash = "sha256:e15a407b93ea4a017e715a486bf69f334bdb0bb9cf126a5bbfd7629eb2c5cb0d"},
 ]
 
 [package.dependencies]
@@ -944,4 +944,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "49db95dd80cc9694312ae6c00f3dcdb4f9aa35e683f95a42eea18170f1cd7f27"
+content-hash = "a8e0832b25653219a8c482c5b5e6bcb8e5ffd1aaf9024d3c26b3d9894435946f"

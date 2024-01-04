@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal, Union
+from typing import Literal, Optional, Union
 
 import lxml.etree as etree
 from lxml.etree import _Element
@@ -119,7 +119,9 @@ class MscoreLyricsInterface(Score):
         score.save(new_name, mscore)
 
     def extract_lyrics(
-        self, number: Union[int, str, Literal["all"]] = None, mscore: bool = False
+        self,
+        number: Optional[Union[int, str, Literal["all"]]] = None,
+        mscore: bool = False,
     ) -> None:
         """Extract one lyric verse or all lyric verses.
 
@@ -130,7 +132,12 @@ class MscoreLyricsInterface(Score):
             for n in range(1, self.max + 1):
                 self.extract_one_lyrics_verse(n)
         else:
-            self.extract_one_lyrics_verse(int(number))
+            no: int
+            if number is None:
+                no = 1
+            else:
+                no = int(number)
+            self.extract_one_lyrics_verse(no)
 
     def fix_lyrics_verse(self, verse_number: int) -> None:
         """
@@ -171,25 +178,26 @@ class MscoreLyricsInterface(Score):
         for element in self.lyrics:
             if element.number == verse_number:
                 tag: _Element = element.element
-                tag_text: _Element | None = tag.find("text")
-                text = tag_text.text
-                tag_syl: _Element = etree.Element("syllabic")
+                element_text: _Element = utils.xml.find_safe(tag, "text")
+                text = utils.xml.get_text_safe(element_text)
+                element_syllabic: _Element = etree.Element("syllabic")
+                append_syllabic: bool = True
                 if text.endswith("-"):
-                    tag_text.text = text[:-1]
+                    element_text.text = text[:-1]
                     if not syllabic:
-                        tag_syl.text = "begin"
+                        element_syllabic.text = "begin"
                         syllabic = True
                     else:
-                        tag_syl.text = "middle"
+                        element_syllabic.text = "middle"
                 else:
                     if syllabic:
-                        tag_syl.text = "end"
+                        element_syllabic.text = "end"
                         syllabic = False
                     else:
-                        tag_syl = False
+                        append_syllabic = False
 
-                if not isinstance(tag_syl, bool):
-                    tag.append(tag_syl)
+                if append_syllabic:
+                    tag.append(element_syllabic)
 
     def fix_lyrics(self, mscore: bool = False) -> None:
         for verse_number in range(1, self.max + 1):

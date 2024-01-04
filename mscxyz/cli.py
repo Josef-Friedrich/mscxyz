@@ -326,7 +326,7 @@ sub_rename = subparser.add_parser(
     "string (-f, --format):\n\n"
     "Fields\n======\n\n{}\n\n"
     "Functions\n=========\n\n{}".format(
-        list_fields(Interface.get_all_fields(), prefix="    "), tmep.doc.Doc().get()
+        list_fields(Interface.get_all_fields(), prefix="    "), tmep.get_doc()
     ),
 )
 
