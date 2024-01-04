@@ -104,7 +104,7 @@ class MscoreLyricsInterface(Score):
 
         :param number: The number of the lyrics verse starting by 1
         """
-        score = MscoreLyricsInterface(self.relpath)
+        score = MscoreLyricsInterface(str(self.path))
 
         for element in score.lyrics:
             tag = element.element
@@ -115,7 +115,7 @@ class MscoreLyricsInterface(Score):
                 utils.xml.set_text(tag, "no", 0)
 
         ext: str = "." + self.extension
-        new_name: str = score.relpath.replace(ext, "_" + str(number) + ext)
+        new_name: str = str(self.path).replace(ext, "_" + str(number) + ext)
         score.save(new_name, mscore)
 
     def extract_lyrics(

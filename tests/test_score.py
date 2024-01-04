@@ -53,9 +53,6 @@ class TestClassScore:
         assert not self.score.zip_container
         assert score4z.zip_container
 
-    def test_attribute_relpath(self) -> None:
-        assert self.score.relpath
-
     def test_property_dirname(self) -> None:
         path = Path(self.score.dirname)
         assert path.is_dir()

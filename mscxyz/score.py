@@ -115,11 +115,6 @@ class Score:
     stylepath: Optional[Path] = None
     """Score files create with MuseScore 4 have a separate style file."""
 
-    relpath: str
-    """The relative path of the score file, for example:
-    ``files/by_version/2/simple.mscx``.
-    """
-
     xml_tree: _ElementTree
 
     xml_root: _Element
@@ -137,10 +132,9 @@ class Score:
 
     __style: Optional[MscoreStyleInterface] = None
 
-    def __init__(self, relpath: str) -> None:
+    def __init__(self, src: str) -> None:
         self.errors = []
-        self.relpath = relpath
-        self.path = Path(relpath).resolve()
+        self.path = Path(src).resolve()
 
         if self.extension == "mscz":
             self.zip_container = ZipContainer(self.path)
@@ -162,7 +156,7 @@ class Score:
 
     @property
     def relpath_backup(self) -> str:
-        return self.relpath.replace("." + self.extension, "_bak." + self.extension)
+        return str(self.path).replace("." + self.extension, "_bak." + self.extension)
 
     @property
     def dirname(self) -> str:
@@ -205,14 +199,14 @@ class Score:
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
-        shutil.copy2(self.relpath, self.relpath_backup)
+        shutil.copy2(self.path, self.relpath_backup)
 
     def export(self, extension: str = "pdf") -> None:
         """Export the score to the specifed file type.
 
         :param extension: The extension (default: pdf)
         """
-        score: str = self.relpath
+        score: str = str(self.path)
         utils.execute_musescore(
             ["--export-to", score.replace("." + self.extension, "." + extension), score]
         )

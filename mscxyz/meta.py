@@ -439,7 +439,7 @@ class InterfaceReadOnly:
 
     @property
     def readonly_relpath(self) -> str:
-        return self.xml_tree.relpath
+        return str(self.xml_tree.path)
 
     @property
     def readonly_relpath_backup(self) -> str:
