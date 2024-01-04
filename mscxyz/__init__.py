@@ -1,24 +1,5 @@
 """A command line tool to manipulate the XML based mscX and mscZ
 files of the notation software MuseScore.
-
-API Interface:
-
-Classes:
-
-.. code ::
-
-    Score
-        Lyrics
-        MscoreMetaInterface
-        Style
-
-
-Functions:
-
-.. code ::
-
-    exec_mscore_binary
-    list_scores
 """
 
 from __future__ import annotations
@@ -35,15 +16,23 @@ import lxml.etree
 from lxml.etree import LxmlError
 
 import mscxyz
+import mscxyz.lyrics
+import mscxyz.meta
 import mscxyz.score
+import mscxyz.style
 from mscxyz import cli, utils
-from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
 from mscxyz.settings import DefaultArguments
 
 __version__: str = metadata.version("mscxyz")
 
 Score = mscxyz.score.Score
+
+Lyrics = mscxyz.lyrics.Lyrics
+
+Meta = mscxyz.meta.Meta
+
+Style = mscxyz.style.Style
 
 list_scores = utils.list_scores
 
