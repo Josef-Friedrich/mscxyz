@@ -107,7 +107,7 @@ parser.add_argument(
 )
 
 ###############################################################################
-# subparser
+# subparser in alphabetical order
 ###############################################################################
 
 subparser = parser.add_subparsers(
@@ -132,6 +132,61 @@ sub_clean.add_argument(
     type=open,
     help='Load a "*.mss" style file and include the contents of \
     this file.',
+)
+
+###############################################################################
+# export
+###############################################################################
+
+sub_export = subparser.add_parser(
+    "export",
+    help="Export the scores to PDFs or to a format specified by the \
+    extension. The exported file has the same path, only the file extension is \
+    different. See \
+    https://musescore.org/en/handbook/2/file-formats \
+    https://musescore.org/en/handbook/3/file-export \
+    https://musescore.org/en/handbook/4/file-export",
+)
+
+sub_export.add_argument(
+    "-e",
+    "--extension",
+    dest="export_extension",
+    default="pdf",
+    help='Extension to export. If this option \
+    is omitted, then the default extension is "pdf".',
+)
+
+###############################################################################
+# help
+###############################################################################
+
+sub_help = subparser.add_parser(
+    "help",
+    help="Show help. Use “{} help all” to show help \
+    messages of all subcommands. Use \
+    “{} help <subcommand>” to show only help messages \
+    for the given subcommand.".format(parser.prog, parser.prog),
+)
+
+sub_help.add_argument(
+    "-m",
+    "--markdown",
+    dest="help_markdown",
+    action="store_true",
+    help="Show help in markdown format. \
+    This option enables to generate the README file directly \
+    form the command line output.",
+)
+
+sub_help.add_argument(
+    "-r",
+    "--rst",
+    dest="help_rst",
+    action="store_true",
+    help="Show help in reStructuresText \
+    format. This option enables to generate the README file \
+    directly form the command line output.",
 )
 
 ###############################################################################
@@ -380,68 +435,47 @@ sub_rename.add_argument(
 )
 
 ###############################################################################
-# export
+# style
 ###############################################################################
 
-sub_export = subparser.add_parser(
-    "export",
-    help="Export the scores to PDFs or to a format specified by the \
-    extension. The exported file has the same path, only the file extension is \
-    different. See \
-    https://musescore.org/en/handbook/2/file-formats \
-    https://musescore.org/en/handbook/3/file-export \
-    https://musescore.org/en/handbook/4/file-export",
+sub_style = subparser.add_parser(
+    "style",
+    help="Change the styles.",
 )
 
-sub_export.add_argument(
-    "-e",
-    "--extension",
-    dest="export_extension",
-    default="pdf",
-    help='Extension to export. If this option \
-    is omitted, then the default extension is "pdf".',
-)
-
-###############################################################################
-# help
-###############################################################################
-
-sub_help = subparser.add_parser(
-    "help",
-    help="Show help. Use “{} help all” to show help \
-    messages of all subcommands. Use \
-    “{} help <subcommand>” to show only help messages \
-    for the given subcommand.".format(parser.prog, parser.prog),
-)
-
-sub_help.add_argument(
-    "-m",
-    "--markdown",
-    dest="help_markdown",
+sub_style.add_argument(
+    "--list-3",
+    dest="style_list_3",
     action="store_true",
-    help="Show help in markdown format. \
-    This option enables to generate the README file directly \
-    form the command line output.",
+    help="List all possible version 3 styles.",
 )
 
-sub_help.add_argument(
-    "-r",
-    "--rst",
-    dest="help_rst",
+sub_style.add_argument(
+    "--list-4",
+    dest="style_list_4",
     action="store_true",
-    help="Show help in reStructuresText \
-    format. This option enables to generate the README file \
-    directly form the command line output.",
+    help="List all possible version 4 styles.",
 )
+
+sub_style.add_argument(
+    "-y",
+    "--set-style",
+    nargs=2,
+    action="append",
+    metavar=("STYLE", "VALUE"),
+    dest="style_set",
+    help="Set a single style. pageWidth pageHeight pagePrintableWidth",
+)
+
 
 ###############################################################################
-# help
+# last positional parameter
 ###############################################################################
 
 parser.add_argument(
     "path",
-    help='Path to a "*.mscx" file \
-    or a folder which contains "*.mscx" files. In conjunction \
+    help='Path to a *.msc[zx]" file \
+    or a folder which contains "*.msc[zx]" files. In conjunction \
     with the subcommand "help" this positional parameter \
     accepts the names of all other subcommands or the word \
     "all".',

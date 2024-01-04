@@ -28,8 +28,9 @@ def get_file(filename: str, version: int = 2) -> str:
     return tmp
 
 
-def open_file(file: str | Path) -> str:
-    return subprocess.check_output(("xdg-open", str(file))).decode("utf-8")
+def open_file(file: str | Path) -> None:
+    """Open a file wiht xdg-open in the background"""
+    subprocess.Popen(("xdg-open", str(file)))
 
 
 @pytest.fixture
@@ -60,3 +61,24 @@ def test_export_pdf(simple4z: str) -> None:
     dest = Path(simple4z.replace(".mscz", ".pdf"))
     assert dest.exists()
     open_file(dest)
+
+
+def test_set_style() -> None:
+    tmp = get_file("Ragtime_3.mscz", version=4)
+    invoke(
+        "style",
+        "--set-style",
+        "pageWidth",
+        "4.13",
+        "--set-style",
+        "pageHeight",
+        "5.83",
+        "--set-style",
+        "pagePrintableWidth",
+        "3.35",
+        tmp,
+    )
+    assert Path(tmp).exists()
+    open_file(tmp)
+
+

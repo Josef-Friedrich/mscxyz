@@ -5,6 +5,7 @@ files of the notation software MuseScore.
 from __future__ import annotations
 
 import configparser
+import importlib
 import os
 import sys
 import typing
@@ -236,6 +237,21 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
                 score.export(extension=args.export_extension)
             else:
                 score.export()
+        elif args.subcommand == "style":
+            score = Score(file)
+
+            if args.style_list_3:
+                style_names = importlib.import_module("mscxyz.style_names", package=None)
+                style_names.list_styles(3)
+
+            if args.style_list_4:
+                style_names = importlib.import_module("mscxyz.style_names", package=None)
+                style_names.list_styles(3)
+
+            if args.style_set:
+                for a in args.style_set:
+                    score.style.set_value(a[0], a[1])
+            score.save()
         else:
             raise ValueError("Unknown subcommand")
 

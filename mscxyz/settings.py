@@ -9,8 +9,6 @@ from typing import Literal, Optional
 
 
 class DefaultArguments:
-    clean_style: Optional[TextIOWrapper] = None
-    export_extension: Optional[str] = None
     general_backup: bool = False
     general_colorize: bool = False
     general_config_file: Optional[str] = None
@@ -19,11 +17,27 @@ class DefaultArguments:
     general_glob: str = "*.mscx"
     general_mscore: bool = False
     general_verbose: int = 0
+
+    subcommand: Optional[
+        Literal["clean", "export", "help", "lyrics", "meta", "rename", "style"]
+    ] = None
+
+    # clean
+    clean_style: Optional[TextIOWrapper] = None
+
+    # export
+    export_extension: Optional[str] = None
+
+    # help
     help_markdown: bool = False
     help_rst: bool = False
+
+    # lyrics
     lyrics_extract: str = "all"
     lyrics_fix: bool = False
     lyrics_remap: Optional[str] = None
+
+    # meta
     meta_clean: Optional[str] = None
     meta_delete: bool = False
     meta_dist: Optional[list[list[str]]] = None
@@ -31,16 +45,21 @@ class DefaultArguments:
     meta_json: bool = False
     meta_sync: bool = False
     meta_set: Optional[list[list[str]]] = None
-    path: str = "."
+
+    # rename
     rename_alphanum = False
     rename_ascii = False
     rename_format: str = "$combined_title ($combined_composer)"
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
     rename_target: Optional[str] = None
-    subcommand: Optional[
-        Literal["clean", "help", "meta", "lyrics", "rename", "export"]
-    ] = None
+
+    # style
+    style_list_3: bool = False
+    style_list_4: bool = False
+    style_set: Optional[list[list[str]]] = None
+
+    path: str = "."
 
 
 args = DefaultArguments()
