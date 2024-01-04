@@ -118,9 +118,6 @@ class Score:
 
     xml_root: _Element
 
-    version_major: int
-    """The major MuseScore version, for example 2 or 3"""
-
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
 
@@ -147,10 +144,14 @@ class Score:
             self.errors.append(e)
         else:
             self.version = self.get_version()
-            self.version_major = int(self.version)
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
+
+    @property
+    def version_major(self) -> int:
+        """The major MuseScore version, for example 2 or 3"""
+        return int(self.version)
 
     @property
     def relpath_backup(self) -> str:
