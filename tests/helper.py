@@ -13,7 +13,7 @@ from lxml.etree import _Element
 from mscxyz import Score
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz.style import MscoreStyleInterface
+from mscxyz.style import Style
 
 test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
@@ -71,7 +71,7 @@ def get_lyrics(filename: str, version: int = 2) -> Lyrics:
     return get_score(filename, version).lyrics
 
 
-def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:
+def get_style(filename: str, version: int = 2) -> Style:
     return get_score(filename, version).style
 
 

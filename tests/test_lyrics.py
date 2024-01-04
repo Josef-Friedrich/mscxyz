@@ -10,7 +10,7 @@ from mscxyz import utils
 from tests import helper
 
 
-class TestMscoreLyricsInterface:
+class TestLyrics:
     def setup_method(self) -> None:
         self.score_path = helper.get_file("lyrics.mscx")
 
@@ -51,7 +51,7 @@ class TestMscoreLyricsInterface:
         self._test_extract_by_number(version=3)
 
 
-class TestMscoreLyricsInterfaceFix:
+class TestLyricsFix:
     def _test_fix(self, version: int = 2) -> None:
         score_path = helper.get_file("lyrics-fix.mscx", version)
         mscxyz.execute(["lyrics", "--fix", score_path])
@@ -109,7 +109,7 @@ class TestMscoreLyricsInterfaceFix:
         self._test_fix(version=3)
 
 
-class TestMscoreLyricsInterfaceRemap:
+class TestLyricsRemap:
     def test_remap(self) -> None:
         score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])

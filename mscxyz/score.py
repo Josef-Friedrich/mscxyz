@@ -17,7 +17,7 @@ from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz import utils
 from mscxyz.lyrics import Lyrics
-from mscxyz.style import MscoreStyleInterface
+from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -129,7 +129,7 @@ class Score:
 
     __lyrics: Optional[Lyrics] = None
 
-    __style: Optional[MscoreStyleInterface] = None
+    __style: Optional[Style] = None
 
     def __init__(self, src: str | Path) -> None:
         self.path = Path(src).resolve()
@@ -200,9 +200,9 @@ class Score:
         return self.__lyrics
 
     @property
-    def style(self) -> MscoreStyleInterface:
+    def style(self) -> Style:
         if self.__style is None:
-            self.__style = MscoreStyleInterface(self)
+            self.__style = Style(self)
         return self.__style
 
     def new(self) -> Score:

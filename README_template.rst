@@ -42,15 +42,15 @@ API Usage
     score.metatag.composer = 'Mozart'
     score.save()
 
-``MscoreStyleInterface``
+``Style``
 ------------------------
 
 Change all font faces (MuseScore3 only)
 
 .. code-block:: Python
 
-    from mscxyz import MscoreStyleInterface
-    score = MscoreStyleInterface('score.mscx')
+    from mscxyz import Style
+    score = Style('score.mscx')
     for element in score.style:
         if 'FontFace' in element.tag:
             element.text = 'Alegreya'

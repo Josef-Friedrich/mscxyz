@@ -8,9 +8,9 @@ Classes:
 .. code ::
 
     Score
-        MscoreLyricsInterface
+        Lyrics
         MscoreMetaInterface
-        MscoreStyleInterface
+        Style
 
 
 Functions:

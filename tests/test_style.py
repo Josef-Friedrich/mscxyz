@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mscxyz.score import Score
-from mscxyz.style import MscoreStyleInterface
+from mscxyz.style import Style
 from tests import helper
 
 
-def reload(score: Score) -> MscoreStyleInterface:
+def reload(score: Score) -> Style:
     """
     Reloads the style of the given MuseScore file.
 
@@ -152,7 +152,7 @@ class TestVersion4:
         assert reload(self.score).get_value("lol") == "lol"
 
 
-class TestClassMscoreStyleInterfaceWithoutTags:
+class TestClassStyleWithoutTags:
     score: Score
 
     def setup_method(self) -> None:

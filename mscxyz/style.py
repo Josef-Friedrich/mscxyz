@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
-class MscoreStyleInterface:
+class Style:
     """
     Interface specialized for the style manipulation.
 
@@ -84,7 +84,7 @@ class MscoreStyleInterface:
 
             # Set attributes on a maybe non-existent style tag.
             # <measureNumberOffset x="0.5" y="-2"/>
-            test = MscoreStyleInterface('text.mscx')
+            test = Style('text.mscx')
             element = test.get_element('measureNumberOffset')
             element.attrib['x'] = '0.5'
             element.attrib['y'] = '-2'
