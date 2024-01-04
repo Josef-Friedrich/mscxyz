@@ -5,8 +5,6 @@ from __future__ import annotations
 import os
 import tempfile
 
-import mscxyz
-import mscxyz.meta
 from mscxyz import rename
 from mscxyz.settings import reset_args
 from tests import helper
@@ -28,8 +26,8 @@ class TestFunctions:
 
     def test_function_apply_format_string(self) -> None:
         reset_args()
-        meta = mscxyz.meta.Meta(helper.get_file("meta-all-values.mscx"))
-        fields: dict[str, str] = meta.interface.export_to_dict()
+        score = helper.get_score("meta-all-values.mscx")
+        fields: dict[str, str] = score.meta.interface.export_to_dict()
         name: str = rename.apply_format_string(fields)
         assert name == "vbox_title (vbox_composer)"
 

@@ -64,7 +64,7 @@ def get_score(filename: str, version: int = 2) -> Score:
 
 
 def get_meta(filename: str, version: int = 2) -> Meta:
-    return Meta(get_file(filename, version))
+    return get_score(filename, version).meta
 
 
 def get_lyrics(filename: str, version: int = 2) -> Lyrics:

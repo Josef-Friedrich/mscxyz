@@ -201,27 +201,29 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
                 )
 
         elif args.subcommand == "meta":
-            score = Meta(file)
+            score = Score(file)
             if no_error(lxml.etree.XMLSyntaxError, score.errors):
-                pre: dict[str, str] = score.interface.export_to_dict()
+                pre: dict[str, str] = score.meta.interface.export_to_dict()
                 if args.meta_clean:
-                    score.clean_metadata(fields_spec=args.meta_clean)
+                    score.meta.clean_metadata(fields_spec=args.meta_clean)
                 if args.meta_json:
-                    score.export_json()
+                    score.meta.export_json()
                 if args.meta_dist:
                     for a in args.meta_dist:
-                        score.distribute_field(source_fields=a[0], format_string=a[1])
+                        score.meta.distribute_field(
+                            source_fields=a[0], format_string=a[1]
+                        )
                 if args.meta_set:
                     for a in args.meta_set:
-                        score.set_field(destination_field=a[0], format_string=a[1])
+                        score.meta.set_field(destination_field=a[0], format_string=a[1])
                 if args.meta_delete:
-                    score.delete_duplicates()
+                    score.meta.delete_duplicates()
                 if args.meta_sync:
-                    score.sync_fields()
+                    score.meta.sync_fields()
                 if args.meta_log:
-                    score.write_to_log_file(args.meta_log[0], args.meta_log[1])
-                post: dict[str, str] = score.interface.export_to_dict()
-                score.show(pre, post)
+                    score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+                post: dict[str, str] = score.meta.interface.export_to_dict()
+                score.meta.show(pre, post)
                 if not args.general_dry_run and not score.errors and pre != post:
                     score.save(mscore=args.general_mscore)
 

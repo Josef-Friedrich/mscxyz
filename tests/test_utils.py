@@ -29,7 +29,7 @@ class TestFunctions:
             ]
             return utils.list_scores(path, extension, glob)
 
-    @mock.patch("mscxyz.Meta")
+    @mock.patch("mscxyz.Score")
     def test_batch(self, Meta: mock.Mock) -> None:
         mscxyz.execute(["meta", helper.get_dir("batch")])
         assert Meta.call_count == 3

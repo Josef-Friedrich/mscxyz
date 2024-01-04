@@ -17,6 +17,7 @@ from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz import utils
 from mscxyz.lyrics import Lyrics
+from mscxyz.meta import Meta
 from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
@@ -129,6 +130,8 @@ class Score:
 
     __lyrics: Optional[Lyrics] = None
 
+    __meta: Optional[Meta] = None
+
     __style: Optional[Style] = None
 
     def __init__(self, src: str | Path) -> None:
@@ -198,6 +201,12 @@ class Score:
         if self.__lyrics is None:
             self.__lyrics = Lyrics(self)
         return self.__lyrics
+
+    @property
+    def meta(self) -> Meta:
+        if self.__meta is None:
+            self.__meta = Meta(self)
+        return self.__meta
 
     @property
     def style(self) -> Style:

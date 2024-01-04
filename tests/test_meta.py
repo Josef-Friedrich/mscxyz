@@ -28,6 +28,10 @@ from tests import helper
 from tests.helper import ini_file
 
 
+def reload(src: Score | str | Path) -> Interface:
+    return helper.reload(src).meta.interface
+
+
 class TestExceptions:
     def test_read_only_field_error(self) -> None:
         with pytest.raises(meta.ReadOnlyFieldError) as e:
@@ -457,33 +461,33 @@ class TestClassCombined:
     def _init_class(self, filename: str) -> tuple[Combined, Score, str]:
         tmp = helper.get_file(filename)
         tree = Score(tmp)
-        combined = Combined(tree.xml_root)
-        return combined, tree, tmp
+        c = Combined(tree.xml_root)
+        return c, tree, tmp
 
     def test_getter(self) -> None:
-        combined, _, _ = self._init_class("simple.mscx")
-        assert combined.title == "Title"
-        assert combined.subtitle is None
-        assert combined.composer == "Composer"
-        assert combined.lyricist is None
+        c, _, _ = self._init_class("simple.mscx")
+        assert c.title == "Title"
+        assert c.subtitle is None
+        assert c.composer == "Composer"
+        assert c.lyricist is None
 
     def test_setter(self) -> None:
-        combined, tree, _ = self._init_class("simple.mscx")
-        combined.title = "T"
-        combined.subtitle = "S"
-        combined.composer = "C"
-        combined.lyricist = "L"
+        c, tree, _ = self._init_class("simple.mscx")
+        c.title = "T"
+        c.subtitle = "S"
+        c.composer = "C"
+        c.lyricist = "L"
         tree.save()
-        combined = Combined(tree.xml_root)
-        assert combined.metatag.workTitle == "T"
-        assert combined.metatag.movementTitle == "S"
-        assert combined.metatag.composer == "C"
-        assert combined.metatag.lyricist == "L"
+        c = Combined(tree.xml_root)
+        assert c.metatag.workTitle == "T"
+        assert c.metatag.movementTitle == "S"
+        assert c.metatag.composer == "C"
+        assert c.metatag.lyricist == "L"
 
-        assert combined.vbox.Title == "T"
-        assert combined.vbox.Subtitle == "S"
-        assert combined.vbox.Composer == "C"
-        assert combined.vbox.Lyricist == "L"
+        assert c.vbox.Title == "T"
+        assert c.vbox.Subtitle == "S"
+        assert c.vbox.Composer == "C"
+        assert c.vbox.Lyricist == "L"
 
 
 class TestIntegration:
@@ -498,12 +502,11 @@ class TestIntegration:
                 tmp,
             ]
         )
-        meta = Meta(tmp)
-        iface = meta.interface
-        assert iface.vbox_composer == "Composer"
-        assert iface.metatag_composer == "Composer"
-        assert iface.vbox_title == "Title"
-        assert iface.metatag_work_title == "Title"
+        i = reload(tmp)
+        assert i.vbox_composer == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.vbox_title == "Title"
+        assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multple_source_fields(self) -> None:
         tmp = helper.get_file("Title - Composer.mscx")
@@ -516,12 +519,11 @@ class TestIntegration:
                 tmp,
             ]
         )
-        meta = Meta(tmp)
-        iface = meta.interface
-        assert iface.vbox_composer == "Composer"
-        assert iface.metatag_composer == "Composer"
-        assert iface.vbox_title == "Title"
-        assert iface.metatag_work_title == "Title"
+        i = reload(tmp)
+        assert i.vbox_composer == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.vbox_title == "Title"
+        assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multiple_values(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
@@ -537,12 +539,11 @@ class TestIntegration:
                 tmp,
             ]
         )
-        meta = Meta(tmp)
-        iface = meta.interface
-        assert iface.metatag_lyricist == "Composer"
-        assert iface.metatag_composer == "Composer"
-        assert iface.metatag_movement_title == "Title"
-        assert iface.metatag_work_title == "Title"
+        i = reload(tmp)
+        assert i.metatag_lyricist == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.metatag_movement_title == "Title"
+        assert i.metatag_work_title == "Title"
 
     def test_distribute_field_invalid_format_string(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
@@ -567,27 +568,25 @@ class TestIntegration:
     def test_clean_all(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "all", tmp])
-        meta = Meta(tmp)
-        iface = meta.interface_read_write
-        for field in iface.fields:
-            assert getattr(iface, field) is None, field
+        score = helper.reload(tmp)
+        i = score.meta.interface_read_write
+        for field in i.fields:
+            assert getattr(i, field) is None, field
 
     def test_clean_single_field(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title", tmp])
-        meta = Meta(tmp)
-        iface = meta.interface
-        assert iface.vbox_title is None, "vbox_title"
-        assert iface.vbox_composer == "vbox_composer", "vbox_composer"
+        i = reload(tmp)
+        assert i.vbox_title is None, "vbox_title"
+        assert i.vbox_composer == "vbox_composer", "vbox_composer"
 
     def test_clean_some_fields(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--clean", "vbox_title,vbox_composer", tmp])
-        meta = Meta(tmp)
-        iface = meta.interface
-        assert iface.vbox_title is None, "vbox_title"
-        assert iface.vbox_composer is None, "vbox_composer"
-        assert iface.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
+        i = reload(tmp)
+        assert i.vbox_title is None, "vbox_title"
+        assert i.vbox_composer is None, "vbox_composer"
+        assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
 
     def test_show(self, capsys: pytest.CaptureFixture[str]) -> None:
         mscxyz.execute(
@@ -676,8 +675,8 @@ class TestIntegration:
     def test_set_field_simple_string(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(["meta", "--set-field", "vbox_title", "lol", tmp])
-        meta = Meta(tmp)
-        assert meta.interface.vbox_title == "lol"
+        i = reload(tmp)
+        assert i.vbox_title == "lol"
 
     def test_set_field_multiple_times(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
@@ -693,32 +692,32 @@ class TestIntegration:
                 tmp,
             ]
         )
-        meta = Meta(tmp)
-        assert meta.interface.vbox_title == "lol"
-        assert meta.interface.vbox_composer == "troll"
+        i = reload(tmp)
+        assert i.vbox_title == "lol"
+        assert i.vbox_composer == "troll"
 
     def test_set_field_with_templating(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
         mscxyz.execute(
             ["meta", "--set-field", "vbox_title", "$vbox_title ($vbox_composer)", tmp]
         )
-        meta = Meta(tmp)
-        assert meta.interface.vbox_title == "vbox_title (vbox_composer)"
+        i = reload(tmp)
+        assert i.vbox_title == "vbox_title (vbox_composer)"
 
     def test_delete_duplicates(self) -> None:
         tmp = helper.get_file("meta-duplicates.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
-        meta = Meta(tmp)
-        assert not meta.interface.combined_lyricist
-        assert not meta.interface.combined_subtitle
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
 
     def test_delete_duplicates_move_subtitle(self) -> None:
         tmp = helper.get_file("meta-duplicates-move-subtitle.mscx")
         mscxyz.execute(["meta", "--delete-duplicates", tmp])
-        meta = Meta(tmp)
-        assert not meta.interface.combined_lyricist
-        assert not meta.interface.combined_subtitle
-        assert meta.interface.combined_title == "Title"
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
+        assert i.combined_title == "Title"
 
     def test_log(self) -> None:
         tmp = helper.get_file("simple.mscx")

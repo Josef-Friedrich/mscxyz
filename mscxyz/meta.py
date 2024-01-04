@@ -14,10 +14,11 @@ import tmep
 from lxml.etree import _Element
 
 from mscxyz import utils
-from mscxyz.score import Score
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
+
+    from mscxyz.score import Score
 
 
 class ReadOnlyFieldError(Exception):
@@ -299,7 +300,7 @@ class Vbox:
             self._set_text(field.title(), value)
 
 
-class Combined(Score):
+class Combined:
     fields = (
         "composer",
         "lyricist",
@@ -307,7 +308,7 @@ class Combined(Score):
         "title",
     )
 
-    xml_root: _Element
+    score: "Score"
 
     def __init__(self, xml_root: _Element) -> None:
         self.xml_root = xml_root
@@ -447,12 +448,12 @@ class InterfaceReadOnly:
 
 
 class Interface:
-    xml_tree: Score
+    score: "Score"
 
-    def __init__(self, tree: Score) -> None:
-        self.xml_tree = tree
-        self.read_only = InterfaceReadOnly(tree)
-        self.read_write = InterfaceReadWrite(tree.xml_root)
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.read_only = InterfaceReadOnly(score)
+        self.read_write = InterfaceReadWrite(score.xml_root)
         self.fields: list[str] = self.get_all_fields()
 
     @staticmethod
@@ -469,7 +470,7 @@ class Interface:
             return getattr(self.read_write, field)
 
     def __setattr__(self, field: str, value: str) -> None:
-        if field in ("xml_tree", "read_only", "read_write", "fields"):
+        if field in ("score", "read_only", "read_write", "fields"):
             self.__dict__[field] = value
         elif not re.match(r"^readonly_", field):
             return setattr(self.read_write, field, value)
@@ -477,19 +478,21 @@ class Interface:
             raise ReadOnlyFieldError(field)
 
 
-class Meta(Score):
-    def __init__(self, relpath: str) -> None:
-        super(Meta, self).__init__(relpath)
+class Meta:
+    score: "Score"
 
-        if not self.errors:
-            self.metatag = MetaTag(self.xml_root)
-            self.vbox = Vbox(self.xml_root)
-            self.combined = Combined(self.xml_root)
-            self.interface_read_write = InterfaceReadWrite(self.xml_root)
-            self.interface = Interface(self)
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+
+        if not self.score.errors:
+            self.metatag = MetaTag(self.score.xml_root)
+            self.vbox = Vbox(self.score.xml_root)
+            self.combined = Combined(self.score.xml_root)
+            self.interface_read_write = InterfaceReadWrite(self.score.xml_root)
+            self.interface = Interface(self.score)
 
     def sync_fields(self) -> None:
-        if not self.errors:
+        if not self.score.errors:
             self.combined.title = self.combined.title
             self.combined.subtitle = self.combined.subtitle
             self.combined.composer = self.combined.composer
@@ -506,7 +509,7 @@ class Meta(Score):
                         setattr(self.interface, field, value)
                 return
             except UnmatchedFormatStringError as error:
-                self.errors.append(error)
+                self.score.errors.append(error)
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
@@ -605,7 +608,7 @@ class Meta(Score):
         :return: The path to the exported JSON file.
         """
         data: dict[str, str] = {}
-        result_path: Path = self.make_path(extension="json")
+        result_path: Path = self.score.make_path(extension="json")
         for field in self.interface.fields:
             data[field] = self.interface.__getattr__(field)
         output = open(result_path, "w")

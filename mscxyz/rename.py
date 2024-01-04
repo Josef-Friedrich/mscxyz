@@ -10,7 +10,7 @@ import shutil
 import tmep
 from tmep.format import alphanum, asciify, nowhitespace
 
-from mscxyz.meta import Meta
+from mscxyz.score import Score
 from mscxyz.utils import color, get_args
 
 
@@ -62,11 +62,11 @@ def get_checksum(filename: str) -> str:
     return hasher.hexdigest()
 
 
-def rename_filename(source: str) -> Meta:
+def rename_filename(source: str) -> Score:
     args = get_args()
 
-    meta = Meta(source)
-    meta_values: dict[str, str] = meta.interface.export_to_dict()
+    score = Score(source)
+    meta_values: dict[str, str] = score.meta.interface.export_to_dict()
     target_filename: str = apply_format_string(meta_values)
 
     if args.rename_skip:
@@ -74,14 +74,14 @@ def rename_filename(source: str) -> Meta:
         for skip in skips:
             if not meta_values[skip]:
                 print(color("Field “{}” is empty! Skipping".format(skip), "red"))
-                return meta
+                return score
 
     if args.rename_target:
         target_base: str = os.path.abspath(args.rename_target)
     else:
         target_base = os.getcwd()
 
-    target: str = os.path.join(target_base, target_filename + "." + meta.extension)
+    target: str = os.path.join(target_base, target_filename + "." + score.extension)
 
     if os.path.exists(target):
         target_format: str = target.replace(".mscx", "{}.mscx")
@@ -99,7 +99,7 @@ def rename_filename(source: str) -> Meta:
                         "red",
                     )
                 )
-                return meta
+                return score
             if i == 1:
                 counter_format = ""
             else:
@@ -116,4 +116,4 @@ def rename_filename(source: str) -> Meta:
         # os.rename(source, target)
         shutil.move(source, target)
 
-    return meta
+    return score
