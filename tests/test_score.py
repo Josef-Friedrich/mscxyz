@@ -35,6 +35,10 @@ class TestClassScore:
     def setup_method(self) -> None:
         self.score = helper.get_score("simple.mscx")
 
+    def test_path_constructor(self) -> None:
+        score = Score(helper.get_path("simple.mscx"))
+        assert score.path.exists()
+
     def test_attribute_path(self) -> None:
         assert self.score.path.is_file()
         assert self.score.path.exists()

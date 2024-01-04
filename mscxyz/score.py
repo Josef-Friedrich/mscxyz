@@ -99,14 +99,14 @@ class ZipContainer:
 
 
 class Score:
-    """This class holds basic file properties of the MuseScore score file.
-
-    :param relpath: The relative (or absolute) path of a MuseScore
-        file.
-    """
+    """This class holds basic file properties of the MuseScore score file."""
 
     path: Path
-    """The absolute path of the input file."""
+    """The absolute path of the input file.
+           
+    :param src: The relative (or absolute) path of a MuseScore
+        file.
+    """
 
     loadpath: str
     """The path of the uncompressed MuseScore file in XML format file. 
@@ -132,8 +132,7 @@ class Score:
 
     __style: Optional[MscoreStyleInterface] = None
 
-    def __init__(self, src: str) -> None:
-        self.errors = []
+    def __init__(self, src: str | Path) -> None:
         self.path = Path(src).resolve()
 
         if self.extension == "mscz":
@@ -142,6 +141,7 @@ class Score:
         else:
             self.loadpath = str(self.path)
 
+        self.errors = []
         try:
             self.xml_tree = lxml.etree.parse(self.loadpath)
         except lxml.etree.XMLSyntaxError as e:
