@@ -1,6 +1,9 @@
 test:
 	poetry run tox
 
+test_real_binary:
+	pytest tests/_test_real-binary.py
+
 install:
 	poetry install
 
