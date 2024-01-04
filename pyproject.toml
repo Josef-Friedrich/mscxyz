@@ -51,3 +51,6 @@ python_files = "*_test.py"
 
 [tool.pyright]
 reportPrivateUsage = false
+
+[tool.mypy]
+strict = true

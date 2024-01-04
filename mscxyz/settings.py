@@ -38,7 +38,9 @@ class DefaultArguments:
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
     rename_target: Optional[str] = None
-    subcommand: Optional[Literal["help", "meta", "lyrics", "rename", "export"]] = None
+    subcommand: Optional[
+        Literal["clean", "help", "meta", "lyrics", "rename", "export"]
+    ] = None
 
 
 args = DefaultArguments()

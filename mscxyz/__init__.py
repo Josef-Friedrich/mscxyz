@@ -28,7 +28,7 @@ import os
 import sys
 import typing
 from importlib import metadata
-from typing import Optional, Sequence, Type
+from typing import Optional, Type
 
 import lxml
 import lxml.etree
@@ -89,8 +89,8 @@ def merge_config_into_args(
         "rename_no_whitespace",
     ]:
         if hasattr(args, arg):
-            value = getattr(args, arg)
-            if value == 1 or value == "true" or value == "True":
+            value2 = getattr(args, arg)
+            if value2 == 1 or value2 == "true" or value2 == "True":
                 setattr(args, arg, True)
             else:
                 setattr(args, arg, False)
@@ -145,18 +145,23 @@ def show_all_help(args: DefaultArguments) -> None:
         code_block(args, getattr(cli, args.path).format_help())
 
 
-def report_errors(errors: typing.Sequence[SyntaxError]) -> None:
+def report_errors(errors: list[Exception]) -> None:
     for error in errors:
+        msg = ""
+
+        if isinstance(error, SyntaxError):
+            msg = error.msg
+
         print(
             "{}: {}; message: {}".format(
                 utils.color("Error", "white", "on_red"),
                 utils.color(error.__class__.__name__, "red"),
-                error.msg,
+                msg,
             )
         )
 
 
-def no_error(error: Type[LxmlError], errors: Sequence[SyntaxError]) -> bool:
+def no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
     for e in errors:
         if isinstance(e, error):
             return False

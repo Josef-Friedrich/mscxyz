@@ -6,6 +6,7 @@ import json
 import re
 import typing
 from pathlib import Path
+from typing import Any
 
 import lxml
 import lxml.etree
@@ -373,7 +374,7 @@ class InterfaceReadWrite:
         return sorted(fields)
 
     @staticmethod
-    def _split(field: str):
+    def _split(field: str) -> dict[str, str | Any]:
         match = re.search(r"([^_]*)_(.*)", field)
         if not match:
             raise ValueError("Field “" + field + "” can’t be splitted!")
@@ -386,7 +387,7 @@ class InterfaceReadWrite:
     def export_to_dict(self) -> dict[str, str]:
         return export_to_dict(self, self.fields)
 
-    def __getattr__(self, field: str):
+    def __getattr__(self, field: str) -> Any:
         parts = self._split(field)
         obj = getattr(self, parts["object"])
         return getattr(obj, parts["field"])
@@ -461,7 +462,7 @@ class Interface:
     def export_to_dict(self) -> dict[str, str]:
         return export_to_dict(self, self.fields)
 
-    def __getattr__(self, field: str):
+    def __getattr__(self, field: str) -> Any:
         if re.match(r"^readonly_", field):
             return getattr(self.read_only, field)
         else:

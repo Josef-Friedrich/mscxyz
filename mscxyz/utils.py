@@ -9,7 +9,7 @@ import string
 import subprocess
 import typing
 from pathlib import Path
-from typing import Any, List, Literal, Optional
+from typing import Any, List, Literal, Optional, cast
 
 import lxml
 import lxml.etree
@@ -72,7 +72,7 @@ def get_args() -> DefaultArguments:
     """
     from mscxyz import settings
 
-    return getattr(settings, "args")
+    return cast(DefaultArguments, getattr(settings, "args"))
 
 
 def set_args(args: DefaultArguments) -> DefaultArguments:

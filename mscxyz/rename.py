@@ -47,7 +47,7 @@ def apply_format_string(fields: dict[str, str]) -> str:
     return name
 
 
-def show(old: str, new: str):
+def show(old: str, new: str) -> None:
     print("{} -> {}".format(color(old, "yellow"), color(new, "green")))
 
 

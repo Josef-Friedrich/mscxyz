@@ -9,10 +9,10 @@ import tempfile
 import typing
 import zipfile
 from pathlib import Path
-from typing import Optional, Sequence
+from typing import Optional
 
 import lxml
-import lxml.etree  # Required for the type hints
+import lxml.etree
 from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz import utils
@@ -132,7 +132,7 @@ class Score:
 
     zip_container: Optional[ZipContainer] = None
 
-    errors: Sequence[SyntaxError]
+    errors: list[Exception]
     """A list to store errors."""
 
     __style: Optional[MscoreStyleInterface] = None
