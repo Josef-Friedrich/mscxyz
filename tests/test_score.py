@@ -43,15 +43,15 @@ class TestClassScore:
         assert self.score.path.is_file()
         assert self.score.path.exists()
 
-    def test_property_loadpath(self) -> None:
-        path = Path(self.score.loadpath)
+    def test_property_xml_file(self) -> None:
+        path = Path(self.score.xml_file)
         assert path.is_file()
         assert path.exists()
 
-    def test_property_stylepath(self, score2x: Score, score4z: Score) -> None:
-        assert not score2x.stylepath
-        assert score4z.stylepath
-        assert score4z.stylepath.exists()
+    def test_property_style_file(self, score2x: Score, score4z: Score) -> None:
+        assert not score2x.style_file
+        assert score4z.style_file
+        assert score4z.style_file.exists()
 
     def test_property_zip_container(self, score4z: Score) -> None:
         assert not self.score.zip_container
@@ -129,7 +129,7 @@ class TestScoreMscz3:
         assert self.score.extension == "mscz"
 
     def test_attribute_loadpath(self) -> None:
-        assert "simple.mscx" in self.score.loadpath
+        assert "simple.mscx" in self.score.xml_file
 
 
 class TestScoreMscz4:
@@ -152,9 +152,9 @@ class TestZipContainer:
         assert str(self.container.tmp_dir).startswith(os.path.sep)
         assert self.container.tmp_dir.exists()
 
-    def test_attribute_mscx_file(self) -> None:
-        assert str(self.container.mscx_file).endswith(".mscx")
-        assert self.container.mscx_file.exists()
+    def test_attribute_xml_file(self) -> None:
+        assert str(self.container.xml_file).endswith(".mscx")
+        assert self.container.xml_file.exists()
 
     def test_attribute_thumbnail_file(self) -> None:
         path = self.container.thumbnail_file
@@ -178,7 +178,7 @@ class TestZipContainer:
         _, dest = tempfile.mkstemp(suffix=".mscz")
         self.container.save(dest)
         container = ZipContainer(dest)
-        assert container.mscx_file.exists()
+        assert container.xml_file.exists()
 
 
 class TestScoreVersion2:

@@ -39,8 +39,8 @@ mscxyz.settings module
 
 .. automodule:: mscxyz.settings
 
-mscxyz.style 
-^^^^^^^^^^^^
+mscxyz.style module
+^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.style
 

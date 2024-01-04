@@ -42,7 +42,7 @@ class ZipContainer:
     tmp_dir: Path
     """Absolute path of the temporary directory where the unzipped files are stored"""
 
-    mscx_file: Path
+    xml_file: Path
     """Absolute path of the uncompressed XML score file"""
 
     score_style_file: Optional[Path]
@@ -70,7 +70,7 @@ class ZipContainer:
                     if isinstance(relpath, str):
                         abs_path: Path = self.tmp_dir / relpath
                         if relpath.endswith(".mscx"):
-                            self.mscx_file = abs_path
+                            self.xml_file = abs_path
                         elif relpath.endswith(".mss"):
                             self.score_style_file = abs_path
                         elif relpath.endswith(".png"):
@@ -99,20 +99,23 @@ class ZipContainer:
 
 
 class Score:
-    """This class holds basic file properties of the MuseScore score file."""
+    """This class holds basic file properties of the MuseScore score file.
 
-    path: Path
-    """The absolute path of the input file.
-           
     :param src: The relative (or absolute) path of a MuseScore
         file.
     """
 
-    loadpath: str
+    path: Path
+    """The absolute path of the input file.
+           
+
+    """
+
+    xml_file: str
     """The path of the uncompressed MuseScore file in XML format file. 
     This path may be located in the temporary directory."""
 
-    stylepath: Optional[Path] = None
+    style_file: Optional[Path] = None
     """Score files create with MuseScore 4 have a separate style file."""
 
     xml_tree: _ElementTree
@@ -137,13 +140,13 @@ class Score:
 
         if self.extension == "mscz":
             self.zip_container = ZipContainer(self.path)
-            self.loadpath = str(self.zip_container.mscx_file)
+            self.xml_file = str(self.zip_container.xml_file)
         else:
-            self.loadpath = str(self.path)
+            self.xml_file = str(self.path)
 
         self.errors = []
         try:
-            self.xml_tree = lxml.etree.parse(self.loadpath)
+            self.xml_tree = lxml.etree.parse(self.xml_file)
         except lxml.etree.XMLSyntaxError as e:
             self.errors.append(e)
         else:
@@ -152,7 +155,7 @@ class Score:
             self.version_major = int(self.version)
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
-            self.stylepath = self.zip_container.score_style_file
+            self.style_file = self.zip_container.score_style_file
 
     @property
     def relpath_backup(self) -> str:
@@ -291,7 +294,7 @@ class Score:
             xml_dest = dest
 
             if self.extension == "mscz":
-                xml_dest = self.loadpath
+                xml_dest = self.xml_file
             utils.xml.write(xml_dest, self.xml_root)
             if self.__style:
                 self.__style.save()
