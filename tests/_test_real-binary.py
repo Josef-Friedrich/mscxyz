@@ -80,5 +80,3 @@ def test_set_style() -> None:
     )
     assert Path(tmp).exists()
     open_file(tmp)
-
-

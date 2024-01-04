@@ -241,11 +241,15 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
             score = Score(file)
 
             if args.style_list_3:
-                style_names = importlib.import_module("mscxyz.style_names", package=None)
+                style_names = importlib.import_module(
+                    "mscxyz.style_names", package=None
+                )
                 style_names.list_styles(3)
 
             if args.style_list_4:
-                style_names = importlib.import_module("mscxyz.style_names", package=None)
+                style_names = importlib.import_module(
+                    "mscxyz.style_names", package=None
+                )
                 style_names.list_styles(3)
 
             if args.style_set:
