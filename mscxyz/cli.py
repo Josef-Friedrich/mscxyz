@@ -464,7 +464,7 @@ sub_style.add_argument(
     action="append",
     metavar=("STYLE", "VALUE"),
     dest="style_set",
-    help="Set a single style. pageWidth pageHeight pagePrintableWidth",
+    help="Set a single style. For example: --set-style pageWidth 8.5",
 )
 
 

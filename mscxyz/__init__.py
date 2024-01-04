@@ -240,17 +240,21 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         elif args.subcommand == "style":
             score = Score(file)
 
-            if args.style_list_3:
-                style_names = importlib.import_module(
-                    "mscxyz.style_names", package=None
-                )
-                style_names.list_styles(3)
+            if args.style_list_3 or args.style_list_4:
 
-            if args.style_list_4:
-                style_names = importlib.import_module(
-                    "mscxyz.style_names", package=None
-                )
-                style_names.list_styles(3)
+                def list_styles(version: int) -> None:
+                    """There are many styles in MuseScore. We dynamically
+                    import the module to avoid long load time"""
+                    style_names = importlib.import_module(
+                        "mscxyz.style_names", package=None
+                    )
+                    style_names.list_styles(version)
+                    sys.exit()
+
+                if args.style_list_3:
+                    list_styles(3)
+                if args.style_list_4:
+                    list_styles(3)
 
             if args.style_set:
                 for a in args.style_set:
