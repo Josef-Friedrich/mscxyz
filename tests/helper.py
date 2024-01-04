@@ -14,8 +14,6 @@ from mscxyz import Score
 from mscxyz.meta import Meta
 from mscxyz.style import MscoreStyleInterface
 
-# if typing.TYPE_CHECKING:
-
 test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 

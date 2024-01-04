@@ -235,7 +235,7 @@ class TestClassInterfaceReadOnly:
 
     def test_exception(self) -> None:
         with pytest.raises(AttributeError):
-            self.interface.readonly_relpath = "lol"
+            self.interface.readonly_relpath = "lol"  # type: ignore
 
     def test_field_readonly_basename(self) -> None:
         assert self.interface.readonly_basename == "simple"
@@ -260,7 +260,7 @@ class TestClassInterfaceReadOnly:
 
 class TestClassInterface:
     def setup_method(self) -> None:
-        self.fields = [
+        self.fields: list[str] = [
             "combined_composer",
             "combined_lyricist",
             "combined_subtitle",
@@ -291,7 +291,7 @@ class TestClassInterface:
             "vbox_title",
         ]
 
-        self.tmp = helper.get_file("meta-all-values.mscx")
+        self.tmp: str = helper.get_file("meta-all-values.mscx")
         self.xml_tree = Score(self.tmp)
         self.interface = Interface(self.xml_tree)
 

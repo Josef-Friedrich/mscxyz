@@ -22,4 +22,7 @@ docs:
 	poetry run tox -e docs
 	xdg-open docs/_build/index.html
 
+activate_venv:
+	source .venv/bin/activate
+
 .PHONY: test install install_editable update build publish docs

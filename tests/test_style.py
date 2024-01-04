@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from mscxyz.score import (
-    MscoreStyleInterface,
-    Score,
-)
+from mscxyz.score import Score
+from mscxyz.style import MscoreStyleInterface
 from tests import helper
 
 
