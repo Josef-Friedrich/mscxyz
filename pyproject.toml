@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mscxyz"
-version = "1.3.0"
+version = "2.0.0"
 description = "A command line tool to manipulate the XML based *.mscX and *.mscZ files of the notation software MuseScore."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
