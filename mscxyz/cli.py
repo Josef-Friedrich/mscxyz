@@ -385,8 +385,12 @@ sub_rename.add_argument(
 
 sub_export = subparser.add_parser(
     "export",
-    help="Export the scores to PDFs or to the specified \
-    extension.",
+    help="Export the scores to PDFs or to a format specified by the \
+    extension. The exported file has the same path, only the file extension is \
+    different. See \
+    https://musescore.org/en/handbook/2/file-formats \
+    https://musescore.org/en/handbook/3/file-export \
+    https://musescore.org/en/handbook/4/file-export",
 )
 
 sub_export.add_argument(
