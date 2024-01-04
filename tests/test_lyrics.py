@@ -1,10 +1,12 @@
 """Test submodule “lyrics.py”."""
 
+from __future__ import annotations
 
 import os
 
 import mscxyz
 import mscxyz.lyrics
+from mscxyz import utils
 from tests import helper
 
 
@@ -56,15 +58,18 @@ class TestMscoreLyricsInterfaceFix:
         self.xml_tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
         self.lyrics = self.xml_tree.lyrics
 
-        text = []
-        syllabic = []
+        text: list[str] = []
+        syllabic: list[str] = []
         for element in self.lyrics:
             tag = element.element
             tag_text = tag.find("text")
-            text.append(tag_text.text)
+
+            text.append(utils.xml.get_text_safe(tag_text))
             tag_syllabic = tag.find("syllabic")
-            if hasattr(tag_syllabic, "text"):
-                syllabic.append(tag_syllabic.text)
+
+            syllabic_text = utils.xml.get_text(tag_syllabic)
+            if syllabic_text:
+                syllabic.append(syllabic_text)
 
         assert text == [
             "Al",
@@ -109,12 +114,14 @@ class TestMscoreLyricsInterfaceRemap:
         score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])
         tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
-        text = []
+        text: list[str] = []
         for element in tree.lyrics:
             tag = element.element
             tag_text = tag.find("no")
-            if hasattr(tag_text, "text"):
-                no = tag_text.text
+
+            text_no = utils.xml.get_text(tag_text)
+            if text_no:
+                no = text_no
             else:
                 no = "0"
             text.append(no)

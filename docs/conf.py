@@ -1,15 +1,17 @@
+from __future__ import annotations
+
 import sphinx_rtd_theme
 
 import mscxyz
 
 html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme_path: list[str] = [sphinx_rtd_theme.get_html_theme_path()]
 
-extensions = [
+extensions: list[str] = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
 ]
-templates_path = ["_templates"]
+templates_path: list[str] = ["_templates"]
 source_suffix = ".rst"
 
 master_doc = "index"
@@ -23,7 +25,7 @@ language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 pygments_style = "sphinx"
 todo_include_todos = False
-html_static_path = []
+html_static_path: list[str] = []
 htmlhelp_basename = "mscxyzdoc"
 
 autodoc_default_options = {
