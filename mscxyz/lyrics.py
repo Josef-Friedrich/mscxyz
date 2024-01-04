@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Literal, Optional, Union
 
 import lxml.etree as etree
 from lxml.etree import _Element
 
 from mscxyz import utils
-from mscxyz.score import Score
+
+if typing.TYPE_CHECKING:
+    from mscxyz.score import Score
 
 
 class NumberedLyricsElement:
@@ -16,10 +19,14 @@ class NumberedLyricsElement:
     element: _Element
 
 
-class MscoreLyricsInterface(Score):
-    def __init__(self, relpath: str) -> None:
-        super(MscoreLyricsInterface, self).__init__(relpath)
-        self.lyrics: list[NumberedLyricsElement] = self.normalize_lyrics()
+class Lyrics:
+    score: "Score"
+
+    lyrics: list[NumberedLyricsElement]
+
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.lyrics = self.normalize_lyrics()
         self.max = self.get_max()
 
     def normalize_lyrics(self) -> list[NumberedLyricsElement]:
@@ -53,7 +60,7 @@ class MscoreLyricsInterface(Score):
                 ]
         """
         lyrics: list[NumberedLyricsElement] = []
-        for lyric in self.xml_root.findall(".//Lyrics"):
+        for lyric in self.score.xml_root.findall(".//Lyrics"):
             safe = NumberedLyricsElement()
             safe.element = lyric
             number: _Element | None = lyric.find("no")
@@ -97,16 +104,17 @@ class MscoreLyricsInterface(Score):
                 if element.number == int(old):
                     utils.xml.find_safe(element.element, "no").text = str(int(new) - 1)
 
-        self.save(mscore=mscore)
+        self.score.save(mscore=mscore)
 
     def extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
         """Extract a lyric verse by verse number.
 
         :param number: The number of the lyrics verse starting by 1
         """
-        score = MscoreLyricsInterface(str(self.path))
 
-        for element in score.lyrics:
+        score = self.score.new()
+
+        for element in score.lyrics.lyrics:
             tag = element.element
 
             if element.number != number:
@@ -114,8 +122,8 @@ class MscoreLyricsInterface(Score):
             elif number != 1:
                 utils.xml.set_text(tag, "no", 0)
 
-        ext: str = "." + self.extension
-        new_name: str = str(self.path).replace(ext, "_" + str(number) + ext)
+        ext: str = "." + score.extension
+        new_name: str = str(score.path).replace(ext, "_" + str(number) + ext)
         score.save(new_name, mscore)
 
     def extract_lyrics(
@@ -203,4 +211,4 @@ class MscoreLyricsInterface(Score):
         for verse_number in range(1, self.max + 1):
             self.fix_lyrics_verse(verse_number)
 
-        self.save(mscore=mscore)
+        self.score.save(mscore=mscore)

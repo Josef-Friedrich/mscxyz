@@ -11,6 +11,7 @@ from pathlib import Path
 from lxml.etree import _Element
 
 from mscxyz import Score
+from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.style import MscoreStyleInterface
 
@@ -66,6 +67,10 @@ def get_meta(filename: str, version: int = 2) -> Meta:
     return Meta(get_file(filename, version))
 
 
+def get_lyrics(filename: str, version: int = 2) -> Lyrics:
+    return get_score(filename, version).lyrics
+
+
 def get_style(filename: str, version: int = 2) -> MscoreStyleInterface:
     return get_score(filename, version).style
 
@@ -79,6 +84,12 @@ def get_xml_root(filename: str, version: int = 2) -> _Element:
     :return: The XML tree.
     """
     return get_score(filename, version).xml_root
+
+
+def reload(src: Score | str | Path) -> Score:
+    if isinstance(src, str) or isinstance(src, Path):
+        return Score(src)
+    return Score(src.path)
 
 
 def read_file(filename: str | Path) -> str:

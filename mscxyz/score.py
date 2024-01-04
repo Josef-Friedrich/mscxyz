@@ -16,6 +16,7 @@ import lxml.etree
 from lxml.etree import _Element, _ElementTree, strip_tags
 
 from mscxyz import utils
+from mscxyz.lyrics import Lyrics
 from mscxyz.style import MscoreStyleInterface
 
 if typing.TYPE_CHECKING:
@@ -126,6 +127,8 @@ class Score:
     errors: list[Exception]
     """A list to store errors."""
 
+    __lyrics: Optional[Lyrics] = None
+
     __style: Optional[MscoreStyleInterface] = None
 
     def __init__(self, src: str | Path) -> None:
@@ -191,10 +194,19 @@ class Score:
         return Path(path)
 
     @property
+    def lyrics(self) -> Lyrics:
+        if self.__lyrics is None:
+            self.__lyrics = Lyrics(self)
+        return self.__lyrics
+
+    @property
     def style(self) -> MscoreStyleInterface:
         if self.__style is None:
             self.__style = MscoreStyleInterface(self)
         return self.__style
+
+    def new(self) -> Score:
+        return Score(self.path)
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""

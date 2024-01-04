@@ -55,8 +55,8 @@ class TestMscoreLyricsInterfaceFix:
     def _test_fix(self, version: int = 2) -> None:
         score_path = helper.get_file("lyrics-fix.mscx", version)
         mscxyz.execute(["lyrics", "--fix", score_path])
-        self.xml_tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
-        self.lyrics = self.xml_tree.lyrics
+        score = helper.reload(score_path)
+        self.lyrics = score.lyrics.lyrics
 
         text: list[str] = []
         syllabic: list[str] = []
@@ -113,9 +113,9 @@ class TestMscoreLyricsInterfaceRemap:
     def test_remap(self) -> None:
         score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])
-        tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
+        score = helper.reload(score_path)
         text: list[str] = []
-        for element in tree.lyrics:
+        for element in score.lyrics.lyrics:
             tag = element.element
             tag_text = tag.find("no")
 

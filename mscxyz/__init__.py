@@ -37,7 +37,6 @@ from lxml.etree import LxmlError
 import mscxyz
 import mscxyz.score
 from mscxyz import cli, utils
-from mscxyz.lyrics import MscoreLyricsInterface
 from mscxyz.meta import Meta
 from mscxyz.rename import rename_filename
 from mscxyz.settings import DefaultArguments
@@ -200,13 +199,15 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == "lyrics":
-            score = MscoreLyricsInterface(file)
+            score = Score(file)
             if args.lyrics_remap:
-                score.remap(remap_string=args.lyrics_remap, mscore=args.general_mscore)
+                score.lyrics.remap(
+                    remap_string=args.lyrics_remap, mscore=args.general_mscore
+                )
             elif args.lyrics_fix:
-                score.fix_lyrics(mscore=args.general_mscore)
+                score.lyrics.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.extract_lyrics(
+                score.lyrics.extract_lyrics(
                     number=args.lyrics_extract, mscore=args.general_mscore
                 )
 
