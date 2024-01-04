@@ -147,7 +147,7 @@ class MetaTag:
 
     def _get_text(self, field: str) -> str | None:
         element: _Element | None = self._get_element(field)
-        return utils.xml.text(element)
+        return utils.xml.get_text(element)
 
     def _set_text(self, field: str, value: str | None) -> None:
         element: _Element | None = self._get_element(field)

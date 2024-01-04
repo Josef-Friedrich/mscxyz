@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Literal, Union
 
 import lxml.etree as etree
 from lxml.etree import _Element
 
+from mscxyz import utils
 from mscxyz.score import Score
 
 
@@ -30,11 +31,11 @@ class MscoreLyricsInterface(Score):
 
                 <Lyrics>
                         <text>1. la</text>
-                        </Lyrics>
+                </Lyrics>
                 <Lyrics>
                         <no>1</no>
                         <style>Lyrics Even Lines</style>
-                <text>2. li</text>
+                        <text>2. li</text>
                 </Lyrics>
                 <Lyrics>
                         <no>2</no>
@@ -57,7 +58,7 @@ class MscoreLyricsInterface(Score):
             safe.element = lyric
             number: _Element | None = lyric.find("no")
 
-            if hasattr(number, "text"):
+            if number is not None and number.text is not None:
                 no = int(number.text) + 1
             else:
                 no = 1
@@ -94,7 +95,7 @@ class MscoreLyricsInterface(Score):
             new = pair.split(":")[1]
             for element in self.lyrics:
                 if element.number == int(old):
-                    element.element.find("no").text = str(int(new) - 1)
+                    utils.xml.find_safe(element.element, "no").text = str(int(new) - 1)
 
         self.save(mscore=mscore)
 
@@ -109,16 +110,16 @@ class MscoreLyricsInterface(Score):
             tag = element.element
 
             if element.number != number:
-                tag.getparent().remove(tag)
+                utils.xml.remove(tag)
             elif number != 1:
-                tag.find("no").text = "0"
+                utils.xml.set_text(tag, "no", 0)
 
-        ext = "." + self.extension
-        new_name = score.relpath.replace(ext, "_" + str(number) + ext)
+        ext: str = "." + self.extension
+        new_name: str = score.relpath.replace(ext, "_" + str(number) + ext)
         score.save(new_name, mscore)
 
     def extract_lyrics(
-        self, number: Optional[Union[int, str]] = None, mscore: bool = False
+        self, number: Union[int, str, Literal["all"]] = None, mscore: bool = False
     ) -> None:
         """Extract one lyric verse or all lyric verses.
 

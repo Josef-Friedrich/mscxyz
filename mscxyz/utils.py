@@ -98,9 +98,9 @@ def get_musescore_bin() -> str:
         binary = "/Applications/MuseScore 2.app/Contents/MacOS/mscore"
     else:
         cmd = "where" if system == "Windows" else "which"
-        binary = subprocess.check_output([cmd, "mscore"])
-        binary = binary.decode("utf-8")
-        binary = binary.replace("\n", "")
+        binary = (
+            subprocess.check_output([cmd, "mscore"]).decode("utf-8").replace("\n", "")
+        )
 
     if os.path.exists(binary):
         return binary
@@ -208,10 +208,23 @@ def color(
 class xml:
     @staticmethod
     def read(path: str | Path) -> _Element:
+        """
+        Read an XML file and return the root element.
+
+        :param path: The path to the XML file.
+        :return: The root element of the XML file.
+        """
         return lxml.etree.parse(path).getroot()
 
     @staticmethod
     def write(path: str | Path, element: _Element | _ElementTree) -> None:
+        """
+        Write the XML element or tree to the specified file.
+
+        :param path: The path to the file.
+        :param element: The XML element or tree to write.
+        :return: None
+        """
         with open(path, "w") as document:
             # maybe use: xml_declaration=True, pretty_print=True
             # TestFileCompare not passing ...
@@ -223,6 +236,14 @@ class xml:
 
     @staticmethod
     def find_safe(element: _Element, path: str) -> _Element:
+        """
+        Find an element in the given XML element using the specified element path.
+
+        :param element: The XML element to search within.
+        :param path: The path to the desired element.
+        :return: The found element.
+        :raises ValueError: If the element is not found.
+        """
         result: _Element | None = element.find(path)
         if result is None:
             raise ValueError(f"Path {path} not found in element {element}!")
@@ -230,6 +251,13 @@ class xml:
 
     @staticmethod
     def xpath(element: _Element, path: str) -> _Element | None:
+        """
+        Find the first matching element in the XML tree using XPath.
+
+        :param element: The root element of the XML tree.
+        :param path: The XPath expression to search for.
+        :return: The first matching element or None if no match is found.
+        """
         output: list[_Element] | None = xml.xpathall(element, path)
         if output and len(output) > 0:
             return output[0]
@@ -238,6 +266,14 @@ class xml:
 
     @staticmethod
     def xpath_safe(element: _Element, path: str) -> _Element:
+        """
+        Safely retrieves the first matching XML element using the given XPath expression.
+
+        :param element: The XML element to search within.
+        :param path: The XPath expression to match elements.
+        :return: The first matching XML element.XPath
+        :raises ValueError: If more than one element is found matching the XPath expression.
+        """
         output: list[_Element] = xml.xpathall_safe(element, path)
         if len(output) > 1:
             raise ValueError(
@@ -247,6 +283,14 @@ class xml:
 
     @staticmethod
     def xpathall(element: _Element, path: str) -> list[_Element] | None:
+        """
+        Returns a list of elements matching the given XPath expression.
+
+        :param element: The XML element to search within.
+        :param path: The XPath expression to match elements.
+        :return: A list of elements matching the XPath expression, or None if no
+          elements are found.
+        """
         result: _XPathObject = element.xpath(path)
         output: list[_Element] = []
 
@@ -262,15 +306,71 @@ class xml:
 
     @staticmethod
     def xpathall_safe(element: _Element, path: str) -> list[_Element]:
+        """
+        Safely retrieves a list of elements matching the given XPath expression within
+        the specified element.
+
+        :param element: The XML element to search within.
+        :param path: The XPath expression to match elements.
+        :return: A list of elements matching the XPath expression.
+        :raises ValueError: If the XPath expression is not found in the element.
+        """
         output: list[_Element] | None = xml.xpathall(element, path)
         if output is None:
             raise ValueError(f"XPath “{path}” not found in element {element}!")
         return output
 
     @staticmethod
-    def text(element: _Element | None) -> str | None:
+    def get_text(element: _Element | None) -> str | None:
+        """
+        Get the text content of an XML element.
+
+        :param element: The XML element.
+        :return: The text content of the XML element, or None if the element is None.
+        """
         if element is None:
             return None
         if element.text is None:
             return None
         return element.text
+
+    @staticmethod
+    def get_text_safe(element: _Element | None) -> str:
+        """
+        Safely retrieves the text content from an XML element.
+
+        :param element: The XML element to retrieve the text from.
+        :return: The text content of the element.
+        :raises ValueError: If the element is None or has no text content.
+        """
+        if element is None or element.text is None:
+            raise ValueError(f"Element {element} has no text!")
+        return element.text
+
+    @staticmethod
+    def set_text(element: _Element, path: str, value: str | int | float) -> None:
+        """
+        Set the text value of an XML element at the specified element path.
+
+        :param element: The XML element to modify.
+        :param path: The element path expression to locate the target element.
+        :param value: The new value to set for the element's text.
+        :return: None
+        """
+        xml.find_safe(element, path).text = str(value)
+
+    @staticmethod
+    def remove(element: _Element | None) -> None:
+        """
+        Remove the given element from its parent.
+
+        :param element: The element to be removed.
+        """
+        if element is None:
+            return None
+
+        parent: _Element | None = element.getparent()
+        if parent is None:
+            return None
+
+        parent.remove(element)
