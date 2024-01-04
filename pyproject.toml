@@ -30,7 +30,7 @@ readme-patcher = "^0.6.0"
 tox = "^4.11.4"
 ruff = "^0.1.9"
 pytest = "^7.4.4"
-Sphinx = "^"
+Sphinx = "6"
 sphinx-rtd-theme = "^2.0.0"
 
 [build-system]

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import sphinx_rtd_theme
+import sphinx_rtd_theme  # type: ignore
 
 import mscxyz
 
@@ -19,10 +19,10 @@ master_doc = "index"
 project = "mscxyz"
 copyright = "2016 - 2023, Josef Friedrich"
 author = "Josef Friedrich"
-version = mscxyz.__version__
-release = mscxyz.__version__
+version: str = mscxyz.__version__
+release: str = mscxyz.__version__
 language = "en"
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 pygments_style = "sphinx"
 todo_include_todos = False
 html_static_path: list[str] = []
