@@ -29,12 +29,12 @@ from tests.helper import ini_file
 
 
 class TestExceptions:
-    def test_read_only_field_error(self):
+    def test_read_only_field_error(self) -> None:
         with pytest.raises(meta.ReadOnlyFieldError) as e:
             raise meta.ReadOnlyFieldError("lol")
         assert e.value.args[0] == "The field “lol” is read only!"
 
-    def test_unkown_field_error(self):
+    def test_unkown_field_error(self) -> None:
         valid_fields = ("troll", "trill")
         with pytest.raises(meta.UnkownFieldError) as e:
             raise meta.UnkownFieldError("lol", valid_fields)
@@ -43,7 +43,7 @@ class TestExceptions:
             "troll, trill"
         )
 
-    def test_unmatched_format_string_error(self):
+    def test_unmatched_format_string_error(self) -> None:
         with pytest.raises(meta.UnmatchedFormatStringError) as e:
             raise meta.UnmatchedFormatStringError("test", "test")
         assert (
@@ -51,14 +51,14 @@ class TestExceptions:
             "doesn’t match on this input string: “test”"
         )
 
-    def test_format_string_no_field_error(self):
+    def test_format_string_no_field_error(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError) as e:
             raise meta.FormatStringNoFieldError("test")
         assert e.value.args[0] == "No fields found in your " "format string “test”!"
 
 
 class TestFunctions:
-    def test_distribute_field(self):
+    def test_distribute_field(self) -> None:
         assert distribute_field(
             "We are the champions - Queen", "$title - $composer"
         ) == {"composer": "Queen", "title": "We are the champions"}
@@ -102,7 +102,9 @@ class TestClassUnifiedInterface:
             "vbox_title",
         ]
 
-    def _init_class(self, filename: str, version: int = 2):
+    def _init_class(
+        self, filename: str, version: int = 2
+    ) -> tuple[InterfaceReadWrite, Score, str]:
         tmp = helper.get_file(filename, version)
         tree = Score(tmp)
         interface = InterfaceReadWrite(tree.xml_root)
@@ -114,7 +116,7 @@ class TestClassUnifiedInterface:
         assert interface.vbox
         assert interface.combined
 
-    def test_subclasses(self):
+    def test_subclasses(self) -> None:
         self._test_subclasses(version=2)
         self._test_subclasses(version=3)
 
@@ -146,11 +148,11 @@ class TestClassUnifiedInterface:
         for field in self.fields[4:]:
             assert getattr(interface, field) == field
 
-    def test_get_all_values(self):
+    def test_get_all_values(self) -> None:
         self._test_get_all_values(version=2)
         self._test_get_all_values(version=3)
 
-    def _test_set_all_values(self, version: int):
+    def _test_set_all_values(self, version: int) -> None:
         interface, tree, tmp = self._init_class("meta-all-values.mscx", version)
 
         for field in self.fields:
@@ -169,15 +171,15 @@ class TestClassUnifiedInterface:
         for field in self.fields[4:]:
             assert getattr(interface, field) == field + "_test"
 
-    def test_set_all_values(self):
+    def test_set_all_values(self) -> None:
         self._test_set_all_values(version=2)
         self._test_set_all_values(version=3)
 
-    def test_method_get_all_fields(self):
+    def test_method_get_all_fields(self) -> None:
         fields = InterfaceReadWrite.get_all_fields()
         assert fields == self.fields
 
-    def _test_method_export_to_dict(self, version: int):
+    def _test_method_export_to_dict(self, version: int) -> None:
         interface, _, _ = self._init_class("meta-all-values.mscx", version)
         result = interface.export_to_dict()
         assert result == {
@@ -218,7 +220,7 @@ class TestClassUnifiedInterface:
 
 
 class TestClassInterfaceReadOnly:
-    def setup_method(self):
+    def setup_method(self) -> None:
         self.fields = (
             "readonly_basename",
             "readonly_dirname",
@@ -231,26 +233,26 @@ class TestClassInterfaceReadOnly:
         self.xml_tree = Score(self.tmp)
         self.interface = InterfaceReadOnly(self.xml_tree)
 
-    def test_exception(self):
+    def test_exception(self) -> None:
         with pytest.raises(AttributeError):
             self.interface.readonly_relpath = "lol"
 
-    def test_field_readonly_basename(self):
+    def test_field_readonly_basename(self) -> None:
         assert self.interface.readonly_basename == "simple"
 
-    def test_field_readonly_dirname(self):
+    def test_field_readonly_dirname(self) -> None:
         assert self.interface.readonly_dirname == os.path.dirname(self.tmp)
 
-    def test_field_readonly_extension(self):
+    def test_field_readonly_extension(self) -> None:
         assert self.interface.readonly_extension == "mscx"
 
-    def test_field_readonly_filename(self):
+    def test_field_readonly_filename(self) -> None:
         assert self.interface.readonly_filename == "simple.mscx"
 
-    def test_field_readonly_relpath(self):
+    def test_field_readonly_relpath(self) -> None:
         assert self.interface.readonly_relpath == self.tmp
 
-    def test_field_readonly_relpath_backup(self):
+    def test_field_readonly_relpath_backup(self) -> None:
         assert self.interface.readonly_relpath_backup == self.tmp.replace(
             ".mscx", "_bak.mscx"
         )
@@ -310,7 +312,9 @@ class TestClassInterface:
 
 
 class TestClassMetaTag:
-    def _init_class(self, filename: str, version: int = 2):
+    def _init_class(
+        self, filename: str, version: int = 2
+    ) -> tuple[MetaTag, Score, str]:
         tmp = helper.get_file(filename, version)
         tree = Score(tmp)
         meta = MetaTag(tree.xml_root)
@@ -361,12 +365,12 @@ class TestClassMetaTag:
         xml_string = helper.read_file(tmp)
         assert '<metaTag name="workTitle">WT</metaTag>' in xml_string
 
-    def test_get_exception(self):
+    def test_get_exception(self) -> None:
         meta, _, _ = self._init_class("simple.mscx")
         with pytest.raises(mscxyz.meta.UnkownFieldError):
             meta.lol
 
-    def test_set_exception(self):
+    def test_set_exception(self) -> None:
         meta, _, _ = self._init_class("simple.mscx")
         with pytest.raises(AttributeError):
             meta.lol = "lol"
@@ -463,7 +467,7 @@ class TestClassCombined:
         assert combined.composer == "Composer"
         assert combined.lyricist is None
 
-    def test_setter(self):
+    def test_setter(self) -> None:
         combined, tree, _ = self._init_class("simple.mscx")
         combined.title = "T"
         combined.subtitle = "S"

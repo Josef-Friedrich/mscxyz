@@ -116,22 +116,22 @@ tree = helper.get_xml_tree("simple.mscz", 4)
 root = tree.getroot()
 
 
-def test_find_safe():
+def test_find_safe() -> None:
     element = utils.xml.find_safe(root, ".//Score")
     assert element.tag == "Score"
 
 
-def test_xpath():
+def test_xpath() -> None:
     element = utils.xml.xpath(root, ".//xxxxxxx")
     assert element is None
 
 
 class TestXpathSave:
-    def test_xpath_safe(self):
+    def test_xpath_safe(self) -> None:
         element = utils.xml.xpath_safe(root, ".//Score")
         assert element.tag == "Score"
 
-    def test_xpath_safe_raise(self):
+    def test_xpath_safe_raise(self) -> None:
         with pytest.raises(ValueError) as e:
             utils.xml.xpath_safe(root, ".//metaTag")
         assert "XPath “.//metaTag” found more than one element in" in e.value.args[0]

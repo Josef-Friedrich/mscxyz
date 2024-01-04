@@ -10,7 +10,7 @@ from mscxyz import cli
 
 
 class TestArgs:
-    def test_args_general(self):
+    def test_args_general(self) -> None:
         args = cli.parser.parse_args(["help", "."])
         assert args.general_backup is False
         assert args.general_colorize is False
@@ -20,30 +20,30 @@ class TestArgs:
         assert args.general_verbose == 0
         assert args.path == "."
 
-    def test_args_clean(self):
+    def test_args_clean(self) -> None:
         args = cli.parser.parse_args(["clean", "."])
         assert args.clean_style is None
         assert args.subcommand == "clean"
 
-    def test_args_export(self):
+    def test_args_export(self) -> None:
         args = cli.parser.parse_args(["export", "."])
         assert args.export_extension == "pdf"
         assert args.subcommand == "export"
 
-    def test_args_help(self):
+    def test_args_help(self) -> None:
         args = cli.parser.parse_args(["help", "."])
         assert args.help_markdown is False
         assert args.help_rst is False
         assert args.subcommand == "help"
 
-    def test_args_general_lyrics(self):
+    def test_args_general_lyrics(self) -> None:
         args = cli.parser.parse_args(["lyrics", "."])
         assert args.lyrics_extract == "all"
         assert args.lyrics_fix is False
         assert args.lyrics_remap is None
         assert args.subcommand == "lyrics"
 
-    def test_args_general_meta(self):
+    def test_args_general_meta(self) -> None:
         args = cli.parser.parse_args(["meta", "."])
         assert args.meta_clean is None
         assert args.meta_json is False
@@ -51,7 +51,7 @@ class TestArgs:
         assert args.meta_sync is False
         assert args.subcommand == "meta"
 
-    def test_args_general_rename(self):
+    def test_args_general_rename(self) -> None:
         args = cli.parser.parse_args(["rename", "."])
         assert args.rename_alphanum is False
         assert args.rename_ascii is False
@@ -61,17 +61,17 @@ class TestArgs:
 
 
 class TestCommandlineInterface:
-    def test_help_short(self):
+    def test_help_short(self) -> None:
         with pytest.raises(SystemExit) as e:
             mscxyz.execute(["-h"])
         assert e.value.code == 0
 
-    def test_help_long(self):
+    def test_help_long(self) -> None:
         with pytest.raises(SystemExit) as e:
             mscxyz.execute(["--help"])
         assert e.value.code == 0
 
-    def test_without_arguments(self):
+    def test_without_arguments(self) -> None:
         with pytest.raises(SystemExit) as e:
             mscxyz.execute()
         assert e.value.code == 2

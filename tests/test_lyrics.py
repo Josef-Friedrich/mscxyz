@@ -44,13 +44,13 @@ class TestMscoreLyricsInterface:
         mscxyz.execute(["lyrics", "--extract", "2", self.score_path])
         self.assert_lyrics_file_exists(2)
 
-    def test_extract_by_number(self):
+    def test_extract_by_number(self) -> None:
         self._test_extract_by_number(version=2)
         self._test_extract_by_number(version=3)
 
 
 class TestMscoreLyricsInterfaceFix:
-    def _test_fix(self, version: int = 2):
+    def _test_fix(self, version: int = 2) -> None:
         score_path = helper.get_file("lyrics-fix.mscx", version)
         mscxyz.execute(["lyrics", "--fix", score_path])
         self.xml_tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)
@@ -99,13 +99,13 @@ class TestMscoreLyricsInterfaceFix:
             "end",
         ]
 
-    def test_fix(self):
+    def test_fix(self) -> None:
         self._test_fix(version=2)
         self._test_fix(version=3)
 
 
 class TestMscoreLyricsInterfaceRemap:
-    def test_remap(self):
+    def test_remap(self) -> None:
         score_path = helper.get_file("lyrics-remap.mscx")
         mscxyz.execute(["lyrics", "--remap", "2:6", score_path])
         tree = mscxyz.lyrics.MscoreLyricsInterface(score_path)

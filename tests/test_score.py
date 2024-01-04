@@ -231,7 +231,7 @@ class TestClean:
         assert "<LayoutBreak>" not in cleaned
         assert "<StemDirection>" not in cleaned
 
-    def test_clean(self):
+    def test_clean(self) -> None:
         self._test_clean(version=2)
         self._test_clean(version=3)
 
@@ -241,13 +241,13 @@ class TestClean:
         style = helper.read_file(tmp)
         assert "<staffUpperBorder>77</staffUpperBorder>" in style
 
-    def test_clean_add_style(self):
+    def test_clean_add_style(self) -> None:
         self._test_clean_add_style(version=2)
         self._test_clean_add_style(version=3)
 
 
 class TestFileCompare:
-    def assert_diff(self, filename: str, version: int = 2):
+    def assert_diff(self, filename: str, version: int = 2) -> None:
         orig: str = os.path.join(os.path.expanduser("~"), filename)
         saved: str = orig.replace(".mscx", "_saved.mscx")
         tmp: str = helper.get_file(filename, version=version)
