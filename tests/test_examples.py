@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from mscxyz import Score
+from pathlib import Path
+
+from mscxyz import Score, list_score_paths
 
 
 def test_instantiate_a_score_object(score_file: str) -> None:
@@ -13,6 +15,21 @@ def test_instantiate_a_score_object(score_file: str) -> None:
     assert score.extension == "mscz"
     assert score.version == 4.20
     assert score.version_major == 4
+
+
+def test_list_score_paths(nested_dir: Path) -> None:
+    score_paths = list_score_paths(path=str(nested_dir), extension="mscz")
+    for score_path in score_paths:
+        score = Score(score_path)
+        assert score.path.exists()
+        assert score.extension == "mscz"
+
+    assert len(score_paths) == 4
+
+    assert "level1/level2/level3/score3.mscz" in score_paths[0]
+    assert "level1/level2/score2.mscz" in score_paths[1]
+    assert "level1/score1.mscz" in score_paths[2]
+    assert "score0.mscz" in score_paths[3]
 
 
 def test_set_meta_tag_composer(score: Score) -> None:

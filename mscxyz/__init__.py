@@ -35,7 +35,7 @@ Meta = mscxyz.meta.Meta
 
 Style = mscxyz.style.Style
 
-list_scores = utils.list_scores
+list_score_paths = utils.list_score_paths
 
 
 def parse_config_ini(
@@ -171,7 +171,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         show_all_help(args)
         sys.exit()
 
-    files = utils.list_scores(path=args.path, glob=args.general_glob)
+    files = utils.list_score_paths(path=args.path, glob=args.general_glob)
 
     for file in files:
         print("\n" + utils.color(file, "red"))

@@ -24,8 +24,11 @@ if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
 
 
-def list_scores(
-    path: str, extension: str = "both", glob: Optional[str] = None
+ListExtension = Literal["mscz", "mscx", "both"]
+
+
+def list_score_paths(
+    path: str, extension: ListExtension = "both", glob: Optional[str] = None
 ) -> list[str]:
     """List all scores in path.
 
@@ -37,7 +40,7 @@ def list_scores(
         if extension == "both":
             glob = "*.msc[xz]"
         elif extension in ("mscx", "mscz"):
-            glob = "*.{}".format(extension)
+            glob = f"*.{extension}"
         else:
             raise ValueError(
                 "Possible values for the argument “extension” "

@@ -13,7 +13,7 @@ import pytest
 
 import mscxyz
 from mscxyz import utils
-from mscxyz.utils import PathChanger, ZipContainer
+from mscxyz.utils import ListExtension, PathChanger, ZipContainer
 from tests import helper
 
 args = utils.get_args()
@@ -23,14 +23,14 @@ args.general_executable = None
 class TestFunctions:
     @staticmethod
     def _list_scores(
-        path: str, extension: str = "both", glob: Optional[str] = None
+        path: str, extension: ListExtension = "both", glob: Optional[str] = None
     ) -> list[str]:
         with mock.patch("os.walk") as mockwalk:
             mockwalk.return_value = [
                 ("/a", ("bar",), ("lorem.mscx",)),
                 ("/a/b", (), ("impsum.mscz", "dolor.mscx", "sit.txt")),
             ]
-            return utils.list_scores(path, extension, glob)
+            return utils.list_score_paths(path, extension, glob)
 
     @mock.patch("mscxyz.Score")
     def test_batch(self, Meta: mock.Mock) -> None:
@@ -55,18 +55,18 @@ class TestFunctions:
 
     def test_raises_exception(self) -> None:
         with pytest.raises(ValueError):
-            self._list_scores("/test", extension="lol")
+            self._list_scores("/test", extension="lol")  # type: ignore
 
     def test_isfile(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
-            result = utils.list_scores("/a/b/lorem.mscx")
+            result = utils.list_score_paths("/a/b/lorem.mscx")
             assert result == ["/a/b/lorem.mscx"]
 
     def test_isfile_no_match(self) -> None:
         with mock.patch("os.path.isfile") as mock_isfile:
             mock_isfile.return_value = True
-            result: list[str] = utils.list_scores("/a/b/lorem.lol")
+            result: list[str] = utils.list_score_paths("/a/b/lorem.lol")
             assert result == []
 
     def test_arg_glob_txt(self) -> None:

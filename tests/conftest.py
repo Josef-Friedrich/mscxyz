@@ -58,3 +58,8 @@ def score_path() -> Path:
 @pytest.fixture(autouse=True)
 def score_file() -> str:
     return helper.get_file("score.mscz", version=4)
+
+
+@pytest.fixture(autouse=True)
+def nested_dir() -> Path:
+    return Path(helper.get_dir("nested-folders", version=4))

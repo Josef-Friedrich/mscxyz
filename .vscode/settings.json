@@ -16,6 +16,7 @@
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
+    "--capture=tee-sys",
     "-vv",
     "--rootdir",
     "${workspaceFolder}/tests"

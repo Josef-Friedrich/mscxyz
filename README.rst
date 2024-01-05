@@ -495,6 +495,37 @@ Instantiate a ``Score`` object:
     assert score.version == 4.20
     assert score.version_major == 4
 
+List score paths in a nested folder structure:
+
+    cd /home/xyz/scores
+    find . | sort
+
+    .
+    ./level1
+    ./level1/level2
+    ./level1/level2/score2.mscz
+    ./level1/level2/level3
+    ./level1/level2/level3/score3.mscz
+    ./level1/score1.mscz
+    ./score0.mscz
+
+.. code-block:: Python
+
+    from mscxyz import list_score_paths, Score
+
+    score_paths = list_score_paths(path="/home/xyz/scores", extension="mscz")
+    for score_path in score_paths:
+        score = Score(score_path)
+        assert score.path.exists()
+        assert score.extension == "mscz"
+
+    assert len(score_paths) == 4
+
+    assert "level1/level2/level3/score3.mscz" in score_paths[0] 
+    assert "level1/level2/score2.mscz" in score_paths[1] 
+    assert "level1/score1.mscz" in score_paths[2] 
+    assert "score0.mscz" in score_paths[3] 
+
 ``meta``
 --------
 
