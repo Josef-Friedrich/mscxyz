@@ -11,14 +11,14 @@ import tempfile
 import typing
 import zipfile
 from pathlib import Path
-from typing import Any, List, Literal, Optional, cast
+from typing import Any, List, Literal, Optional
 
 import lxml
 import lxml.etree
 import termcolor
 from lxml.etree import _Element, _ElementTree
 
-from mscxyz.settings import DefaultArguments
+from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -67,27 +67,6 @@ def list_zero_alphabet() -> List[str]:
     for char in string.ascii_lowercase:
         score_dirs.append(char)
     return score_dirs
-
-
-def get_args() -> DefaultArguments:
-    """Get the ``args`` object (the ``argparse`` object) which is stored in
-    the .settings.py submodule for all other submodules.
-
-    :return: the ``argparse`` object
-    """
-    from mscxyz import settings
-
-    return cast(DefaultArguments, getattr(settings, "args"))
-
-
-def set_args(args: DefaultArguments) -> DefaultArguments:
-    """Set the ``args`` object (the ``argparse`` object) which is stored in
-    the .settings.py submodule for all other submodules to import.
-    """
-    from mscxyz import settings
-
-    setattr(settings, "args", args)
-    return args
 
 
 def get_musescore_bin() -> str:

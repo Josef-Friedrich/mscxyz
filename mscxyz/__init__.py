@@ -4,13 +4,11 @@ files of the notation software MuseScore.
 
 from __future__ import annotations
 
-import configparser
 import importlib
-import os
 import sys
 import typing
 from importlib import metadata
-from typing import Optional, Type
+from typing import Type
 
 import lxml
 import lxml.etree
@@ -20,74 +18,31 @@ import mscxyz
 import mscxyz.lyrics
 import mscxyz.meta
 import mscxyz.score
+import mscxyz.settings
+import mscxyz.settings as settings
 import mscxyz.style
 from mscxyz import cli, utils
 from mscxyz.rename import rename_filename
-from mscxyz.settings import DefaultArguments
 
 __version__: str = metadata.version("mscxyz")
 
 Score = mscxyz.score.Score
+"""Score""" ""
 
 Lyrics = mscxyz.lyrics.Lyrics
+"""Lyrics"""
 
 Meta = mscxyz.meta.Meta
+"""Meta"""
 
 Style = mscxyz.style.Style
+"""Style"""
 
 list_score_paths = utils.list_score_paths
+"""list_score_paths"""
 
 
-def parse_config_ini(
-    relpath: Optional[str] = None,
-) -> Optional[configparser.ConfigParser]:
-    """Parse the configuration file. The file format is INI. The default
-    location is ``/etc/mscxyz.ini``."""
-    if not relpath:
-        ini_file = os.path.abspath(os.path.join(os.sep, "etc", "mscxyz.ini"))
-    else:
-        ini_file = relpath
-    config = configparser.ConfigParser()
-    if os.path.exists(ini_file):
-        config.read(ini_file)
-        return config
-    return None
-
-
-def merge_config_into_args(
-    config: configparser.ConfigParser, args: DefaultArguments
-) -> DefaultArguments:
-    for section in config.sections():
-        for key, value in config[section].items():
-            arg = "{}_{}".format(section, key)
-            if not hasattr(args, arg) or not getattr(args, arg):
-                setattr(args, arg, value)
-
-    for arg in [
-        "general_backup",
-        "general_colorize",
-        "general_dry_run",
-        "general_mscore",
-        "help_markdown",
-        "help_rst",
-        "lyrics_fix",
-        "meta_json",
-        "meta_sync",
-        "rename_alphanum",
-        "rename_ascii",
-        "rename_no_whitespace",
-    ]:
-        if hasattr(args, arg):
-            value2 = getattr(args, arg)
-            if value2 == 1 or value2 == "true" or value2 == "True":
-                setattr(args, arg, True)
-            else:
-                setattr(args, arg, False)
-
-    return args
-
-
-def heading(args: DefaultArguments, text: str, level: int = 1) -> None:
+def heading(args: settings.DefaultArguments, text: str, level: int = 1) -> None:
     length = len(text)
     if args.help_markdown:
         print("\n" + ("#" * level) + " " + text + "\n")
@@ -107,7 +62,7 @@ def heading(args: DefaultArguments, text: str, level: int = 1) -> None:
         print(text)
 
 
-def code_block(args: DefaultArguments, text: str) -> None:
+def code_block(args: settings.DefaultArguments, text: str) -> None:
     if args.help_markdown:
         print("```\n" + text + "\n```")
     elif args.help_rst:
@@ -116,7 +71,7 @@ def code_block(args: DefaultArguments, text: str) -> None:
         print(text)
 
 
-def show_all_help(args: DefaultArguments) -> None:
+def show_all_help(args: settings.DefaultArguments) -> None:
     subcommands = ("clean", "meta", "lyrics", "rename", "export", "help")
 
     if args.path == "all":
@@ -158,14 +113,14 @@ def no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
 
 
 def execute(cli_args: typing.Sequence[str] | None = None) -> None:
-    args: DefaultArguments = typing.cast(
-        DefaultArguments, cli.parser.parse_args(cli_args)
+    args: settings.DefaultArguments = typing.cast(
+        settings.DefaultArguments, cli.parser.parse_args(cli_args)
     )
     if args.general_config_file:
-        config = parse_config_ini(args.general_config_file)
+        config = settings.parse_config_ini(args.general_config_file)
         if config:
-            args = merge_config_into_args(config, args)
-    utils.set_args(args)
+            args = settings.merge_config_into_args(config, args)
+    settings.set_args(args)
 
     if args.subcommand == "help":
         show_all_help(args)

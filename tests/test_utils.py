@@ -13,10 +13,11 @@ import pytest
 
 import mscxyz
 from mscxyz import utils
+from mscxyz.settings import get_args
 from mscxyz.utils import ListExtension, PathChanger, ZipContainer
 from tests import helper
 
-args = utils.get_args()
+args = get_args()
 args.general_executable = None
 
 

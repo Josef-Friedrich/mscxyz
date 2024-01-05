@@ -23,7 +23,7 @@ publish:
 
 docs:
 	poetry run tox -e docs
-	xdg-open docs/_build/index.html
+	xdg-open docs/_build/index.html > /dev/null 2>&1
 
 activate_venv:
 	source .venv/bin/activate

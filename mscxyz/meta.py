@@ -14,6 +14,7 @@ import tmep
 from lxml.etree import _Element
 
 from mscxyz import utils
+from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -560,7 +561,7 @@ class Meta:
             iface.combined_subtitle = ""
 
     def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
-        args = utils.get_args()
+        args = get_args()
 
         fields = list(self.interface.fields)
 
