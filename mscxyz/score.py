@@ -238,6 +238,14 @@ class Score:
             if mscore:
                 utils.re_open(dest)
 
+    def read_as_text(self) -> str:
+        """Read the MuseScore file as text.
+
+        :return: The content of the MuseScore XML file as text.
+        """
+        with open(self.path, "r") as f:
+            return f.read()
+
     def reload(self) -> Score:
         """Reload the MuseScore file."""
         return Score(self.path)

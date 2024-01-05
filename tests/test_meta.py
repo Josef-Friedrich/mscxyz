@@ -315,69 +315,70 @@ class TestClassInterface:
             self.interface.readonly_extension = "lol"
 
 
+def get_meta_tag(filename: str, version: int) -> MetaTag:
+    score = helper.get_score(filename, version)
+    return score.meta.meta_tag
+
+
+@pytest.fixture
+def meta_tag_v2() -> MetaTag:
+    return get_meta_tag("simple.mscx", version=2)
+
+
+@pytest.fixture
+def meta_tag_v3() -> MetaTag:
+    return get_meta_tag("simple.mscx", version=3)
+
+
+@pytest.fixture
+def meta_tag_v4() -> MetaTag:
+    return get_meta_tag("simple.mscz", version=4)
+
+
 class TestClassMetaTag:
     def _init_class(
         self, filename: str, version: int = 2
     ) -> tuple[MetaTag, Score, str]:
         tmp = helper.get_file(filename, version)
-        tree = Score(tmp)
-        meta = MetaTag(tree.xml_root)
-        return meta, tree, tmp
+        score = Score(tmp)
+        meta = score.meta.meta_tag
+        return meta, score, tmp
 
-    def test_static_method_to_camel_case(self) -> None:
-        camel_case = MetaTag._to_camel_case
-        assert camel_case("work_title") == "workTitle"
-        assert camel_case("composer") == "composer"
-        assert camel_case("work_title_lol") == "workTitleLol"
-        assert camel_case("workTitle") == "workTitle"
+    def test_get_v2(self, meta_tag_v2: MetaTag) -> None:
+        assert meta_tag_v2.work_title == "Title"
+        assert meta_tag_v2.arranger is None
+        assert meta_tag_v2.composer == "Composer"
 
-    def test_get2(self) -> None:
-        meta, _, _ = self._init_class("simple.mscx", version=2)
-        assert meta.workTitle == "Title"
-        assert meta.work_title == "Title"
-        assert meta.arranger is None
-        assert meta.composer == "Composer"
+    def test_get_v3(self, meta_tag_v3: MetaTag) -> None:
+        assert meta_tag_v3.work_title == "Title"
+        assert meta_tag_v3.arranger is None
+        assert meta_tag_v3.composer == "Composer"
 
-    def test_get3(self) -> None:
-        meta, _, _ = self._init_class("simple.mscx", version=3)
-        assert meta.workTitle == "Title"
-        assert meta.work_title == "Title"
-        assert meta.arranger is None
-        assert meta.composer == "Composer"
+    def test_get_v4(self, meta_tag_v4: MetaTag) -> None:
+        assert meta_tag_v4.work_title == "Title"
+        assert meta_tag_v4.arranger is None
+        assert meta_tag_v4.composer == "Composer"
+        assert meta_tag_v4.creation_date is None
+        assert meta_tag_v4.msc_version == "4.20"
 
     def test_set2(self) -> None:
-        meta, tree, tmp = self._init_class("simple.mscx", version=2)
-        meta.workTitle = "WT"
+        meta, score, _ = self._init_class("simple.mscx", version=2)
         meta.movement_title = "MT"
-        tree.save()
-        tree = Score(tmp)
-        meta = MetaTag(tree.xml_root)
-        assert meta.work_title == "WT"
-        assert meta.movementTitle == "MT"
-        xml_string = helper.read_file(tmp)
-        assert '<metaTag name="workTitle">WT</metaTag>' in xml_string
+        score.save()
+        new_score = score.reload()
+
+        assert new_score.meta.meta_tag.movement_title == "MT"
+        assert '<metaTag name="movementTitle">MT</metaTag>' in new_score.read_as_text()
 
     def test_set3(self) -> None:
         meta, tree, tmp = self._init_class("simple.mscx", version=3)
-        meta.workTitle = "WT"
         meta.movement_title = "MT"
         tree.save()
         tree = Score(tmp)
         meta = MetaTag(tree.xml_root)
         assert meta.work_title == "WT"
-        assert meta.movementTitle == "MT"
         xml_string = helper.read_file(tmp)
         assert '<metaTag name="workTitle">WT</metaTag>' in xml_string
-
-    def test_get_exception(self) -> None:
-        meta, _, _ = self._init_class("simple.mscx")
-        with pytest.raises(mscxyz.meta.UnkownFieldError):
-            meta.lol
-
-    def test_set_exception(self) -> None:
-        meta, _, _ = self._init_class("simple.mscx")
-        with pytest.raises(AttributeError):
-            meta.lol = "lol"
 
     def test_clean(self) -> None:
         meta, _, _ = self._init_class("simple.mscx")
@@ -479,8 +480,8 @@ class TestClassCombined:
         c.lyricist = "L"
         tree.save()
         c = Combined(tree.xml_root)
-        assert c.metatag.workTitle == "T"
-        assert c.metatag.movementTitle == "S"
+        assert c.metatag.work_title == "T"
+        assert c.metatag.movement_title == "S"
         assert c.metatag.composer == "C"
         assert c.metatag.lyricist == "L"
 

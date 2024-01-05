@@ -105,42 +105,63 @@ class MetaTag:
     """The available metaTag fields are:
 
     * `arranger`
+    * `audioComUrl` (new in v4)
     * `composer`
     * `copyright`
     * `creationDate`
     * `lyricist`
     * `movementNumber`
     * `movementTitle`
+    * `mscVersion`
     * `platform`
-    * `poet`
+    * `poet` (not in v4)
     * `source`
+    * `sourceRevisionId`
+    * `subtitle`
     * `translator`
     * `workNumber`
     * `workTitle`
 
+    version 4
+
+    .. code-block:: xml
+            <museScore version="4.20">
+                <Score>
+                    <metaTag name="arranger"></metaTag>
+                    <metaTag name="audioComUrl"></metaTag>
+                    <metaTag name="composer">Composer / arranger</metaTag>
+                    <metaTag name="copyright"></metaTag>
+                    <metaTag name="creationDate">2024-01-05</metaTag>
+                    <metaTag name="lyricist"></metaTag>
+                    <metaTag name="movementNumber"></metaTag>
+                    <metaTag name="movementTitle"></metaTag>
+                    <metaTag name="platform">Linux</metaTag>
+                    <metaTag name="source"></metaTag>
+                    <metaTag name="sourceRevisionId"></metaTag>
+                    <metaTag name="subtitle">Subtitle</metaTag>
+                    <metaTag name="translator"></metaTag>
+                    <metaTag name="workNumber"></metaTag>
+                    <metaTag name="workTitle">Untitled score</metaTag>
     """
 
     fields = (
         "arranger",
-        "composer",
+        "audio_com_url" "composer",
         "copyright",
-        "creationDate",
+        "creation_date",
         "lyricist",
-        "movementNumber",
-        "movementTitle",
+        "movement_number",
+        "movement_title",
+        "msc_version"
         "platform",
         "poet",
         "source",
-        "translator",
-        "workNumber",
-        "workTitle",
+        "source_revision_id" "subtitle" "translator",
+        "work_number",
+        "work_title",
     )
 
     xml_root: _Element
-
-    @staticmethod
-    def _to_camel_case(field: str) -> str:
-        return re.sub(r"(?!^)_([a-zA-Z])", lambda match: match.group(1).upper(), field)
 
     def __init__(self, xml_root: _Element) -> None:
         self.xml_root = xml_root
@@ -159,19 +180,175 @@ class MetaTag:
         else:
             raise AttributeError(f"Field “{field}” not found!")
 
-    def __getattr__(self, field: str) -> str | None:
-        field = self._to_camel_case(field)
-        if field not in self.fields:
-            raise UnkownFieldError(field, self.fields)
-        else:
-            return self._get_text(field)
+    # arranger
 
-    def __setattr__(self, field: str, value: str | None) -> None:
-        if field == "xml_root" or field == "fields":
-            self.__dict__[field] = value
-        else:
-            field = self._to_camel_case(field)
-            self._set_text(field, value)
+    @property
+    def arranger(self) -> str | None:
+        return self._get_text("arranger")
+
+    @arranger.setter
+    def arranger(self, value: str) -> None:
+        self._set_text("arranger", value)
+
+    # audio_com_url -> audioComUrl
+
+    @property
+    def audio_com_url(self) -> str | None:
+        return self._get_text("audioComUrl")
+
+    @audio_com_url.setter
+    def audio_com_url(self, value: str) -> None:
+        self._set_text("audioComUrl", value)
+
+    # composer
+
+    @property
+    def composer(self) -> str | None:
+        return self._get_text("composer")
+
+    @composer.setter
+    def composer(self, value: str) -> None:
+        self._set_text("composer", value)
+
+    # copyright
+
+    @property
+    def copyright(self) -> str | None:
+        return self._get_text("copyright")
+
+    @copyright.setter
+    def copyright(self, value: str) -> None:
+        self._set_text("copyright", value)
+
+    # creation_date -> creationDate
+
+    @property
+    def creation_date(self) -> str | None:
+        return self._get_text("creationDate")
+
+    @creation_date.setter
+    def creation_date(self, value: str) -> None:
+        self._set_text("creationDate", value)
+
+    # lyricist
+
+    @property
+    def lyricist(self) -> str | None:
+        return self._get_text("lyricist")
+
+    @lyricist.setter
+    def lyricist(self, value: str) -> None:
+        self._set_text("lyricist", value)
+
+    # movement_number -> movementNumber
+
+    @property
+    def movement_number(self) -> str | None:
+        return self._get_text("movementNumber")
+
+    @movement_number.setter
+    def movement_number(self, value: str) -> None:
+        self._set_text("movementNumber", value)
+
+    # movement_title -> movementTitle
+
+    @property
+    def movement_title(self) -> str | None:
+        return self._get_text("movementTitle")
+
+    @movement_title.setter
+    def movement_title(self, value: str) -> None:
+        self._set_text("movementTitle", value)
+
+    # msc_version -> mscVersion
+
+    @property
+    def msc_version(self) -> str | None:
+        return self._get_text("mscVersion")
+
+    @msc_version.setter
+    def msc_version(self, value: str) -> None:
+        self._set_text("mscVersion", value)
+
+    # platform
+
+    @property
+    def platform(self) -> str | None:
+        return self._get_text("platform")
+
+    @platform.setter
+    def platform(self, value: str) -> None:
+        self._set_text("platform", value)
+
+    # poet
+
+    @property
+    def poet(self) -> str | None:
+        return self._get_text("poet")
+
+    @poet.setter
+    def poet(self, value: str) -> None:
+        self._set_text("poet", value)
+
+    # source
+
+    @property
+    def source(self) -> str | None:
+        return self._get_text("source")
+
+    @source.setter
+    def source(self, value: str) -> None:
+        self._set_text("source", value)
+
+    # source_revision_id -> sourceRevisionId
+
+    @property
+    def source_revision_id(self) -> str | None:
+        return self._get_text("sourceRevisionId")
+
+    @source_revision_id.setter
+    def source_revision_id(self, value: str) -> None:
+        self._set_text("sourceRevisionId", value)
+
+    # subtitle
+
+    @property
+    def subtitle(self) -> str | None:
+        return self._get_text("subtitle")
+
+    @subtitle.setter
+    def subtitle(self, value: str) -> None:
+        self._set_text("subtitle", value)
+
+    # translator
+
+    @property
+    def translator(self) -> str | None:
+        return self._get_text("translator")
+
+    @translator.setter
+    def translator(self, value: str) -> None:
+        self._set_text("translator", value)
+
+    # work_number -> workNumber
+
+    @property
+    def work_number(self) -> str | None:
+        return self._get_text("workNumber")
+
+    @work_number.setter
+    def work_number(self, value: str) -> None:
+        self._set_text("workNumber", value)
+
+    # work_title -> workTitle
+
+    @property
+    def work_title(self) -> str | None:
+        return self._get_text("workTitle")
+
+    @work_title.setter
+    def work_title(self, value: str) -> None:
+        self._set_text("workTitle", value)
 
     def clean(self) -> None:
         fields = (
@@ -324,19 +501,19 @@ class Combined:
 
     @property
     def title(self) -> str | None:
-        return self._pick_value(self.vbox.Title, self.metatag.workTitle)
+        return self._pick_value(self.vbox.Title, self.metatag.work_title)
 
     @title.setter
     def title(self, value: str | None) -> None:
-        self.vbox.Title = self.metatag.workTitle = value
+        self.vbox.Title = self.metatag.work_title = value
 
     @property
     def subtitle(self) -> str | None:
-        return self._pick_value(self.vbox.Subtitle, self.metatag.movementTitle)
+        return self._pick_value(self.vbox.Subtitle, self.metatag.movement_title)
 
     @subtitle.setter
     def subtitle(self, value: str | None) -> None:
-        self.vbox.Subtitle = self.metatag.movementTitle = value
+        self.vbox.Subtitle = self.metatag.movement_title = value
 
     @property
     def composer(self) -> str | None:
@@ -482,11 +659,13 @@ class Interface:
 class Meta:
     score: "Score"
 
+    meta_tag: MetaTag
+
     def __init__(self, score: "Score") -> None:
         self.score = score
 
         if not self.score.errors:
-            self.metatag = MetaTag(self.score.xml_root)
+            self.meta_tag = MetaTag(self.score.xml_root)
             self.vbox = Vbox(self.score.xml_root)
             self.combined = Combined(self.score.xml_root)
             self.interface_read_write = InterfaceReadWrite(self.score.xml_root)
