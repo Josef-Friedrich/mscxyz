@@ -418,6 +418,12 @@ class PathChanger:
         return Path(path_changer.path)
 
 
+def change_path(
+    path: str | Path, suffix: Optional[str] = None, extension: Optional[str] = None
+) -> Path:
+    return PathChanger(path).change(suffix=suffix, extension=extension)
+
+
 class ZipContainer:
     """Container for the file paths of the different files in an unzipped MuseScore file
 

@@ -52,7 +52,5 @@ class TestExport:
             self.execute("xxx")
         assert (
             str(excinfo.value)
-            == "Unsupported extension: xxx! Supported extensions: ('mei', 'spos', 'mpos', "
-            "'mscz', 'mscx', 'brf', 'wav', 'mp3', 'ogg', 'flac', 'mid', 'midi', 'kar', "
-            "'musicxml', 'xml', 'mxl', 'pdf', 'svg', 'png')"
+            == "Unsupported extension: xxx! Supported extensions: ('mscz', 'mscx', 'spos', 'mpos', 'pdf', 'svg', 'png', 'wav', 'mp3', 'ogg', 'flac', 'mid', 'midi', 'kar', 'musicxml', 'xml', 'mxl', 'brf', 'mei')"
         )

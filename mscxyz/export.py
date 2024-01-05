@@ -10,25 +10,30 @@ if typing.TYPE_CHECKING:
 
 
 extensions_4 = (
-    "mei",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/mei/meimodule.cpp#L58
-    "spos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L126
-    "mpos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L127
+    # Vendor specific formats
     "mscz",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L128
     "mscx",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L129
-    "brf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/braille/braillemodule.cpp#L53
+    "spos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L126
+    "mpos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L127
+    # Graphical formats
+    "pdf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L54
+    "svg",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L55
+    "png",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L56
+    # Audio formats
     "wav",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L56
     "mp3",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L57
     "ogg",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L58
     "flac",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L59
+    # Hybrid formats
     "mid",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
     "midi",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
     "kar",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
+    # Score formats
     "musicxml",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
     "xml",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
     "mxl",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
-    "pdf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L54
-    "svg",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L55
-    "png",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L56
+    "brf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/braille/braillemodule.cpp#L53
+    "mei",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/mei/meimodule.cpp#L58
 )
 
 
