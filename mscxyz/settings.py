@@ -66,6 +66,7 @@ class DefaultArguments:
 
 args = DefaultArguments()
 
+
 def get_args() -> DefaultArguments:
     """Get the ``args`` object (the ``argparse`` object) which is stored in
     the .settings.py submodule for all other submodules.
@@ -73,6 +74,7 @@ def get_args() -> DefaultArguments:
     :return: the ``argparse`` object
     """
     return args
+
 
 def set_args(new_args: DefaultArguments) -> DefaultArguments:
     """Set the ``args`` object (the ``argparse`` object) which is stored in
@@ -83,7 +85,6 @@ def set_args(new_args: DefaultArguments) -> DefaultArguments:
     return args
 
 
-
 def reset_args() -> DefaultArguments:
     """Reset the ``args`` object (the ``argparse`` object) which is stored in
     the .settings.py submodule for all other submodules to import.
@@ -91,6 +92,7 @@ def reset_args() -> DefaultArguments:
     global args
     args = DefaultArguments()
     return args
+
 
 def parse_config_ini(
     relpath: Optional[str] = None,

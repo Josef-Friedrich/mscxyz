@@ -143,16 +143,16 @@ mscx-manager meta
       - combined_subtitle
       - combined_title
       - metatag_arranger
-      - metatag_composer
+      - metatag_audio_com_urlcomposer
       - metatag_copyright
       - metatag_creation_date
       - metatag_lyricist
       - metatag_movement_number
       - metatag_movement_title
-      - metatag_platform
+      - metatag_msc_versionplatform
       - metatag_poet
       - metatag_source
-      - metatag_translator
+      - metatag_source_revision_idsubtitletranslator
       - metatag_work_number
       - metatag_work_title
       - vbox_composer
@@ -227,16 +227,16 @@ mscx-manager rename
       - combined_subtitle
       - combined_title
       - metatag_arranger
-      - metatag_composer
+      - metatag_audio_com_urlcomposer
       - metatag_copyright
       - metatag_creation_date
       - metatag_lyricist
       - metatag_movement_number
       - metatag_movement_title
-      - metatag_platform
+      - metatag_msc_versionplatform
       - metatag_poet
       - metatag_source
-      - metatag_translator
+      - metatag_source_revision_idsubtitletranslator
       - metatag_work_number
       - metatag_work_title
       - readonly_abspath

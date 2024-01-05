@@ -146,17 +146,20 @@ class MetaTag:
 
     fields = (
         "arranger",
-        "audio_com_url" "composer",
+        "audio_com_url",
+        "composer",
         "copyright",
         "creation_date",
         "lyricist",
         "movement_number",
         "movement_title",
-        "msc_version"
+        "msc_version",
         "platform",
         "poet",
         "source",
-        "source_revision_id" "subtitle" "translator",
+        "source_revision_id",
+        "subtitle",
+        "translator",
         "work_number",
         "work_title",
     )
