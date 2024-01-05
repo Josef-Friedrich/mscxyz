@@ -237,3 +237,7 @@ class Score:
 
             if mscore:
                 utils.re_open(dest)
+
+    def reload(self) -> Score:
+        """Reload the MuseScore file."""
+        return Score(self.path)

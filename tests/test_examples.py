@@ -1,51 +1,11 @@
-{{ badge.pypi }}
+"""Test the examples from the README.rst file."""
 
-{{ badge.github_workflow() }}
+from __future__ import annotations
 
-{{ badge.readthedocs }}
-
-======
-mscxyz
-======
-
-Manipulate the XML based .mscx and .mscz files of the notation software MuseScore.
-
-Installation
-============
-
-.. code:: Shell
-
-    pip install mscxyz
+from mscxyz import Score
 
 
-Other MuseScore related projects 
-================================
-
-* https://github.com/johentsch/ms3
-
-
-Usage
-=====
-
-{{ cli('mscx-manager help --rst all') }}
-
-API Usage
-=========
-
-``meta``
---------
-
-Set the meta tag ``composer``
-
-.. code-block:: xml
-
-    <museScore version="4.20">
-        <Score>
-            <metaTag name="composer">Composer</metaTag>
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
+def test_set_meta_tag_composer(score: Score) -> None:
     assert score.meta.interface.metatag_composer == "Composer"
 
     score.meta.interface.metatag_composer = "Mozart"
@@ -54,22 +14,10 @@ Set the meta tag ``composer``
     new_score: Score = score.reload()
     assert new_score.meta.interface.metatag_composer == "Mozart"
 
-.. code-block:: xml
 
-    <museScore version="4.20">
-        <Score>
-            <metaTag name="composer">Mozart</metaTag>
-
-``style``
----------
-
-Set all font faces (using a for loop, not available in MuseScore 2)
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
+def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     assert score.style.get_value("defaultFontFace") == "FreeSerif"
-    
+
     for element in score.style.styles:
         if "FontFace" in element.tag:
             element.text = "Alegreya"
@@ -79,13 +27,7 @@ Set all font faces (using a for loop, not available in MuseScore 2)
     assert new_score.style.get_value("defaultFontFace") == "Alegreya"
 
 
-.. code-block:: Python
-
-Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``, not available in MuseScore 2)
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
+def test_set_all_font_faces_using_method(score: Score) -> None:
     assert score.style.get_value("defaultFontFace") == "FreeSerif"
 
     response = score.style.set_all_font_faces("Alegreya")
@@ -158,50 +100,3 @@ Set all font faces (using the method ``score.style.set_all_font_faces(font_face)
 
     new_score: Score = score.reload()
     assert new_score.style.get_value("defaultFontFace") == "Alegreya"
-
-Configuration file
-==================
-
-``/etc/mscxyz.ini``
-
-.. code-block:: ini
-
-    [general]
-    executable = /usr/bin/mscore3
-    colorize = True
-
-    [rename]
-    format = '$combined_title ($combined_composer)'
-
-Development
-===========
-
-Test
-----
-
-::
-
-    make test
-
-
-Publish a new version
----------------------
-
-::
-
-    git tag 1.1.1
-    git push --tags
-    make publish
-
-
-Package documentation
----------------------
-
-The package documentation is hosted on
-`readthedocs <http://mscxyz.readthedocs.io>`_.
-
-Generate the package documentation:
-
-::
-
-    make docs

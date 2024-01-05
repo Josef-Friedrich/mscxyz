@@ -69,6 +69,36 @@ class Style:
                 parent = element
         return parent
 
+    @property
+    def styles(self) -> list[_Element]:
+        """
+        Return all style elements (all XML elements inside the ``<Style>``) as a list.
+
+        :return: A list of all style elements.
+        """
+        output: list[_Element] = []
+        for element in self.parent_element:
+            output.append(element)
+        return output
+
+    def set_all_font_faces(self, font_face: str) -> list[tuple[str, str, str]]:
+        """
+        Sets the font face for all elements in the parent element.
+
+        :param font_face: The new font face to be set.
+
+        :return: A list of tuples representing the changes made. Each tuple
+          contains the tag name, the old font face, and the new font face.
+        """
+        output: list[tuple[str, str, str]] = []
+        for element in self.parent_element:
+            if "FontFace" in element.tag:
+                old: str = utils.xml.get_text_safe(element)
+                change: tuple[str, str, str] = (element.tag, old, font_face)
+                element.text = font_face
+                output.append(change)
+        return output
+
     def get_element(self, element_path: str) -> _Element:
         """
         Determines an lxml element that is a child to the ``Style`` tag
