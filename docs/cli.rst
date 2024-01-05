@@ -7,18 +7,17 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d] [-g GENERAL_GLOB]
-                      [-m] [-e GENERAL_EXECUTABLE] [-v]
+  usage: mscx-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d]
+                      [-g GENERAL_GLOB] [-m] [-e FILE_PATH] [-v]
                       {clean,export,help,meta,lyrics,rename,style} ... path
 
-  A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the
-  notation software MuseScore.
+  A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
 
   positional arguments:
-    path                  Path to a *.msc[zx]" file or a folder which contains "*.msc[zx]"
-                          files. In conjunction with the subcommand "help" this positional
-                          parameter accepts the names of all other subcommands or the word
-                          "all".
+    path                  Path to a *.msc[zx]" file or a folder which contains
+                          "*.msc[zx]" files. In conjunction with the subcommand "help"
+                          this positional parameter accepts the names of all other
+                          subcommands or the word "all".
 
   options:
     -h, --help            show this help message and exit
@@ -29,34 +28,35 @@ mscxyz
                           Specify a configuration file in the INI format.
     -d, --dry-run         Simulate the actions.
     -g GENERAL_GLOB, --glob GENERAL_GLOB
-                          Handle only files which matches against Unix style glob patterns
-                          (e. g. "*.mscx", "* - *"). If you omit this option, the standard
-                          glob pattern "*.msc[xz]" is used.
-    -m, --mscore          Open and save the XML file in MuseScore after manipulating the
-                          XML with lxml to avoid differences in the XML structure.
-    -e GENERAL_EXECUTABLE, --executable GENERAL_EXECUTABLE
+                          Handle only files which matches against Unix style glob
+                          patterns (e. g. "*.mscx", "* - *"). If you omit this option,
+                          the standard glob pattern "*.msc[xz]" is used.
+    -m, --mscore          Open and save the XML file in MuseScore after manipulating
+                          the XML with lxml to avoid differences in the XML structure.
+    -e FILE_PATH, --executable FILE_PATH
                           Path of the musescore executable.
-    -v, --verbose         Make commands more verbose. You can specifiy multiple arguments
-                          (. g.: -vvv) to make the command more verbose.
+    -v, --verbose         Make commands more verbose. You can specifiy multiple
+                          arguments (. g.: -vvv) to make the command more verbose.
 
   Subcommands:
     {clean,export,help,meta,lyrics,rename,style}
                           Run "subcommand --help" for more informations.
       clean               Clean and reset the formating of the "*.mscx" file
       export              Export the scores to PDFs or to a format specified by the
-                          extension. The exported file has the same path, only the file
-                          extension is different. See
+                          extension. The exported file has the same path, only the
+                          file extension is different. See
                           https://musescore.org/en/handbook/2/file-formats
                           https://musescore.org/en/handbook/3/file-export
                           https://musescore.org/en/handbook/4/file-export
-      help                Show help. Use “mscx-manager help all” to show help messages of
-                          all subcommands. Use “mscx-manager help <subcommand>” to show
-                          only help messages for the given subcommand.
-      meta                Deal with meta data informations stored in the MuseScore file.
-      lyrics              Extract lyrics. Without any option this subcommand extracts all
-                          lyrics verses into separate mscx files. This generated mscx
-                          files contain only one verse. The old verse number is appended
-                          to the file name, e. g.: score_1.mscx.
+      help                Show help. Use “mscx-manager help all” to show help messages
+                          of all subcommands. Use “mscx-manager help <subcommand>” to
+                          show only help messages for the given subcommand.
+      meta                Deal with meta data informations stored in the MuseScore
+                          file.
+      lyrics              Extract lyrics. Without any option this subcommand extracts
+                          all lyrics verses into separate mscx files. This generated
+                          mscx files contain only one verse. The old verse number is
+                          appended to the file name, e. g.: score_1.mscx.
       rename              Rename the "*.mscx" files.
       style               Change the styles.
 
@@ -73,14 +73,16 @@ mscx-manager clean
   options:
     -h, --help            show this help message and exit
     -s CLEAN_STYLE, --style CLEAN_STYLE
-                          Load a "*.mss" style file and include the contents of this file.
+                          Load a "*.mss" style file and include the contents of this
+                          file.
 
 mscx-manager meta
 -----------------
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c META_CLEAN] [-D] [-d SOURCE_FIELDS FORMAT_STRING] [-j]
+  usage: mscx-manager meta [-h] [-c META_CLEAN] [-D]
+                           [-d SOURCE_FIELDS FORMAT_STRING] [-j]
                            [-l DESTINATION FORMAT_STRING] [-s]
                            [-S DESTINATION_FIELD FORMAT_STRING]
 
@@ -165,21 +167,21 @@ mscx-manager meta
                           „field_one,field_two“.
     -D, --delete-duplicates
                           Deletes combined_lyricist if this field is equal to
-                          combined_composer. Deletes combined_subtitle if this field is
-                          equal tocombined_title. Move combined_subtitle to combimed_title
-                          if combined_title is empty.
+                          combined_composer. Deletes combined_subtitle if this field
+                          is equal tocombined_title. Move combined_subtitle to
+                          combimed_title if combined_title is empty.
     -d SOURCE_FIELDS FORMAT_STRING, --distribute-fields SOURCE_FIELDS FORMAT_STRING
                           Distribute source fields to target fields applying a format
-                          string on the source fields. It is possible to apply multiple
-                          --distribute-fields options. SOURCE_FIELDS can be a single field
-                          or a comma separated list of fields: field_one,field_two. The
-                          program tries first to match the FORMAT_STRING on the first
-                          source field. If this fails, it tries the second source field
-                          ... an so on.
+                          string on the source fields. It is possible to apply
+                          multiple --distribute-fields options. SOURCE_FIELDS can be a
+                          single field or a comma separated list of fields:
+                          field_one,field_two. The program tries first to match the
+                          FORMAT_STRING on the first source field. If this fails, it
+                          tries the second source field ... an so on.
     -j, --json            Additionally write the meta data to a json file.
     -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
-                          Write one line per file to a text file. e. g. --log /tmp/mscx-
-                          manager.log '$title $composer'
+                          Write one line per file to a text file. e. g. --log
+                          /tmp/mscx-manager.log '$title $composer'
     -s, --synchronize     Synchronize the values of the first vertical frame (vbox)
                           (title, subtitle, composer, lyricist) with the corresponding
                           metadata fields
@@ -198,13 +200,14 @@ mscx-manager lyrics
     -e LYRICS_EXTRACT, --extract LYRICS_EXTRACT
                           The lyric verse number to extract or "all".
     -r LYRICS_REMAP, --remap LYRICS_REMAP
-                          Remap lyrics. Example: "--remap 3:2,5:3". This example remaps
-                          lyrics verse 3 to verse 2 and verse 5 to 3. Use commas to
-                          specify multiple remap pairs. One remap pair is separated by a
-                          colon in this form: "old:new": "old" stands for the old verse
-                          number. "new" stands for the new verse number.
-    -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to a correct
-                          hyphenation ("la - la - la")
+                          Remap lyrics. Example: "--remap 3:2,5:3". This example
+                          remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
+                          commas to specify multiple remap pairs. One remap pair is
+                          separated by a colon in this form: "old:new": "old" stands
+                          for the old verse number. "new" stands for the new verse
+                          number.
+    -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to a
+                          correct hyphenation ("la - la - la")
 
 mscx-manager rename
 -------------------
@@ -413,8 +416,8 @@ mscx-manager rename
     -a, --ascii           Use only ASCII characters.
     -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.
     -s FIELDS, --skip-if-empty FIELDS
-                          Skip rename action if FIELDS are empty. Separate FIELDS using
-                          commas: combined_composer,combined_title
+                          Skip rename action if FIELDS are empty. Separate FIELDS
+                          using commas: combined_composer,combined_title
     -t RENAME_TARGET, --target RENAME_TARGET
                           Target directory
 
@@ -428,8 +431,8 @@ mscx-manager export
   options:
     -h, --help            show this help message and exit
     -e EXPORT_EXTENSION, --extension EXPORT_EXTENSION
-                          Extension to export. If this option is omitted, then the default
-                          extension is "pdf".
+                          Extension to export. If this option is omitted, then the
+                          default extension is "pdf".
 
 mscx-manager help
 -----------------
@@ -440,7 +443,9 @@ mscx-manager help
 
   options:
     -h, --help      show this help message and exit
-    -m, --markdown  Show help in markdown format. This option enables to generate the
-                    README file directly form the command line output.
-    -r, --rst       Show help in reStructuresText format. This option enables to generate
-                    the README file directly form the command line output.
+    -m, --markdown  Show help in markdown format. This option enables to
+                    generate the README file directly form the command line
+                    output.
+    -r, --rst       Show help in reStructuresText format. This option enables to
+                    generate the README file directly form the command line
+                    output.

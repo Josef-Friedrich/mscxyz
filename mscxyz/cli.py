@@ -20,10 +20,22 @@ def list_fields(
     return "\n".join(out)
 
 
+class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
+    """https://stackoverflow.com/a/35925919"""
+
+    def __init__(self, prog: typing.Text) -> None:
+        super().__init__(prog, width=80)
+
+    def _split_lines(self, text: typing.Text, width: int) -> typing.List[str]:
+        text = self._whitespace_matcher.sub(" ", text).strip()
+        return textwrap.wrap(text, 60)
+
+
 parser = argparse.ArgumentParser(
-    description='A command \
-    line tool to manipulate the XML based "*.mscX" and "*.mscZ" \
-    files of the notation software MuseScore.'
+    description="A command "
+    'line tool to manipulate the XML based "*.mscX" and "*.mscZ" '
+    "files of the notation software MuseScore.",
+    formatter_class=LineWrapRawTextHelpFormatter,
 )
 
 ###############################################################################
@@ -93,6 +105,7 @@ parser.add_argument(
     "--executable",
     dest="general_executable",
     help="Path of the musescore executable.",
+    metavar="FILE_PATH",
 )
 
 parser.add_argument(
@@ -122,7 +135,9 @@ subparser = parser.add_subparsers(
 ###############################################################################
 
 sub_clean = subparser.add_parser(
-    "clean", help='Clean and reset the formating of the "*.mscx" file'
+    "clean",
+    help='Clean and reset the formating of the "*.mscx" file',
+    formatter_class=LineWrapRawTextHelpFormatter,
 )
 
 sub_clean.add_argument(
@@ -146,6 +161,7 @@ sub_export = subparser.add_parser(
     https://musescore.org/en/handbook/2/file-formats \
     https://musescore.org/en/handbook/3/file-export \
     https://musescore.org/en/handbook/4/file-export",
+    formatter_class=LineWrapRawTextHelpFormatter,
 )
 
 sub_export.add_argument(
@@ -167,6 +183,7 @@ sub_help = subparser.add_parser(
     messages of all subcommands. Use \
     “{} help <subcommand>” to show only help messages \
     for the given subcommand.".format(parser.prog, parser.prog),
+    formatter_class=LineWrapRawTextHelpFormatter,
 )
 
 sub_help.add_argument(
@@ -196,7 +213,7 @@ sub_help.add_argument(
 sub_meta = subparser.add_parser(
     "meta",
     help="Deal with meta data informations stored in the MuseScore file.",
-    formatter_class=argparse.RawDescriptionHelpFormatter,
+    formatter_class=LineWrapRawTextHelpFormatter,
     description=textwrap.dedent(
         """\
     MuseScore can store meta data informations in different places:
@@ -338,6 +355,7 @@ sub_lyrics = subparser.add_parser(
     This generated mscx files contain only one verse. The old \
     verse number is appended to the file name, e. g.: \
     score_1.mscx.",
+    formatter_class=LineWrapRawTextHelpFormatter,
 )
 
 sub_lyrics.add_argument(
@@ -376,7 +394,7 @@ sub_lyrics.add_argument(
 sub_rename = subparser.add_parser(
     "rename",
     help='Rename the "*.mscx" files.',
-    formatter_class=argparse.RawDescriptionHelpFormatter,
+    formatter_class=LineWrapRawTextHelpFormatter,
     description="Fields and functions you can use in the format "
     "string (-f, --format):\n\n"
     "Fields\n======\n\n{}\n\n"
@@ -439,8 +457,7 @@ sub_rename.add_argument(
 ###############################################################################
 
 sub_style = subparser.add_parser(
-    "style",
-    help="Change the styles.",
+    "style", help="Change the styles.", formatter_class=LineWrapRawTextHelpFormatter
 )
 
 sub_style.add_argument(
