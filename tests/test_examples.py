@@ -5,6 +5,16 @@ from __future__ import annotations
 from mscxyz import Score
 
 
+def test_instantiate_a_score_object(score_file: str) -> None:
+    score = Score(score_file)
+    assert score.path.exists()
+    assert score.filename == "score.mscz"
+    assert score.basename == "score"
+    assert score.extension == "mscz"
+    assert score.version == 4.20
+    assert score.version_major == 4
+
+
 def test_set_meta_tag_composer(score: Score) -> None:
     assert score.meta.interface.metatag_composer == "Composer"
 

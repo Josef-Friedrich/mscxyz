@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from mscxyz import Score
@@ -39,10 +41,20 @@ def score3z() -> Score:
 @pytest.fixture(autouse=True)
 def score4z() -> Score:
     """Instantiate a Score object from the file simple.mscz (version 4)."""
-    return helper.get_score("simple.mscz", version=4)
+    return helper.get_score("score.mscz", version=4)
 
 
 @pytest.fixture(autouse=True)
 def score() -> Score:
     """Instantiate a Score object from the file simple.mscz (version 4)."""
-    return helper.get_score("simple.mscz", version=4)
+    return helper.get_score("score.mscz", version=4)
+
+
+@pytest.fixture(autouse=True)
+def score_path() -> Path:
+    return helper.get_path("score.mscz", version=4)
+
+
+@pytest.fixture(autouse=True)
+def score_file() -> str:
+    return helper.get_file("score.mscz", version=4)

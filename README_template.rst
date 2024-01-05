@@ -32,6 +32,19 @@ Usage
 API Usage
 =========
 
+Instantiate a ``Score`` object:
+
+.. code-block:: Python
+
+    from mscxyz import Score
+    score = Score('score.mscz')
+    assert score.path.exists()
+    assert score.filename == "score.mscz"
+    assert score.basename == "score"
+    assert score.extension == "mscz"
+    assert score.version == 4.20
+    assert score.version_major == 4
+
 ``meta``
 --------
 
