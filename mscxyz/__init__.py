@@ -234,9 +234,9 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         elif args.subcommand == "export":
             score = Score(file)
             if args.export_extension:
-                score.export(extension=args.export_extension)
+                score.export.to_extension(extension=args.export_extension)
             else:
-                score.export()
+                score.export.to_extension()
         elif args.subcommand == "style":
             score = Score(file)
 

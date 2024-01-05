@@ -6,7 +6,6 @@ from __future__ import annotations
 import filecmp
 import os
 import shutil
-import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -16,7 +15,6 @@ from lxml.etree import _Element
 import mscxyz
 from mscxyz.score import (
     Score,
-    ZipContainer,
 )
 from tests import helper
 
@@ -106,19 +104,19 @@ class TestClassScore:
         assert result[0].tag == "Style"
 
 
-class TestMethodMakePath:
+class TestMethodChangePath:
     score: Score = helper.get_score("simple.mscz")
 
-    def make_path(
+    def change_path(
         self, extension: Optional[str] = None, suffix: Optional[str] = None
     ) -> str:
-        return str(self.score.make_path(extension=extension, suffix=suffix))
+        return str(self.score.change_path(extension=extension, suffix=suffix))
 
     def test_argument_extension(self) -> None:
-        assert self.make_path(extension="mscx").endswith(".mscx")
+        assert self.change_path(extension="mscx").endswith(".mscx")
 
     def test_argument_suffix(self) -> None:
-        assert self.make_path(suffix="bak").endswith("_bak.mscz")
+        assert self.change_path(suffix="bak").endswith("_bak.mscz")
 
 
 class TestScoreMscz3:
@@ -140,45 +138,6 @@ class TestScoreMscz4:
 
     def test_attribute_extension(self) -> None:
         assert self.file.extension == "mscz"
-
-
-class TestZipContainer:
-    def setup_method(self) -> None:
-        self.container = ZipContainer(
-            helper.get_file("test.mscz", version=4),
-        )
-
-    def test_attribute_tmp_dir(self) -> None:
-        assert str(self.container.tmp_dir).startswith(os.path.sep)
-        assert self.container.tmp_dir.exists()
-
-    def test_attribute_xml_file(self) -> None:
-        assert str(self.container.xml_file).endswith(".mscx")
-        assert self.container.xml_file.exists()
-
-    def test_attribute_thumbnail_file(self) -> None:
-        path = self.container.thumbnail_file
-        assert str(path).endswith("thumbnail.png")
-        if path:
-            assert path.exists()
-
-    def test_attribute_audiosettings_file(self) -> None:
-        path = self.container.audiosettings_file
-        assert str(path).endswith("audiosettings.json")
-        if path:
-            assert path.exists()
-
-    def test_attribute_viewsettings_file(self) -> None:
-        path = self.container.viewsettings_file
-        assert str(path).endswith("viewsettings.json")
-        if path:
-            assert path.exists()
-
-    def test_method_save(self) -> None:
-        _, dest = tempfile.mkstemp(suffix=".mscz")
-        self.container.save(dest)
-        container = ZipContainer(dest)
-        assert container.xml_file.exists()
 
 
 class TestScoreVersion2:

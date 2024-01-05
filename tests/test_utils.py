@@ -1,6 +1,8 @@
 """Test submodule “utils.py”."""
 from __future__ import annotations
 
+import os
+import tempfile
 from pathlib import Path
 from typing import Optional
 from unittest import mock
@@ -11,6 +13,7 @@ import pytest
 
 import mscxyz
 from mscxyz import utils
+from mscxyz.utils import PathChanger, ZipContainer
 from tests import helper
 
 args = utils.get_args()
@@ -156,3 +159,70 @@ def test_xml_write(tmp_path: Path) -> None:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         "<root><a><b/><c/></a><d><e/></d></root>\n"
     )
+
+
+class TestClassPathChanger:
+    path = PathChanger("test.MSCZ")
+
+    def test_property_extension(self) -> None:
+        assert self.path.extension == "mscz"
+
+    def test_property_base(self) -> None:
+        assert str(self.path.base) == "test"
+
+    def test_method_change_extension(self) -> None:
+        assert str(self.path.change_extension("mscx")) == "test.mscx"
+
+    def test_method_add_suffix(self) -> None:
+        assert str(self.path.add_suffix("bak")) == "test_bak.mscz"
+
+    def test_method_change_suffix_extension(self) -> None:
+        assert str(self.path.change(suffix="bak", extension="mp3")) == "test_bak.mp3"
+
+    def test_method_change_suffix_only(self) -> None:
+        assert str(self.path.change(suffix="bak")) == "test_bak.mscz"
+
+    def test_method_change_extension_only(self) -> None:
+        assert str(self.path.change(extension="midi")) == "test.midi"
+
+    def test_method_change_without_arguments(self) -> None:
+        assert str(self.path.change()) == "test.MSCZ"
+
+
+class TestClassZipContainer:
+    def setup_method(self) -> None:
+        self.container = ZipContainer(
+            helper.get_file("test.mscz", version=4),
+        )
+
+    def test_attribute_tmp_dir(self) -> None:
+        assert str(self.container.tmp_dir).startswith(os.path.sep)
+        assert self.container.tmp_dir.exists()
+
+    def test_attribute_xml_file(self) -> None:
+        assert str(self.container.xml_file).endswith(".mscx")
+        assert self.container.xml_file.exists()
+
+    def test_attribute_thumbnail_file(self) -> None:
+        path = self.container.thumbnail_file
+        assert str(path).endswith("thumbnail.png")
+        if path:
+            assert path.exists()
+
+    def test_attribute_audiosettings_file(self) -> None:
+        path = self.container.audiosettings_file
+        assert str(path).endswith("audiosettings.json")
+        if path:
+            assert path.exists()
+
+    def test_attribute_viewsettings_file(self) -> None:
+        path = self.container.viewsettings_file
+        assert str(path).endswith("viewsettings.json")
+        if path:
+            assert path.exists()
+
+    def test_method_save(self) -> None:
+        _, dest = tempfile.mkstemp(suffix=".mscz")
+        self.container.save(dest)
+        container = ZipContainer(dest)
+        assert container.xml_file.exists()

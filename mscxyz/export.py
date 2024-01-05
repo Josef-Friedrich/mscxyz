@@ -1,0 +1,61 @@
+from __future__ import annotations
+
+import typing
+from pathlib import Path
+
+from mscxyz import utils
+
+if typing.TYPE_CHECKING:
+    from mscxyz.score import Score
+
+
+extensions_4 = (
+    "mei",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/mei/meimodule.cpp#L58
+    "spos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L126
+    "mpos",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L127
+    "mscz",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L128
+    "mscx",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L129
+    "brf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/braille/braillemodule.cpp#L53
+    "wav",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L56
+    "mp3",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L57
+    "ogg",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L58
+    "flac",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/audioexport/audioexportmodule.cpp#L59
+    "mid",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
+    "midi",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
+    "kar",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/midi/midimodule.cpp#L59
+    "musicxml",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
+    "xml",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
+    "mxl",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/musicxml/musicxmlmodule.cpp#L71
+    "pdf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L54
+    "svg",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L55
+    "png",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/imagesexport/imagesexportmodule.cpp#L56
+)
+
+
+class Export:
+    score: "Score"
+
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+
+    def to_extension(self, extension: str = "pdf") -> None:
+        """Export the score to the specifed file type.
+
+        :param extension: The extension (default: pdf)
+        """
+
+        extension = extension.lower()
+
+        if extension not in extensions_4:
+            raise ValueError(
+                f"Unsupported extension: {extension}! Supported extensions: {extensions_4}"
+            )
+
+        dest: Path = self.score.change_path(extension=extension)
+        utils.execute_musescore(
+            [
+                "--export-to",
+                str(dest),
+                str(self.score.path),
+            ]
+        )

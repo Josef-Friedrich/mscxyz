@@ -608,7 +608,7 @@ class Meta:
         :return: The path to the exported JSON file.
         """
         data: dict[str, str] = {}
-        result_path: Path = self.score.make_path(extension="json")
+        result_path: Path = self.score.change_path(extension="json")
         for field in self.interface.fields:
             data[field] = self.interface.__getattr__(field)
         output = open(result_path, "w")

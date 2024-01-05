@@ -7,7 +7,9 @@ import os
 import platform
 import string
 import subprocess
+import tempfile
 import typing
+import zipfile
 from pathlib import Path
 from typing import Any, List, Literal, Optional, cast
 
@@ -374,3 +376,119 @@ class xml:
             return None
 
         parent.remove(element)
+
+
+class PathChanger:
+    path: Path
+
+    def __init__(self, path: str | Path) -> None:
+        self.path = Path(path)
+
+    @property
+    def extension(self) -> str:
+        return str(self.path).split(".")[-1].lower()
+
+    @property
+    def base(self) -> str:
+        return str(self.path)[0 : -len(self.extension) - 1]
+
+    def new(self) -> PathChanger:
+        return PathChanger(self.path)
+
+    def change_extension(self, new_extension: str) -> Path:
+        return Path(str(self.path)[0 : -len(self.extension) - 1] + "." + new_extension)
+
+    def add_suffix(self, suffix: str) -> Path:
+        return Path(
+            str(self.path)[0 : -len(self.extension) - 1]
+            + "_"
+            + suffix
+            + "."
+            + self.extension
+        )
+
+    def change(
+        self, suffix: Optional[str] = None, extension: Optional[str] = None
+    ) -> Path:
+        path_changer: PathChanger = self.new()
+        if suffix:
+            path_changer = PathChanger(path_changer.add_suffix(suffix))
+        if extension:
+            path_changer = PathChanger(path_changer.change_extension(extension))
+        return Path(path_changer.path)
+
+
+class ZipContainer:
+    """Container for the file paths of the different files in an unzipped MuseScore file
+
+    .. code :: XML
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <container>
+            <rootfiles>
+                <rootfile full-path="score_style.mss"/>
+                <rootfile full-path="test.mscx"/>
+                <rootfile full-path="Thumbnails/thumbnail.png"/>
+                <rootfile full-path="audiosettings.json"/>
+                <rootfile full-path="viewsettings.json"/>
+                </rootfiles>
+            </container>
+    """
+
+    tmp_dir: Path
+    """Absolute path of the temporary directory where the unzipped files are stored"""
+
+    xml_file: Path
+    """Absolute path of the uncompressed XML score file"""
+
+    score_style_file: Optional[Path]
+    """Absolute path of the score style file"""
+
+    thumbnail_file: Optional[Path]
+    """Absolute path of the thumbnail file"""
+
+    audiosettings_file: Optional[Path]
+    """Absolute path of the audio settings file"""
+
+    viewsettings_file: Optional[Path]
+    """Absolute path of the view settings file"""
+
+    def __init__(self, abspath: str | Path) -> None:
+        self.tmp_dir = ZipContainer._extract_zip(abspath)
+        container_info: _ElementTree = lxml.etree.parse(
+            self.tmp_dir / "META-INF" / "container.xml"
+        )
+        root_files: _XPathObject = container_info.xpath("/container/rootfiles")
+        if isinstance(root_files, list):
+            for root_file in root_files[0]:
+                if isinstance(root_file, _Element):
+                    relpath = root_file.get("full-path")
+                    if isinstance(relpath, str):
+                        abs_path: Path = self.tmp_dir / relpath
+                        if relpath.endswith(".mscx"):
+                            self.xml_file = abs_path
+                        elif relpath.endswith(".mss"):
+                            self.score_style_file = abs_path
+                        elif relpath.endswith(".png"):
+                            self.thumbnail_file = abs_path
+                        elif relpath.endswith("audiosettings.json"):
+                            self.audiosettings_file = abs_path
+                        elif relpath.endswith("viewsettings.json"):
+                            self.viewsettings_file = abs_path
+
+    @staticmethod
+    def _extract_zip(abspath: str | Path) -> Path:
+        tmp_zipdir = Path(tempfile.mkdtemp())
+        zip = zipfile.ZipFile(abspath, "r")
+        zip.extractall(tmp_zipdir)
+        zip.close()
+        return tmp_zipdir
+
+    def save(self, dest: str | Path) -> None:
+        zip = zipfile.ZipFile(dest, "w")
+        for r, _, files in os.walk(self.tmp_dir):
+            root = Path(r)
+            relpath: Path = root.relative_to(self.tmp_dir)
+            for file_name in files:
+                zip.write(root / file_name, relpath / file_name)
+        zip.close()

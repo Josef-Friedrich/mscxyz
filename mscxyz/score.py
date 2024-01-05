@@ -5,99 +5,22 @@ from __future__ import annotations
 
 import os
 import shutil
-import tempfile
 import typing
-import zipfile
 from pathlib import Path
 from typing import Optional
 
 import lxml
 import lxml.etree
-from lxml.etree import _Element, _ElementTree, strip_tags
+from lxml.etree import _Element, strip_tags
 
 from mscxyz import utils
+from mscxyz.export import Export
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
-
-
-class ZipContainer:
-    """Container for the file paths of the different files in an unzipped MuseScore file
-
-    .. code :: XML
-
-        <?xml version="1.0" encoding="UTF-8"?>
-        <container>
-            <rootfiles>
-                <rootfile full-path="score_style.mss"/>
-                <rootfile full-path="test.mscx"/>
-                <rootfile full-path="Thumbnails/thumbnail.png"/>
-                <rootfile full-path="audiosettings.json"/>
-                <rootfile full-path="viewsettings.json"/>
-                </rootfiles>
-            </container>
-    """
-
-    tmp_dir: Path
-    """Absolute path of the temporary directory where the unzipped files are stored"""
-
-    xml_file: Path
-    """Absolute path of the uncompressed XML score file"""
-
-    score_style_file: Optional[Path]
-    """Absolute path of the score style file"""
-
-    thumbnail_file: Optional[Path]
-    """Absolute path of the thumbnail file"""
-
-    audiosettings_file: Optional[Path]
-    """Absolute path of the audio settings file"""
-
-    viewsettings_file: Optional[Path]
-    """Absolute path of the view settings file"""
-
-    def __init__(self, abspath: str | Path) -> None:
-        self.tmp_dir = ZipContainer._extract_zip(abspath)
-        container_info: _ElementTree = lxml.etree.parse(
-            self.tmp_dir / "META-INF" / "container.xml"
-        )
-        root_files: _XPathObject = container_info.xpath("/container/rootfiles")
-        if isinstance(root_files, list):
-            for root_file in root_files[0]:
-                if isinstance(root_file, _Element):
-                    relpath = root_file.get("full-path")
-                    if isinstance(relpath, str):
-                        abs_path: Path = self.tmp_dir / relpath
-                        if relpath.endswith(".mscx"):
-                            self.xml_file = abs_path
-                        elif relpath.endswith(".mss"):
-                            self.score_style_file = abs_path
-                        elif relpath.endswith(".png"):
-                            self.thumbnail_file = abs_path
-                        elif relpath.endswith("audiosettings.json"):
-                            self.audiosettings_file = abs_path
-                        elif relpath.endswith("viewsettings.json"):
-                            self.viewsettings_file = abs_path
-
-    @staticmethod
-    def _extract_zip(abspath: str | Path) -> Path:
-        tmp_zipdir = Path(tempfile.mkdtemp())
-        zip = zipfile.ZipFile(abspath, "r")
-        zip.extractall(tmp_zipdir)
-        zip.close()
-        return tmp_zipdir
-
-    def save(self, dest: str | Path) -> None:
-        zip = zipfile.ZipFile(dest, "w")
-        for r, _, files in os.walk(self.tmp_dir):
-            root = Path(r)
-            relpath: Path = root.relative_to(self.tmp_dir)
-            for file_name in files:
-                zip.write(root / file_name, relpath / file_name)
-        zip.close()
 
 
 class Score:
@@ -123,10 +46,12 @@ class Score:
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
 
-    zip_container: Optional[ZipContainer] = None
+    zip_container: Optional[utils.ZipContainer] = None
 
     errors: list[Exception]
     """A list to store errors."""
+
+    __export: Optional[Export] = None
 
     __lyrics: Optional[Lyrics] = None
 
@@ -138,7 +63,7 @@ class Score:
         self.path = Path(src).resolve()
 
         if self.extension == "mscz":
-            self.zip_container = ZipContainer(self.path)
+            self.zip_container = utils.ZipContainer(self.path)
             self.xml_file = str(self.zip_container.xml_file)
         else:
             self.xml_file = str(self.path)
@@ -186,15 +111,16 @@ class Score:
         """The basename of the score file, for example: ``simple``."""
         return self.filename.replace("." + self.extension, "")
 
-    def make_path(
+    def change_path(
         self, suffix: Optional[str] = None, extension: Optional[str] = None
     ) -> Path:
-        path = str(self.path)
-        if suffix:
-            path = path.replace(f".{self.extension}", f"_{suffix}.{self.extension}")
-        if extension:
-            path = path.replace(f".{self.extension}", f".{extension}")
-        return Path(path)
+        return utils.PathChanger(self.path).change(suffix=suffix, extension=extension)
+
+    @property
+    def export(self) -> Export:
+        if self.__export is None:
+            self.__export = Export(self)
+        return self.__export
 
     @property
     def lyrics(self) -> Lyrics:
@@ -220,16 +146,6 @@ class Score:
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
         shutil.copy2(self.path, self.relpath_backup)
-
-    def export(self, extension: str = "pdf") -> None:
-        """Export the score to the specifed file type.
-
-        :param extension: The extension (default: pdf)
-        """
-        score: str = str(self.path)
-        utils.execute_musescore(
-            ["--export-to", score.replace("." + self.extension, "." + extension), score]
-        )
 
     def get_version(self) -> float:
         """
