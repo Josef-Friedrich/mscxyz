@@ -8,7 +8,19 @@
 mscxyz
 ======
 
-Manipulate the XML based .mscx and .mscz files of the notation software MuseScore.
+Manipulate the XML based ``.mscz`` and ``.mscx`` files of the notation software 
+`MuseScore <https://musescore.org>`_.
+
+Features
+========
+
+* Batch processing of ``.msc[zx]`` files in nested folder structures
+* Rename ``.msc[zx]`` files based on meta tags
+* Set, read and synchronized meta tags
+* Set style properties
+* Can handle MuseScore 2, 3 and 4 files
+* Command line interface 
+* Python API
 
 Installation
 ============
@@ -16,13 +28,6 @@ Installation
 .. code:: Shell
 
     pip install mscxyz
-
-
-Other MuseScore related projects 
-================================
-
-* https://github.com/johentsch/ms3
-
 
 Usage
 =====
@@ -47,8 +52,12 @@ Instantiate a ``Score`` object:
 
 List score paths in a nested folder structure:
 
+::
+
     cd /home/xyz/scores
     find . | sort
+
+::
 
     .
     ./level1
@@ -79,7 +88,7 @@ List score paths in a nested folder structure:
 ``meta``
 --------
 
-Set the meta tag ``composer``
+Set the meta tag ``composer``:
 
 .. code-block:: xml
 
@@ -107,7 +116,7 @@ Set the meta tag ``composer``
 ``style``
 ---------
 
-Set all font faces (using a for loop, not available in MuseScore 2)
+Set all font faces (using a for loop, not available in MuseScore 2):
 
 .. code-block:: Python
 
@@ -125,7 +134,8 @@ Set all font faces (using a for loop, not available in MuseScore 2)
 
 .. code-block:: Python
 
-Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``, not available in MuseScore 2)
+Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``, 
+not available in MuseScore 2):
 
 .. code-block:: Python
 
@@ -216,6 +226,11 @@ Configuration file
 
     [rename]
     format = '$combined_title ($combined_composer)'
+
+Other MuseScore related projects 
+================================
+
+* https://github.com/johentsch/ms3
 
 Development
 ===========
