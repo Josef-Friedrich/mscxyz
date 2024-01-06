@@ -5,6 +5,8 @@ Not meant for tests on Github.
 We import no mscxyz specific code here to be able to run the test outside of the venv.
 
 run “pip install -e .” to install the mscxyz command line interface
+
+@pytest.mark.only
 """
 
 from __future__ import annotations
@@ -17,6 +19,16 @@ from pathlib import Path
 
 import pytest
 
+OPEN_FILES = True
+
+
+def open_file(file: str | Path) -> None:
+    if not OPEN_FILES:
+        return
+    """Open a file wiht xdg-open in the background"""
+    subprocess.Popen(("xdg-open", str(file)))
+
+
 test_dir: str = os.path.dirname(os.path.abspath(__file__))
 
 mscore_executable: str | None = shutil.which("mscore")
@@ -24,15 +36,12 @@ mscore_executable: str | None = shutil.which("mscore")
 if not mscore_executable:
     raise Exception("find binary not found")
 
-
 mscx_manager_executable: str | None = shutil.which("musescore-manager")
 
 if not mscx_manager_executable:
     raise Exception("musescore-manager binary not found")
 
 executable = Path(mscore_executable)
-
-open_files = False
 
 if not executable.exists():
     raise Exception(f"MuseScore binary not found: {executable}")
@@ -42,7 +51,7 @@ if not shutil.which("find"):
 
 
 def get_path(filename: str, version: int = 2) -> Path:
-    return Path(test_dir) / "files" / "by_version" / str(version) / filename
+    return Path(test_dir) / "tests" / "files" / "by_version" / str(version) / filename
 
 
 def get_file(filename: str, version: int = 2) -> str:
@@ -51,13 +60,6 @@ def get_file(filename: str, version: int = 2) -> str:
     tmp: str = os.path.join(tmp_dir, filename)
     shutil.copyfile(orig, tmp)
     return tmp
-
-
-def open_file(file: str | Path) -> None:
-    if not open_files:
-        return
-    """Open a file wiht xdg-open in the background"""
-    subprocess.Popen(("xdg-open", str(file)))
 
 
 def get_file_type(file: str | Path) -> str:
@@ -143,4 +145,24 @@ def test_set_style() -> None:
         tmp,
     )
     assert Path(tmp).exists()
-    open_file(tmp)
+
+
+def test_meta() -> None:
+    tmp = get_file("no-vbox.mscz", version=4)
+    invoke(
+        "meta",
+        "--set-field",
+        "vbox_title",
+        "This is a new title",
+        "--set-field",
+        "vbox_subtitle",
+        "This is a new subtitle",
+        "--set-field",
+        "vbox_composer",
+        "This is a new composer",
+        "--set-field",
+        "vbox_lyricist",
+        "This is a new lyricist",
+        tmp,
+    )
+    assert Path(tmp).exists()

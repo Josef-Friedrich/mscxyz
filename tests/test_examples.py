@@ -48,7 +48,7 @@ def test_list_score_paths(nested_dir: Path) -> None:
 def test_set_meta_tag_composer(score: Score) -> None:
     assert score.meta.meta_tag.composer == "Composer"
 
-    score.meta.meta_tag.composer  = "Mozart"
+    score.meta.meta_tag.composer = "Mozart"
     score.save()
 
     new_score: Score = score.reload()
