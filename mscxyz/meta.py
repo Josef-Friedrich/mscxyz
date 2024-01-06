@@ -17,8 +17,6 @@ from mscxyz import utils
 from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
-    from lxml.etree import _XPathObject
-
     from mscxyz.score import Score
 
 
@@ -125,6 +123,7 @@ class MetaTag:
     version 4
 
     .. code-block:: xml
+    
             <museScore version="4.20">
                 <Score>
                     <metaTag name="arranger"></metaTag>
@@ -164,10 +163,13 @@ class MetaTag:
         "work_title",
     )
 
+    score: "Score"
+
     xml_root: _Element
 
-    def __init__(self, xml_root: _Element) -> None:
-        self.xml_root = xml_root
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.xml_root = score.xml_root
 
     def _get_element(self, field: str) -> _Element | None:
         return utils.xml.xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
@@ -190,7 +192,7 @@ class MetaTag:
         return self._get_text("arranger")
 
     @arranger.setter
-    def arranger(self, value: str) -> None:
+    def arranger(self, value: str | None) -> None:
         self._set_text("arranger", value)
 
     # audio_com_url -> audioComUrl
@@ -200,7 +202,7 @@ class MetaTag:
         return self._get_text("audioComUrl")
 
     @audio_com_url.setter
-    def audio_com_url(self, value: str) -> None:
+    def audio_com_url(self, value: str | None) -> None:
         self._set_text("audioComUrl", value)
 
     # composer
@@ -210,7 +212,7 @@ class MetaTag:
         return self._get_text("composer")
 
     @composer.setter
-    def composer(self, value: str) -> None:
+    def composer(self, value: str | None) -> None:
         self._set_text("composer", value)
 
     # copyright
@@ -220,7 +222,7 @@ class MetaTag:
         return self._get_text("copyright")
 
     @copyright.setter
-    def copyright(self, value: str) -> None:
+    def copyright(self, value: str | None) -> None:
         self._set_text("copyright", value)
 
     # creation_date -> creationDate
@@ -230,7 +232,7 @@ class MetaTag:
         return self._get_text("creationDate")
 
     @creation_date.setter
-    def creation_date(self, value: str) -> None:
+    def creation_date(self, value: str | None) -> None:
         self._set_text("creationDate", value)
 
     # lyricist
@@ -240,7 +242,7 @@ class MetaTag:
         return self._get_text("lyricist")
 
     @lyricist.setter
-    def lyricist(self, value: str) -> None:
+    def lyricist(self, value: str | None) -> None:
         self._set_text("lyricist", value)
 
     # movement_number -> movementNumber
@@ -250,7 +252,7 @@ class MetaTag:
         return self._get_text("movementNumber")
 
     @movement_number.setter
-    def movement_number(self, value: str) -> None:
+    def movement_number(self, value: str | None) -> None:
         self._set_text("movementNumber", value)
 
     # movement_title -> movementTitle
@@ -260,7 +262,7 @@ class MetaTag:
         return self._get_text("movementTitle")
 
     @movement_title.setter
-    def movement_title(self, value: str) -> None:
+    def movement_title(self, value: str | None) -> None:
         self._set_text("movementTitle", value)
 
     # msc_version -> mscVersion
@@ -270,7 +272,7 @@ class MetaTag:
         return self._get_text("mscVersion")
 
     @msc_version.setter
-    def msc_version(self, value: str) -> None:
+    def msc_version(self, value: str | None) -> None:
         self._set_text("mscVersion", value)
 
     # platform
@@ -280,7 +282,7 @@ class MetaTag:
         return self._get_text("platform")
 
     @platform.setter
-    def platform(self, value: str) -> None:
+    def platform(self, value: str | None) -> None:
         self._set_text("platform", value)
 
     # poet
@@ -290,7 +292,7 @@ class MetaTag:
         return self._get_text("poet")
 
     @poet.setter
-    def poet(self, value: str) -> None:
+    def poet(self, value: str | None) -> None:
         self._set_text("poet", value)
 
     # source
@@ -300,7 +302,7 @@ class MetaTag:
         return self._get_text("source")
 
     @source.setter
-    def source(self, value: str) -> None:
+    def source(self, value: str | None) -> None:
         self._set_text("source", value)
 
     # source_revision_id -> sourceRevisionId
@@ -310,7 +312,7 @@ class MetaTag:
         return self._get_text("sourceRevisionId")
 
     @source_revision_id.setter
-    def source_revision_id(self, value: str) -> None:
+    def source_revision_id(self, value: str | None) -> None:
         self._set_text("sourceRevisionId", value)
 
     # subtitle
@@ -320,7 +322,7 @@ class MetaTag:
         return self._get_text("subtitle")
 
     @subtitle.setter
-    def subtitle(self, value: str) -> None:
+    def subtitle(self, value: str | None) -> None:
         self._set_text("subtitle", value)
 
     # translator
@@ -330,7 +332,7 @@ class MetaTag:
         return self._get_text("translator")
 
     @translator.setter
-    def translator(self, value: str) -> None:
+    def translator(self, value: str | None) -> None:
         self._set_text("translator", value)
 
     # work_number -> workNumber
@@ -340,7 +342,7 @@ class MetaTag:
         return self._get_text("workNumber")
 
     @work_number.setter
-    def work_number(self, value: str) -> None:
+    def work_number(self, value: str | None) -> None:
         self._set_text("workNumber", value)
 
     # work_title -> workTitle
@@ -350,7 +352,7 @@ class MetaTag:
         return self._get_text("workTitle")
 
     @work_title.setter
-    def work_title(self, value: str) -> None:
+    def work_title(self, value: str | None) -> None:
         self._set_text("workTitle", value)
 
     def clean(self) -> None:
@@ -398,35 +400,40 @@ class Vbox:
     """
 
     fields = (
-        "Composer",
-        "Lyricist",
-        "Subtitle",
-        "Title",
+        "composer",
+        "lyricist",
+        "subtitle",
+        "title",
     )
+
+    score: "Score"
 
     xml_root: _Element
 
-    def __init__(self, xml_root: _Element) -> None:
-        self.xml_root = xml_root
+    vbox: _Element
+
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.xml_root = score.xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
-        if not xml_root.xpath(xpath + "/VBox"):
+
+        vbox = utils.xml.xpath(self.xml_root, xpath + "/VBox")
+        if not vbox:
             vbox = lxml.etree.Element("VBox")
             height = lxml.etree.SubElement(vbox, "height")
             height.text = "10"
-            utils.xml.xpath_safe(xml_root, xpath).insert(0, vbox)
+            utils.xml.xpath_safe(self.xml_root, xpath).insert(0, vbox)
+        self.vbox = vbox
 
     def _get_tag(self, style: str) -> _Element | None:
         """
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer``.
         """
-        x: _XPathObject = self.xml_root.xpath("//VBox/Text")
-        if isinstance(x, list):
-            for element in x:
-                if isinstance(element, _Element):
-                    s: _Element | None = element.find("style")
-                    if s is not None and s.text == style:
-                        return element.find("text")
+        for element in self.vbox:
+            s: _Element | None = element.find("style")
+            if s is not None and s.text == style:
+                return element.find("text")
         return None
 
     def _get_text(self, style: str) -> str | None:
@@ -438,13 +445,6 @@ class Vbox:
         if element is not None and hasattr(element, "text"):
             return element.text
         return None
-
-    def __getattr__(self, field: str) -> str | None:
-        field = field.title()
-        if field not in self.fields:
-            raise UnkownFieldError(field, self.fields)
-        else:
-            return self._get_text(field)
 
     def _create_text_tag(self, style: str, text: str) -> None:
         """
@@ -461,10 +461,15 @@ class Vbox:
         for element in utils.xml.xpathall_safe(self.xml_root, "//VBox"):
             element.append(Text_tag)
 
-    def _set_text(self, style: str, text: str) -> None:
+    def _set_text(self, style: str, text: str | None) -> None:
         """
         :param string style: String inside the `<style>` tags
         """
+
+        if text is None:
+            self._remove_text_element(style)
+            return None
+
         element: _Element | None = self._get_tag(style)
         if hasattr(element, "text"):
             if element is not None:
@@ -472,13 +477,49 @@ class Vbox:
         else:
             self._create_text_tag(style, text)
 
-    def __setattr__(self, field: str, value: _Element | str | None) -> None:
-        if field == "xml_root" or field == "fields":
-            self.__dict__[field] = value
-        elif field.title() not in self.fields:
-            raise UnkownFieldError(field, self.fields)
-        elif isinstance(value, str):
-            self._set_text(field.title(), value)
+    def _remove_text_element(self, style: str) -> None:
+        utils.xml.remove(self._get_tag(style))
+        return None
+
+    # composer -> Composer
+
+    @property
+    def composer(self) -> str | None:
+        return self._get_text("Composer")
+
+    @composer.setter
+    def composer(self, value: str | None) -> None:
+        self._set_text("Composer", value)
+
+    # lyricist -> Lyricist
+
+    @property
+    def lyricist(self) -> str | None:
+        return self._get_text("Lyricist")
+
+    @lyricist.setter
+    def lyricist(self, value: str | None) -> None:
+        self._set_text("Lyricist", value)
+
+    # subtitle -> Subtitle
+
+    @property
+    def subtitle(self) -> str | None:
+        return self._get_text("Subtitle")
+
+    @subtitle.setter
+    def subtitle(self, value: str | None) -> None:
+        self._set_text("Subtitle", value)
+
+    # title -> Title
+
+    @property
+    def title(self) -> str | None:
+        return self._get_text("Title")
+
+    @title.setter
+    def title(self, value: str | None) -> None:
+        self._set_text("Title", value)
 
 
 class Combined:
@@ -491,10 +532,17 @@ class Combined:
 
     score: "Score"
 
-    def __init__(self, xml_root: _Element) -> None:
-        self.xml_root = xml_root
-        self.metatag = MetaTag(xml_root)
-        self.vbox = Vbox(xml_root)
+    xml_root: _Element
+
+    metatag: MetaTag
+
+    vbox: Vbox
+
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.xml_root = self.score.xml_root
+        self.metatag = MetaTag(self.score)
+        self.vbox = Vbox(self.score)
 
     def _pick_value(self, *values: str | None) -> str | None:
         for value in values:
@@ -504,53 +552,64 @@ class Combined:
 
     @property
     def title(self) -> str | None:
-        return self._pick_value(self.vbox.Title, self.metatag.work_title)
+        return self._pick_value(self.vbox.title, self.metatag.work_title)
 
     @title.setter
     def title(self, value: str | None) -> None:
-        self.vbox.Title = self.metatag.work_title = value
+        self.vbox.title = self.metatag.work_title = value
 
     @property
     def subtitle(self) -> str | None:
-        return self._pick_value(self.vbox.Subtitle, self.metatag.movement_title)
+        return self._pick_value(self.vbox.subtitle, self.metatag.movement_title)
 
     @subtitle.setter
     def subtitle(self, value: str | None) -> None:
-        self.vbox.Subtitle = self.metatag.movement_title = value
+        self.vbox.subtitle = self.metatag.movement_title = value
 
     @property
     def composer(self) -> str | None:
-        return self._pick_value(self.vbox.Composer, self.metatag.composer)
+        return self._pick_value(self.vbox.composer, self.metatag.composer)
 
     @composer.setter
     def composer(self, value: str | None) -> None:
-        self.vbox.Composer = self.metatag.composer = value
+        self.vbox.composer = self.metatag.composer = value
 
     @property
     def lyricist(self) -> str | None:
-        return self._pick_value(self.vbox.Lyricist, self.metatag.lyricist)
+        return self._pick_value(self.vbox.lyricist, self.metatag.lyricist)
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
-        self.vbox.Lyricist = self.metatag.lyricist = value
+        self.vbox.lyricist = self.metatag.lyricist = value
 
 
 class InterfaceReadWrite:
     objects = ("metatag", "vbox", "combined")
 
-    def __init__(self, xml_root: _Element) -> None:
-        self.metatag = MetaTag(xml_root)
-        self.vbox = Vbox(xml_root)
-        self.combined = Combined(xml_root)
+    score: "Score"
+
+    metatag: MetaTag
+
+    vbox: Vbox
+
+    combined: Combined
+
+    fields: list[str]
+
+    def __init__(self, score: "Score") -> None:
+        self.score = score
+        self.metatag = MetaTag(self.score)
+        self.vbox = Vbox(self.score)
+        self.combined = Combined(self.score)
         self.fields = self.get_all_fields()
 
     @staticmethod
     def get_all_fields() -> list[str]:
         fields: list[str] = []
         for field in MetaTag.fields:
-            fields.append("metatag_" + to_underscore(field))
+            fields.append("metatag_" + field)
         for field in Vbox.fields:
-            fields.append("vbox_" + field.lower())
+            fields.append("vbox_" + field)
         for field in Combined.fields:
             fields.append("combined_" + field)
         return sorted(fields)
@@ -575,7 +634,7 @@ class InterfaceReadWrite:
         return getattr(obj, parts["field"])
 
     def __setattr__(self, field: str, value: str) -> None:
-        if field in ("fields", "metatag", "objects", "vbox", "combined"):
+        if field in ("fields", "metatag", "objects", "vbox", "combined", "score"):
             self.__dict__[field] = value
         else:
             parts = self._split(field)
@@ -594,38 +653,38 @@ class InterfaceReadOnly:
         "readonly_relpath_backup",
     ]
 
-    xml_tree: Score
+    score: Score
 
-    def __init__(self, tree: Score) -> None:
-        self.xml_tree = tree
+    def __init__(self, score: Score) -> None:
+        self.score = score
 
     @property
     def readonly_abspath(self) -> str:
-        return str(self.xml_tree.path)
+        return str(self.score.path)
 
     @property
     def readonly_basename(self) -> str:
-        return self.xml_tree.basename
+        return self.score.basename
 
     @property
     def readonly_dirname(self) -> str:
-        return self.xml_tree.dirname
+        return self.score.dirname
 
     @property
     def readonly_extension(self) -> str:
-        return self.xml_tree.extension
+        return self.score.extension
 
     @property
     def readonly_filename(self) -> str:
-        return self.xml_tree.filename
+        return self.score.filename
 
     @property
     def readonly_relpath(self) -> str:
-        return str(self.xml_tree.path)
+        return str(self.score.path)
 
     @property
     def readonly_relpath_backup(self) -> str:
-        return self.xml_tree.relpath_backup
+        return self.score.relpath_backup
 
 
 class Interface:
@@ -633,8 +692,8 @@ class Interface:
 
     def __init__(self, score: "Score") -> None:
         self.score = score
-        self.read_only = InterfaceReadOnly(score)
-        self.read_write = InterfaceReadWrite(score.xml_root)
+        self.read_only = InterfaceReadOnly(self.score)
+        self.read_write = InterfaceReadWrite(self.score)
         self.fields: list[str] = self.get_all_fields()
 
     @staticmethod
@@ -664,14 +723,22 @@ class Meta:
 
     meta_tag: MetaTag
 
+    vbox: Vbox
+
+    combined: Combined
+
+    interface_read_write: InterfaceReadWrite
+
+    interface: Interface
+
     def __init__(self, score: "Score") -> None:
         self.score = score
 
         if not self.score.errors:
-            self.meta_tag = MetaTag(self.score.xml_root)
-            self.vbox = Vbox(self.score.xml_root)
-            self.combined = Combined(self.score.xml_root)
-            self.interface_read_write = InterfaceReadWrite(self.score.xml_root)
+            self.meta_tag = MetaTag(self.score)
+            self.vbox = Vbox(self.score)
+            self.combined = Combined(self.score)
+            self.interface_read_write = InterfaceReadWrite(self.score)
             self.interface = Interface(self.score)
 
     def sync_fields(self) -> None:

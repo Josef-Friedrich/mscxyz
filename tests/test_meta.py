@@ -110,9 +110,9 @@ class TestClassUnifiedInterface:
         self, filename: str, version: int = 2
     ) -> tuple[InterfaceReadWrite, Score, str]:
         tmp = helper.get_file(filename, version)
-        tree = Score(tmp)
-        interface = InterfaceReadWrite(tree.xml_root)
-        return interface, tree, tmp
+        score = Score(tmp)
+        interface = InterfaceReadWrite(score)
+        return interface, score, tmp
 
     def _test_subclasses(self, version: int) -> None:
         interface, _, _ = self._init_class("simple.mscx", version)
@@ -157,15 +157,15 @@ class TestClassUnifiedInterface:
         self._test_get_all_values(version=3)
 
     def _test_set_all_values(self, version: int) -> None:
-        interface, tree, tmp = self._init_class("meta-all-values.mscx", version)
+        interface, score, tmp = self._init_class("meta-all-values.mscx", version)
 
         for field in self.fields:
             setattr(interface, field, field + "_test")
             assert getattr(interface, field) == field + "_test"
 
-        tree.save()
-        tree = Score(tmp)
-        interface = InterfaceReadWrite(tree.xml_root)
+        score.save()
+        score = Score(tmp)
+        interface = InterfaceReadWrite(score)
 
         assert interface.combined_composer == "vbox_composer_test"
         assert interface.combined_lyricist == "vbox_lyricist_test"
@@ -361,24 +361,21 @@ class TestClassMetaTag:
         assert meta_tag_v4.creation_date is None
         assert meta_tag_v4.msc_version == "4.20"
 
-    def test_set2(self) -> None:
-        meta, score, _ = self._init_class("simple.mscx", version=2)
-        meta.movement_title = "MT"
-        score.save()
-        new_score = score.reload()
+    def test_set_v2(self, meta_tag_v2: MetaTag) -> None:
+        meta_tag_v2.movement_title = "MT"
+        meta_tag_v2.score.save()
+        new_score = meta_tag_v2.score.reload()
 
         assert new_score.meta.meta_tag.movement_title == "MT"
         assert '<metaTag name="movementTitle">MT</metaTag>' in new_score.read_as_text()
 
-    def test_set3(self) -> None:
-        meta, tree, tmp = self._init_class("simple.mscx", version=3)
-        meta.movement_title = "MT"
-        tree.save()
-        tree = Score(tmp)
-        meta = MetaTag(tree.xml_root)
-        assert meta.work_title == "WT"
-        xml_string = helper.read_file(tmp)
-        assert '<metaTag name="workTitle">WT</metaTag>' in xml_string
+    def test_set_v3(self, meta_tag_v3: MetaTag) -> None:
+        meta_tag_v3.movement_title = "MT"
+        meta_tag_v3.score.save()
+        new_score = meta_tag_v3.score.reload()
+
+        assert new_score.meta.meta_tag.work_title == "WT"
+        assert '<metaTag name="workTitle">WT</metaTag>' in new_score.read_as_text()
 
     def test_clean(self) -> None:
         meta, _, _ = self._init_class("simple.mscx")
@@ -388,12 +385,21 @@ class TestClassMetaTag:
         assert meta.arranger == ""
 
 
+def get_vbox(filename: str, version: int) -> Vbox:
+    score = helper.get_score(filename, version)
+    return score.meta.vbox
+
+
+def vbox_v3() -> Vbox:
+    return get_vbox("simple.mscx", version=3)
+
+
 class TestClassVbox:
     def _init_class(self, filename: str, version: int = 2) -> tuple[Vbox, Score, str]:
         tmp = helper.get_file(filename, version)
-        tree = Score(tmp)
-        vbox = Vbox(tree.xml_root)
-        return vbox, tree, tmp
+        score = Score(tmp)
+        vbox = Vbox(score)
+        return vbox, score, tmp
 
     def _test_init(self, version: int) -> None:
         _, tree, tmp = self._init_class("no-vbox.mscx", version)
@@ -405,53 +411,51 @@ class TestClassVbox:
         self._test_init(version=2)
         self._test_init(version=3)
 
-    def _test_get(self, version: int) -> None:
-        vbox, _, _ = self._init_class("simple.mscx", version)
-        assert vbox.Title == "Title"
-        assert vbox.Composer == "Composer"
-        assert vbox.Subtitle is None
+    @pytest.mark.parametrize(
+        "version",
+        [
+            2,
+            3,
+        ],
+    )
+    def test_get(self, version: int) -> None:
+        vbox = get_vbox("simple.mscx", version)
+        assert vbox.subtitle is None
         assert vbox.title == "Title"
         assert vbox.composer == "Composer"
-
-    def test_get(self) -> None:
-        self._test_get(version=2)
-        self._test_get(version=3)
 
     def _test_get_exception(self, version: int) -> None:
         vbox, _, _ = self._init_class("simple.mscx", version)
         with pytest.raises(meta.UnkownFieldError):
-            vbox.lol
+            vbox.lol  # type: ignore
 
     def test_get_exception(self) -> None:
         self._test_get_exception(version=2)
         self._test_get_exception(version=3)
 
-    def _assert_set(self, filename: str, version: int = 2) -> None:
-        tmp = helper.get_file(filename, version)
-        tree = Score(tmp)
-        vbox = Vbox(tree.xml_root)
-        vbox.Title = "lol"
-        vbox.composer = "lol"
-        tree.save()
-        tree = Score(tmp)
-        vbox = Vbox(tree.xml_root)
-        assert vbox.title == "lol"
-        assert vbox.Composer == "lol"
-        xml_string = helper.read_file(tmp)
-        assert "<text>lol</text>" in xml_string
+    @pytest.mark.parametrize(
+        "filename,version",
+        [
+            ("simple.mscx", 2),
+            ("simple.mscx", 3),
+            ("no-vbox.mscx", 2),
+            ("no-vbox.mscx", 3),
+        ],
+    )
+    def test_set(self, filename: str, version: int) -> None:
+        vbox = get_vbox(filename, version)
+        vbox.title = "New Title"
+        vbox.score.save()
 
-    def test_set_with_existing_vbox(self) -> None:
-        self._assert_set("simple.mscx", version=2)
-        self._assert_set("simple.mscx", version=3)
+        new_score = vbox.score.reload()
 
-    def test_set_no_inital_vbox(self) -> None:
-        self._assert_set("no-vbox.mscx", version=2)
-        self._assert_set("no-vbox.mscx", version=3)
+        assert new_score.meta.vbox.title == "New Title"
+        assert "<text>New Title</text>" in new_score.read_as_text()
 
     def _test_set_exception(self, version: int = 2) -> None:
         vbox, _, _ = self._init_class("simple.mscx", version)
         with pytest.raises(meta.UnkownFieldError):
-            vbox.lol = "lol"
+            vbox.lol = "lol"  # type: ignore
 
     def test_set_exception(self) -> None:
         self._test_set_exception(version=2)
@@ -461,9 +465,9 @@ class TestClassVbox:
 class TestClassCombined:
     def _init_class(self, filename: str) -> tuple[Combined, Score, str]:
         tmp = helper.get_file(filename)
-        tree = Score(tmp)
-        c = Combined(tree.xml_root)
-        return c, tree, tmp
+        score = Score(tmp)
+        c = Combined(score)
+        return c, score, tmp
 
     def test_getter(self) -> None:
         c, _, _ = self._init_class("simple.mscx")
@@ -479,16 +483,16 @@ class TestClassCombined:
         c.composer = "C"
         c.lyricist = "L"
         tree.save()
-        c = Combined(tree.xml_root)
+        c = Combined(tree)
         assert c.metatag.work_title == "T"
         assert c.metatag.movement_title == "S"
         assert c.metatag.composer == "C"
         assert c.metatag.lyricist == "L"
 
-        assert c.vbox.Title == "T"
-        assert c.vbox.Subtitle == "S"
-        assert c.vbox.Composer == "C"
-        assert c.vbox.Lyricist == "L"
+        assert c.vbox.title == "T"
+        assert c.vbox.subtitle == "S"
+        assert c.vbox.composer == "C"
+        assert c.vbox.lyricist == "L"
 
 
 class TestIntegration:
