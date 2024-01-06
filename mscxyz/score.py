@@ -39,9 +39,10 @@ class Score:
     This path may be located in the temporary directory."""
 
     style_file: Optional[Path] = None
-    """Score files create with MuseScore 4 have a separate style file."""
+    """Score files created with MuseScore 4 have a separate style file."""
 
     xml_root: _Element
+    """The root element of the XML tree. See the `lxml API <https://lxml.de/api.html>`_."""
 
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""

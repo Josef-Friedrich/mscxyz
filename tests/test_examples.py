@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from lxml.etree import _Element
+
 from mscxyz import Score, list_score_paths
 
 
@@ -15,6 +17,17 @@ def test_instantiate_a_score_object(score_file: str) -> None:
     assert score.extension == "mscz"
     assert score.version == 4.20
     assert score.version_major == 4
+
+
+def test_investigate_xml_root(score_file: str) -> None:
+    score = Score(score_file)
+
+    def print_elements(element: _Element, level: int) -> None:
+        for sub_element in element:
+            print(f"{'  ' * level}<{sub_element.tag}>")
+            print_elements(sub_element, level + 1)
+
+    print_elements(score.xml_root, 0)
 
 
 def test_list_score_paths(nested_dir: Path) -> None:

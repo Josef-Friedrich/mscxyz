@@ -50,6 +50,21 @@ Instantiate a ``Score`` object:
     assert score.version == 4.20
     assert score.version_major == 4
 
+It’s best to take a look at the `lxml API <https://lxml.de/api.html>`_ documentation
+to see what you can do with this element. So much can be revealed: 
+lots of interesting things.
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+
+    def print_elements(element: _Element, level: int) -> None:
+        for sub_element in element:
+            print(f"{'  ' * level}<{sub_element.tag}>")
+            print_elements(sub_element, level + 1)
+
+    print_elements(score.xml_root, 0)
+
 List score paths in a nested folder structure:
 
 ::
