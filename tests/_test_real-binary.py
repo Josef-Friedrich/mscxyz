@@ -25,10 +25,10 @@ if not mscore_executable:
     raise Exception("find binary not found")
 
 
-mscx_manager_executable: str | None = shutil.which("mscx-manager")
+mscx_manager_executable: str | None = shutil.which("musescore-manager")
 
 if not mscx_manager_executable:
-    raise Exception("mscx-manager binary not found")
+    raise Exception("musescore-manager binary not found")
 
 executable = Path(mscore_executable)
 
@@ -79,9 +79,9 @@ def simple4z() -> str:
 
 
 def invoke(*args: str) -> subprocess.Popen[str]:
-    """Invoke mscx-manager with an real mscore executable."""
+    """Invoke musescore-manager with an real mscore executable."""
     p = subprocess.Popen(
-        ("mscx-manager", "--executable", str(executable), *args), encoding="utf-8"
+        ("musescore-manager", "--executable", str(executable), *args), encoding="utf-8"
     )
     p.communicate()
     return p

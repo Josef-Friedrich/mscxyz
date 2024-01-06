@@ -4,9 +4,9 @@
 
 {{ badge.readthedocs }}
 
-======
-mscxyz
-======
+==============================
+mscxyz - The MuseScore Manager
+==============================
 
 Manipulate the XML based ``.mscz`` and ``.mscx`` files of the notation software 
 `MuseScore <https://musescore.org>`_.
@@ -32,7 +32,7 @@ Installation
 Usage
 =====
 
-{{ cli('mscx-manager help --rst all') }}
+{{ cli('musescore-manager help --rst all') }}
 
 API Usage
 =========

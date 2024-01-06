@@ -7,9 +7,9 @@ mscxyz
 
 .. code-block:: text
 
-  usage: mscx-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d]
-                      [-g GENERAL_GLOB] [-m] [-e FILE_PATH] [-v]
-                      {clean,export,help,meta,lyrics,rename,style} ... path
+  usage: musescore-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d]
+                           [-g GENERAL_GLOB] [-m] [-e FILE_PATH] [-v]
+                           {clean,export,help,meta,lyrics,rename,style} ... path
 
   A command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
 
@@ -48,9 +48,10 @@ mscxyz
                           https://musescore.org/en/handbook/2/file-formats
                           https://musescore.org/en/handbook/3/file-export
                           https://musescore.org/en/handbook/4/file-export
-      help                Show help. Use “mscx-manager help all” to show help messages
-                          of all subcommands. Use “mscx-manager help <subcommand>” to
-                          show only help messages for the given subcommand.
+      help                Show help. Use “musescore-manager help all” to show help
+                          messages of all subcommands. Use “musescore-manager help
+                          <subcommand>” to show only help messages for the given
+                          subcommand.
       meta                Deal with meta data informations stored in the MuseScore
                           file.
       lyrics              Extract lyrics. Without any option this subcommand extracts
@@ -63,12 +64,12 @@ mscxyz
 Subcommands
 ===========
 
-mscx-manager clean
-------------------
+musescore-manager clean
+-----------------------
 
 .. code-block:: text
 
-  usage: mscx-manager clean [-h] [-s CLEAN_STYLE]
+  usage: musescore-manager clean [-h] [-s CLEAN_STYLE]
 
   options:
     -h, --help            show this help message and exit
@@ -76,15 +77,15 @@ mscx-manager clean
                           Load a "*.mss" style file and include the contents of this
                           file.
 
-mscx-manager meta
------------------
+musescore-manager meta
+----------------------
 
 .. code-block:: text
 
-  usage: mscx-manager meta [-h] [-c META_CLEAN] [-D]
-                           [-d SOURCE_FIELDS FORMAT_STRING] [-j]
-                           [-l DESTINATION FORMAT_STRING] [-s]
-                           [-S DESTINATION_FIELD FORMAT_STRING]
+  usage: musescore-manager meta [-h] [-c META_CLEAN] [-D]
+                                [-d SOURCE_FIELDS FORMAT_STRING] [-j]
+                                [-l DESTINATION FORMAT_STRING] [-s]
+                                [-S DESTINATION_FIELD FORMAT_STRING]
 
   MuseScore can store meta data informations in different places:
 
@@ -185,19 +186,19 @@ mscx-manager meta
     -j, --json            Additionally write the meta data to a json file.
     -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
                           Write one line per file to a text file. e. g. --log
-                          /tmp/mscx-manager.log '$title $composer'
+                          /tmp/musescore-manager.log '$title $composer'
     -s, --synchronize     Synchronize the values of the first vertical frame (vbox)
                           (title, subtitle, composer, lyricist) with the corresponding
                           metadata fields
     -S DESTINATION_FIELD FORMAT_STRING, --set-field DESTINATION_FIELD FORMAT_STRING
                           Set value to meta data fields.
 
-mscx-manager lyrics
--------------------
+musescore-manager lyrics
+------------------------
 
 .. code-block:: text
 
-  usage: mscx-manager lyrics [-h] [-e LYRICS_EXTRACT] [-r LYRICS_REMAP] [-f]
+  usage: musescore-manager lyrics [-h] [-e LYRICS_EXTRACT] [-r LYRICS_REMAP] [-f]
 
   options:
     -h, --help            show this help message and exit
@@ -213,13 +214,13 @@ mscx-manager lyrics
     -f, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to a
                           correct hyphenation ("la - la - la")
 
-mscx-manager rename
--------------------
+musescore-manager rename
+------------------------
 
 .. code-block:: text
 
-  usage: mscx-manager rename [-h] [-f RENAME_FORMAT] [-A] [-a] [-n] [-s FIELDS]
-                             [-t RENAME_TARGET]
+  usage: musescore-manager rename [-h] [-f RENAME_FORMAT] [-A] [-a] [-n]
+                                  [-s FIELDS] [-t RENAME_TARGET]
 
   Fields and functions you can use in the format string (-f, --format):
 
@@ -429,12 +430,12 @@ mscx-manager rename
     -t RENAME_TARGET, --target RENAME_TARGET
                           Target directory
 
-mscx-manager export
--------------------
+musescore-manager export
+------------------------
 
 .. code-block:: text
 
-  usage: mscx-manager export [-h] [-e EXPORT_EXTENSION]
+  usage: musescore-manager export [-h] [-e EXPORT_EXTENSION]
 
   options:
     -h, --help            show this help message and exit
@@ -442,12 +443,12 @@ mscx-manager export
                           Extension to export. If this option is omitted, then the
                           default extension is "pdf".
 
-mscx-manager help
------------------
+musescore-manager help
+----------------------
 
 .. code-block:: text
 
-  usage: mscx-manager help [-h] [-m] [-r]
+  usage: musescore-manager help [-h] [-m] [-r]
 
   options:
     -h, --help      show this help message and exit

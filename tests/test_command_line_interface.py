@@ -12,8 +12,8 @@ from tests import helper
 
 
 def test_help() -> None:
-    output: bytes = subprocess.check_output(("mscx-manager", "--help"))
-    assert "usage: mscx-manager" in str(output)
+    output: bytes = subprocess.check_output(("musescore-manager", "--help"))
+    assert "usage: musescore-manager" in str(output)
 
 
 class TestBackup:

@@ -101,10 +101,10 @@ def read_file(filename: str | Path) -> str:
 
 def run(*args: str) -> str:
     """
-    Run the mscx-manager command on the command line with the given arguments
+    Run the musescore-manager command on the command line with the given arguments
     and return the output as a string.
 
-    :param args: The arguments to pass to the mscx-manager command.
-    :return: The output of the mscx-manager command as a string.
+    :param args: The arguments to pass to the musescore-manager command.
+    :return: The output of the musescore-manager command as a string.
     """
-    return subprocess.check_output(["mscx-manager"] + list(args)).decode("utf-8")
+    return subprocess.check_output(["musescore-manager"] + list(args)).decode("utf-8")

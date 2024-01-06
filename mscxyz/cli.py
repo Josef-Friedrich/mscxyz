@@ -321,7 +321,7 @@ sub_meta.add_argument(
     metavar=("DESTINATION", "FORMAT_STRING"),
     dest="meta_log",
     help="Write one line per file to a text file. e. g. --log "
-    "/tmp/mscx-manager.log '$title $composer'",
+    "/tmp/musescore-manager.log '$title $composer'",
 )
 
 sub_meta.add_argument(
