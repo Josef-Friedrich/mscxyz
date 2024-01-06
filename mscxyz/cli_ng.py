@@ -6,17 +6,6 @@ import click
 @click.group(
     chain=True,
 )
-@click.argument(
-    "path",
-    nargs=1,
-    metavar="PATH",
-    type=str,
-    # help='Path to a *.msc[zx]" file '
-    # 'or a folder which contains "*.msc[zx]" files. In conjunction '
-    # 'with the subcommand "help" this positional parameter '
-    # "accepts the names of all other subcommands or the word "
-    # '"all".',
-)
 def cli() -> None:
     """
     A command line tool to manipulate the XML based "*.mscX" and "*.mscZ"
@@ -116,10 +105,24 @@ def cli() -> None:
     "tries first to match the FORMAT_STRING on the first source field. If this "
     "fails, it tries the second source field ... an so on.",
 )
+@click.option(
+    "-v",
+    "--vbox",
+    nargs=2,
+    type=str,
+    metavar="FIELD VALUE",
+    help="",
+    multiple=True,
+)
+@click.argument(
+    "path",
+    metavar="PATH",
+    type=str,
+)
 def meta(
-    clean: bool, delete_duplicates: bool, distribute_fields: tuple[str, str]
+    clean: bool, delete_duplicates: bool, distribute_fields: tuple[str, str], path: str, vbox: tuple[str, str]
 ) -> None:
-    click.echo("meta called")
+    print(path, clean, delete_duplicates, distribute_fields, vbox)
 
 
 @cli.command("style")
