@@ -120,7 +120,11 @@ def cli() -> None:
     type=str,
 )
 def meta(
-    clean: bool, delete_duplicates: bool, distribute_fields: tuple[str, str], path: str, vbox: tuple[str, str]
+    clean: bool,
+    delete_duplicates: bool,
+    distribute_fields: tuple[str, str],
+    path: str,
+    vbox: tuple[str, str],
 ) -> None:
     print(path, clean, delete_duplicates, distribute_fields, vbox)
 

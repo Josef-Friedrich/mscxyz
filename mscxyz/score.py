@@ -35,7 +35,7 @@ class Score:
     """
 
     xml_file: str
-    """The path of the uncompressed MuseScore file in XML format file. 
+    """The path of the uncompressed MuseScore file in XML format file.
     This path may be located in the temporary directory."""
 
     style_file: Optional[Path] = None
