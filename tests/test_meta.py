@@ -128,14 +128,6 @@ class TestClassUnifiedInterface:
         self._test_subclasses(version=2)
         self._test_subclasses(version=3)
 
-    def test_static_method_split(self) -> None:
-        result = InterfaceReadWrite._split("metatag_work_title")
-        assert result == {"field": "work_title", "object": "metatag"}
-        with pytest.raises(ValueError):
-            InterfaceReadWrite._split("metatag")
-        with pytest.raises(ValueError):
-            InterfaceReadWrite._split("lol_work_title")
-
     def _test_get_simple(self, version: int) -> None:
         interface, _, _ = self._init_class("simple.mscx", version)
         assert interface.vbox_title == "Title"

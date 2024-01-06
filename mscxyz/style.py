@@ -38,9 +38,9 @@ class Style:
             if element is not None:
                 self.parent_element = element
             else:
-                self.parent_element: _Element = self._create_parent_style()
+                self.parent_element: _Element = self.__create_parent_style()
 
-    def _create_parent_style(self) -> _Element:
+    def __create_parent_style(self) -> _Element:
         """
         Create the parent style element.
 
@@ -51,7 +51,7 @@ class Style:
             raise ValueError("The score file has no <Score> tag.")
         return lxml.etree.SubElement(score, "Style")
 
-    def _create_nested_element(self, tag: str) -> _Element:
+    def __create_nested_element(self, tag: str) -> _Element:
         """
         Create a nested XML element based on the given tag.
 
@@ -122,7 +122,7 @@ class Style:
         """
         element: _Element | None = self.parent_element.find(element_path)
         if element is None:
-            element = self._create_nested_element(element_path)
+            element = self.__create_nested_element(element_path)
         return element
 
     def get_value(self, element_path: str) -> str:
@@ -161,10 +161,10 @@ class Style:
         """
         element: _Element | None = self.parent_element.find(element_path)
         if element is None:
-            element = self._create_nested_element(element_path)
+            element = self.__create_nested_element(element_path)
         element.text = str(value)
 
-    def _get_text_style_element(self, name: str) -> _Element:
+    def __get_text_style_element(self, name: str) -> _Element:
         if self.score.version_major != 2:
             raise ValueError(
                 "This operation is only allowed for MuseScore 2 score files"
@@ -219,7 +219,7 @@ class Style:
         :param name: The name of the text style, for example ``Title``, ``Subtitle``,
           ``Lyricist``, ``Fingering``, ``String Number``, ``Dynamics`` etc.
         """
-        text_style = self._get_text_style_element(name)
+        text_style = self.__get_text_style_element(name)
         out: dict[str, str] = {}
         for child in text_style.iterchildren():
             if child.text is not None:
@@ -235,7 +235,7 @@ class Style:
           the text values of the child tags, for example
           ``{size: 14, bold: 1}``.
         """
-        text_style: _Element = self._get_text_style_element(name)
+        text_style: _Element = self.__get_text_style_element(name)
         for element_name, value in values.items():
             element: _Element | None = text_style.find(element_name)
             if element is None:

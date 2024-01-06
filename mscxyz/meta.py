@@ -681,7 +681,7 @@ class InterfaceReadWrite:
         return sorted(fields)
 
     @staticmethod
-    def _split(field: str) -> dict[str, str | Any]:
+    def __split(field: str) -> dict[str, str | Any]:
         match = re.search(r"([^_]*)_(.*)", field)
         if not match:
             raise ValueError("Field “" + field + "” can’t be splitted!")
@@ -695,7 +695,7 @@ class InterfaceReadWrite:
         return export_to_dict(self, self.fields)
 
     def __getattr__(self, field: str) -> Any:
-        parts = self._split(field)
+        parts = self.__split(field)
         obj = getattr(self, parts["object"])
         return getattr(obj, parts["field"])
 
@@ -703,7 +703,7 @@ class InterfaceReadWrite:
         if field in ("fields", "metatag", "objects", "vbox", "combined", "score"):
             self.__dict__[field] = value
         else:
-            parts = self._split(field)
+            parts = self.__split(field)
             obj = getattr(self, parts["object"])
             return setattr(obj, parts["field"], value)
 
