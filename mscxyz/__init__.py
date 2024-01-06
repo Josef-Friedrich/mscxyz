@@ -26,6 +26,8 @@ from mscxyz.rename import rename_filename
 
 __version__: str = metadata.version("mscxyz")
 
+supported_versions = (2, 3, 4)
+
 Score = mscxyz.score.Score
 """Score""" ""
 

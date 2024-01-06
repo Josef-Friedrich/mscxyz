@@ -359,6 +359,19 @@ class xml:
 
         parent.remove(element)
 
+    @staticmethod
+    def create_element(tag_name: str) -> _Element:
+        return lxml.etree.Element(tag_name)
+
+    @staticmethod
+    def create_sub_element(
+        parrent: _Element, tag_name: str, text: Optional[str] = None
+    ) -> _Element:
+        element: _Element = lxml.etree.SubElement(parrent, tag_name)
+        if text:
+            element.text = text
+        return element
+
 
 class PathChanger:
     path: Path

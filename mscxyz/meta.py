@@ -123,7 +123,7 @@ class MetaTag:
     version 4
 
     .. code-block:: xml
-    
+
             <museScore version="4.20">
                 <Score>
                     <metaTag name="arranger"></metaTag>
@@ -171,189 +171,191 @@ class MetaTag:
         self.score = score
         self.xml_root = score.xml_root
 
-    def _get_element(self, field: str) -> _Element | None:
+    def __get_element(self, field: str) -> _Element | None:
         return utils.xml.xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
 
-    def _get_text(self, field: str) -> str | None:
-        element: _Element | None = self._get_element(field)
+    def __get_text(self, field: str) -> str | None:
+        element: _Element | None = self.__get_element(field)
         return utils.xml.get_text(element)
 
-    def _set_text(self, field: str, value: str | None) -> None:
-        element: _Element | None = self._get_element(field)
+    def __set_text(self, field: str, value: str | None) -> None:
+        if value is None:
+            return None
+        element: _Element | None = self.__get_element(field)
         if element is not None:
             element.text = value
-        else:
-            raise AttributeError(f"Field “{field}” not found!")
+        # else:
+        #     raise AttributeError(f"Field “{field}” not found!")
 
     # arranger
 
     @property
     def arranger(self) -> str | None:
-        return self._get_text("arranger")
+        return self.__get_text("arranger")
 
     @arranger.setter
     def arranger(self, value: str | None) -> None:
-        self._set_text("arranger", value)
+        self.__set_text("arranger", value)
 
     # audio_com_url -> audioComUrl
 
     @property
     def audio_com_url(self) -> str | None:
-        return self._get_text("audioComUrl")
+        return self.__get_text("audioComUrl")
 
     @audio_com_url.setter
     def audio_com_url(self, value: str | None) -> None:
-        self._set_text("audioComUrl", value)
+        self.__set_text("audioComUrl", value)
 
     # composer
 
     @property
     def composer(self) -> str | None:
-        return self._get_text("composer")
+        return self.__get_text("composer")
 
     @composer.setter
     def composer(self, value: str | None) -> None:
-        self._set_text("composer", value)
+        self.__set_text("composer", value)
 
     # copyright
 
     @property
     def copyright(self) -> str | None:
-        return self._get_text("copyright")
+        return self.__get_text("copyright")
 
     @copyright.setter
     def copyright(self, value: str | None) -> None:
-        self._set_text("copyright", value)
+        self.__set_text("copyright", value)
 
     # creation_date -> creationDate
 
     @property
     def creation_date(self) -> str | None:
-        return self._get_text("creationDate")
+        return self.__get_text("creationDate")
 
     @creation_date.setter
     def creation_date(self, value: str | None) -> None:
-        self._set_text("creationDate", value)
+        self.__set_text("creationDate", value)
 
     # lyricist
 
     @property
     def lyricist(self) -> str | None:
-        return self._get_text("lyricist")
+        return self.__get_text("lyricist")
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
-        self._set_text("lyricist", value)
+        self.__set_text("lyricist", value)
 
     # movement_number -> movementNumber
 
     @property
     def movement_number(self) -> str | None:
-        return self._get_text("movementNumber")
+        return self.__get_text("movementNumber")
 
     @movement_number.setter
     def movement_number(self, value: str | None) -> None:
-        self._set_text("movementNumber", value)
+        self.__set_text("movementNumber", value)
 
     # movement_title -> movementTitle
 
     @property
     def movement_title(self) -> str | None:
-        return self._get_text("movementTitle")
+        return self.__get_text("movementTitle")
 
     @movement_title.setter
     def movement_title(self, value: str | None) -> None:
-        self._set_text("movementTitle", value)
+        self.__set_text("movementTitle", value)
 
     # msc_version -> mscVersion
 
     @property
     def msc_version(self) -> str | None:
-        return self._get_text("mscVersion")
+        return self.__get_text("mscVersion")
 
     @msc_version.setter
     def msc_version(self, value: str | None) -> None:
-        self._set_text("mscVersion", value)
+        self.__set_text("mscVersion", value)
 
     # platform
 
     @property
     def platform(self) -> str | None:
-        return self._get_text("platform")
+        return self.__get_text("platform")
 
     @platform.setter
     def platform(self, value: str | None) -> None:
-        self._set_text("platform", value)
+        self.__set_text("platform", value)
 
     # poet
 
     @property
     def poet(self) -> str | None:
-        return self._get_text("poet")
+        return self.__get_text("poet")
 
     @poet.setter
     def poet(self, value: str | None) -> None:
-        self._set_text("poet", value)
+        self.__set_text("poet", value)
 
     # source
 
     @property
     def source(self) -> str | None:
-        return self._get_text("source")
+        return self.__get_text("source")
 
     @source.setter
     def source(self, value: str | None) -> None:
-        self._set_text("source", value)
+        self.__set_text("source", value)
 
     # source_revision_id -> sourceRevisionId
 
     @property
     def source_revision_id(self) -> str | None:
-        return self._get_text("sourceRevisionId")
+        return self.__get_text("sourceRevisionId")
 
     @source_revision_id.setter
     def source_revision_id(self, value: str | None) -> None:
-        self._set_text("sourceRevisionId", value)
+        self.__set_text("sourceRevisionId", value)
 
     # subtitle
 
     @property
     def subtitle(self) -> str | None:
-        return self._get_text("subtitle")
+        return self.__get_text("subtitle")
 
     @subtitle.setter
     def subtitle(self, value: str | None) -> None:
-        self._set_text("subtitle", value)
+        self.__set_text("subtitle", value)
 
     # translator
 
     @property
     def translator(self) -> str | None:
-        return self._get_text("translator")
+        return self.__get_text("translator")
 
     @translator.setter
     def translator(self, value: str | None) -> None:
-        self._set_text("translator", value)
+        self.__set_text("translator", value)
 
     # work_number -> workNumber
 
     @property
     def work_number(self) -> str | None:
-        return self._get_text("workNumber")
+        return self.__get_text("workNumber")
 
     @work_number.setter
     def work_number(self, value: str | None) -> None:
-        self._set_text("workNumber", value)
+        self.__set_text("workNumber", value)
 
     # work_title -> workTitle
 
     @property
     def work_title(self) -> str | None:
-        return self._get_text("workTitle")
+        return self.__get_text("workTitle")
 
     @work_title.setter
     def work_title(self, value: str | None) -> None:
-        self._set_text("workTitle", value)
+        self.__set_text("workTitle", value)
 
     def clean(self) -> None:
         fields = (
@@ -381,22 +383,46 @@ class Vbox:
     * `Subtitle`
     * `Title`
 
+    Version 2, 3
+
     .. code-block:: xml
 
         <Staff id="1">
-          <VBox>
-            <height>10</height>
-            <Text>
-              <style>Title</style>
-              <text>Title</text>
-              </Text>
-            <Text>
-              <style>Composer</style>
-              <text>Composer</text>
-              </Text>
+            <VBox>
+                <height>10</height>
+                <Text>
+                    <style>Title</style>
+                    <text>Title</text>
+                </Text>
+                <Text>
+                    <style>Composer</style>
+                    <text>Composer</text>
+                </Text>
             </VBox>
-          </Staff>
+        </Staff>
 
+
+    Version 4
+
+    .. code-block:: xml
+
+        <Staff id="1">
+            <VBox>
+                <height>10</height>
+                <boxAutoSize>0</boxAutoSize>
+                <eid>4294967418</eid>
+                <Text>
+                    <eid>8589934598</eid>
+                    <style>title</style>
+                    <text>Title</text>
+                </Text>
+                <Text>
+                    <eid>12884901894</eid>
+                    <style>composer</style>
+                    <text>Composer</text>
+                </Text>
+            </VBox>
+        </Staff>
     """
 
     fields = (
@@ -418,108 +444,148 @@ class Vbox:
         xpath = '/museScore/Score/Staff[@id="1"]'
 
         vbox = utils.xml.xpath(self.xml_root, xpath + "/VBox")
-        if not vbox:
+        if vbox is None:
             vbox = lxml.etree.Element("VBox")
             height = lxml.etree.SubElement(vbox, "height")
             height.text = "10"
             utils.xml.xpath_safe(self.xml_root, xpath).insert(0, vbox)
         self.vbox = vbox
 
-    def _get_tag(self, style: str) -> _Element | None:
+    def __normalize_style_name(self, style: str) -> str:
         """
         :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer``.
+          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
+        """
+        if self.score.version_major in (2, 3):
+            style = style.title()
+        elif self.score.version_major == 4:
+            style = style.lower()
+        return style
+
+    def __get_element(self, style: str) -> _Element | None:
+        """
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
         for element in self.vbox:
             s: _Element | None = element.find("style")
-            if s is not None and s.text == style:
+            if s is not None and s.text == self.__normalize_style_name(style):
                 return element.find("text")
         return None
 
-    def _get_text(self, style: str) -> str | None:
+    def __get_text(self, style: str) -> str | None:
         """
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer``.
         """
-        element: _Element | None = self._get_tag(style)
+        element: _Element | None = self.__get_element(style)
         if element is not None and hasattr(element, "text"):
             return element.text
         return None
 
-    def _create_text_tag(self, style: str, text: str) -> None:
+    def __create_text_element(self, style: str, text: str) -> None:
         """
+        Version 2, 3
+
+        .. code-block:: xml
+
+            <Text>
+                <style>Title</style>
+                <text>Title</text>
+            </Text>
+
+        Version 4
+
+        .. code-block:: xml
+
+            <Text>
+                <eid>8589934598</eid>
+                <style>title</style>
+                <text>Title</text>
+            </Text>
+
+
         :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer``.
+          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         :param text: The string inside the ``<text>`` tags.
         """
-        Text_tag: _Element = lxml.etree.Element("Text")
-        style_tag: _Element = lxml.etree.SubElement(Text_tag, "style")
-        style_tag.text = style
-        text_tag: _Element = lxml.etree.SubElement(Text_tag, "text")
-        text_tag.text = text
+        text_element: _Element = utils.xml.create_element("Text")
 
-        for element in utils.xml.xpathall_safe(self.xml_root, "//VBox"):
-            element.append(Text_tag)
+        if self.score.version_major in (2, 3):
+            style = style.title()
+        elif self.score.version_major == 4:
+            style = style.lower()
 
-    def _set_text(self, style: str, text: str | None) -> None:
+        utils.xml.create_sub_element(
+            text_element, "style", self.__normalize_style_name(style)
+        )
+        utils.xml.create_sub_element(text_element, "text", text)
+        self.vbox.append(text_element)
+
+    def __set_text(self, style: str, text: str | None) -> None:
         """
-        :param string style: String inside the `<style>` tags
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
 
         if text is None:
-            self._remove_text_element(style)
+            self.__remove_text_element(style)
             return None
 
-        element: _Element | None = self._get_tag(style)
+        element: _Element | None = self.__get_element(style)
         if hasattr(element, "text"):
             if element is not None:
                 element.text = text
         else:
-            self._create_text_tag(style, text)
+            self.__create_text_element(style, text)
 
-    def _remove_text_element(self, style: str) -> None:
-        utils.xml.remove(self._get_tag(style))
+    def __remove_text_element(self, style: str) -> None:
+        """
+        :param style: The string inside the ``<style>`` tags, for example
+          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
+        """
+        utils.xml.remove(self.__get_element(style))
         return None
 
     # composer -> Composer
 
     @property
     def composer(self) -> str | None:
-        return self._get_text("Composer")
+        return self.__get_text("Composer")
 
     @composer.setter
     def composer(self, value: str | None) -> None:
-        self._set_text("Composer", value)
+        self.__set_text("Composer", value)
 
     # lyricist -> Lyricist
 
     @property
     def lyricist(self) -> str | None:
-        return self._get_text("Lyricist")
+        return self.__get_text("Lyricist")
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
-        self._set_text("Lyricist", value)
+        self.__set_text("Lyricist", value)
 
     # subtitle -> Subtitle
 
     @property
     def subtitle(self) -> str | None:
-        return self._get_text("Subtitle")
+        return self.__get_text("Subtitle")
 
     @subtitle.setter
     def subtitle(self, value: str | None) -> None:
-        self._set_text("Subtitle", value)
+        self.__set_text("Subtitle", value)
 
     # title -> Title
 
     @property
     def title(self) -> str | None:
-        return self._get_text("Title")
+        return self.__get_text("Title")
 
     @title.setter
     def title(self, value: str | None) -> None:
-        self._set_text("Title", value)
+        self.__set_text("Title", value)
 
 
 class Combined:
