@@ -24,7 +24,7 @@ def test_investigate_xml_root(score_file: str) -> None:
 
     def print_elements(element: _Element, level: int) -> None:
         for sub_element in element:
-            print(f"{'  ' * level}<{sub_element.tag}>")
+            print(f"{'    ' * level}<{sub_element.tag}>")
             print_elements(sub_element, level + 1)
 
     print_elements(score.xml_root, 0)
@@ -46,13 +46,13 @@ def test_list_score_paths(nested_dir: Path) -> None:
 
 
 def test_set_meta_tag_composer(score: Score) -> None:
-    assert score.meta.interface.metatag_composer == "Composer"
+    assert score.meta.meta_tag.composer == "Composer"
 
-    score.meta.interface.metatag_composer = "Mozart"
+    score.meta.meta_tag.composer  = "Mozart"
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.meta.interface.metatag_composer == "Mozart"
+    assert new_score.meta.meta_tag.composer == "Mozart"
 
 
 def test_set_all_font_faces_using_for_loop(score: Score) -> None:

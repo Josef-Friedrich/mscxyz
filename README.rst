@@ -511,6 +511,9 @@ Instantiate a ``Score`` object:
     assert score.version == 4.20
     assert score.version_major == 4
 
+Examine the most important attribute of a ``Score`` object: ``xml_root``.
+It is the root element of the XML document in which MuseScore stores all information
+about a score.
 It’s best to take a look at the `lxml API <https://lxml.de/api.html>`_ documentation
 to see what you can do with this element. So much can be revealed: 
 lots of interesting things.
@@ -521,10 +524,27 @@ lots of interesting things.
 
     def print_elements(element: _Element, level: int) -> None:
         for sub_element in element:
-            print(f"{'  ' * level}<{sub_element.tag}>")
+            print(f"{'    ' * level}<{sub_element.tag}>")
             print_elements(sub_element, level + 1)
 
     print_elements(score.xml_root, 0)
+
+The output of the code example is very long, so here is a shortened version:
+
+::
+
+    <programVersion>
+    <programRevision>
+    <LastEID>
+    <Score>
+        <Division>
+        <showInvisible>
+        <showUnprintable>
+        <showFrames>
+        <showMargins>
+        <open>
+        <metaTag>
+        ...
 
 List score paths in a nested folder structure:
 
@@ -575,13 +595,13 @@ Set the meta tag ``composer``:
 .. code-block:: Python
 
     score = Score('score.mscz')
-    assert score.meta.interface.metatag_composer == "Composer"
+    assert score.meta.meta_tag.composer == "Composer"
 
-    score.meta.interface.metatag_composer = "Mozart"
+    score.meta.meta_tag.composer  = "Mozart"
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.meta.interface.metatag_composer == "Mozart"
+    assert new_score.meta.meta_tag.composer == "Mozart"
 
 .. code-block:: xml
 
