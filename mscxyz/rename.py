@@ -11,7 +11,7 @@ import tmep
 from tmep.format import alphanum, asciify, nowhitespace
 
 from mscxyz.score import Score
-from mscxyz.settings import get_args
+from mscxyz.settings_legacy import get_args
 from mscxyz.utils import color
 
 

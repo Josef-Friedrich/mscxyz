@@ -3,19 +3,16 @@
 
 from pytest import CaptureFixture
 
-import mscxyz
 from tests import helper
-from tests.helper import ini_file
+from tests.helper import ini_file, simulate_cli_legacy
 
 
 def test_broken_file(capsys: CaptureFixture[str]) -> None:
-    mscxyz.execute(
-        [
-            "--config-file",
-            ini_file,
-            "meta",
-            helper.get_file("broken.mscx"),
-        ]
+    simulate_cli_legacy(
+        "--config-file",
+        ini_file,
+        "meta",
+        helper.get_file("broken.mscx"),
     )
     capture = capsys.readouterr()
     assert (

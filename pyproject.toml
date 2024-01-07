@@ -24,7 +24,6 @@ lxml = "^5.0.0"
 termcolor = "^2.4.0"
 tmep = "^2.4.0"
 lxml-stubs = "^0.4.0"
-click = "^8.1.7"
 
 [tool.poetry.group.dev.dependencies]
 readme-patcher = "^0.6.0"
@@ -39,9 +38,8 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-"musescore-manager" = "mscxyz.cli_ng:execute"
-"musescore-manager-ng" = "mscxyz.cli_click:cli"
-"mscx-manager" = "mscxyz:execute"
+"musescore-manager" = "mscxyz.cli:execute"
+"mscx-manager" = "mscxyz.cli_legacy:execute"
 
 [[tool.readme_patcher.file]]
 src = "README_template.rst"

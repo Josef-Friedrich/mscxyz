@@ -19,7 +19,7 @@ import lxml.etree
 import termcolor
 from lxml.etree import _Element, _ElementTree
 
-from mscxyz.settings import get_args
+from mscxyz.settings_legacy import get_args
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
