@@ -8,7 +8,7 @@ from unittest import mock
 import pytest
 
 from tests import helper
-from tests.helper import simulate_cli_legacy
+from tests.helper import cli_legacy
 
 
 def test_help() -> None:
@@ -24,7 +24,7 @@ class TestBackup:
     def setup_method(self) -> None:
         self.tmp = helper.get_file("simple.mscx")
         self.backup = self.tmp.replace(".mscx", "_bak.mscx")
-        simulate_cli_legacy("--backup", "meta", self.tmp)
+        cli_legacy("--backup", "meta", self.tmp)
 
     def test_exists(self) -> None:
         assert os.path.isfile(self.backup)
@@ -37,7 +37,7 @@ class TestExport:
     def execute(self, extension: str) -> tuple[mock.Mock, str]:
         tmp: str = helper.get_file("simple.mscx")
         with mock.patch("mscxyz.score.utils.execute_musescore") as mscore_function:
-            simulate_cli_legacy("export", "--extension", extension, tmp)
+            cli_legacy("export", "--extension", extension, tmp)
         return mscore_function, tmp
 
     def test_valid_extension(self) -> None:

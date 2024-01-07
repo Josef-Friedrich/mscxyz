@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Literal
 
 import pytest
+from pytest import CaptureFixture
 
 import mscxyz
 from mscxyz.score import Score
@@ -250,3 +251,14 @@ def test_load_style_file() -> None:
     result = score.xml_root.find("Score/Style")
     assert result is not None
     assert result[0].text == "77"
+
+
+class TestCli:
+    def test_option_styles_v3(self, capsys: CaptureFixture[str]) -> None:
+        helper.cli("--styles-v3")
+        assert "user12FrameFgColor" in capsys.readouterr().out
+        assert "instrumentNameOffset" not in capsys.readouterr().out
+
+    def test_option_styles_v4(self, capsys: CaptureFixture[str]) -> None:
+        helper.cli("--styles-v4")
+        assert "instrumentNameOffset" in capsys.readouterr().out

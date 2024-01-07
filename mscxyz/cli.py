@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import importlib
-import sys
 import textwrap
 import typing
 from typing import Sequence
@@ -520,12 +519,13 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             import the module to avoid long load time"""
             style_names = importlib.import_module("mscxyz.style_names", package=None)
             style_names.list_styles(version)
-            sys.exit()
 
         if args.style_styles_v3:
             list_styles(3)
+            return
         if args.style_styles_v4:
-            list_styles(3)
+            list_styles(4)
+            return
 
     for file in utils.list_files(src=args.path, glob=args.general_glob):
         if args.general_only_list:

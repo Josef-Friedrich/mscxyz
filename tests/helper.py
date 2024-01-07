@@ -11,6 +11,7 @@ from pathlib import Path
 from lxml.etree import _Element
 
 from mscxyz import Score
+from mscxyz.cli import execute
 from mscxyz.cli_legacy import execute as execute_legacy
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
@@ -100,8 +101,12 @@ def read_file(filename: str | Path) -> str:
     return output
 
 
-def simulate_cli_legacy(*args: str) -> None:
+def cli_legacy(*args: str) -> None:
     execute_legacy(args)
+
+
+def cli(*args: str) -> None:
+    execute(args)
 
 
 def run(*args: str) -> str:

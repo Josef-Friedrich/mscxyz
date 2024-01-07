@@ -4,11 +4,11 @@
 from pytest import CaptureFixture
 
 from tests import helper
-from tests.helper import ini_file, simulate_cli_legacy
+from tests.helper import cli_legacy, ini_file
 
 
 def test_broken_file(capsys: CaptureFixture[str]) -> None:
-    simulate_cli_legacy(
+    cli_legacy(
         "--config-file",
         ini_file,
         "meta",

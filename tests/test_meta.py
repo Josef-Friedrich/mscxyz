@@ -25,7 +25,7 @@ from mscxyz.meta import (
 )
 from mscxyz.score import Score
 from tests import helper
-from tests.helper import ini_file, simulate_cli_legacy
+from tests.helper import cli_legacy, ini_file
 
 
 def reload(src: Score | str | Path) -> Interface:
@@ -442,7 +442,7 @@ class TestClassCombined:
 class TestIntegration:
     def test_distribute_field(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
-        simulate_cli_legacy(
+        cli_legacy(
             "meta",
             "--distribute-field",
             "vbox_title",
@@ -457,7 +457,7 @@ class TestIntegration:
 
     def test_distribute_field_multple_source_fields(self) -> None:
         tmp = helper.get_file("Title - Composer.mscx")
-        simulate_cli_legacy(
+        cli_legacy(
             "meta",
             "--distribute-field",
             "vbox_title,readonly_basename",
@@ -472,7 +472,7 @@ class TestIntegration:
 
     def test_distribute_field_multiple_values(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
-        simulate_cli_legacy(
+        cli_legacy(
             "meta",
             "--distribute-field",
             "vbox_title",
@@ -491,12 +491,12 @@ class TestIntegration:
     def test_distribute_field_invalid_format_string(self) -> None:
         tmp = helper.get_file("meta-distribute-field.mscx")
         with pytest.raises(meta.FormatStringNoFieldError):
-            simulate_cli_legacy("meta", "--distribute-field", "vbox_title", "lol", tmp)
+            cli_legacy("meta", "--distribute-field", "vbox_title", "lol", tmp)
 
     def test_distribute_field_exception_unmatched(
         self, capsys: pytest.CaptureFixture[str]
     ) -> None:
-        simulate_cli_legacy(
+        cli_legacy(
             "meta",
             "--distribute-field",
             "vbox_title",
@@ -508,7 +508,7 @@ class TestIntegration:
 
     def test_clean_all(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy("meta", "--clean", "all", tmp)
+        cli_legacy("meta", "--clean", "all", tmp)
         score = helper.reload(tmp)
         i = score.meta.interface_read_write
         for field in i.fields:
@@ -516,21 +516,21 @@ class TestIntegration:
 
     def test_clean_single_field(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy("meta", "--clean", "vbox_title", tmp)
+        cli_legacy("meta", "--clean", "vbox_title", tmp)
         i = reload(tmp)
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer == "vbox_composer", "vbox_composer"
 
     def test_clean_some_fields(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy("meta", "--clean", "vbox_title,vbox_composer", tmp)
+        cli_legacy("meta", "--clean", "vbox_title,vbox_composer", tmp)
         i = reload(tmp)
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer is None, "vbox_composer"
         assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
 
     def test_show(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy(
+        cli_legacy(
             "--config-file",
             ini_file,
             "meta",
@@ -546,7 +546,7 @@ class TestIntegration:
         assert lines[-1] == "vbox_title: “vbox_title” -> “”"
 
     def test_show_simple_unverbose(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy(
+        cli_legacy(
             "--config-file",
             ini_file,
             "meta",
@@ -563,7 +563,7 @@ class TestIntegration:
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
     def test_show_verbose(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy(
+        cli_legacy(
             "--config-file",
             ini_file,
             "--verbose",
@@ -582,22 +582,20 @@ class TestIntegration:
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
     def test_show_verbose_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy("meta", "--clean", "all", helper.get_file("simple.mscx"))
+        cli_legacy("meta", "--clean", "all", helper.get_file("simple.mscx"))
         capture = capsys.readouterr()
         assert "readonly_basename" in capture.out
         assert "readonly_abspath" not in capture.out
         assert "readonly_relpath_backup" not in capture.out
 
     def test_show_verbose_one(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy(
-            "-v", "meta", "--clean", "all", helper.get_file("simple.mscx")
-        )
+        cli_legacy("-v", "meta", "--clean", "all", helper.get_file("simple.mscx"))
         capture = capsys.readouterr()
         assert "readonly_abspath" in capture.out
         assert "readonly_relpath_backup" not in capture.out
 
     def test_show_verbose_two(self, capsys: pytest.CaptureFixture[str]) -> None:
-        simulate_cli_legacy(
+        cli_legacy(
             "-vv",
             "meta",
             "--clean",
@@ -609,13 +607,13 @@ class TestIntegration:
 
     def test_set_field_simple_string(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy("meta", "--set-field", "vbox_title", "lol", tmp)
+        cli_legacy("meta", "--set-field", "vbox_title", "lol", tmp)
         i = reload(tmp)
         assert i.vbox_title == "lol"
 
     def test_set_field_multiple_times(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy(
+        cli_legacy(
             "meta",
             "--set-field",
             "vbox_title",
@@ -631,7 +629,7 @@ class TestIntegration:
 
     def test_set_field_with_templating(self) -> None:
         tmp = helper.get_file("meta-all-values.mscx")
-        simulate_cli_legacy(
+        cli_legacy(
             "meta", "--set-field", "vbox_title", "$vbox_title ($vbox_composer)", tmp
         )
         i = reload(tmp)
@@ -639,14 +637,14 @@ class TestIntegration:
 
     def test_delete_duplicates(self) -> None:
         tmp = helper.get_file("meta-duplicates.mscx")
-        simulate_cli_legacy("meta", "--delete-duplicates", tmp)
+        cli_legacy("meta", "--delete-duplicates", tmp)
         i = reload(tmp)
         assert not i.combined_lyricist
         assert not i.combined_subtitle
 
     def test_delete_duplicates_move_subtitle(self) -> None:
         tmp = helper.get_file("meta-duplicates-move-subtitle.mscx")
-        simulate_cli_legacy("meta", "--delete-duplicates", tmp)
+        cli_legacy("meta", "--delete-duplicates", tmp)
         i = reload(tmp)
         assert not i.combined_lyricist
         assert not i.combined_subtitle
@@ -655,9 +653,7 @@ class TestIntegration:
     def test_log(self) -> None:
         tmp = helper.get_file("simple.mscx")
         log = tempfile.mktemp()
-        simulate_cli_legacy(
-            "meta", "--log", log, "$combined_title-$combined_composer", tmp
-        )
+        cli_legacy("meta", "--log", log, "$combined_title-$combined_composer", tmp)
         log_file = open(log, "r")
         assert log_file.readline() == "Title-Composer\n"
 

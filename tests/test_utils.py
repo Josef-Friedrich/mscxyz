@@ -15,7 +15,7 @@ from mscxyz import utils
 from mscxyz.settings_legacy import get_args
 from mscxyz.utils import ListExtension, PathChanger, ZipContainer
 from tests import helper
-from tests.helper import simulate_cli_legacy
+from tests.helper import cli_legacy
 
 args = get_args()
 args.general_executable = None
@@ -36,7 +36,7 @@ class TestFunctions:
     @pytest.mark.skip("TODO: Fix this test")
     @mock.patch("mscxyz.score.Score")
     def test_batch(self, Score: mock.Mock) -> None:
-        simulate_cli_legacy("meta", helper.get_dir("batch"))
+        cli_legacy("meta", helper.get_dir("batch"))
         assert Score.call_count == 3
 
     def test_without_extension(self) -> None:
