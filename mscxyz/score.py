@@ -202,18 +202,16 @@ class Score:
         strip_tags(self.xml_root, "font", "b", "i", "pos", "offset")
 
     def print_diff(self) -> None:
-        """
-        Print or return a colour-coded diff of two items in a list of strings.
-        Default: Compare first and last strings; print the output; return None.
-        """
         if self.__xml_string_initial is None:
             return
-        green = "\x1b[32m"  # text color green
-        red = "\x1b[31m"  # text color red
-        reset = "\x1b[0m"  # reset to the default color
+        green = "\x1b[32m"
+        red = "\x1b[31m"
+        reset = "\x1b[0m"
 
         diff = difflib.unified_diff(
-            self.__xml_string_initial.splitlines(), self.xml_string.splitlines()
+            self.__xml_string_initial.splitlines(),
+            self.xml_string.splitlines(),
+            lineterm="",
         )
 
         for line in diff:
@@ -221,6 +219,8 @@ class Score:
                 print(red + line + reset)
             elif line.startswith("+"):
                 print(green + line + reset)
+            else:
+                print(line)
 
     def save(self, new_dest: str = "", mscore: bool = False) -> None:
         """Save the MuseScore file.
