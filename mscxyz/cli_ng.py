@@ -7,18 +7,19 @@ import importlib
 import sys
 import textwrap
 import typing
-from typing import Type
+from typing import Sequence
 
-import lxml
-import lxml.etree
+# import lxml
+# import lxml.etree
 import tmep
-from lxml.etree import LxmlError
 
-import mscxyz.settings as settings
-from mscxyz import cli, utils
+# from lxml.etree import LxmlError
+from mscxyz import utils
 from mscxyz.meta import Interface, InterfaceReadWrite
-from mscxyz.rename import rename_filename
+
+# from mscxyz.rename import rename_filename
 from mscxyz.score import Score
+from mscxyz.settings_ng import parse_args
 
 
 def list_fields(
@@ -42,7 +43,7 @@ class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
 
 parser = argparse.ArgumentParser(
-    description="A command "
+    description="The next generation command "
     'line tool to manipulate the XML based "*.mscX" and "*.mscZ" '
     "files of the notation software MuseScore.",
     formatter_class=LineWrapRawTextHelpFormatter,
@@ -69,7 +70,7 @@ parser.add_argument(
 
 
 parser.add_argument(
-    "-c",
+    "-k",
     "--colorize",
     action="store_true",
     dest="general_colorize",
@@ -136,28 +137,27 @@ parser.add_argument(
     verbose.",
 )
 
-###############################################################################
-# subparser in alphabetical order
-###############################################################################
-
-subparser = parser.add_subparsers(
-    title="Subcommands",
-    dest="subcommand",
-    help='Run "subcommand --help" for more \
-    informations.',
+parser.add_argument(
+    "--list-files",
+    action="store_true",
+    dest="general_only_list",
+    help="Only list files and do nothing else.",
 )
+
+###############################################################################
+# groups in alphabetical order
+###############################################################################
 
 ###############################################################################
 # clean
 ###############################################################################
 
-sub_clean = subparser.add_parser(
+group_clean = parser.add_argument_group(
     "clean",
-    help='Clean and reset the formating of the "*.mscx" file',
-    formatter_class=LineWrapRawTextHelpFormatter,
+    'Clean and reset the formating of the "*.mscx" file',
 )
 
-sub_clean.add_argument(
+group_clean.add_argument(
     "-s",
     "--style",
     dest="clean_style",
@@ -170,19 +170,20 @@ sub_clean.add_argument(
 # export
 ###############################################################################
 
-sub_export = subparser.add_parser(
+group_export = parser.add_argument_group(
     "export",
-    help="Export the scores to PDFs or to a format specified by the \
-    extension. The exported file has the same path, only the file extension is \
-    different. See \
-    https://musescore.org/en/handbook/2/file-formats \
-    https://musescore.org/en/handbook/3/file-export \
-    https://musescore.org/en/handbook/4/file-export",
-    formatter_class=LineWrapRawTextHelpFormatter,
+    """
+    Export the scores to PDFs or to a format specified by the extension. The
+    exported file has the same path, only the file extension is different. See
+
+    - https://musescore.org/en/handbook/2/file-formats
+    - https://musescore.org/en/handbook/3/file-export
+    - https://musescore.org/en/handbook/4/file-export
+    """,
 )
 
-sub_export.add_argument(
-    "-e",
+group_export.add_argument(
+    "-E",
     "--extension",
     dest="export_extension",
     default="pdf",
@@ -191,47 +192,13 @@ sub_export.add_argument(
 )
 
 ###############################################################################
-# help
-###############################################################################
-
-sub_help = subparser.add_parser(
-    "help",
-    help="Show help. Use “{} help all” to show help \
-    messages of all subcommands. Use \
-    “{} help <subcommand>” to show only help messages \
-    for the given subcommand.".format(parser.prog, parser.prog),
-    formatter_class=LineWrapRawTextHelpFormatter,
-)
-
-sub_help.add_argument(
-    "-m",
-    "--markdown",
-    dest="help_markdown",
-    action="store_true",
-    help="Show help in markdown format. \
-    This option enables to generate the README file directly \
-    form the command line output.",
-)
-
-sub_help.add_argument(
-    "-r",
-    "--rst",
-    dest="help_rst",
-    action="store_true",
-    help="Show help in reStructuresText \
-    format. This option enables to generate the README file \
-    directly form the command line output.",
-)
-
-###############################################################################
 # meta
 ###############################################################################
 
-sub_meta = subparser.add_parser(
+group_meta = parser.add_argument_group(
     "meta",
-    help="Deal with meta data informations stored in the MuseScore file.",
-    formatter_class=LineWrapRawTextHelpFormatter,
-    description=textwrap.dedent(
+    "Deal with meta data informations stored in the MuseScore file."
+    + textwrap.dedent(
         """\
     MuseScore can store meta data informations in different places:
 
@@ -289,7 +256,7 @@ sub_meta = subparser.add_parser(
     + list_fields(InterfaceReadWrite.get_all_fields(), prefix="    "),
 )
 
-sub_meta.add_argument(
+group_meta.add_argument(
     "-c",
     "--clean",
     dest="meta_clean",
@@ -297,7 +264,7 @@ sub_meta.add_argument(
     „field_one,field_two“.",
 )
 
-sub_meta.add_argument(
+group_meta.add_argument(
     "-D",
     "--delete-duplicates",
     dest="meta_delete",
@@ -308,8 +275,8 @@ sub_meta.add_argument(
     "combined_title is empty.",
 )
 
-sub_meta.add_argument(
-    "-d",
+group_meta.add_argument(
+    "-i",
     "--distribute-fields",
     dest="meta_dist",
     action="append",
@@ -323,7 +290,7 @@ sub_meta.add_argument(
     fails, it tries the second source field ... an so on.",
 )
 
-sub_meta.add_argument(
+group_meta.add_argument(
     "-j",
     "--json",
     action="store_true",
@@ -331,7 +298,7 @@ sub_meta.add_argument(
     help="Additionally write the meta data to a json file.",
 )
 
-sub_meta.add_argument(
+group_meta.add_argument(
     "-l",
     "--log",
     nargs=2,
@@ -341,8 +308,8 @@ sub_meta.add_argument(
     "/tmp/musescore-manager.log '$title $composer'",
 )
 
-sub_meta.add_argument(
-    "-s",
+group_meta.add_argument(
+    "-y",
     "--synchronize",
     action="store_true",
     dest="meta_sync",
@@ -351,7 +318,7 @@ sub_meta.add_argument(
     metadata fields",
 )
 
-sub_meta.add_argument(
+group_meta.add_argument(
     "-S",
     "--set-field",
     nargs=2,
@@ -365,25 +332,25 @@ sub_meta.add_argument(
 # lyrics
 ###############################################################################
 
-sub_lyrics = subparser.add_parser(
+group_lyrics = parser.add_argument_group(
     "lyrics",
-    help="Extract lyrics. Without any option this subcommand \
-    extracts all lyrics verses into separate mscx files. \
-    This generated mscx files contain only one verse. The old \
-    verse number is appended to the file name, e. g.: \
-    score_1.mscx.",
-    formatter_class=LineWrapRawTextHelpFormatter,
+    """
+    Extract lyrics. Without any option this subcommand  extracts all lyrics
+    verses into separate mscx files. This generated mscx files contain only one
+    verse. The old verse number is appended to the file name, e. g.:
+    score_1.mscx.
+    """,
 )
 
-sub_lyrics.add_argument(
-    "-e",
+group_lyrics.add_argument(
+    "-x",
     "--extract",
     dest="lyrics_extract",
     default="all",
     help='The lyric verse number to extract or "all".',
 )
 
-sub_lyrics.add_argument(
+group_lyrics.add_argument(
     "-r",
     "--remap",
     dest="lyrics_remap",
@@ -395,8 +362,8 @@ sub_lyrics.add_argument(
     verse number.',
 )
 
-sub_lyrics.add_argument(
-    "-f",
+group_lyrics.add_argument(
+    "-F",
     "--fix",
     action="store_true",
     dest="lyrics_fix",
@@ -408,11 +375,10 @@ sub_lyrics.add_argument(
 # rename
 ###############################################################################
 
-sub_rename = subparser.add_parser(
+group_rename = parser.add_argument_group(
     "rename",
-    help='Rename the "*.mscx" files.',
-    formatter_class=LineWrapRawTextHelpFormatter,
-    description="Fields and functions you can use in the format "
+    'Rename the "*.mscx" files.'
+    "Fields and functions you can use in the format "
     "string (-f, --format):\n\n"
     "Fields\n======\n\n{}\n\n"
     "Functions\n=========\n\n{}".format(
@@ -420,7 +386,7 @@ sub_rename = subparser.add_parser(
     ),
 )
 
-sub_rename.add_argument(
+group_rename.add_argument(
     "-f",
     "--format",
     dest="rename_format",
@@ -428,7 +394,7 @@ sub_rename.add_argument(
     help="Format string.",
 )
 
-sub_rename.add_argument(
+group_rename.add_argument(
     "-A",
     "--alphanum",
     dest="rename_alphanum",
@@ -436,7 +402,7 @@ sub_rename.add_argument(
     help="Use only alphanumeric characters.",
 )
 
-sub_rename.add_argument(
+group_rename.add_argument(
     "-a",
     "--ascii",
     dest="rename_ascii",
@@ -444,7 +410,7 @@ sub_rename.add_argument(
     help="Use only ASCII characters.",
 )
 
-sub_rename.add_argument(
+group_rename.add_argument(
     "-n",
     "--no-whitespace",
     dest="rename_no_whitespace",
@@ -453,8 +419,8 @@ sub_rename.add_argument(
     sometimes underlines.",
 )
 
-sub_rename.add_argument(
-    "-s",
+group_rename.add_argument(
+    "-K",
     "--skip-if-empty",
     dest="rename_skip",
     metavar="FIELDS",
@@ -462,7 +428,7 @@ sub_rename.add_argument(
     commas: combined_composer,combined_title",
 )
 
-sub_rename.add_argument(
+group_rename.add_argument(
     "-t",
     "--target",
     dest="rename_target",
@@ -473,26 +439,26 @@ sub_rename.add_argument(
 # style
 ###############################################################################
 
-sub_style = subparser.add_parser(
-    "style", help="Change the styles.", formatter_class=LineWrapRawTextHelpFormatter
-)
+group_style = parser.add_argument_group("style", "Change the styles.")
 
-sub_style.add_argument(
-    "--list-3",
-    dest="style_list_3",
+group_style.add_argument(
+    "--s3",
+    "--styles-v3",
+    dest="style_styles_v3",
     action="store_true",
     help="List all possible version 3 styles.",
 )
 
-sub_style.add_argument(
-    "--list-4",
-    dest="style_list_4",
+group_style.add_argument(
+    "--s4",
+    "--styles-v4",
+    dest="style_styles_v4",
     action="store_true",
     help="List all possible version 4 styles.",
 )
 
-sub_style.add_argument(
-    "-y",
+group_style.add_argument(
+    "-Y",
     "--set-style",
     nargs=2,
     action="append",
@@ -508,6 +474,7 @@ sub_style.add_argument(
 
 parser.add_argument(
     "path",
+    nargs="*",
     help='Path to a *.msc[zx]" file \
     or a folder which contains "*.msc[zx]" files. In conjunction \
     with the subcommand "help" this positional parameter \
@@ -520,189 +487,131 @@ files of the notation software MuseScore.
 """
 
 
-def __heading(args: settings.DefaultArguments, text: str, level: int = 1) -> None:
-    length = len(text)
-    if args.help_markdown:
-        print("\n" + ("#" * level) + " " + text + "\n")
-    elif args.help_rst:
-        if level == 1:
-            underline = "="
-        elif level == 2:
-            underline = "-"
-        elif level == 3:
-            underline = "^"
-        elif level == 4:
-            underline = '"'
-        else:
-            underline = "-"
-        print("\n" + text + "\n" + (underline * length) + "\n")
-    else:
-        print(text)
+# def __report_errors(errors: list[Exception]) -> None:
+#     for error in errors:
+#         msg = ""
+
+#         if isinstance(error, SyntaxError):
+#             msg = error.msg
+
+#         print(
+#             "{}: {}; message: {}".format(
+#                 utils.color("Error", "white", "on_red"),
+#                 utils.color(error.__class__.__name__, "red"),
+#                 msg,
+#             )
+#         )
 
 
-def __code_block(args: settings.DefaultArguments, text: str) -> None:
-    if args.help_markdown:
-        print("```\n" + text + "\n```")
-    elif args.help_rst:
-        print(".. code-block:: text\n\n  " + text.replace("\n", "\n  "))
-    else:
-        print(text)
+# def __no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
+#     for e in errors:
+#         if isinstance(e, error):
+#             return False
+#     return True
 
 
-def __show_all_help(args: settings.DefaultArguments) -> None:
-    subcommands = ("clean", "meta", "lyrics", "rename", "export", "help")
+def execute(cli_args: Sequence[str] | None = None) -> None:
+    args = parse_args(parser, cli_args)
 
-    if args.path == "all":
-        __heading(args, "mscxyz", 1)
-        __code_block(args, cli.parser.format_help())
+    if args.style_styles_v3 or args.style_styles_v4:
 
-        __heading(args, "Subcommands", 1)
+        def list_styles(version: int) -> None:
+            """There are many styles in MuseScore. We dynamically
+            import the module to avoid long load time"""
+            style_names = importlib.import_module("mscxyz.style_names", package=None)
+            style_names.list_styles(version)
+            sys.exit()
 
-        for subcommand in subcommands:
-            command = getattr(cli, "sub_" + subcommand)
-            __heading(args, command.prog, 2)
-            __code_block(args, command.format_help())
+        if args.style_styles_v3:
+            list_styles(3)
+        if args.style_styles_v4:
+            list_styles(3)
 
-    else:
-        __code_block(args, getattr(cli, args.path).format_help())
+    for file in utils.list_files(src=args.path, glob=args.general_glob):
+        if args.general_only_list:
+            print(file)
+            continue
 
+        score = Score(file)
+        print(score)
 
-def __report_errors(errors: list[Exception]) -> None:
-    for error in errors:
-        msg = ""
+    # for file in files:
+    #     print("\n" + utils.color(file, "red"))
 
-        if isinstance(error, SyntaxError):
-            msg = error.msg
+    #     if args.general_backup:
+    #         score = Score(file)
+    #         score.backup()
 
-        print(
-            "{}: {}; message: {}".format(
-                utils.color("Error", "white", "on_red"),
-                utils.color(error.__class__.__name__, "red"),
-                msg,
-            )
-        )
+    #     if args.subcommand == "clean":
+    #         score = Score(file)
+    #         print(score.filename)
+    #         score.clean()
+    #         if args.clean_style:
+    #             score.style.merge(styles=args.clean_style.name)
+    #         score.save(mscore=args.general_mscore)
 
+    #     elif args.subcommand == "lyrics":
+    #         score = Score(file)
+    #         if args.lyrics_remap:
+    #             score.lyrics.remap(
+    #                 remap_string=args.lyrics_remap, mscore=args.general_mscore
+    #             )
+    #         elif args.lyrics_fix:
+    #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
+    #         else:
+    #             score.lyrics.extract_lyrics(
+    #                 number=args.lyrics_extract, mscore=args.general_mscore
+    #             )
 
-def __no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
-    for e in errors:
-        if isinstance(e, error):
-            return False
-    return True
+    #     elif args.subcommand == "meta":
+    #         score = Score(file)
+    #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
+    #             pre: dict[str, str] = score.meta.interface.export_to_dict()
+    #             if args.meta_clean:
+    #                 score.meta.clean_metadata(fields_spec=args.meta_clean)
+    #             if args.meta_json:
+    #                 score.meta.export_json()
+    #             if args.meta_dist:
+    #                 for a in args.meta_dist:
+    #                     score.meta.distribute_field(
+    #                         source_fields=a[0], format_string=a[1]
+    #                     )
+    #             if args.meta_set:
+    #                 for a in args.meta_set:
+    #                     score.meta.set_field(destination_field=a[0], format_string=a[1])
+    #             if args.meta_delete:
+    #                 score.meta.delete_duplicates()
+    #             if args.meta_sync:
+    #                 score.meta.sync_fields()
+    #             if args.meta_log:
+    #                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+    #             post: dict[str, str] = score.meta.interface.export_to_dict()
+    #             score.meta.show(pre, post)
 
+    #             if args.general_diff:
+    #                 score.print_diff()
 
-def execute(cli_args: typing.Sequence[str] | None = None) -> None:
-    args: settings.DefaultArguments = typing.cast(
-        settings.DefaultArguments, cli.parser.parse_args(cli_args)
-    )
-    if args.general_config_file:
-        config = settings.parse_config_ini(args.general_config_file)
-        if config:
-            args = settings.merge_config_into_args(config, args)
-    settings.set_args(args)
+    #             if not args.general_dry_run and not score.errors and pre != post:
+    #                 score.save(mscore=args.general_mscore)
 
-    if args.subcommand == "help":
-        __show_all_help(args)
-        sys.exit()
+    #     elif args.subcommand == "rename":
+    #         score = rename_filename(file)
 
-    files = utils.list_score_paths(path=args.path, glob=args.general_glob)
+    #     elif args.subcommand == "export":
+    #         score = Score(file)
+    #         if args.export_extension:
+    #             score.export.to_extension(extension=args.export_extension)
+    #         else:
+    #             score.export.to_extension()
+    #     elif args.subcommand == "style":
+    #         score = Score(file)
 
-    for file in files:
-        print("\n" + utils.color(file, "red"))
+    #         if args.style_set:
+    #             for a in args.style_set:
+    #                 score.style.set_value(a[0], a[1])
 
-        if args.general_backup:
-            score = Score(file)
-            score.backup()
+    #         score.save()
+    #     else:
+    #         raise ValueError("Unknown subcommand")
 
-        if args.subcommand == "clean":
-            score = Score(file)
-            print(score.filename)
-            score.clean()
-            if args.clean_style:
-                score.style.merge(styles=args.clean_style.name)
-            score.save(mscore=args.general_mscore)
-
-        elif args.subcommand == "lyrics":
-            score = Score(file)
-            if args.lyrics_remap:
-                score.lyrics.remap(
-                    remap_string=args.lyrics_remap, mscore=args.general_mscore
-                )
-            elif args.lyrics_fix:
-                score.lyrics.fix_lyrics(mscore=args.general_mscore)
-            else:
-                score.lyrics.extract_lyrics(
-                    number=args.lyrics_extract, mscore=args.general_mscore
-                )
-
-        elif args.subcommand == "meta":
-            score = Score(file)
-            if __no_error(lxml.etree.XMLSyntaxError, score.errors):
-                pre: dict[str, str] = score.meta.interface.export_to_dict()
-                if args.meta_clean:
-                    score.meta.clean_metadata(fields_spec=args.meta_clean)
-                if args.meta_json:
-                    score.meta.export_json()
-                if args.meta_dist:
-                    for a in args.meta_dist:
-                        score.meta.distribute_field(
-                            source_fields=a[0], format_string=a[1]
-                        )
-                if args.meta_set:
-                    for a in args.meta_set:
-                        score.meta.set_field(destination_field=a[0], format_string=a[1])
-                if args.meta_delete:
-                    score.meta.delete_duplicates()
-                if args.meta_sync:
-                    score.meta.sync_fields()
-                if args.meta_log:
-                    score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
-                post: dict[str, str] = score.meta.interface.export_to_dict()
-                score.meta.show(pre, post)
-
-                if args.general_diff:
-                    score.print_diff()
-
-                if not args.general_dry_run and not score.errors and pre != post:
-                    score.save(mscore=args.general_mscore)
-
-        elif args.subcommand == "rename":
-            score = rename_filename(file)
-
-        elif args.subcommand == "export":
-            score = Score(file)
-            if args.export_extension:
-                score.export.to_extension(extension=args.export_extension)
-            else:
-                score.export.to_extension()
-        elif args.subcommand == "style":
-            score = Score(file)
-
-            if args.style_list_3 or args.style_list_4:
-
-                def list_styles(version: int) -> None:
-                    """There are many styles in MuseScore. We dynamically
-                    import the module to avoid long load time"""
-                    style_names = importlib.import_module(
-                        "mscxyz.style_names", package=None
-                    )
-                    style_names.list_styles(version)
-                    sys.exit()
-
-                if args.style_list_3:
-                    list_styles(3)
-                if args.style_list_4:
-                    list_styles(3)
-
-            if args.style_set:
-                for a in args.style_set:
-                    score.style.set_value(a[0], a[1])
-
-            score.save()
-        else:
-            raise ValueError("Unknown subcommand")
-
-        __report_errors(score.errors)
-
-
-if __name__ == "__main__":
-    execute()
+    #     __report_errors(score.errors)

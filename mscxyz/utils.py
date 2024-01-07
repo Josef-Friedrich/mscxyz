@@ -11,7 +11,7 @@ import tempfile
 import typing
 import zipfile
 from pathlib import Path
-from typing import Any, List, Literal, Optional
+from typing import Any, Generator, List, Literal, Optional
 
 import lxml
 import lxml.etree
@@ -59,6 +59,41 @@ def list_score_paths(
                 out.append(scores_path)
     out.sort()
     return out
+
+
+def list_files(
+    src: str | list[str], extension: ListExtension = "both", glob: Optional[str] = None
+) -> Generator[Path, None, None]:
+    """List all scores in path.
+
+    :param src: A directory to search for files or a file path or multiple directories or paths.
+    :param extension: Possible values: “both”, “mscz” or “mscx”.
+    :param glob: A glob string, see fnmatch
+    """
+
+    if not glob:
+        if extension == "both":
+            glob = "*.msc[xz]"
+        elif extension in ("mscx", "mscz"):
+            glob = f"*.{extension}"
+        else:
+            raise ValueError(
+                "Possible values for the argument “extension” "
+                "are: “both”, “mscx”, “mscz”"
+            )
+
+    if isinstance(src, str):
+        src = [src]
+
+    for s in src:
+        path = Path(s)
+        if path.is_file() and fnmatch.fnmatch(s, glob):
+            yield path
+        elif path.is_dir():
+            for root, _, files in os.walk(path):
+                for file in files:
+                    if fnmatch.fnmatch(file, glob):
+                        yield Path(root) / file
 
 
 def list_zero_alphabet() -> List[str]:

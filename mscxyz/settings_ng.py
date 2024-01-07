@@ -4,10 +4,11 @@ submodules using the function `get_args()`."""
 
 from __future__ import annotations
 
+import argparse
 import configparser
 import os
 from io import TextIOWrapper
-from typing import Literal, Optional
+from typing import Literal, Optional, Sequence, cast
 
 
 class DefaultArguments:
@@ -19,6 +20,7 @@ class DefaultArguments:
     general_executable: Optional[str] = None
     general_glob: str = "*.mscx"
     general_mscore: bool = False
+    general_only_list: bool = False
     general_verbose: int = 0
 
     subcommand: Optional[
@@ -58,8 +60,8 @@ class DefaultArguments:
     rename_target: Optional[str] = None
 
     # style
-    style_list_3: bool = False
-    style_list_4: bool = False
+    style_styles_v3: bool = False
+    style_styles_v4: bool = False
     style_set: Optional[list[list[str]]] = None
 
     path: str = "."
@@ -140,5 +142,18 @@ def merge_config_into_args(
                 setattr(args, arg, True)
             else:
                 setattr(args, arg, False)
+
+    return args
+
+
+def parse_args(
+    parser: argparse.ArgumentParser, cli_args: Sequence[str] | None = None
+) -> DefaultArguments:
+    args: DefaultArguments = cast(DefaultArguments, parser.parse_args(cli_args))
+    if args.general_config_file:
+        config = parse_config_ini(args.general_config_file)
+        if config:
+            args = merge_config_into_args(config, args)
+    set_args(args)
 
     return args

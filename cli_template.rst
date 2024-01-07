@@ -2,4 +2,9 @@
 Comande line interface
 **********************
 
-{{ cli('musescore-manager help --rst all') }}
+{{ cli('musescore-manager --help') | literal }}
+
+Legacy
+======
+
+{{ cli('mscx-manager help --rst all') }}

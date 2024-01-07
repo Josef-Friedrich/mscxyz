@@ -8,7 +8,7 @@
 mscxyz - The MuseScore Manager
 ==============================
 
-Manipulate the XML based ``.mscz`` and ``.mscx`` files of the notation software 
+Manipulate the XML based ``.mscz`` and ``.mscx`` files of the notation software
 `MuseScore <https://musescore.org>`_.
 
 Features
@@ -19,7 +19,7 @@ Features
 * Set, read and synchronized meta tags
 * Set style properties
 * Can handle MuseScore 2, 3 and 4 files
-* Command line interface 
+* Command line interface
 * Python API
 
 Installation
@@ -29,10 +29,15 @@ Installation
 
     pip install mscxyz
 
-Usage
-=====
+CLI Usage
+=========
 
-{{ cli('musescore-manager help --rst all') }}
+{{ cli('musescore-manager --help') | literal }}
+
+Legacy CLI Usage
+================
+
+{{ cli('mscx-manager help --rst all') }}
 
 API Usage
 =========
@@ -54,7 +59,7 @@ Examine the most important attribute of a ``Score`` object: ``xml_root``.
 It is the root element of the XML document in which MuseScore stores all information
 about a score.
 It’s best to take a look at the `lxml API <https://lxml.de/api.html>`_ documentation
-to see what you can do with this element. So much can be revealed: 
+to see what you can do with this element. So much can be revealed:
 lots of interesting things.
 
 .. code-block:: Python
@@ -113,13 +118,13 @@ List score paths in a nested folder structure:
         score = Score(score_path)
         assert score.path.exists()
         assert score.extension == "mscz"
-        
+
     assert len(score_paths) == 4
 
-    assert "level1/level2/level3/score3.mscz" in score_paths[0] 
-    assert "level1/level2/score2.mscz" in score_paths[1] 
-    assert "level1/score1.mscz" in score_paths[2] 
-    assert "score0.mscz" in score_paths[3] 
+    assert "level1/level2/level3/score3.mscz" in score_paths[0]
+    assert "level1/level2/score2.mscz" in score_paths[1]
+    assert "level1/score1.mscz" in score_paths[2]
+    assert "score0.mscz" in score_paths[3]
 
 ``meta``
 --------
@@ -158,7 +163,7 @@ Set all font faces (using a for loop, not available in MuseScore 2):
 
     score = Score('score.mscz')
     assert score.style.get_value("defaultFontFace") == "FreeSerif"
-    
+
     for element in score.style.styles:
         if "FontFace" in element.tag:
             element.text = "Alegreya"
@@ -170,7 +175,7 @@ Set all font faces (using a for loop, not available in MuseScore 2):
 
 .. code-block:: Python
 
-Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``, 
+Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``,
 not available in MuseScore 2):
 
 .. code-block:: Python
@@ -263,7 +268,7 @@ Configuration file
     [rename]
     format = '$combined_title ($combined_composer)'
 
-Other MuseScore related projects 
+Other MuseScore related projects
 ================================
 
 * https://github.com/johentsch/ms3
