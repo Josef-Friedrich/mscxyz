@@ -22,73 +22,65 @@ def reload(score: Score) -> Style:
 
 
 def test_method_get_element_create() -> None:
-    score: Score = helper.get_score("All_Dudes.mscx", version=2)
-    element = score.style.get_element("x/y/z")
+    style: Style = helper.get_style("All_Dudes.mscx", version=2)
+    element = style.get_element("x/y/z")
     element.attrib["y"] = "YYY"
     assert element.tag == "z"
-    score.save()
-    assert reload(score).get_element("x/y/z").attrib["y"] == "YYY"
+    assert style.reload(save=True).get_element("x/y/z").attrib["y"] == "YYY"
 
 
 def test_method_set_attributes() -> None:
-    helper.get_score
-    score = helper.get_score("All_Dudes.mscx", version=3)
-    score.style.set_attributes("XXX", {"one": 1, "two": 2})
-    score.save()
-    assert reload(score).get_element("XXX").attrib["one"] == "1"
+    style: Style = helper.get_style("All_Dudes.mscx", version=3)
+    style.set_attributes("XXX", {"one": 1, "two": 2})
+    assert style.reload(save=True).get_element("XXX").attrib["one"] == "1"
 
 
 class TestClassStyle:
     """Test on MuseScore Version 2"""
 
-    score: Score
+    style: Style
 
     def setup_method(self) -> None:
-        self.score = helper.get_score("All_Dudes.mscx", version=2)
+        self.style = helper.get_style("All_Dudes.mscx", version=2)
 
     def test_attributes_style(self) -> None:
-        assert self.score.style.parent_element.tag == "Style"
+        assert self.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
-        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+        assert self.style.get_value("staffUpperBorder") == "6.5"
 
     def test_method_get_muliple_element_path(self) -> None:
-        assert self.score.style.get_value("page-layout/page-height") == "1584"
+        assert self.style.get_value("page-layout/page-height") == "1584"
 
     def test_method_get_element(self) -> None:
-        assert self.score.style.get_element("voltaY").tag == "voltaY"
+        assert self.style.get_element("voltaY").tag == "voltaY"
 
     def test_method_get_value(self) -> None:
-        assert self.score.style.get_value("voltaY") == "-2"
+        assert self.style.get_value("voltaY") == "-2"
 
     def test_method_set_value(self) -> None:
-        self.score.style.set_value("staffUpperBorder", 99)
-        self.score.save()
-        assert reload(self.score).get_value("staffUpperBorder") == "99"
+        self.style.set_value("staffUpperBorder", 99)
+        assert self.style.reload(save=True).get_value("staffUpperBorder") == "99"
 
     def test_method_set_value_create(self) -> None:
-        self.score.style.set_value("lol", "lol")
-        self.score.save()
-        assert reload(self.score).get_value("lol") == "lol"
+        self.style.set_value("lol", "lol")
+        assert self.style.reload(save=True).get_value("lol") == "lol"
 
     def test_method_set_value_muliple_element_path(self) -> None:
-        self.score.style.set_value("page-layout/page-height", 99)
-        self.score.save()
-        assert reload(self.score).get_value("page-layout/page-height") == "99"
+        self.style.set_value("page-layout/page-height", 99)
+        assert self.style.reload(save=True).get_value("page-layout/page-height") == "99"
 
     def test_method_set_muliple_element_path_multiple_times(self) -> None:
-        style = self.score.style
-        style.set_value("page-layout/page-height", 99)
-        style.set_value("page-layout/page-width", 100)
-        style.set_value("page-layout/page-depth", 101)
-        self.score.save()
-        style_new = reload(self.score)
+        self.style.set_value("page-layout/page-height", 99)
+        self.style.set_value("page-layout/page-width", 100)
+        self.style.set_value("page-layout/page-depth", 101)
+        style_new = self.style.reload(save=True)
         assert style_new.get_value("page-layout/page-depth") == "101"
         assert style_new.get_value("page-layout/page-height") == "99"
         assert style_new.get_value("page-layout/page-width") == "100"
 
     def test_method_get_text_style(self) -> None:
-        title = self.score.style.get_text_style("Title")
+        title = self.style.get_text_style("Title")
         assert title == {
             "halign": "center",
             "size": "28",
@@ -100,10 +92,8 @@ class TestClassStyle:
         }
 
     def test_method_set_text_style(self) -> None:
-        self.score.style.set_text_style("Title", {"size": 99})
-        self.score.save()
-
-        title = reload(self.score).get_text_style("Title")
+        self.style.set_text_style("Title", {"size": 99})
+        title = self.style.reload(save=True).get_text_style("Title")
         assert title["size"] == "99"
 
 
