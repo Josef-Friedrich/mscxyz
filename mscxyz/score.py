@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import difflib
 import os
 import shutil
 import typing
@@ -17,6 +18,7 @@ from mscxyz import utils
 from mscxyz.export import Export
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
+from mscxyz.settings import get_args
 from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
@@ -52,6 +54,8 @@ class Score:
     errors: list[Exception]
     """A list to store errors."""
 
+    __xml_string_initial: Optional[str] = None
+
     __export: Optional[Export] = None
 
     __lyrics: Optional[Lyrics] = None
@@ -79,6 +83,14 @@ class Score:
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
+
+        args = get_args()
+        if args.general_diff:
+            self.__xml_string_initial = self.xml_string
+
+    @property
+    def xml_string(self) -> str:
+        return utils.xml.tostring(self.xml_root)
 
     @property
     def version_major(self) -> int:
@@ -189,6 +201,27 @@ class Score:
         )
         strip_tags(self.xml_root, "font", "b", "i", "pos", "offset")
 
+    def print_diff(self) -> None:
+        """
+        Print or return a colour-coded diff of two items in a list of strings.
+        Default: Compare first and last strings; print the output; return None.
+        """
+        if self.__xml_string_initial is None:
+            return
+        green = "\x1b[32m"  # text color green
+        red = "\x1b[31m"  # text color red
+        reset = "\x1b[0m"  # reset to the default color
+
+        diff = difflib.unified_diff(
+            self.__xml_string_initial.splitlines(), self.xml_string.splitlines()
+        )
+
+        for line in diff:
+            if line.startswith("-"):
+                print(red + line + reset)
+            elif line.startswith("+"):
+                print(green + line + reset)
+
     def save(self, new_dest: str = "", mscore: bool = False) -> None:
         """Save the MuseScore file.
 
@@ -196,6 +229,9 @@ class Score:
         :param mscore: Save the MuseScore file by opening it with the
           MuseScore executable and save it there.
         """
+        args = get_args()
+        if args.general_dry_run:
+            return
         if new_dest:
             dest: str = new_dest
         else:

@@ -14,6 +14,7 @@ class DefaultArguments:
     general_backup: bool = False
     general_colorize: bool = False
     general_config_file: Optional[str] = None
+    general_diff: bool = False
     general_dry_run: bool = False
     general_executable: Optional[str] = None
     general_glob: str = "*.mscx"

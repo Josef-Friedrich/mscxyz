@@ -101,6 +101,13 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--diff",
+    action="store_true",
+    dest="general_diff",
+    help="Show a diff of the XML file before and after the manipulation.",
+)
+
+parser.add_argument(
     "-e",
     "--executable",
     dest="general_executable",

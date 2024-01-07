@@ -182,6 +182,10 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
                     score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
                 post: dict[str, str] = score.meta.interface.export_to_dict()
                 score.meta.show(pre, post)
+
+                if args.general_diff:
+                    score.print_diff()
+
                 if not args.general_dry_run and not score.errors and pre != post:
                     score.save(mscore=args.general_mscore)
 
@@ -216,6 +220,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
             if args.style_set:
                 for a in args.style_set:
                     score.style.set_value(a[0], a[1])
+
             score.save()
         else:
             raise ValueError("Unknown subcommand")

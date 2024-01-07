@@ -201,6 +201,22 @@ class xml:
         return lxml.etree.parse(path).getroot()
 
     @staticmethod
+    def tostring(element: _Element | _ElementTree) -> str:
+        """
+        Convert the XML element or tree to a string.
+
+        :param element: The XML element or tree to write.
+        :return: None
+        """
+        # maybe use: xml_declaration=True, pretty_print=True
+        # TestFileCompare not passing ...
+        return (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            + lxml.etree.tostring(element, encoding="UTF-8").decode("utf-8")
+            + "\n"
+        )
+
+    @staticmethod
     def write(path: str | Path, element: _Element | _ElementTree) -> None:
         """
         Write the XML element or tree to the specified file.
@@ -210,13 +226,7 @@ class xml:
         :return: None
         """
         with open(path, "w") as document:
-            # maybe use: xml_declaration=True, pretty_print=True
-            # TestFileCompare not passing ...
-            document.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            document.write(
-                lxml.etree.tostring(element, encoding="UTF-8").decode("utf-8")
-            )
-            document.write("\n")
+            document.write(xml.tostring(element))
 
     @staticmethod
     def find_safe(element: _Element, path: str) -> _Element:
