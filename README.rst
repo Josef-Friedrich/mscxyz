@@ -42,13 +42,14 @@ CLI Usage
 
     usage: musescore-manager [-h] [-V] [-b] [-k] [-C GENERAL_CONFIG_FILE] [-d]
                              [-g GENERAL_GLOB] [-m] [--diff] [-e FILE_PATH] [-v]
-                             [--list-files] [-s CLEAN_STYLE] [-E EXPORT_EXTENSION]
-                             [-c META_CLEAN] [-D] [-i SOURCE_FIELDS FORMAT_STRING]
-                             [-j] [-l DESTINATION FORMAT_STRING] [-y]
+                             [--list-files] [-E EXPORT_EXTENSION] [-c META_CLEAN]
+                             [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
+                             [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
-                             [-t RENAME_TARGET] [--s3] [--s4] [-Y STYLE VALUE]
+                             [-t RENAME_TARGET] [-s STYLE VALUE] [-Y STYLE_FILE]
+                             [--s3] [--s4]
                              [path ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -84,7 +85,7 @@ CLI Usage
     clean:
       Clean and reset the formating of the "*.mscx" file
 
-      -s CLEAN_STYLE, --style CLEAN_STYLE
+      -Y STYLE_FILE, --style-file STYLE_FILE
                             Load a "*.mss" style file and include the contents of this
                             file.
 
@@ -435,10 +436,10 @@ CLI Usage
     style:
       Change the styles.
 
+      -s STYLE VALUE, --style STYLE VALUE
+                            Set a single style. For example: --style pageWidth 8.5
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
-      -Y STYLE VALUE, --set-style STYLE VALUE
-                            Set a single style. For example: --set-style pageWidth 8.5
 
 Legacy CLI Usage
 ================

@@ -219,31 +219,34 @@ class TestClassStyleWithoutTags:
         assert unkown["size"] == "99"
 
 
-def test_method_merge_style() -> None:
+@pytest.mark.parametrize(
+    "styles",
+    (
+        "<pageWidth>8.27</pageWidth>",
+        """<?xml version="1.0"?>
+    <museScore version="2.06">
+        <Style>
+            <pageWidth>8.27</pageWidth>
+        </Style>
+    </museScore>
+    """,
+    ),
+)
+def test_method_set_all(styles: str) -> None:
+    style = helper.get_style("simple.mscx")
+    style.load_styles_as_string(styles)
+    result = style.score.xml_root.find("Score/Style")
+    assert result is not None
+    assert result[0].tag == "pageWidth"
+    assert result[0].text == "8.27"
+
+
+def test_load_style_file() -> None:
     score = helper.get_score("simple.mscx")
-    styles = """
-        <TextStyle>
-            <halign>center</halign>
-            <valign>bottom</valign>
-            <xoffset>0</xoffset>
-            <yoffset>-1</yoffset>
-            <offsetType>spatium</offsetType>
-            <name>Form Section</name>
-            <family>Alegreya Sans</family>
-            <size>12</size>
-            <bold>1</bold>
-            <italic>1</italic>
-            <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-            <frameWidthS>0.1</frameWidthS>
-            <paddingWidthS>0.2</paddingWidthS>
-            <frameRound>0</frameRound>
-            <frameColor r="0" g="0" b="0" a="255"/>
-            </TextStyle>
-    """
     score.clean()
-    score.style.merge(styles)
+    style = helper.get_file("style.mss", 2)
+    score.style.load_style_file(style)
 
     result = score.xml_root.find("Score/Style")
     assert result is not None
-    assert result[0][0].tag == "halign"
-    assert result[0][0].text == "center"
+    assert result[0].text == "77"

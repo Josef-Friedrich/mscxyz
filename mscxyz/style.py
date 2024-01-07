@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import os
 import typing
+from io import TextIOWrapper
+from pathlib import Path
 
 import lxml
 import lxml.etree
@@ -274,76 +275,43 @@ class Style:
     def musical_text_font(self, font_face: str) -> None:
         self.set_value("musicalTextFont", font_face)
 
-    def merge(self, styles: str) -> None:
-        """Merge styles into the XML tree.
+    def __set_parent_style_element(self, parent_style: _Element) -> None:
+        score_element: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
+        score_element.insert(0, parent_style)
+        self.parent_element = parent_style
 
-        :param styles: The path of the style file or a string containing
-          the XML style markup.
+    def load_styles_as_string(self, styles: str) -> None:
+        """Load styles into the XML tree and replace the old styles.
 
-        ``styles`` may not contain surrounding ``<Style>`` tags. This input is
-        valid:
+        :param styles: A string containing the XML style markup.
+
+        For example this inputs are valid:
+
+        Without declaration:
 
         .. code :: XML
 
-            <TextStyle>
-              <halign>center</halign>
-              <valign>bottom</valign>
-              <xoffset>0</xoffset>
-              <yoffset>-1</yoffset>
-              <offsetType>spatium</offsetType>
-              <name>Form Section</name>
-              <family>Alegreya Sans</family>
-              <size>12</size>
-              <bold>1</bold>
-              <italic>1</italic>
-              <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-              <frameWidthS>0.1</frameWidthS>
-              <paddingWidthS>0.2</paddingWidthS>
-              <frameRound>0</frameRound>
-              <frameColor r="0" g="0" b="0" a="255"/>
-              </TextStyle>
+            <pageWidth>8.27</pageWidth>
 
-        This input is invalid:
+        With declaration:
 
         .. code :: XML
 
             <?xml version="1.0"?>
             <museScore version="2.06">
-              <Style>
-                <TextStyle>
-                  <halign>center</halign>
-                  <valign>bottom</valign>
-                  <xoffset>0</xoffset>
-                  <yoffset>-1</yoffset>
-                  <offsetType>spatium</offsetType>
-                  <name>Form Section</name>
-                  <family>Alegreya Sans</family>
-                  <size>12</size>
-                  <bold>1</bold>
-                  <italic>1</italic>
-                  <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-                  <frameWidthS>0.1</frameWidthS>
-                  <paddingWidthS>0.2</paddingWidthS>
-                  <frameRound>0</frameRound>
-                  <frameColor r="0" g="0" b="0" a="255"/>
-                  </TextStyle>
-                </Style>
-              </museScore>
-
+                <Style>
+                    <pageWidth>8.27</pageWidth>
         """
-        if os.path.exists(styles):
-            style: _Element = lxml.etree.parse(styles).getroot()
-        else:
-            # <?xml ... tag without encoding to avoid this error:
-            # ValueError: Unicode strings with encoding declaration are
-            # not supported. Please use bytes input or XML fragments without
-            # declaration.
-            pre = '<?xml version="1.0"?><museScore version="2.06"><Style>'
-            post = "</Style></museScore>"
-            style = lxml.etree.XML(pre + styles + post)
 
-        parent: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
-        parent.insert(0, style[0])
+        if "<Style>" not in styles:
+            styles = f'<?xml version="1.0"?>\n<museScore version="{self.score.version}"><Style>{styles}</Style></museScore>'
+
+        style = lxml.etree.XML(styles)
+        self.__set_parent_style_element(style[0])
+
+    def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
+        style: _Element = utils.xml.read(file)
+        self.__set_parent_style_element(style[0])
 
     def reload(self, save: bool = False) -> Style:
         """

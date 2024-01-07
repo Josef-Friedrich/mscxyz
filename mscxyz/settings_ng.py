@@ -8,7 +8,7 @@ import argparse
 import configparser
 import os
 from io import TextIOWrapper
-from typing import Literal, Optional, Sequence, cast
+from typing import Optional, Sequence, cast
 
 
 class DefaultArguments:
@@ -22,13 +22,6 @@ class DefaultArguments:
     general_mscore: bool = False
     general_only_list: bool = False
     general_verbose: int = 0
-
-    subcommand: Optional[
-        Literal["clean", "export", "help", "lyrics", "meta", "rename", "style"]
-    ] = None
-
-    # clean
-    clean_style: Optional[TextIOWrapper] = None
 
     # export
     export_extension: Optional[str] = None
@@ -60,10 +53,10 @@ class DefaultArguments:
     rename_target: Optional[str] = None
 
     # style
+    style_set: list[list[str]] = []
+    style_file: Optional[TextIOWrapper] = None
     style_styles_v3: bool = False
     style_styles_v4: bool = False
-    style_set: Optional[list[list[str]]] = None
-
     path: str = "."
 
 

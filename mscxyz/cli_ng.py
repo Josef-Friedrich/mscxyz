@@ -157,15 +157,6 @@ group_clean = parser.add_argument_group(
     'Clean and reset the formating of the "*.mscx" file',
 )
 
-group_clean.add_argument(
-    "-s",
-    "--style",
-    dest="clean_style",
-    type=open,
-    help='Load a "*.mss" style file and include the contents of \
-    this file.',
-)
-
 ###############################################################################
 # export
 ###############################################################################
@@ -442,6 +433,25 @@ group_rename.add_argument(
 group_style = parser.add_argument_group("style", "Change the styles.")
 
 group_style.add_argument(
+    "-s",
+    "--style",
+    nargs=2,
+    action="append",
+    metavar=("STYLE", "VALUE"),
+    default=[],
+    dest="style_set",
+    help="Set a single style. For example: --style pageWidth 8.5",
+)
+
+group_clean.add_argument(
+    "-Y",
+    "--style-file",
+    dest="style_file",
+    type=open,
+    help='Load a "*.mss" style file and include the contents of this file.',
+)
+
+group_style.add_argument(
     "--s3",
     "--styles-v3",
     dest="style_styles_v3",
@@ -455,16 +465,6 @@ group_style.add_argument(
     dest="style_styles_v4",
     action="store_true",
     help="List all possible version 4 styles.",
-)
-
-group_style.add_argument(
-    "-Y",
-    "--set-style",
-    nargs=2,
-    action="append",
-    metavar=("STYLE", "VALUE"),
-    dest="style_set",
-    help="Set a single style. For example: --set-style pageWidth 8.5",
 )
 
 
@@ -533,7 +533,21 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             continue
 
         score = Score(file)
-        print(score)
+
+        if args.general_diff:
+            score.make_snapshot()
+
+        if args.style_file:
+            score.style.load_style_file(args.style_file.name)
+
+        for field, value in args.style_set:
+            score.style.set_value(field, value)
+
+        if args.general_diff:
+            score.print_diff()
+        if not args.general_dry_run:
+            pass
+            # score.save()
 
     # for file in files:
     #     print("\n" + utils.color(file, "red"))
@@ -610,7 +624,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
     #             for a in args.style_set:
     #                 score.style.set_value(a[0], a[1])
 
-    #         score.save()
+    #
     #     else:
     #         raise ValueError("Unknown subcommand")
 

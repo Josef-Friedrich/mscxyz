@@ -142,7 +142,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
             print(score.filename)
             score.clean()
             if args.clean_style:
-                score.style.merge(styles=args.clean_style.name)
+                score.style.load_style_file(args.clean_style.name)
             score.save(mscore=args.general_mscore)
 
         elif args.subcommand == "lyrics":

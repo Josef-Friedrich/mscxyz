@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import typing
 import zipfile
+from io import TextIOWrapper
 from pathlib import Path
 from typing import Any, Generator, List, Literal, Optional
 
@@ -226,7 +227,7 @@ def color(
 
 class xml:
     @staticmethod
-    def read(path: str | Path) -> _Element:
+    def read(path: str | Path | TextIOWrapper) -> _Element:
         """
         Read an XML file and return the root element.
 
@@ -387,6 +388,12 @@ class xml:
         :return: None
         """
         xml.find_safe(element, path).text = str(value)
+
+    @staticmethod
+    def replace(old: _Element, new: _Element) -> None:
+        parent: _Element | None = old.getparent()
+        if parent is not None:
+            parent.replace(old, new)
 
     @staticmethod
     def remove(element: _Element | None) -> None:

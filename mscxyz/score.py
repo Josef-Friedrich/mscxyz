@@ -84,10 +84,6 @@ class Score:
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
 
-        args = get_args()
-        if args.general_diff:
-            self.__xml_string_initial = self.xml_string
-
     @property
     def xml_string(self) -> str:
         return utils.xml.tostring(self.xml_root)
@@ -152,6 +148,9 @@ class Score:
         if self.__style is None:
             self.__style = Style(self)
         return self.__style
+
+    def make_snapshot(self) -> None:
+        self.__xml_string_initial = self.xml_string
 
     def new(self) -> Score:
         return Score(self.path)
