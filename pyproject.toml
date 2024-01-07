@@ -39,8 +39,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-"musescore-manager" = "mscxyz:execute"
-"musescore-manager-ng" = "mscxyz.cli_ng:cli"
+"musescore-manager" = "mscxyz.cli_ng:cli"
 "mscx-manager" = "mscxyz:execute"
 
 [[tool.readme_patcher.file]]
