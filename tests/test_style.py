@@ -124,9 +124,7 @@ def test_property_get_musical_symbols_font(version: int, expected: str) -> None:
 def test_property_set_musical_symbols_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
     style.musical_symbols_font = "Test Font"
-    style.score.save()
-    new_style = style.reload()
-    assert new_style.musical_symbols_font == "Test Font"
+    assert style.reload(save=True).musical_symbols_font == "Test Font"
 
 
 @pytest.mark.parametrize(
@@ -148,9 +146,7 @@ def test_property_get_musical_text_font(
 def test_property_set_musical_text_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
     style.musical_text_font = "Test Font"
-    style.score.save()
-    new_style = style.reload()
-    assert new_style.musical_text_font == "Test Font"
+    assert style.reload(save=True).musical_text_font == "Test Font"
 
 
 class TestVersion3:

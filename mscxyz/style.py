@@ -345,19 +345,12 @@ class Style:
         parent: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
         parent.insert(0, style[0])
 
-    def reload(self) -> Style:
+    def reload(self, save: bool = False) -> Style:
         """
-        Reload the style object from the score file.
+        Reload the MuseScore file.
 
-        :return: The reloaded style object.
+        :param save: Whether to save the changes before reloading. Default is False.
+
+        :return: The reloaded Style object.
         """
-        return self.score.reload().style
-
-    def save(self) -> None:
-        """Save the XML tree to the style file."""
-        if self.score.style_file:
-            element: _Element = lxml.etree.Element(
-                "museScore", {"version": str(self.score.version)}
-            )
-            element.append(self.parent_element)
-            utils.xml.write(self.score.style_file, element)
+        return self.score.reload(save).style

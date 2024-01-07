@@ -230,8 +230,14 @@ class Score:
             if self.extension == "mscz":
                 xml_dest = self.xml_file
             utils.xml.write(xml_dest, self.xml_root)
-            if self.__style:
-                self.__style.save()
+
+            # Since MuseScore 4 the style is stored in a separate file.
+            if self.style_file:
+                element: _Element = lxml.etree.Element(
+                    "museScore", {"version": str(self.version)}
+                )
+                element.append(self.style.parent_element)
+                utils.xml.write(self.style_file, element)
 
             if self.extension == "mscz" and self.zip_container:
                 self.zip_container.save(dest)
@@ -247,6 +253,14 @@ class Score:
         with open(self.xml_file, "r") as f:
             return f.read()
 
-    def reload(self) -> Score:
-        """Reload the MuseScore file."""
+    def reload(self, save: bool = False) -> Score:
+        """
+        Reload the MuseScore file.
+
+        :param save: Whether to save the changes before reloading. Default is False.
+
+        :return: The reloaded Score object.
+        """
+        if save:
+            self.save()
         return Score(self.path)
