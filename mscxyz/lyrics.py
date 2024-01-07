@@ -213,3 +213,15 @@ class Lyrics:
             self.fix_lyrics_verse(verse_number)
 
         self.score.save(mscore=mscore)
+
+    def reload(self, save: bool = False) -> Lyrics:
+        """
+        Reload the MuseScore file.
+
+        :param save: Whether to save the changes before reloading. Default is False.
+
+        :return: The reloaded Lyrics object.
+
+        :see: :meth:`mscxyz.score.Score.reload`
+        """
+        return self.score.reload(save).lyrics

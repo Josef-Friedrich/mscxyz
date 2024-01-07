@@ -352,5 +352,7 @@ class Style:
         :param save: Whether to save the changes before reloading. Default is False.
 
         :return: The reloaded Style object.
+
+        :see: :meth:`mscxyz.score.Score.reload`
         """
         return self.score.reload(save).style

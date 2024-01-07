@@ -931,3 +931,15 @@ class Meta:
         json.dump(data, output, indent=4)
         output.close()
         return result_path
+
+    def reload(self, save: bool = False) -> Meta:
+        """
+        Reload the MuseScore file.
+
+        :param save: Whether to save the changes before reloading. Default is False.
+
+        :return: The reloaded Meta object.
+
+        :see: :meth:`mscxyz.score.Score.reload`
+        """
+        return self.score.reload(save).meta

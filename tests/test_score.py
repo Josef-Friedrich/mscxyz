@@ -19,16 +19,6 @@ from mscxyz.score import (
 from tests import helper
 
 
-@pytest.fixture()
-def score2x() -> Score:
-    return helper.get_score("simple.mscx", version=2)
-
-
-@pytest.fixture()
-def score4z() -> Score:
-    return helper.get_score("simple.mscz", version=4)
-
-
 class TestClassScore:
     def setup_method(self) -> None:
         self.score = helper.get_score("simple.mscx")
@@ -140,43 +130,30 @@ class TestScoreMscz4:
         assert self.file.extension == "mscz"
 
 
-class TestScoreVersion2:
-    score = helper.get_score("simple.mscz", 2)
-
-    def test_property_version(self) -> None:
-        assert self.score.version == 2.06
-
-    def test_property_version_major(self) -> None:
-        assert self.score.version_major == 2
-
-    def test_method_get_version(self) -> None:
-        assert self.score.get_version() == 2.06
+@pytest.mark.parametrize("version,expected", [(2, 2.06), (3, 3.01), (4, 4.2)])
+def test_attribute_version(version: int, expected: float) -> None:
+    score = helper.get_score("score.mscz", version)
+    assert score.version == expected
 
 
-class TestScoreVersion3:
-    score = helper.get_score("simple.mscz", 3)
-
-    def test_property_version(self) -> None:
-        assert self.score.version == 3.01
-
-    def test_property_version_major(self) -> None:
-        assert self.score.version_major == 3
-
-    def test_method_get_version(self) -> None:
-        assert self.score.get_version() == 3.01
+@pytest.mark.parametrize("version,expected", [(2, 2.06), (3, 3.01), (4, 4.2)])
+def test_method_get_version(version: int, expected: float) -> None:
+    score = helper.get_score("score.mscz", version)
+    assert score.get_version() == expected
 
 
-class TestScoreVersion4:
-    score = helper.get_score("simple.mscz", 4)
+@pytest.mark.parametrize("version", mscxyz.supported_versions)
+def test_property_version_major(version: int) -> None:
+    score = helper.get_score("score.mscz", version)
+    assert score.version_major == version
 
-    def test_property_version(self) -> None:
-        assert self.score.version == 4.2
 
-    def test_property_version_major(self) -> None:
-        assert self.score.version_major == 4
-
-    def test_method_get_version(self) -> None:
-        assert self.score.get_version() == 4.2
+def test_methods_reload(score: Score) -> None:
+    assert score.reload().__class__.__name__ == "Score"
+    assert score.export.reload().__class__.__name__ == "Export"
+    assert score.lyrics.reload().__class__.__name__ == "Lyrics"
+    assert score.meta.reload().__class__.__name__ == "Meta"
+    assert score.style.reload().__class__.__name__ == "Style"
 
 
 class TestClean:

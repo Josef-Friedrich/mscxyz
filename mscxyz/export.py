@@ -64,3 +64,15 @@ class Export:
                 str(self.score.path),
             ]
         )
+
+    def reload(self, save: bool = False) -> Export:
+        """
+        Reload the MuseScore file.
+
+        :param save: Whether to save the changes before reloading. Default is False.
+
+        :return: The reloaded Export object.
+
+        :see: :meth:`mscxyz.score.Score.reload`
+        """
+        return self.score.reload(save).export
