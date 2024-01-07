@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+from typing import Literal
+
+import pytest
+
+import mscxyz
 from mscxyz.score import Score
 from mscxyz.style import Style
 from tests import helper
@@ -100,6 +105,52 @@ class TestClassStyle:
 
         title = reload(self.score).get_text_style("Title")
         assert title["size"] == "99"
+
+
+@pytest.mark.parametrize(
+    "version,expected",
+    (
+        (2, None),
+        (3, None),
+        (4, "Leland"),
+    ),
+)
+def test_property_get_musical_symbols_font(version: int, expected: str) -> None:
+    style = helper.get_style("score.mscz", version)
+    assert style.musical_symbols_font == expected
+
+
+@pytest.mark.parametrize("version", mscxyz.supported_versions)
+def test_property_set_musical_symbols_font(version: int) -> None:
+    style = helper.get_style("score.mscz", version)
+    style.musical_symbols_font = "Test Font"
+    style.score.save()
+    new_style = style.reload()
+    assert new_style.musical_symbols_font == "Test Font"
+
+
+@pytest.mark.parametrize(
+    "version,expected",
+    (
+        (2, None),
+        (3, None),
+        (4, "Leland Text"),
+    ),
+)
+def test_property_get_musical_text_font(
+    version: Literal[2, 3, 4], expected: str | None
+) -> None:
+    style = helper.get_style("score.mscz", version)
+    assert style.musical_text_font == expected
+
+
+@pytest.mark.parametrize("version", mscxyz.supported_versions)
+def test_property_set_musical_text_font(version: int) -> None:
+    style = helper.get_style("score.mscz", version)
+    style.musical_text_font = "Test Font"
+    style.score.save()
+    new_style = style.reload()
+    assert new_style.musical_text_font == "Test Font"
 
 
 class TestVersion3:

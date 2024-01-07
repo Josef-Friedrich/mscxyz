@@ -81,24 +81,6 @@ class Style:
             output.append(element)
         return output
 
-    def set_all_font_faces(self, font_face: str) -> list[tuple[str, str, str]]:
-        """
-        Sets the font face for all elements in the parent element.
-
-        :param font_face: The new font face to be set.
-
-        :return: A list of tuples representing the changes made. Each tuple
-          contains the tag name, the old font face, and the new font face.
-        """
-        output: list[tuple[str, str, str]] = []
-        for element in self.parent_element:
-            if "FontFace" in element.tag:
-                old: str = utils.xml.get_text_safe(element)
-                change: tuple[str, str, str] = (element.tag, old, font_face)
-                element.text = font_face
-                output.append(change)
-        return output
-
     def get_element(self, element_path: str) -> _Element:
         """
         Determines an lxml element that is a child to the ``Style`` tag
@@ -125,7 +107,7 @@ class Style:
             element = self.__create_nested_element(element_path)
         return element
 
-    def get_value(self, element_path: str) -> str:
+    def get_value(self, element_path: str, raise_exception: bool = True) -> str | None:
         """
         Get the value (text) of a style tag.
 
@@ -134,8 +116,11 @@ class Style:
         """
         element: _Element = self.get_element(element_path)
         if element.text is None:
-            raise ValueError(f"Element {element} has no text!")
-        return element.text
+            if raise_exception:
+                raise ValueError(f"Element {element} has no text!")
+            return None
+        else:
+            return element.text
 
     def set_attributes(
         self, element_path: str, attributes: dict[str, str | int | float]
@@ -242,6 +227,53 @@ class Style:
                 element = lxml.etree.SubElement(text_style, element_name)
             element.text = str(value)
 
+    def set_all_font_faces(self, font_face: str) -> list[tuple[str, str, str]]:
+        """
+        Sets the font face for all elements in the parent element.
+
+        :param font_face: The new font face to be set.
+
+        :return: A list of tuples representing the changes made. Each tuple
+          contains the tag name, the old font face, and the new font face.
+        """
+        output: list[tuple[str, str, str]] = []
+        for element in self.parent_element:
+            if "FontFace" in element.tag:
+                old: str = utils.xml.get_text_safe(element)
+                change: tuple[str, str, str] = (element.tag, old, font_face)
+                element.text = font_face
+                output.append(change)
+        return output
+
+    @property
+    def musical_symbols_font(self) -> str | None:
+        """
+        .. code :: XML
+
+            <musicalSymbolFont>Leland</musicalSymbolFont>
+            <dynamicsFont>Leland</dynamicsFont>
+
+        """
+        return self.get_value("musicalSymbolFont", raise_exception=False)
+
+    @musical_symbols_font.setter
+    def musical_symbols_font(self, font_face: str) -> None:
+        self.set_value("musicalSymbolFont", font_face)
+        self.set_value("dynamicsFont", font_face)
+
+    @property
+    def musical_text_font(self) -> str | None:
+        """
+        .. code :: XML
+
+            <musicalTextFont>Leland Text</musicalTextFont>
+        """
+        return self.get_value("musicalTextFont", raise_exception=False)
+
+    @musical_text_font.setter
+    def musical_text_font(self, font_face: str) -> None:
+        self.set_value("musicalTextFont", font_face)
+
     def merge(self, styles: str) -> None:
         """Merge styles into the XML tree.
 
@@ -312,6 +344,14 @@ class Style:
 
         parent: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
         parent.insert(0, style[0])
+
+    def reload(self) -> Style:
+        """
+        Reload the style object from the score file.
+
+        :return: The reloaded style object.
+        """
+        return self.score.reload().style
 
     def save(self) -> None:
         """Save the XML tree to the style file."""
