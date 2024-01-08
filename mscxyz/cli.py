@@ -322,27 +322,23 @@ group_meta.add_argument(
 # lyrics
 ###############################################################################
 
-group_lyrics = parser.add_argument_group(
-    "lyrics",
-    """
-    Extract lyrics. Without any option this subcommand  extracts all lyrics
-    verses into separate mscx files. This generated mscx files contain only one
-    verse. The old verse number is appended to the file name, e. g.:
-    score_1.mscx.
-    """,
-)
+group_lyrics = parser.add_argument_group("lyrics")
 
 group_lyrics.add_argument(
     "-x",
     "--extract",
+    "--extract-lyrics",
     dest="lyrics_extract",
-    default="all",
-    help='The lyric verse number to extract or "all".',
+    help="Extract each lyrics verse into a separate MuseScore file. "
+    "Specify ”all” to extract all lyrics "
+    "verses. The old verse number is appended to the file name, e. g.: "
+    "score_1.mscx.",
 )
 
 group_lyrics.add_argument(
     "-r",
     "--remap",
+    "--remap-lyrics",
     dest="lyrics_remap",
     help='Remap lyrics. Example: "--remap 3:2,5:3". This \
     example remaps lyrics verse 3 to verse 2 and verse 5 to 3. \
@@ -355,6 +351,7 @@ group_lyrics.add_argument(
 group_lyrics.add_argument(
     "-F",
     "--fix",
+    "--fix-lyrics",
     action="store_true",
     dest="lyrics_fix",
     help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
@@ -556,9 +553,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         for field, value in args.style_set:
             score.style.set_value(field, value)
 
-        if args.general_diff:
-            score.print_diff()
-
         #     print("\n" + utils.color(file, "red"))
 
         #     if args.subcommand == "clean":
@@ -577,10 +571,11 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #             )
         #         elif args.lyrics_fix:
         #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
-        #         else:
-        #             score.lyrics.extract_lyrics(
-        #                 number=args.lyrics_extract, mscore=args.general_mscore
-        #             )
+        if args.lyrics_extract:
+            no = 0
+            if args.lyrics_extract != "all":
+                no = int(args.lyrics_extract)
+            score.lyrics.extract_lyrics(number=no)
 
         #     elif args.subcommand == "meta":
         #         score = Score(file)
@@ -628,6 +623,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #         if args.style_set:
         #             for a in args.style_set:
         #                 score.style.set_value(a[0], a[1])
+
+        if args.general_diff:
+            score.print_diff()
 
         if not args.general_dry_run:
             score.save()

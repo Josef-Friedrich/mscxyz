@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import typing
-from typing import Literal, Optional, Union
 
 import lxml.etree as etree
 from lxml.etree import _Element
@@ -127,26 +126,16 @@ class Lyrics:
         new_name: str = str(score.path).replace(ext, "_" + str(number) + ext)
         score.save(new_name, mscore)
 
-    def extract_lyrics(
-        self,
-        number: Optional[Union[int, str, Literal["all"]]] = None,
-        mscore: bool = False,
-    ) -> None:
+    def extract_lyrics(self, number: int | None = None) -> None:
         """Extract one lyric verse or all lyric verses.
 
-        :param mixed number: The lyric verse number or 'all'
+        :param number: The lyric verse number. 1 is the first verse.
         """
-
-        if number == "all":
+        if number is None or number == 0:
             for n in range(1, self.max + 1):
                 self.extract_one_lyrics_verse(n)
         else:
-            no: int
-            if number is None:
-                no = 1
-            else:
-                no = int(number)
-            self.extract_one_lyrics_verse(no)
+            self.extract_one_lyrics_verse(number)
 
     def fix_lyrics_verse(self, verse_number: int) -> None:
         """

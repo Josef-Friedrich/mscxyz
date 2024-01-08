@@ -377,7 +377,7 @@ sub_lyrics = subparser.add_parser(
 sub_lyrics.add_argument(
     "-e",
     "--extract",
-    dest="lyrics_extract",
+    dest="lyrics_extract_legacy",
     default="all",
     help='The lyric verse number to extract or "all".',
 )
@@ -625,9 +625,10 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
             elif args.lyrics_fix:
                 score.lyrics.fix_lyrics(mscore=args.general_mscore)
             else:
-                score.lyrics.extract_lyrics(
-                    number=args.lyrics_extract, mscore=args.general_mscore
-                )
+                no: int | None = None
+                if args.lyrics_extract_legacy != "all":
+                    no = int(args.lyrics_extract_legacy)
+                score.lyrics.extract_lyrics(no)
 
         elif args.subcommand == "meta":
             score = Score(file)

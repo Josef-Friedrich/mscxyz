@@ -31,7 +31,7 @@ class DefaultArguments:
     help_rst: bool = False
 
     # lyrics
-    lyrics_extract: str = "all"
+    lyrics_extract: Optional[str] = None
     lyrics_fix: bool = False
     lyrics_remap: Optional[str] = None
 
@@ -63,6 +63,9 @@ class DefaultArguments:
     subcommand: Optional[
         Literal["clean", "export", "help", "lyrics", "meta", "rename", "style"]
     ] = None
+    """TODO for legacy cli: remove"""
+
+    lyrics_extract_legacy: str = "all"
     """TODO for legacy cli: remove"""
 
     clean_style: Optional[TextIOWrapper] = None

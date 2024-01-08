@@ -8,7 +8,7 @@ import os
 import shutil
 import typing
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import lxml
 import lxml.etree
@@ -121,7 +121,7 @@ class Score:
         return self.filename.replace("." + self.extension, "")
 
     def change_path(
-        self, suffix: Optional[str] = None, extension: Optional[str] = None
+        self, suffix: Optional[Any] = None, extension: Optional[str] = None
     ) -> Path:
         return utils.PathChanger(self.path).change(suffix=suffix, extension=extension)
 

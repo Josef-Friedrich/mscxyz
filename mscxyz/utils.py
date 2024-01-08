@@ -445,17 +445,13 @@ class PathChanger:
     def change_extension(self, new_extension: str) -> Path:
         return Path(str(self.path)[0 : -len(self.extension) - 1] + "." + new_extension)
 
-    def add_suffix(self, suffix: str) -> Path:
+    def add_suffix(self, suffix: Any) -> Path:
         return Path(
-            str(self.path)[0 : -len(self.extension) - 1]
-            + "_"
-            + suffix
-            + "."
-            + self.extension
+            str(self.path)[0 : -len(self.extension) - 1] + f"_{suffix}.{self.extension}"
         )
 
     def change(
-        self, suffix: Optional[str] = None, extension: Optional[str] = None
+        self, suffix: Optional[Any] = None, extension: Optional[str] = None
     ) -> Path:
         path_changer: PathChanger = self.new()
         if suffix:
@@ -466,7 +462,7 @@ class PathChanger:
 
 
 def change_path(
-    path: str | Path, suffix: Optional[str] = None, extension: Optional[str] = None
+    path: str | Path, suffix: Optional[Any] = None, extension: Optional[str] = None
 ) -> Path:
     return PathChanger(path).change(suffix=suffix, extension=extension)
 
