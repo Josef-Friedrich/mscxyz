@@ -750,7 +750,7 @@ class InterfaceReadOnly:
 
     @property
     def readonly_relpath_backup(self) -> str:
-        return self.score.relpath_backup
+        return str(self.score.backup_file)
 
 
 class Interface:

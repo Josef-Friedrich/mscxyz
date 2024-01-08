@@ -20,10 +20,10 @@ def score3x() -> Score:
     return helper.get_score("simple.mscx", version=3)
 
 
-# @pytest.fixture(scope="session", autouse=True)
-# def score4x() -> Score:
-#     """Instantiate a Score object from the file simple.mscx (version 4)."""
-#     return helper.get_score("simple.mscx", version=4)
+@pytest.fixture(autouse=True)
+def score4x() -> Score:
+    """Instantiate a Score object from the file simple.mscx (version 4)."""
+    return helper.get_score("simple.mscx", version=4)
 
 
 @pytest.fixture(autouse=True)

@@ -9,6 +9,7 @@ import tempfile
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
+from typing import Sequence, Union
 
 from lxml.etree import _Element
 
@@ -31,6 +32,10 @@ def get_path(filename: str, version: int = 2) -> Path:
     :param version: The version of the file (default is 2).
     :return: The path of the file.
     """
+
+    if version > 3 and filename.endswith(".mscx"):
+        base = filename[:-5]
+        filename = str(Path(base) / filename)
     return Path(test_dir) / "files" / "by_version" / str(version) / filename
 
 
@@ -103,26 +108,45 @@ def read_file(filename: str | Path) -> str:
     return output
 
 
-def cli_legacy(*args: str) -> None:
-    execute_legacy(args)
+CliArg = Union[str, Path, Score]
 
 
-def stderr(*cli_args: str) -> str:
+def __stringify_args(args: Sequence[CliArg]) -> list[str]:
+    result: list[str] = []
+    for arg in args:
+        if isinstance(arg, Path):
+            result.append(str(arg))
+        elif isinstance(arg, Score):
+            result.append(str(arg.path))
+        else:
+            result.append(arg)
+    return result
+
+
+def __simluate_cli(*args: CliArg) -> None:
+    execute(__stringify_args(args))
+
+
+def cli_legacy(*args: CliArg) -> None:
+    execute_legacy(__stringify_args(args))
+
+
+def stderr(*cli_args: CliArg) -> str:
     f = StringIO()
     with redirect_stderr(f):
-        execute(cli_args)
+        __simluate_cli(*cli_args)
     return f.getvalue()
 
 
-def stdout(*cli_args: str) -> str:
+def stdout(*cli_args: CliArg) -> str:
     f = StringIO()
     with redirect_stdout(f):
-        execute(cli_args)
+        __simluate_cli(*cli_args)
     return f.getvalue()
 
 
-def cli(*cli_args: str) -> None:
-    execute(cli_args)
+def cli(*cli_args: CliArg) -> None:
+    __simluate_cli(*cli_args)
 
 
 def run(*args: str) -> str:

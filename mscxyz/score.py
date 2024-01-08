@@ -94,8 +94,8 @@ class Score:
         return int(self.version)
 
     @property
-    def relpath_backup(self) -> str:
-        return str(self.path).replace("." + self.extension, "_bak." + self.extension)
+    def backup_file(self) -> Path:
+        return self.change_path(suffix="bak")
 
     @property
     def dirname(self) -> str:
@@ -157,7 +157,7 @@ class Score:
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
-        shutil.copy2(self.path, self.relpath_backup)
+        shutil.copy2(self.path, self.backup_file)
 
     def get_version(self) -> float:
         """
