@@ -70,7 +70,7 @@ def test_set_all_font_faces_using_for_loop(score: Score) -> None:
 def test_set_all_font_faces_using_method(score: Score) -> None:
     assert score.style.get_value("defaultFontFace") == "FreeSerif"
 
-    response = score.style.set_all_font_faces("Alegreya")
+    response = score.style.set_text_font_faces("Alegreya")
 
     assert response == [
         ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
@@ -79,7 +79,6 @@ def test_set_all_font_faces_using_method(score: Score) -> None:
         ("pedalFontFace", "FreeSerif", "Alegreya"),
         ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
         ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
-        ("romanNumeralFontFace", "Campania", "Alegreya"),
         ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
         ("voltaFontFace", "FreeSerif", "Alegreya"),
         ("ottavaFontFace", "FreeSerif", "Alegreya"),
@@ -98,7 +97,6 @@ def test_set_all_font_faces_using_method(score: Score) -> None:
         ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
         ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
         ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("dynamicsFontFace", "FreeSerif", "Alegreya"),
         ("expressionFontFace", "FreeSerif", "Alegreya"),
         ("tempoFontFace", "FreeSerif", "Alegreya"),
         ("tempoChangeFontFace", "Edwin", "Alegreya"),
@@ -120,7 +118,6 @@ def test_set_all_font_faces_using_method(score: Score) -> None:
         ("footerFontFace", "FreeSerif", "Alegreya"),
         ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
         ("stickingFontFace", "FreeSerif", "Alegreya"),
-        ("figuredBassFontFace", "MScoreBC", "Alegreya"),
         ("user1FontFace", "FreeSerif", "Alegreya"),
         ("user2FontFace", "FreeSerif", "Alegreya"),
         ("user3FontFace", "FreeSerif", "Alegreya"),

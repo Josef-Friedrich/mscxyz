@@ -1037,7 +1037,7 @@ Set all font faces (using a for loop, not available in MuseScore 2):
 
 .. code-block:: Python
 
-Set all font faces (using the method ``score.style.set_all_font_faces(font_face)``,
+Set all text font faces (using the method ``score.style.set_text_font_faces(font_face)``,
 not available in MuseScore 2):
 
 .. code-block:: Python
@@ -1045,7 +1045,7 @@ not available in MuseScore 2):
     score = Score('score.mscz')
     assert score.style.get_value("defaultFontFace") == "FreeSerif"
 
-    response = score.style.set_all_font_faces("Alegreya")
+    response = score.style.set_text_font_faces("Alegreya")
 
     assert response == [
         ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
@@ -1054,7 +1054,6 @@ not available in MuseScore 2):
         ("pedalFontFace", "FreeSerif", "Alegreya"),
         ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
         ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
-        ("romanNumeralFontFace", "Campania", "Alegreya"),
         ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
         ("voltaFontFace", "FreeSerif", "Alegreya"),
         ("ottavaFontFace", "FreeSerif", "Alegreya"),
@@ -1073,7 +1072,6 @@ not available in MuseScore 2):
         ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
         ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
         ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("dynamicsFontFace", "FreeSerif", "Alegreya"),
         ("expressionFontFace", "FreeSerif", "Alegreya"),
         ("tempoFontFace", "FreeSerif", "Alegreya"),
         ("tempoChangeFontFace", "Edwin", "Alegreya"),
@@ -1095,7 +1093,6 @@ not available in MuseScore 2):
         ("footerFontFace", "FreeSerif", "Alegreya"),
         ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
         ("stickingFontFace", "FreeSerif", "Alegreya"),
-        ("figuredBassFontFace", "MScoreBC", "Alegreya"),
         ("user1FontFace", "FreeSerif", "Alegreya"),
         ("user2FontFace", "FreeSerif", "Alegreya"),
         ("user3FontFace", "FreeSerif", "Alegreya"),

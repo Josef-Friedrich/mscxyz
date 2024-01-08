@@ -14,6 +14,72 @@ if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
+font_faces = (
+    "lyricsOddFontFace",
+    "lyricsEvenFontFace",
+    "hairpinFontFace",
+    "pedalFontFace",
+    "chordSymbolAFontFace",
+    "chordSymbolBFontFace",
+    # "romanNumeralFontFace", # **Campania**
+    "nashvilleNumberFontFace",
+    "voltaFontFace",
+    "ottavaFontFace",
+    "tupletFontFace",
+    "defaultFontFace",
+    "titleFontFace",
+    "subTitleFontFace",
+    "composerFontFace",
+    "lyricistFontFace",
+    "fingeringFontFace",
+    "lhGuitarFingeringFontFace",
+    "rhGuitarFingeringFontFace",
+    "stringNumberFontFace",
+    "harpPedalDiagramFontFace",
+    "harpPedalTextDiagramFontFace",
+    "longInstrumentFontFace",
+    "shortInstrumentFontFace",
+    "partInstrumentFontFace",
+    # "dynamicsFontFace",
+    "expressionFontFace",
+    "tempoFontFace",
+    "tempoChangeFontFace",
+    "metronomeFontFace",
+    "measureNumberFontFace",
+    "mmRestRangeFontFace",
+    "translatorFontFace",
+    "systemFontFace",
+    "staffFontFace",
+    "rehearsalMarkFontFace",
+    "repeatLeftFontFace",
+    "repeatRightFontFace",
+    "frameFontFace",
+    "textLineFontFace",
+    "systemTextLineFontFace",
+    "glissandoFontFace",
+    "bendFontFace",
+    "headerFontFace",
+    "footerFontFace",
+    "instrumentChangeFontFace",
+    "stickingFontFace",
+    # "figuredBassFontFace", # **MScoreBC**
+    "user1FontFace",
+    "user2FontFace",
+    "user3FontFace",
+    "user4FontFace",
+    "user5FontFace",
+    "user6FontFace",
+    "user7FontFace",
+    "user8FontFace",
+    "user9FontFace",
+    "user10FontFace",
+    "user11FontFace",
+    "user12FontFace",
+    "letRingFontFace",
+    "palmMuteFontFace",
+)
+
+
 class Style:
     """
     Interface specialized for the style manipulation.
@@ -232,9 +298,13 @@ class Style:
                 element = lxml.etree.SubElement(text_style, element_name)
             element.text = str(value)
 
-    def set_all_font_faces(self, font_face: str) -> list[tuple[str, str, str]]:
+    def set_text_font_faces(
+        self, new_font_face: str
+    ) -> list[tuple[str, str | None, str]]:
         """
-        Sets the font face for all elements in the parent element.
+        Set the font face for nearly all font face related styles
+        except for ``romanNumeralFontFace`` and ``figuredBassFontFace``,
+        ``dynamicsFontFace`` ``musicalSymbolFont`` ``musicalTextFont``.
 
         Default values in v3 and v4:
 
@@ -263,7 +333,7 @@ class Style:
         * ``longInstrumentFontFace``: Edwin
         * ``shortInstrumentFontFace``: Edwin
         * ``partInstrumentFontFace``: Edwin
-        * ``dynamicsFontFace``: Edwin
+        * ``dynamicsFontFace``: **Edwin**
         * ``expressionFontFace``: Edwin
         * ``tempoFontFace``: Edwin
         * ``tempoChangeFontFace``: Edwin
@@ -306,13 +376,18 @@ class Style:
         :return: A list of tuples representing the changes made. Each tuple
           contains the tag name, the old font face, and the new font face.
         """
-        output: list[tuple[str, str, str]] = []
-        for element in self.parent_element:
-            if "FontFace" in element.tag:
-                old: str = utils.xml.get_text_safe(element)
-                change: tuple[str, str, str] = (element.tag, old, font_face)
-                element.text = font_face
-                output.append(change)
+        output: list[tuple[str, str | None, str]] = []
+        for font_face in font_faces:
+            change: tuple[str, str | None, str] = (
+                font_face,
+                self.get_value(font_face, raise_exception=False),
+                new_font_face,
+            )
+            self.set_value(
+                font_face,
+                new_font_face,
+            )
+            output.append(change)
         return output
 
     def get_all_font_faces(self) -> list[tuple[str, str]]:
