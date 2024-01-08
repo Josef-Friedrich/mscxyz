@@ -14,7 +14,7 @@ import tmep
 from lxml.etree import _Element
 
 from mscxyz import utils
-from mscxyz.settings_legacy import get_args
+from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score

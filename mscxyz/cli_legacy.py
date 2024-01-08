@@ -14,7 +14,7 @@ import lxml.etree
 import tmep
 from lxml.etree import LxmlError
 
-import mscxyz.settings_legacy as settings_legacy
+import mscxyz.settings as settings
 from mscxyz import Score, cli_legacy, utils
 from mscxyz.meta import Interface, InterfaceReadWrite
 from mscxyz.rename import rename_filename
@@ -515,7 +515,7 @@ parser.add_argument(
 )
 
 
-def heading(args: settings_legacy.DefaultArguments, text: str, level: int = 1) -> None:
+def heading(args: settings.DefaultArguments, text: str, level: int = 1) -> None:
     length = len(text)
     if args.help_markdown:
         print("\n" + ("#" * level) + " " + text + "\n")
@@ -535,7 +535,7 @@ def heading(args: settings_legacy.DefaultArguments, text: str, level: int = 1) -
         print(text)
 
 
-def code_block(args: settings_legacy.DefaultArguments, text: str) -> None:
+def code_block(args: settings.DefaultArguments, text: str) -> None:
     if args.help_markdown:
         print("```\n" + text + "\n```")
     elif args.help_rst:
@@ -544,7 +544,7 @@ def code_block(args: settings_legacy.DefaultArguments, text: str) -> None:
         print(text)
 
 
-def show_all_help(args: settings_legacy.DefaultArguments) -> None:
+def show_all_help(args: settings.DefaultArguments) -> None:
     subcommands = ("clean", "meta", "lyrics", "rename", "export", "help")
 
     if args.path == "all":
@@ -586,14 +586,14 @@ def no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
 
 
 def execute(cli_args: typing.Sequence[str] | None = None) -> None:
-    args: settings_legacy.DefaultArguments = typing.cast(
-        settings_legacy.DefaultArguments, cli_legacy.parser.parse_args(cli_args)
+    args: settings.DefaultArguments = typing.cast(
+        settings.DefaultArguments, cli_legacy.parser.parse_args(cli_args)
     )
     if args.general_config_file:
-        config = settings_legacy.parse_config_ini(args.general_config_file)
+        config = settings.parse_config_ini(args.general_config_file)
         if config:
-            args = settings_legacy.merge_config_into_args(config, args)
-    settings_legacy.set_args(args)
+            args = settings.merge_config_into_args(config, args)
+    settings.set_args(args)
 
     if args.subcommand == "help":
         show_all_help(args)

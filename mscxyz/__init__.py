@@ -10,7 +10,6 @@ import mscxyz
 import mscxyz.lyrics
 import mscxyz.meta
 import mscxyz.score
-import mscxyz.settings_legacy
 import mscxyz.style
 from mscxyz import utils
 

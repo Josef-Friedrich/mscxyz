@@ -12,7 +12,7 @@ import lxml.etree
 import pytest
 
 from mscxyz import utils
-from mscxyz.settings_legacy import get_args
+from mscxyz.settings import get_args
 from mscxyz.utils import ListExtension, PathChanger, ZipContainer
 from tests import helper
 from tests.helper import cli_legacy

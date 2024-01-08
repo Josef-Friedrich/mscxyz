@@ -18,7 +18,7 @@ from mscxyz import utils
 from mscxyz.export import Export
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz.settings_legacy import get_args
+from mscxyz.settings import get_args
 from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
