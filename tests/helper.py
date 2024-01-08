@@ -6,6 +6,8 @@ import os
 import shutil
 import subprocess
 import tempfile
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 from lxml.etree import _Element
@@ -105,8 +107,22 @@ def cli_legacy(*args: str) -> None:
     execute_legacy(args)
 
 
-def cli(*args: str) -> None:
-    execute(args)
+def stderr(*cli_args: str) -> str:
+    f = StringIO()
+    with redirect_stderr(f):
+        execute(cli_args)
+    return f.getvalue()
+
+
+def stdout(*cli_args: str) -> str:
+    f = StringIO()
+    with redirect_stdout(f):
+        execute(cli_args)
+    return f.getvalue()
+
+
+def cli(*cli_args: str) -> None:
+    execute(cli_args)
 
 
 def run(*args: str) -> str:

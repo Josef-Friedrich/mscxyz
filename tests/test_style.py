@@ -255,15 +255,13 @@ def test_load_style_file() -> None:
 
 class TestCli:
     def test_option_styles_v3(self, capsys: CaptureFixture[str]) -> None:
-        helper.cli("--styles-v3")
-        output = capsys.readouterr().out
-        assert "user12FrameFgColor" in output
-        assert "instrumentNameOffset" not in output
+        stdout = helper.stdout("--styles-v3")
+        assert "user12FrameFgColor" in stdout
+        assert "instrumentNameOffset" not in stdout
 
-    def test_option_styles_v4(self, capsys: CaptureFixture[str]) -> None:
-        helper.cli("--styles-v4")
-        assert "instrumentNameOffset" in capsys.readouterr().out
+    def test_option_styles_v4(self) -> None:
+        assert "instrumentNameOffset" in helper.stdout("--styles-v4")
 
-    def test_option_list_fonts(self, capsys: CaptureFixture[str], score: Score) -> None:
-        helper.cli("--list-fonts", str(score.path))
-        assert "harpPedalTextDiagramFontFace: Edwin" in capsys.readouterr().out
+    def test_option_list_fonts(self, score: Score) -> None:
+        stdout = helper.stdout("--list-fonts", str(score.path))
+        assert "harpPedalTextDiagramFontFace: Edwin" in stdout
