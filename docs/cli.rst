@@ -13,7 +13,7 @@ Comande line interface
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
                              [-t RENAME_TARGET] [-s STYLE VALUE] [-Y STYLE_FILE]
-                             [--s3] [--s4]
+                             [--s3] [--s4] [--list-fonts]
                              [path ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -404,6 +404,7 @@ Comande line interface
                             Set a single style. For example: --style pageWidth 8.5
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
+      --list-fonts          List all font related styles.
 
 Legacy
 ======

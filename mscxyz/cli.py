@@ -466,6 +466,13 @@ group_style.add_argument(
     help="List all possible version 4 styles.",
 )
 
+group_style.add_argument(
+    "--list-fonts",
+    dest="style_list_fonts",
+    action="store_true",
+    help="List all font related styles.",
+)
+
 
 ###############################################################################
 # last positional parameter
@@ -533,6 +540,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             continue
 
         score = Score(file)
+
+        if args.style_list_fonts:
+            score.style.print_all_font_faces()
+            continue
 
         if args.general_diff:
             score.make_snapshot()

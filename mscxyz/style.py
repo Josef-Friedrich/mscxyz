@@ -19,6 +19,10 @@ class Style:
     Interface specialized for the style manipulation.
 
     :param relpath: The relative (or absolute) path of a MuseScore file.
+
+    v3: https://github.com/musescore/MuseScore/blob/4566605d92467b0f5a36b3731b64150500e48583/libmscore/style.cpp
+
+    v4: https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp
     """
 
     score: "Score"
@@ -232,6 +236,71 @@ class Style:
         """
         Sets the font face for all elements in the parent element.
 
+        Default values in v3 and v4:
+
+        * ``lyricsOddFontFace``: Edwin
+        * ``lyricsEvenFontFace``: Edwin
+        * ``hairpinFontFace``: Edwin
+        * ``pedalFontFace``: Edwin
+        * ``chordSymbolAFontFace``: Edwin
+        * ``chordSymbolBFontFace``: Edwin
+        * ``romanNumeralFontFace``: **Campania**
+        * ``nashvilleNumberFontFace``: Edwin
+        * ``voltaFontFace``: Edwin
+        * ``ottavaFontFace``: Edwin
+        * ``tupletFontFace``: Edwin
+        * ``defaultFontFace``: Edwin
+        * ``titleFontFace``: Edwin
+        * ``subTitleFontFace``: Edwin
+        * ``composerFontFace``: Edwin
+        * ``lyricistFontFace``: Edwin
+        * ``fingeringFontFace``: Edwin
+        * ``lhGuitarFingeringFontFace``: Edwin
+        * ``rhGuitarFingeringFontFace``: Edwin
+        * ``stringNumberFontFace``: Edwin
+        * ``harpPedalDiagramFontFace``: Edwin
+        * ``harpPedalTextDiagramFontFace``: Edwin
+        * ``longInstrumentFontFace``: Edwin
+        * ``shortInstrumentFontFace``: Edwin
+        * ``partInstrumentFontFace``: Edwin
+        * ``dynamicsFontFace``: Edwin
+        * ``expressionFontFace``: Edwin
+        * ``tempoFontFace``: Edwin
+        * ``tempoChangeFontFace``: Edwin
+        * ``metronomeFontFace``: Edwin
+        * ``measureNumberFontFace``: Edwin
+        * ``mmRestRangeFontFace``: Edwin
+        * ``translatorFontFace``: Edwin
+        * ``systemFontFace``: Edwin
+        * ``staffFontFace``: Edwin
+        * ``rehearsalMarkFontFace``: Edwin
+        * ``repeatLeftFontFace``: Edwin
+        * ``repeatRightFontFace``: Edwin
+        * ``frameFontFace``: Edwin
+        * ``textLineFontFace``: Edwin
+        * ``systemTextLineFontFace``: Edwin
+        * ``glissandoFontFace``: Edwin
+        * ``bendFontFace``: Edwin
+        * ``headerFontFace``: Edwin
+        * ``footerFontFace``: Edwin
+        * ``instrumentChangeFontFace``: Edwin
+        * ``stickingFontFace``: Edwin
+        * ``figuredBassFontFace``: **MScoreBC**
+        * ``user1FontFace``: Edwin
+        * ``user2FontFace``: Edwin
+        * ``user3FontFace``: Edwin
+        * ``user4FontFace``: Edwin
+        * ``user5FontFace``: Edwin
+        * ``user6FontFace``: Edwin
+        * ``user7FontFace``: Edwin
+        * ``user8FontFace``: Edwin
+        * ``user9FontFace``: Edwin
+        * ``user10FontFace``: Edwin
+        * ``user11FontFace``: Edwin
+        * ``user12FontFace``: Edwin
+        * ``letRingFontFace``: Edwin
+        * ``palmMuteFontFace``: Edwin
+
         :param font_face: The new font face to be set.
 
         :return: A list of tuples representing the changes made. Each tuple
@@ -246,15 +315,40 @@ class Style:
                 output.append(change)
         return output
 
+    def get_all_font_faces(self) -> list[tuple[str, str]]:
+        """
+        Returns a list of tuples containing the tag name and the font face.
+        """
+        output: list[tuple[str, str]] = []
+        for element in self.parent_element:
+            if "FontFace" in element.tag:
+                output.append((element.tag, utils.xml.get_text_safe(element)))
+        return output
+
+    def print_all_font_faces(self) -> None:
+        for style in self.get_all_font_faces():
+            print(f"{style[0]}: {style[1]}")
+
     @property
     def musical_symbols_font(self) -> str | None:
         """
+
+        v3
+
+        .. code :: XML
+
+            <musicalSymbolFont>Leland</musicalSymbolFont>
+            <dynamicsFontFace>Leland</dynamicsFontFace>
+
+        v4 // OBSOLETE after version 4.1. Dynamic text now takes its setting from expression.
+
         .. code :: XML
 
             <musicalSymbolFont>Leland</musicalSymbolFont>
             <dynamicsFont>Leland</dynamicsFont>
 
         """
+
         return self.get_value("musicalSymbolFont", raise_exception=False)
 
     @musical_symbols_font.setter
