@@ -158,3 +158,8 @@ def run(*args: str) -> str:
     :return: The output of the mscx-manager command as a string.
     """
     return subprocess.check_output(["mscx-manager"] + list(args)).decode("utf-8")
+
+
+def open_in_gui(file: str | Path) -> None:
+    """Open a file wiht xdg-open in the background"""
+    subprocess.Popen(("/usr/local/bin/mscore", str(file)))

@@ -619,9 +619,8 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         elif args.subcommand == "lyrics":
             score = Score(file)
             if args.lyrics_remap:
-                score.lyrics.remap(
-                    remap_string=args.lyrics_remap, mscore=args.general_mscore
-                )
+                score.lyrics.remap(remap_string=args.lyrics_remap)
+                score.save(mscore=args.general_mscore)
             elif args.lyrics_fix:
                 score.lyrics.fix_lyrics(mscore=args.general_mscore)
             else:

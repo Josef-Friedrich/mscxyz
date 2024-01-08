@@ -565,17 +565,15 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         #     elif args.subcommand == "lyrics":
         #         score = Score(file)
-        #         if args.lyrics_remap:
-        #             score.lyrics.remap(
-        #                 remap_string=args.lyrics_remap, mscore=args.general_mscore
-        #             )
+        if args.lyrics_remap:
+            score.lyrics.remap(args.lyrics_remap)
         #         elif args.lyrics_fix:
         #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
         if args.lyrics_extract:
             no = 0
             if args.lyrics_extract != "all":
                 no = int(args.lyrics_extract)
-            score.lyrics.extract_lyrics(number=no)
+            score.lyrics.extract_lyrics(no)
 
         #     elif args.subcommand == "meta":
         #         score = Score(file)

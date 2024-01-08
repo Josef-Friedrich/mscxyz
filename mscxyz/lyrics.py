@@ -96,7 +96,7 @@ class Lyrics:
 
         return max_lyric
 
-    def remap(self, remap_string: str, mscore: bool = False) -> None:
+    def remap(self, remap_string: str) -> None:
         for pair in remap_string.split(","):
             old = pair.split(":")[0]
             new = pair.split(":")[1]
@@ -104,9 +104,7 @@ class Lyrics:
                 if element.no == int(old):
                     utils.xml.find_safe(element.element, "no").text = str(int(new) - 1)
 
-        self.score.save(mscore=mscore)
-
-    def extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
+    def __extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
         """Extract a lyric verse by verse number.
 
         :param number: The number of the lyrics verse starting by 1
@@ -133,9 +131,9 @@ class Lyrics:
         """
         if number is None or number == 0:
             for n in range(1, self.number_of_verses + 1):
-                self.extract_one_lyrics_verse(n)
+                self.__extract_one_lyrics_verse(n)
         else:
-            self.extract_one_lyrics_verse(number)
+            self.__extract_one_lyrics_verse(number)
 
     def fix_lyrics_verse(self, verse_number: int) -> None:
         """

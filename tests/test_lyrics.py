@@ -129,19 +129,13 @@ class TestLyricsFix:
 
 class TestLyricsRemap:
     def test_remap(self) -> None:
-        score_path = helper.get_file("lyrics-remap.mscx")
-        cli_legacy("lyrics", "--remap", "2:6", score_path)
-        score = helper.reload(score_path)
-        text: list[str] = []
-        for element in score.lyrics.elements:
-            tag = element.element
-            tag_text = tag.find("no")
+        score = helper.get_score("lyrics-remap.mscx")
 
-            text_no = utils.xml.get_text(tag_text)
-            if text_no:
-                no = text_no
-            else:
-                no = "0"
-            text.append(no)
+        cli_legacy("lyrics", "--remap", "2:6", score)
+        new_score = score.reload()
+        nos: list[int] = []
 
-        assert text == ["0", "5", "2", "3", "4"]
+        for element in new_score.lyrics.elements:
+            nos.append(element.no)
+
+        assert nos == [1, 6, 3, 4, 5]

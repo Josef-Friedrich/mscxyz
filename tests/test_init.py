@@ -12,7 +12,7 @@ def test_broken_file(capsys: CaptureFixture[str]) -> None:
         "--config-file",
         ini_file,
         "meta",
-        helper.get_file("broken.mscx"),
+        helper.get_score("broken.mscx"),
     )
     capture = capsys.readouterr()
     assert (
