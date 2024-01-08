@@ -11,6 +11,24 @@ from tests import helper
 from tests.helper import cli, cli_legacy
 
 
+@pytest.fixture
+def lyrics() -> Score:
+    return helper.get_score("lyrics.mscz", version=4)
+
+
+@pytest.mark.parametrize(
+    "filename, expected",
+    (
+        ("score.mscz", 0),
+        ("lyrics.mscz", 3),
+        ("lyrics_number-of-verses.mscz", 7),
+    ),
+)
+def test_property_number_of_verse(filename: str, expected: int) -> None:
+    score = helper.get_score(filename, version=4)
+    assert score.lyrics.number_of_verses == expected
+
+
 def is_extraction(score: Score, numbers: int | Sequence[int]) -> bool:
     if isinstance(numbers, int):
         numbers = [numbers]
@@ -18,11 +36,6 @@ def is_extraction(score: Score, numbers: int | Sequence[int]) -> bool:
         if not score.change_path(suffix=n).exists():
             return False
     return True
-
-
-@pytest.fixture
-def lyrics() -> Score:
-    return helper.get_score("lyrics.mscz", version=4)
 
 
 class TestLyricsExtraction:
@@ -61,7 +74,7 @@ class TestLyricsFix:
         score_path = helper.get_file("lyrics-fix.mscx", version)
         cli_legacy("lyrics", "--fix", score_path)
         score = helper.reload(score_path)
-        self.lyrics = score.lyrics.lyrics
+        self.lyrics = score.lyrics.elements
 
         text: list[str] = []
         syllabic: list[str] = []
@@ -120,7 +133,7 @@ class TestLyricsRemap:
         cli_legacy("lyrics", "--remap", "2:6", score_path)
         score = helper.reload(score_path)
         text: list[str] = []
-        for element in score.lyrics.lyrics:
+        for element in score.lyrics.elements:
             tag = element.element
             tag_text = tag.find("no")
 

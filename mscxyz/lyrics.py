@@ -15,21 +15,20 @@ if typing.TYPE_CHECKING:
 
 
 class NumberedLyricsElement:
-    number: int
+    no: int
     element: _Element
 
 
 class Lyrics:
     score: "Score"
 
-    lyrics: list[NumberedLyricsElement]
+    elements: list[NumberedLyricsElement]
 
     def __init__(self, score: "Score") -> None:
         self.score = score
-        self.lyrics = self.normalize_lyrics()
-        self.max = self.get_max()
+        self.elements = self.__renumber()
 
-    def normalize_lyrics(self) -> list[NumberedLyricsElement]:
+    def __renumber(self) -> list[NumberedLyricsElement]:
         """Normalize numbering of verses to natural numbering (1,2,3).
 
         From
@@ -61,21 +60,22 @@ class Lyrics:
         """
         lyrics: list[NumberedLyricsElement] = []
         for lyric in self.score.xml_root.findall(".//Lyrics"):
-            safe = NumberedLyricsElement()
-            safe.element = lyric
+            numbered = NumberedLyricsElement()
+            numbered.element = lyric
             number: _Element | None = lyric.find("no")
 
             if number is not None and number.text is not None:
                 no = int(number.text) + 1
             else:
                 no = 1
-            safe.number = no
+            numbered.no = no
 
-            lyrics.append(safe)
+            lyrics.append(numbered)
 
         return lyrics
 
-    def get_max(self) -> int:
+    @property
+    def number_of_verses(self) -> int:
         """Retrieve the number of verses.
 
         From:
@@ -90,9 +90,9 @@ class Lyrics:
 
         """
         max_lyric = 0
-        for element in self.lyrics:
-            if element.number > max_lyric:
-                max_lyric = element.number
+        for element in self.elements:
+            if element.no > max_lyric:
+                max_lyric = element.no
 
         return max_lyric
 
@@ -100,8 +100,8 @@ class Lyrics:
         for pair in remap_string.split(","):
             old = pair.split(":")[0]
             new = pair.split(":")[1]
-            for element in self.lyrics:
-                if element.number == int(old):
+            for element in self.elements:
+                if element.no == int(old):
                     utils.xml.find_safe(element.element, "no").text = str(int(new) - 1)
 
         self.score.save(mscore=mscore)
@@ -114,10 +114,10 @@ class Lyrics:
 
         score = self.score.new()
 
-        for element in score.lyrics.lyrics:
+        for element in score.lyrics.elements:
             tag = element.element
 
-            if element.number != number:
+            if element.no != number:
                 utils.xml.remove(tag)
             elif number != 1:
                 utils.xml.set_text(tag, "no", 0)
@@ -132,7 +132,7 @@ class Lyrics:
         :param number: The lyric verse number. 1 is the first verse.
         """
         if number is None or number == 0:
-            for n in range(1, self.max + 1):
+            for n in range(1, self.number_of_verses + 1):
                 self.extract_one_lyrics_verse(n)
         else:
             self.extract_one_lyrics_verse(number)
@@ -173,8 +173,8 @@ class Lyrics:
         """
 
         syllabic = False
-        for element in self.lyrics:
-            if element.number == verse_number:
+        for element in self.elements:
+            if element.no == verse_number:
                 tag: _Element = element.element
                 element_text: _Element = utils.xml.find_safe(tag, "text")
                 text = utils.xml.get_text_safe(element_text)
@@ -198,7 +198,7 @@ class Lyrics:
                     tag.append(element_syllabic)
 
     def fix_lyrics(self, mscore: bool = False) -> None:
-        for verse_number in range(1, self.max + 1):
+        for verse_number in range(1, self.number_of_verses + 1):
             self.fix_lyrics_verse(verse_number)
 
         self.score.save(mscore=mscore)
