@@ -64,11 +64,13 @@ class TestClassStyle:
         assert self.style.reload(save=True).get_value("staffUpperBorder") == "99"
 
     def test_method_set_value_create(self) -> None:
-        self.style.set_value("lol", "lol")
+        response = self.style.set_value("lol", "lol")
+        assert response == [("lol", None, "lol")]
         assert self.style.reload(save=True).get_value("lol") == "lol"
 
     def test_method_set_value_muliple_element_path(self) -> None:
-        self.style.set_value("page-layout/page-height", 99)
+        response = self.style.set_value("page-layout/page-height", 99)
+        assert response == [("page-layout/page-height", "1584", 99)]
         assert self.style.reload(save=True).get_value("page-layout/page-height") == "99"
 
     def test_method_set_muliple_element_path_multiple_times(self) -> None:
@@ -79,6 +81,17 @@ class TestClassStyle:
         assert style_new.get_value("page-layout/page-depth") == "101"
         assert style_new.get_value("page-layout/page-height") == "99"
         assert style_new.get_value("page-layout/page-width") == "100"
+
+    def test_method_set_value_mulitple_style_names(self) -> None:
+        response = self.style.set_value(["staffUpperBorder", "staffLowerBorder"], 42)
+        assert response == [
+            ("staffUpperBorder", "6.5", 42),
+            ("staffLowerBorder", "6", 42),
+        ]
+
+        style_new = self.style.reload(save=True)
+        assert style_new.get_value("staffUpperBorder") == "42"
+        assert style_new.get_value("staffLowerBorder") == "42"
 
     def test_method_get_text_style(self) -> None:
         title = self.style.get_text_style("Title")

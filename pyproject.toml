@@ -19,7 +19,7 @@ classifiers = [
 keywords = ["audio"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 lxml = "^5.0.0"
 termcolor = "^2.4.0"
 tmep = "^2.4.0"

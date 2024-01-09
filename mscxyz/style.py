@@ -3,6 +3,7 @@ from __future__ import annotations
 import typing
 from io import TextIOWrapper
 from pathlib import Path
+from typing import Optional, Sequence, Union
 
 import lxml
 import lxml.etree
@@ -14,7 +15,7 @@ if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
-font_faces = (
+text_font_faces = (
     "lyricsOddFontFace",
     "lyricsEvenFontFace",
     "hairpinFontFace",
@@ -78,6 +79,12 @@ font_faces = (
     "letRingFontFace",
     "palmMuteFontFace",
 )
+
+StyleValue = Optional[Union[str, int, float]]
+
+StyleChange = tuple[str, StyleValue, StyleValue]
+
+StyleChanges = list[StyleChange]
 
 
 class Style:
@@ -206,19 +213,38 @@ class Style:
             element.attrib[name] = str(value)
         return element
 
-    def set_value(self, element_path: str, value: str | int | float) -> None:
+    def set_value(
+        self, style_name: str | Sequence[str], value: StyleValue
+    ) -> StyleChanges:
         """
         Sets the value of an XML element identified by the given element path.
 
-        :param element_path: The XPath expression to locate the XML element.
-                             For more information, refer to http://lxml.de/tutorial.html#elementpath
+        :param style_name: A style name or multiple style names as a list or a
+          element path expression. For more information, refer to
+          http://lxml.de/tutorial.html#elementpath
         :param value: The value to be set for the XML element.
-                      It can be a string, integer, or float.
+          It can be a string, integer, or float.
         """
-        element: _Element | None = self.parent_element.find(element_path)
-        if element is None:
-            element = self.__create_nested_element(element_path)
-        element.text = str(value)
+        style_names: list[str] = []
+        if isinstance(style_name, str):
+            style_names = [style_name]
+        else:
+            style_names = list(style_name)
+
+        response: StyleChanges = []
+        for style_name in style_names:
+            element: _Element | None = self.parent_element.find(style_name)
+            if element is None:
+                element = self.__create_nested_element(style_name)
+            change: StyleChange = (
+                style_name,
+                self.get_value(style_name, raise_exception=False),
+                value,
+            )
+            response.append(change)
+            element.text = str(value)
+
+        return response
 
     def __get_text_style_element(self, name: str) -> _Element:
         if self.score.version_major != 2:
@@ -298,9 +324,7 @@ class Style:
                 element = lxml.etree.SubElement(text_style, element_name)
             element.text = str(value)
 
-    def set_text_font_faces(
-        self, new_font_face: str
-    ) -> list[tuple[str, str | None, str]]:
+    def set_text_font_faces(self, new_font_face: str) -> StyleChanges:
         """
         Set the font face for nearly all font face related styles
         except for ``romanNumeralFontFace`` and ``figuredBassFontFace``,
@@ -376,19 +400,7 @@ class Style:
         :return: A list of tuples representing the changes made. Each tuple
           contains the tag name, the old font face, and the new font face.
         """
-        output: list[tuple[str, str | None, str]] = []
-        for font_face in font_faces:
-            change: tuple[str, str | None, str] = (
-                font_face,
-                self.get_value(font_face, raise_exception=False),
-                new_font_face,
-            )
-            self.set_value(
-                font_face,
-                new_font_face,
-            )
-            output.append(change)
-        return output
+        return self.set_value(text_font_faces, new_font_face)
 
     def get_all_font_faces(self) -> list[tuple[str, str]]:
         """
