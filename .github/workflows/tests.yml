@@ -9,6 +9,13 @@ on:
     branches: ['main']
   workflow_dispatch:
 
+env:
+  # https://github.com/musescore/MuseScore/issues/17247
+  # https://github.com/musescore/MuseScore/issues/17247#issuecomment-1510434918
+  # https://ourcodeworld.com/articles/read/1409/how-to-use-musescore-3-in-headless-mode-in-ubuntu-2004
+  QT_QPA_PLATFORM: offscreen
+
+
 jobs:
   tests:
     name: Python ${{ matrix.python-version }}
@@ -19,6 +26,17 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
+      - name: >-
+          Install “libfuse2” to prevent AppImage Error: error
+          while loading shared libraries: libfuse.so.2: cannot open shared
+          object file: No such file or directory
+        run: sudo apt install libfuse2
+      - name: Download latest “mscore” AppImage
+        run: |
+          wget --quiet --output-document mscore4 https://github.com/musescore/MuseScore/releases/download/v4.2.0/MuseScore-4.2.0.233521125-x86_64.AppImage
+          chmod a+x mscore
+          sudo cp mscore /usr/bin/mscore
+
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v3
       # https://github.com/marketplace/actions/setup-python
