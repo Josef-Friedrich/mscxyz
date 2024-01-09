@@ -10,6 +10,8 @@ complete musescore-manager \
         'n/--config-file/f/' \
         'n/-e/f/' \
         'n/--executable/f/' \
+        'n/-E/(mscz mscx spos mpos pdf svg png wav mp3 ogg flac mid midi kar musicxml xml mxl brf mei)/' \
+        'n/--extension/(mscz mscx spos mpos pdf svg png wav mp3 ogg flac mid midi kar musicxml xml mxl brf mei)/' \
         'n/-Y/f/' \
         'n/--style-file/f/' \
         'p/1/f/' \

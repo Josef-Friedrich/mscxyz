@@ -41,7 +41,7 @@ class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
 
 
 parser = argparse.ArgumentParser(
-    description="aaaaaaA command "
+    description="The legacy command "
     'line tool to manipulate the XML based "*.mscX" and "*.mscZ" '
     "files of the notation software MuseScore.",
     formatter_class=LineWrapRawTextHelpFormatter,

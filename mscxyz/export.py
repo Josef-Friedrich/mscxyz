@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
-extensions_4 = (
+extensions = (
     # Vendor specific formats
     "mscz",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L128
     "mscx",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/notation/notationmodule.cpp#L129
@@ -35,6 +35,7 @@ extensions_4 = (
     "brf",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/braille/braillemodule.cpp#L53
     "mei",  # https://github.com/musescore/MuseScore/blob/75fe9addbfd1b2588f4b817668e396a317131f8b/src/importexport/mei/meimodule.cpp#L58
 )
+"""Supported file extensions for export in MuseScore version 4."""
 
 
 class Export:
@@ -51,9 +52,9 @@ class Export:
 
         extension = extension.lower()
 
-        if extension not in extensions_4:
+        if extension not in extensions:
             raise ValueError(
-                f"Unsupported extension: {extension}! Supported extensions: {extensions_4}"
+                f"Unsupported extension: {extension}! Supported extensions: {extensions}"
             )
 
         dest: Path = self.score.change_path(extension=extension)

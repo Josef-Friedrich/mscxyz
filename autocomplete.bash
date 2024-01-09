@@ -13,6 +13,8 @@ _shtab_musescore_manager__Y_COMPGEN=_shtab_compgen_files
 _shtab_musescore_manager___style_file_COMPGEN=_shtab_compgen_files
 
 _shtab_musescore_manager___print_completion_choices=('bash' 'zsh' 'tcsh')
+_shtab_musescore_manager__E_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
+_shtab_musescore_manager___extension_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
 
 _shtab_musescore_manager_pos_0_nargs=*
 _shtab_musescore_manager__h_nargs=0

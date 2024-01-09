@@ -501,7 +501,7 @@ mscxyz
                       [-g SELECTION_GLOB] [-m] [--diff] [-e FILE_PATH] [-v]
                       {clean,export,help,meta,lyrics,rename,style} ... path
 
-  aaaaaaA command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
+  The legacy command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
 
   positional arguments:
     path                  Path to a *.msc[zx]" file or a folder which contains

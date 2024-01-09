@@ -12,6 +12,7 @@ import shtab
 import tmep
 
 from mscxyz import utils
+import mscxyz.export
 from mscxyz.meta import Interface, InterfaceReadWrite
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
@@ -168,6 +169,8 @@ group_export.add_argument(
     "-E",
     "--extension",
     dest="export_extension",
+    choices=mscxyz.export.extensions,
+    metavar="<extension>",
     default="pdf",
     help="Extension to export. If this option "
     'is omitted, then the default extension is "pdf".',
