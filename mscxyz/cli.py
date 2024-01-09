@@ -159,7 +159,6 @@ parser.add_argument(
     dest="export_extension",
     choices=mscxyz.export.extensions,
     metavar="<extension>",
-    default="pdf",
     help="Export the scores in a format defined by the extension. The exported file "
     "has the same path, only the file extension is different. Further information "
     "can be found at the MuseScore website: "
@@ -651,8 +650,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         #     elif args.subcommand == "export":
         #         score = Score(file)
-        #         if args.export_extension:
-        #             score.export.to_extension(extension=args.export_extension)
+        if args.export_extension:
+            score.export.to_extension(args.export_extension)
         #         else:
         #             score.export.to_extension()
         #     elif args.subcommand == "style":

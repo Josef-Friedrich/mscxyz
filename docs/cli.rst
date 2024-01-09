@@ -41,6 +41,15 @@ Comande line interface
                             Path of the musescore executable.
       -v, --verbose         Make commands more verbose. You can specifiy multiple
                             arguments (. g.: -vvv) to make the command more verbose.
+      -E <extension>, --export <extension>
+                            Export the scores in a format defined by the extension. The
+                            exported file has the same path, only the file extension is
+                            different. Further information can be found at the MuseScore
+                            website: https://musescore.org/en/handbook/2/file-formats,
+                            https://musescore.org/en/handbook/3/file-export,
+                            https://musescore.org/en/handbook/4/file-export. MuseScore
+                            must be installed and the script must know the location of
+                            the binary file.
 
     clean:
       Clean and reset the formating of the "*.mscx" file
@@ -48,19 +57,6 @@ Comande line interface
       -Y STYLE_FILE, --style-file STYLE_FILE
                             Load a "*.mss" style file and include the contents of this
                             file.
-
-    export:
-
-          Export the scores to PDFs or to a format specified by the extension. The
-          exported file has the same path, only the file extension is different. See
-
-          - https://musescore.org/en/handbook/2/file-formats
-          - https://musescore.org/en/handbook/3/file-export
-          - https://musescore.org/en/handbook/4/file-export
-
-      -E <extension>, --extension <extension>
-                            Extension to export. If this option is omitted, then the
-                            default extension is "pdf".
 
     meta:
       Deal with meta data informations stored in the MuseScore file. MuseScore can store meta data informations in different places:

@@ -2,7 +2,7 @@
 
 
 
-_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--extension' '-c' '--clean' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '-f' '--format' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-t' '--target' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts')
+_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--export' '-c' '--clean' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '-f' '--format' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-t' '--target' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts')
 
 _shtab_musescore_manager_pos_0_COMPGEN=_shtab_compgen_files
 _shtab_musescore_manager__C_COMPGEN=_shtab_compgen_files
@@ -14,7 +14,7 @@ _shtab_musescore_manager___style_file_COMPGEN=_shtab_compgen_files
 
 _shtab_musescore_manager___print_completion_choices=('bash' 'zsh' 'tcsh')
 _shtab_musescore_manager__E_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
-_shtab_musescore_manager___extension_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
+_shtab_musescore_manager___export_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
 
 _shtab_musescore_manager_pos_0_nargs=*
 _shtab_musescore_manager__h_nargs=0
