@@ -137,7 +137,11 @@ def execute_musescore(cli_args: list[str]) -> subprocess.Popen[Any]:
     cli_args.insert(0, executable)
     # https://doc.qt.io/qt-5/qguiapplication.html#supported-command-line-options
     # https://doc.qt.io/qt-5/qguiapplication.html#platformName-prop
-    p = subprocess.Popen(cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        ["-platform", "offscreen"] + cli_args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     p.wait()
     if p.returncode != 0:
         if p.stderr is not None:
