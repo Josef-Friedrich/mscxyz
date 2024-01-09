@@ -45,5 +45,7 @@ autocomplete:
 	musescore-manager --print-completion bash > autocomplete.bash
 	musescore-manager --print-completion tcsh > autocomplete.tcsh
 
+install_autocomplete: autocomplete
+	cp autocomplete.zsh "$(HOME)/.zsh-completions/_musescore-manager"
 
 .PHONY: test test_real_binary install install_editable update build publish format docs lint activate_venv pin_docs_requirements

@@ -16,11 +16,11 @@ _shtab_musescore_manager_options=(
   "(- : *)"{-V,--version}"[show program\'s version number and exit]"
   {-b,--backup}"[Create a backup file.]"
   {-k,--colorize}"[Colorize the command line print statements.]"
-  {-C,--config-file}"[Specify a configuration file in the INI format.]:general_config_file:"
+  {-C,--config-file}"[Specify a configuration file in the INI format.]:general_config_file:_files"
   {-d,--dry-run}"[Simulate the actions.]"
   {-m,--mscore}"[Open and save the XML file in MuseScore after manipulating the XML with lxml to avoid differences in the XML structure.]"
   "--diff[Show a diff of the XML file before and after the manipulation.]"
-  {-e,--executable}"[Path of the musescore executable.]:general_executable:"
+  {-e,--executable}"[Path of the musescore executable.]:general_executable:_files"
   "*"{-v,--verbose}"[Make commands more verbose. You can specifiy multiple arguments (. g.\: -vvv) to make the command more verbose.]"
   {-E,--extension}"[Extension to export. If this option is omitted, then the default extension is \"pdf\".]:export_extension:"
   {-c,--clean}"[Clean the meta data fields. Possible values\: \„all\“ or \„field_one,field_two\“.]:meta_clean:"
@@ -44,11 +44,11 @@ _shtab_musescore_manager_options=(
   "--mscz[Take only \"\*.mscz\" files into account.]"
   "--mscx[Take only \"\*.mscx\" files into account.]"
   "*"{-s,--style}"[Set a single style. For example\: --style pageWidth 8.5]:style_set:"
-  {-Y,--style-file}"[Load a \"\*.mss\" style file and include the contents of this file.]:style_file:"
+  {-Y,--style-file}"[Load a \"\*.mss\" style file and include the contents of this file.]:style_file:_files"
   {--s3,--styles-v3}"[List all possible version 3 styles.]"
   {--s4,--styles-v4}"[List all possible version 4 styles.]"
   "--list-fonts[List all font related styles.]"
-  "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:"
+  "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 
 

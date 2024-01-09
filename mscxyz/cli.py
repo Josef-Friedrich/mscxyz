@@ -9,16 +9,10 @@ import typing
 from typing import Sequence
 
 import shtab
-
-# import lxml
-# import lxml.etree
 import tmep
 
-# from lxml.etree import LxmlError
 from mscxyz import utils
 from mscxyz.meta import Interface, InterfaceReadWrite
-
-# from mscxyz.rename import rename_filename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
 
@@ -41,6 +35,9 @@ class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
     def _split_lines(self, text: typing.Text, width: int) -> typing.List[str]:
         text = self._whitespace_matcher.sub(" ", text).strip()
         return textwrap.wrap(text, 60)
+
+
+file_completers: list[argparse.Action] = []
 
 
 parser = argparse.ArgumentParser(
@@ -80,11 +77,13 @@ parser.add_argument(
     help="Colorize the command line print statements.",
 )
 
-parser.add_argument(
-    "-C",
-    "--config-file",
-    dest="general_config_file",
-    help="Specify a configuration file in the INI format.",
+file_completers.append(
+    parser.add_argument(
+        "-C",
+        "--config-file",
+        dest="general_config_file",
+        help="Specify a configuration file in the INI format.",
+    )
 )
 
 parser.add_argument(
@@ -112,13 +111,17 @@ parser.add_argument(
     help="Show a diff of the XML file before and after the manipulation.",
 )
 
-parser.add_argument(
-    "-e",
-    "--executable",
-    dest="general_executable",
-    help="Path of the musescore executable.",
-    metavar="FILE_PATH",
+
+file_completers.append(
+    parser.add_argument(
+        "-e",
+        "--executable",
+        dest="general_executable",
+        help="Path of the musescore executable.",
+        metavar="FILE_PATH",
+    )
 )
+
 
 parser.add_argument(
     "-v",
@@ -472,12 +475,14 @@ group_style.add_argument(
     help="Set a single style. For example: --style pageWidth 8.5",
 )
 
-group_clean.add_argument(
-    "-Y",
-    "--style-file",
-    dest="style_file",
-    type=open,
-    help='Load a "*.mss" style file and include the contents of this file.',
+file_completers.append(
+    group_clean.add_argument(
+        "-Y",
+        "--style-file",
+        dest="style_file",
+        type=open,
+        help='Load a "*.mss" style file and include the contents of this file.',
+    )
 )
 
 group_style.add_argument(
@@ -508,19 +513,19 @@ group_style.add_argument(
 # last positional parameter
 ###############################################################################
 
-parser.add_argument(
-    "path",
-    nargs="*",
-    default=["."],
-    metavar="<path>",
-    help='Path to a "*.msc[zx]" file or a folder containing "*.msc[zx]" files. '
-    "can be specified several times.",
+file_completers.append(
+    parser.add_argument(
+        "path",
+        nargs="*",
+        default=["."],
+        metavar="<path>",
+        help='Path to a "*.msc[zx]" file or a folder containing "*.msc[zx]" files. '
+        "can be specified several times.",
+    )
 )
 
-"""A command line tool to manipulate the XML based mscX and mscZ
-files of the notation software MuseScore.
-"""
-
+for action in file_completers:
+    action.complete = shtab.FILE  # type: ignore
 
 # def __report_errors(errors: list[Exception]) -> None:
 #     for error in errors:
