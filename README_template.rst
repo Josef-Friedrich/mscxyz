@@ -27,7 +27,30 @@ Installation
 
 .. code:: Shell
 
-    pip install mscxyz
+    pipx install mscxyz
+
+
+How to ...
+==========
+
+Specify the MuseScore files to work on.
+
+To find out which files are selected by the script, the ``--list-files`` option
+can be used. The ``--list-files`` option lists as the name suggests
+only the file paths and doesn’t touch the specified MuseScore files.
+
+::
+
+    musescore-manager --list-files
+
+::
+
+    musescore-manager score1.mscz score2.mscz score3.mscz
+
+::
+
+    musescore-manager score1.mscz score2.mscz score3.mscz
+
 
 CLI Usage
 =========
