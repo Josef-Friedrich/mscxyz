@@ -33,9 +33,8 @@ Installation
 How to ...
 ==========
 
-... specify the MuseScore files to work on.
+... specify the MuseScore files to work on?
 -------------------------------------------
-
 
 To find out which files are selected by the script, the ``-L, --list-files``
 option can be used. The ``--list-files`` option lists as the name suggests
@@ -75,6 +74,24 @@ To apply glob patterns on the file paths, the ``--glob`` option can be used.
 
 To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
 Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
+
+
+... enable autocomplete support?
+--------------------------------
+
+Use one of the following autocomplete files ...
+
+* `bash <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.bash>`_.
+* `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_.
+* `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_.
+
+... or generate the autocomplete files by yourself:
+
+::
+
+    musescore-manager --print-completion bash > autocomplete.bash
+    musescore-manager --print-completion zsh > autocomplete.zsh
+    musescore-manager --print-completion tcsh > autocomplete.tcsh
 
 CLI Usage
 =========

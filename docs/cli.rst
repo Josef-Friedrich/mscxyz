@@ -6,9 +6,9 @@ Comande line interface
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
                              [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m] [--diff]
-                             [-e FILE_PATH] [-v] [-E EXPORT_EXTENSION]
-                             [-c META_CLEAN] [-D] [-i SOURCE_FIELDS FORMAT_STRING]
-                             [-j] [-l DESTINATION FORMAT_STRING] [-y]
+                             [-e FILE_PATH] [-v] [-E <extension>] [-c META_CLEAN]
+                             [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
+                             [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
@@ -58,7 +58,7 @@ Comande line interface
           - https://musescore.org/en/handbook/3/file-export
           - https://musescore.org/en/handbook/4/file-export
 
-      -E EXPORT_EXTENSION, --extension EXPORT_EXTENSION
+      -E <extension>, --extension <extension>
                             Extension to export. If this option is omitted, then the
                             default extension is "pdf".
 

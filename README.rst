@@ -38,7 +38,7 @@ Installation
 How to ...
 ==========
 
-... specify the MuseScore files to work on.
+... specify the MuseScore files to work on?
 -------------------------------------------
 
 To find out which files are selected by the script, the ``-L, --list-files``
@@ -78,6 +78,23 @@ To apply glob patterns on the file paths, the ``--glob`` option can be used.
 To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
 Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
 
+... enable autocomplete support?
+--------------------------------
+
+Use one of the following autocomplete files ...
+
+* `bash <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.bash>`_.
+* `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_.
+* `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_.
+
+... or generate the autocomplete files by yourself:
+
+::
+
+    musescore-manager --print-completion bash > autocomplete.bash
+    musescore-manager --print-completion zsh > autocomplete.zsh
+    musescore-manager --print-completion tcsh > autocomplete.tcsh
+
 CLI Usage
 =========
 
@@ -85,9 +102,9 @@ CLI Usage
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
                              [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m] [--diff]
-                             [-e FILE_PATH] [-v] [-E EXPORT_EXTENSION]
-                             [-c META_CLEAN] [-D] [-i SOURCE_FIELDS FORMAT_STRING]
-                             [-j] [-l DESTINATION FORMAT_STRING] [-y]
+                             [-e FILE_PATH] [-v] [-E <extension>] [-c META_CLEAN]
+                             [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
+                             [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
@@ -137,7 +154,7 @@ CLI Usage
           - https://musescore.org/en/handbook/3/file-export
           - https://musescore.org/en/handbook/4/file-export
 
-      -E EXPORT_EXTENSION, --extension EXPORT_EXTENSION
+      -E <extension>, --extension <extension>
                             Extension to export. If this option is omitted, then the
                             default extension is "pdf".
 

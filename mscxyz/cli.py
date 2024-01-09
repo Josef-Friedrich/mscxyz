@@ -11,8 +11,8 @@ from typing import Sequence
 import shtab
 import tmep
 
-from mscxyz import utils
 import mscxyz.export
+from mscxyz import utils
 from mscxyz.meta import Interface, InterfaceReadWrite
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
