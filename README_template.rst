@@ -75,6 +75,28 @@ To apply glob patterns on the file paths, the ``--glob`` option can be used.
 To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
 Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
 
+... export files to different files types?
+------------------------------------------
+
+On the command line use the option ``--export`` to export the scores to
+different file types. The exported file has the same path, only the file
+extension is different. Further information about the supported file formats
+can be found at the MuseScore website:
+`Version 2 <https://musescore.org/en/handbook/2/file-formats>`_,
+`Version 3 <https://musescore.org/en/handbook/3/file-export>`_ and
+`Version 4 <https://musescore.org/en/handbook/4/file-export>`_
+The MuseScore binay must be installed and the script must know the location of t
+his binary.
+
+::
+
+    musescore-manager --export pdf
+    musescore-manager --export png
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+    score.export.to_extension("musicxml")
 
 ... enable autocomplete support?
 --------------------------------
@@ -92,9 +114,6 @@ Use one of the following autocomplete files ...
     musescore-manager --print-completion bash > autocomplete.bash
     musescore-manager --print-completion zsh > autocomplete.zsh
     musescore-manager --print-completion tcsh > autocomplete.tcsh
-
-... export files to different files types?
-------------------------------------------
 
 CLI Usage
 =========
