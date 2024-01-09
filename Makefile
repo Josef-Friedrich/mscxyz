@@ -4,7 +4,7 @@ test:
 	poetry run tox
 
 test_real_binary:
-	pytest -m only _test_real-binary.py
+	pytest _test_real-binary.py
 
 install:
 	poetry install

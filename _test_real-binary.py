@@ -1,4 +1,4 @@
-"""Test the command line interface using subprocess with the real binary. 
+"""Test the command line interface using subprocess with the real binary.
 
 Not meant for tests on Github.
 
@@ -94,7 +94,7 @@ def test_executable() -> None:
 
 
 @pytest.mark.parametrize(
-    "extension,expected",
+    "extension, expected",
     [
         ("mscz", "application/zip"),
         ("mscx", "text/xml"),
@@ -119,7 +119,7 @@ def test_executable() -> None:
 )
 def test_export(extension: str, expected: str) -> None:
     tmp: str = get_file("simple.mscz", version=4)
-    p = invoke("export", "--extension", extension, tmp)
+    p = invoke("--export", extension, tmp)
     assert p.returncode == 0
     numbering = ""
     if extension in ("svg", "png"):

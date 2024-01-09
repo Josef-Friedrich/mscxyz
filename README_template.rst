@@ -81,9 +81,9 @@ Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
 
 Use one of the following autocomplete files ...
 
-* `bash <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.bash>`_.
-* `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_.
-* `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_.
+* `bash <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.bash>`_
+* `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_
+* `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_
 
 ... or generate the autocomplete files by yourself:
 
@@ -92,6 +92,9 @@ Use one of the following autocomplete files ...
     musescore-manager --print-completion bash > autocomplete.bash
     musescore-manager --print-completion zsh > autocomplete.zsh
     musescore-manager --print-completion tcsh > autocomplete.tcsh
+
+... export files to different files types?
+------------------------------------------
 
 CLI Usage
 =========

@@ -153,27 +153,21 @@ group_clean = parser.add_argument_group(
 # export
 ###############################################################################
 
-group_export = parser.add_argument_group(
-    "export",
-    """
-    Export the scores to PDFs or to a format specified by the extension. The
-    exported file has the same path, only the file extension is different. See
-
-    - https://musescore.org/en/handbook/2/file-formats
-    - https://musescore.org/en/handbook/3/file-export
-    - https://musescore.org/en/handbook/4/file-export
-    """,
-)
-
-group_export.add_argument(
+parser.add_argument(
     "-E",
-    "--extension",
+    "--export",
     dest="export_extension",
     choices=mscxyz.export.extensions,
     metavar="<extension>",
     default="pdf",
-    help="Extension to export. If this option "
-    'is omitted, then the default extension is "pdf".',
+    help="Export the scores in a format defined by the extension. The exported file "
+    "has the same path, only the file extension is different. Further information "
+    "can be found at the MuseScore website: "
+    "https://musescore.org/en/handbook/2/file-formats, "
+    "https://musescore.org/en/handbook/3/file-export, "
+    "https://musescore.org/en/handbook/4/file-export. "
+    "MuseScore must be installed and the script must know the location of the "
+    "binary file.",
 )
 
 ###############################################################################
