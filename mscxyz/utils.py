@@ -135,6 +135,8 @@ def execute_musescore(cli_args: list[str]) -> subprocess.Popen[Any]:
     """
     executable = get_musescore_bin()
     cli_args.insert(0, executable)
+    # https://doc.qt.io/qt-5/qguiapplication.html#supported-command-line-options
+    # https://doc.qt.io/qt-5/qguiapplication.html#platformName-prop
     p = subprocess.Popen(cli_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     p.wait()
     if p.returncode != 0:
