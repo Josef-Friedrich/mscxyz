@@ -26,6 +26,8 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
+      - name: Install musescore3 to get all dependencies
+        run: sudo apt install musescore3
       - name: >-
           Install “libfuse2” to prevent AppImage Error: error
           while loading shared libraries: libfuse.so.2: cannot open shared

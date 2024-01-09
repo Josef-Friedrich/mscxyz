@@ -23,8 +23,8 @@ from mscxyz.style import Style
 test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
-# mscore_executable: str | None = shutil.which("mscore")
-mscore_executable: str | None = None
+mscore_executable: str | None = shutil.which("mscore")
+#mscore_executable: str | None = None
 
 def get_path(filename: str, version: int = 2) -> Path:
     """
