@@ -93,7 +93,7 @@ parser.add_argument(
 parser.add_argument(
     "-g",
     "--glob",
-    dest="general_glob",
+    dest="selection_glob",
     default="*.msc[xz]",
     help='Handle only files which matches against Unix style \
     glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
@@ -599,7 +599,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         show_all_help(args)
         sys.exit()
 
-    files = utils.list_score_paths(path=args.path, glob=args.general_glob)
+    files = utils.list_score_paths(path=args.path, glob=args.selection_glob)
 
     for file in files:
         print("\n" + utils.color(file, "red"))

@@ -93,8 +93,9 @@ def list_files(
         elif path.is_dir():
             for root, _, files in os.walk(path):
                 for file in files:
-                    if fnmatch.fnmatch(file, glob):
-                        yield Path(root) / file
+                    relpath = Path(root) / file
+                    if fnmatch.fnmatch(str(relpath), glob):
+                        yield relpath
 
 
 def list_zero_alphabet() -> List[str]:

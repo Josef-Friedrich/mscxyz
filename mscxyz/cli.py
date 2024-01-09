@@ -95,15 +95,6 @@ parser.add_argument(
     help="Simulate the actions.",
 )
 
-parser.add_argument(
-    "-g",
-    "--glob",
-    dest="general_glob",
-    default="*.msc[xz]",
-    help='Handle only files which matches against Unix style \
-    glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
-    option, the standard glob pattern "*.msc[xz]" is used.',
-)
 
 parser.add_argument(
     "-m",
@@ -140,12 +131,6 @@ parser.add_argument(
     verbose.",
 )
 
-parser.add_argument(
-    "--list-files",
-    action="store_true",
-    dest="general_only_list",
-    help="Only list files and do nothing else.",
-)
 
 ###############################################################################
 # groups in alphabetical order
@@ -427,6 +412,51 @@ group_rename.add_argument(
 )
 
 ###############################################################################
+# selection
+###############################################################################
+
+group_selection = parser.add_argument_group(
+    "selection",
+    "The following options affect how the manager selects the MuseScore files.",
+)
+
+group_selection.add_argument(
+    "-L",
+    "--list-files",
+    action="store_true",
+    dest="selection_list",
+    help="Only list files and do nothing else.",
+)
+
+group_selection_exclusive = group_selection.add_mutually_exclusive_group()
+
+group_selection_exclusive.add_argument(
+    "-g",
+    "--glob",
+    dest="selection_glob",
+    metavar="<glob-pattern>",
+    default="*.msc[xz]",
+    help='Handle only files which matches against Unix style \
+    glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
+    option, the standard glob pattern "*.msc[xz]" is used.',
+)
+
+group_selection_exclusive.add_argument(
+    "--mscz",
+    dest="selection_mscz",
+    action="store_true",
+    help='Take only "*.mscz" files into account.',
+)
+
+group_selection_exclusive.add_argument(
+    "--mscx",
+    dest="selection_mscx",
+    action="store_true",
+    help='Take only "*.mscx" files into account.',
+)
+
+
+###############################################################################
 # style
 ###############################################################################
 
@@ -482,6 +512,8 @@ group_style.add_argument(
 parser.add_argument(
     "path",
     nargs="*",
+    default=["."],
+    metavar="<path>",
     help='Path to a *.msc[zx]" file \
     or a folder which contains "*.msc[zx]" files. In conjunction \
     with the subcommand "help" this positional parameter \
@@ -535,8 +567,14 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             list_styles(4)
             return
 
-    for file in utils.list_files(src=args.path, glob=args.general_glob):
-        if args.general_only_list:
+    selection_glob: str = args.selection_glob
+    if args.selection_mscz:
+        selection_glob = "*.mscz"
+    elif args.selection_mscx:
+        selection_glob = "*.mscx"
+
+    for file in utils.list_files(src=args.path, glob=selection_glob):
+        if args.selection_list:
             print(file)
             continue
 

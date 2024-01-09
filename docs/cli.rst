@@ -5,22 +5,22 @@ Comande line interface
 :: 
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
-                             [-k] [-C GENERAL_CONFIG_FILE] [-d] [-g GENERAL_GLOB]
-                             [-m] [--diff] [-e FILE_PATH] [-v] [--list-files]
-                             [-E EXPORT_EXTENSION] [-c META_CLEAN] [-D]
-                             [-i SOURCE_FIELDS FORMAT_STRING] [-j]
-                             [-l DESTINATION FORMAT_STRING] [-y]
+                             [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m] [--diff]
+                             [-e FILE_PATH] [-v] [-E EXPORT_EXTENSION]
+                             [-c META_CLEAN] [-D] [-i SOURCE_FIELDS FORMAT_STRING]
+                             [-j] [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
-                             [-t RENAME_TARGET] [-s STYLE VALUE] [-Y STYLE_FILE]
-                             [--s3] [--s4] [--list-fonts]
-                             [path ...]
+                             [-t RENAME_TARGET] [-L]
+                             [-g <glob-pattern> | --mscz | --mscx] [-s STYLE VALUE]
+                             [-Y STYLE_FILE] [--s3] [--s4] [--list-fonts]
+                             [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
 
     positional arguments:
-      path                  Path to a *.msc[zx]" file or a folder which contains
+      <path>                Path to a *.msc[zx]" file or a folder which contains
                             "*.msc[zx]" files. In conjunction with the subcommand "help"
                             this positional parameter accepts the names of all other
                             subcommands or the word "all".
@@ -35,10 +35,6 @@ Comande line interface
       -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
                             Specify a configuration file in the INI format.
       -d, --dry-run         Simulate the actions.
-      -g GENERAL_GLOB, --glob GENERAL_GLOB
-                            Handle only files which matches against Unix style glob
-                            patterns (e. g. "*.mscx", "* - *"). If you omit this option,
-                            the standard glob pattern "*.msc[xz]" is used.
       -m, --mscore          Open and save the XML file in MuseScore after manipulating
                             the XML with lxml to avoid differences in the XML structure.
       --diff                Show a diff of the XML file before and after the
@@ -47,7 +43,6 @@ Comande line interface
                             Path of the musescore executable.
       -v, --verbose         Make commands more verbose. You can specifiy multiple
                             arguments (. g.: -vvv) to make the command more verbose.
-      --list-files          Only list files and do nothing else.
 
     clean:
       Clean and reset the formating of the "*.mscx" file
@@ -397,6 +392,17 @@ Comande line interface
       -t RENAME_TARGET, --target RENAME_TARGET
                             Target directory
 
+    selection:
+      The following options affect how the manager selects the MuseScore files.
+
+      -L, --list-files      Only list files and do nothing else.
+      -g <glob-pattern>, --glob <glob-pattern>
+                            Handle only files which matches against Unix style glob
+                            patterns (e. g. "*.mscx", "* - *"). If you omit this option,
+                            the standard glob pattern "*.msc[xz]" is used.
+      --mscz                Take only "*.mscz" files into account.
+      --mscx                Take only "*.mscx" files into account.
+
     style:
       Change the styles.
 
@@ -415,7 +421,7 @@ mscxyz
 .. code-block:: text
 
   usage: mscx-manager [-h] [-V] [-b] [-c] [-C GENERAL_CONFIG_FILE] [-d]
-                      [-g GENERAL_GLOB] [-m] [--diff] [-e FILE_PATH] [-v]
+                      [-g SELECTION_GLOB] [-m] [--diff] [-e FILE_PATH] [-v]
                       {clean,export,help,meta,lyrics,rename,style} ... path
 
   aaaaaaA command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -434,7 +440,7 @@ mscxyz
     -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
                           Specify a configuration file in the INI format.
     -d, --dry-run         Simulate the actions.
-    -g GENERAL_GLOB, --glob GENERAL_GLOB
+    -g SELECTION_GLOB, --glob SELECTION_GLOB
                           Handle only files which matches against Unix style glob
                           patterns (e. g. "*.mscx", "* - *"). If you omit this option,
                           the standard glob pattern "*.msc[xz]" is used.

@@ -2,7 +2,7 @@
 
 
 
-_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-g' '--glob' '-m' '--mscore' '--diff' '-e' '--executable' '-v' '--verbose' '--list-files' '-E' '--extension' '-c' '--clean' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '-f' '--format' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-t' '--target' '-s' '--style' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts')
+_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--extension' '-c' '--clean' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '-f' '--format' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-t' '--target' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts')
 
 
 
@@ -24,7 +24,6 @@ _shtab_musescore_manager___mscore_nargs=0
 _shtab_musescore_manager___diff_nargs=0
 _shtab_musescore_manager__v_nargs=0
 _shtab_musescore_manager___verbose_nargs=0
-_shtab_musescore_manager___list_files_nargs=0
 _shtab_musescore_manager__D_nargs=0
 _shtab_musescore_manager___delete_duplicates_nargs=0
 _shtab_musescore_manager__i_nargs=2
@@ -46,6 +45,10 @@ _shtab_musescore_manager__a_nargs=0
 _shtab_musescore_manager___ascii_nargs=0
 _shtab_musescore_manager__n_nargs=0
 _shtab_musescore_manager___no_whitespace_nargs=0
+_shtab_musescore_manager__L_nargs=0
+_shtab_musescore_manager___list_files_nargs=0
+_shtab_musescore_manager___mscz_nargs=0
+_shtab_musescore_manager___mscx_nargs=0
 _shtab_musescore_manager__s_nargs=2
 _shtab_musescore_manager___style_nargs=2
 _shtab_musescore_manager___s3_nargs=0

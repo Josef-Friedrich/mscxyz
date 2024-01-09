@@ -18,9 +18,8 @@ class DefaultArguments:
     general_diff: bool = False
     general_dry_run: bool = False
     general_executable: Optional[str] = None
-    general_glob: str = "*.mscx"
     general_mscore: bool = False
-    general_only_list: bool = False
+
     general_verbose: int = 0
 
     # export
@@ -51,6 +50,12 @@ class DefaultArguments:
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
     rename_target: Optional[str] = None
+
+    # selection
+    selection_list: bool = False
+    selection_glob: str = "*.mscx"
+    selection_mscz: bool = False
+    selection_mscx: bool = False
 
     # style
     style_set: list[list[str]] = []
