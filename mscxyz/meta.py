@@ -14,7 +14,7 @@ import tmep
 from lxml.etree import _Element
 
 from mscxyz import utils
-from mscxyz.settings_legacy import get_args
+from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -750,7 +750,7 @@ class InterfaceReadOnly:
 
     @property
     def readonly_relpath_backup(self) -> str:
-        return self.score.relpath_backup
+        return str(self.score.backup_file)
 
 
 class Interface:

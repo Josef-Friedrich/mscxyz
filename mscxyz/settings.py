@@ -8,7 +8,7 @@ import argparse
 import configparser
 import os
 from io import TextIOWrapper
-from typing import Optional, Sequence, cast
+from typing import Literal, Optional, Sequence, cast
 
 
 class DefaultArguments:
@@ -31,7 +31,7 @@ class DefaultArguments:
     help_rst: bool = False
 
     # lyrics
-    lyrics_extract: str = "all"
+    lyrics_extract: Optional[str] = None
     lyrics_fix: bool = False
     lyrics_remap: Optional[str] = None
 
@@ -57,7 +57,25 @@ class DefaultArguments:
     style_file: Optional[TextIOWrapper] = None
     style_styles_v3: bool = False
     style_styles_v4: bool = False
+    style_list_fonts: bool = False
     path: str = "."
+
+    subcommand: Optional[
+        Literal["clean", "export", "help", "lyrics", "meta", "rename", "style"]
+    ] = None
+    """TODO for legacy cli: remove"""
+
+    lyrics_extract_legacy: str = "all"
+    """TODO for legacy cli: remove"""
+
+    clean_style: Optional[TextIOWrapper] = None
+    """TODO for legacy cli: remove"""
+
+    style_list_3: bool = False
+    """TODO for legacy cli: remove"""
+
+    style_list_4: bool = False
+    """TODO for legacy cli: remove"""
 
 
 args = DefaultArguments()

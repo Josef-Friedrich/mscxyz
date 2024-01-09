@@ -8,7 +8,7 @@ import os
 import shutil
 import typing
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import lxml
 import lxml.etree
@@ -18,7 +18,7 @@ from mscxyz import utils
 from mscxyz.export import Export
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
-from mscxyz.settings_legacy import get_args
+from mscxyz.settings import get_args
 from mscxyz.style import Style
 
 if typing.TYPE_CHECKING:
@@ -94,8 +94,8 @@ class Score:
         return int(self.version)
 
     @property
-    def relpath_backup(self) -> str:
-        return str(self.path).replace("." + self.extension, "_bak." + self.extension)
+    def backup_file(self) -> Path:
+        return self.change_path(suffix="bak")
 
     @property
     def dirname(self) -> str:
@@ -121,7 +121,7 @@ class Score:
         return self.filename.replace("." + self.extension, "")
 
     def change_path(
-        self, suffix: Optional[str] = None, extension: Optional[str] = None
+        self, suffix: Optional[Any] = None, extension: Optional[str] = None
     ) -> Path:
         return utils.PathChanger(self.path).change(suffix=suffix, extension=extension)
 
@@ -157,7 +157,7 @@ class Score:
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
-        shutil.copy2(self.path, self.relpath_backup)
+        shutil.copy2(self.path, self.backup_file)
 
     def get_version(self) -> float:
         """

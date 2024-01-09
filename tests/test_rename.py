@@ -6,7 +6,7 @@ import os
 import tempfile
 
 from mscxyz import rename
-from mscxyz.settings_legacy import reset_args
+from mscxyz.settings import reset_args
 from tests import helper
 from tests.helper import ini_file
 

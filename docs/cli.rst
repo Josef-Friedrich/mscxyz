@@ -13,7 +13,7 @@ Comande line interface
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
                              [-t RENAME_TARGET] [-s STYLE VALUE] [-Y STYLE_FILE]
-                             [--s3] [--s4]
+                             [--s3] [--s4] [--list-fonts]
                              [path ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -172,22 +172,19 @@ Comande line interface
                             Set value to meta data fields.
 
     lyrics:
-
-          Extract lyrics. Without any option this subcommand  extracts all lyrics
-          verses into separate mscx files. This generated mscx files contain only one
-          verse. The old verse number is appended to the file name, e. g.:
-          score_1.mscx.
-
-      -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT
-                            The lyric verse number to extract or "all".
-      -r LYRICS_REMAP, --remap LYRICS_REMAP
+      -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT, --extract-lyrics LYRICS_EXTRACT
+                            Extract each lyrics verse into a separate MuseScore file.
+                            Specify ”all” to extract all lyrics verses. The old verse
+                            number is appended to the file name, e. g.: score_1.mscx.
+      -r LYRICS_REMAP, --remap LYRICS_REMAP, --remap-lyrics LYRICS_REMAP
                             Remap lyrics. Example: "--remap 3:2,5:3". This example
                             remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
                             commas to specify multiple remap pairs. One remap pair is
                             separated by a colon in this form: "old:new": "old" stands
                             for the old verse number. "new" stands for the new verse
                             number.
-      -F, --fix             Fix lyrics: Convert trailing hyphens ("la- la- la") to a
+      -F, --fix, --fix-lyrics
+                            Fix lyrics: Convert trailing hyphens ("la- la- la") to a
                             correct hyphenation ("la - la - la")
 
     rename:
@@ -404,6 +401,7 @@ Comande line interface
                             Set a single style. For example: --style pageWidth 8.5
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
+      --list-fonts          List all font related styles.
 
 Legacy
 ======
@@ -605,11 +603,12 @@ mscx-manager lyrics
 
 .. code-block:: text
 
-  usage: mscx-manager lyrics [-h] [-e LYRICS_EXTRACT] [-r LYRICS_REMAP] [-f]
+  usage: mscx-manager lyrics [-h] [-e LYRICS_EXTRACT_LEGACY] [-r LYRICS_REMAP]
+                             [-f]
 
   options:
     -h, --help            show this help message and exit
-    -e LYRICS_EXTRACT, --extract LYRICS_EXTRACT
+    -e LYRICS_EXTRACT_LEGACY, --extract LYRICS_EXTRACT_LEGACY
                           The lyric verse number to extract or "all".
     -r LYRICS_REMAP, --remap LYRICS_REMAP
                           Remap lyrics. Example: "--remap 3:2,5:3". This example

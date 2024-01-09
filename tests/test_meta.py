@@ -441,7 +441,7 @@ class TestClassCombined:
 
 class TestIntegration:
     def test_distribute_field(self) -> None:
-        tmp = helper.get_file("meta-distribute-field.mscx")
+        tmp = helper.get_score("meta-distribute-field.mscx")
         cli_legacy(
             "meta",
             "--distribute-field",
@@ -456,7 +456,7 @@ class TestIntegration:
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multple_source_fields(self) -> None:
-        tmp = helper.get_file("Title - Composer.mscx")
+        tmp = helper.get_score("Title - Composer.mscx")
         cli_legacy(
             "meta",
             "--distribute-field",
@@ -471,7 +471,7 @@ class TestIntegration:
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multiple_values(self) -> None:
-        tmp = helper.get_file("meta-distribute-field.mscx")
+        tmp = helper.get_score("meta-distribute-field.mscx")
         cli_legacy(
             "meta",
             "--distribute-field",
@@ -489,7 +489,7 @@ class TestIntegration:
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field_invalid_format_string(self) -> None:
-        tmp = helper.get_file("meta-distribute-field.mscx")
+        tmp = helper.get_score("meta-distribute-field.mscx")
         with pytest.raises(meta.FormatStringNoFieldError):
             cli_legacy("meta", "--distribute-field", "vbox_title", "lol", tmp)
 
@@ -501,13 +501,13 @@ class TestIntegration:
             "--distribute-field",
             "vbox_title",
             "$metatag_work_title - $metatag_composer",
-            helper.get_file("simple.mscx"),
+            helper.get_score("simple.mscx"),
         )
         capture = capsys.readouterr()
         assert "UnmatchedFormatStringError" in capture.out
 
     def test_clean_all(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy("meta", "--clean", "all", tmp)
         score = helper.reload(tmp)
         i = score.meta.interface_read_write
@@ -515,14 +515,14 @@ class TestIntegration:
             assert getattr(i, field) is None, field
 
     def test_clean_single_field(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy("meta", "--clean", "vbox_title", tmp)
         i = reload(tmp)
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer == "vbox_composer", "vbox_composer"
 
     def test_clean_some_fields(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy("meta", "--clean", "vbox_title,vbox_composer", tmp)
         i = reload(tmp)
         assert i.vbox_title is None, "vbox_title"
@@ -536,7 +536,7 @@ class TestIntegration:
             "meta",
             "--clean",
             "all",
-            helper.get_file("meta-all-values.mscx"),
+            helper.get_score("meta-all-values.mscx"),
         )
 
         capture = capsys.readouterr()
@@ -552,7 +552,7 @@ class TestIntegration:
             "meta",
             "--clean",
             "all",
-            helper.get_file("simple.mscx"),
+            helper.get_score("simple.mscx"),
         )
         capture = capsys.readouterr()
         lines = capture.out.splitlines()
@@ -570,7 +570,7 @@ class TestIntegration:
             "meta",
             "--clean",
             "all",
-            helper.get_file("simple.mscx"),
+            helper.get_score("simple.mscx"),
         )
         capture = capsys.readouterr()
         lines = capture.out.splitlines()
@@ -582,14 +582,14 @@ class TestIntegration:
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
     def test_show_verbose_zero(self, capsys: pytest.CaptureFixture[str]) -> None:
-        cli_legacy("meta", "--clean", "all", helper.get_file("simple.mscx"))
+        cli_legacy("meta", "--clean", "all", helper.get_score("simple.mscx"))
         capture = capsys.readouterr()
         assert "readonly_basename" in capture.out
         assert "readonly_abspath" not in capture.out
         assert "readonly_relpath_backup" not in capture.out
 
     def test_show_verbose_one(self, capsys: pytest.CaptureFixture[str]) -> None:
-        cli_legacy("-v", "meta", "--clean", "all", helper.get_file("simple.mscx"))
+        cli_legacy("-v", "meta", "--clean", "all", helper.get_score("simple.mscx"))
         capture = capsys.readouterr()
         assert "readonly_abspath" in capture.out
         assert "readonly_relpath_backup" not in capture.out
@@ -600,19 +600,19 @@ class TestIntegration:
             "meta",
             "--clean",
             "all",
-            helper.get_file("simple.mscx"),
+            helper.get_score("simple.mscx"),
         )
         capture = capsys.readouterr()
         assert "readonly_relpath_backup" in capture.out
 
     def test_set_field_simple_string(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy("meta", "--set-field", "vbox_title", "lol", tmp)
         i = reload(tmp)
         assert i.vbox_title == "lol"
 
     def test_set_field_multiple_times(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy(
             "meta",
             "--set-field",
@@ -628,7 +628,7 @@ class TestIntegration:
         assert i.vbox_composer == "troll"
 
     def test_set_field_with_templating(self) -> None:
-        tmp = helper.get_file("meta-all-values.mscx")
+        tmp = helper.get_score("meta-all-values.mscx")
         cli_legacy(
             "meta", "--set-field", "vbox_title", "$vbox_title ($vbox_composer)", tmp
         )
@@ -636,14 +636,14 @@ class TestIntegration:
         assert i.vbox_title == "vbox_title (vbox_composer)"
 
     def test_delete_duplicates(self) -> None:
-        tmp = helper.get_file("meta-duplicates.mscx")
+        tmp = helper.get_score("meta-duplicates.mscx")
         cli_legacy("meta", "--delete-duplicates", tmp)
         i = reload(tmp)
         assert not i.combined_lyricist
         assert not i.combined_subtitle
 
     def test_delete_duplicates_move_subtitle(self) -> None:
-        tmp = helper.get_file("meta-duplicates-move-subtitle.mscx")
+        tmp = helper.get_score("meta-duplicates-move-subtitle.mscx")
         cli_legacy("meta", "--delete-duplicates", tmp)
         i = reload(tmp)
         assert not i.combined_lyricist
@@ -651,7 +651,7 @@ class TestIntegration:
         assert i.combined_title == "Title"
 
     def test_log(self) -> None:
-        tmp = helper.get_file("simple.mscx")
+        tmp = helper.get_score("simple.mscx")
         log = tempfile.mktemp()
         cli_legacy("meta", "--log", log, "$combined_title-$combined_composer", tmp)
         log_file = open(log, "r")

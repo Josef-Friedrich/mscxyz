@@ -38,7 +38,7 @@ class TestArgs:
 
     def test_args_general_lyrics(self) -> None:
         args = parser.parse_args(["lyrics", "."])
-        assert args.lyrics_extract == "all"
+        assert args.lyrics_extract_legacy == "all"
         assert args.lyrics_fix is False
         assert args.lyrics_remap is None
         assert args.subcommand == "lyrics"

@@ -322,27 +322,23 @@ group_meta.add_argument(
 # lyrics
 ###############################################################################
 
-group_lyrics = parser.add_argument_group(
-    "lyrics",
-    """
-    Extract lyrics. Without any option this subcommand  extracts all lyrics
-    verses into separate mscx files. This generated mscx files contain only one
-    verse. The old verse number is appended to the file name, e. g.:
-    score_1.mscx.
-    """,
-)
+group_lyrics = parser.add_argument_group("lyrics")
 
 group_lyrics.add_argument(
     "-x",
     "--extract",
+    "--extract-lyrics",
     dest="lyrics_extract",
-    default="all",
-    help='The lyric verse number to extract or "all".',
+    help="Extract each lyrics verse into a separate MuseScore file. "
+    "Specify ”all” to extract all lyrics "
+    "verses. The old verse number is appended to the file name, e. g.: "
+    "score_1.mscx.",
 )
 
 group_lyrics.add_argument(
     "-r",
     "--remap",
+    "--remap-lyrics",
     dest="lyrics_remap",
     help='Remap lyrics. Example: "--remap 3:2,5:3". This \
     example remaps lyrics verse 3 to verse 2 and verse 5 to 3. \
@@ -355,6 +351,7 @@ group_lyrics.add_argument(
 group_lyrics.add_argument(
     "-F",
     "--fix",
+    "--fix-lyrics",
     action="store_true",
     dest="lyrics_fix",
     help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
@@ -466,6 +463,13 @@ group_style.add_argument(
     help="List all possible version 4 styles.",
 )
 
+group_style.add_argument(
+    "--list-fonts",
+    dest="style_list_fonts",
+    action="store_true",
+    help="List all font related styles.",
+)
+
 
 ###############################################################################
 # last positional parameter
@@ -533,6 +537,12 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             continue
 
         score = Score(file)
+        if args.general_backup:
+            score.backup()
+
+        if args.style_list_fonts:
+            score.style.print_all_font_faces()
+            continue
 
         if args.general_diff:
             score.make_snapshot()
@@ -543,87 +553,80 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         for field, value in args.style_set:
             score.style.set_value(field, value)
 
+        #     print("\n" + utils.color(file, "red"))
+
+        #     if args.subcommand == "clean":
+        #         score = Score(file)
+        #         print(score.filename)
+        #         score.clean()
+        #         if args.clean_style:
+        #             score.style.merge(styles=args.clean_style.name)
+        #         score.save(mscore=args.general_mscore)
+
+        #     elif args.subcommand == "lyrics":
+        #         score = Score(file)
+        if args.lyrics_remap:
+            score.lyrics.remap(args.lyrics_remap)
+        #         elif args.lyrics_fix:
+        #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
+        if args.lyrics_extract:
+            no = 0
+            if args.lyrics_extract != "all":
+                no = int(args.lyrics_extract)
+            score.lyrics.extract_lyrics(no)
+
+        #     elif args.subcommand == "meta":
+        #         score = Score(file)
+        #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
+        #             pre: dict[str, str] = score.meta.interface.export_to_dict()
+        #             if args.meta_clean:
+        #                 score.meta.clean_metadata(fields_spec=args.meta_clean)
+        #             if args.meta_json:
+        #                 score.meta.export_json()
+        #             if args.meta_dist:
+        #                 for a in args.meta_dist:
+        #                     score.meta.distribute_field(
+        #                         source_fields=a[0], format_string=a[1]
+        #                     )
+        #             if args.meta_set:
+        #                 for a in args.meta_set:
+        #                     score.meta.set_field(destination_field=a[0], format_string=a[1])
+        #             if args.meta_delete:
+        #                 score.meta.delete_duplicates()
+        #             if args.meta_sync:
+        #                 score.meta.sync_fields()
+        #             if args.meta_log:
+        #                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+        #             post: dict[str, str] = score.meta.interface.export_to_dict()
+        #             score.meta.show(pre, post)
+
+        #             if args.general_diff:
+        #                 score.print_diff()
+
+        #             if not args.general_dry_run and not score.errors and pre != post:
+        #                 score.save(mscore=args.general_mscore)
+
+        #     elif args.subcommand == "rename":
+        #         score = rename_filename(file)
+
+        #     elif args.subcommand == "export":
+        #         score = Score(file)
+        #         if args.export_extension:
+        #             score.export.to_extension(extension=args.export_extension)
+        #         else:
+        #             score.export.to_extension()
+        #     elif args.subcommand == "style":
+        #         score = Score(file)
+
+        #         if args.style_set:
+        #             for a in args.style_set:
+        #                 score.style.set_value(a[0], a[1])
+
         if args.general_diff:
             score.print_diff()
+
         if not args.general_dry_run:
-            pass
-            # score.save()
-
-    # for file in files:
-    #     print("\n" + utils.color(file, "red"))
-
-    #     if args.general_backup:
-    #         score = Score(file)
-    #         score.backup()
-
-    #     if args.subcommand == "clean":
-    #         score = Score(file)
-    #         print(score.filename)
-    #         score.clean()
-    #         if args.clean_style:
-    #             score.style.merge(styles=args.clean_style.name)
-    #         score.save(mscore=args.general_mscore)
-
-    #     elif args.subcommand == "lyrics":
-    #         score = Score(file)
-    #         if args.lyrics_remap:
-    #             score.lyrics.remap(
-    #                 remap_string=args.lyrics_remap, mscore=args.general_mscore
-    #             )
-    #         elif args.lyrics_fix:
-    #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
-    #         else:
-    #             score.lyrics.extract_lyrics(
-    #                 number=args.lyrics_extract, mscore=args.general_mscore
-    #             )
-
-    #     elif args.subcommand == "meta":
-    #         score = Score(file)
-    #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
-    #             pre: dict[str, str] = score.meta.interface.export_to_dict()
-    #             if args.meta_clean:
-    #                 score.meta.clean_metadata(fields_spec=args.meta_clean)
-    #             if args.meta_json:
-    #                 score.meta.export_json()
-    #             if args.meta_dist:
-    #                 for a in args.meta_dist:
-    #                     score.meta.distribute_field(
-    #                         source_fields=a[0], format_string=a[1]
-    #                     )
-    #             if args.meta_set:
-    #                 for a in args.meta_set:
-    #                     score.meta.set_field(destination_field=a[0], format_string=a[1])
-    #             if args.meta_delete:
-    #                 score.meta.delete_duplicates()
-    #             if args.meta_sync:
-    #                 score.meta.sync_fields()
-    #             if args.meta_log:
-    #                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
-    #             post: dict[str, str] = score.meta.interface.export_to_dict()
-    #             score.meta.show(pre, post)
-
-    #             if args.general_diff:
-    #                 score.print_diff()
-
-    #             if not args.general_dry_run and not score.errors and pre != post:
-    #                 score.save(mscore=args.general_mscore)
-
-    #     elif args.subcommand == "rename":
-    #         score = rename_filename(file)
-
-    #     elif args.subcommand == "export":
-    #         score = Score(file)
-    #         if args.export_extension:
-    #             score.export.to_extension(extension=args.export_extension)
-    #         else:
-    #             score.export.to_extension()
-    #     elif args.subcommand == "style":
-    #         score = Score(file)
-
-    #         if args.style_set:
-    #             for a in args.style_set:
-    #                 score.style.set_value(a[0], a[1])
-
+            score.save()
     #
     #     else:
     #         raise ValueError("Unknown subcommand")

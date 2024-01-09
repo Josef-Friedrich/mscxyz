@@ -7,30 +7,40 @@ from unittest import mock
 
 import pytest
 
+from mscxyz import Score
 from tests import helper
-from tests.helper import cli_legacy
+from tests.helper import cli, cli_legacy
 
 
 def test_help() -> None:
+    output: bytes = subprocess.check_output(("musescore-manager", "--help"))
+    assert "usage: musescore-manager" in str(output)
+
+
+@pytest.mark.legacy
+def test_help_legacy() -> None:
     output: bytes = subprocess.check_output(("mscx-manager", "--help"))
     assert "usage: mscx-manager" in str(output)
 
 
-class TestBackup:
-    tmp: str
+class TestOptionBackup:
+    def test_exists(self, score: Score) -> None:
+        cli("--backup", score)
+        assert os.path.isfile(score.backup_file)
 
-    backup: str
+    @pytest.mark.legacy
+    def test_exists_legacy(self, score: Score) -> None:
+        cli_legacy("--backup", "meta", score)
+        assert os.path.isfile(score.backup_file)
 
-    def setup_method(self) -> None:
-        self.tmp = helper.get_file("simple.mscx")
-        self.backup = self.tmp.replace(".mscx", "_bak.mscx")
-        cli_legacy("--backup", "meta", self.tmp)
+    def test_size(self, score: Score) -> None:
+        cli("--backup", "--dry-run", score)
+        assert os.path.getsize(score.path) == os.path.getsize(score.backup_file)
 
-    def test_exists(self) -> None:
-        assert os.path.isfile(self.backup)
-
-    def test_size(self) -> None:
-        assert os.path.getsize(self.tmp) == os.path.getsize(self.backup)
+    @pytest.mark.legacy
+    def test_size_legacy(self, score: Score) -> None:
+        cli_legacy("--backup", "meta", score)
+        assert os.path.getsize(score.path) == os.path.getsize(score.backup_file)
 
 
 class TestExport:

@@ -2,52 +2,71 @@
 
 from __future__ import annotations
 
-import os
+from typing import Sequence
 
-from mscxyz import utils
+import pytest
+
+from mscxyz import Score, utils
 from tests import helper
-from tests.helper import cli_legacy
+from tests.helper import cli, cli_legacy
 
 
-class TestLyrics:
-    def setup_method(self) -> None:
-        self.score_path = helper.get_file("lyrics.mscx")
+@pytest.fixture
+def lyrics() -> Score:
+    return helper.get_score("lyrics.mscz", version=4)
 
-    def assert_lyrics_file_exists(self, number: int) -> None:
-        assert os.path.isfile(
-            self.score_path.replace(".mscx", "_{}.mscx".format(number))
-        )
 
-    def _test_without_arguments(self, version: int = 2) -> None:
-        self.score_path = helper.get_file("lyrics.mscx", version)
-        cli_legacy("lyrics", self.score_path)
-        self.assert_lyrics_file_exists(1)
-        self.assert_lyrics_file_exists(2)
-        self.assert_lyrics_file_exists(3)
+@pytest.mark.parametrize(
+    "filename, expected",
+    (
+        ("score.mscz", 0),
+        ("lyrics.mscz", 3),
+        ("lyrics_number-of-verses.mscz", 7),
+    ),
+)
+def test_property_number_of_verse(filename: str, expected: int) -> None:
+    score = helper.get_score(filename, version=4)
+    assert score.lyrics.number_of_verses == expected
 
-    def test_without_arguments(self) -> None:
-        self._test_without_arguments(version=2)
-        self._test_without_arguments(version=3)
 
-    def _test_extract_all(self, version: int = 2) -> None:
-        self.score_path = helper.get_file("lyrics.mscx", version)
-        cli_legacy("lyrics", "--extract", "all", self.score_path)
-        self.assert_lyrics_file_exists(1)
-        self.assert_lyrics_file_exists(2)
-        self.assert_lyrics_file_exists(3)
+def is_extraction(score: Score, numbers: int | Sequence[int]) -> bool:
+    if isinstance(numbers, int):
+        numbers = [numbers]
+    for n in numbers:
+        if not score.change_path(suffix=n).exists():
+            return False
+    return True
 
-    def test_extract_all(self) -> None:
-        self._test_extract_all(version=2)
-        self._test_extract_all(version=3)
 
-    def _test_extract_by_number(self, version: int = 2) -> None:
-        self.score_path = helper.get_file("lyrics.mscx", version)
-        cli_legacy("lyrics", "--extract", "2", self.score_path)
-        self.assert_lyrics_file_exists(2)
+class TestLyricsExtraction:
+    @pytest.mark.legacy
+    def test_without_arguments_legacy(self, lyrics: Score) -> None:
+        cli_legacy("lyrics", lyrics)
+        assert is_extraction(lyrics, [1, 2, 3])
 
-    def test_extract_by_number(self) -> None:
-        self._test_extract_by_number(version=2)
-        self._test_extract_by_number(version=3)
+    def test_without_arguments(self, lyrics: Score) -> None:
+        cli(lyrics)
+        assert not is_extraction(lyrics, [1, 2, 3])
+
+    @pytest.mark.legacy
+    def test_extract_all_legacy(self, lyrics: Score) -> None:
+        cli_legacy("lyrics", "--extract", "all", lyrics)
+        assert is_extraction(lyrics, [1, 2, 3])
+
+    def test_extract_all(self, lyrics: Score) -> None:
+        cli("--extract-lyrics", "all", lyrics)
+        assert is_extraction(lyrics, [1, 2, 3])
+
+    @pytest.mark.legacy
+    def test_extract_by_number_legacy(self, lyrics: Score) -> None:
+        cli_legacy("lyrics", "--extract", "2", lyrics)
+        assert is_extraction(lyrics, 2)
+        assert not is_extraction(lyrics, [1, 3])
+
+    def test_extract_by_number(self, lyrics: Score) -> None:
+        cli("--extract-lyrics", "2", lyrics)
+        assert is_extraction(lyrics, 2)
+        assert not is_extraction(lyrics, [1, 3])
 
 
 class TestLyricsFix:
@@ -55,7 +74,7 @@ class TestLyricsFix:
         score_path = helper.get_file("lyrics-fix.mscx", version)
         cli_legacy("lyrics", "--fix", score_path)
         score = helper.reload(score_path)
-        self.lyrics = score.lyrics.lyrics
+        self.lyrics = score.lyrics.elements
 
         text: list[str] = []
         syllabic: list[str] = []
@@ -110,19 +129,13 @@ class TestLyricsFix:
 
 class TestLyricsRemap:
     def test_remap(self) -> None:
-        score_path = helper.get_file("lyrics-remap.mscx")
-        cli_legacy("lyrics", "--remap", "2:6", score_path)
-        score = helper.reload(score_path)
-        text: list[str] = []
-        for element in score.lyrics.lyrics:
-            tag = element.element
-            tag_text = tag.find("no")
+        score = helper.get_score("lyrics-remap.mscx")
 
-            text_no = utils.xml.get_text(tag_text)
-            if text_no:
-                no = text_no
-            else:
-                no = "0"
-            text.append(no)
+        cli_legacy("lyrics", "--remap", "2:6", score)
+        new_score = score.reload()
+        nos: list[int] = []
 
-        assert text == ["0", "5", "2", "3", "4"]
+        for element in new_score.lyrics.elements:
+            nos.append(element.no)
+
+        assert nos == [1, 6, 3, 4, 5]

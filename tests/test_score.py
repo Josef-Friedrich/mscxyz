@@ -175,7 +175,7 @@ class TestClean:
 
     def _test_clean_add_style(self, version: int = 2) -> None:
         tmp = helper.get_file("simple.mscx", version)
-        cli_legacy("clean", "--style", helper.get_file("style.mss", version), tmp)
+        cli_legacy("clean", "--style", helper.get_score("style.mss", version), tmp)
         style = helper.read_file(tmp)
         assert "<staffUpperBorder>77</staffUpperBorder>" in style
 
