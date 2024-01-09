@@ -101,8 +101,8 @@ parser.add_argument(
     "--mscore",
     action="store_true",
     dest="general_mscore",
-    help="Open and save the XML file in MuseScore after manipulating the XML \
-    with lxml to avoid differences in the XML structure.",
+    help="Open and save the XML file in MuseScore after manipulating the XML "
+    "with lxml to avoid differences in the XML structure.",
 )
 
 parser.add_argument(
@@ -126,9 +126,9 @@ parser.add_argument(
     action="count",
     dest="general_verbose",
     default=0,
-    help="Make commands more verbose. You can specifiy \
-    multiple arguments (. g.: -vvv) to make the command more \
-    verbose.",
+    help="Make commands more verbose. You can specifiy "
+    "multiple arguments (. g.: -vvv) to make the command more "
+    "verbose.",
 )
 
 
@@ -166,8 +166,8 @@ group_export.add_argument(
     "--extension",
     dest="export_extension",
     default="pdf",
-    help='Extension to export. If this option \
-    is omitted, then the default extension is "pdf".',
+    help="Extension to export. If this option "
+    'is omitted, then the default extension is "pdf".',
 )
 
 ###############################################################################
@@ -176,7 +176,7 @@ group_export.add_argument(
 
 group_meta = parser.add_argument_group(
     "meta",
-    "Deal with meta data informations stored in the MuseScore file."
+    "Deal with meta data informations stored in the MuseScore file. "
     + textwrap.dedent(
         """\
     MuseScore can store meta data informations in different places:
@@ -239,8 +239,8 @@ group_meta.add_argument(
     "-c",
     "--clean",
     dest="meta_clean",
-    help="Clean the meta data fields. Possible values: „all“ or \
-    „field_one,field_two“.",
+    help="Clean the meta data fields. Possible values: „all“ or "
+    "„field_one,field_two“.",
 )
 
 group_meta.add_argument(
@@ -261,12 +261,12 @@ group_meta.add_argument(
     action="append",
     nargs=2,
     metavar=("SOURCE_FIELDS", "FORMAT_STRING"),
-    help="Distribute source fields to target fields applying a format string \
-    on the source fields. It is possible to apply multiple \
-    --distribute-fields options. SOURCE_FIELDS can be a single field or a \
-    comma separated list of fields: field_one,field_two. The program \
-    tries first to match the FORMAT_STRING on the first source field. If this\
-    fails, it tries the second source field ... an so on.",
+    help="Distribute source fields to target fields applying a format string "
+    "on the source fields. It is possible to apply multiple "
+    "--distribute-fields options. SOURCE_FIELDS can be a single field or a "
+    "comma separated list of fields: field_one,field_two. The program "
+    "tries first to match the FORMAT_STRING on the first source field. If this"
+    "fails, it tries the second source field ... an so on.",
 )
 
 group_meta.add_argument(
@@ -292,9 +292,9 @@ group_meta.add_argument(
     "--synchronize",
     action="store_true",
     dest="meta_sync",
-    help="Synchronize the values of the first vertical frame (vbox) \
-    (title, subtitle, composer, lyricist) with the corresponding \
-    metadata fields",
+    help="Synchronize the values of the first vertical frame (vbox) "
+    "(title, subtitle, composer, lyricist) with the corresponding "
+    "metadata fields",
 )
 
 group_meta.add_argument(
@@ -329,12 +329,12 @@ group_lyrics.add_argument(
     "--remap",
     "--remap-lyrics",
     dest="lyrics_remap",
-    help='Remap lyrics. Example: "--remap 3:2,5:3". This \
-    example remaps lyrics verse 3 to verse 2 and verse 5 to 3. \
-    Use commas to specify multiple remap pairs. One remap pair \
-    is separated by a colon in this form: "old:new": "old" \
-    stands for the old verse number. "new" stands for the new \
-    verse number.',
+    help='Remap lyrics. Example: "--remap 3:2,5:3". This '
+    "example remaps lyrics verse 3 to verse 2 and verse 5 to 3. "
+    "Use commas to specify multiple remap pairs. One remap pair "
+    'is separated by a colon in this form: "old:new": "old" '
+    'stands for the old verse number. "new" stands for the new '
+    "verse number.",
 )
 
 group_lyrics.add_argument(
@@ -343,8 +343,8 @@ group_lyrics.add_argument(
     "--fix-lyrics",
     action="store_true",
     dest="lyrics_fix",
-    help='Fix lyrics: Convert trailing hyphens ("la- la- la") \
-    to a correct hyphenation ("la - la - la")',
+    help='Fix lyrics: Convert trailing hyphens ("la- la- la") '
+    'to a correct hyphenation ("la - la - la")',
 )
 
 ###############################################################################
@@ -391,8 +391,7 @@ group_rename.add_argument(
     "--no-whitespace",
     dest="rename_no_whitespace",
     action="store_true",
-    help="Replace all whitespaces with dashes or \
-    sometimes underlines.",
+    help="Replace all whitespaces with dashes or sometimes underlines.",
 )
 
 group_rename.add_argument(
@@ -400,8 +399,8 @@ group_rename.add_argument(
     "--skip-if-empty",
     dest="rename_skip",
     metavar="FIELDS",
-    help="Skip rename action if FIELDS are empty. Separate FIELDS using \
-    commas: combined_composer,combined_title",
+    help="Skip rename action if FIELDS are empty. Separate FIELDS using "
+    "commas: combined_composer,combined_title",
 )
 
 group_rename.add_argument(
@@ -436,9 +435,9 @@ group_selection_exclusive.add_argument(
     dest="selection_glob",
     metavar="<glob-pattern>",
     default="*.msc[xz]",
-    help='Handle only files which matches against Unix style \
-    glob patterns (e. g. "*.mscx", "* - *"). If you omit this \
-    option, the standard glob pattern "*.msc[xz]" is used.',
+    help="Handle only files which matches against Unix style "
+    'glob patterns (e. g. "*.mscx", "* - *"). If you omit this '
+    'option, the standard glob pattern "*.msc[xz]" is used.',
 )
 
 group_selection_exclusive.add_argument(
@@ -514,11 +513,8 @@ parser.add_argument(
     nargs="*",
     default=["."],
     metavar="<path>",
-    help='Path to a *.msc[zx]" file \
-    or a folder which contains "*.msc[zx]" files. In conjunction \
-    with the subcommand "help" this positional parameter \
-    accepts the names of all other subcommands or the word \
-    "all".',
+    help='Path to a "*.msc[zx]" file or a folder containing "*.msc[zx]" files. '
+    "can be specified several times.",
 )
 
 """A command line tool to manipulate the XML based mscX and mscZ

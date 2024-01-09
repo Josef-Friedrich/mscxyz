@@ -99,10 +99,8 @@ CLI Usage
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
 
     positional arguments:
-      <path>                Path to a *.msc[zx]" file or a folder which contains
-                            "*.msc[zx]" files. In conjunction with the subcommand "help"
-                            this positional parameter accepts the names of all other
-                            subcommands or the word "all".
+      <path>                Path to a "*.msc[zx]" file or a folder containing
+                            "*.msc[zx]" files. can be specified several times.
 
     options:
       -h, --help            show this help message and exit
@@ -144,7 +142,7 @@ CLI Usage
                             default extension is "pdf".
 
     meta:
-      Deal with meta data informations stored in the MuseScore file.MuseScore can store meta data informations in different places:
+      Deal with meta data informations stored in the MuseScore file. MuseScore can store meta data informations in different places:
 
       # metatag
 
@@ -236,7 +234,7 @@ CLI Usage
                             multiple --distribute-fields options. SOURCE_FIELDS can be a
                             single field or a comma separated list of fields:
                             field_one,field_two. The program tries first to match the
-                            FORMAT_STRING on the first source field. If this fails, it
+                            FORMAT_STRING on the first source field. If thisfails, it
                             tries the second source field ... an so on.
       -j, --json            Additionally write the meta data to a json file.
       -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
