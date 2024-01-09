@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from tests.helper import stdout
+from tests.helper import stdout, sysexit
 
 
 class TestSpecifyMusescoreFiles:
@@ -47,5 +47,34 @@ class TestSpecifyMusescoreFiles:
         assert dir3 in output
         assert dir4 in output
 
+    def test_glob(self) -> None:
+        output = stdout("-L", "--glob", "*/by_version/4/*.mscz")
+        assert "/by_version/4/" in output
+        assert ".mscz" in output
+        assert "/by_version/3/" not in output
+        assert ".mscx" not in output
+
     def test_mscz_only(self) -> None:
-        assert "score.mscz" in stdout("--mscz")
+        output = stdout("-L", "--mscz")
+        assert "score.mscz" in output
+        assert "score.mscx" not in output
+
+    def test_mscx_only(self) -> None:
+        output = stdout("-L", "--mscx")
+        assert "score.mscz" not in output
+        assert "simple.mscx" in output
+
+    def test_dont_mix_mscz_and_mscx(self) -> None:
+        assert "--mscx: not allowed with argument --mscz" in sysexit(
+            "-L", "--mscz", "--mscx"
+        )
+
+    def test_dont_mix_mscz_and_glob(self) -> None:
+        assert "--glob: not allowed with argument --mscz" in sysexit(
+            "-L", "--mscz", "--glob", "*"
+        )
+
+    def test_dont_mix_mscx_and_glob(self) -> None:
+        assert "--glob: not allowed with argument --mscx" in sysexit(
+            "-L", "--mscx", "-glob", "*"
+        )

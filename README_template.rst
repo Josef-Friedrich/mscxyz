@@ -39,7 +39,7 @@ How to ...
 
 To find out which files are selected by the script, the ``-L, --list-files``
 option can be used. The ``--list-files`` option lists as the name suggests
-only the file paths and doesn’t touch the specified MuseScore files:
+only the file paths and doesn’t touch the specified *MuseScore* files:
 
 ::
 
@@ -65,6 +65,16 @@ or use the path expansion of your shell:
 
     musescore-manager -L *.mscz
 
+
+To apply glob patterns on the file paths, the ``--glob`` option can be used.
+
+::
+
+    musescore-manager -L --glob "*/folder/*.mscz"
+
+
+To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
+Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
 
 CLI Usage
 =========
