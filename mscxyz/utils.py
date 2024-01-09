@@ -147,7 +147,7 @@ def execute_musescore(cli_args: list[str]) -> subprocess.Popen[Any]:
         if p.stderr is not None:
             for line in p.stderr:
                 print(line.decode("utf-8"))
-            raise ValueError("mscore exits with returncode != 0")
+            # raise ValueError("mscore exits with returncode != 0")
     return p
 
 
