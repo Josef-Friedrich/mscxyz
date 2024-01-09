@@ -15,7 +15,7 @@ class TestArgs:
         assert args.general_backup is False
         assert args.general_colorize is False
         assert args.general_dry_run is False
-        assert args.general_glob == "*.msc[xz]"
+        assert args.selection_glob == "*.msc[xz]"
         assert args.general_mscore is False
         assert args.general_verbose == 0
         assert args.path == "."

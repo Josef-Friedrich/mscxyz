@@ -33,23 +33,37 @@ Installation
 How to ...
 ==========
 
-Specify the MuseScore files to work on.
+... specify the MuseScore files to work on.
+-------------------------------------------
 
-To find out which files are selected by the script, the ``--list-files`` option
-can be used. The ``--list-files`` option lists as the name suggests
-only the file paths and doesn’t touch the specified MuseScore files.
+
+To find out which files are selected by the script, the ``-L, --list-files``
+option can be used. The ``--list-files`` option lists as the name suggests
+only the file paths and doesn’t touch the specified MuseScore files:
 
 ::
 
     musescore-manager --list-files
 
+Without an option the script lists all MuseScore files in the current directory
+in a recursive way (``musescore-manager`` = ``musescore-manager .``).
+You can pass multiple file paths to the script:
+
 ::
 
-    musescore-manager score1.mscz score2.mscz score3.mscz
+    musescore-manager -L score1.mscz score2.mscz score3.mscz
+
+or multiple directories:
 
 ::
 
-    musescore-manager score1.mscz score2.mscz score3.mscz
+    musescore-manager -L folder1 folder2 folder3
+
+or use the path expansion of your shell:
+
+::
+
+    musescore-manager -L *.mscz
 
 
 CLI Usage

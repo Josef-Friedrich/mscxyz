@@ -149,6 +149,13 @@ def cli(*cli_args: CliArg) -> None:
     __simluate_cli(*cli_args)
 
 
+def sysexit(*cli_args: CliArg) -> str:
+    return subprocess.check_output(
+        ["musescore-manager"] + __stringify_args(cli_args),
+        encoding="utf-8",
+    )
+
+
 def run(*args: str) -> str:
     """
     Run the mscx-manager command on the command line with the given arguments
