@@ -134,11 +134,11 @@ def execute_musescore(cli_args: list[str]) -> subprocess.Popen[Any]:
     :param cli_args: Command line arguments to call the mscore binary with.
     """
     executable = get_musescore_bin()
-    cli_args.insert(0, executable)
     # https://doc.qt.io/qt-5/qguiapplication.html#supported-command-line-options
     # https://doc.qt.io/qt-5/qguiapplication.html#platformName-prop
+    cli_args = [executable, "-platform", "offscreen"] + cli_args
     p = subprocess.Popen(
-        ["-platform", "offscreen"] + cli_args,
+        cli_args,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
