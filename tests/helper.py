@@ -23,6 +23,8 @@ from mscxyz.style import Style
 test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
+mscore_executable: str | None = shutil.which("mscore")
+
 
 def get_path(filename: str, version: int = 2) -> Path:
     """
@@ -106,6 +108,19 @@ def read_file(filename: str | Path) -> str:
     output = tmp.read()
     tmp.close()
     return output
+
+
+def get_file_type(file: str | Path) -> str:
+    """Get the type of a file using the `file` command."""
+    output: str = subprocess.check_output(
+        ("file", "--brief", "--mime", file), encoding="utf-8"
+    )
+    return output.split(";")[0]
+
+
+def assert_file_type(file: str | Path, expected: str) -> None:
+    """Assert that the type of a file is equal to the expected type."""
+    assert get_file_type(file) == expected
 
 
 CliArg = Union[str, Path, Score]

@@ -54,7 +54,7 @@ dest = "docs/cli.rst"
 python_files = "*_test.py"
 
 [tool.pytest.ini_options]
-markers = ["only", "legacy"]
+markers = ["only", "legacy", "slow"]
 
 [tool.pyright]
 reportPrivateUsage = false
