@@ -40,10 +40,11 @@ CLI Usage
 
 :: 
 
-    usage: musescore-manager [-h] [-V] [-b] [-k] [-C GENERAL_CONFIG_FILE] [-d]
-                             [-g GENERAL_GLOB] [-m] [--diff] [-e FILE_PATH] [-v]
-                             [--list-files] [-E EXPORT_EXTENSION] [-c META_CLEAN]
-                             [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
+    usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
+                             [-k] [-C GENERAL_CONFIG_FILE] [-d] [-g GENERAL_GLOB]
+                             [-m] [--diff] [-e FILE_PATH] [-v] [--list-files]
+                             [-E EXPORT_EXTENSION] [-c META_CLEAN] [-D]
+                             [-i SOURCE_FIELDS FORMAT_STRING] [-j]
                              [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
@@ -62,6 +63,8 @@ CLI Usage
 
     options:
       -h, --help            show this help message and exit
+      --print-completion {bash,zsh,tcsh}
+                            print shell completion script
       -V, --version         show program's version number and exit
       -b, --backup          Create a backup file.
       -k, --colorize        Colorize the command line print statements.

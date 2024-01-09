@@ -24,6 +24,7 @@ lxml = "^5.0.0"
 termcolor = "^2.4.0"
 tmep = "^2.4.0"
 lxml-stubs = "^0.4.0"
+shtab = "^1.6.5"
 
 [tool.poetry.group.dev.dependencies]
 readme-patcher = "^0.6.0"

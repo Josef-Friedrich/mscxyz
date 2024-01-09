@@ -1,3 +1,5 @@
+all: test autocomplete
+
 test:
 	poetry run tox
 
@@ -37,5 +39,11 @@ activate_venv:
 
 pin_docs_requirements:
 	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
+
+autocomplete:
+	musescore-manager --print-completion zsh > autocomplete.zsh
+	musescore-manager --print-completion bash > autocomplete.bash
+	musescore-manager --print-completion tcsh > autocomplete.tcsh
+
 
 .PHONY: test test_real_binary install install_editable update build publish format docs lint activate_venv pin_docs_requirements

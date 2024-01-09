@@ -8,6 +8,8 @@ import textwrap
 import typing
 from typing import Sequence
 
+import shtab
+
 # import lxml
 # import lxml.etree
 import tmep
@@ -47,6 +49,8 @@ parser = argparse.ArgumentParser(
     "files of the notation software MuseScore.",
     formatter_class=LineWrapRawTextHelpFormatter,
 )
+
+shtab.add_argument_to(parser, ["--print-completion"])
 
 ###############################################################################
 # Global options
