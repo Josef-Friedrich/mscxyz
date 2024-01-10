@@ -101,6 +101,114 @@ his binary.
     score = Score('score.mscz')
     score.export.to_extension("musicxml")
 
+... change the styling of a score?
+----------------------------------
+
+Set a single style by its style name ``--style``:
+
+::
+
+    musescore-manager --style staffDistance 7.5 score.mscz
+
+To set mulitple styles at once specify the option ``--style`` multiple times:
+
+::
+
+    musescore-manager --style staffUpperBorder 5.5 --style staffLowerBorder 5.5 score.mscz
+
+Set all font faces (using a for loop, not available in MuseScore 2):
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+
+    for element in score.style.styles:
+        if "FontFace" in element.tag:
+            element.text = "Alegreya"
+    score.save()
+
+    new_score: Score = score.reload()
+    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+
+.. code-block:: Python
+
+Set all text font faces (using the method ``score.style.set_text_font_faces(font_face)``,
+not available in MuseScore 2):
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+
+    response = score.style.set_text_font_faces("Alegreya")
+
+    assert response == [
+        ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
+        ("lyricsEvenFontFace", "FreeSerif", "Alegreya"),
+        ("hairpinFontFace", "FreeSerif", "Alegreya"),
+        ("pedalFontFace", "FreeSerif", "Alegreya"),
+        ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
+        ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
+        ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
+        ("voltaFontFace", "FreeSerif", "Alegreya"),
+        ("ottavaFontFace", "FreeSerif", "Alegreya"),
+        ("tupletFontFace", "FreeSerif", "Alegreya"),
+        ("defaultFontFace", "FreeSerif", "Alegreya"),
+        ("titleFontFace", "FreeSerif", "Alegreya"),
+        ("subTitleFontFace", "FreeSerif", "Alegreya"),
+        ("composerFontFace", "FreeSerif", "Alegreya"),
+        ("lyricistFontFace", "FreeSerif", "Alegreya"),
+        ("fingeringFontFace", "FreeSerif", "Alegreya"),
+        ("lhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
+        ("rhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
+        ("stringNumberFontFace", "FreeSerif", "Alegreya"),
+        ("harpPedalDiagramFontFace", "Edwin", "Alegreya"),
+        ("harpPedalTextDiagramFontFace", "Edwin", "Alegreya"),
+        ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
+        ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
+        ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
+        ("expressionFontFace", "FreeSerif", "Alegreya"),
+        ("tempoFontFace", "FreeSerif", "Alegreya"),
+        ("tempoChangeFontFace", "Edwin", "Alegreya"),
+        ("metronomeFontFace", "FreeSerif", "Alegreya"),
+        ("measureNumberFontFace", "FreeSerif", "Alegreya"),
+        ("mmRestRangeFontFace", "Edwin", "Alegreya"),
+        ("translatorFontFace", "FreeSerif", "Alegreya"),
+        ("systemFontFace", "FreeSerif", "Alegreya"),
+        ("staffFontFace", "FreeSerif", "Alegreya"),
+        ("rehearsalMarkFontFace", "FreeSerif", "Alegreya"),
+        ("repeatLeftFontFace", "FreeSerif", "Alegreya"),
+        ("repeatRightFontFace", "FreeSerif", "Alegreya"),
+        ("frameFontFace", "FreeSerif", "Alegreya"),
+        ("textLineFontFace", "FreeSerif", "Alegreya"),
+        ("systemTextLineFontFace", "Edwin", "Alegreya"),
+        ("glissandoFontFace", "FreeSerif", "Alegreya"),
+        ("bendFontFace", "FreeSerif", "Alegreya"),
+        ("headerFontFace", "FreeSerif", "Alegreya"),
+        ("footerFontFace", "FreeSerif", "Alegreya"),
+        ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
+        ("stickingFontFace", "FreeSerif", "Alegreya"),
+        ("user1FontFace", "FreeSerif", "Alegreya"),
+        ("user2FontFace", "FreeSerif", "Alegreya"),
+        ("user3FontFace", "FreeSerif", "Alegreya"),
+        ("user4FontFace", "FreeSerif", "Alegreya"),
+        ("user5FontFace", "FreeSerif", "Alegreya"),
+        ("user6FontFace", "FreeSerif", "Alegreya"),
+        ("user7FontFace", "FreeSerif", "Alegreya"),
+        ("user8FontFace", "FreeSerif", "Alegreya"),
+        ("user9FontFace", "FreeSerif", "Alegreya"),
+        ("user10FontFace", "FreeSerif", "Alegreya"),
+        ("user11FontFace", "FreeSerif", "Alegreya"),
+        ("user12FontFace", "FreeSerif", "Alegreya"),
+        ("letRingFontFace", "FreeSerif", "Alegreya"),
+        ("palmMuteFontFace", "FreeSerif", "Alegreya"),
+    ]
+    score.save()
+
+    new_score: Score = score.reload()
+    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+
 ... enable autocomplete support?
 --------------------------------
 
@@ -132,8 +240,12 @@ CLI Usage
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
                              [-t RENAME_TARGET] [-L]
-                             [-g <glob-pattern> | --mscz | --mscx] [-s STYLE VALUE]
-                             [-Y STYLE_FILE] [--s3] [--s4] [--list-fonts]
+                             [-g <glob-pattern> | --mscz | --mscx]
+                             [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
+                             [--list-fonts] [--text-fonts <font-face>]
+                             [--title-fonts <font-face>]
+                             [--musical-symbol-fonts <font-face>]
+                             [--musical-text-font <font-face>]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -173,7 +285,7 @@ CLI Usage
     clean:
       Clean and reset the formating of the "*.mscx" file
 
-      -Y STYLE_FILE, --style-file STYLE_FILE
+      -Y <file>, --style-file <file>
                             Load a "*.mss" style file and include the contents of this
                             file.
 
@@ -519,11 +631,22 @@ CLI Usage
     style:
       Change the styles.
 
-      -s STYLE VALUE, --style STYLE VALUE
-                            Set a single style. For example: --style pageWidth 8.5
+      -s <style-name> <value>, --style <style-name> <value>
+                            Set a single style value. For example: --style pageWidth 8.5
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
       --list-fonts          List all font related styles.
+      --text-fonts <font-face>
+                            Set nearly all fonts except “romanNumeralFontFace”,
+                            “figuredBassFontFace”, “dynamicsFontFace“,
+                            “musicalSymbolFont” and “musicalTextFont”.
+      --title-fonts <font-face>
+                            Set “titleFontFace” and “subTitleFontFace”.
+      --musical-symbol-fonts <font-face>
+                            Set “musicalSymbolFont”, “dynamicsFont” and
+                            “dynamicsFontFace”.
+      --musical-text-font <font-face>
+                            Set “musicalTextFont”.
 
 Legacy CLI Usage
 ================
@@ -1100,102 +1223,6 @@ Set the meta tag ``composer``:
     <museScore version="4.20">
         <Score>
             <metaTag name="composer">Mozart</metaTag>
-
-``style``
----------
-
-Set all font faces (using a for loop, not available in MuseScore 2):
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
-
-    for element in score.style.styles:
-        if "FontFace" in element.tag:
-            element.text = "Alegreya"
-    score.save()
-
-    new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
-
-.. code-block:: Python
-
-Set all text font faces (using the method ``score.style.set_text_font_faces(font_face)``,
-not available in MuseScore 2):
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
-
-    response = score.style.set_text_font_faces("Alegreya")
-
-    assert response == [
-        ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
-        ("lyricsEvenFontFace", "FreeSerif", "Alegreya"),
-        ("hairpinFontFace", "FreeSerif", "Alegreya"),
-        ("pedalFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
-        ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
-        ("voltaFontFace", "FreeSerif", "Alegreya"),
-        ("ottavaFontFace", "FreeSerif", "Alegreya"),
-        ("tupletFontFace", "FreeSerif", "Alegreya"),
-        ("defaultFontFace", "FreeSerif", "Alegreya"),
-        ("titleFontFace", "FreeSerif", "Alegreya"),
-        ("subTitleFontFace", "FreeSerif", "Alegreya"),
-        ("composerFontFace", "FreeSerif", "Alegreya"),
-        ("lyricistFontFace", "FreeSerif", "Alegreya"),
-        ("fingeringFontFace", "FreeSerif", "Alegreya"),
-        ("lhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("rhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("stringNumberFontFace", "FreeSerif", "Alegreya"),
-        ("harpPedalDiagramFontFace", "Edwin", "Alegreya"),
-        ("harpPedalTextDiagramFontFace", "Edwin", "Alegreya"),
-        ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("expressionFontFace", "FreeSerif", "Alegreya"),
-        ("tempoFontFace", "FreeSerif", "Alegreya"),
-        ("tempoChangeFontFace", "Edwin", "Alegreya"),
-        ("metronomeFontFace", "FreeSerif", "Alegreya"),
-        ("measureNumberFontFace", "FreeSerif", "Alegreya"),
-        ("mmRestRangeFontFace", "Edwin", "Alegreya"),
-        ("translatorFontFace", "FreeSerif", "Alegreya"),
-        ("systemFontFace", "FreeSerif", "Alegreya"),
-        ("staffFontFace", "FreeSerif", "Alegreya"),
-        ("rehearsalMarkFontFace", "FreeSerif", "Alegreya"),
-        ("repeatLeftFontFace", "FreeSerif", "Alegreya"),
-        ("repeatRightFontFace", "FreeSerif", "Alegreya"),
-        ("frameFontFace", "FreeSerif", "Alegreya"),
-        ("textLineFontFace", "FreeSerif", "Alegreya"),
-        ("systemTextLineFontFace", "Edwin", "Alegreya"),
-        ("glissandoFontFace", "FreeSerif", "Alegreya"),
-        ("bendFontFace", "FreeSerif", "Alegreya"),
-        ("headerFontFace", "FreeSerif", "Alegreya"),
-        ("footerFontFace", "FreeSerif", "Alegreya"),
-        ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
-        ("stickingFontFace", "FreeSerif", "Alegreya"),
-        ("user1FontFace", "FreeSerif", "Alegreya"),
-        ("user2FontFace", "FreeSerif", "Alegreya"),
-        ("user3FontFace", "FreeSerif", "Alegreya"),
-        ("user4FontFace", "FreeSerif", "Alegreya"),
-        ("user5FontFace", "FreeSerif", "Alegreya"),
-        ("user6FontFace", "FreeSerif", "Alegreya"),
-        ("user7FontFace", "FreeSerif", "Alegreya"),
-        ("user8FontFace", "FreeSerif", "Alegreya"),
-        ("user9FontFace", "FreeSerif", "Alegreya"),
-        ("user10FontFace", "FreeSerif", "Alegreya"),
-        ("user11FontFace", "FreeSerif", "Alegreya"),
-        ("user12FontFace", "FreeSerif", "Alegreya"),
-        ("letRingFontFace", "FreeSerif", "Alegreya"),
-        ("palmMuteFontFace", "FreeSerif", "Alegreya"),
-    ]
-    score.save()
-
-    new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
 
 Configuration file
 ==================

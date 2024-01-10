@@ -48,39 +48,39 @@ class TestClassStyle:
         assert self.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
-        assert self.style.get_value("staffUpperBorder") == "6.5"
+        assert self.style.get("staffUpperBorder") == "6.5"
 
     def test_method_get_muliple_element_path(self) -> None:
-        assert self.style.get_value("page-layout/page-height") == "1584"
+        assert self.style.get("page-layout/page-height") == "1584"
 
     def test_method_get_element(self) -> None:
         assert self.style.get_element("voltaY").tag == "voltaY"
 
     def test_method_get_value(self) -> None:
-        assert self.style.get_value("voltaY") == "-2"
+        assert self.style.get("voltaY") == "-2"
 
     def test_method_set_value(self) -> None:
         self.style.set_value("staffUpperBorder", 99)
-        assert self.style.reload(save=True).get_value("staffUpperBorder") == "99"
+        assert self.style.reload(save=True).get("staffUpperBorder") == "99"
 
     def test_method_set_value_create(self) -> None:
         response = self.style.set_value("lol", "lol")
         assert response == [("lol", None, "lol")]
-        assert self.style.reload(save=True).get_value("lol") == "lol"
+        assert self.style.reload(save=True).get("lol") == "lol"
 
     def test_method_set_value_muliple_element_path(self) -> None:
         response = self.style.set_value("page-layout/page-height", 99)
         assert response == [("page-layout/page-height", "1584", 99)]
-        assert self.style.reload(save=True).get_value("page-layout/page-height") == "99"
+        assert self.style.reload(save=True).get("page-layout/page-height") == "99"
 
     def test_method_set_muliple_element_path_multiple_times(self) -> None:
         self.style.set_value("page-layout/page-height", 99)
         self.style.set_value("page-layout/page-width", 100)
         self.style.set_value("page-layout/page-depth", 101)
         style_new = self.style.reload(save=True)
-        assert style_new.get_value("page-layout/page-depth") == "101"
-        assert style_new.get_value("page-layout/page-height") == "99"
-        assert style_new.get_value("page-layout/page-width") == "100"
+        assert style_new.get("page-layout/page-depth") == "101"
+        assert style_new.get("page-layout/page-height") == "99"
+        assert style_new.get("page-layout/page-width") == "100"
 
     def test_method_set_value_mulitple_style_names(self) -> None:
         response = self.style.set_value(["staffUpperBorder", "staffLowerBorder"], 42)
@@ -90,8 +90,8 @@ class TestClassStyle:
         ]
 
         style_new = self.style.reload(save=True)
-        assert style_new.get_value("staffUpperBorder") == "42"
-        assert style_new.get_value("staffLowerBorder") == "42"
+        assert style_new.get("staffUpperBorder") == "42"
+        assert style_new.get("staffLowerBorder") == "42"
 
     def test_method_get_text_style(self) -> None:
         title = self.style.get_text_style("Title")
@@ -121,14 +121,14 @@ class TestClassStyle:
 )
 def test_property_get_musical_symbols_font(version: int, expected: str) -> None:
     style = helper.get_style("score.mscz", version)
-    assert style.musical_symbols_font == expected
+    assert style.musical_symbol_font == expected
 
 
 @pytest.mark.parametrize("version", mscxyz.supported_versions)
-def test_property_set_musical_symbols_font(version: int) -> None:
+def test_property_set_musical_symbol_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
-    style.musical_symbols_font = "Test Font"
-    assert style.reload(save=True).musical_symbols_font == "Test Font"
+    style.set_musical_symbol_fonts("Test Font")
+    assert style.reload(save=True).musical_symbol_font == "Test Font"
 
 
 @pytest.mark.parametrize(
@@ -149,7 +149,7 @@ def test_property_get_musical_text_font(
 @pytest.mark.parametrize("version", mscxyz.supported_versions)
 def test_property_set_musical_text_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
-    style.musical_text_font = "Test Font"
+    style.set_musical_text_font("Test Font")
     assert style.reload(save=True).musical_text_font == "Test Font"
 
 
@@ -165,17 +165,17 @@ class TestVersion3:
         assert self.score.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
-        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+        assert self.score.style.get("staffUpperBorder") == "6.5"
 
     def test_method_set(self) -> None:
         self.score.style.set_value("staffUpperBorder", 99)
         self.score.save()
-        assert reload(self.score).get_value("staffUpperBorder") == "99"
+        assert reload(self.score).get("staffUpperBorder") == "99"
 
     def test_method_set_create(self) -> None:
         self.score.style.set_value("lol", "lol")
         self.score.save()
-        assert reload(self.score).get_value("lol") == "lol"
+        assert reload(self.score).get("lol") == "lol"
 
 
 class TestVersion4:
@@ -190,17 +190,17 @@ class TestVersion4:
         assert self.score.style.parent_element.tag == "Style"
 
     def test_method_get(self) -> None:
-        assert self.score.style.get_value("staffUpperBorder") == "6.5"
+        assert self.score.style.get("staffUpperBorder") == "6.5"
 
     def test_method_set(self) -> None:
         self.score.style.set_value("staffUpperBorder", 99)
         self.score.save()
-        assert reload(self.score).get_value("staffUpperBorder") == "99"
+        assert reload(self.score).get("staffUpperBorder") == "99"
 
     def test_method_set_create(self) -> None:
         self.score.style.set_value("lol", "lol")
         self.score.save()
-        assert reload(self.score).get_value("lol") == "lol"
+        assert reload(self.score).get("lol") == "lol"
 
 
 class TestClassStyleWithoutTags:
@@ -215,12 +215,12 @@ class TestClassStyleWithoutTags:
     def test_method_set(self) -> None:
         self.score.style.set_value("staffUpperBorder", 99)
         self.score.save()
-        assert reload(self.score).get_value("staffUpperBorder") == "99"
+        assert reload(self.score).get("staffUpperBorder") == "99"
 
     def test_method_set_element_path_multiple(self) -> None:
         self.score.style.set_value("lol/troll", 99)
         self.score.save()
-        assert reload(self.score).get_value("lol/troll") == "99"
+        assert reload(self.score).get("lol/troll") == "99"
 
     def test_method_get_text_style_unkown(self) -> None:
         unkown = self.score.style.get_text_style("Unkown")

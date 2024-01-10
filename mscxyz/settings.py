@@ -22,6 +22,10 @@ class DefaultArguments:
 
     general_verbose: int = 0
 
+    # Groups alphabetically
+    # in groups related not alphabetically
+    # keep Order in sync with cli.py
+
     # export
     export_extension: Optional[str] = None
 
@@ -58,11 +62,17 @@ class DefaultArguments:
     selection_mscx: bool = False
 
     # style
-    style_set: list[list[str]] = []
+    style_value: list[tuple[str, str]] = []
     style_file: Optional[TextIOWrapper] = None
     style_styles_v3: bool = False
     style_styles_v4: bool = False
     style_list_fonts: bool = False
+    style_text_fonts: Optional[str] = None
+    style_title_fonts: Optional[str] = None
+    style_musical_symbol_fonts: Optional[str] = None
+    style_musical_text_font: Optional[str] = None
+
+    # positional argument
     path: str = "."
 
     subcommand: Optional[

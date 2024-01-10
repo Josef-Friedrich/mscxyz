@@ -43,11 +43,15 @@ _shtab_musescore_manager_options=(
   {-g,--glob}"[Handle only files which matches against Unix style glob patterns (e. g. \"\*.mscx\", \"\* - \*\"). If you omit this option, the standard glob pattern \"\*.msc\[xz\]\" is used.]:selection_glob:"
   "--mscz[Take only \"\*.mscz\" files into account.]"
   "--mscx[Take only \"\*.mscx\" files into account.]"
-  "*"{-s,--style}"[Set a single style. For example\: --style pageWidth 8.5]:style_set:"
+  "*"{-s,--style}"[Set a single style value. For example\: --style pageWidth 8.5]:style_value:"
   {-Y,--style-file}"[Load a \"\*.mss\" style file and include the contents of this file.]:style_file:_files"
   {--s3,--styles-v3}"[List all possible version 3 styles.]"
   {--s4,--styles-v4}"[List all possible version 4 styles.]"
   "--list-fonts[List all font related styles.]"
+  "--text-fonts[Set nearly all fonts except \“romanNumeralFontFace\”, \“figuredBassFontFace\”, \“dynamicsFontFace\“, \“musicalSymbolFont\” and \“musicalTextFont\”.]:style_text_fonts:"
+  "--title-fonts[Set \“titleFontFace\” and \“subTitleFontFace\”.]:style_title_fonts:"
+  "--musical-symbol-fonts[Set \“musicalSymbolFont\”, \“dynamicsFont\” and  \“dynamicsFontFace\”.]:style_musical_symbol_fonts:"
+  "--musical-text-font[Set \“musicalTextFont\”.]:style_musical_text_font:"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 

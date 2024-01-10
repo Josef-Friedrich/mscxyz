@@ -185,14 +185,14 @@ class Style:
             element = self.__create_nested_element(element_path)
         return element
 
-    def get_value(self, element_path: str, raise_exception: bool = True) -> str | None:
+    def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """
-        Get the value (text) of a style tag.
+        Get a style value by its style name (element path) of a style tag.
 
-        :param element_path: see
+        :param style_name: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element: _Element = self.get_element(element_path)
+        element: _Element = self.get_element(style_name)
         if element.text is None:
             if raise_exception:
                 raise ValueError(f"Element {element} has no text!")
@@ -233,17 +233,14 @@ class Style:
 
         response: StyleChanges = []
         for style_name in style_names:
-            element: _Element | None = self.parent_element.find(style_name)
-            if element is None:
-                element = self.__create_nested_element(style_name)
+            element: _Element = self.get_element(style_name)
             change: StyleChange = (
                 style_name,
-                self.get_value(style_name, raise_exception=False),
+                self.get(style_name, raise_exception=False),
                 value,
             )
             response.append(change)
             element.text = str(value)
-
         return response
 
     def __get_text_style_element(self, name: str) -> _Element:
@@ -324,11 +321,25 @@ class Style:
                 element = lxml.etree.SubElement(text_style, element_name)
             element.text = str(value)
 
-    def set_text_font_faces(self, new_font_face: str) -> StyleChanges:
+    def get_all_fonts(self) -> list[tuple[str, str]]:
+        """
+        Returns a list of tuples containing the tag name and the font face.
+        """
+        output: list[tuple[str, str]] = []
+        for element in self.parent_element:
+            if "FontFace" in element.tag:
+                output.append((element.tag, utils.xml.get_text_safe(element)))
+        return output
+
+    def print_all_font_faces(self) -> None:
+        for style in self.get_all_fonts():
+            print(f"{style[0]}: {style[1]}")
+
+    def set_text_fonts(self, new_font_face: str) -> StyleChanges:
         """
         Set the font face for nearly all font face related styles
-        except for ``romanNumeralFontFace`` and ``figuredBassFontFace``,
-        ``dynamicsFontFace`` ``musicalSymbolFont`` ``musicalTextFont``.
+        except for ``romanNumeralFontFace``, ``figuredBassFontFace``,
+        ``dynamicsFontFace``, ``musicalSymbolFont`` and ``musicalTextFont``.
 
         Default values in v3 and v4:
 
@@ -402,22 +413,14 @@ class Style:
         """
         return self.set_value(text_font_faces, new_font_face)
 
-    def get_all_font_faces(self) -> list[tuple[str, str]]:
-        """
-        Returns a list of tuples containing the tag name and the font face.
-        """
-        output: list[tuple[str, str]] = []
-        for element in self.parent_element:
-            if "FontFace" in element.tag:
-                output.append((element.tag, utils.xml.get_text_safe(element)))
-        return output
-
-    def print_all_font_faces(self) -> None:
-        for style in self.get_all_font_faces():
-            print(f"{style[0]}: {style[1]}")
+    def set_title_fonts(self, font_face: str) -> StyleChanges:
+        return self.set_value(("titleFontFace", "subTitleFontFace"), font_face)
 
     @property
-    def musical_symbols_font(self) -> str | None:
+    def musical_symbol_font(self) -> str | None:
+        return self.get("musicalSymbolFont", raise_exception=False)
+
+    def set_musical_symbol_fonts(self, font_face: str) -> StyleChanges:
         """
 
         v3
@@ -435,26 +438,21 @@ class Style:
             <dynamicsFont>Leland</dynamicsFont>
 
         """
-
-        return self.get_value("musicalSymbolFont", raise_exception=False)
-
-    @musical_symbols_font.setter
-    def musical_symbols_font(self, font_face: str) -> None:
-        self.set_value("musicalSymbolFont", font_face)
-        self.set_value("dynamicsFont", font_face)
+        return self.set_value(
+            ("musicalSymbolFont", "dynamicsFont", "dynamicsFontFace"), font_face
+        )
 
     @property
     def musical_text_font(self) -> str | None:
+        return self.get("musicalTextFont", raise_exception=False)
+
+    def set_musical_text_font(self, font_face: str) -> StyleChanges:
         """
         .. code :: XML
 
             <musicalTextFont>Leland Text</musicalTextFont>
         """
-        return self.get_value("musicalTextFont", raise_exception=False)
-
-    @musical_text_font.setter
-    def musical_text_font(self, font_face: str) -> None:
-        self.set_value("musicalTextFont", font_face)
+        return self.set_value("musicalTextFont", font_face)
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
         score_element: _Element = utils.xml.find_safe(self.score.xml_root, "Score")

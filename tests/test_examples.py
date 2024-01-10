@@ -56,7 +56,7 @@ def test_set_meta_tag_composer(score: Score) -> None:
 
 
 def test_set_all_font_faces_using_for_loop(score: Score) -> None:
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+    assert score.style.get("defaultFontFace") == "FreeSerif"
 
     for element in score.style.styles:
         if "FontFace" in element.tag:
@@ -64,13 +64,13 @@ def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+    assert new_score.style.get("defaultFontFace") == "Alegreya"
 
 
 def test_set_all_font_faces_using_method(score: Score) -> None:
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+    assert score.style.get("defaultFontFace") == "FreeSerif"
 
-    response = score.style.set_text_font_faces("Alegreya")
+    response = score.style.set_text_fonts("Alegreya")
 
     assert response == [
         ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
@@ -136,4 +136,4 @@ def test_set_all_font_faces_using_method(score: Score) -> None:
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+    assert new_score.style.get("defaultFontFace") == "Alegreya"

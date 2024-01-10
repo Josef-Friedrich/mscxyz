@@ -465,10 +465,10 @@ group_style.add_argument(
     "--style",
     nargs=2,
     action="append",
-    metavar=("STYLE", "VALUE"),
+    metavar=("<style-name>", "<value>"),
     default=[],
-    dest="style_set",
-    help="Set a single style. For example: --style pageWidth 8.5",
+    dest="style_value",
+    help="Set a single style value. For example: --style pageWidth 8.5",
 )
 
 file_completers.append(
@@ -476,6 +476,7 @@ file_completers.append(
         "-Y",
         "--style-file",
         dest="style_file",
+        metavar="<file>",
         type=open,
         help='Load a "*.mss" style file and include the contents of this file.',
     )
@@ -502,6 +503,35 @@ group_style.add_argument(
     dest="style_list_fonts",
     action="store_true",
     help="List all font related styles.",
+)
+
+group_style.add_argument(
+    "--text-fonts",
+    dest="style_text_fonts",
+    metavar="<font-face>",
+    help="Set nearly all fonts except “romanNumeralFontFace”, “figuredBassFontFace”, "
+    "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
+)
+
+group_style.add_argument(
+    "--title-fonts",
+    dest="style_title_fonts",
+    metavar="<font-face>",
+    help="Set “titleFontFace” and “subTitleFontFace”.",
+)
+
+group_style.add_argument(
+    "--musical-symbol-fonts",
+    dest="style_musical_symbol_fonts",
+    metavar="<font-face>",
+    help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
+)
+
+group_style.add_argument(
+    "--musical-text-font",
+    dest="style_musical_text_font",
+    metavar="<font-face>",
+    help="Set “musicalTextFont”.",
 )
 
 
@@ -576,21 +606,36 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             continue
 
         score = Score(file)
-        if args.general_backup:
-            score.backup()
 
         if args.style_list_fonts:
             score.style.print_all_font_faces()
             continue
 
+        if args.general_backup:
+            score.backup()
+
         if args.general_diff:
             score.make_snapshot()
+
+        # style
+
+        for style_name, value in args.style_value:
+            score.style.set_value(style_name, value)
 
         if args.style_file:
             score.style.load_style_file(args.style_file.name)
 
-        for field, value in args.style_set:
-            score.style.set_value(field, value)
+        if args.style_text_fonts:
+            score.style.set_text_fonts(args.style_text_fonts)
+
+        if args.style_title_fonts:
+            score.style.set_title_fonts(args.style_title_fonts)
+
+        if args.style_musical_symbol_fonts:
+            score.style.set_musical_symbol_fonts(args.style_musical_symbol_fonts)
+
+        if args.style_musical_text_font:
+            score.style.set_musical_text_font(args.style_musical_text_font)
 
         #     print("\n" + utils.color(file, "red"))
 
@@ -648,18 +693,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #     elif args.subcommand == "rename":
         #         score = rename_filename(file)
 
-        #     elif args.subcommand == "export":
-        #         score = Score(file)
         if args.export_extension:
             score.export.to_extension(args.export_extension)
-        #         else:
-        #             score.export.to_extension()
-        #     elif args.subcommand == "style":
-        #         score = Score(file)
-
-        #         if args.style_set:
-        #             for a in args.style_set:
-        #                 score.style.set_value(a[0], a[1])
 
         if args.general_diff:
             score.print_diff()

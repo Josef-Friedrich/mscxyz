@@ -13,8 +13,12 @@ Comande line interface
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
                              [-t RENAME_TARGET] [-L]
-                             [-g <glob-pattern> | --mscz | --mscx] [-s STYLE VALUE]
-                             [-Y STYLE_FILE] [--s3] [--s4] [--list-fonts]
+                             [-g <glob-pattern> | --mscz | --mscx]
+                             [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
+                             [--list-fonts] [--text-fonts <font-face>]
+                             [--title-fonts <font-face>]
+                             [--musical-symbol-fonts <font-face>]
+                             [--musical-text-font <font-face>]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -54,7 +58,7 @@ Comande line interface
     clean:
       Clean and reset the formating of the "*.mscx" file
 
-      -Y STYLE_FILE, --style-file STYLE_FILE
+      -Y <file>, --style-file <file>
                             Load a "*.mss" style file and include the contents of this
                             file.
 
@@ -400,11 +404,22 @@ Comande line interface
     style:
       Change the styles.
 
-      -s STYLE VALUE, --style STYLE VALUE
-                            Set a single style. For example: --style pageWidth 8.5
+      -s <style-name> <value>, --style <style-name> <value>
+                            Set a single style value. For example: --style pageWidth 8.5
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
       --list-fonts          List all font related styles.
+      --text-fonts <font-face>
+                            Set nearly all fonts except “romanNumeralFontFace”,
+                            “figuredBassFontFace”, “dynamicsFontFace“,
+                            “musicalSymbolFont” and “musicalTextFont”.
+      --title-fonts <font-face>
+                            Set “titleFontFace” and “subTitleFontFace”.
+      --musical-symbol-fonts <font-face>
+                            Set “musicalSymbolFont”, “dynamicsFont” and
+                            “dynamicsFontFace”.
+      --musical-text-font <font-face>
+                            Set “musicalTextFont”.
 
 Legacy
 ======
