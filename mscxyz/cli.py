@@ -506,23 +506,23 @@ group_style.add_argument(
 )
 
 group_style.add_argument(
-    "--text-fonts",
-    dest="style_text_fonts",
+    "--text-font",
+    dest="style_text_font",
     metavar="<font-face>",
     help="Set nearly all fonts except “romanNumeralFontFace”, “figuredBassFontFace”, "
     "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
 )
 
 group_style.add_argument(
-    "--title-fonts",
-    dest="style_title_fonts",
+    "--title-font",
+    dest="style_title_font",
     metavar="<font-face>",
     help="Set “titleFontFace” and “subTitleFontFace”.",
 )
 
 group_style.add_argument(
-    "--musical-symbol-fonts",
-    dest="style_musical_symbol_fonts",
+    "--musical-symbol-font",
+    dest="style_musical_symbol_font",
     metavar="<font-face>",
     help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
 )
@@ -625,14 +625,14 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if args.style_file:
             score.style.load_style_file(args.style_file.name)
 
-        if args.style_text_fonts:
-            score.style.set_text_fonts(args.style_text_fonts)
+        if args.style_text_font:
+            score.style.set_text_fonts(args.style_text_font)
 
-        if args.style_title_fonts:
-            score.style.set_title_fonts(args.style_title_fonts)
+        if args.style_title_font:
+            score.style.set_title_fonts(args.style_title_font)
 
-        if args.style_musical_symbol_fonts:
-            score.style.set_musical_symbol_fonts(args.style_musical_symbol_fonts)
+        if args.style_musical_symbol_font:
+            score.style.set_musical_symbol_fonts(args.style_musical_symbol_font)
 
         if args.style_musical_text_font:
             score.style.set_musical_text_font(args.style_musical_text_font)

@@ -67,9 +67,9 @@ class DefaultArguments:
     style_styles_v3: bool = False
     style_styles_v4: bool = False
     style_list_fonts: bool = False
-    style_text_fonts: Optional[str] = None
-    style_title_fonts: Optional[str] = None
-    style_musical_symbol_fonts: Optional[str] = None
+    style_text_font: Optional[str] = None
+    style_title_font: Optional[str] = None
+    style_musical_symbol_font: Optional[str] = None
     style_musical_text_font: Optional[str] = None
 
     # positional argument

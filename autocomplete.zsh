@@ -48,9 +48,9 @@ _shtab_musescore_manager_options=(
   {--s3,--styles-v3}"[List all possible version 3 styles.]"
   {--s4,--styles-v4}"[List all possible version 4 styles.]"
   "--list-fonts[List all font related styles.]"
-  "--text-fonts[Set nearly all fonts except \“romanNumeralFontFace\”, \“figuredBassFontFace\”, \“dynamicsFontFace\“, \“musicalSymbolFont\” and \“musicalTextFont\”.]:style_text_fonts:"
-  "--title-fonts[Set \“titleFontFace\” and \“subTitleFontFace\”.]:style_title_fonts:"
-  "--musical-symbol-fonts[Set \“musicalSymbolFont\”, \“dynamicsFont\” and  \“dynamicsFontFace\”.]:style_musical_symbol_fonts:"
+  "--text-font[Set nearly all fonts except \“romanNumeralFontFace\”, \“figuredBassFontFace\”, \“dynamicsFontFace\“, \“musicalSymbolFont\” and \“musicalTextFont\”.]:style_text_font:"
+  "--title-font[Set \“titleFontFace\” and \“subTitleFontFace\”.]:style_title_font:"
+  "--musical-symbol-font[Set \“musicalSymbolFont\”, \“dynamicsFont\” and  \“dynamicsFontFace\”.]:style_musical_symbol_font:"
   "--musical-text-font[Set \“musicalTextFont\”.]:style_musical_text_font:"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )

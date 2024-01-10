@@ -15,9 +15,9 @@ Comande line interface
                              [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
-                             [--list-fonts] [--text-fonts <font-face>]
-                             [--title-fonts <font-face>]
-                             [--musical-symbol-fonts <font-face>]
+                             [--list-fonts] [--text-font <font-face>]
+                             [--title-font <font-face>]
+                             [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
                              [<path> ...]
 
@@ -409,13 +409,13 @@ Comande line interface
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
       --list-fonts          List all font related styles.
-      --text-fonts <font-face>
+      --text-font <font-face>
                             Set nearly all fonts except “romanNumeralFontFace”,
                             “figuredBassFontFace”, “dynamicsFontFace“,
                             “musicalSymbolFont” and “musicalTextFont”.
-      --title-fonts <font-face>
+      --title-font <font-face>
                             Set “titleFontFace” and “subTitleFontFace”.
-      --musical-symbol-fonts <font-face>
+      --musical-symbol-font <font-face>
                             Set “musicalSymbolFont”, “dynamicsFont” and
                             “dynamicsFontFace”.
       --musical-text-font <font-face>

@@ -116,12 +116,21 @@ To set mulitple styles at once specify the option ``--style`` multiple times:
 
     musescore-manager --style staffUpperBorder 5.5 --style staffLowerBorder 5.5 score.mscz
 
+Some options change mutliple styles at once:
+
+::
+
+    musescore-manager --text-font Alegreya score.mscz
+    musescore-manager --title-font "Alegreya Sans" score.mscz
+    musescore-manager --musical-symbol-font Leland score.mscz
+    musescore-manager --musical-text-font "Leland Text" score.mscz
+
 Set all font faces (using a for loop, not available in MuseScore 2):
 
 .. code-block:: Python
 
     score = Score('score.mscz')
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+    assert score.style.get("defaultFontFace") == "FreeSerif"
 
     for element in score.style.styles:
         if "FontFace" in element.tag:
@@ -129,7 +138,7 @@ Set all font faces (using a for loop, not available in MuseScore 2):
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+    assert new_score.style.get("defaultFontFace") == "Alegreya"
 
 .. code-block:: Python
 
@@ -139,7 +148,7 @@ not available in MuseScore 2):
 .. code-block:: Python
 
     score = Score('score.mscz')
-    assert score.style.get_value("defaultFontFace") == "FreeSerif"
+    assert score.style.get("defaultFontFace") == "FreeSerif"
 
     response = score.style.set_text_font_faces("Alegreya")
 
@@ -207,7 +216,7 @@ not available in MuseScore 2):
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.style.get_value("defaultFontFace") == "Alegreya"
+    assert new_score.style.get("defaultFontFace") == "Alegreya"
 
 ... enable autocomplete support?
 --------------------------------
@@ -242,9 +251,9 @@ CLI Usage
                              [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
-                             [--list-fonts] [--text-fonts <font-face>]
-                             [--title-fonts <font-face>]
-                             [--musical-symbol-fonts <font-face>]
+                             [--list-fonts] [--text-font <font-face>]
+                             [--title-font <font-face>]
+                             [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
                              [<path> ...]
 
@@ -636,13 +645,13 @@ CLI Usage
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
       --list-fonts          List all font related styles.
-      --text-fonts <font-face>
+      --text-font <font-face>
                             Set nearly all fonts except “romanNumeralFontFace”,
                             “figuredBassFontFace”, “dynamicsFontFace“,
                             “musicalSymbolFont” and “musicalTextFont”.
-      --title-fonts <font-face>
+      --title-font <font-face>
                             Set “titleFontFace” and “subTitleFontFace”.
-      --musical-symbol-fonts <font-face>
+      --musical-symbol-font <font-face>
                             Set “musicalSymbolFont”, “dynamicsFont” and
                             “dynamicsFontFace”.
       --musical-text-font <font-face>
