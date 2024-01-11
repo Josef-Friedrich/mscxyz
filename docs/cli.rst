@@ -18,7 +18,7 @@ Comande line interface
                              [--list-fonts] [--text-font <font-face>]
                              [--title-font <font-face>]
                              [--musical-symbol-font <font-face>]
-                             [--musical-text-font <font-face>]
+                             [--musical-text-font <font-face>] [--spatium <float>]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -420,6 +420,8 @@ Comande line interface
                             “dynamicsFontFace”.
       --musical-text-font <font-face>
                             Set “musicalTextFont”.
+      --spatium <float>     Set the staff space or spatium. This is the vertical
+                            distance between two lines of a music staff.
 
 Legacy
 ======

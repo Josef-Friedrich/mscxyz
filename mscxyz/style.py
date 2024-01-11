@@ -3,11 +3,11 @@ from __future__ import annotations
 import typing
 from io import TextIOWrapper
 from pathlib import Path
-from typing import Optional, Sequence, Union
+from typing import Optional, Sequence, TypedDict, Union, cast
 
 import lxml
 import lxml.etree
-from lxml.etree import _Element
+from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
 
@@ -80,11 +80,17 @@ text_font_faces = (
     "palmMuteFontFace",
 )
 
-StyleValue = Optional[Union[str, int, float]]
+PrimitiveValue = Union[str, int, float]
+
+StyleValue = Optional[Union[PrimitiveValue, dict[str, PrimitiveValue]]]
 
 StyleChange = tuple[str, StyleValue, StyleValue]
 
 StyleChanges = list[StyleChange]
+
+AttibutesDict = dict[str, PrimitiveValue]
+
+Offset = TypedDict("Offset", {"x": Union[float, str], "y": Union[float, str]})
 
 
 class Style:
@@ -185,6 +191,16 @@ class Style:
             element = self.__create_nested_element(element_path)
         return element
 
+    def __get_float(self, style_name: str) -> float | None:
+        value: str | None = self.get(style_name, raise_exception=False)
+        if value is not None:
+            return float(value)
+        return None
+
+    def __get_attributes(self, style_name: str) -> _Attrib:
+        element: _Element = self.get_element(style_name)
+        return element.attrib
+
     def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """
         Get a style value by its style name (element path) of a style tag.
@@ -200,15 +216,13 @@ class Style:
         else:
             return element.text
 
-    def set_attributes(
-        self, element_path: str, attributes: dict[str, str | int | float]
-    ) -> _Element:
+    def set_attributes(self, style_name: str, attributes: AttibutesDict) -> _Element:
         """Set attributes on a style child tag.
 
         :param element_path: see
           http://lxml.de/tutorial.html#elementpath
         """
-        element: _Element = self.get_element(element_path)
+        element: _Element = self.get_element(style_name)
         for name, value in attributes.items():
             element.attrib[name] = str(value)
         return element
@@ -238,7 +252,11 @@ class Style:
                 value,
             )
             response.append(change)
-            element.text = str(value)
+            if isinstance(value, dict):
+                for name, value in value.items():
+                    element.attrib[name] = str(value)
+            else:
+                element.text = str(value)
         return response
 
     def __get_text_style_element(self, name: str) -> _Element:
@@ -502,22 +520,7 @@ class Style:
         """
         return self.score.reload(save).style
 
-    def __get_float(self, style_name: str) -> float | None:
-        value: str | None = self.get(style_name, raise_exception=False)
-        if value is not None:
-            return float(value)
-        return None
-
-    @property
-    def spatium(self) -> float | None:
-        """
-        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640
-        """
-        return self.__get_float("Spatium")
-
-    @spatium.setter
-    def spatium(self, value: float) -> None:
-        self.set("Spatium", value)
+    # The properties in the order they are arranged in this file: https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp
 
     @property
     def page_width(self) -> float | None:
@@ -539,7 +542,12 @@ class Style:
     def page_height(self, value: float) -> None:
         self.set("pageHeight", value)
 
+    def page_printable_width(self, value: float) -> None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45"""
+        self.set("pagePrintableWidth", value)
+
     def margin(self, value: float) -> None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46-L51"""
         self.set(
             (
                 "pageEvenLeftMargin",
@@ -552,20 +560,12 @@ class Style:
             value,
         )
 
-    def footer(self, value: str) -> None:
-        self.set(
-            [
-                "evenFooterL",
-                "evenFooterC",
-                "evenFooterR",
-                "oddFooterL",
-                "oddFooterC",
-                "oddFooterR",
-            ],
-            value,
-        )
+    def max_system_distance(self, value: float) -> None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L61"""
+        self.set("maxSystemDistance", value)
 
     def header(self, value: str) -> None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497-L502"""
         self.set(
             [
                 "evenHeaderL",
@@ -578,11 +578,42 @@ class Style:
             value,
         )
 
-    def max_system_distance(self, value: float) -> None:
-        self.set("maxSystemDistance", value)
+    def footer(self, value: str) -> None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507-L512"""
+        self.set(
+            [
+                "evenFooterL",
+                "evenFooterC",
+                "evenFooterR",
+                "oddFooterL",
+                "oddFooterC",
+                "oddFooterR",
+            ],
+            value,
+        )
 
-    def page_printable_width(self, value: float) -> None:
-        self.set("pagePrintableWidth", value)
+    @property
+    def spatium(self) -> float | None:
+        """
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640
+        """
+        return self.__get_float("Spatium")
 
-    def measure_number_offset(self, value: float) -> None:
-        self.set("measureNumberOffset", value)
+    @spatium.setter
+    def spatium(self, value: float) -> None:
+        self.set("Spatium", value)
+
+    @property
+    def measure_number_offset(self) -> Offset:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L1008
+
+
+        .. code :: XML
+
+            <measureNumberOffset x="0" y="-2"/>
+        """
+        return cast(Offset, self.__get_attributes("measureNumberOffset"))
+
+    @measure_number_offset.setter
+    def measure_number_offset(self, value: Offset) -> None:
+        self.set("measureNumberOffset", cast(AttibutesDict, value))

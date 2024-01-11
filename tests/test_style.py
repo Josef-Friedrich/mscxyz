@@ -278,3 +278,15 @@ class TestCli:
     def test_option_list_fonts(self, score: Score) -> None:
         stdout = helper.stdout("--list-fonts", str(score.path))
         assert "harpPedalTextDiagramFontFace: Edwin" in stdout
+
+
+class TestProperties:
+    def test_spatium(self, score: Score) -> None:
+        assert score.style.spatium == 1.76389
+        score.style.spatium = 1.234
+        assert score.style.spatium == 1.234
+
+    def test_measure_number_offset(self, score: Score) -> None:
+        assert score.style.measure_number_offset == {"x": "0", "y": "-2"}
+        score.style.measure_number_offset = {"x": 1.2, "y": 3.0}
+        assert score.style.measure_number_offset == {"x": "1.2", "y": "3.0"}

@@ -534,6 +534,15 @@ group_style.add_argument(
     help="Set “musicalTextFont”.",
 )
 
+group_style.add_argument(
+    "--spatium",
+    dest="style_spatium",
+    type=float,
+    metavar="<float>",
+    help="Set the staff space or spatium. This is the vertical distance between "
+    "two lines of a music staff.",
+)
+
 
 ###############################################################################
 # last positional parameter

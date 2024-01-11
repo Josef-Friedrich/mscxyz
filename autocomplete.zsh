@@ -52,6 +52,7 @@ _shtab_musescore_manager_options=(
   "--title-font[Set \“titleFontFace\” and \“subTitleFontFace\”.]:style_title_font:"
   "--musical-symbol-font[Set \“musicalSymbolFont\”, \“dynamicsFont\” and  \“dynamicsFontFace\”.]:style_musical_symbol_font:"
   "--musical-text-font[Set \“musicalTextFont\”.]:style_musical_text_font:"
+  "--spatium[Set the staff space or spatium. This is the vertical distance between two lines of a music staff.]:style_spatium:"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 
