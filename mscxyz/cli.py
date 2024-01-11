@@ -620,7 +620,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         # style
 
         for style_name, value in args.style_value:
-            score.style.set_value(style_name, value)
+            score.style.set(style_name, value)
 
         if args.style_file:
             score.style.load_style_file(args.style_file.name)

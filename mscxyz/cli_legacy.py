@@ -689,7 +689,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
                     list_styles(3)
 
             for style_name, value in args.style_value:
-                score.style.set_value(style_name, value)
+                score.style.set(style_name, value)
 
             score.save()
         else:

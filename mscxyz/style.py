@@ -213,9 +213,7 @@ class Style:
             element.attrib[name] = str(value)
         return element
 
-    def set_value(
-        self, style_name: str | Sequence[str], value: StyleValue
-    ) -> StyleChanges:
+    def set(self, style_name: str | Sequence[str], value: StyleValue) -> StyleChanges:
         """
         Sets the value of an XML element identified by the given element path.
 
@@ -411,10 +409,10 @@ class Style:
         :return: A list of tuples representing the changes made. Each tuple
           contains the tag name, the old font face, and the new font face.
         """
-        return self.set_value(text_font_faces, new_font_face)
+        return self.set(text_font_faces, new_font_face)
 
     def set_title_fonts(self, font_face: str) -> StyleChanges:
-        return self.set_value(("titleFontFace", "subTitleFontFace"), font_face)
+        return self.set(("titleFontFace", "subTitleFontFace"), font_face)
 
     @property
     def musical_symbol_font(self) -> str | None:
@@ -438,7 +436,7 @@ class Style:
             <dynamicsFont>Leland</dynamicsFont>
 
         """
-        return self.set_value(
+        return self.set(
             ("musicalSymbolFont", "dynamicsFont", "dynamicsFontFace"), font_face
         )
 
@@ -452,7 +450,7 @@ class Style:
 
             <musicalTextFont>Leland Text</musicalTextFont>
         """
-        return self.set_value("musicalTextFont", font_face)
+        return self.set("musicalTextFont", font_face)
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
         score_element: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
@@ -503,3 +501,88 @@ class Style:
         :see: :meth:`mscxyz.score.Score.reload`
         """
         return self.score.reload(save).style
+
+    def __get_float(self, style_name: str) -> float | None:
+        value: str | None = self.get(style_name, raise_exception=False)
+        if value is not None:
+            return float(value)
+        return None
+
+    @property
+    def spatium(self) -> float | None:
+        """
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640
+        """
+        return self.__get_float("Spatium")
+
+    @spatium.setter
+    def spatium(self, value: float) -> None:
+        self.set("Spatium", value)
+
+    @property
+    def page_width(self) -> float | None:
+        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L43"""
+        return self.__get_float("pageWidth")
+
+    @page_width.setter
+    def page_width(self, value: float) -> None:
+        self.set("pageWidth", value)
+
+    @property
+    def page_height(self) -> float | None:
+        """
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L44
+        """
+        return self.__get_float("pageHeight")
+
+    @page_height.setter
+    def page_height(self, value: float) -> None:
+        self.set("pageHeight", value)
+
+    def margin(self, value: float) -> None:
+        self.set(
+            (
+                "pageEvenLeftMargin",
+                "pageOddLeftMargin",
+                "pageEvenTopMargin",
+                "pageEvenBottomMargin",
+                "pageOddTopMargin",
+                "pageOddBottomMargin",
+            ),
+            value,
+        )
+
+    def footer(self, value: str) -> None:
+        self.set(
+            [
+                "evenFooterL",
+                "evenFooterC",
+                "evenFooterR",
+                "oddFooterL",
+                "oddFooterC",
+                "oddFooterR",
+            ],
+            value,
+        )
+
+    def header(self, value: str) -> None:
+        self.set(
+            [
+                "evenHeaderL",
+                "evenHeaderC",
+                "evenHeaderR",
+                "oddHeaderL",
+                "oddHeaderC",
+                "oddHeaderR",
+            ],
+            value,
+        )
+
+    def max_system_distance(self, value: float) -> None:
+        self.set("maxSystemDistance", value)
+
+    def page_printable_width(self, value: float) -> None:
+        self.set("pagePrintableWidth", value)
+
+    def measure_number_offset(self, value: float) -> None:
+        self.set("measureNumberOffset", value)
