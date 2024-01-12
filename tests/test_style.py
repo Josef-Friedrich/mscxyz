@@ -283,6 +283,12 @@ class TestCli:
         cli("--staff-space", "1in", score)
         assert score.reload().style.staff_space == 25.4
 
+    def test_option_page_size(self, score: Score) -> None:
+        cli("--page-size", "150mm", "100mm", score)
+        new = score.reload()
+        assert new.style.page_width == 5.905511811023622
+        assert new.style.page_height == 3.937007874015748
+
 
 class TestProperties:
     def test_spatium(self, score: Score) -> None:
@@ -294,3 +300,25 @@ class TestProperties:
         assert score.style.measure_number_offset == {"x": "0", "y": "-2"}
         score.style.measure_number_offset = {"x": 1.2, "y": 3.0}
         assert score.style.measure_number_offset == {"x": "1.2", "y": "3.0"}
+
+    def test_margin(self, score: Score) -> None:
+        s = score.style
+        assert s.page_even_top_margin == 0.393701
+        assert s.page_odd_top_margin == 0.393701
+        assert s.page_even_right_margin == 0.39369899999999985
+        assert s.page_odd_right_margin == 0.39369899999999985
+        assert s.page_even_bottom_margin == 0.787403
+        assert s.page_odd_bottom_margin == 0.787403
+        assert s.page_even_left_margin == 0.393701
+        assert s.page_odd_left_margin == 0.393701
+
+        s.margin = 1.234  # type: ignore
+
+        assert s.page_even_top_margin == 1.234
+        assert s.page_odd_top_margin == 1.234
+        assert s.page_even_right_margin == 1.234
+        assert s.page_odd_right_margin == 1.234
+        assert s.page_even_bottom_margin == 1.234
+        assert s.page_odd_bottom_margin == 1.234
+        assert s.page_even_left_margin == 1.234
+        assert s.page_odd_left_margin == 1.234

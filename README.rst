@@ -256,6 +256,8 @@ CLI Usage
                              [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
                              [--staff-space <dimension>]
+                             [--page-size <width> <height> <width> <height>]
+                             [--margin <dimension>]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -660,6 +662,10 @@ CLI Usage
       --staff-space <dimension>
                             Set the staff space or spatium. This is the vertical
                             distance between two lines of a music staff.
+      --page-size <width> <height> <width> <height>
+                            Set the page size.
+      --margin <dimension>  Set the top, right, bottom and left margin to the same
+                            value.
 
 Legacy CLI Usage
 ================

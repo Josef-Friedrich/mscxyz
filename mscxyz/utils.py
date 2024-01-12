@@ -27,6 +27,8 @@ if typing.TYPE_CHECKING:
 
 ListExtension = Literal["mscz", "mscx", "both"]
 
+INCH = 25.4
+
 
 def list_score_paths(
     path: str, extension: ListExtension = "both", glob: Optional[str] = None
@@ -194,9 +196,9 @@ class Dimension:
     @staticmethod
     def convert(value: float, from_unit: Unit, to_unit: Unit) -> float:
         if from_unit == "in" and to_unit == "mm":
-            value = value * 25.4
+            value = value * INCH
         elif from_unit == "mm" and to_unit == "in":
-            value = value / 25.4
+            value = value / INCH
         return value
 
     def to(self, unit: Unit) -> float:

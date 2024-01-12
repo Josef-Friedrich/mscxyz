@@ -72,6 +72,7 @@ class DefaultArguments:
     style_musical_symbol_font: Optional[str] = None
     style_musical_text_font: Optional[str] = None
     style_staff_space: Optional[float] = None
+    style_page_size: Optional[tuple[str, str]] = None
 
     # positional argument
     path: str = "."

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from dataclasses import dataclass
 from io import TextIOWrapper
 from pathlib import Path
 from typing import Optional, Sequence, TypedDict, Union, cast
@@ -10,6 +11,7 @@ import lxml.etree
 from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
+from mscxyz.utils import INCH
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -91,6 +93,18 @@ StyleChanges = list[StyleChange]
 AttibutesDict = dict[str, PrimitiveValue]
 
 Offset = TypedDict("Offset", {"x": Union[float, str], "y": Union[float, str]})
+
+
+@dataclass
+class Margin:
+    even_top: float
+    odd_top: float
+    even_right: float
+    odd_right: float
+    even_bottom: float
+    odd_bottom: float
+    even_left: float
+    odd_left: float
 
 
 class Style:
@@ -196,6 +210,12 @@ class Style:
         if value is not None:
             return float(value)
         return None
+
+    def __get_float_default(self, style_name: str, default: float) -> float:
+        value: str | None = self.get(style_name, raise_exception=False)
+        if value is not None:
+            return float(value)
+        return default
 
     def __get_attributes(self, style_name: str) -> _Attrib:
         element: _Element = self.get_element(style_name)
@@ -523,42 +543,162 @@ class Style:
     # The properties in the order they are arranged in this file: https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp
 
     @property
-    def page_width(self) -> float | None:
+    def page_width(self) -> float:
         """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L43"""
-        return self.__get_float("pageWidth")
+        return self.__get_float_default("pageWidth", 210 / INCH)
 
     @page_width.setter
     def page_width(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
         self.set("pageWidth", value)
 
     @property
-    def page_height(self) -> float | None:
+    def page_height(self) -> float:
         """
         https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L44
         """
-        return self.__get_float("pageHeight")
+        return self.__get_float_default("pageHeight", 297 / INCH)
 
     @page_height.setter
     def page_height(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
         self.set("pageHeight", value)
 
-    def page_printable_width(self, value: float) -> None:
-        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45"""
-        self.set("pagePrintableWidth", value)
+    @property
+    def page_even_top_margin(self) -> float:
+        return self.__get_float_default("pageEvenTopMargin", 15 / INCH)
 
-    def margin(self, value: float) -> None:
-        """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46-L51"""
+    @page_even_top_margin.setter
+    def page_even_top_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageEvenTopMargin", value)
+
+    @property
+    def page_odd_top_margin(self) -> float:
+        return self.__get_float_default("pageOddTopMargin", 15 / INCH)
+
+    @page_odd_top_margin.setter
+    def page_odd_top_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageOddTopMargin", value)
+
+    @property
+    def page_even_right_margin(self) -> float:
+        return self.page_width - self.page_printable_width - self.page_even_left_margin
+
+    @page_even_right_margin.setter
+    def page_even_right_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
         self.set(
-            (
-                "pageEvenLeftMargin",
-                "pageOddLeftMargin",
-                "pageEvenTopMargin",
-                "pageEvenBottomMargin",
-                "pageOddTopMargin",
-                "pageOddBottomMargin",
-            ),
-            value,
+            "pagePrintableWidth", self.page_width - self.page_even_left_margin - value
         )
+
+    @property
+    def page_odd_right_margin(self) -> float:
+        return self.page_width - self.page_printable_width - self.page_odd_left_margin
+
+    @page_odd_right_margin.setter
+    def page_odd_right_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set(
+            "pagePrintableWidth", self.page_width - self.page_odd_left_margin - value
+        )
+
+    @property
+    def page_even_bottom_margin(self) -> float:
+        return self.__get_float_default("pageEvenBottomMargin", 15 / INCH)
+
+    @page_even_bottom_margin.setter
+    def page_even_bottom_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageEvenBottomMargin", value)
+
+    @property
+    def page_odd_bottom_margin(self) -> float:
+        return self.__get_float_default("pageOddBottomMargin", 15 / INCH)
+
+    @page_odd_bottom_margin.setter
+    def page_odd_bottom_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageOddBottomMargin", value)
+
+    @property
+    def page_even_left_margin(self) -> float:
+        return self.__get_float_default("pageEvenLeftMargin", 15 / INCH)
+
+    @page_even_left_margin.setter
+    def page_even_left_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageEvenLeftMargin", value)
+
+    @property
+    def page_odd_left_margin(self) -> float:
+        return self.__get_float_default("pageOddLeftMargin", 15 / INCH)
+
+    @page_odd_left_margin.setter
+    def page_odd_left_margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+        """
+        self.set("pageOddLeftMargin", value)
+
+    @property
+    def page_printable_width(self) -> float:
+        """
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45
+        """
+        return self.__get_float_default("pagePrintableWidth", 180 / INCH)
+
+    @property
+    def margin(self) -> Margin:
+        """
+        :return: Dimension in ``inch``.
+        """
+        return Margin(
+            even_top=self.page_even_top_margin,
+            odd_top=self.page_odd_top_margin,
+            even_right=self.page_even_right_margin,
+            odd_right=self.page_odd_right_margin,
+            even_bottom=self.page_even_bottom_margin,
+            odd_bottom=self.page_odd_bottom_margin,
+            even_left=self.page_even_top_margin,
+            odd_left=self.page_odd_top_margin,
+        )
+
+    @margin.setter
+    def margin(self, value: float) -> None:
+        """
+        :param value: Dimension in ``inch``.
+
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46-L51"""
+        self.page_even_top_margin = value
+        self.page_odd_top_margin = value
+        self.page_even_bottom_margin = value
+        self.page_odd_bottom_margin = value
+        self.page_even_left_margin = value
+        self.page_odd_left_margin = value
+
+        # After page_even_left_margin and page_odd_left_margin
+        self.page_even_right_margin = value
+        self.page_odd_right_margin = value
 
     def max_system_distance(self, value: float) -> None:
         """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L61"""

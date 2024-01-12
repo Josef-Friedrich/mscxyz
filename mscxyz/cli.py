@@ -23,6 +23,10 @@ def mm(value: str) -> float:
     return Dimension(value).to("mm")
 
 
+def inch(value: str) -> float:
+    return Dimension(value).to("in")
+
+
 def list_fields(
     fields: typing.Sequence[str], prefix: str = "", suffix: str = ""
 ) -> str:
@@ -548,6 +552,21 @@ group_style.add_argument(
     "two lines of a music staff.",
 )
 
+group_style.add_argument(
+    "--page-size",
+    dest="style_page_size",
+    nargs=2,
+    metavar="<width> <height>",
+    help="Set the page size.",
+)
+
+group_style.add_argument(
+    "--margin",
+    dest="style_margin",
+    metavar="<dimension>",
+    help="Set the top, right, bottom and left margin to the same value.",
+)
+
 
 ###############################################################################
 # last positional parameter
@@ -639,20 +658,24 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if args.style_file:
             score.style.load_style_file(args.style_file.name)
 
-        if args.style_text_font:
+        if args.style_text_font is not None:
             score.style.set_text_fonts(args.style_text_font)
 
-        if args.style_title_font:
+        if args.style_title_font is not None:
             score.style.set_title_fonts(args.style_title_font)
 
-        if args.style_musical_symbol_font:
+        if args.style_musical_symbol_font is not None:
             score.style.set_musical_symbol_fonts(args.style_musical_symbol_font)
 
-        if args.style_musical_text_font:
+        if args.style_musical_text_font is not None:
             score.style.set_musical_text_font(args.style_musical_text_font)
 
         if args.style_staff_space is not None:
             score.style.staff_space = args.style_staff_space
+
+        if args.style_page_size is not None:
+            score.style.page_width = inch(args.style_page_size[0])
+            score.style.page_height = inch(args.style_page_size[1])
 
         #     print("\n" + utils.color(file, "red"))
 
