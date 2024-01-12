@@ -282,9 +282,9 @@ class TestCli:
 
 class TestProperties:
     def test_spatium(self, score: Score) -> None:
-        assert score.style.spatium == 1.76389
-        score.style.spatium = 1.234
-        assert score.style.spatium == 1.234
+        assert score.style.staff_space == 1.76389
+        score.style.staff_space = 1.234
+        assert score.style.staff_space == 1.234
 
     def test_measure_number_offset(self, score: Score) -> None:
         assert score.style.measure_number_offset == {"x": "0", "y": "-2"}

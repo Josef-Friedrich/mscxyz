@@ -163,6 +163,23 @@ def test_xml_write(tmp_path: Path) -> None:
     )
 
 
+class TestFunctionConvertToInch:
+    def test_input_integer(self) -> None:
+        assert utils.convert_to_inch(1) == 1
+
+    def test_input_float(self) -> None:
+        assert utils.convert_to_inch(1.1) == 1.1
+
+    def test_input_cm(self) -> None:
+        assert utils.convert_to_inch("1cm") == 0.39370078740157477
+
+    def test_input_mm(self) -> None:
+        assert utils.convert_to_inch("1mm") == 0.03937007874015748
+
+    def test_input_in(self) -> None:
+        assert utils.convert_to_inch("1in") == 1
+
+
 class TestClassPathChanger:
     path = PathChanger("test.MSCZ")
 

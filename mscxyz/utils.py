@@ -171,6 +171,40 @@ def convert_mxl(input_file: str) -> None:
     os.remove(input_file)
 
 
+def convert_to_inch(value: str | float) -> float:
+    """
+    Convert a value from millimeters (mm) or centimeters (cm) to inches (in).
+
+    :param value: The value to be converted. If a string is provided, it should
+      include the unit (e.g., '10mm', '5cm').
+
+    :returns: The converted value in inches.
+
+    :raises: ValueError: If the unit is not recognized.
+
+    Example:
+        >>> convert_to_inch('25mm')
+        0.984251968503937
+        >>> convert_to_inch('10cm')
+        3.937007874015748
+        >>> convert_to_inch(2.5)
+        2.5
+    """
+    if isinstance(value, str):
+        unit = value[-2:]
+        unit = unit.lower()
+        value = float(value[:-2])
+        if unit == "mm":
+            value = value / 25.4
+        elif unit == "cm":
+            value = value / 2.54
+        elif unit == "in":
+            pass
+        else:
+            raise ValueError(f"Unknown unit: {unit}")
+    return value
+
+
 # https://github.com/termcolor/termcolor/issues/62
 Color = Literal[
     "black",

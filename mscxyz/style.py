@@ -593,14 +593,24 @@ class Style:
         )
 
     @property
-    def spatium(self) -> float | None:
+    def staff_space(self) -> float | None:
         """
+        staff space in mm, default values 0.069in = 1.750mm
+
+        .. code :: XML
+
+            <Spatium>1.74978</Spatium>
+
+
+        styledef.cpp#L640 default 24.8 ???
+
+
         https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640
         """
         return self.__get_float("Spatium")
 
-    @spatium.setter
-    def spatium(self, value: float) -> None:
+    @staff_space.setter
+    def staff_space(self, value: float) -> None:
         self.set("Spatium", value)
 
     @property
