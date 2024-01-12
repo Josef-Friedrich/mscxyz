@@ -71,6 +71,7 @@ class DefaultArguments:
     style_title_font: Optional[str] = None
     style_musical_symbol_font: Optional[str] = None
     style_musical_text_font: Optional[str] = None
+    style_staff_space: Optional[float] = None
 
     # positional argument
     path: str = "."

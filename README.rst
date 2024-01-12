@@ -254,7 +254,8 @@ CLI Usage
                              [--list-fonts] [--text-font <font-face>]
                              [--title-font <font-face>]
                              [--musical-symbol-font <font-face>]
-                             [--musical-text-font <font-face>] [--spatium <float>]
+                             [--musical-text-font <font-face>]
+                             [--staff-space <dimension>]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -656,7 +657,8 @@ CLI Usage
                             “dynamicsFontFace”.
       --musical-text-font <font-face>
                             Set “musicalTextFont”.
-      --spatium <float>     Set the staff space or spatium. This is the vertical
+      --staff-space <dimension>
+                            Set the staff space or spatium. This is the vertical
                             distance between two lines of a music staff.
 
 Legacy CLI Usage

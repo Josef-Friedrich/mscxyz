@@ -171,38 +171,36 @@ def convert_mxl(input_file: str) -> None:
     os.remove(input_file)
 
 
-def convert_to_inch(value: str | float) -> float:
-    """
-    Convert a value from millimeters (mm) or centimeters (cm) to inches (in).
+Unit = Literal["mm", "in"]
 
-    :param value: The value to be converted. If a string is provided, it should
-      include the unit (e.g., '10mm', '5cm').
 
-    :returns: The converted value in inches.
+class Dimension:
+    value: float
 
-    :raises: ValueError: If the unit is not recognized.
+    unit: Unit
 
-    Example:
-        >>> convert_to_inch('25mm')
-        0.984251968503937
-        >>> convert_to_inch('10cm')
-        3.937007874015748
-        >>> convert_to_inch(2.5)
-        2.5
-    """
-    if isinstance(value, str):
-        unit = value[-2:]
+    def __init__(self, value: str) -> None:
+        self.value, self.unit = Dimension.parse(value)
+
+    @staticmethod
+    def parse(dimension: str) -> tuple[float, Unit]:
+        unit: str = dimension[-2:]
         unit = unit.lower()
-        value = float(value[:-2])
-        if unit == "mm":
+        if unit not in ("mm", "in"):
+            raise ValueError(f"Unknown unit: {unit}. Allowed are mm and in.")
+        value = float(dimension[:-2])
+        return (value, unit)  # type: ignore
+
+    @staticmethod
+    def convert(value: float, from_unit: Unit, to_unit: Unit) -> float:
+        if from_unit == "in" and to_unit == "mm":
+            value = value * 25.4
+        elif from_unit == "mm" and to_unit == "in":
             value = value / 25.4
-        elif unit == "cm":
-            value = value / 2.54
-        elif unit == "in":
-            pass
-        else:
-            raise ValueError(f"Unknown unit: {unit}")
-    return value
+        return value
+
+    def to(self, unit: Unit) -> float:
+        return Dimension.convert(self.value, self.unit, unit)
 
 
 # https://github.com/termcolor/termcolor/issues/62

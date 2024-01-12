@@ -16,6 +16,11 @@ from mscxyz import utils
 from mscxyz.meta import Interface, InterfaceReadWrite
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
+from mscxyz.utils import Dimension
+
+
+def mm(value: str) -> float:
+    return Dimension(value).to("mm")
 
 
 def list_fields(
@@ -535,10 +540,10 @@ group_style.add_argument(
 )
 
 group_style.add_argument(
-    "--spatium",
-    dest="style_spatium",
-    type=float,
-    metavar="<float>",
+    "--staff-space",
+    dest="style_staff_space",
+    type=mm,
+    metavar="<dimension>",
     help="Set the staff space or spatium. This is the vertical distance between "
     "two lines of a music staff.",
 )
@@ -645,6 +650,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         if args.style_musical_text_font:
             score.style.set_musical_text_font(args.style_musical_text_font)
+
+        if args.style_staff_space is not None:
+            score.style.staff_space = args.style_staff_space
 
         #     print("\n" + utils.color(file, "red"))
 

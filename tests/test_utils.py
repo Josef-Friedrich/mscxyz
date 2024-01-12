@@ -13,7 +13,7 @@ import pytest
 
 from mscxyz import utils
 from mscxyz.settings import get_args
-from mscxyz.utils import ListExtension, PathChanger, ZipContainer
+from mscxyz.utils import Dimension, ListExtension, PathChanger, ZipContainer
 from tests import helper
 from tests.helper import cli_legacy
 
@@ -163,21 +163,24 @@ def test_xml_write(tmp_path: Path) -> None:
     )
 
 
-class TestFunctionConvertToInch:
-    def test_input_integer(self) -> None:
-        assert utils.convert_to_inch(1) == 1
+class TestClassDimension:
+    def test_exception(self) -> None:
+        with pytest.raises(ValueError):
+            Dimension("1")
+        with pytest.raises(ValueError):
+            Dimension("1xx")
 
-    def test_input_float(self) -> None:
-        assert utils.convert_to_inch(1.1) == 1.1
+    def test_input_mm_in(self) -> None:
+        assert Dimension("1mm").to("in") == 0.03937007874015748
 
-    def test_input_cm(self) -> None:
-        assert utils.convert_to_inch("1cm") == 0.39370078740157477
+    def test_input_in_in(self) -> None:
+        assert Dimension("1in").to("in") == 1
 
-    def test_input_mm(self) -> None:
-        assert utils.convert_to_inch("1mm") == 0.03937007874015748
+    def test_input_mm_mm(self) -> None:
+        assert Dimension("1mm").to("mm") == 1
 
-    def test_input_in(self) -> None:
-        assert utils.convert_to_inch("1in") == 1
+    def test_input_in_mm(self) -> None:
+        assert Dimension("1in").to("mm") == 25.4
 
 
 class TestClassPathChanger:

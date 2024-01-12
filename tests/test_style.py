@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import Literal
 
 import pytest
-from pytest import CaptureFixture
 
 import mscxyz
 from mscxyz.score import Score
 from mscxyz.style import Style
 from tests import helper
+from tests.helper import cli
 
 
 def reload(score: Score) -> Style:
@@ -267,7 +267,7 @@ def test_load_style_file() -> None:
 
 
 class TestCli:
-    def test_option_styles_v3(self, capsys: CaptureFixture[str]) -> None:
+    def test_option_styles_v3(self) -> None:
         stdout = helper.stdout("--styles-v3")
         assert "user12FrameFgColor" in stdout
         assert "instrumentNameOffset" not in stdout
@@ -278,6 +278,10 @@ class TestCli:
     def test_option_list_fonts(self, score: Score) -> None:
         stdout = helper.stdout("--list-fonts", str(score.path))
         assert "harpPedalTextDiagramFontFace: Edwin" in stdout
+
+    def test_option_staff_space(self, score: Score) -> None:
+        cli("--staff-space", "1in", score)
+        assert score.reload().style.staff_space == 25.4
 
 
 class TestProperties:
