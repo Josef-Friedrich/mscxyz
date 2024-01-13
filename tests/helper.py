@@ -162,7 +162,93 @@ def stdout(*cli_args: CliArg) -> str:
 
 
 def cli(*cli_args: CliArg) -> None:
+    """
+    TODO replacie with cli_on_score
+    """
     __simluate_cli(*cli_args)
+
+
+def cli_on_score(*cli_args: CliArg) -> Score:
+    """
+    TODO rename to cli?
+
+    By default a version 4 score object (score.mscz) is appened to the args list.
+
+    :returns: A reloaded score object.
+    """
+    args = list(cli_args)
+    if not isinstance(args[-1], Score):
+        score: Score = get_score("score.mscz", version=4)
+        args.append(score)
+    else:
+        score = args[-1]
+    __simluate_cli(*args)
+    return score.reload()
+
+
+class Cli:
+    __args: list[CliArg]
+    __score: Score
+    __executed: bool = False
+    __stdout: str
+    __stderr: str
+    __returncode: int
+
+    def __init__(self, *args: CliArg) -> None:
+        self.__args = list(args)
+        if not isinstance(self.__args[-1], Score):
+            self.__score: Score = get_score("score.mscz", version=4)
+            self.__args.append(self.__score)
+        else:
+            self.__score = self.__args[-1]
+
+    @property
+    def __stringified_args(self) -> list[str]:
+        result: list[str] = []
+        for arg in self.__args:
+            if isinstance(arg, Path):
+                result.append(str(arg))
+            elif isinstance(arg, Score):
+                result.append(str(arg.path))
+            else:
+                result.append(arg)
+        return result
+
+    def __execute(self) -> None:
+        if not self.__executed:
+            stdout = StringIO()
+            stderr = StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                execute(self.__stringified_args)
+            self.__score = self.__score.reload()
+            self.__stdout = stdout.getvalue()
+            self.__stderr = stderr.getvalue()
+            self.__executed = True
+
+    def score(self) -> Score:
+        self.__execute()
+        return self.__score
+
+    def stdout(self) -> str:
+        self.__execute()
+        return self.__stdout
+
+    def stderr(self) -> str:
+        self.__execute()
+        return self.__stderr
+
+    def sysexit(self) -> str:
+        if not self.__executed:
+            result = subprocess.run(
+                ["musescore-manager"] + self.__stringified_args,
+                capture_output=True,
+                encoding="utf-8",
+            )
+            self.__returncode = result.returncode
+            self.__stderr = result.stderr
+            self.__stdout = result.stdout
+            self.__executed = True
+        return self.__stderr + self.__stdout
 
 
 def sysexit(*cli_args: CliArg) -> str:

@@ -8,7 +8,7 @@ import mscxyz
 from mscxyz.score import Score
 from mscxyz.style import Style
 from tests import helper
-from tests.helper import cli
+from tests.helper import Cli
 
 
 def reload(score: Score) -> Style:
@@ -268,26 +268,24 @@ def test_load_style_file() -> None:
 
 class TestCli:
     def test_option_styles_v3(self) -> None:
-        stdout = helper.stdout("--styles-v3")
+        stdout = Cli("--styles-v3").stdout()
         assert "user12FrameFgColor" in stdout
         assert "instrumentNameOffset" not in stdout
 
     def test_option_styles_v4(self) -> None:
-        assert "instrumentNameOffset" in helper.stdout("--styles-v4")
+        assert "instrumentNameOffset" in Cli("--styles-v4").stdout()
 
-    def test_option_list_fonts(self, score: Score) -> None:
-        stdout = helper.stdout("--list-fonts", str(score.path))
-        assert "harpPedalTextDiagramFontFace: Edwin" in stdout
+    def test_option_list_fonts(self) -> None:
+        assert "harpPedalTextDiagramFontFace: Edwin" in Cli("--list-fonts").stdout()
 
-    def test_option_staff_space(self, score: Score) -> None:
-        cli("--staff-space", "1in", score)
-        assert score.reload().style.staff_space == 25.4
+    def test_option_staff_space(self) -> None:
+        score: Score = Cli("--staff-space", "1in").score()
+        assert score.style.staff_space == 25.4
 
-    def test_option_page_size(self, score: Score) -> None:
-        cli("--page-size", "150mm", "100mm", score)
-        new = score.reload()
-        assert new.style.page_width == 5.905511811023622
-        assert new.style.page_height == 3.937007874015748
+    def test_option_page_size(self) -> None:
+        score: Score = Cli("--page-size", "150mm", "100mm").score()
+        assert score.style.page_width == 5.905511811023622
+        assert score.style.page_height == 3.937007874015748
 
 
 class TestProperties:
