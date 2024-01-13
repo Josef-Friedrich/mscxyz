@@ -303,6 +303,24 @@ class TestCli:
         assert s.page_even_left_margin == 1.1811
         assert s.page_odd_left_margin == 1.1811
 
+    def test_option_header(self) -> None:
+        c = Cli("--header").execute()
+        assert not c.pre.style.show_header
+        assert c.post.style.show_header
+
+        c = Cli("--no-header", c.score()).execute()
+        assert c.pre.style.show_header
+        assert not c.post.style.show_header
+
+    def test_option_footer(self) -> None:
+        c = Cli("--footer").execute()
+        assert c.pre.style.show_footer
+        assert c.post.style.show_footer
+
+        c = Cli("--no-footer", c.score()).execute()
+        assert c.pre.style.show_footer
+        assert not c.post.style.show_footer
+
 
 class TestProperties:
     def test_measure_number_offset(self, score: Score) -> None:

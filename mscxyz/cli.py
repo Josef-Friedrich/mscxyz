@@ -567,6 +567,19 @@ group_style.add_argument(
     help="Set the top, right, bottom and left margins to the same value.",
 )
 
+group_style.add_argument(
+    "--header",
+    dest="style_show_header",
+    action=argparse.BooleanOptionalAction,
+    help="Show or hide the header",
+)
+
+group_style.add_argument(
+    "--footer",
+    dest="style_show_footer",
+    action=argparse.BooleanOptionalAction,
+    help="Show or hide the footer.",
+)
 
 ###############################################################################
 # last positional parameter
@@ -679,6 +692,12 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         if args.style_margin is not None:
             score.style.margin = inch(args.style_margin)
+
+        if args.style_show_header is not None:
+            score.style.show_header = args.style_show_header
+
+        if args.style_show_footer is not None:
+            score.style.show_footer = args.style_show_footer
 
         #     print("\n" + utils.color(file, "red"))
 

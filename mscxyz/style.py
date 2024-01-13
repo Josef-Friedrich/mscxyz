@@ -217,6 +217,18 @@ class Style:
             return value
         return default
 
+    def __get_bool(self, style_name: str) -> bool | None:
+        value: str | None = self.get(style_name, raise_exception=False)
+        if value is not None:
+            return value == "1"
+        return None
+
+    def __get_bool_default(self, style_name: str, default: bool) -> bool:
+        value: bool | None = self.__get_bool(style_name)
+        if value is not None:
+            return value
+        return default
+
     def __get_attributes(self, style_name: str) -> _Attrib:
         element: _Element = self.get_element(style_name)
         return element.attrib
@@ -715,6 +727,37 @@ class Style:
     def max_system_distance(self, value: float) -> None:
         """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L61"""
         self.set("maxSystemDistance", value)
+
+    @property
+    def show_header(self) -> bool:
+        """
+
+        .. code :: XML
+
+            <showHeader>1</showHeader>
+
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L494C1-L494"""
+        return self.__get_bool_default("showHeader", True)
+
+    @show_header.setter
+    def show_header(self, value: bool) -> None:
+        self.set("showHeader", int(value))
+
+    @property
+    def show_footer(self) -> bool:
+        """
+
+        .. code :: XML
+
+            <showFooter>1</showFooter>
+
+
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L494C1-L503"""
+        return self.__get_bool_default("showFooter", True)
+
+    @show_footer.setter
+    def show_footer(self, value: bool) -> None:
+        self.set("showFooter", int(value))
 
     def header(self, value: str) -> None:
         """https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497-L502"""

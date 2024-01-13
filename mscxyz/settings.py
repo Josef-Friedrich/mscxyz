@@ -74,6 +74,8 @@ class DefaultArguments:
     style_staff_space: Optional[float] = None
     style_page_size: Optional[tuple[str, str]] = None
     style_margin: Optional[str] = None
+    style_show_header: Optional[bool] = None
+    style_show_footer: Optional[bool] = None
 
     # positional argument
     path: str = "."

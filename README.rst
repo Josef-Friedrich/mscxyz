@@ -257,7 +257,8 @@ CLI Usage
                              [--musical-text-font <font-face>]
                              [--staff-space <dimension>]
                              [--page-size <width> <height> <width> <height>]
-                             [--margin <dimension>]
+                             [--margin <dimension>] [--header | --no-header]
+                             [--footer | --no-footer]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -666,6 +667,10 @@ CLI Usage
                             Set the page size.
       --margin <dimension>  Set the top, right, bottom and left margins to the same
                             value.
+      --header, --no-header
+                            Show or hide the header
+      --footer, --no-footer
+                            Show or hide the footer.
 
 Legacy CLI Usage
 ================
