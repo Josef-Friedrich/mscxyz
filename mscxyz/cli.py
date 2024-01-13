@@ -564,7 +564,7 @@ group_style.add_argument(
     "--margin",
     dest="style_margin",
     metavar="<dimension>",
-    help="Set the top, right, bottom and left margin to the same value.",
+    help="Set the top, right, bottom and left margins to the same value.",
 )
 
 
@@ -676,6 +676,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if args.style_page_size is not None:
             score.style.page_width = inch(args.style_page_size[0])
             score.style.page_height = inch(args.style_page_size[1])
+
+        if args.style_margin is not None:
+            score.style.margin = inch(args.style_margin)
 
         #     print("\n" + utils.color(file, "red"))
 

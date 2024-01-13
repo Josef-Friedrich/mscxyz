@@ -664,7 +664,7 @@ CLI Usage
                             distance between two lines of a music staff.
       --page-size <width> <height> <width> <height>
                             Set the page size.
-      --margin <dimension>  Set the top, right, bottom and left margin to the same
+      --margin <dimension>  Set the top, right, bottom and left margins to the same
                             value.
 
 Legacy CLI Usage

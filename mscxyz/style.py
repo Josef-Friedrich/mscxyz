@@ -209,6 +209,7 @@ class Style:
         value: str | None = self.get(style_name, raise_exception=False)
         if value is not None:
             return utils.round_float(value)
+        return None
 
     def __get_float_default(self, style_name: str, default: float) -> float:
         value: float | None = self.__get_float(style_name)
@@ -673,11 +674,11 @@ class Style:
         return self.__get_float_default("pagePrintableWidth", 180 / INCH)
 
     @property
-    def margin(self) -> Margin:
+    def margin(self) -> Margin | float:
         """
         :return: Dimension in ``inch``.
         """
-        return Margin(
+        margin = Margin(
             even_top=self.page_even_top_margin,
             odd_top=self.page_odd_top_margin,
             even_right=self.page_even_right_margin,
@@ -687,6 +688,12 @@ class Style:
             even_left=self.page_even_top_margin,
             odd_left=self.page_odd_top_margin,
         )
+
+        margin_single_value: float = margin.even_top
+        for attr in margin.__dict__:
+            if getattr(margin, attr) != margin_single_value:
+                return margin
+        return margin_single_value
 
     @margin.setter
     def margin(self, value: float) -> None:
