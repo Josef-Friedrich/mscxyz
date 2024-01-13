@@ -3,6 +3,9 @@ all: test autocomplete
 test:
 	poetry run tox
 
+test_quick:
+	poetry run tox -e py319,format,docs,lint
+
 test_real_binary:
 	pytest _test_real-binary.py
 

@@ -8,7 +8,7 @@ import pytest
 
 from mscxyz import Score
 from tests import helper
-from tests.helper import Cli, assert_file_type, cli
+from tests.helper import Cli, assert_file_type
 
 
 class TestSpecifyMusescoreFiles:
@@ -145,81 +145,73 @@ class TestExport:
 
 class TestStyle:
     def test_set_style_single(self) -> None:
-        score = Cli("--style", "staffDistance", "7.5").score()
-        assert score.style.get("staffDistance") == "7.5"
+        c = Cli("--style", "staffDistance", "7.5").execute()
+        assert c.pre.style.get("staffDistance") == "6.5"
+        assert c.post.style.get("staffDistance") == "7.5"
 
-    def test_set_style_multiple(self, score: Score) -> None:
-        score = Cli(
+    def test_set_style_multiple(self) -> None:
+        c = Cli(
             "-s",
             "staffUpperBorder",
             "5.5",
             "--style",
             "staffLowerBorder",
             "5.5",
-            score,
-        ).score()
-        assert score.style.get("staffUpperBorder") == "5.5"
-        assert score.style.get("staffLowerBorder") == "5.5"
+        ).execute()
 
-    def test_set_text_fonts(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("defaultFontFace") == "FreeSerif"
-        assert sty.get("titleFontFace") == "FreeSerif"
-        assert sty.get("romanNumeralFontFace") == "Campania"
+        assert c.pre.style.get("staffUpperBorder") == "7"
+        assert c.pre.style.get("staffLowerBorder") == "7"
 
-        cli("--text-font", "Alegreya", score)
+        assert c.post.style.get("staffUpperBorder") == "5.5"
+        assert c.post.style.get("staffLowerBorder") == "5.5"
 
-        new = sty.reload()
-        assert new.get("defaultFontFace") == "Alegreya"
-        assert new.get("titleFontFace") == "Alegreya"
-        assert new.get("romanNumeralFontFace") == "Campania"
+    def test_set_text_fonts(self) -> None:
+        c = Cli("--text-font", "Alegreya").execute()
 
-    def test_set_title_fonts(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("titleFontFace") == "FreeSerif"
-        assert sty.get("subTitleFontFace") == "FreeSerif"
+        assert c.pre.style.get("defaultFontFace") == "FreeSerif"
+        assert c.pre.style.get("titleFontFace") == "FreeSerif"
+        assert c.pre.style.get("romanNumeralFontFace") == "Campania"
 
-        cli("--title-font", "Alegreya Sans", score)
+        assert c.post.style.get("defaultFontFace") == "Alegreya"
+        assert c.post.style.get("titleFontFace") == "Alegreya"
+        assert c.post.style.get("romanNumeralFontFace") == "Campania"
 
-        new = sty.reload()
-        assert new.get("defaultFontFace") == "FreeSerif"
-        assert new.get("titleFontFace") == "Alegreya Sans"
-        assert new.get("subTitleFontFace") == "Alegreya Sans"
+    def test_set_title_fonts(self) -> None:
+        c = Cli("--title-font", "Alegreya Sans").execute()
 
-    def test_set_musical_symbols_font(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("musicalSymbolFont") == "Leland"
-        assert sty.get("dynamicsFont") == "Leland"
-        assert sty.get("dynamicsFontFace") == "FreeSerif"
+        assert c.pre.style.get("titleFontFace") == "FreeSerif"
+        assert c.pre.style.get("subTitleFontFace") == "FreeSerif"
 
-        cli("--musical-symbol-font", "Emmentaler", score)
+        assert c.post.style.get("defaultFontFace") == "FreeSerif"
+        assert c.post.style.get("titleFontFace") == "Alegreya Sans"
+        assert c.post.style.get("subTitleFontFace") == "Alegreya Sans"
 
-        new = sty.reload()
-        assert new.get("musicalSymbolFont") == "Emmentaler"
-        assert new.get("dynamicsFont") == "Emmentaler"
-        assert new.get("dynamicsFontFace") == "Emmentaler"
+    def test_set_musical_symbols_font(self) -> None:
+        c = Cli("--musical-symbol-font", "Emmentaler").execute()
 
-    def test_set_musical_symbol_font(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("musicalSymbolFont") == "Leland"
-        assert sty.get("dynamicsFont") == "Leland"
-        assert sty.get("dynamicsFontFace") == "FreeSerif"
+        assert c.pre.style.get("musicalSymbolFont") == "Leland"
+        assert c.pre.style.get("dynamicsFont") == "Leland"
+        assert c.pre.style.get("dynamicsFontFace") == "FreeSerif"
 
-        cli("--musical-symbol-font", "Emmentaler", score)
+        assert c.post.style.get("musicalSymbolFont") == "Emmentaler"
+        assert c.post.style.get("dynamicsFont") == "Emmentaler"
+        assert c.post.style.get("dynamicsFontFace") == "Emmentaler"
 
-        new = sty.reload()
-        assert new.get("musicalSymbolFont") == "Emmentaler"
-        assert new.get("dynamicsFont") == "Emmentaler"
-        assert new.get("dynamicsFontFace") == "Emmentaler"
+    def test_set_musical_symbol_font(self) -> None:
+        c = Cli("--musical-symbol-font", "Emmentaler").execute()
 
-    def test_set_musical_text_font(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("musicalTextFont") == "Leland Text"
+        assert c.pre.style.get("musicalSymbolFont") == "Leland"
+        assert c.pre.style.get("dynamicsFont") == "Leland"
+        assert c.pre.style.get("dynamicsFontFace") == "FreeSerif"
 
-        cli("--musical-text-font", "Emmentaler Text", score)
+        assert c.post.style.get("musicalSymbolFont") == "Emmentaler"
+        assert c.post.style.get("dynamicsFont") == "Emmentaler"
+        assert c.post.style.get("dynamicsFontFace") == "Emmentaler"
 
-        new = sty.reload()
-        assert new.get("musicalTextFont") == "Emmentaler Text"
+    def test_set_musical_text_font(self) -> None:
+        c = Cli("--musical-text-font", "Emmentaler Text").execute()
+        assert c.pre.style.get("musicalTextFont") == "Leland Text"
+        assert c.post.style.get("musicalTextFont") == "Emmentaler Text"
 
 
 class TestAutocomplete:

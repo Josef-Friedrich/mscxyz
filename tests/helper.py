@@ -188,7 +188,7 @@ def cli_on_score(*cli_args: CliArg) -> Score:
 
 class Cli:
     __args: list[CliArg]
-    __score_old: Optional[Score] = None
+    __score_pre: Optional[Score] = None
     __score: Optional[Score] = None
     __executed: bool = False
     __stdout: Optional[str] = None
@@ -203,15 +203,15 @@ class Cli:
             return
 
         if isinstance(last, Score):
-            self.__score_old = last
+            self.__score_pre = last
             self.__score = last
             return
 
         if not (isinstance(last, str) and Path(last).exists()) and not isinstance(
             last, Score
         ):
-            self.__score_old = get_score("score.mscz", version=4)
-            self.__score = self.__score_old
+            self.__score_pre = get_score("score.mscz", version=4)
+            self.__score = self.__score_pre
             self.__args.append(self.__score)
 
     @property
@@ -227,10 +227,16 @@ class Cli:
         return result
 
     @property
-    def score_old(self) -> Score:
-        if self.__score_old is None:
+    def pre(self) -> Score:
+        if self.__score_pre is None:
             raise Exception("No score object")
-        return self.__score_old
+        return self.__score_pre
+
+    @property
+    def post(self) -> Score:
+        if self.__score is None:
+            raise Exception("No score object")
+        return self.__score
 
     def __execute(self) -> None:
         if not self.__executed:
@@ -243,6 +249,10 @@ class Cli:
             self.__stdout = stdout.getvalue()
             self.__stderr = stderr.getvalue()
             self.__executed = True
+
+    def execute(self) -> Cli:
+        self.__execute()
+        return self
 
     def score(self) -> Score:
         self.__execute()
