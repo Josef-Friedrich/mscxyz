@@ -208,13 +208,12 @@ class Style:
     def __get_float(self, style_name: str) -> float | None:
         value: str | None = self.get(style_name, raise_exception=False)
         if value is not None:
-            return float(value)
-        return None
+            return utils.round_float(value)
 
     def __get_float_default(self, style_name: str, default: float) -> float:
-        value: str | None = self.get(style_name, raise_exception=False)
+        value: float | None = self.__get_float(style_name)
         if value is not None:
-            return float(value)
+            return value
         return default
 
     def __get_attributes(self, style_name: str) -> _Attrib:
@@ -276,6 +275,8 @@ class Style:
                 for name, value in value.items():
                     element.attrib[name] = str(value)
             else:
+                if isinstance(value, float):
+                    value = utils.round_float(value)
                 element.text = str(value)
         return response
 
@@ -592,7 +593,9 @@ class Style:
 
     @property
     def page_even_right_margin(self) -> float:
-        return self.page_width - self.page_printable_width - self.page_even_left_margin
+        return utils.round_float(
+            self.page_width - self.page_printable_width - self.page_even_left_margin
+        )
 
     @page_even_right_margin.setter
     def page_even_right_margin(self, value: float) -> None:
@@ -605,7 +608,9 @@ class Style:
 
     @property
     def page_odd_right_margin(self) -> float:
-        return self.page_width - self.page_printable_width - self.page_odd_left_margin
+        return utils.round_float(
+            self.page_width - self.page_printable_width - self.page_odd_left_margin
+        )
 
     @page_odd_right_margin.setter
     def page_odd_right_margin(self, value: float) -> None:

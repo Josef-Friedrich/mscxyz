@@ -175,6 +175,10 @@ def convert_mxl(input_file: str) -> None:
     os.remove(input_file)
 
 
+def round_float(value: str | int | float) -> float:
+    return float(round(float(value), 4))
+
+
 Unit = Literal["mm", "in"]
 
 

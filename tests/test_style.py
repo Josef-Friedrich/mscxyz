@@ -284,13 +284,13 @@ class TestCli:
 
     def test_option_page_size(self) -> None:
         score: Score = Cli("--page-size", "150mm", "100mm").score()
-        assert score.style.page_width == 5.905511811023622
-        assert score.style.page_height == 3.937007874015748
+        assert score.style.page_width == 5.9055
+        assert score.style.page_height == 3.9370
 
 
 class TestProperties:
     def test_spatium(self, score: Score) -> None:
-        assert score.style.staff_space == 1.76389
+        assert score.style.staff_space == 1.7639
         score.style.staff_space = 1.234
         assert score.style.staff_space == 1.234
 
@@ -301,14 +301,14 @@ class TestProperties:
 
     def test_margin(self, score: Score) -> None:
         s = score.style
-        assert s.page_even_top_margin == 0.393701
-        assert s.page_odd_top_margin == 0.393701
-        assert s.page_even_right_margin == 0.39369899999999985
-        assert s.page_odd_right_margin == 0.39369899999999985
-        assert s.page_even_bottom_margin == 0.787403
-        assert s.page_odd_bottom_margin == 0.787403
-        assert s.page_even_left_margin == 0.393701
-        assert s.page_odd_left_margin == 0.393701
+        assert s.page_even_top_margin == 0.3937
+        assert s.page_odd_top_margin == 0.3937
+        assert s.page_even_right_margin == 0.3937
+        assert s.page_odd_right_margin == 0.3937
+        assert s.page_even_bottom_margin == 0.7874
+        assert s.page_odd_bottom_margin == 0.7874
+        assert s.page_even_left_margin == 0.3937
+        assert s.page_odd_left_margin == 0.3937
 
         s.margin = 1.234  # type: ignore
 
