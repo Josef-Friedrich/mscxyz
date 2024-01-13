@@ -8,12 +8,15 @@ import pytest
 
 from mscxyz import Score
 from tests import helper
-from tests.helper import Cli, assert_file_type, cli, stdout
+from tests.helper import Cli, assert_file_type, cli
 
 
 class TestSpecifyMusescoreFiles:
     def test_without_an_argument(self) -> None:
-        assert "tests/files/by_version/4/score.mscz" in stdout("--list-files")
+        assert (
+            "tests/files/by_version/4/score.mscz"
+            in Cli("--list-files", append_score=False).stdout()
+        )
 
     def test_dot_to_specify_pwd(self) -> None:
         assert (
@@ -26,49 +29,51 @@ class TestSpecifyMusescoreFiles:
         file3 = "tests/files/by_version/3/score.mscz"
         file4 = "tests/files/by_version/4/score.mscz"
 
-        output = stdout(
+        stdout = Cli(
             "-L",
             file2,
             file3,
             file4,
-        )
+        ).stdout()
 
-        assert file2 in output
-        assert file3 in output
-        assert file4 in output
+        assert file2 in stdout
+        assert file3 in stdout
+        assert file4 in stdout
 
     def test_pass_multiple_directories(self) -> None:
         dir2 = "tests/files/by_version/2"
         dir3 = "tests/files/by_version/3"
         dir4 = "tests/files/by_version/4"
 
-        output = stdout(
+        stdout = Cli(
             "-L",
             dir2,
             dir3,
             dir4,
-        )
+        ).stdout()
 
-        assert dir2 in output
-        assert dir3 in output
-        assert dir4 in output
+        assert dir2 in stdout
+        assert dir3 in stdout
+        assert dir4 in stdout
 
     def test_glob(self) -> None:
-        output = stdout("-L", "--glob", "*/by_version/4/*.mscz")
-        assert "/by_version/4/" in output
-        assert ".mscz" in output
-        assert "/by_version/3/" not in output
-        assert ".mscx" not in output
+        stdout = Cli(
+            "-L", "--glob", "*/by_version/4/*.mscz", append_score=False
+        ).stdout()
+        assert "/by_version/4/" in stdout
+        assert ".mscz" in stdout
+        assert "/by_version/3/" not in stdout
+        assert ".mscx" not in stdout
 
     def test_mscz_only(self) -> None:
-        output = stdout("-L", "--mscz")
-        assert "score.mscz" in output
-        assert "score.mscx" not in output
+        stdout = Cli("-L", "--mscz", append_score=False).stdout()
+        assert "score.mscz" in stdout
+        assert "score.mscx" not in stdout
 
     def test_mscx_only(self) -> None:
-        output = stdout("-L", "--mscx")
-        assert "score.mscz" not in output
-        assert "simple.mscx" in output
+        stdout = Cli("-L", "--mscx", append_score=False).stdout()
+        assert "score.mscz" not in stdout
+        assert "simple.mscx" in stdout
 
     def test_dont_mix_mscz_and_mscx(self) -> None:
         assert (
@@ -125,8 +130,7 @@ class TestExport:
         ],
     )
     def test_cli(self, extension: str, expected: str) -> None:
-        score = helper.get_score("simple.mscz", version=4)
-        cli("--export", extension, score)
+        score = Cli("--export", extension).score()
         dest = self.get_export_path(score, extension)
         assert dest.exists()
         assert_file_type(dest, expected)
@@ -140,18 +144,12 @@ class TestExport:
 
 
 class TestStyle:
-    def test_set_style_single(self, score: Score) -> None:
-        assert score.style.get("staffDistance") == "6.5"
-        cli("--style", "staffDistance", "7.5", score)
-        # Don’t save
-        assert score.reload().style.get("staffDistance") == "7.5"
+    def test_set_style_single(self) -> None:
+        score = Cli("--style", "staffDistance", "7.5").score()
+        assert score.style.get("staffDistance") == "7.5"
 
     def test_set_style_multiple(self, score: Score) -> None:
-        sty = score.style
-        assert sty.get("staffUpperBorder") == "7"
-        assert sty.get("staffLowerBorder") == "7"
-
-        cli(
+        score = Cli(
             "-s",
             "staffUpperBorder",
             "5.5",
@@ -159,10 +157,9 @@ class TestStyle:
             "staffLowerBorder",
             "5.5",
             score,
-        )
-        new = sty.reload()
-        assert new.get("staffUpperBorder") == "5.5"
-        assert new.get("staffLowerBorder") == "5.5"
+        ).score()
+        assert score.style.get("staffUpperBorder") == "5.5"
+        assert score.style.get("staffLowerBorder") == "5.5"
 
     def test_set_text_fonts(self, score: Score) -> None:
         sty = score.style

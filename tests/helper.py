@@ -9,7 +9,7 @@ import tempfile
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Optional, Sequence, Union
 
 from lxml.etree import _Element
 
@@ -23,8 +23,8 @@ from mscxyz.style import Style
 test_dir = os.path.dirname(os.path.abspath(__file__))
 ini_file = os.path.join(test_dir, "mscxyz.ini")
 
-# mscore_executable: str | None = shutil.which("mscore")
-mscore_executable: str | None = None
+mscore_executable: str | None = shutil.which("mscore")
+# mscore_executable: str | None = None
 
 
 def get_path(filename: str, version: int = 2) -> Path:
@@ -188,19 +188,31 @@ def cli_on_score(*cli_args: CliArg) -> Score:
 
 class Cli:
     __args: list[CliArg]
-    __score: Score
+    __score_old: Optional[Score] = None
+    __score: Optional[Score] = None
     __executed: bool = False
-    __stdout: str
-    __stderr: str
+    __stdout: Optional[str] = None
+    __stderr: Optional[str] = None
     __returncode: int
 
-    def __init__(self, *args: CliArg) -> None:
+    def __init__(self, *args: CliArg, append_score: bool = True) -> None:
         self.__args = list(args)
-        if not isinstance(self.__args[-1], Score):
-            self.__score: Score = get_score("score.mscz", version=4)
+        last = self.__args[-1]
+
+        if not append_score:
+            return
+
+        if isinstance(last, Score):
+            self.__score_old = last
+            self.__score = last
+            return
+
+        if not (isinstance(last, str) and Path(last).exists()) and not isinstance(
+            last, Score
+        ):
+            self.__score_old = get_score("score.mscz", version=4)
+            self.__score = self.__score_old
             self.__args.append(self.__score)
-        else:
-            self.__score = self.__args[-1]
 
     @property
     def __stringified_args(self) -> list[str]:
@@ -214,27 +226,40 @@ class Cli:
                 result.append(arg)
         return result
 
+    @property
+    def score_old(self) -> Score:
+        if self.__score_old is None:
+            raise Exception("No score object")
+        return self.__score_old
+
     def __execute(self) -> None:
         if not self.__executed:
             stdout = StringIO()
             stderr = StringIO()
             with redirect_stdout(stdout), redirect_stderr(stderr):
                 execute(self.__stringified_args)
-            self.__score = self.__score.reload()
+            if self.__score is not None:
+                self.__score = self.__score.reload()
             self.__stdout = stdout.getvalue()
             self.__stderr = stderr.getvalue()
             self.__executed = True
 
     def score(self) -> Score:
         self.__execute()
+        if self.__score is None:
+            raise Exception("No score object")
         return self.__score
 
     def stdout(self) -> str:
         self.__execute()
+        if self.__stdout is None:
+            raise Exception("No stdout")
         return self.__stdout
 
     def stderr(self) -> str:
         self.__execute()
+        if self.__stderr is None:
+            raise Exception("No stderr")
         return self.__stderr
 
     def sysexit(self) -> str:
@@ -248,6 +273,8 @@ class Cli:
             self.__stderr = result.stderr
             self.__stdout = result.stdout
             self.__executed = True
+        if self.__stdout is None or self.__stderr is None:
+            raise Exception("No stdout or stderr")
         return self.__stderr + self.__stdout
 
 

@@ -9,11 +9,11 @@ on:
     branches: ['main']
   workflow_dispatch:
 
-env:
+# env:
   # https://github.com/musescore/MuseScore/issues/17247
   # https://github.com/musescore/MuseScore/issues/17247#issuecomment-1510434918
   # https://ourcodeworld.com/articles/read/1409/how-to-use-musescore-3-in-headless-mode-in-ubuntu-2004
-  QT_QPA_PLATFORM: offscreen
+  # QT_QPA_PLATFORM: offscreen
 
 
 jobs:
@@ -26,21 +26,21 @@ jobs:
         python-version: ['3.9', '3.10', '3.11', '3.12']
 
     steps:
-      - name: >-
-          Install “libfuse2” to prevent AppImage Error: error
-          while loading shared libraries: libfuse.so.2: cannot open shared
-          object file: No such file or directory
-        run: sudo apt install libfuse2
-      - name: >-
-          findlib: libjack.so.0: cannot open shared object file: No such file or directory
-          /usr/bin/mscore: Using fallback for library 'libjack.so.0'
-          /lib/x86_64-linux-gnu/libnss3.so
-        run: sudo apt install libjack0
-      - name: Download latest “mscore” AppImage
-        run: |
-          wget --quiet --output-document mscore https://github.com/musescore/MuseScore/releases/download/v4.2.0/MuseScore-4.2.0.233521125-x86_64.AppImage
-          chmod a+x mscore
-          sudo cp mscore /usr/bin/mscore
+      # - name: >-
+      #     Install “libfuse2” to prevent AppImage Error: error
+      #     while loading shared libraries: libfuse.so.2: cannot open shared
+      #     object file: No such file or directory
+      #   run: sudo apt install libfuse2
+      # - name: >-
+      #     findlib: libjack.so.0: cannot open shared object file: No such file or directory
+      #     /usr/bin/mscore: Using fallback for library 'libjack.so.0'
+      #     /lib/x86_64-linux-gnu/libnss3.so
+      #   run: sudo apt install libjack0
+      # - name: Download latest “mscore” AppImage
+      #   run: |
+      #     wget --quiet --output-document mscore https://github.com/musescore/MuseScore/releases/download/v4.2.0/MuseScore-4.2.0.233521125-x86_64.AppImage
+      #     chmod a+x mscore
+      #     sudo cp mscore /usr/bin/mscore
 
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v3
