@@ -17,7 +17,7 @@ from mscxyz.score import (
     Score,
 )
 from tests import helper
-from tests.helper import cli_legacy
+from tests.helper import Cli
 
 
 class TestClassScore:
@@ -160,7 +160,7 @@ def test_methods_reload(score: Score) -> None:
 class TestClean:
     def _test_clean(self, version: int = 2) -> None:
         tmp: str = helper.get_file("formats.mscx", version)
-        cli_legacy("clean", tmp)
+        Cli("clean", tmp, legacy=True).execute()
         cleaned: str = helper.read_file(tmp)
         assert "<font" not in cleaned
         assert "<b>" not in cleaned
@@ -175,7 +175,9 @@ class TestClean:
 
     def _test_clean_add_style(self, version: int = 2) -> None:
         tmp = helper.get_file("simple.mscx", version)
-        cli_legacy("clean", "--style", helper.get_score("style.mss", version), tmp)
+        Cli(
+            "clean", "--style", helper.get_score("style.mss", version), tmp, legacy=True
+        ).execute()
         style = helper.read_file(tmp)
         assert "<staffUpperBorder>77</staffUpperBorder>" in style
 

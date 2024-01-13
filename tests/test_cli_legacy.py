@@ -6,7 +6,7 @@ import pytest
 from pytest import CaptureFixture
 
 from mscxyz.cli_legacy import execute, parser
-from tests.helper import cli_legacy
+from tests.helper import Cli
 
 
 class TestArgs:
@@ -84,40 +84,30 @@ class TestCommandlineInterface:
 
 
 class TestHelp:
-    def test_all(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("help", "all")
-        capture = capsys.readouterr()
-        assert len(capture.out) > 150
+    def test_all(self) -> None:
+        stderr = Cli("help", "all", legacy=True, append_score=False).sysexit()
+        assert len(stderr) > 150
 
-    def test_restructuredtext(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("help", "--rst", "all")
-        capture = capsys.readouterr()
-        assert ".. code-block:: text" in capture.out
+    def test_restructuredtext(self) -> None:
+        stderr = Cli("help", "--rst", "all", legacy=True, append_score=False).sysexit()
+        assert ".. code-block:: text" in stderr
 
-    def test_markdown(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("help", "--markdown", "all")
-        capture = capsys.readouterr()
-        assert "```" in capture.out
+    def test_markdown(self) -> None:
+        stderr = Cli(
+            "help", "--markdown", "all", legacy=True, append_score=False
+        ).sysexit()
+        assert "```" in stderr
 
-    def test_functions_in_all(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("help", "all")
-        capture = capsys.readouterr()
-        assert "%asciify{text}" in capture.out
+    def test_functions_in_all(self) -> None:
+        stderr = Cli("help", "all", legacy=True, append_score=False).sysexit()
+        assert "%asciify{text}" in stderr
 
-    def test_functions_in_rename(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("rename", "--help")
-        capture = capsys.readouterr()
-        assert "%asciify{text}" in capture.out
+    def test_functions_in_rename(self) -> None:
+        stderr = Cli("rename", "--help", legacy=True, append_score=False).sysexit()
+        assert "%asciify{text}" in stderr
 
 
 class TestVersion:
-    def test_version(self, capsys: CaptureFixture[str]) -> None:
-        with pytest.raises(SystemExit):
-            cli_legacy("--version")
-        capture = capsys.readouterr()
-        assert re.search("[^ ]* [^ ]*", capture.out)
+    def test_version(self) -> None:
+        stderr = Cli("--version").sysexit()
+        assert re.search("[^ ]* [^ ]*", stderr)

@@ -15,7 +15,7 @@ from mscxyz import utils
 from mscxyz.settings import get_args
 from mscxyz.utils import Dimension, ListExtension, PathChanger, ZipContainer
 from tests import helper
-from tests.helper import cli_legacy
+from tests.helper import Cli
 
 args = get_args()
 args.general_executable = None
@@ -36,7 +36,7 @@ class TestFunctions:
     @pytest.mark.skip("TODO: Fix this test")
     @mock.patch("mscxyz.score.Score")
     def test_batch(self, Score: mock.Mock) -> None:
-        cli_legacy("meta", helper.get_dir("batch"))
+        Cli("meta", helper.get_dir("batch"), legacy=True).execute()
         assert Score.call_count == 3
 
     def test_without_extension(self) -> None:
