@@ -194,10 +194,14 @@ class Cli:
     __stdout: Optional[str] = None
     __stderr: Optional[str] = None
     __returncode: int
+    __legacy: bool = False
 
-    def __init__(self, *args: CliArg, append_score: bool = True) -> None:
+    def __init__(
+        self, *args: CliArg, append_score: bool = True, legacy: bool = False
+    ) -> None:
         self.__args = list(args)
         last = self.__args[-1]
+        self.__legacy = legacy
 
         if not append_score:
             return
@@ -243,7 +247,10 @@ class Cli:
             stdout = StringIO()
             stderr = StringIO()
             with redirect_stdout(stdout), redirect_stderr(stderr):
-                execute(self.__stringified_args)
+                if self.__legacy:
+                    execute_legacy(self.__stringified_args)
+                else:
+                    execute(self.__stringified_args)
             if self.__score is not None:
                 self.__score = self.__score.reload()
             self.__stdout = stdout.getvalue()
@@ -274,8 +281,12 @@ class Cli:
 
     def sysexit(self) -> str:
         if not self.__executed:
+            script_name = "musescore-manager"
+            if self.__legacy:
+                script_name = "mscx-manager"
+
             result = subprocess.run(
-                ["musescore-manager"] + self.__stringified_args,
+                [script_name] + self.__stringified_args,
                 capture_output=True,
                 encoding="utf-8",
             )

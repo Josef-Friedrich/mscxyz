@@ -2,44 +2,41 @@
 from __future__ import annotations
 
 import os
-import subprocess
 from unittest import mock
 
 import pytest
 
 from mscxyz import Score
 from tests import helper
-from tests.helper import cli, cli_legacy
+from tests.helper import Cli, cli_legacy
 
 
 def test_help() -> None:
-    output: bytes = subprocess.check_output(("musescore-manager", "--help"))
-    assert "usage: musescore-manager" in str(output)
+    assert "usage: musescore-manager" in Cli("--help").sysexit()
 
 
 @pytest.mark.legacy
 def test_help_legacy() -> None:
-    output: bytes = subprocess.check_output(("mscx-manager", "--help"))
-    assert "usage: mscx-manager" in str(output)
+    assert "usage: mscx-manager" in Cli("--help", legacy=True).sysexit()
 
 
 class TestOptionBackup:
-    def test_exists(self, score: Score) -> None:
-        cli("--backup", score)
-        assert os.path.isfile(score.backup_file)
+    def test_exists(self) -> None:
+        score: Score = Cli("--backup").score()
+        assert score.backup_file.is_file()
 
     @pytest.mark.legacy
-    def test_exists_legacy(self, score: Score) -> None:
-        cli_legacy("--backup", "meta", score)
-        assert os.path.isfile(score.backup_file)
+    def test_exists_legacy(self) -> None:
+        score: Score = Cli("--backup", "meta", legacy=True).score()
+        assert score.backup_file.is_file()
 
-    def test_size(self, score: Score) -> None:
-        cli("--backup", "--dry-run", score)
+    def test_size(self) -> None:
+        score: Score = Cli("--backup", "--dry-run").score()
         assert os.path.getsize(score.path) == os.path.getsize(score.backup_file)
 
     @pytest.mark.legacy
-    def test_size_legacy(self, score: Score) -> None:
-        cli_legacy("--backup", "meta", score)
+    def test_size_legacy(self) -> None:
+        score: Score = Cli("--backup", "meta", legacy=True).score()
         assert os.path.getsize(score.path) == os.path.getsize(score.backup_file)
 
 
