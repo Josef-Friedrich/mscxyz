@@ -1,21 +1,19 @@
 """Test file “__init__.py”"""
 
 
-from pytest import CaptureFixture
-
 from tests import helper
-from tests.helper import cli_legacy, ini_file
+from tests.helper import Cli, ini_file
 
 
-def test_broken_file(capsys: CaptureFixture[str]) -> None:
-    cli_legacy(
-        "--config-file",
-        ini_file,
-        "meta",
-        helper.get_score("broken.mscx"),
-    )
-    capture = capsys.readouterr()
+def test_broken_file() -> None:
     assert (
         "Error: XMLSyntaxError; message: Start tag expected, "
-        "'<' not found, line 1, column 1" in capture.out
+        "'<' not found, line 1, column 1"
+        in Cli(
+            "--config-file",
+            ini_file,
+            "meta",
+            helper.get_score("broken.mscx"),
+            legacy=True,
+        ).sysexit()
     )

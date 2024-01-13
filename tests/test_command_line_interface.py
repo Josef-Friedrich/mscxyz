@@ -8,7 +8,7 @@ import pytest
 
 from mscxyz import Score
 from tests import helper
-from tests.helper import Cli, cli_legacy
+from tests.helper import Cli
 
 
 def test_help() -> None:
@@ -44,7 +44,7 @@ class TestExport:
     def execute(self, extension: str) -> tuple[mock.Mock, str]:
         tmp: str = helper.get_file("simple.mscx")
         with mock.patch("mscxyz.score.utils.execute_musescore") as mscore_function:
-            cli_legacy("export", "--extension", extension, tmp)
+            Cli("export", "--extension", extension, tmp, legacy=True).execute()
         return mscore_function, tmp
 
     def test_valid_extension(self) -> None:

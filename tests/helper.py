@@ -9,7 +9,7 @@ import tempfile
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
-from typing import Optional, Sequence, Union
+from typing import Optional, Union
 
 from lxml.etree import _Element
 
@@ -127,65 +127,6 @@ def assert_file_type(file: str | Path, expected: str) -> None:
 CliArg = Union[str, Path, Score]
 
 
-def __stringify_args(args: Sequence[CliArg]) -> list[str]:
-    result: list[str] = []
-    for arg in args:
-        if isinstance(arg, Path):
-            result.append(str(arg))
-        elif isinstance(arg, Score):
-            result.append(str(arg.path))
-        else:
-            result.append(arg)
-    return result
-
-
-def __simluate_cli(*args: CliArg) -> None:
-    execute(__stringify_args(args))
-
-
-def cli_legacy(*args: CliArg) -> None:
-    execute_legacy(__stringify_args(args))
-
-
-def stderr(*cli_args: CliArg) -> str:
-    f = StringIO()
-    with redirect_stderr(f):
-        __simluate_cli(*cli_args)
-    return f.getvalue()
-
-
-def stdout(*cli_args: CliArg) -> str:
-    f = StringIO()
-    with redirect_stdout(f):
-        __simluate_cli(*cli_args)
-    return f.getvalue()
-
-
-def cli(*cli_args: CliArg) -> None:
-    """
-    TODO replacie with cli_on_score
-    """
-    __simluate_cli(*cli_args)
-
-
-def cli_on_score(*cli_args: CliArg) -> Score:
-    """
-    TODO rename to cli?
-
-    By default a version 4 score object (score.mscz) is appened to the args list.
-
-    :returns: A reloaded score object.
-    """
-    args = list(cli_args)
-    if not isinstance(args[-1], Score):
-        score: Score = get_score("score.mscz", version=4)
-        args.append(score)
-    else:
-        score = args[-1]
-    __simluate_cli(*args)
-    return score.reload()
-
-
 class Cli:
     __args: list[CliArg]
     __score_pre: Optional[Score] = None
@@ -297,15 +238,6 @@ class Cli:
         if self.__stdout is None or self.__stderr is None:
             raise Exception("No stdout or stderr")
         return self.__stderr + self.__stdout
-
-
-def sysexit(*cli_args: CliArg) -> str:
-    result = subprocess.run(
-        ["musescore-manager"] + __stringify_args(cli_args),
-        capture_output=True,
-        encoding="utf-8",
-    )
-    return result.stderr + result.stdout
 
 
 def run(*args: str) -> str:
