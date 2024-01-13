@@ -8,7 +8,7 @@ import pytest
 
 from mscxyz import Score, utils
 from tests import helper
-from tests.helper import cli, cli_legacy
+from tests.helper import Cli
 
 
 @pytest.fixture
@@ -41,30 +41,30 @@ def is_extraction(score: Score, numbers: int | Sequence[int]) -> bool:
 class TestLyricsExtraction:
     @pytest.mark.legacy
     def test_without_arguments_legacy(self, lyrics: Score) -> None:
-        cli_legacy("lyrics", lyrics)
+        Cli("lyrics", lyrics, legacy=True).execute()
         assert is_extraction(lyrics, [1, 2, 3])
 
     def test_without_arguments(self, lyrics: Score) -> None:
-        cli(lyrics)
+        Cli("lyrics", lyrics).execute()
         assert not is_extraction(lyrics, [1, 2, 3])
 
     @pytest.mark.legacy
     def test_extract_all_legacy(self, lyrics: Score) -> None:
-        cli_legacy("lyrics", "--extract", "all", lyrics)
+        Cli("lyrics", "--extract", "all", lyrics, legacy=True).execute()
         assert is_extraction(lyrics, [1, 2, 3])
 
     def test_extract_all(self, lyrics: Score) -> None:
-        cli("--extract-lyrics", "all", lyrics)
+        Cli("--extract-lyrics", "all", lyrics).execute()
         assert is_extraction(lyrics, [1, 2, 3])
 
     @pytest.mark.legacy
     def test_extract_by_number_legacy(self, lyrics: Score) -> None:
-        cli_legacy("lyrics", "--extract", "2", lyrics)
+        Cli("lyrics", "--extract", "2", lyrics, legacy=True).execute()
         assert is_extraction(lyrics, 2)
         assert not is_extraction(lyrics, [1, 3])
 
     def test_extract_by_number(self, lyrics: Score) -> None:
-        cli("--extract-lyrics", "2", lyrics)
+        Cli("--extract-lyrics", "2", lyrics).execute()
         assert is_extraction(lyrics, 2)
         assert not is_extraction(lyrics, [1, 3])
 
@@ -72,7 +72,7 @@ class TestLyricsExtraction:
 class TestLyricsFix:
     def _test_fix(self, version: int = 2) -> None:
         score_path = helper.get_file("lyrics-fix.mscx", version)
-        cli_legacy("lyrics", "--fix", score_path)
+        Cli("lyrics", "--fix", score_path, legacy=True).execute()
         score = helper.reload(score_path)
         self.lyrics = score.lyrics.elements
 
@@ -131,7 +131,7 @@ class TestLyricsRemap:
     def test_remap(self) -> None:
         score = helper.get_score("lyrics-remap.mscx")
 
-        cli_legacy("lyrics", "--remap", "2:6", score)
+        Cli("lyrics", "--remap", "2:6", score, legacy=True).execute()
         new_score = score.reload()
         nos: list[int] = []
 
