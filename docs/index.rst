@@ -8,8 +8,12 @@ Contents:
     :maxdepth: 3
 
     cli
-    modules
-
+    main-module
+    submodule-lyrics
+    submodule-meta
+    submodule-score
+    submodule-style
+    other-submodules
 
 ******************
 Indices and tables
