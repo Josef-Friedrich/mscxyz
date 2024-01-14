@@ -1041,38 +1041,6 @@ class Style:
     def odd_footer_right(self, value: str) -> None:
         self.set("oddFooterR", value)
 
-    def header(self, value: str) -> None:
-        """
-        :see: `MuseScore C++ source code: styledef.cpp line 497-502 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497-L502>`_
-        """
-        self.set(
-            [
-                "evenHeaderL",
-                "evenHeaderC",
-                "evenHeaderR",
-                "oddHeaderL",
-                "oddHeaderC",
-                "oddHeaderR",
-            ],
-            value,
-        )
-
-    def footer(self, value: str) -> None:
-        """
-        :see: `MuseScore C++ source code: styledef.cpp line 507-512 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507-L512>`_
-        """
-        self.set(
-            [
-                "evenFooterL",
-                "evenFooterC",
-                "evenFooterR",
-                "oddFooterL",
-                "oddFooterC",
-                "oddFooterR",
-            ],
-            value,
-        )
-
     @property
     def staff_space(self) -> float | None:
         """
