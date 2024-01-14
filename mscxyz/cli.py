@@ -13,27 +13,32 @@ import tmep
 
 import mscxyz.export
 from mscxyz import utils
-from mscxyz.meta import Interface, InterfaceReadWrite
+from mscxyz.meta import Combined, Interface, InterfaceReadWrite, Metatag, Vbox
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
 from mscxyz.utils import Dimension
 
 
-def mm(value: str) -> float:
+def __mm(value: str) -> float:
     return Dimension(value).to("mm")
 
 
-def inch(value: str) -> float:
+def __inch(value: str) -> float:
     return Dimension(value).to("in")
 
 
-def list_fields(
-    fields: typing.Sequence[str], prefix: str = "", suffix: str = ""
-) -> str:
+def __itemized_fields(fields: Sequence[str], prefix: str = "", suffix: str = "") -> str:
     out: list[str] = []
     for field in fields:
         out.append(prefix + "- " + field + suffix)
     return "\n".join(out)
+
+
+def __embed_fields(
+    fields: Sequence[str], prefix: str = " Available fields: ", suffix: str = "."
+) -> str:
+    joined_fields: str = ", ".join(fields)
+    return f"{prefix}{joined_fields}{suffix}"
 
 
 class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
@@ -197,19 +202,23 @@ group_meta = parser.add_argument_group(
 
     ## All meta tags:
 
-        - arranger
-        - composer
-        - copyright
-        - creationDate
-        - lyricist
-        - movementNumber
-        - movementTitle
-        - platform
-        - poet
-        - source
-        - translator
-        - workNumber
-        - workTitle
+    - arranger
+    - audioComUrl (new in v4
+    - composer
+    - copyright
+    - creationDate
+    - lyricist
+    - movementNumber
+    - movementTitle
+    - mscVersion
+    - platform
+    - poet (not in v4)
+    - source
+    - sourceRevisionId
+    - subtitle
+    - translator
+    - workNumber
+    - workTitle
 
     # vbox
 
@@ -223,10 +232,10 @@ group_meta = parser.add_argument_group(
 
     ## All vbox tags:
 
-        - Title
-        - Subtitle
-        - Composer
-        - Lyricist
+        - title (v2,3: Title)
+        - subtitle (v2,3: Subtitle)
+        - composer (v2,3: Composer)
+        - lyricist (v2,3: Lyricist)
 
     This command line tool bundles some meta data informations:
 
@@ -240,7 +249,7 @@ group_meta = parser.add_argument_group(
     You have access to all this metadata fields through following fields:"""
     )
     + "\n\n"
-    + list_fields(InterfaceReadWrite.get_all_fields(), prefix="    "),
+    + __itemized_fields(InterfaceReadWrite.get_all_fields(), prefix="    "),
 )
 
 group_meta.add_argument(
@@ -315,6 +324,37 @@ group_meta.add_argument(
     help="Set value to meta data fields.",
 )
 
+group_meta.add_argument(
+    "--metatag",
+    "--metatag-meta",
+    nargs=2,
+    action="append",
+    metavar=("<field>", "<value>"),
+    dest="meta_metatag",
+    help="Define the metadata in MetaTag elements." + __embed_fields(Metatag.fields),
+)
+
+group_meta.add_argument(
+    "--vbox",
+    "--vbox-meta",
+    nargs=2,
+    action="append",
+    metavar=("<field>", "<value>"),
+    dest="meta_vbox",
+    help="Define the metadata in VBox elements." + __embed_fields(Vbox.fields),
+)
+
+group_meta.add_argument(
+    "--combined",
+    "--combined-meta",
+    nargs=2,
+    action="append",
+    metavar=("<field>", "<value>"),
+    dest="meta_combined",
+    help="Define the metadata combined in one step for MetaTag and VBox elements."
+    + __embed_fields(Combined.fields),
+)
+
 ###############################################################################
 # lyrics
 ###############################################################################
@@ -366,7 +406,7 @@ group_rename = parser.add_argument_group(
     "string (-f, --format):\n\n"
     "Fields\n======\n\n{}\n\n"
     "Functions\n=========\n\n{}".format(
-        list_fields(Interface.get_all_fields(), prefix="    "), tmep.get_doc()
+        __itemized_fields(Interface.get_all_fields(), prefix="    "), tmep.get_doc()
     ),
 )
 
@@ -546,7 +586,7 @@ group_style.add_argument(
 group_style.add_argument(
     "--staff-space",
     dest="style_staff_space",
-    type=mm,
+    type=__mm,
     metavar="<dimension>",
     help="Set the staff space or spatium. This is the vertical distance between "
     "two lines of a music staff.",
@@ -687,11 +727,11 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             score.style.staff_space = args.style_staff_space
 
         if args.style_page_size is not None:
-            score.style.page_width = inch(args.style_page_size[0])
-            score.style.page_height = inch(args.style_page_size[1])
+            score.style.page_width = __inch(args.style_page_size[0])
+            score.style.page_height = __inch(args.style_page_size[1])
 
         if args.style_margin is not None:
-            score.style.margin = inch(args.style_margin)
+            score.style.margin = __inch(args.style_margin)
 
         if args.style_show_header is not None:
             score.style.show_header = args.style_show_header
@@ -721,6 +761,39 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 no = int(args.lyrics_extract)
             score.lyrics.extract_lyrics(no)
 
+        if args.meta_metatag:
+            for a in args.meta_metatag:
+                field = a[0]
+                value = a[1]
+                if field not in Metatag.fields:
+                    raise ValueError(
+                        f"Unknown field {field}. "
+                        f"Possible fields: {', '.join(Metatag.fields)}"
+                    )
+                setattr(score.meta.metatag, field, value)
+
+        if args.meta_vbox:
+            for a in args.meta_vbox:
+                field = a[0]
+                value = a[1]
+                if field not in Vbox.fields:
+                    raise ValueError(
+                        f"Unknown field {field}. "
+                        f"Possible fields: {', '.join(Vbox.fields)}"
+                    )
+                setattr(score.meta.vbox, field, value)
+
+        if args.meta_combined:
+            for a in args.meta_combined:
+                field = a[0]
+                value = a[1]
+                if field not in Combined.fields:
+                    raise ValueError(
+                        f"Unknown field {field}. "
+                        f"Possible fields: {', '.join(Combined.fields)}"
+                    )
+                setattr(score.meta.combined, field, value)
+
         #     elif args.subcommand == "meta":
         #         score = Score(file)
         #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
@@ -734,9 +807,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #                     score.meta.distribute_field(
         #                         source_fields=a[0], format_string=a[1]
         #                     )
-        #             if args.meta_set:
-        #                 for a in args.meta_set:
-        #                     score.meta.set_field(destination_field=a[0], format_string=a[1])
+
         #             if args.meta_delete:
         #                 score.meta.delete_duplicates()
         #             if args.meta_sync:

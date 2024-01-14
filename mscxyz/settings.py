@@ -46,6 +46,9 @@ class DefaultArguments:
     meta_json: bool = False
     meta_sync: bool = False
     meta_set: Optional[list[list[str]]] = None
+    meta_metatag: Optional[list[tuple[str, str]]] = None
+    meta_vbox: Optional[list[tuple[str, str]]] = None
+    meta_combined: Optional[list[tuple[str, str]]] = None
 
     # rename
     rename_alphanum = False

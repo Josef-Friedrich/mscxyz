@@ -17,7 +17,7 @@ from mscxyz.meta import (
     InterfaceReadOnly,
     InterfaceReadWrite,
     Meta,
-    MetaTag,
+    Metatag,
     Vbox,
     distribute_field,
     export_to_dict,
@@ -322,18 +322,18 @@ class TestClassInterface:
             self.interface.readonly_extension = "lol"
 
 
-def get_meta_tag(filename: str, version: int) -> MetaTag:
+def get_meta_tag(filename: str, version: int) -> Metatag:
     score = helper.get_score(filename, version)
-    return score.meta.meta_tag
+    return score.meta.metatag
 
 
 class TestClassMetaTag:
     def _init_class(
         self, filename: str, version: int = 2
-    ) -> tuple[MetaTag, Score, str]:
+    ) -> tuple[Metatag, Score, str]:
         tmp = helper.get_file(filename, version)
         score = Score(tmp)
-        meta = score.meta.meta_tag
+        meta = score.meta.metatag
         return meta, score, tmp
 
     @pytest.mark.parametrize(
@@ -358,7 +358,7 @@ class TestClassMetaTag:
         m.movement_title = "MT"
         m.score.save()
         new_score = m.score.reload()
-        assert new_score.meta.meta_tag.movement_title == "MT"
+        assert new_score.meta.metatag.movement_title == "MT"
         assert '<metaTag name="movementTitle">MT</metaTag>' in new_score.read_as_text()
 
     @pytest.mark.parametrize("version", supported_versions)
@@ -439,7 +439,7 @@ class TestClassCombined:
         assert c.vbox.lyricist == "L"
 
 
-class TestIntegration:
+class TestCli:
     def test_distribute_field(self) -> None:
         tmp = helper.get_score("meta-distribute-field.mscx")
         Cli(
@@ -611,6 +611,80 @@ class TestIntegration:
                 legacy=True,
             ).stdout()
         )
+
+    def test_option_metatag(self) -> None:
+        score = Cli(
+            "--metatag",
+            "arranger",
+            "value",
+            "--metatag",
+            "audio_com_url",
+            "value",
+            "--metatag",
+            "composer",
+            "value",
+            "--metatag",
+            "copyright",
+            "value",
+            "--metatag",
+            "creation_date",
+            "value",
+            "--metatag",
+            "lyricist",
+            "value",
+            "--metatag",
+            "movement_number",
+            "value",
+            "--metatag",
+            "movement_title",
+            "value",
+            "--metatag",
+            "msc_version",
+            "value",
+            "--metatag",
+            "platform",
+            "value",
+            "--metatag",
+            "poet",
+            "value",
+            "--metatag",
+            "source",
+            "value",
+            "--metatag",
+            "source_revision_id",
+            "value",
+            "--metatag",
+            "subtitle",
+            "value",
+            "--metatag",
+            "translator",
+            "value",
+            "--metatag",
+            "work_number",
+            "value",
+            "--metatag",
+            "work_title",
+            "value",
+        ).score()
+
+        m = score.meta.metatag
+        assert m.arranger == "value"
+        assert m.audio_com_url == "value"
+        assert m.composer == "value"
+        assert m.copyright == "value"
+        assert m.creation_date == "value"
+        assert m.lyricist == "value"
+        assert m.movement_number == "value"
+        assert m.movement_title == "value"
+        assert m.msc_version == "value"
+        assert m.platform == "value"
+        assert m.poet == "value"
+        assert m.source == "value"
+        assert m.source_revision_id == "value"
+        assert m.subtitle == "value"
+        assert m.translator == "value"
+        assert m.work_number == "value"
+        assert m.work_title == "value"
 
     def test_set_field_simple_string(self) -> None:
         tmp = helper.get_score("meta-all-values.mscx")

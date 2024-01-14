@@ -46,13 +46,13 @@ def test_list_score_paths(nested_dir: Path) -> None:
 
 
 def test_set_meta_tag_composer(score: Score) -> None:
-    assert score.meta.meta_tag.composer == "Composer"
+    assert score.meta.metatag.composer == "Composer"
 
-    score.meta.meta_tag.composer = "Mozart"
+    score.meta.metatag.composer = "Mozart"
     score.save()
 
     new_score: Score = score.reload()
-    assert new_score.meta.meta_tag.composer == "Mozart"
+    assert new_score.meta.metatag.composer == "Mozart"
 
 
 def test_set_all_font_faces_using_for_loop(score: Score) -> None:

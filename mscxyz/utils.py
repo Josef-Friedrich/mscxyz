@@ -22,7 +22,7 @@ from lxml.etree import _Element, _ElementTree
 from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
-    from lxml.etree import _XPathObject
+    from lxml.etree import _DictAnyStr, _XPathObject
 
 
 ListExtension = Literal["mscz", "mscx", "both"]
@@ -464,9 +464,12 @@ class xml:
 
     @staticmethod
     def create_sub_element(
-        parrent: _Element, tag_name: str, text: Optional[str] = None
+        parent: _Element,
+        tag_name: str,
+        text: Optional[str] = None,
+        attrib: Optional[_DictAnyStr] = None,
     ) -> _Element:
-        element: _Element = lxml.etree.SubElement(parrent, tag_name)
+        element: _Element = lxml.etree.SubElement(parent, tag_name, attrib=attrib)
         if text:
             element.text = text
         return element

@@ -246,9 +246,10 @@ CLI Usage
                              [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
                              [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
-                             [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
-                             [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
-                             [-t RENAME_TARGET] [-L]
+                             [--metatag <field> <value>] [--vbox <field> <value>]
+                             [--combined <field> <value>] [-x LYRICS_EXTRACT]
+                             [-r LYRICS_REMAP] [-F] [-f RENAME_FORMAT] [-A] [-a]
+                             [-n] [-K FIELDS] [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
                              [--list-fonts] [--text-font <font-face>]
@@ -313,19 +314,23 @@ CLI Usage
 
       ## All meta tags:
 
-          - arranger
-          - composer
-          - copyright
-          - creationDate
-          - lyricist
-          - movementNumber
-          - movementTitle
-          - platform
-          - poet
-          - source
-          - translator
-          - workNumber
-          - workTitle
+      - arranger
+      - audioComUrl (new in v4
+      - composer
+      - copyright
+      - creationDate
+      - lyricist
+      - movementNumber
+      - movementTitle
+      - mscVersion
+      - platform
+      - poet (not in v4)
+      - source
+      - sourceRevisionId
+      - subtitle
+      - translator
+      - workNumber
+      - workTitle
 
       # vbox
 
@@ -339,10 +344,10 @@ CLI Usage
 
       ## All vbox tags:
 
-          - Title
-          - Subtitle
-          - Composer
-          - Lyricist
+          - title (v2,3: Title)
+          - subtitle (v2,3: Subtitle)
+          - composer (v2,3: Composer)
+          - lyricist (v2,3: Lyricist)
 
       This command line tool bundles some meta data informations:
 
@@ -406,6 +411,19 @@ CLI Usage
                             metadata fields
       -S DESTINATION_FIELD FORMAT_STRING, --set-field DESTINATION_FIELD FORMAT_STRING
                             Set value to meta data fields.
+      --metatag <field> <value>, --metatag-meta <field> <value>
+                            Define the metadata in MetaTag elements. Available fields:
+                            arranger, audio_com_url, composer, copyright, creation_date,
+                            lyricist, movement_number, movement_title, msc_version,
+                            platform, poet, source, source_revision_id, subtitle,
+                            translator, work_number, work_title.
+      --vbox <field> <value>, --vbox-meta <field> <value>
+                            Define the metadata in VBox elements. Available fields:
+                            composer, lyricist, subtitle, title.
+      --combined <field> <value>, --combined-meta <field> <value>
+                            Define the metadata combined in one step for MetaTag and
+                            VBox elements. Available fields: composer, lyricist,
+                            subtitle, title.
 
     lyrics:
       -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT, --extract-lyrics LYRICS_EXTRACT

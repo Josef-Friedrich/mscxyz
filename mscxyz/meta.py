@@ -98,9 +98,16 @@ def export_to_dict(obj: object, fields: typing.Iterable[str]) -> dict[str, str]:
     return out
 
 
-class MetaTag:
+class Metatag:
+    """
+    The class provides access to the MuseScore metadata fields.
 
-    """The available metaTag fields are:
+    The class should not be renamed to ``MetaTag`` because it would conflict with the
+    naming scheme of the fields ``metatag_title`` etc.
+
+    :see: `MuseScore Handbook <https://musescore.org/en/handbook/4/project-properties>`_
+
+    The available ``metaTag`` fields are:
 
     * `arranger`
     * `audioComUrl` (new in v4)
@@ -171,8 +178,16 @@ class MetaTag:
         self.score = score
         self.xml_root = score.xml_root
 
-    def __get_element(self, field: str) -> _Element | None:
-        return utils.xml.xpath(self.xml_root, '//metaTag[@name="' + field + '"]')
+    def __get_element(self, field: str) -> _Element:
+        score_element: _Element = utils.xml.find_safe(self.xml_root, "Score")
+        element: _Element | None = utils.xml.xpath(
+            self.xml_root, '//metaTag[@name="' + field + '"]'
+        )
+        if element is None:
+            element = utils.xml.create_sub_element(
+                score_element, "metaTag", "", attrib={"name": field}
+            )
+        return element
 
     def __get_text(self, field: str) -> str | None:
         element: _Element | None = self.__get_element(field)
@@ -181,11 +196,8 @@ class MetaTag:
     def __set_text(self, field: str, value: str | None) -> None:
         if value is None:
             return None
-        element: _Element | None = self.__get_element(field)
-        if element is not None:
-            element.text = value
-        # else:
-        #     raise AttributeError(f"Field “{field}” not found!")
+        element: _Element = self.__get_element(field)
+        element.text = value
 
     # arranger
 
@@ -211,6 +223,7 @@ class MetaTag:
 
     @property
     def composer(self) -> str | None:
+        """Same text as "Composer" on the first page of the score"""
         return self.__get_text("composer")
 
     @composer.setter
@@ -221,6 +234,7 @@ class MetaTag:
 
     @property
     def copyright(self) -> str | None:
+        """Same text as "Copyright" on the first page of the score."""
         return self.__get_text("copyright")
 
     @copyright.setter
@@ -241,6 +255,7 @@ class MetaTag:
 
     @property
     def lyricist(self) -> str | None:
+        """Same text as “Lyricist” on the first page of the score."""
         return self.__get_text("lyricist")
 
     @lyricist.setter
@@ -281,6 +296,7 @@ class MetaTag:
 
     @property
     def platform(self) -> str | None:
+        """The computing platform the score was created on. This might be empty if the score was saved in test mode."""
         return self.__get_text("platform")
 
     @platform.setter
@@ -301,6 +317,7 @@ class MetaTag:
 
     @property
     def source(self) -> str | None:
+        """May contain a URL if the score was downloaded from or Publish to MuseScore.com."""
         return self.__get_text("source")
 
     @source.setter
@@ -321,6 +338,9 @@ class MetaTag:
 
     @property
     def subtitle(self) -> str | None:
+        """
+        The Subtitle. It has the same text as “Subtitle” on the first page of the score.
+        """
         return self.__get_text("subtitle")
 
     @subtitle.setter
@@ -351,6 +371,9 @@ class MetaTag:
 
     @property
     def work_title(self) -> str | None:
+        """
+        The Work Title. It has the same text as “Title” on the first page of the score.
+        """
         return self.__get_text("workTitle")
 
     @work_title.setter
@@ -589,6 +612,8 @@ class Vbox:
 
 
 class Combined:
+    """Combines the metadata fields of the embedded ``metaTag`` and ``VBox`` elements."""
+
     fields = (
         "composer",
         "lyricist",
@@ -600,14 +625,14 @@ class Combined:
 
     xml_root: _Element
 
-    metatag: MetaTag
+    metatag: Metatag
 
     vbox: Vbox
 
     def __init__(self, score: "Score") -> None:
         self.score = score
         self.xml_root = self.score.xml_root
-        self.metatag = MetaTag(self.score)
+        self.metatag = Metatag(self.score)
         self.vbox = Vbox(self.score)
 
     def _pick_value(self, *values: str | None) -> str | None:
@@ -654,7 +679,7 @@ class InterfaceReadWrite:
 
     score: "Score"
 
-    metatag: MetaTag
+    metatag: Metatag
 
     vbox: Vbox
 
@@ -664,7 +689,7 @@ class InterfaceReadWrite:
 
     def __init__(self, score: "Score") -> None:
         self.score = score
-        self.metatag = MetaTag(self.score)
+        self.metatag = Metatag(self.score)
         self.vbox = Vbox(self.score)
         self.combined = Combined(self.score)
         self.fields = self.get_all_fields()
@@ -672,7 +697,7 @@ class InterfaceReadWrite:
     @staticmethod
     def get_all_fields() -> list[str]:
         fields: list[str] = []
-        for field in MetaTag.fields:
+        for field in Metatag.fields:
             fields.append("metatag_" + field)
         for field in Vbox.fields:
             fields.append("vbox_" + field)
@@ -787,7 +812,7 @@ class Interface:
 class Meta:
     score: "Score"
 
-    meta_tag: MetaTag
+    metatag: Metatag
 
     vbox: Vbox
 
@@ -801,7 +826,7 @@ class Meta:
         self.score = score
 
         if not self.score.errors:
-            self.meta_tag = MetaTag(self.score)
+            self.metatag = Metatag(self.score)
             self.vbox = Vbox(self.score)
             self.combined = Combined(self.score)
             self.interface_read_write = InterfaceReadWrite(self.score)
