@@ -817,9 +817,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #             post: dict[str, str] = score.meta.interface.export_to_dict()
         #             score.meta.show(pre, post)
 
-        #             if args.general_diff:
-        #                 score.print_diff()
-
         #             if not args.general_dry_run and not score.errors and pre != post:
         #                 score.save(mscore=args.general_mscore)
 
@@ -834,8 +831,5 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         if not args.general_dry_run:
             score.save()
-    #
-    #     else:
-    #         raise ValueError("Unknown subcommand")
 
     #     __report_errors(score.errors)

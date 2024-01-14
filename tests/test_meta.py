@@ -616,75 +616,147 @@ class TestCli:
         score = Cli(
             "--metatag",
             "arranger",
-            "value",
+            "a",
+            #
             "--metatag",
             "audio_com_url",
-            "value",
+            "acu",
+            #
             "--metatag",
             "composer",
-            "value",
+            "c",
+            #
             "--metatag",
             "copyright",
-            "value",
+            "c",
+            #
             "--metatag",
             "creation_date",
-            "value",
+            "cd",
+            #
             "--metatag",
             "lyricist",
-            "value",
+            "l",
+            #
             "--metatag",
             "movement_number",
-            "value",
+            "mn",
+            #
             "--metatag",
             "movement_title",
-            "value",
+            "mt",
+            #
             "--metatag",
             "msc_version",
-            "value",
+            "mv",
+            #
             "--metatag",
             "platform",
-            "value",
+            "p",
+            #
             "--metatag",
             "poet",
-            "value",
+            "p",
+            #
             "--metatag",
             "source",
-            "value",
+            "s",
+            #
             "--metatag",
             "source_revision_id",
-            "value",
+            "sri",
+            #
             "--metatag",
             "subtitle",
-            "value",
+            "s",
+            #
             "--metatag",
             "translator",
-            "value",
+            "t",
+            #
             "--metatag",
             "work_number",
-            "value",
+            "wn",
+            #
             "--metatag",
             "work_title",
-            "value",
+            "wt",
         ).score()
 
         m = score.meta.metatag
-        assert m.arranger == "value"
-        assert m.audio_com_url == "value"
-        assert m.composer == "value"
-        assert m.copyright == "value"
-        assert m.creation_date == "value"
-        assert m.lyricist == "value"
-        assert m.movement_number == "value"
-        assert m.movement_title == "value"
-        assert m.msc_version == "value"
-        assert m.platform == "value"
-        assert m.poet == "value"
-        assert m.source == "value"
-        assert m.source_revision_id == "value"
-        assert m.subtitle == "value"
-        assert m.translator == "value"
-        assert m.work_number == "value"
-        assert m.work_title == "value"
+        assert m.arranger == "a"
+        assert m.audio_com_url == "acu"
+        assert m.composer == "c"
+        assert m.copyright == "c"
+        assert m.creation_date == "cd"
+        assert m.lyricist == "l"
+        assert m.movement_number == "mn"
+        assert m.movement_title == "mt"
+        assert m.msc_version == "mv"
+        assert m.platform == "p"
+        assert m.poet == "p"
+        assert m.source == "s"
+        assert m.source_revision_id == "sri"
+        assert m.subtitle == "s"
+        assert m.translator == "t"
+        assert m.work_number == "wn"
+        assert m.work_title == "wt"
+
+    def test_option_vbox(self) -> None:
+        score = Cli(
+            "--vbox",
+            "composer",
+            "c",
+            #
+            "--vbox",
+            "lyricist",
+            "l",
+            #
+            "--vbox",
+            "subtitle",
+            "s",
+            #
+            "--vbox",
+            "title",
+            "t",
+        ).score()
+
+        v = score.meta.vbox
+        assert v.composer == "c"
+        assert v.lyricist == "l"
+        assert v.subtitle == "s"
+        assert v.title == "t"
+
+    def test_option_combined(self) -> None:
+        score = Cli(
+            "--combined",
+            "composer",
+            "c",
+            #
+            "--combined",
+            "lyricist",
+            "l",
+            #
+            "--combined",
+            "subtitle",
+            "s",
+            #
+            "--combined",
+            "title",
+            "t",
+        ).score()
+
+        m = score.meta.metatag
+        assert m.composer == "c"
+        assert m.lyricist == "l"
+        assert m.movement_title == "s"
+        assert m.work_title == "t"
+
+        v = score.meta.vbox
+        assert v.composer == "c"
+        assert v.lyricist == "l"
+        assert v.subtitle == "s"
+        assert v.title == "t"
 
     def test_set_field_simple_string(self) -> None:
         tmp = helper.get_score("meta-all-values.mscx")
