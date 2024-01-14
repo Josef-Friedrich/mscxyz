@@ -229,6 +229,12 @@ class Style:
             return value
         return default
 
+    def __get_str_default(self, style_name: str, default: str) -> str:
+        value: str | None = self.get(style_name, raise_exception=False)
+        if value is not None:
+            return value
+        return default
+
     def __get_attributes(self, style_name: str) -> _Attrib:
         element: _Element = self.get_element(style_name)
         return element.attrib
@@ -565,7 +571,7 @@ class Style:
 
             <pageWidth>8.5</pageWidth>
 
-        See: `MuseScore C++ source code: styledef.cpp line 43 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L43>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 43 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L43>`_
         """
         return self.__get_float_default("pageWidth", 210 / INCH)
 
@@ -582,7 +588,7 @@ class Style:
 
             <pageHeight>11.69</pageHeight>
 
-        See: `MuseScore C++ source code: styledef.cpp line 44 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L44>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 44 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L44>`_
         """
         return self.__get_float_default("pageHeight", 297 / INCH)
 
@@ -590,12 +596,18 @@ class Style:
     def page_height(self, value: float) -> None:
         self.set("pageHeight", value)
 
+    # page even/odd top/right/bottom/left margin # in CSS order ################
+
     @property
     def page_even_top_margin(self) -> float:
         """
         The top margin of the even pages in ``inch``.
 
-        See: `MuseScore C++ source code: styledef.cpp line 48 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L48>`_
+        .. code :: XML
+
+            <pageEvenTopMargin>0.393701</pageEvenTopMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 48 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L48>`_
         """
         return self.__get_float_default("pageEvenTopMargin", 15 / INCH)
 
@@ -608,7 +620,11 @@ class Style:
         """
         The top margin of the odd pages in ``inch``.
 
-        See: `MuseScore C++ source code: styledef.cpp line 50 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L50>`_
+        .. code :: XML
+
+            <pageOddTopMargin>0.393701</pageOddTopMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 50 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L50>`_
         """
         return self.__get_float_default("pageOddTopMargin", 15 / INCH)
 
@@ -621,7 +637,13 @@ class Style:
         """
         The top right of the even pages in ``inch``.
 
-        See: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
+        .. code :: XML
+
+            <pageWidth>8.5</pageWidth>
+            <pagePrintableWidth>7.7126</pagePrintableWidth>
+            <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
         """
         return utils.round_float(
             self.page_width - self.page_printable_width - self.page_even_left_margin
@@ -629,9 +651,6 @@ class Style:
 
     @page_even_right_margin.setter
     def page_even_right_margin(self, value: float) -> None:
-        """
-        :param value: Dimension in ``inch``.
-        """
         self.set(
             "pagePrintableWidth", self.page_width - self.page_even_left_margin - value
         )
@@ -641,7 +660,13 @@ class Style:
         """
         The right margin of the odd pages in ``inch``.
 
-        See: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
+        .. code :: XML
+
+            <pageWidth>8.5</pageWidth>
+            <pagePrintableWidth>7.7126</pagePrintableWidth>
+            <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
         """
         return utils.round_float(
             self.page_width - self.page_printable_width - self.page_odd_left_margin
@@ -658,7 +683,11 @@ class Style:
         """
         The bottom margin of the even pages in ``inch``.
 
-        See: `MuseScore C++ source code: styledef.cpp line 49 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L49>`_
+        .. code :: XML
+
+            <pageEvenBottomMargin>0.787403</pageEvenBottomMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 49 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L49>`_
         """
         return self.__get_float_default("pageEvenBottomMargin", 15 / INCH)
 
@@ -670,6 +699,12 @@ class Style:
     def page_odd_bottom_margin(self) -> float:
         """
         The bottom margin of the odd pages in ``inch``.
+
+        .. code :: XML
+
+            <pageOddBottomMargin>0.787403</pageOddBottomMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 51 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L51>`_
         """
         return self.__get_float_default("pageOddBottomMargin", 15 / INCH)
 
@@ -681,6 +716,12 @@ class Style:
     def page_even_left_margin(self) -> float:
         """
         The left margin of the even pages in ``inch``.
+
+        .. code :: XML
+
+            <pageEvenLeftMargin>0.393701</pageEvenLeftMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 46 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46>`_
         """
         return self.__get_float_default("pageEvenLeftMargin", 15 / INCH)
 
@@ -692,6 +733,12 @@ class Style:
     def page_odd_left_margin(self) -> float:
         """
         The left margin of the odd pages in ``inch``.
+
+        .. code :: XML
+
+            <pageOddLeftMargin>0.393701</pageOddLeftMargin>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 47 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L47>`_
         """
         return self.__get_float_default("pageOddLeftMargin", 15 / INCH)
 
@@ -704,7 +751,11 @@ class Style:
         """
         The printable width of the page in ``inch``. This property is used to calculate the right margin.
 
-        See: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
+        .. code :: XML
+
+            <pagePrintableWidth>7.7126</pagePrintableWidth>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
         """
         return self.__get_float_default("pagePrintableWidth", 180 / INCH)
 
@@ -723,7 +774,7 @@ class Style:
             <pageOddTopMargin>0.393701</pageOddTopMargin>
             <pageOddBottomMargin>0.787403</pageOddBottomMargin>
 
-        See: `MuseScore C++ source code: styledef.cpp lines 46-51 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46-L51>`_
+        :see: `MuseScore C++ source code: styledef.cpp lines 46-51 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L46-L51>`_
         """
         margin = Margin(
             even_top=self.page_even_top_margin,
@@ -755,20 +806,33 @@ class Style:
         self.page_even_right_margin = value
         self.page_odd_right_margin = value
 
+    @property
+    def max_system_distance(self) -> float:
+        """
+        The maximum system distance in ``sp`` (staff space).
+
+        .. code :: XML
+
+            <maxSystemDistance>15</maxSystemDistance>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 61 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L61>`_
+        """
+        return self.__get_float_default("maxSystemDistance", 15.0)
+
+    @max_system_distance.setter
     def max_system_distance(self, value: float) -> None:
-        """
-        See: `MuseScore C++ source code: styledef.cpp line 61 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L61>`_
-        """
         self.set("maxSystemDistance", value)
 
     @property
     def show_header(self) -> bool:
         """
+        Show the header on the page.
+
         .. code :: XML
 
             <showHeader>1</showHeader>
 
-        See: `MuseScore C++ source code: styledef.cpp line 494 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L494>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 494 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L494>`_
         """
         return self.__get_bool_default("showHeader", True)
 
@@ -779,11 +843,13 @@ class Style:
     @property
     def show_footer(self) -> bool:
         """
+        Show the footer on the page.
+
         .. code :: XML
 
             <showFooter>1</showFooter>
 
-        See: `MuseScore C++ source code: styledef.cpp line 503 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L503>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 503 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L503>`_
         """
         return self.__get_bool_default("showFooter", True)
 
@@ -791,9 +857,193 @@ class Style:
     def show_footer(self, value: bool) -> None:
         self.set("showFooter", int(value))
 
+    # even/odd header l/c/r ####################################################
+
+    @property
+    def even_header_left(self) -> str:
+        """
+        .. code :: XML
+
+            <evenHeaderL>$p</evenHeaderL>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 497 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497>`_
+        """
+        return self.__get_str_default("evenHeaderL", "$p")
+
+    @even_header_left.setter
+    def even_header_left(self, value: str) -> None:
+        self.set("evenHeaderL", value)
+
+    @property
+    def even_header_center(self) -> str:
+        """
+        .. code :: XML
+
+            <evenHeaderC></evenHeaderC>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 498 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L498>`_
+        """
+        return self.__get_str_default("evenHeaderC", "")
+
+    @even_header_center.setter
+    def even_header_center(self, value: str) -> None:
+        self.set("evenHeaderC", value)
+
+    @property
+    def even_header_right(self) -> str:
+        """
+        .. code :: XML
+
+            <evenHeaderR></evenHeaderR>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 499 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L499>`_
+        """
+        return self.__get_str_default("evenHeaderR", "")
+
+    @even_header_right.setter
+    def even_header_right(self, value: str) -> None:
+        self.set("evenHeaderR", value)
+
+    @property
+    def odd_header_left(self) -> str:
+        """
+        .. code :: XML
+
+            <oddHeaderL></oddHeaderL>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 500 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L500>`_
+        """
+        return self.__get_str_default("oddHeaderL", "")
+
+    @odd_header_left.setter
+    def odd_header_left(self, value: str) -> None:
+        self.set("oddHeaderL", value)
+
+    @property
+    def odd_header_center(self) -> str:
+        """
+        .. code :: XML
+
+            <oddHeaderC></oddHeaderC>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 501 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L501>`_
+        """
+        return self.__get_str_default("oddHeaderC", "")
+
+    @odd_header_center.setter
+    def odd_header_center(self, value: str) -> None:
+        self.set("oddHeaderC", value)
+
+    @property
+    def odd_header_right(self) -> str:
+        """
+        .. code :: XML
+
+            <oddHeaderR>$p</oddHeaderR>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 502 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L502>`_
+        """
+        return self.__get_str_default("oddHeaderR", "$p")
+
+    @odd_header_right.setter
+    def odd_header_right(self, value: str) -> None:
+        self.set("oddHeaderR", value)
+
+    # even/odd footer l/c/r ####################################################
+
+    @property
+    def even_footer_left(self) -> str:
+        """
+        .. code :: XML
+
+            <evenFooterL></evenFooterL>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 507 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507>`_
+        """
+        return self.__get_str_default("evenFooterL", "")
+
+    @even_footer_left.setter
+    def even_footer_left(self, value: str) -> None:
+        self.set("evenFooterL", value)
+
+    @property
+    def even_footer_center(self) -> str:
+        """
+        .. code :: XML
+
+            <evenFooterC>$C</evenFooterC>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 508 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L508>`_
+        """
+        return self.__get_str_default("evenFooterC", "$C")
+
+    @even_footer_center.setter
+    def even_footer_center(self, value: str) -> None:
+        self.set("evenFooterC", value)
+
+    @property
+    def even_footer_right(self) -> str:
+        """
+        .. code :: XML
+
+            <evenFooterR></evenFooterR>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 509 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L509>`_
+        """
+        return self.__get_str_default("evenFooterR", "")
+
+    @even_footer_right.setter
+    def even_footer_right(self, value: str) -> None:
+        self.set("evenFooterR", value)
+
+    @property
+    def odd_footer_left(self) -> str:
+        """
+        .. code :: XML
+
+            <oddFooterL></oddFooterL>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 510 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L510>`_
+        """
+        return self.__get_str_default("oddFooterL", "")
+
+    @odd_footer_left.setter
+    def odd_footer_left(self, value: str) -> None:
+        self.set("oddFooterL", value)
+
+    @property
+    def odd_footer_center(self) -> str:
+        """
+        .. code :: XML
+
+             <oddFooterC>$C</oddFooterC>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 511 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L511>`_
+        """
+        return self.__get_str_default("oddFooterC", "$C")
+
+    @odd_footer_center.setter
+    def odd_footer_center(self, value: str) -> None:
+        self.set("oddFooterC", value)
+
+    @property
+    def odd_footer_right(self) -> str:
+        """
+        .. code :: XML
+
+            <oddFooterR></oddFooterR>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 512 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L512>`_
+        """
+        return self.__get_str_default("oddFooterR", "")
+
+    @odd_footer_right.setter
+    def odd_footer_right(self, value: str) -> None:
+        self.set("oddFooterR", value)
+
     def header(self, value: str) -> None:
         """
-        See: `MuseScore C++ source code: styledef.cpp line 497-502 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497-L502>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 497-502 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497-L502>`_
         """
         self.set(
             [
@@ -809,7 +1059,7 @@ class Style:
 
     def footer(self, value: str) -> None:
         """
-        See: `MuseScore C++ source code: styledef.cpp line 507-512 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507-L512>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 507-512 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507-L512>`_
         """
         self.set(
             [
@@ -834,7 +1084,7 @@ class Style:
 
         styledef.cpp#L640 default 24.8 ???
 
-        See: `MuseScore C++ source code: styledef.cpp line 640 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 640 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L640>`_
         """
         return self.__get_float("Spatium")
 
@@ -849,7 +1099,7 @@ class Style:
 
             <measureNumberOffset x="0" y="-2"/>
 
-        See: `MuseScore C++ source code: styledef.cpp line 1008 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L1008>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 1008 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L1008>`_
         """
         return cast(Offset, self.__get_attributes("measureNumberOffset"))
 

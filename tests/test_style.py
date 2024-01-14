@@ -110,6 +110,52 @@ class TestClassStyle:
         title = self.style.reload(save=True).get_text_style("Title")
         assert title["size"] == "99"
 
+    def test_property_odd_even_header_left_center_right(self) -> None:
+        # even
+        assert self.style.even_header_left == "$p"
+        self.style.even_header_left = "even_header_left"
+        assert self.style.even_header_left == "even_header_left"
+
+        self.style.even_header_center = "even_header_center"
+        assert self.style.even_header_center == "even_header_center"
+
+        self.style.even_header_right = "even_header_right"
+        assert self.style.even_header_right == "even_header_right"
+
+        # odd
+        self.style.odd_header_left = "odd_header_left"
+        assert self.style.odd_header_left == "odd_header_left"
+
+        self.style.odd_header_center = "odd_header_center"
+        assert self.style.odd_header_center == "odd_header_center"
+
+        assert self.style.odd_header_right == "$p"
+        self.style.odd_header_right = "odd_header_right"
+        assert self.style.odd_header_right == "odd_header_right"
+
+    def test_property_odd_even_footer_left_center_right(self) -> None:
+        # even
+        self.style.even_footer_left = "even_footer_left"
+        assert self.style.even_footer_left == "even_footer_left"
+
+        assert self.style.even_footer_center == "$C"
+        self.style.even_footer_center = "even_footer_center"
+        assert self.style.even_footer_center == "even_footer_center"
+
+        self.style.even_footer_right = "even_footer_right"
+        assert self.style.even_footer_right == "even_footer_right"
+
+        # odd
+        self.style.odd_footer_left = "odd_footer_left"
+        assert self.style.odd_footer_left == "odd_footer_left"
+
+        assert self.style.odd_footer_center == "$C"
+        self.style.odd_footer_center = "odd_footer_center"
+        assert self.style.odd_footer_center == "odd_footer_center"
+
+        self.style.odd_footer_right = "odd_footer_right"
+        assert self.style.odd_footer_right == "odd_footer_right"
+
 
 @pytest.mark.parametrize(
     "version,expected",
