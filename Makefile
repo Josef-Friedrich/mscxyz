@@ -3,7 +3,7 @@ all: test autocomplete
 test:
 	poetry run tox
 
-test_quick:
+test_quick: autocomplete
 	poetry run tox -e py310,format,docs,lint
 
 test_real_binary:

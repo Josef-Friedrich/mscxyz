@@ -30,6 +30,9 @@ _shtab_musescore_manager_options=(
   {-l,--log}"[Write one line per file to a text file. e. g. --log \/tmp\/musescore-manager.log \'\$title \$composer\']:meta_log:"
   {-y,--synchronize}"[Synchronize the values of the first vertical frame (vbox) (title, subtitle, composer, lyricist) with the corresponding metadata fields]"
   "*"{-S,--set-field}"[Set value to meta data fields.]:meta_set:"
+  "*"{--metatag,--metatag-meta}"[Define the metadata in MetaTag elements. Available fields\: arranger, audio_com_url, composer, copyright, creation_date, lyricist, movement_number, movement_title, msc_version, platform, poet, source, source_revision_id, subtitle, translator, work_number, work_title.]:meta_metatag:"
+  "*"{--vbox,--vbox-meta}"[Define the metadata in VBox elements. Available fields\: composer, lyricist, subtitle, title.]:meta_vbox:"
+  "*"{--combined,--combined-meta}"[Define the metadata combined in one step for MetaTag and VBox elements. Available fields\: composer, lyricist, subtitle, title.]:meta_combined:"
   {-x,--extract,--extract-lyrics}"[Extract each lyrics verse into a separate MuseScore file. Specify \”all\” to extract all lyrics verses. The old verse number is appended to the file name, e. g.\: score_1.mscx.]:lyrics_extract:"
   {-r,--remap,--remap-lyrics}"[Remap lyrics. Example\: \"--remap 3\:2,5\:3\". This example remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use commas to specify multiple remap pairs. One remap pair is separated by a colon in this form\: \"old\:new\"\: \"old\" stands for the old verse number. \"new\" stands for the new verse number.]:lyrics_remap:"
   {-F,--fix,--fix-lyrics}"[Fix lyrics\: Convert trailing hyphens (\"la- la- la\") to a correct hyphenation (\"la - la - la\")]"
@@ -54,7 +57,9 @@ _shtab_musescore_manager_options=(
   "--musical-text-font[Set \“musicalTextFont\”.]:style_musical_text_font:"
   "--staff-space[Set the staff space or spatium. This is the vertical distance between two lines of a music staff.]:style_staff_space:"
   "--page-size[Set the page size.]:style_page_size:"
-  "--margin[Set the top, right, bottom and left margin to the same value.]:style_margin:"
+  "--margin[Set the top, right, bottom and left margins to the same value.]:style_margin:"
+  {--header,--no-header}"[Show or hide the header]:style_show_header:"
+  {--footer,--no-footer}"[Show or hide the footer.]:style_show_footer:"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 
