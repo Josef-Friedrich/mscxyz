@@ -243,7 +243,7 @@ CLI Usage
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
                              [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m] [--diff]
                              [-e FILE_PATH] [-v] [-E <extension>] [-c META_CLEAN]
-                             [-D] [-i SOURCE_FIELDS FORMAT_STRING] [-j]
+                             [-D] [-i <source-fields> <format-string>] [-j]
                              [-l DESTINATION FORMAT_STRING] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
@@ -394,14 +394,14 @@ CLI Usage
                             combined_composer. Deletes combined_subtitle if this field
                             is equal tocombined_title. Move combined_subtitle to
                             combimed_title if combined_title is empty.
-      -i SOURCE_FIELDS FORMAT_STRING, --distribute-fields SOURCE_FIELDS FORMAT_STRING
-                            Distribute source fields to target fields applying a format
-                            string on the source fields. It is possible to apply
-                            multiple --distribute-fields options. SOURCE_FIELDS can be a
-                            single field or a comma separated list of fields:
+      -i <source-fields> <format-string>, --distribute-fields <source-fields> <format-string>
+                            Distribute source fields to target fields by applying a
+                            format string on the source fields. It is possible to apply
+                            multiple --distribute-fields options. <source-fields> can be
+                            a single field or a comma separated list of fields:
                             field_one,field_two. The program tries first to match the
-                            FORMAT_STRING on the first source field. If thisfails, it
-                            tries the second source field ... an so on.
+                            <format-string> on the first source field. If thisfails, it
+                            tries the second source field ... and so on.
       -j, --json            Additionally write the meta data to a json file.
       -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
                             Write one line per file to a text file. e. g. --log

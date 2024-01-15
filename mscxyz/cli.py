@@ -277,13 +277,13 @@ group_meta.add_argument(
     dest="meta_dist",
     action="append",
     nargs=2,
-    metavar=("SOURCE_FIELDS", "FORMAT_STRING"),
-    help="Distribute source fields to target fields applying a format string "
+    metavar=("<source-fields>", "<format-string>"),
+    help="Distribute source fields to target fields by applying a format string "
     "on the source fields. It is possible to apply multiple "
-    "--distribute-fields options. SOURCE_FIELDS can be a single field or a "
+    "--distribute-fields options. <source-fields> can be a single field or a "
     "comma separated list of fields: field_one,field_two. The program "
-    "tries first to match the FORMAT_STRING on the first source field. If this"
-    "fails, it tries the second source field ... an so on.",
+    "tries first to match the <format-string> on the first source field. If this"
+    "fails, it tries the second source field ... and so on.",
 )
 
 group_meta.add_argument(
@@ -639,20 +639,21 @@ file_completers.append(
 for action in file_completers:
     action.complete = shtab.FILE  # type: ignore
 
-# def __report_errors(errors: list[Exception]) -> None:
-#     for error in errors:
-#         msg = ""
 
-#         if isinstance(error, SyntaxError):
-#             msg = error.msg
+def __report_errors(errors: list[Exception]) -> None:
+    for error in errors:
+        msg = ""
 
-#         print(
-#             "{}: {}; message: {}".format(
-#                 utils.color("Error", "white", "on_red"),
-#                 utils.color(error.__class__.__name__, "red"),
-#                 msg,
-#             )
-#         )
+        if isinstance(error, SyntaxError):
+            msg = error.msg
+
+        print(
+            "{}: {}; message: {}".format(
+                utils.color("Error", "white", "on_red"),
+                utils.color(error.__class__.__name__, "red"),
+                msg,
+            )
+        )
 
 
 # def __no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
@@ -799,11 +800,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #                 score.meta.clean_metadata(fields_spec=args.meta_clean)
         #             if args.meta_json:
         #                 score.meta.export_json()
-        #             if args.meta_dist:
-        #                 for a in args.meta_dist:
-        #                     score.meta.distribute_field(
-        #                         source_fields=a[0], format_string=a[1]
-        #                     )
+        if args.meta_dist:
+            for a in args.meta_dist:
+                score.meta.distribute_field(source_fields=a[0], format_string=a[1])
 
         #             if args.meta_delete:
         #                 score.meta.delete_duplicates()
@@ -829,4 +828,4 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if not args.general_dry_run:
             score.save()
 
-    #     __report_errors(score.errors)
+        __report_errors(score.errors)

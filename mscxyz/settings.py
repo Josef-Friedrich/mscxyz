@@ -41,11 +41,11 @@ class DefaultArguments:
     # meta
     meta_clean: Optional[str] = None
     meta_delete: bool = False
-    meta_dist: Optional[list[list[str]]] = None
+    meta_dist: Optional[list[tuple[str, str]]] = None
     meta_log: Optional[list[str]] = None
     meta_json: bool = False
     meta_sync: bool = False
-    meta_set: Optional[list[list[str]]] = None
+    meta_set: Optional[list[tuple[str, str]]] = None
     meta_metatag: Optional[list[tuple[str, str]]] = None
     meta_vbox: Optional[list[tuple[str, str]]] = None
     meta_combined: Optional[list[tuple[str, str]]] = None
