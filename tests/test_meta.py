@@ -12,7 +12,6 @@ import mscxyz
 import mscxyz.meta
 from mscxyz import meta, supported_versions
 from mscxyz.meta import (
-    Combined,
     Interface,
     InterfaceReadOnly,
     InterfaceReadWrite,
@@ -328,14 +327,6 @@ def get_meta_tag(filename: str, version: int) -> Metatag:
 
 
 class TestClassMetaTag:
-    def _init_class(
-        self, filename: str, version: int = 2
-    ) -> tuple[Metatag, Score, str]:
-        tmp = helper.get_file(filename, version)
-        score = Score(tmp)
-        meta = score.meta.metatag
-        return meta, score, tmp
-
     @pytest.mark.parametrize(
         "version,msc_version",
         [(2, None), (3, None), (4, "4.20")],
@@ -407,27 +398,21 @@ class TestClassVbox:
 
 
 class TestClassCombined:
-    def _init_class(self, filename: str) -> tuple[Combined, Score, str]:
-        tmp = helper.get_file(filename)
-        score = Score(tmp)
-        c = Combined(score)
-        return c, score, tmp
-
-    def test_getter(self) -> None:
-        c, _, _ = self._init_class("simple.mscx")
+    def test_getter(self, score: Score) -> None:
+        c = score.meta.combined
         assert c.title == "Title"
         assert c.subtitle is None
         assert c.composer == "Composer"
         assert c.lyricist is None
 
-    def test_setter(self) -> None:
-        c, tree, _ = self._init_class("simple.mscx")
+    def test_setter(self, score: Score) -> None:
+        c = score.meta.combined
         c.title = "T"
         c.subtitle = "S"
         c.composer = "C"
         c.lyricist = "L"
-        tree.save()
-        c = Combined(tree)
+        score.reload(save=True)
+        c = score.meta.combined
         assert c.metatag.work_title == "T"
         assert c.metatag.movement_title == "S"
         assert c.metatag.composer == "C"
