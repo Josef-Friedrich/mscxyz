@@ -313,6 +313,11 @@ def test_load_style_file() -> None:
 
 
 class TestCli:
+    def test_option_style_file(self, score: Score) -> None:
+        c = Cli("--style-file", helper.get_file("Jazz.mss", 4), score).execute()
+        assert c.pre.style.musical_symbol_font == "Leland"
+        assert c.post.style.musical_symbol_font == "MuseJazz"
+
     def test_option_styles_v3(self) -> None:
         stdout = Cli("--styles-v3").stdout()
         assert "user12FrameFgColor" in stdout

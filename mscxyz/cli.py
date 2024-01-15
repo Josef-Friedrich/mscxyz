@@ -745,9 +745,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #         score = Score(file)
         #         print(score.filename)
         #         score.clean()
-        #         if args.clean_style:
-        #             score.style.merge(styles=args.clean_style.name)
-        #         score.save(mscore=args.general_mscore)
 
         #     elif args.subcommand == "lyrics":
         #         score = Score(file)
