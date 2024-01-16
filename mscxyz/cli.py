@@ -14,7 +14,7 @@ import tmep
 import mscxyz.export
 from mscxyz import utils
 from mscxyz.meta import Combined, Interface, InterfaceReadWrite, Metatag, Vbox
-from mscxyz.rename import rename_filename
+from mscxyz.rename import rename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
 from mscxyz.utils import Dimension
@@ -825,7 +825,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #                 score.save(mscore=args.general_mscore)
 
         if args.rename_rename:
-            rename_filename(str(score.path))
+            rename(score)
 
         if args.export_extension:
             score.export.to_extension(args.export_extension)

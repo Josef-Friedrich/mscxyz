@@ -63,10 +63,9 @@ def get_checksum(filename: str) -> str:
     return hasher.hexdigest()
 
 
-def rename_filename(source: str) -> Score:
+def rename(score: Score) -> Score:
     args = get_args()
 
-    score = Score(source)
     meta_values: dict[str, str] = score.meta.interface.export_to_dict()
     target_filename: str = apply_format_string(meta_values)
 
@@ -90,12 +89,12 @@ def rename_filename(source: str) -> Score:
         counter_format: str = ""
         while os.path.exists(target_format.format(counter_format)):
             target = target_format.format(counter_format)
-            if get_checksum(source) == get_checksum(target):
+            if get_checksum(str(score.path)) == get_checksum(target):
                 print(
                     color(
                         "The file “{}” with the same checksum (sha1) "
                         "already exists in the target path “{}”!".format(
-                            source, target
+                            str(score.path), target
                         ),
                         "red",
                     )
@@ -109,12 +108,12 @@ def rename_filename(source: str) -> Score:
 
         target = target_format.format(counter_format)
 
-    show(source, target)
+    show(str(score.path), target)
 
     if not args.general_dry_run:
         create_dir(target)
         # Invalid cross-device link:
         # os.rename(source, target)
-        shutil.move(source, target)
+        shutil.move(score.path, target)
 
     return score

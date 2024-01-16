@@ -17,7 +17,7 @@ from lxml.etree import LxmlError
 import mscxyz.settings as settings
 from mscxyz import Score, cli_legacy, utils
 from mscxyz.meta import Interface, InterfaceReadWrite
-from mscxyz.rename import rename_filename
+from mscxyz.rename import rename
 
 
 def list_fields(
@@ -661,7 +661,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
                     score.save(mscore=args.general_mscore)
 
         elif args.subcommand == "rename":
-            score = rename_filename(file)
+            score = rename(Score(file))
 
         elif args.subcommand == "export":
             score = Score(file)
