@@ -204,7 +204,7 @@ class Cli:
             self.__stderr = stderr.getvalue()
             self.__executed = True
 
-    def use_score(self, filename: str, version: int = 4) -> Cli:
+    def append_score(self, filename: str, version: int = 4) -> Cli:
         self.__set_score(get_score(filename, version=version), append_to_args=True)
         return self
 

@@ -427,30 +427,34 @@ class TestClassCombined:
 class TestOptionDistributeField:
     @pytest.mark.legacy
     def test_distribute_field_legacy(self) -> None:
-        tmp = helper.get_score("meta-distribute-field.mscx")
-        Cli(
-            "meta",
-            "--distribute-field",
-            "vbox_title",
-            "$combined_title - $combined_composer",
-            tmp,
-            legacy=True,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "meta",
+                "--distribute-field",
+                "vbox_title",
+                "$combined_title - $combined_composer",
+                legacy=True,
+            )
+            .append_score("meta-distribute-field.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.vbox_composer == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.vbox_title == "Title"
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field(self) -> None:
-        score = helper.get_score("meta-distribute-field.mscz", 4)
-        Cli(
-            "--distribute-field",
-            "vbox_title",
-            "$combined_title - $combined_composer",
-            score,
-        ).execute()
-        i = reload(score)
+        c = (
+            Cli(
+                "--distribute-field",
+                "vbox_title",
+                "$combined_title - $combined_composer",
+            )
+            .append_score("meta-distribute-field.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.vbox_composer == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.vbox_title == "Title"
@@ -458,30 +462,34 @@ class TestOptionDistributeField:
 
     @pytest.mark.legacy
     def test_distribute_field_multple_source_fields_legacy(self) -> None:
-        tmp = helper.get_score("Title - Composer.mscx")
-        Cli(
-            "meta",
-            "--distribute-field",
-            "vbox_title,readonly_basename",
-            "$combined_title - $combined_composer",
-            tmp,
-            legacy=True,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "meta",
+                "--distribute-field",
+                "vbox_title,readonly_basename",
+                "$combined_title - $combined_composer",
+                legacy=True,
+            )
+            .append_score("Title - Composer.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.vbox_composer == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.vbox_title == "Title"
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multple_source_fields(self) -> None:
-        tmp = helper.get_score("Title - Composer.mscz", 4)
-        Cli(
-            "--distribute-field",
-            "vbox_title,readonly_basename",
-            "$combined_title - $combined_composer",
-            tmp,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "--distribute-field",
+                "vbox_title,readonly_basename",
+                "$combined_title - $combined_composer",
+            )
+            .append_score("Title - Composer.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.vbox_composer == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.vbox_title == "Title"
@@ -831,7 +839,7 @@ class TestOptionSetField:
     def test_simple_string(self) -> None:
         c = (
             Cli("--set-field", "vbox_title", "test")
-            .use_score("meta-all-values.mscz")
+            .append_score("meta-all-values.mscz")
             .execute()
         )
         assert c.post.meta.interface.vbox_title == "test"
@@ -864,7 +872,7 @@ class TestOptionSetField:
                 "vbox_composer",
                 "vc",
             )
-            .use_score("meta-all-values.mscz")
+            .append_score("meta-all-values.mscz")
             .execute()
         )
         i = c.post.meta.interface
@@ -880,7 +888,7 @@ class TestOptionSetField:
                 "$vbox_title ($vbox_composer)",
                 legacy=True,
             )
-            .use_score("meta-all-values.mscz")
+            .append_score("meta-all-values.mscz")
             .execute()
         )
         assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
@@ -892,7 +900,7 @@ class TestOptionSetField:
                 "vbox_title",
                 "$vbox_title ($vbox_composer)",
             )
-            .use_score("meta-all-values.mscz")
+            .append_score("meta-all-values.mscz")
             .execute()
         )
         assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
@@ -918,7 +926,7 @@ class TestOptionDeleteDuplicates:
         assert not i.combined_subtitle
 
     def test_normal(self) -> None:
-        c = Cli("--delete-duplicates").use_score("meta-duplicates.mscz").execute()
+        c = Cli("--delete-duplicates").append_score("meta-duplicates.mscz").execute()
         i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
@@ -935,7 +943,7 @@ class TestOptionDeleteDuplicates:
     def test_move_subtitle(self) -> None:
         c = (
             Cli("--delete-duplicates")
-            .use_score("meta-duplicates-move-subtitle.mscz")
+            .append_score("meta-duplicates-move-subtitle.mscz")
             .execute()
         )
         i = c.post.meta.interface
