@@ -150,7 +150,6 @@ class Cli:
         if isinstance(last, Score):
             self.__score_pre = last
             self.__score = last
-            return
 
         if not (isinstance(last, str) and Path(last).exists()) and not isinstance(
             last, Score

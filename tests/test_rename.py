@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 import tempfile
 
-from mscxyz import rename
+from mscxyz import Score, rename
 from mscxyz.settings import reset_args
 from tests import helper
-from tests.helper import ini_file
+from tests.helper import Cli, ini_file
 
 
 class TestFunctions:
@@ -159,9 +160,8 @@ class TestIntegration:
         assert "Title (Composer).mscx" in output
         os.remove(target)
 
-    def test_rename_target(self) -> None:
-        tmp_dir: str = tempfile.mkdtemp()
-        helper.run("rename", "--target", tmp_dir, self._get("simple.mscx"))
-        target: str = os.path.join(tmp_dir, "Title (Composer).mscx")
-        assert os.path.exists(target)
-        os.remove(target)
+    def test_rename_target(self, score: Score, tmp_path: Path) -> None:
+        Cli("rename", "--target", tmp_path, str(score.path), legacy=True).execute()
+        target: Path = tmp_path / "Title (Composer).mscz"
+        assert target.exists()
+        target.unlink()
