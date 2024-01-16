@@ -576,25 +576,63 @@ class TestOptionDistributeField:
 
 
 class TestOptionClean:
-    def test_clean_all(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli("meta", "--clean", "all", tmp, legacy=True).execute()
-        score = helper.reload(tmp)
-        i = score.meta.interface_read_write
+    @pytest.mark.legacy
+    def test_clean_all_legacy(self) -> None:
+        c = (
+            Cli("meta", "--clean", "all", legacy=True)
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface_read_write
         for field in i.fields:
             assert getattr(i, field) is None, field
 
-    def test_clean_single_field(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli("meta", "--clean", "vbox_title", tmp, legacy=True).execute()
-        i = reload(tmp)
+    def test_clean_all(self) -> None:
+        c = Cli("--clean-meta", "all").append_score("meta-all-values.mscz").execute()
+        i = c.post.meta.interface_read_write
+        for field in i.fields:
+            assert getattr(i, field) is None, field
+
+    @pytest.mark.legacy
+    def test_clean_single_field_legacy(self) -> None:
+        c = (
+            Cli("meta", "--clean", "vbox_title", legacy=True)
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface_read_write
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer == "vbox_composer", "vbox_composer"
 
+    def test_clean_single_field(self) -> None:
+        c = (
+            Cli("--clean-meta", "vbox_title")
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface_read_write
+        assert i.vbox_title is None, "vbox_title"
+        assert i.vbox_composer == "vbox_composer", "vbox_composer"
+
+    @pytest.mark.legacy
+    def test_clean_some_fields_legacy(self) -> None:
+        c = (
+            Cli("meta", "--clean", "vbox_title,vbox_composer", legacy=True)
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface_read_write
+        assert i.vbox_title is None, "vbox_title"
+        assert i.vbox_composer is None, "vbox_composer"
+        assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
+
     def test_clean_some_fields(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli("meta", "--clean", "vbox_title,vbox_composer", tmp, legacy=True).execute()
-        i = reload(tmp)
+        c = (
+            Cli("--clean-meta", "vbox_title,vbox_composer")
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface_read_write
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer is None, "vbox_composer"
         assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
@@ -879,6 +917,7 @@ class TestOptionSetField:
         assert i.vbox_title == "vt"
         assert i.vbox_composer == "vc"
 
+    @pytest.mark.legacy
     def test_with_templating_legacy(self) -> None:
         c = (
             Cli(

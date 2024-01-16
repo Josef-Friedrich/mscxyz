@@ -255,9 +255,10 @@ group_meta = parser.add_argument_group(
 
 group_meta.add_argument(
     "-c",
-    "--clean",
+    "--clean-meta",
     dest="meta_clean",
-    help="Clean the meta data fields. Possible values: „all“ or "
+    help="Clean the meta data fields. Possible values: „all“ or a comma separated "
+    "list of fields, for example: "
     "„field_one,field_two“.",
 )
 
@@ -810,8 +811,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #         score = Score(file)
         #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
         #             pre: dict[str, str] = score.meta.interface.export_to_dict()
-        #             if args.meta_clean:
-        #                 score.meta.clean_metadata(fields_spec=args.meta_clean)
+
+        if args.meta_clean:
+            score.meta.clean_metadata(fields_spec=args.meta_clean)
+
         #             if args.meta_json:
         #                 score.meta.export_json()
         if args.meta_dist:

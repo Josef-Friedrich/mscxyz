@@ -150,8 +150,9 @@ Comande line interface
           - vbox_subtitle
           - vbox_title
 
-      -c META_CLEAN, --clean META_CLEAN
-                            Clean the meta data fields. Possible values: „all“ or
+      -c META_CLEAN, --clean-meta META_CLEAN
+                            Clean the meta data fields. Possible values: „all“ or a
+                            comma separated list of fields, for example:
                             „field_one,field_two“.
       -D, --delete-duplicates
                             Deletes combined_lyricist if this field is equal to
