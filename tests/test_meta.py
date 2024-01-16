@@ -872,17 +872,18 @@ class TestOptionSetField:
         assert i.vbox_composer == "vc"
 
     def test_with_templating_legacy(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli(
-            "meta",
-            "--set-field",
-            "vbox_title",
-            "$vbox_title ($vbox_composer)",
-            tmp,
-            legacy=True,
-        ).execute()
-        i = reload(tmp)
-        assert i.vbox_title == "vbox_title (vbox_composer)"
+        c = (
+            Cli(
+                "meta",
+                "--set-field",
+                "vbox_title",
+                "$vbox_title ($vbox_composer)",
+                legacy=True,
+            )
+            .use_score("meta-all-values.mscz")
+            .execute()
+        )
+        assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
 
     def test_with_templating(self) -> None:
         c = (

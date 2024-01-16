@@ -131,38 +131,44 @@ class Cli:
     __args: list[CliArg]
     __score_pre: Optional[Score] = None
     __score: Optional[Score] = None
+    __appended_score: Optional[Score] = None
     __executed: bool = False
     __stdout: Optional[str] = None
     __stderr: Optional[str] = None
-    __returncode: int
     __legacy: bool = False
+    __append_score: bool
 
     def __init__(
         self, *args: CliArg, append_score: bool = True, legacy: bool = False
     ) -> None:
         self.__args = list(args)
-        last = self.__args[-1]
         self.__legacy = legacy
+        self.__append_score = append_score
 
-        if not append_score:
-            return
-
-        if isinstance(last, Score):
-            self.__set_score(last)
-
-        if not (isinstance(last, str) and Path(last).exists()) and not isinstance(
-            last, Score
-        ):
-            self.__set_score(get_score("score.mscz", version=4), append_to_args=True)
-
-    def __set_score(self, score: Score, append_to_args: bool = False) -> None:
+    def __set_score(self, score: Score, append_to_args: bool = False) -> Score:
         self.__score_pre = score
         self.__score = score
         if append_to_args:
             self.__args.append(score)
+            self.__appended_score = score
+        return score
+
+    @property
+    def __last_arg(self) -> CliArg:
+        return self.__args[-1]
 
     @property
     def __stringified_args(self) -> list[str]:
+        if self.__append_score and self.__appended_score is None:
+            if isinstance(self.__last_arg, Score):
+                self.__set_score(self.__last_arg)
+            elif not (
+                isinstance(self.__last_arg, str) and Path(self.__last_arg).exists()
+            ) and not isinstance(self.__last_arg, Score):
+                self.__set_score(
+                    get_score("score.mscz", version=4), append_to_args=True
+                )
+
         result: list[str] = []
         for arg in self.__args:
             if isinstance(arg, Score):
@@ -235,7 +241,6 @@ class Cli:
                 capture_output=True,
                 encoding="utf-8",
             )
-            self.__returncode = result.returncode
             self.__stderr = result.stderr
             self.__stdout = result.stdout
             self.__executed = True

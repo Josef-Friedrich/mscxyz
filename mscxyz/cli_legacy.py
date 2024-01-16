@@ -18,6 +18,7 @@ import mscxyz.settings as settings
 from mscxyz import Score, cli_legacy, utils
 from mscxyz.meta import Interface, InterfaceReadWrite
 from mscxyz.rename import rename
+from mscxyz.settings import parse_args
 
 
 def list_fields(
@@ -586,14 +587,7 @@ def no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
 
 
 def execute(cli_args: typing.Sequence[str] | None = None) -> None:
-    args: settings.DefaultArguments = typing.cast(
-        settings.DefaultArguments, cli_legacy.parser.parse_args(cli_args)
-    )
-    if args.general_config_file:
-        config = settings.parse_config_ini(args.general_config_file)
-        if config:
-            args = settings.merge_config_into_args(config, args)
-    settings.set_args(args)
+    args = parse_args(parser, cli_args)
 
     if args.subcommand == "help":
         show_all_help(args)
