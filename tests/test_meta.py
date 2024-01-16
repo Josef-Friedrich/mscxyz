@@ -12,7 +12,6 @@ import mscxyz
 import mscxyz.meta
 from mscxyz import meta, supported_versions
 from mscxyz.meta import (
-    Combined,
     Interface,
     InterfaceReadOnly,
     InterfaceReadWrite,
@@ -328,14 +327,6 @@ def get_meta_tag(filename: str, version: int) -> Metatag:
 
 
 class TestClassMetaTag:
-    def _init_class(
-        self, filename: str, version: int = 2
-    ) -> tuple[Metatag, Score, str]:
-        tmp = helper.get_file(filename, version)
-        score = Score(tmp)
-        meta = score.meta.metatag
-        return meta, score, tmp
-
     @pytest.mark.parametrize(
         "version,msc_version",
         [(2, None), (3, None), (4, "4.20")],
@@ -407,27 +398,21 @@ class TestClassVbox:
 
 
 class TestClassCombined:
-    def _init_class(self, filename: str) -> tuple[Combined, Score, str]:
-        tmp = helper.get_file(filename)
-        score = Score(tmp)
-        c = Combined(score)
-        return c, score, tmp
-
-    def test_getter(self) -> None:
-        c, _, _ = self._init_class("simple.mscx")
+    def test_getter(self, score: Score) -> None:
+        c = score.meta.combined
         assert c.title == "Title"
         assert c.subtitle is None
         assert c.composer == "Composer"
         assert c.lyricist is None
 
-    def test_setter(self) -> None:
-        c, tree, _ = self._init_class("simple.mscx")
+    def test_setter(self, score: Score) -> None:
+        c = score.meta.combined
         c.title = "T"
         c.subtitle = "S"
         c.composer = "C"
         c.lyricist = "L"
-        tree.save()
-        c = Combined(tree)
+        score.reload(save=True)
+        c = score.meta.combined
         assert c.metatag.work_title == "T"
         assert c.metatag.movement_title == "S"
         assert c.metatag.composer == "C"
@@ -439,8 +424,9 @@ class TestClassCombined:
         assert c.vbox.lyricist == "L"
 
 
-class TestCli:
-    def test_distribute_field(self) -> None:
+class TestOptionDistributeField:
+    @pytest.mark.legacy
+    def test_distribute_field_legacy(self) -> None:
         tmp = helper.get_score("meta-distribute-field.mscx")
         Cli(
             "meta",
@@ -456,7 +442,22 @@ class TestCli:
         assert i.vbox_title == "Title"
         assert i.metatag_work_title == "Title"
 
-    def test_distribute_field_multple_source_fields(self) -> None:
+    def test_distribute_field(self) -> None:
+        score = helper.get_score("meta-distribute-field.mscz", 4)
+        Cli(
+            "--distribute-field",
+            "vbox_title",
+            "$combined_title - $combined_composer",
+            score,
+        ).execute()
+        i = reload(score)
+        assert i.vbox_composer == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.vbox_title == "Title"
+        assert i.metatag_work_title == "Title"
+
+    @pytest.mark.legacy
+    def test_distribute_field_multple_source_fields_legacy(self) -> None:
         tmp = helper.get_score("Title - Composer.mscx")
         Cli(
             "meta",
@@ -472,7 +473,22 @@ class TestCli:
         assert i.vbox_title == "Title"
         assert i.metatag_work_title == "Title"
 
-    def test_distribute_field_multiple_values(self) -> None:
+    def test_distribute_field_multple_source_fields(self) -> None:
+        tmp = helper.get_score("Title - Composer.mscz", 4)
+        Cli(
+            "--distribute-field",
+            "vbox_title,readonly_basename",
+            "$combined_title - $combined_composer",
+            tmp,
+        ).execute()
+        i = reload(tmp)
+        assert i.vbox_composer == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.vbox_title == "Title"
+        assert i.metatag_work_title == "Title"
+
+    @pytest.mark.legacy
+    def test_distribute_field_multiple_values_legacy(self) -> None:
         tmp = helper.get_score("meta-distribute-field.mscx")
         Cli(
             "meta",
@@ -491,14 +507,46 @@ class TestCli:
         assert i.metatag_movement_title == "Title"
         assert i.metatag_work_title == "Title"
 
-    def test_distribute_field_invalid_format_string(self) -> None:
-        tmp = helper.get_score("meta-distribute-field.mscx")
+    def test_distribute_field_multiple_values(self) -> None:
+        tmp = helper.get_score("meta-distribute-field.mscz", 4)
+        Cli(
+            "--distribute-field",
+            "vbox_title",
+            "$metatag_work_title - $metatag_composer",
+            "--distribute-field",
+            "vbox_title",
+            "$metatag_movement_title - $metatag_lyricist",
+            tmp,
+        ).execute()
+        i = reload(tmp)
+        assert i.metatag_lyricist == "Composer"
+        assert i.metatag_composer == "Composer"
+        assert i.metatag_movement_title == "Title"
+        assert i.metatag_work_title == "Title"
+
+    @pytest.mark.legacy
+    def test_distribute_field_invalid_format_string_legacy(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
             Cli(
-                "meta", "--distribute-field", "vbox_title", "lol", tmp, legacy=True
+                "meta",
+                "--distribute-field",
+                "vbox_title",
+                "lol",
+                helper.get_score("meta-distribute-field.mscx"),
+                legacy=True,
             ).execute()
 
-    def test_distribute_field_exception_unmatched(self) -> None:
+    def test_distribute_field_invalid_format_string(self) -> None:
+        with pytest.raises(meta.FormatStringNoFieldError):
+            Cli(
+                "--distribute-field",
+                "vbox_title",
+                "lol",
+                helper.get_score("meta-distribute-field.mscz", 4),
+            ).execute()
+
+    @pytest.mark.legacy
+    def test_distribute_field_exception_unmatched_legacy(self) -> None:
         stdout = Cli(
             "meta",
             "--distribute-field",
@@ -509,6 +557,17 @@ class TestCli:
         ).stdout()
         assert "UnmatchedFormatStringError" in stdout
 
+    def test_distribute_field_exception_unmatched(self) -> None:
+        stdout = Cli(
+            "--distribute-field",
+            "vbox_title",
+            "$metatag_work_title - $metatag_composer",
+            helper.get_score("simple.mscx"),
+        ).stdout()
+        assert "UnmatchedFormatStringError" in stdout
+
+
+class TestOptionClean:
     def test_clean_all(self) -> None:
         tmp = helper.get_score("meta-all-values.mscx")
         Cli("meta", "--clean", "all", tmp, legacy=True).execute()
@@ -532,6 +591,8 @@ class TestCli:
         assert i.vbox_composer is None, "vbox_composer"
         assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
 
+
+class TestStdout:
     def test_show(self) -> None:
         stdout = Cli(
             "--config-file",
