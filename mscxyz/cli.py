@@ -767,6 +767,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 no = int(args.lyrics_extract)
             score.lyrics.extract_lyrics(no)
 
+        # meta
+
         if args.meta_metatag:
             for a in args.meta_metatag:
                 field = a[0]
@@ -799,6 +801,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                         f"Possible fields: {', '.join(Combined.fields)}"
                     )
                 setattr(score.meta.combined, field, value)
+
+        if args.meta_set:
+            for a in args.meta_set:
+                score.meta.set_field(destination_field=a[0], format_string=a[1])
 
         #     elif args.subcommand == "meta":
         #         score = Score(file)

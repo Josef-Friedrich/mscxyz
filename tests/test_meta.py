@@ -819,30 +819,59 @@ class TestStdout:
         assert v.subtitle == "s"
         assert v.title == "t"
 
-    def test_set_field_simple_string(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli("meta", "--set-field", "vbox_title", "lol", tmp, legacy=True).execute()
-        i = reload(tmp)
-        assert i.vbox_title == "lol"
 
-    def test_set_field_multiple_times(self) -> None:
+class TestOptionSetField:
+    @pytest.mark.legacy
+    def test_simple_string_legacy(self) -> None:
+        tmp = helper.get_score("meta-all-values.mscx")
+        Cli("meta", "--set-field", "vbox_title", "test", tmp, legacy=True).execute()
+        i = reload(tmp)
+        assert i.vbox_title == "test"
+
+    def test_simple_string(self) -> None:
+        c = (
+            Cli("--set-field", "vbox_title", "test")
+            .use_score("meta-all-values.mscz")
+            .execute()
+        )
+        assert c.post.meta.interface.vbox_title == "test"
+
+    @pytest.mark.legacy
+    def test_multiple_times_legacy(self) -> None:
         tmp = helper.get_score("meta-all-values.mscx")
         Cli(
             "meta",
             "--set-field",
             "vbox_title",
-            "lol",
+            "vt",
             "--set-field",
             "vbox_composer",
-            "troll",
+            "vc",
             tmp,
             legacy=True,
         ).execute()
         i = reload(tmp)
-        assert i.vbox_title == "lol"
-        assert i.vbox_composer == "troll"
+        assert i.vbox_title == "vt"
+        assert i.vbox_composer == "vc"
 
-    def test_set_field_with_templating(self) -> None:
+    def test_multiple_times(self) -> None:
+        c = (
+            Cli(
+                "--set-field",
+                "vbox_title",
+                "vt",
+                "--set-field",
+                "vbox_composer",
+                "vc",
+            )
+            .use_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
+        assert i.vbox_title == "vt"
+        assert i.vbox_composer == "vc"
+
+    def test_with_templating_legacy(self) -> None:
         tmp = helper.get_score("meta-all-values.mscx")
         Cli(
             "meta",
@@ -855,14 +884,27 @@ class TestStdout:
         i = reload(tmp)
         assert i.vbox_title == "vbox_title (vbox_composer)"
 
-    def test_log(self) -> None:
-        tmp = helper.get_score("simple.mscx")
-        log = tempfile.mktemp()
-        Cli(
-            "meta", "--log", log, "$combined_title-$combined_composer", tmp, legacy=True
-        ).execute()
-        log_file = open(log, "r")
-        assert log_file.readline() == "Title-Composer\n"
+    def test_with_templating(self) -> None:
+        c = (
+            Cli(
+                "--set-field",
+                "vbox_title",
+                "$vbox_title ($vbox_composer)",
+            )
+            .use_score("meta-all-values.mscz")
+            .execute()
+        )
+        assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
+
+
+def test_log() -> None:
+    tmp = helper.get_score("simple.mscx")
+    log = tempfile.mktemp()
+    Cli(
+        "meta", "--log", log, "$combined_title-$combined_composer", tmp, legacy=True
+    ).execute()
+    log_file = open(log, "r")
+    assert log_file.readline() == "Title-Composer\n"
 
 
 class TestOptionDeleteDuplicates:
@@ -875,9 +917,8 @@ class TestOptionDeleteDuplicates:
         assert not i.combined_subtitle
 
     def test_normal(self) -> None:
-        tmp = helper.get_score("meta-duplicates.mscz", 4)
-        Cli("--delete-duplicates", tmp).execute()
-        i = reload(tmp)
+        c = Cli("--delete-duplicates").use_score("meta-duplicates.mscz").execute()
+        i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
 
@@ -891,9 +932,12 @@ class TestOptionDeleteDuplicates:
         assert i.combined_title == "Title"
 
     def test_move_subtitle(self) -> None:
-        tmp = helper.get_score("meta-duplicates-move-subtitle.mscz", 4)
-        Cli("--delete-duplicates", tmp).execute()
-        i = reload(tmp)
+        c = (
+            Cli("--delete-duplicates")
+            .use_score("meta-duplicates-move-subtitle.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
         assert i.combined_title == "Title"
