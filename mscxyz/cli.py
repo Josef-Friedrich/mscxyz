@@ -812,8 +812,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             for a in args.meta_dist:
                 score.meta.distribute_field(source_fields=a[0], format_string=a[1])
 
-        #             if args.meta_delete:
-        #                 score.meta.delete_duplicates()
+        if args.meta_delete:
+            score.meta.delete_duplicates()
         #             if args.meta_sync:
         #                 score.meta.sync_fields()
         #             if args.meta_log:

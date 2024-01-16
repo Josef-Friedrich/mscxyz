@@ -148,15 +148,18 @@ class Cli:
             return
 
         if isinstance(last, Score):
-            self.__score_pre = last
-            self.__score = last
+            self.__set_score(last)
 
         if not (isinstance(last, str) and Path(last).exists()) and not isinstance(
             last, Score
         ):
-            self.__score_pre = get_score("score.mscz", version=4)
-            self.__score = self.__score_pre
-            self.__args.append(self.__score)
+            self.__set_score(get_score("score.mscz", version=4), append_to_args=True)
+
+    def __set_score(self, score: Score, append_to_args: bool = False) -> None:
+        self.__score_pre = score
+        self.__score = score
+        if append_to_args:
+            self.__args.append(score)
 
     @property
     def __stringified_args(self) -> list[str]:
@@ -194,6 +197,10 @@ class Cli:
             self.__stdout = stdout.getvalue()
             self.__stderr = stderr.getvalue()
             self.__executed = True
+
+    def use_score(self, filename: str, version: int = 4) -> Cli:
+        self.__set_score(get_score(filename, version=version), append_to_args=True)
+        return self
 
     def execute(self) -> Cli:
         self.__execute()

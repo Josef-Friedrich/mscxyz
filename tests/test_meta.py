@@ -855,21 +855,6 @@ class TestStdout:
         i = reload(tmp)
         assert i.vbox_title == "vbox_title (vbox_composer)"
 
-    def test_delete_duplicates(self) -> None:
-        tmp = helper.get_score("meta-duplicates.mscx")
-        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
-        i = reload(tmp)
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
-
-    def test_delete_duplicates_move_subtitle(self) -> None:
-        tmp = helper.get_score("meta-duplicates-move-subtitle.mscx")
-        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
-        i = reload(tmp)
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
-        assert i.combined_title == "Title"
-
     def test_log(self) -> None:
         tmp = helper.get_score("simple.mscx")
         log = tempfile.mktemp()
@@ -878,6 +863,40 @@ class TestStdout:
         ).execute()
         log_file = open(log, "r")
         assert log_file.readline() == "Title-Composer\n"
+
+
+class TestOptionDeleteDuplicates:
+    @pytest.mark.legacy
+    def test_normal_legacy(self) -> None:
+        tmp = helper.get_score("meta-duplicates.mscx")
+        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
+
+    def test_normal(self) -> None:
+        tmp = helper.get_score("meta-duplicates.mscz", 4)
+        Cli("--delete-duplicates", tmp).execute()
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
+
+    @pytest.mark.legacy
+    def test_move_subtitle_legacy(self) -> None:
+        tmp = helper.get_score("meta-duplicates-move-subtitle.mscx")
+        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
+        assert i.combined_title == "Title"
+
+    def test_move_subtitle(self) -> None:
+        tmp = helper.get_score("meta-duplicates-move-subtitle.mscz", 4)
+        Cli("--delete-duplicates", tmp).execute()
+        i = reload(tmp)
+        assert not i.combined_lyricist
+        assert not i.combined_subtitle
+        assert i.combined_title == "Title"
 
 
 class TestClassMeta:
