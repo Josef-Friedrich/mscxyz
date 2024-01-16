@@ -820,8 +820,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         if args.meta_delete:
             score.meta.delete_duplicates()
-        #             if args.meta_sync:
-        #                 score.meta.sync_fields()
+
+        if args.meta_sync:
+            score.meta.sync_fields()
         #             if args.meta_log:
         #                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
         #             post: dict[str, str] = score.meta.interface.export_to_dict()

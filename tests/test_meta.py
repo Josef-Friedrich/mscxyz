@@ -952,6 +952,73 @@ class TestOptionDeleteDuplicates:
         assert i.combined_title == "Title"
 
 
+@pytest.mark.legacy
+def test_option_synchronize_legacy() -> None:
+    c = (
+        Cli("meta", "--synchronize", legacy=True)
+        .append_score("meta-all-values.mscz")
+        .execute()
+    )
+
+    pre = c.pre.meta
+    post = c.post.meta
+
+    # pre
+    assert pre.vbox.title == "vbox_title"
+    assert pre.metatag.work_title == "metatag_work_title"
+    # post
+    assert post.vbox.title == post.metatag.work_title == "vbox_title"
+
+    # pre
+    assert pre.vbox.subtitle == "vbox_subtitle"
+    assert pre.metatag.movement_title == "metatag_movement_title"
+    # post
+    assert post.vbox.subtitle == post.metatag.movement_title == "vbox_subtitle"
+
+    # pre
+    assert pre.vbox.composer == "vbox_composer"
+    assert pre.metatag.composer == "metatag_composer"
+    # post
+    assert post.vbox.composer == post.metatag.composer == "vbox_composer"
+
+    # pre
+    assert pre.vbox.lyricist is None
+    assert pre.metatag.lyricist == "metatag_lyricist"
+    # post
+    assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
+
+
+def test_option_synchronize() -> None:
+    c = Cli("--synchronize").append_score("meta-all-values.mscz").execute()
+
+    pre = c.pre.meta
+    post = c.post.meta
+
+    # pre
+    assert pre.vbox.title == "vbox_title"
+    assert pre.metatag.work_title == "metatag_work_title"
+    # post
+    assert post.vbox.title == post.metatag.work_title == "vbox_title"
+
+    # pre
+    assert pre.vbox.subtitle == "vbox_subtitle"
+    assert pre.metatag.movement_title == "metatag_movement_title"
+    # post
+    assert post.vbox.subtitle == post.metatag.movement_title == "vbox_subtitle"
+
+    # pre
+    assert pre.vbox.composer == "vbox_composer"
+    assert pre.metatag.composer == "metatag_composer"
+    # post
+    assert post.vbox.composer == post.metatag.composer == "vbox_composer"
+
+    # pre
+    assert pre.vbox.lyricist is None
+    assert pre.metatag.lyricist == "metatag_lyricist"
+    # post
+    assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
+
+
 class TestClassMeta:
     meta: Meta
 
