@@ -36,6 +36,7 @@ _shtab_musescore_manager_options=(
   {-x,--extract,--extract-lyrics}"[Extract each lyrics verse into a separate MuseScore file. Specify \”all\” to extract all lyrics verses. The old verse number is appended to the file name, e. g.\: score_1.mscx.]:lyrics_extract:"
   {-r,--remap,--remap-lyrics}"[Remap lyrics. Example\: \"--remap 3\:2,5\:3\". This example remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use commas to specify multiple remap pairs. One remap pair is separated by a colon in this form\: \"old\:new\"\: \"old\" stands for the old verse number. \"new\" stands for the new verse number.]:lyrics_remap:"
   {-F,--fix,--fix-lyrics}"[Fix lyrics\: Convert trailing hyphens (\"la- la- la\") to a correct hyphenation (\"la - la - la\")]"
+  "--rename[Format string.]"
   {-f,--format}"[Format string.]:rename_format:"
   {-A,--alphanum}"[Use only alphanumeric characters.]"
   {-a,--ascii}"[Use only ASCII characters.]"

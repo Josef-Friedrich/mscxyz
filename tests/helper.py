@@ -162,12 +162,10 @@ class Cli:
     def __stringified_args(self) -> list[str]:
         result: list[str] = []
         for arg in self.__args:
-            if isinstance(arg, Path):
-                result.append(str(arg))
-            elif isinstance(arg, Score):
+            if isinstance(arg, Score):
                 result.append(str(arg.path))
             else:
-                result.append(arg)
+                result.append(str(arg))
         return result
 
     @property

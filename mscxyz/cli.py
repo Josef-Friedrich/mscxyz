@@ -14,6 +14,7 @@ import tmep
 import mscxyz.export
 from mscxyz import utils
 from mscxyz.meta import Combined, Interface, InterfaceReadWrite, Metatag, Vbox
+from mscxyz.rename import rename_filename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
 from mscxyz.utils import Dimension
@@ -401,13 +402,20 @@ group_lyrics.add_argument(
 
 group_rename = parser.add_argument_group(
     "rename",
-    'Rename the "*.mscx" files.'
+    "Rename the “*.msc[zx]” files."
     "Fields and functions you can use in the format "
     "string (-f, --format):\n\n"
     "Fields\n======\n\n{}\n\n"
     "Functions\n=========\n\n{}".format(
         __itemized_fields(Interface.get_all_fields(), prefix="    "), tmep.get_doc()
     ),
+)
+
+group_rename.add_argument(
+    "--rename",
+    dest="rename_rename",
+    action="store_true",
+    help="Format string.",
 )
 
 group_rename.add_argument(
@@ -817,8 +825,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         #             if not args.general_dry_run and not score.errors and pre != post:
         #                 score.save(mscore=args.general_mscore)
 
-        #     elif args.subcommand == "rename":
-        #         score = rename_filename(file)
+        if args.rename_rename:
+            rename_filename(str(score.path))
 
         if args.export_extension:
             score.export.to_extension(args.export_extension)

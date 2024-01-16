@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-import tempfile
+
+import pytest
 
 from mscxyz import Score, rename
 from mscxyz.settings import reset_args
 from tests import helper
-from tests.helper import Cli, ini_file
+from tests.helper import Cli, get_file, ini_file
 
 
 class TestFunctions:
@@ -33,15 +34,11 @@ class TestFunctions:
         assert name == "vbox_title (vbox_composer)"
 
     def test_function_get_checksum(self) -> None:
-        tmp: str = helper.get_file("simple.mscx")
+        tmp: str = get_file("simple.mscx")
         assert rename.get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
 
 
 class TestIntegration:
-    @staticmethod
-    def _get(filename: str, version: int = 2) -> str:
-        return helper.get_file(filename, version)
-
     @staticmethod
     def _target_path_cwd(filename: str) -> str:
         return os.path.join(os.getcwd(), filename)
@@ -56,7 +53,7 @@ class TestIntegration:
 
     def _test_simple(self, version: int) -> None:
         output: str = helper.run(
-            "--config-file", ini_file, "rename", self._get("simple.mscx", version)
+            "--config-file", ini_file, "rename", get_file("simple.mscx", version)
         )
         target: str = self._target_path_cwd("Title (Composer).mscx")
         assert os.path.exists(target)
@@ -69,7 +66,7 @@ class TestIntegration:
         self._test_simple(version=3)
 
     def _test_without_arguments(self, version: int) -> None:
-        output: str = helper.run("rename", self._get("meta-all-values.mscx", version))
+        output: str = helper.run("rename", get_file("meta-all-values.mscx", version))
         target: str = self._target_path_cwd("vbox_title (vbox_composer).mscx")
         assert os.path.exists(target)
         assert "vbox_title (vbox_composer).mscx" in output
@@ -79,21 +76,22 @@ class TestIntegration:
         self._test_without_arguments(version=2)
         self._test_without_arguments(version=3)
 
-    def test_format(self) -> None:
-        output: str = helper.run(
+    def test_format(self, cwd_tmpdir: Path) -> None:
+        stdout: str = Cli(
             "rename",
             "--format",
             "${vbox_composer}_${vbox_title}",
-            self._get("simple.mscx"),
-        )
-        target = self._target_path_cwd("Composer_Title.mscx")
+            get_file("score.mscz", 4),
+            append_score=False,
+            legacy=True,
+        ).stdout()
+        target = cwd_tmpdir / "Composer_Title.mscz"
         assert os.path.exists(target)
-        assert "Composer_Title.mscx" in output
-        os.remove(target)
+        assert "Composer_Title.mscz" in stdout
 
     def test_no_whitespace(self) -> None:
         output: str = helper.run(
-            "rename", "--no-whitespace", self._get("meta-real-world.mscx")
+            "rename", "--no-whitespace", get_file("meta-real-world.mscx")
         )
         new_name = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx"
         target: str = self._target_path_cwd(new_name)
@@ -103,7 +101,7 @@ class TestIntegration:
 
     def test_alphanum(self) -> None:
         output: str = helper.run(
-            "rename", "--alphanum", self._get("meta-all-values.mscx")
+            "rename", "--alphanum", get_file("meta-all-values.mscx")
         )
         target: str = self._target_path_cwd("vbox title (vbox composer).mscx")
         assert os.path.exists(target)
@@ -111,23 +109,23 @@ class TestIntegration:
         os.remove(target)
 
     def test_ascii(self) -> None:
-        output: str = helper.run("rename", "--ascii", self._get("unicode.mscx"))
+        output: str = helper.run("rename", "--ascii", get_file("unicode.mscx"))
         target: str = self._target_path_cwd("Tuetlae (Coempoesser).mscx")
         assert os.path.exists(target)
         assert "Tuetlae (Coempoesser).mscx" in output
         os.remove(target)
 
     def test_rename_file_twice(self) -> None:
-        helper.run("rename", self._get("simple.mscx"))
-        output = helper.run("rename", self._get("simple.mscx"))
+        helper.run("rename", get_file("simple.mscx"))
+        output = helper.run("rename", get_file("simple.mscx"))
         target = self._target_path_cwd("Title (Composer).mscx")
         assert "with the same checksum (sha1) already" in output
         os.remove(target)
 
     def test_rename_same_filename(self) -> None:
-        helper.run("rename", "-f", "same", self._get("simple.mscx"))
-        helper.run("rename", "-f", "same", self._get("lyrics.mscx"))
-        helper.run("rename", "-f", "same", self._get("no-vbox.mscx"))
+        helper.run("rename", "-f", "same", get_file("simple.mscx"))
+        helper.run("rename", "-f", "same", get_file("lyrics.mscx"))
+        helper.run("rename", "-f", "same", get_file("no-vbox.mscx"))
         assert self._exists_in_cwd("same.mscx")
         assert not self._exists_in_cwd("same1.mscx")
         assert self._exists_in_cwd("same2.mscx")
@@ -141,7 +139,7 @@ class TestIntegration:
             "rename",
             "--skip-if-empty",
             "metatag_composer,metatag_source",
-            self._get("simple.mscx"),
+            get_file("simple.mscx"),
         )
         assert "Field “metatag_source” is empty! Skipping" in output
 
@@ -152,7 +150,7 @@ class TestIntegration:
             "rename",
             "--skip-if-empty",
             "metatag_composer,metatag_work_title",
-            self._get("simple.mscx"),
+            get_file("simple.mscx"),
         )
         target: str = self._target_path_cwd("Title (Composer).mscx")
         assert os.path.exists(target)
@@ -160,8 +158,20 @@ class TestIntegration:
         assert "Title (Composer).mscx" in output
         os.remove(target)
 
-    def test_rename_target(self, score: Score, tmp_path: Path) -> None:
-        Cli("rename", "--target", tmp_path, str(score.path), legacy=True).execute()
-        target: Path = tmp_path / "Title (Composer).mscz"
+    @pytest.mark.legacy
+    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli(
+            "rename",
+            "--target",
+            cwd_tmpdir,
+            score,
+            append_score=False,
+            legacy=True,
+        ).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
         assert target.exists()
-        target.unlink()
+
+    def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
+        assert target.exists()

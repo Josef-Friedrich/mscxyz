@@ -12,22 +12,22 @@ from tests.helper import Cli, assert_file_type
 
 
 class TestSpecifyMusescoreFiles:
-    def test_without_an_argument(self) -> None:
+    def test_without_an_argument(self, cwd_test_path: Path) -> None:
         assert (
-            "tests/files/by_version/4/score.mscz"
+            "files/by_version/4/score.mscz"
             in Cli("--list-files", append_score=False).stdout()
         )
 
-    def test_dot_to_specify_pwd(self) -> None:
+    def test_dot_to_specify_pwd(self, cwd_test_path: Path) -> None:
         assert (
-            "tests/files/by_version/4/nested-folders/level1/level2/level3/score3.mscz"
+            "files/by_version/4/nested-folders/level1/level2/level3/score3.mscz"
             in Cli("-L", ".").stdout()
         )
 
-    def test_pass_multiple_files(self) -> None:
-        file2 = "tests/files/by_version/2/score.mscz"
-        file3 = "tests/files/by_version/3/score.mscz"
-        file4 = "tests/files/by_version/4/score.mscz"
+    def test_pass_multiple_files(self, cwd_test_path: Path) -> None:
+        file2 = "files/by_version/2/score.mscz"
+        file3 = "files/by_version/3/score.mscz"
+        file4 = "files/by_version/4/score.mscz"
 
         stdout = Cli(
             "-L",
@@ -40,10 +40,10 @@ class TestSpecifyMusescoreFiles:
         assert file3 in stdout
         assert file4 in stdout
 
-    def test_pass_multiple_directories(self) -> None:
-        dir2 = "tests/files/by_version/2"
-        dir3 = "tests/files/by_version/3"
-        dir4 = "tests/files/by_version/4"
+    def test_pass_multiple_directories(self, cwd_test_path: Path) -> None:
+        dir2 = "files/by_version/2"
+        dir3 = "files/by_version/3"
+        dir4 = "files/by_version/4"
 
         stdout = Cli(
             "-L",
@@ -56,7 +56,7 @@ class TestSpecifyMusescoreFiles:
         assert dir3 in stdout
         assert dir4 in stdout
 
-    def test_glob(self) -> None:
+    def test_glob(self, cwd_test_path: Path) -> None:
         stdout = Cli(
             "-L", "--glob", "*/by_version/4/*.mscz", append_score=False
         ).stdout()
@@ -65,12 +65,12 @@ class TestSpecifyMusescoreFiles:
         assert "/by_version/3/" not in stdout
         assert ".mscx" not in stdout
 
-    def test_mscz_only(self) -> None:
+    def test_mscz_only(self, cwd_test_path: Path) -> None:
         stdout = Cli("-L", "--mscz", append_score=False).stdout()
         assert "score.mscz" in stdout
         assert "score.mscx" not in stdout
 
-    def test_mscx_only(self) -> None:
+    def test_mscx_only(self, cwd_test_path: Path) -> None:
         stdout = Cli("-L", "--mscx", append_score=False).stdout()
         assert "score.mscz" not in stdout
         assert "simple.mscx" in stdout

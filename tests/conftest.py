@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
+from typing import Any, Generator
 
 import pytest
 
@@ -63,3 +65,23 @@ def score_file() -> str:
 @pytest.fixture(autouse=True)
 def nested_dir() -> Path:
     return Path(helper.get_dir("nested-folders", version=4))
+
+
+def __chdir(dstdir: Path) -> Generator[Path, Any, None]:
+    """https://github.com/ar90n/pytest-chdir"""
+    lwd = os.getcwd()
+    os.chdir(dstdir)
+    try:
+        yield dstdir
+    finally:
+        os.chdir(lwd)
+
+
+@pytest.fixture
+def cwd_tmpdir(tmpdir: Path) -> Generator[Path, Any, None]:
+    yield from __chdir(tmpdir)
+
+
+@pytest.fixture
+def cwd_test_path() -> Generator[Path, Any, None]:
+    yield from __chdir(Path(__file__).parent)

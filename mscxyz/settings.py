@@ -51,8 +51,9 @@ class DefaultArguments:
     meta_combined: Optional[list[tuple[str, str]]] = None
 
     # rename
-    rename_alphanum = False
-    rename_ascii = False
+    rename_rename: bool = False
+    rename_alphanum: bool = False
+    rename_ascii: bool = False
     rename_format: str = "$combined_title ($combined_composer)"
     rename_no_whitespace = False
     rename_skip: Optional[str] = None

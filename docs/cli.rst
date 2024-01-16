@@ -12,8 +12,8 @@ Comande line interface
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--combined <field> <value>] [-x LYRICS_EXTRACT]
-                             [-r LYRICS_REMAP] [-F] [-f RENAME_FORMAT] [-A] [-a]
-                             [-n] [-K FIELDS] [-t RENAME_TARGET] [-L]
+                             [-r LYRICS_REMAP] [-F] [--rename] [-f RENAME_FORMAT]
+                             [-A] [-a] [-n] [-K FIELDS] [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
                              [--list-fonts] [--text-font <font-face>]
@@ -206,7 +206,7 @@ Comande line interface
                             correct hyphenation ("la - la - la")
 
     rename:
-      Rename the "*.mscx" files.Fields and functions you can use in the format string (-f, --format):
+      Rename the “*.msc[zx]” files.Fields and functions you can use in the format string (-f, --format):
 
       Fields
       ======
@@ -401,6 +401,7 @@ Comande line interface
           %upper{text}
               Convert “text” to UPPERCASE.
 
+      --rename              Format string.
       -f RENAME_FORMAT, --format RENAME_FORMAT
                             Format string.
       -A, --alphanum        Use only alphanumeric characters.
