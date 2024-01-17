@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -869,10 +868,12 @@ class TestStdout:
 class TestOptionSetField:
     @pytest.mark.legacy
     def test_simple_string_legacy(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli("meta", "--set-field", "vbox_title", "test", tmp, legacy=True).execute()
-        i = reload(tmp)
-        assert i.vbox_title == "test"
+        c = (
+            Cli("meta", "--set-field", "vbox_title", "test", legacy=True)
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        assert c.post.meta.interface.vbox_title == "test"
 
     def test_simple_string(self) -> None:
         c = (
@@ -884,19 +885,21 @@ class TestOptionSetField:
 
     @pytest.mark.legacy
     def test_multiple_times_legacy(self) -> None:
-        tmp = helper.get_score("meta-all-values.mscx")
-        Cli(
-            "meta",
-            "--set-field",
-            "vbox_title",
-            "vt",
-            "--set-field",
-            "vbox_composer",
-            "vc",
-            tmp,
-            legacy=True,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "meta",
+                "--set-field",
+                "vbox_title",
+                "vt",
+                "--set-field",
+                "vbox_composer",
+                "vc",
+                legacy=True,
+            )
+            .append_score("meta-all-values.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.vbox_title == "vt"
         assert i.vbox_composer == "vc"
 
@@ -945,11 +948,10 @@ class TestOptionSetField:
         assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
 
 
-def test_log() -> None:
-    tmp = helper.get_score("simple.mscx")
-    log = tempfile.mktemp()
+def test_log(tmp_path: Path) -> None:
+    log: Path = tmp_path / "log.txt"
     Cli(
-        "meta", "--log", log, "$combined_title-$combined_composer", tmp, legacy=True
+        "meta", "--log", log, "$combined_title-$combined_composer", legacy=True
     ).execute()
     log_file = open(log, "r")
     assert log_file.readline() == "Title-Composer\n"
@@ -958,9 +960,12 @@ def test_log() -> None:
 class TestOptionDeleteDuplicates:
     @pytest.mark.legacy
     def test_normal_legacy(self) -> None:
-        tmp = helper.get_score("meta-duplicates.mscx")
-        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
-        i = reload(tmp)
+        c = (
+            Cli("meta", "--delete-duplicates", legacy=True)
+            .append_score("meta-duplicates.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
 
@@ -972,9 +977,12 @@ class TestOptionDeleteDuplicates:
 
     @pytest.mark.legacy
     def test_move_subtitle_legacy(self) -> None:
-        tmp = helper.get_score("meta-duplicates-move-subtitle.mscx")
-        Cli("meta", "--delete-duplicates", tmp, legacy=True).execute()
-        i = reload(tmp)
+        c = (
+            Cli("meta", "--delete-duplicates", legacy=True)
+            .append_score("meta-duplicates-move-subtitle.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
         assert i.combined_title == "Title"
