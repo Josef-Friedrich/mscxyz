@@ -1074,7 +1074,7 @@ def test_option_synchronize() -> None:
 
 class TestOptionJson:
     @pytest.mark.legacy
-    def test_legacy(self):
+    def test_legacy(self) -> None:
         score = (
             Cli("meta", "--json", legacy=True)
             .append_score("meta-all-values.mscz")
@@ -1084,7 +1084,7 @@ class TestOptionJson:
         assert json.exists()
         assert '"readonly_basename": "meta-all-values"' in helper.read_file(json)
 
-    def test_json(self):
+    def test_json(self) -> None:
         score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
         json = score.json_file
         assert json.exists()
