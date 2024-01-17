@@ -236,6 +236,43 @@ Use one of the following autocomplete files ...
     musescore-manager --print-completion zsh > autocomplete.zsh
     musescore-manager --print-completion tcsh > autocomplete.tcsh
 
+... rename many files at once?
+
+The following example assumes that the folder ``/home/xyz/messy-leadsheets``
+contains the following three MuseScore files: ``folsom prison blues.mscz``,
+``Johnny Cash - I Walk the Line.mscz``, ``Jackson (Cash).mscz``
+The files are named arbitrarily without any recognizable pattern, but they have a
+title in the first vertical frame (VBox).
+
+{% raw %}
+
+The files should be moved to a target directory (``--target /home/xyz/tidy-leadsheets``) and
+the file names should not contain any spaces (``--no-whitespace``).
+The title should be used as the file name (``--format '$vbox_title'``).
+The individual files should be stored in subdirectories named after the first
+letter of the title (``--format '%lower{%shorten{$vbox_title,1}}/...'``)
+
+::
+
+    musescore-manager --rename \
+        --target /home/xyz/tidy-leadsheets \
+        --format '%lower{%shorten{$vbox_title,1}}/$vbox_title' \
+        --no-whitespace \
+        /home/xyz/messy-leadsheets
+
+
+{% endraw %}
+
+After executing the above command on the command line, ``find /home/xyz/tidy-leadsheets``
+should show the following output:
+
+::
+
+    i/I-Walk-the-Line.mscz
+    j/Jackson.mscz
+    f/Folsom-Prison-Blues.mscz
+
+
 CLI Usage
 =========
 
