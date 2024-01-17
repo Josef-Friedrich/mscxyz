@@ -293,14 +293,15 @@ group_meta.add_argument(
     "--json",
     action="store_true",
     dest="meta_json",
-    help="Additionally write the meta data to a json file.",
+    help="Write the meta data to a json file. The resulting file has the same "
+    "path as the input file, only the extension is changed to “json”.",
 )
 
 group_meta.add_argument(
     "-l",
     "--log",
     nargs=2,
-    metavar=("DESTINATION", "FORMAT_STRING"),
+    metavar=("<log-file>", "<format-string>"),
     dest="meta_log",
     help="Write one line per file to a text file. e. g. --log "
     "/tmp/musescore-manager.log '$title $composer'",
@@ -815,8 +816,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if args.meta_clean:
             score.meta.clean_metadata(fields_spec=args.meta_clean)
 
-        #             if args.meta_json:
-        #                 score.meta.export_json()
+        if args.meta_json:
+            score.meta.export_json()
+
         if args.meta_dist:
             for a in args.meta_dist:
                 score.meta.distribute_field(source_fields=a[0], format_string=a[1])
@@ -826,13 +828,12 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         if args.meta_sync:
             score.meta.sync_fields()
-        #             if args.meta_log:
-        #                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+
+        if args.meta_log:
+            score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+
         #             post: dict[str, str] = score.meta.interface.export_to_dict()
         #             score.meta.show(pre, post)
-
-        #             if not args.general_dry_run and not score.errors and pre != post:
-        #                 score.save(mscore=args.general_mscore)
 
         if args.rename_rename:
             rename(score)

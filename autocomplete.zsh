@@ -26,7 +26,7 @@ _shtab_musescore_manager_options=(
   {-c,--clean-meta}"[Clean the meta data fields. Possible values\: \„all\“ or a comma separated list of fields, for example\: \„field_one,field_two\“.]:meta_clean:"
   {-D,--delete-duplicates}"[Deletes combined_lyricist if this field is equal to combined_composer. Deletes combined_subtitle if this field is equal tocombined_title. Move combined_subtitle to combimed_title if combined_title is empty.]"
   "*"{-i,--distribute-fields}"[Distribute source fields to target fields by applying a format string on the source fields. It is possible to apply multiple --distribute-fields options. \<source-fields\> can be a single field or a comma separated list of fields\: field_one,field_two. The program tries first to match the \<format-string\> on the first source field. If thisfails, it tries the second source field ... and so on.]:meta_dist:"
-  {-j,--json}"[Additionally write the meta data to a json file.]"
+  {-j,--json}"[Write the meta data to a json file. The resulting file has the same path as the input file, only the extension is changed to \“json\”.]"
   {-l,--log}"[Write one line per file to a text file. e. g. --log \/tmp\/musescore-manager.log \'\$title \$composer\']:meta_log:"
   {-y,--synchronize}"[Synchronize the values of the first vertical frame (vbox) (title, subtitle, composer, lyricist) with the corresponding metadata fields]"
   "*"{-S,--set-field}"[Set value to meta data fields.]:meta_set:"

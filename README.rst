@@ -244,7 +244,7 @@ CLI Usage
                              [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m] [--diff]
                              [-e FILE_PATH] [-v] [-E <extension>] [-c META_CLEAN]
                              [-D] [-i <source-fields> <format-string>] [-j]
-                             [-l DESTINATION FORMAT_STRING] [-y]
+                             [-l <log-file> <format-string>] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--combined <field> <value>] [-x LYRICS_EXTRACT]
@@ -403,8 +403,10 @@ CLI Usage
                             field_one,field_two. The program tries first to match the
                             <format-string> on the first source field. If thisfails, it
                             tries the second source field ... and so on.
-      -j, --json            Additionally write the meta data to a json file.
-      -l DESTINATION FORMAT_STRING, --log DESTINATION FORMAT_STRING
+      -j, --json            Write the meta data to a json file. The resulting file has
+                            the same path as the input file, only the extension is
+                            changed to “json”.
+      -l <log-file> <format-string>, --log <log-file> <format-string>
                             Write one line per file to a text file. e. g. --log
                             /tmp/musescore-manager.log '$title $composer'
       -y, --synchronize     Synchronize the values of the first vertical frame (vbox)

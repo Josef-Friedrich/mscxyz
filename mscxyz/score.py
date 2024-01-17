@@ -95,7 +95,13 @@ class Score:
 
     @property
     def backup_file(self) -> Path:
+        """The path of the backup file."""
         return self.change_path(suffix="bak")
+
+    @property
+    def json_file(self) -> Path:
+        """The path of the JSON file in which the metadata is saved."""
+        return self.change_path(extension="json")
 
     @property
     def dirname(self) -> str:

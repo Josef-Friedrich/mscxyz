@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -945,14 +944,19 @@ class TestOptionSetField:
         assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
 
 
-def test_log() -> None:
-    tmp = helper.get_score("simple.mscx")
-    log = tempfile.mktemp()
-    Cli(
-        "meta", "--log", log, "$combined_title-$combined_composer", tmp, legacy=True
-    ).execute()
-    log_file = open(log, "r")
-    assert log_file.readline() == "Title-Composer\n"
+class TestOptionLog:
+    @pytest.mark.legacy
+    def test_log_legacy(self, tmp_path: Path) -> None:
+        log = tmp_path / "log.txt"
+        Cli(
+            "meta", "--log", log, "$combined_title-$combined_composer", legacy=True
+        ).execute()
+        assert open(log, "r").readline() == "Title-Composer\n"
+
+    def test_log(self, tmp_path: Path) -> None:
+        log = tmp_path / "log.txt"
+        Cli("--log", log, "$combined_title-$combined_composer").execute()
+        assert open(log, "r").readline() == "Title-Composer\n"
 
 
 class TestOptionDeleteDuplicates:
@@ -1056,6 +1060,25 @@ def test_option_synchronize() -> None:
     assert pre.metatag.lyricist == "metatag_lyricist"
     # post
     assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
+
+
+class TestOptionJson:
+    @pytest.mark.legacy
+    def test_legacy(self):
+        score = (
+            Cli("meta", "--json", legacy=True)
+            .append_score("meta-all-values.mscz")
+            .execute()
+        ).score()
+        json = score.json_file
+        assert json.exists()
+        assert '"readonly_basename": "meta-all-values"' in helper.read_file(json)
+
+    def test_json(self):
+        score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
+        json = score.json_file
+        assert json.exists()
+        assert '"readonly_basename": "meta-all-values"' in helper.read_file(json)
 
 
 class TestClassMeta:
