@@ -148,15 +148,15 @@ class TestIntegration:
     @pytest.mark.legacy
     def test_ascii_legacy(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "rename", "--ascii", get_file("unicode.mscx"), legacy=True
-        ).stdout()
-        filename = "Tuetlae (Coempoesser).mscx"
+            "rename", "--ascii", legacy=True
+        ).append_score("unicode.mscz").stdout()
+        filename = "Tuetlae (Coempoesser).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
     def test_ascii(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli("--rename", "--ascii", get_file("unicode.mscx")).stdout()
-        filename = "Tuetlae (Coempoesser).mscx"
+        stdout: str = Cli("--rename", "--ascii").append_score("unicode.mscz").stdout()
+        filename = "Tuetlae (Coempoesser).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
@@ -199,7 +199,6 @@ class TestIntegration:
                 "rename",
                 "--skip-if-empty",
                 "metatag_composer,metatag_source",
-                get_file("simple.mscx"),
                 legacy=True,
             ).stdout()
         )

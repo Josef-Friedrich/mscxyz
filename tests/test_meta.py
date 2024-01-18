@@ -496,36 +496,40 @@ class TestOptionDistributeField:
 
     @pytest.mark.legacy
     def test_distribute_field_multiple_values_legacy(self) -> None:
-        tmp = helper.get_score("meta-distribute-field.mscx")
-        Cli(
-            "meta",
-            "--distribute-field",
-            "vbox_title",
-            "$metatag_work_title - $metatag_composer",
-            "--distribute-field",
-            "vbox_title",
-            "$metatag_movement_title - $metatag_lyricist",
-            tmp,
-            legacy=True,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "meta",
+                "--distribute-field",
+                "vbox_title",
+                "$metatag_work_title - $metatag_composer",
+                "--distribute-field",
+                "vbox_title",
+                "$metatag_movement_title - $metatag_lyricist",
+                legacy=True,
+            )
+            .append_score("meta-distribute-field.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.metatag_lyricist == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.metatag_movement_title == "Title"
         assert i.metatag_work_title == "Title"
 
     def test_distribute_field_multiple_values(self) -> None:
-        tmp = helper.get_score("meta-distribute-field.mscz", 4)
-        Cli(
-            "--distribute-field",
-            "vbox_title",
-            "$metatag_work_title - $metatag_composer",
-            "--distribute-field",
-            "vbox_title",
-            "$metatag_movement_title - $metatag_lyricist",
-            tmp,
-        ).execute()
-        i = reload(tmp)
+        c = (
+            Cli(
+                "--distribute-field",
+                "vbox_title",
+                "$metatag_work_title - $metatag_composer",
+                "--distribute-field",
+                "vbox_title",
+                "$metatag_movement_title - $metatag_lyricist",
+            )
+            .append_score("meta-distribute-field.mscz")
+            .execute()
+        )
+        i = c.post.meta.interface
         assert i.metatag_lyricist == "Composer"
         assert i.metatag_composer == "Composer"
         assert i.metatag_movement_title == "Title"
@@ -539,9 +543,8 @@ class TestOptionDistributeField:
                 "--distribute-field",
                 "vbox_title",
                 "lol",
-                helper.get_score("meta-distribute-field.mscx"),
                 legacy=True,
-            ).execute()
+            ).append_score("meta-distribute-field.mscz").execute()
 
     def test_distribute_field_invalid_format_string(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
@@ -549,8 +552,7 @@ class TestOptionDistributeField:
                 "--distribute-field",
                 "vbox_title",
                 "lol",
-                helper.get_score("meta-distribute-field.mscz", 4),
-            ).execute()
+            ).append_score("meta-distribute-field.mscz").execute()
 
     @pytest.mark.legacy
     def test_distribute_field_exception_unmatched_legacy(self) -> None:
@@ -559,7 +561,6 @@ class TestOptionDistributeField:
             "--distribute-field",
             "vbox_title",
             "$metatag_work_title - $metatag_composer",
-            helper.get_score("simple.mscx"),
             legacy=True,
         ).stdout()
         assert "UnmatchedFormatStringError" in stdout
@@ -569,7 +570,6 @@ class TestOptionDistributeField:
             "--distribute-field",
             "vbox_title",
             "$metatag_work_title - $metatag_composer",
-            helper.get_score("simple.mscx"),
         ).stdout()
         assert "UnmatchedFormatStringError" in stdout
 
@@ -639,19 +639,22 @@ class TestOptionClean:
 
 class TestStdout:
     def test_show(self) -> None:
-        stdout = Cli(
-            "--config-file",
-            ini_file,
-            "meta",
-            "--clean",
-            "all",
-            helper.get_score("meta-all-values.mscx"),
-            legacy=True,
-        ).stdout()
+        stdout = (
+            Cli(
+                "--config-file",
+                ini_file,
+                "meta",
+                "--clean",
+                "all",
+                legacy=True,
+            )
+            .append_score("meta-all-values.mscz")
+            .stdout()
+        )
 
         lines = stdout.splitlines()
         assert lines[0] == ""
-        assert "meta-all-values.mscx" in stdout
+        assert "meta-all-values.mscz" in stdout
         assert lines[-1] == "vbox_title: “vbox_title” -> “”"
 
     def test_show_simple_unverbose(self) -> None:
@@ -661,12 +664,11 @@ class TestStdout:
             "meta",
             "--clean",
             "all",
-            helper.get_score("simple.mscx"),
             legacy=True,
         ).stdout()
         lines = stdout.splitlines()
         assert lines[0] == ""
-        assert "simple.mscx" in stdout
+        assert "score.mscz" in stdout
         assert lines[2] == "combined_composer: “Composer” -> “”"
         assert lines[3] == "combined_title: “Title” -> “”"
         assert lines[-1] == "vbox_title: “Title” -> “”"
@@ -679,29 +681,24 @@ class TestStdout:
             "meta",
             "--clean",
             "all",
-            helper.get_score("simple.mscx"),
             legacy=True,
         ).stdout()
         lines = stdout.splitlines()
         assert lines[0] == ""
-        assert "simple.mscx" in stdout
+        assert "score.mscz" in stdout
         assert lines[2] == "combined_composer: “Composer” -> “”"
         assert lines[3] == "combined_lyricist: "
         assert lines[-2] == "vbox_subtitle: "
         assert lines[-1] == "vbox_title: “Title” -> “”"
 
     def test_show_verbose_zero(self) -> None:
-        stdout = Cli(
-            "meta", "--clean", "all", helper.get_score("simple.mscx"), legacy=True
-        ).stdout()
+        stdout = Cli("meta", "--clean", "all", legacy=True).stdout()
         assert "readonly_basename" in stdout
         assert "readonly_abspath" not in stdout
         assert "readonly_relpath_backup" not in stdout
 
     def test_show_verbose_one(self) -> None:
-        stdout = Cli(
-            "-v", "meta", "--clean", "all", helper.get_score("simple.mscx"), legacy=True
-        ).stdout()
+        stdout = Cli("-v", "meta", "--clean", "all", legacy=True).stdout()
         assert "readonly_abspath" in stdout
         assert "readonly_relpath_backup" not in stdout
 
@@ -713,7 +710,6 @@ class TestStdout:
                 "meta",
                 "--clean",
                 "all",
-                helper.get_score("simple.mscx"),
                 legacy=True,
             ).stdout()
         )
