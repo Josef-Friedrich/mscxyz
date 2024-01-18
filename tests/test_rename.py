@@ -121,9 +121,11 @@ class TestIntegration:
         assert filename in stdout
 
     def test_no_whitespace(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "--rename", "--no-whitespace", get_file("meta-real-world.mscz", 4)
-        ).stdout()
+        stdout: str = (
+            Cli("--rename", "--no-whitespace")
+            .append_score("meta-real-world.mscz")
+            .stdout()
+        )
         filename = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
@@ -138,9 +140,14 @@ class TestIntegration:
         assert filename in stdout
 
     def test_alphanum(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "--rename", "--alphanum", get_file("meta-all-values.mscz", 4)
-        ).stdout()
+        stdout: str = (
+            Cli(
+                "--rename",
+                "--alphanum",
+            )
+            .append_score("meta-all-values.mscz")
+            .stdout()
+        )
         filename = "vbox title (vbox composer).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
@@ -148,9 +155,9 @@ class TestIntegration:
     @pytest.mark.legacy
     def test_ascii_legacy(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "rename", "--ascii", legacy=True
-        ).append_score("unicode.mscz").stdout()
-        filename = "Tuetlae (Coempoesser).mscz"
+            "rename", "--ascii", get_file("unicode.mscx"), legacy=True
+        ).stdout()
+        filename = "Tuetlae (Coempoesser).mscx"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
@@ -191,26 +198,6 @@ class TestIntegration:
         assert Path(cwd_tmpdir / "same2.mscx").exists()
         assert Path(cwd_tmpdir / "same3.mscx").exists()
 
-    @pytest.mark.legacy
-    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli(
-            "rename",
-            "--target",
-            cwd_tmpdir,
-            score,
-            append_score=False,
-            legacy=True,
-        ).execute()
-        target: Path = cwd_tmpdir / "Title (Composer).mscz"
-        assert target.exists()
-
-    def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
-        target: Path = cwd_tmpdir / "Title (Composer).mscz"
-        assert target.exists()
-
-
-class TestOptionSkipIfEmpty:
     @pytest.mark.legacy
     def test_rename_skips_legacy(self) -> None:
         assert (
@@ -262,3 +249,21 @@ class TestOptionSkipIfEmpty:
         assert target.exists()
         assert "score.mscz -> " in stdout
         assert filename in stdout
+
+    @pytest.mark.legacy
+    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli(
+            "rename",
+            "--target",
+            cwd_tmpdir,
+            score,
+            append_score=False,
+            legacy=True,
+        ).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
+        assert target.exists()
+
+    def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
+        assert target.exists()
