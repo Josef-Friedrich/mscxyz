@@ -192,6 +192,26 @@ class TestIntegration:
         assert Path(cwd_tmpdir / "same3.mscx").exists()
 
     @pytest.mark.legacy
+    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli(
+            "rename",
+            "--target",
+            cwd_tmpdir,
+            score,
+            append_score=False,
+            legacy=True,
+        ).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
+        assert target.exists()
+
+    def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
+        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
+        target: Path = cwd_tmpdir / "Title (Composer).mscz"
+        assert target.exists()
+
+
+class TestOptionSkipIfEmpty:
+    @pytest.mark.legacy
     def test_rename_skips_legacy(self) -> None:
         assert (
             "Field “metatag_source” is empty! Skipping"
@@ -242,21 +262,3 @@ class TestIntegration:
         assert target.exists()
         assert "score.mscz -> " in stdout
         assert filename in stdout
-
-    @pytest.mark.legacy
-    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli(
-            "rename",
-            "--target",
-            cwd_tmpdir,
-            score,
-            append_score=False,
-            legacy=True,
-        ).execute()
-        target: Path = cwd_tmpdir / "Title (Composer).mscz"
-        assert target.exists()
-
-    def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
-        target: Path = cwd_tmpdir / "Title (Composer).mscz"
-        assert target.exists()
