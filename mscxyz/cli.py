@@ -714,6 +714,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
         # style
 
+        if args.style_clean:
+            score.style.clean()
+
         for style_name, value in args.style_value:
             score.style.set(style_name, value)
 
@@ -749,11 +752,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             score.style.show_footer = args.style_show_footer
 
         #     print("\n" + utils.color(file, "red"))
-
-        #     if args.subcommand == "clean":
-        #         score = Score(file)
-        #         print(score.filename)
-        #         score.clean()
 
         #     elif args.subcommand == "lyrics":
         #         score = Score(file)

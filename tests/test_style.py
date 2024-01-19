@@ -317,7 +317,8 @@ def test_method_set_all(styles: str) -> None:
 
 
 class TestClean:
-    def test_clean(self) -> None:
+    @pytest.mark.legacy
+    def test_clean_legacy(self) -> None:
         c = Cli("clean", legacy=True).append_score("formats.mscz").execute()
 
         uncleaned: str = c.pre.read_as_text()
@@ -336,14 +337,41 @@ class TestClean:
         assert "<LayoutBreak>" not in cleaned
         assert "<StemDirection>" not in cleaned
 
-    def test_clean_add_style(self) -> None:
+    def test_clean(self) -> None:
+        c = Cli("--clean").append_score("formats.mscz").execute()
+
+        uncleaned: str = c.pre.read_as_text()
+        assert "<font" in uncleaned
+        assert "<b>" in uncleaned
+        assert "<i>" in uncleaned
+        # assert "<pos" in uncleaned
+        assert "<LayoutBreak>" in uncleaned
+        assert "<StemDirection>" in uncleaned
+
+        cleaned: str = c.post.read_as_text()
+        assert "<font" not in cleaned
+        assert "<b>" not in cleaned
+        assert "<i>" not in cleaned
+        assert "<pos" not in cleaned
+        assert "<LayoutBreak>" not in cleaned
+        assert "<StemDirection>" not in cleaned
+
+    @pytest.mark.legacy
+    def test_clean_add_style_legacy(self) -> None:
         score = (
             Cli("clean", "--style", helper.get_score("style.mss", 2), legacy=True)
             .append_score("simple.mscx", 2)
             .score()
         )
-        style = score.read_as_text()
-        assert "<staffUpperBorder>77</staffUpperBorder>" in style
+        assert "<staffUpperBorder>77</staffUpperBorder>" in score.read_as_text()
+
+    def test_clean_add_style(self) -> None:
+        score = (
+            Cli("--clean", "--style-file", helper.get_file("Jazz.mss", 4))
+            .append_score("score.mscz")
+            .score()
+        )
+        assert "<musicalSymbolFont>MuseJazz</musicalSymbolFont>" in score.read_as_text()
 
 
 def test_load_style_file() -> None:
