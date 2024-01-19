@@ -104,13 +104,6 @@ def reload(src: Score | str | Path) -> Score:
     return Score(src.path)
 
 
-def read_file(filename: str | Path) -> str:
-    tmp = open(filename)
-    output = tmp.read()
-    tmp.close()
-    return output
-
-
 def get_file_type(file: str | Path) -> str:
     """Get the type of a file using the `file` command."""
     output: str = subprocess.check_output(

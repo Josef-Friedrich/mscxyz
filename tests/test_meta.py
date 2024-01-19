@@ -9,7 +9,7 @@ import pytest
 
 import mscxyz
 import mscxyz.meta
-from mscxyz import meta, supported_versions
+from mscxyz import meta, supported_versions, utils
 from mscxyz.meta import (
     Interface,
     InterfaceReadOnly,
@@ -1078,13 +1078,13 @@ class TestOptionJson:
         ).score()
         json = score.json_file
         assert json.exists()
-        assert '"readonly_basename": "meta-all-values"' in helper.read_file(json)
+        assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
 
     def test_json(self) -> None:
         score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
         json = score.json_file
         assert json.exists()
-        assert '"readonly_basename": "meta-all-values"' in helper.read_file(json)
+        assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
 
 
 class TestClassMeta:
@@ -1114,7 +1114,7 @@ class TestClassMeta:
         result_path: Path = self.meta.export_json()
         assert result_path.exists()
 
-        json: str = helper.read_file(result_path)
+        json: str = utils.read_file(result_path)
         # json = (
         #     '{\n    "combined_composer": "vbox_composer",\n'
         #     '    "combined_lyricist": "vbox_lyricist",\n'

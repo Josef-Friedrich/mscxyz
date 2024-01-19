@@ -591,3 +591,12 @@ class ZipContainer:
             for file_name in files:
                 zip.write(root / file_name, relpath / file_name)
         zip.close()
+
+
+def read_file(filename: str | Path) -> str:
+    """Read the MuseScore XML file as text.
+
+    :return: The content of the MuseScore XML file as text.
+    """
+    with open(filename, "r") as f:
+        return f.read()

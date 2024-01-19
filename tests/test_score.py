@@ -62,14 +62,12 @@ class TestClassScore:
     def test_method_save(self) -> None:
         score: Score = helper.get_score("simple.mscx")
         score.save()
-        result = helper.read_file(score.path)
-        assert '<metaTag name="arranger"></metaTag>' in result
+        assert '<metaTag name="arranger"></metaTag>' in score.read_as_text()
 
     def test_method_save_new_name(self) -> None:
         score: Score = helper.get_score("simple.mscx")
         score.save(new_dest=str(score.path))
-        result = helper.read_file(score.path)
-        assert '<metaTag name="arranger"></metaTag>' in result
+        assert '<metaTag name="arranger"></metaTag>' in score.read_as_text()
 
     def test_mscz(self) -> None:
         score: Score = helper.get_score("simple.mscz")

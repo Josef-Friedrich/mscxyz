@@ -155,7 +155,7 @@ def test_xml_write(tmp_path: Path) -> None:
     dest = tmp_path / "test.xml"
     element = lxml.etree.XML("<root><a><b/><c/></a><d><e/></d></root>")
     utils.xml.write(dest, element)
-    result: str = helper.read_file(dest)
+    result: str = utils.read_file(dest)
     print(result)
     assert result == (
         '<?xml version="1.0" encoding="UTF-8"?>\n'

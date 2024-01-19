@@ -283,8 +283,7 @@ class Score:
 
         :return: The content of the MuseScore XML file as text.
         """
-        with open(self.xml_file, "r") as f:
-            return f.read()
+        return utils.read_file(self.xml_file)
 
     def reload(self, save: bool = False) -> Score:
         """
