@@ -156,15 +156,6 @@ parser.add_argument(
 ###############################################################################
 
 ###############################################################################
-# clean
-###############################################################################
-
-group_clean = parser.add_argument_group(
-    "clean",
-    'Clean and reset the formating of the "*.mscx" file',
-)
-
-###############################################################################
 # export
 ###############################################################################
 
@@ -530,8 +521,15 @@ group_style.add_argument(
     help="Set a single style value. For example: --style pageWidth 8.5",
 )
 
+group_style.add_argument(
+    "--clean",
+    dest="style_clean",
+    action="store_true",
+    help='Clean and reset the formating of the "*.mscx" file',
+)
+
 file_completers.append(
-    group_clean.add_argument(
+    group_style.add_argument(
         "-Y",
         "--style-file",
         dest="style_file",

@@ -15,8 +15,8 @@ Comande line interface
                              [-r LYRICS_REMAP] [-F] [--rename] [-f RENAME_FORMAT]
                              [-A] [-a] [-n] [-K FIELDS] [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
-                             [-s <style-name> <value>] [-Y <file>] [--s3] [--s4]
-                             [--list-fonts] [--text-font <font-face>]
+                             [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
+                             [--s4] [--list-fonts] [--text-font <font-face>]
                              [--title-font <font-face>]
                              [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
@@ -59,13 +59,6 @@ Comande line interface
                             https://musescore.org/en/handbook/4/file-export. MuseScore
                             must be installed and the script must know the location of
                             the binary file.
-
-    clean:
-      Clean and reset the formating of the "*.mscx" file
-
-      -Y <file>, --style-file <file>
-                            Load a "*.mss" style file and include the contents of this
-                            file.
 
     meta:
       Deal with meta data informations stored in the MuseScore file. MuseScore can store meta data informations in different places:
@@ -432,6 +425,10 @@ Comande line interface
 
       -s <style-name> <value>, --style <style-name> <value>
                             Set a single style value. For example: --style pageWidth 8.5
+      --clean               Clean and reset the formating of the "*.mscx" file
+      -Y <file>, --style-file <file>
+                            Load a "*.mss" style file and include the contents of this
+                            file.
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
       --list-fonts          List all font related styles.

@@ -67,6 +67,7 @@ class DefaultArguments:
 
     # style
     style_value: list[tuple[str, str]] = []
+    style_clean: bool = False
     style_file: Optional[TextIOWrapper] = None
     style_styles_v3: bool = False
     style_styles_v4: bool = False

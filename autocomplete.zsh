@@ -48,6 +48,7 @@ _shtab_musescore_manager_options=(
   "--mscz[Take only \"\*.mscz\" files into account.]"
   "--mscx[Take only \"\*.mscx\" files into account.]"
   "*"{-s,--style}"[Set a single style value. For example\: --style pageWidth 8.5]:style_value:"
+  "--clean[Clean and reset the formating of the \"\*.mscx\" file]"
   {-Y,--style-file}"[Load a \"\*.mss\" style file and include the contents of this file.]:style_file:_files"
   {--s3,--styles-v3}"[List all possible version 3 styles.]"
   {--s4,--styles-v4}"[List all possible version 4 styles.]"
