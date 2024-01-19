@@ -752,13 +752,12 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             score.style.show_footer = args.style_show_footer
 
         #     print("\n" + utils.color(file, "red"))
-
-        #     elif args.subcommand == "lyrics":
-        #         score = Score(file)
         if args.lyrics_remap:
             score.lyrics.remap(args.lyrics_remap)
-        #         elif args.lyrics_fix:
-        #             score.lyrics.fix_lyrics(mscore=args.general_mscore)
+
+        if args.lyrics_fix:
+            score.lyrics.fix_lyrics(mscore=args.general_mscore)
+
         if args.lyrics_extract:
             no = 0
             if args.lyrics_extract != "all":

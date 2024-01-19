@@ -6,6 +6,7 @@ from typing import Sequence
 
 import pytest
 
+import mscxyz
 from mscxyz import Score, utils
 from tests import helper
 from tests.helper import Cli
@@ -70,10 +71,17 @@ class TestLyricsExtraction:
 
 
 class TestLyricsFix:
-    def _test_fix(self, version: int = 2) -> None:
-        score_path = helper.get_file("lyrics-fix.mscx", version)
-        Cli("lyrics", "--fix", score_path, legacy=True).execute()
-        score = helper.reload(score_path)
+    @pytest.mark.legacy
+    @pytest.mark.parametrize(
+        "version",
+        mscxyz.supported_versions,
+    )
+    def test_fix_legacy(self, version: int) -> None:
+        score = (
+            Cli("lyrics", "--fix", legacy=True)
+            .append_score("lyrics-fix.mscx", version)
+            .score()
+        )
         self.lyrics = score.lyrics.elements
 
         text: list[str] = []
@@ -105,6 +113,7 @@ class TestLyricsFix:
             "lein.",
             "lein.",
         ]
+
         assert syllabic == [
             "begin",
             "begin",
@@ -122,9 +131,60 @@ class TestLyricsFix:
             "end",
         ]
 
-    def test_fix(self) -> None:
-        self._test_fix(version=2)
-        self._test_fix(version=3)
+    @pytest.mark.parametrize(
+        "version",
+        mscxyz.supported_versions,
+    )
+    def test_fix(self, version: int) -> None:
+        score = Cli("--fix-lyrics").append_score("lyrics-fix.mscx", version).score()
+        self.lyrics = score.lyrics.elements
+
+        text: list[str] = []
+        syllabic: list[str] = []
+        for element in self.lyrics:
+            tag = element.element
+            tag_text = tag.find("text")
+
+            text.append(utils.xml.get_text_safe(tag_text))
+            tag_syllabic = tag.find("syllabic")
+
+            syllabic_text = utils.xml.get_text(tag_syllabic)
+            if syllabic_text:
+                syllabic.append(syllabic_text)
+
+        assert text == [
+            "Al",
+            "K\xf6pf",
+            "le",
+            "chen",
+            "mei",
+            "un",
+            "ne",
+            "ters",
+            "En",
+            "Was",
+            "te",
+            "si",
+            "lein.",
+            "lein.",
+        ]
+
+        assert syllabic == [
+            "begin",
+            "begin",
+            "end",
+            "end",
+            "begin",
+            "begin",
+            "end",
+            "end",
+            "begin",
+            "begin",
+            "middle",
+            "middle",
+            "end",
+            "end",
+        ]
 
 
 class TestLyricsRemap:

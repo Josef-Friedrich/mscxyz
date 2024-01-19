@@ -594,9 +594,9 @@ class ZipContainer:
 
 
 def read_file(filename: str | Path) -> str:
-    """Read the MuseScore XML file as text.
+    """Read the file as text.
 
-    :return: The content of the MuseScore XML file as text.
+    :return: The content of file as text.
     """
     with open(filename, "r") as f:
         return f.read()
