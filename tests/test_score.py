@@ -17,7 +17,6 @@ from mscxyz.score import (
     Score,
 )
 from tests import helper
-from tests.helper import Cli
 
 
 class TestClassScore:
@@ -59,21 +58,6 @@ class TestClassScore:
 
     def test_property_basename(self) -> None:
         assert self.score.basename == "simple"
-
-    def test_method_clean(self) -> None:
-        score = helper.get_score("clean.mscx", version=3)
-        score.clean()
-        score.save()
-        score = Score(str(score.path))
-        xml_tree = score.xml_root
-        assert xml_tree.xpath("/museScore/Score/Style") == []
-        assert xml_tree.xpath("//LayoutBreak") == []
-        assert xml_tree.xpath("//StemDirection") == []
-        assert xml_tree.xpath("//font") == []
-        assert xml_tree.xpath("//b") == []
-        assert xml_tree.xpath("//i") == []
-        assert xml_tree.xpath("//pos") == []
-        assert xml_tree.xpath("//offset") == []
 
     def test_method_save(self) -> None:
         score: Score = helper.get_score("simple.mscx")
@@ -155,35 +139,6 @@ def test_methods_reload(score: Score) -> None:
     assert score.lyrics.reload().__class__.__name__ == "Lyrics"
     assert score.meta.reload().__class__.__name__ == "Meta"
     assert score.style.reload().__class__.__name__ == "Style"
-
-
-class TestClean:
-    def _test_clean(self, version: int = 2) -> None:
-        tmp: str = helper.get_file("formats.mscx", version)
-        Cli("clean", tmp, legacy=True).execute()
-        cleaned: str = helper.read_file(tmp)
-        assert "<font" not in cleaned
-        assert "<b>" not in cleaned
-        assert "<i>" not in cleaned
-        assert "<pos" not in cleaned
-        assert "<LayoutBreak>" not in cleaned
-        assert "<StemDirection>" not in cleaned
-
-    def test_clean(self) -> None:
-        self._test_clean(version=2)
-        self._test_clean(version=3)
-
-    def _test_clean_add_style(self, version: int = 2) -> None:
-        tmp = helper.get_file("simple.mscx", version)
-        Cli(
-            "clean", "--style", helper.get_score("style.mss", version), tmp, legacy=True
-        ).execute()
-        style = helper.read_file(tmp)
-        assert "<staffUpperBorder>77</staffUpperBorder>" in style
-
-    def test_clean_add_style(self) -> None:
-        self._test_clean_add_style(version=2)
-        self._test_clean_add_style(version=3)
 
 
 class TestFileCompare:

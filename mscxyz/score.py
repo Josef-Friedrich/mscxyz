@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import lxml
 import lxml.etree
-from lxml.etree import _Element, strip_tags
+from lxml.etree import _Element
 
 from mscxyz import utils
 from mscxyz.export import Export
@@ -197,14 +197,6 @@ class Score:
                         p: _Element | None = rm.getparent()
                         if isinstance(p, _Element):
                             p.remove(rm)
-
-    def clean(self) -> None:
-        """Remove the style, the layout breaks, the stem directions and the
-        ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
-        self.remove_tags_by_xpath(
-            "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
-        )
-        strip_tags(self.xml_root, "font", "b", "i", "pos", "offset")
 
     def print_diff(self) -> None:
         if self.__xml_string_initial is None:

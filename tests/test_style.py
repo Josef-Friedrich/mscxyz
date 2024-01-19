@@ -44,6 +44,21 @@ class TestClassStyle:
     def setup_method(self) -> None:
         self.style = helper.get_style("All_Dudes.mscx", version=2)
 
+    def test_method_clean(self) -> None:
+        score = helper.get_score("clean.mscx", version=3)
+        score.style.clean()
+        score.save()
+        score = Score(str(score.path))
+        xml_tree = score.xml_root
+        assert xml_tree.xpath("/museScore/Score/Style") == []
+        assert xml_tree.xpath("//LayoutBreak") == []
+        assert xml_tree.xpath("//StemDirection") == []
+        assert xml_tree.xpath("//font") == []
+        assert xml_tree.xpath("//b") == []
+        assert xml_tree.xpath("//i") == []
+        assert xml_tree.xpath("//pos") == []
+        assert xml_tree.xpath("//offset") == []
+
     def test_attributes_style(self) -> None:
         assert self.style.parent_element.tag == "Style"
 
@@ -301,9 +316,38 @@ def test_method_set_all(styles: str) -> None:
     assert result[0].text == "8.27"
 
 
+class TestClean:
+    def _test_clean(self, version: int = 2) -> None:
+        tmp: str = helper.get_file("formats.mscx", version)
+        Cli("clean", tmp, legacy=True).execute()
+        cleaned: str = helper.read_file(tmp)
+        assert "<font" not in cleaned
+        assert "<b>" not in cleaned
+        assert "<i>" not in cleaned
+        assert "<pos" not in cleaned
+        assert "<LayoutBreak>" not in cleaned
+        assert "<StemDirection>" not in cleaned
+
+    def test_clean(self) -> None:
+        self._test_clean(version=2)
+        self._test_clean(version=3)
+
+    def _test_clean_add_style(self, version: int = 2) -> None:
+        tmp = helper.get_file("simple.mscx", version)
+        Cli(
+            "clean", "--style", helper.get_score("style.mss", version), tmp, legacy=True
+        ).execute()
+        style = helper.read_file(tmp)
+        assert "<staffUpperBorder>77</staffUpperBorder>" in style
+
+    def test_clean_add_style(self) -> None:
+        self._test_clean_add_style(version=2)
+        self._test_clean_add_style(version=3)
+
+
 def test_load_style_file() -> None:
     score = helper.get_score("simple.mscx")
-    score.clean()
+    score.style.clean()
     style = helper.get_file("style.mss", 2)
     score.style.load_style_file(style)
 

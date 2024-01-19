@@ -8,7 +8,7 @@ from typing import Optional, Sequence, TypedDict, Union, cast
 
 import lxml
 import lxml.etree
-from lxml.etree import _Attrib, _Element
+from lxml.etree import _Attrib, _Element, strip_tags
 
 from mscxyz import utils
 from mscxyz.utils import INCH
@@ -238,6 +238,14 @@ class Style:
     def __get_attributes(self, style_name: str) -> _Attrib:
         element: _Element = self.get_element(style_name)
         return element.attrib
+
+    def clean(self) -> None:
+        """Remove the style, the layout breaks, the stem directions and the
+        ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
+        self.score.remove_tags_by_xpath(
+            "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
+        )
+        strip_tags(self.score.xml_root, "font", "b", "i", "pos", "offset")
 
     def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """

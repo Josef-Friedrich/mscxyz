@@ -605,7 +605,7 @@ def execute(cli_args: typing.Sequence[str] | None = None) -> None:
         if args.subcommand == "clean":
             score = Score(file)
             print(score.filename)
-            score.clean()
+            score.style.clean()
             if args.clean_style:
                 score.style.load_style_file(args.clean_style.name)
             score.save(mscore=args.general_mscore)
