@@ -12,12 +12,10 @@ import zipfile
 from pathlib import Path
 from typing import Any, Generator, List, Literal, Optional
 
-import lxml
-import lxml.etree
 import termcolor
-from lxml.etree import _Element, _ElementTree
 
 from mscxyz.settings import get_args
+from mscxyz.xml import Xml
 
 ListExtension = Literal["mscz", "mscx", "both"]
 
@@ -345,26 +343,23 @@ class ZipContainer:
 
     def __init__(self, abspath: str | Path) -> None:
         self.tmp_dir = ZipContainer._extract_zip(abspath)
-        container_info: _ElementTree = lxml.etree.parse(
-            self.tmp_dir / "META-INF" / "container.xml"
-        )
-        root_files = container_info.xpath("/container/rootfiles")
-        if isinstance(root_files, list):
-            for root_file in root_files[0]:
-                if isinstance(root_file, _Element):
-                    relpath = root_file.get("full-path")
-                    if isinstance(relpath, str):
-                        abs_path: Path = self.tmp_dir / relpath
-                        if relpath.endswith(".mscx"):
-                            self.xml_file = abs_path
-                        elif relpath.endswith(".mss"):
-                            self.score_style_file = abs_path
-                        elif relpath.endswith(".png"):
-                            self.thumbnail_file = abs_path
-                        elif relpath.endswith("audiosettings.json"):
-                            self.audiosettings_file = abs_path
-                        elif relpath.endswith("viewsettings.json"):
-                            self.viewsettings_file = abs_path
+
+        xml = Xml.new(self.tmp_dir / "META-INF" / "container.xml")
+
+        for root_file in xml.findall(".//rootfiles/rootfile"):
+            relpath = root_file.get("full-path")
+            if isinstance(relpath, str):
+                abs_path: Path = self.tmp_dir / relpath
+                if relpath.endswith(".mscx"):
+                    self.xml_file = abs_path
+                elif relpath.endswith(".mss"):
+                    self.score_style_file = abs_path
+                elif relpath.endswith(".png"):
+                    self.thumbnail_file = abs_path
+                elif relpath.endswith("audiosettings.json"):
+                    self.audiosettings_file = abs_path
+                elif relpath.endswith("viewsettings.json"):
+                    self.viewsettings_file = abs_path
 
     @staticmethod
     def _extract_zip(abspath: str | Path) -> Path:

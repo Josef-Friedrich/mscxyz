@@ -5,9 +5,16 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import Literal, Optional, Union
 
-import lxml
-import lxml.etree
-from lxml.etree import _Element, _ElementTree
+from lxml.etree import (
+    XML,
+    Element,
+    SubElement,
+    XMLSyntaxError,
+    _Element,
+    _ElementTree,
+    parse,
+    tostring,
+)
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _DictAnyStr, _XPathObject
@@ -47,27 +54,27 @@ class Xml:
 
         :return: The root element of the XML file.
         """
-        return lxml.etree.parse(path).getroot()
+        return parse(path).getroot()
 
     @staticmethod
     def parse_string(xml_markup: str) -> _Element:
-        return lxml.etree.XML(xml_markup)
+        return XML(xml_markup)
 
     @staticmethod
     def parse_file_try(
-        path: str | Path | TextIOWrapper,
+        file_path: str | Path | TextIOWrapper,
     ) -> tuple[_Element | None, Exception | None]:
         element: _Element | None = None
         error: Exception | None = None
         try:
-            element = lxml.etree.parse(path).getroot()
-        except lxml.etree.XMLSyntaxError as e:
+            element = parse(file_path).getroot()
+        except XMLSyntaxError as e:
             error = e
         return (element, error)
 
     @staticmethod
-    def new(path: str | Path | TextIOWrapper) -> Xml:
-        return Xml(Xml.parse_file(path))
+    def new(file_path: str | Path | TextIOWrapper) -> Xml:
+        return Xml(Xml.parse_file(file_path))
 
     def tostring(self, element: ElementLike = None) -> str:
         """
@@ -80,7 +87,7 @@ class Xml:
         # TestFileCompare not passing ...
         return (
             '<?xml version="1.0" encoding="UTF-8"?>\n'
-            + lxml.etree.tostring(element, encoding="UTF-8").decode("utf-8")
+            + tostring(element, encoding="UTF-8").decode("utf-8")
             + "\n"
         )
 
@@ -285,7 +292,7 @@ class Xml:
 
     @staticmethod
     def create_element(tag_name: str) -> _Element:
-        return lxml.etree.Element(tag_name)
+        return Element(tag_name)
 
     @staticmethod
     def create_sub_element(
@@ -294,7 +301,7 @@ class Xml:
         text: Optional[str] = None,
         attrib: Optional[_DictAnyStr] = None,
     ) -> _Element:
-        element: _Element = lxml.etree.SubElement(parent, tag_name, attrib=attrib)
+        element: _Element = SubElement(parent, tag_name, attrib=attrib)
         if text:
             element.text = text
         return element

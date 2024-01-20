@@ -220,26 +220,25 @@ class Score:
             # To get the same xml tag structure as the original score file
             # has.
             for xpath in (
-                "//LayerTag",
-                "//metaTag",
-                "//font",
-                "//i",
-                "//evenFooterL",
-                "//evenFooterC",
-                "//evenFooterR",
-                "//oddFooterL",
-                "//oddFooterC",
-                "//oddFooterR",
-                "//chord/name",
-                "//chord/render",
-                "//StaffText/text",
-                "//Jump/continueAt",
+                ".//LayerTag",
+                ".//metaTag",
+                ".//font",
+                ".//i",
+                ".//evenFooterL",
+                ".//evenFooterC",
+                ".//evenFooterR",
+                ".//oddFooterL",
+                ".//oddFooterC",
+                ".//oddFooterR",
+                ".//chord/name",
+                ".//chord/render",
+                ".//StaffText/text",
+                ".//Jump/continueAt",
             ):
-                x: list[_Element] | None = self.xml.xpathall(xpath)
-                if x:
-                    for tag in x:
-                        if not tag.text:
-                            tag.text = ""
+                x = self.xml.findall(xpath)
+                for tag in x:
+                    if not tag.text:
+                        tag.text = ""
 
             xml_dest = dest
 
