@@ -21,16 +21,16 @@ ElementLike = Optional[Union[_Element, _ElementTree, None]]
 class Xml:
     """A wrapper around lxml.etree"""
 
-    element: _Element
+    root: _Element
 
     def __init__(self, element: _Element) -> None:
-        self.element = element
+        self.root = element
 
     def __get_element(self, element: ElementLike = None) -> _Element:
         if isinstance(element, _ElementTree):
             return element.getroot()
         if element is None:
-            return self.element
+            return self.root
         return element
 
     def __normalize_element(self, element: ElementLike = None) -> _Element | None:
@@ -39,7 +39,7 @@ class Xml:
         return element
 
     @staticmethod
-    def read(path: str | Path | TextIOWrapper) -> _Element:
+    def parse_file(path: str | Path | TextIOWrapper) -> _Element:
         """
         Read an XML file and return the root element.
 
@@ -50,12 +50,24 @@ class Xml:
         return lxml.etree.parse(path).getroot()
 
     @staticmethod
-    def from_file(path: str | Path | TextIOWrapper) -> Xml:
-        return Xml(Xml.read(path))
+    def parse_string(xml_markup: str) -> _Element:
+        return lxml.etree.XML(xml_markup)
 
     @staticmethod
-    def parse(string: str) -> _Element:
-        return lxml.etree.XML(string)
+    def parse_file_try(
+        path: str | Path | TextIOWrapper,
+    ) -> tuple[_Element | None, Exception | None]:
+        element: _Element | None = None
+        error: Exception | None = None
+        try:
+            element = lxml.etree.parse(path).getroot()
+        except lxml.etree.XMLSyntaxError as e:
+            error = e
+        return (element, error)
+
+    @staticmethod
+    def new(path: str | Path | TextIOWrapper) -> Xml:
+        return Xml(Xml.parse_file(path))
 
     def tostring(self, element: ElementLike = None) -> str:
         """

@@ -20,6 +20,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.settings import get_args
 from mscxyz.style import Style
+from mscxyz.xml import Xml
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _XPathObject
@@ -45,6 +46,8 @@ class Score:
 
     xml_root: _Element
     """The root element of the XML tree. See the `lxml API <https://lxml.de/api.html>`_."""
+
+    xml: Xml
 
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
@@ -74,19 +77,23 @@ class Score:
             self.xml_file = str(self.path)
 
         self.errors = []
-        try:
-            self.xml_root = lxml.etree.parse(self.xml_file).getroot()
-        except lxml.etree.XMLSyntaxError as e:
-            self.errors.append(e)
-        else:
+
+        element, e = Xml.parse_file_try(self.xml_file)
+
+        if element is not None:
+            self.xml_root = element
+            self.xml = Xml(element)
             self.version = self.get_version()
+
+        if e is not None:
+            self.errors.append(e)
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
 
     @property
     def xml_string(self) -> str:
-        return utils.xml.tostring(self.xml_root)
+        return self.xml.tostring(self.xml_root)
 
     @property
     def version_major(self) -> int:

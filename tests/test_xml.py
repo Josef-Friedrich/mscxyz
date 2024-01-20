@@ -13,17 +13,17 @@ xml_file = helper.get_file("simple.mscx", 4)
 
 root = helper.get_xml_root("score.mscz", 4)
 
-xml = Xml.from_file(xml_file)
+xml = Xml.new(xml_file)
 
 
 def test_read() -> None:
-    element = xml.read(xml_file)
+    element = xml.parse_file(xml_file)
     assert element.tag == "museScore"
 
 
 def test_from_file() -> None:
-    x = xml.from_file(xml_file)
-    assert x.element.tag == "museScore"
+    x = xml.new(xml_file)
+    assert x.root.tag == "museScore"
 
 
 def test_find_safe() -> None:
@@ -60,7 +60,7 @@ def test_xpathall_safe() -> None:
 
 def test_xml_write(tmp_path: Path) -> None:
     dest = tmp_path / "test.xml"
-    element = Xml.parse("<root><a><b/><c/></a><d><e/></d></root>")
+    element = Xml.parse_string("<root><a><b/><c/></a><d><e/></d></root>")
     xml.write(dest, element)
     result: str = utils.read_file(dest)
     assert result == (
