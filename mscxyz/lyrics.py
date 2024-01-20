@@ -8,8 +8,6 @@ import typing
 import lxml.etree as etree
 from lxml.etree import _Element
 
-from mscxyz import utils
-
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
@@ -102,7 +100,9 @@ class Lyrics:
             new = pair.split(":")[1]
             for element in self.elements:
                 if element.no == int(old):
-                    utils.xml.find_safe(element.element, "no").text = str(int(new) - 1)
+                    self.score.xml.find_safe("no", element.element).text = str(
+                        int(new) - 1
+                    )
 
     def __extract_one_lyrics_verse(self, number: int, mscore: bool = False) -> None:
         """Extract a lyric verse by verse number.
@@ -116,9 +116,9 @@ class Lyrics:
             tag = element.element
 
             if element.no != number:
-                utils.xml.remove(tag)
+                self.score.xml.remove(tag)
             elif number != 1:
-                utils.xml.set_text(tag, "no", 0)
+                self.score.xml.set_text("no", 0, tag)
 
         ext: str = "." + score.extension
         new_name: str = str(score.path).replace(ext, "_" + str(number) + ext)
@@ -174,8 +174,11 @@ class Lyrics:
         for element in self.elements:
             if element.no == verse_number:
                 tag: _Element = element.element
-                element_text: _Element = utils.xml.find_safe(tag, "text")
-                text = utils.xml.get_text_safe(element_text)
+                element_text: _Element = self.score.xml.find_safe(
+                    "text",
+                    tag,
+                )
+                text = self.score.xml.get_text_safe(element_text)
                 element_syllabic: _Element = etree.Element("syllabic")
                 append_syllabic: bool = True
                 if text.endswith("-"):

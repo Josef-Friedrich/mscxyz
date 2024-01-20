@@ -3,12 +3,9 @@ from __future__ import annotations
 
 import os
 import tempfile
-from pathlib import Path
 from typing import Optional
 from unittest import mock
 
-import lxml
-import lxml.etree
 import pytest
 
 from mscxyz import utils
@@ -117,50 +114,6 @@ class TestFunctionMscore:
 
 
 root = helper.get_xml_root("simple.mscz", 4)
-
-
-def test_find_safe() -> None:
-    element = utils.xml.find_safe(root, ".//Score")
-    assert element.tag == "Score"
-
-
-def test_xpath() -> None:
-    element = utils.xml.xpath(root, ".//xxxxxxx")
-    assert element is None
-
-
-class TestXpathSave:
-    def test_xpath_safe(self) -> None:
-        element = utils.xml.xpath_safe(root, ".//Score")
-        assert element.tag == "Score"
-
-    def test_xpath_safe_raise(self) -> None:
-        with pytest.raises(ValueError) as e:
-            utils.xml.xpath_safe(root, ".//metaTag")
-        assert "XPath “.//metaTag” found more than one element in" in e.value.args[0]
-
-
-def test_xpathall() -> None:
-    element = utils.xml.xpathall(root, ".//xxxxxxx")
-    assert element is None
-
-
-def test_xpathall_safe() -> None:
-    element = utils.xml.xpathall_safe(root, ".//metaTag")
-    assert isinstance(element, list)
-    assert len(element) == 16
-
-
-def test_xml_write(tmp_path: Path) -> None:
-    dest = tmp_path / "test.xml"
-    element = lxml.etree.XML("<root><a><b/><c/></a><d><e/></d></root>")
-    utils.xml.write(dest, element)
-    result: str = utils.read_file(dest)
-    print(result)
-    assert result == (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        "<root><a><b/><c/></a><d><e/></d></root>\n"
-    )
 
 
 class TestClassDimension:

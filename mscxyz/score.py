@@ -259,7 +259,7 @@ class Score:
                 "//StaffText/text",
                 "//Jump/continueAt",
             ):
-                x: list[_Element] | None = utils.xml.xpathall(self.xml_root, xpath)
+                x: list[_Element] | None = self.xml.xpathall(xpath)
                 if x:
                     for tag in x:
                         if not tag.text:
@@ -269,7 +269,7 @@ class Score:
 
             if self.extension == "mscz":
                 xml_dest = self.xml_file
-            utils.xml.write(xml_dest, self.xml_root)
+            self.xml.write(xml_dest)
 
             # Since MuseScore 4 the style is stored in a separate file.
             if self.style_file:
@@ -277,7 +277,7 @@ class Score:
                     "museScore", {"version": str(self.version)}
                 )
                 element.append(self.style.parent_element)
-                utils.xml.write(self.style_file, element)
+                self.xml.write(self.style_file, element)
 
             if self.extension == "mscz" and self.zip_container:
                 self.zip_container.save(dest)

@@ -179,19 +179,19 @@ class Metatag:
         self.xml_root = score.xml_root
 
     def __get_element(self, field: str) -> _Element:
-        score_element: _Element = utils.xml.find_safe(self.xml_root, "Score")
-        element: _Element | None = utils.xml.xpath(
-            self.xml_root, '//metaTag[@name="' + field + '"]'
+        score_element: _Element = self.score.xml.find_safe("Score")
+        element: _Element | None = self.score.xml.xpath(
+            '//metaTag[@name="' + field + '"]'
         )
         if element is None:
-            element = utils.xml.create_sub_element(
+            element = self.score.xml.create_sub_element(
                 score_element, "metaTag", "", attrib={"name": field}
             )
         return element
 
     def __get_text(self, field: str) -> str | None:
         element: _Element | None = self.__get_element(field)
-        return utils.xml.get_text(element)
+        return self.score.xml.get_text(element)
 
     def __set_text(self, field: str, value: str | None) -> None:
         if value is None:
@@ -466,12 +466,12 @@ class Vbox:
         self.xml_root = score.xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
 
-        vbox = utils.xml.xpath(self.xml_root, xpath + "/VBox")
+        vbox = self.score.xml.xpath(xpath + "/VBox")
         if vbox is None:
             vbox = lxml.etree.Element("VBox")
             height = lxml.etree.SubElement(vbox, "height")
             height.text = "10"
-            utils.xml.xpath_safe(self.xml_root, xpath).insert(0, vbox)
+            self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
 
     def __normalize_style_name(self, style: str) -> str:
@@ -532,17 +532,17 @@ class Vbox:
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         :param text: The string inside the ``<text>`` tags.
         """
-        text_element: _Element = utils.xml.create_element("Text")
+        text_element: _Element = self.score.xml.create_element("Text")
 
         if self.score.version_major in (2, 3):
             style = style.title()
         elif self.score.version_major == 4:
             style = style.lower()
 
-        utils.xml.create_sub_element(
+        self.score.xml.create_sub_element(
             text_element, "style", self.__normalize_style_name(style)
         )
-        utils.xml.create_sub_element(text_element, "text", text)
+        self.score.xml.create_sub_element(text_element, "text", text)
         self.vbox.append(text_element)
 
     def __set_text(self, style: str, text: str | None) -> None:
@@ -567,7 +567,7 @@ class Vbox:
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
-        utils.xml.remove(self.__get_element(style))
+        self.score.xml.remove(self.__get_element(style))
         return None
 
     # composer -> Composer

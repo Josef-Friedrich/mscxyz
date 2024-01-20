@@ -128,8 +128,9 @@ class Style:
         self.score = score
 
         if self.score.style_file:
-            self.parent_element = utils.xml.find_safe(
-                utils.xml.read(self.score.style_file), "Style"
+            self.parent_element = self.score.xml.find_safe(
+                "Style",
+                self.score.xml.parse_file(self.score.style_file),
             )
         else:
             element: _Element | None = self.score.xml_root.find("Score/Style")
@@ -313,8 +314,8 @@ class Style:
                 "This operation is only allowed for MuseScore 2 score files"
             )
 
-        child: _Element | None = utils.xml.xpath(
-            self.score.xml_root, f'//TextStyle/name[contains(., "{name}")]'
+        child: _Element | None = self.score.xml.xpath(
+            f'//TextStyle/name[contains(., "{name}")]'
         )
 
         if child is not None:
@@ -392,7 +393,7 @@ class Style:
         output: list[tuple[str, str]] = []
         for element in self.parent_element:
             if "FontFace" in element.tag:
-                output.append((element.tag, utils.xml.get_text_safe(element)))
+                output.append((element.tag, self.score.xml.get_text_safe(element)))
         return output
 
     def print_all_font_faces(self) -> None:
@@ -519,7 +520,7 @@ class Style:
         return self.set("musicalTextFont", font_face)
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
-        score_element: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
+        score_element: _Element = self.score.xml.find_safe("Score")
         score_element.insert(0, parent_style)
         self.parent_element = parent_style
 
@@ -553,7 +554,7 @@ class Style:
         self.__set_parent_style_element(style[0])
 
     def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
-        style: _Element = utils.xml.read(file)
+        style: _Element = self.score.xml.parse_file(file)
         self.__set_parent_style_element(style[0])
 
     def reload(self, save: bool = False) -> Style:

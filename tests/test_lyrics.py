@@ -7,7 +7,7 @@ from typing import Sequence
 import pytest
 
 import mscxyz
-from mscxyz import Score, utils
+from mscxyz import Score
 from tests import helper
 from tests.helper import Cli
 
@@ -90,10 +90,10 @@ class TestLyricsFix:
             tag = element.element
             tag_text = tag.find("text")
 
-            text.append(utils.xml.get_text_safe(tag_text))
+            text.append(score.xml.get_text_safe(tag_text))
             tag_syllabic = tag.find("syllabic")
 
-            syllabic_text = utils.xml.get_text(tag_syllabic)
+            syllabic_text = score.xml.get_text(tag_syllabic)
             if syllabic_text:
                 syllabic.append(syllabic_text)
 
@@ -145,10 +145,10 @@ class TestLyricsFix:
             tag = element.element
             tag_text = tag.find("text")
 
-            text.append(utils.xml.get_text_safe(tag_text))
+            text.append(score.xml.get_text_safe(tag_text))
             tag_syllabic = tag.find("syllabic")
 
-            syllabic_text = utils.xml.get_text(tag_syllabic)
+            syllabic_text = score.xml.get_text(tag_syllabic)
             if syllabic_text:
                 syllabic.append(syllabic_text)
 
