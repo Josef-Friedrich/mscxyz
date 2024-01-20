@@ -5,7 +5,7 @@ Welcome to mscxyz's documentation!
 Contents:
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 5
 
     cli
     main-module
@@ -13,6 +13,7 @@ Contents:
     submodule-meta
     submodule-score
     submodule-style
+    submodule-xml
     other-submodules
 
 ******************

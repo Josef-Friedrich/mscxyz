@@ -45,7 +45,8 @@ class Score:
     """Score files created with MuseScore 4 have a separate style file."""
 
     xml_root: _Element
-    """The root element of the XML tree. See the `lxml API <https://lxml.de/api.html>`_."""
+    """The root element of the XML tree. It is the ``<museScore version="X.X">`` Tag.
+      See the `lxml API <https://lxml.de/api.html>`_."""
 
     xml: Xml
 

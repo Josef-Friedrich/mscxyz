@@ -7,7 +7,7 @@ from typing import Literal, Optional, Union
 
 import lxml
 import lxml.etree
-from lxml.etree import _Element, _ElementTree
+from lxml.etree import _Element, _ElementTree, strip_tags
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _DictAnyStr, _XPathObject
@@ -97,45 +97,62 @@ class Xml:
         with open(path, "w") as document:
             document.write(self.tostring(element))
 
-    def find_safe(self, path: str, element: ElementLike = None) -> _Element:
+    def find(self, element_path: str, element: ElementLike = None) -> _Element | None:
+        """
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
+        """
+        return self.__get_element(element).find(element_path)
+
+    def find_safe(self, element_path: str, element: ElementLike = None) -> _Element:
         """
         Find an element in the given XML element using the specified element path.
 
-        :param path: The path to the desired element.
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
         :param element: The XML element to search within.
 
         :return: The found element.
 
         :raises ValueError: If the element is not found.
         """
-
         element = self.__get_element(element)
-        result: _Element | None = element.find(path)
+        result: _Element | None = element.find(element_path)
         if result is None:
-            raise ValueError(f"Path {path} not found in element {element}!")
+            raise ValueError(f"Path {element_path} not found in element {element}!")
         return result
 
-    def xpath(self, path: str, element: ElementLike = None) -> _Element | None:
+    def findall(self, element_path: str, element: ElementLike = None) -> list[_Element]:
+        """
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
+        """
+        return self.__get_element(element).findall(element_path)
+
+    def xpath(self, xpath: str, element: ElementLike = None) -> _Element | None:
         """
         Find the first matching element in the XML tree using XPath.
 
-        :param path: The XPath expression to search for.
+        :param xpath: The XPath expression to search for.
         :param element: The root element of the XML tree.
 
         :return: The first matching element or None if no match is found.
         """
         element = self.__get_element(element)
-        output: list[_Element] | None = self.xpathall(path, element)
+        output: list[_Element] | None = self.xpathall(xpath, element)
         if output and len(output) > 0:
             return output[0]
 
         return None
 
-    def xpath_safe(self, path: str, element: ElementLike = None) -> _Element:
+    def xpath_safe(self, xpath: str, element: ElementLike = None) -> _Element:
         """
         Safely retrieves the first matching XML element using the given XPath expression.
 
-        :param path: The XPath expression to match elements.
+        :param xpath: The XPath expression to match elements.
         :param element: The XML element to search within.
 
         :return: The first matching XML element.XPath
@@ -144,27 +161,29 @@ class Xml:
         """
         element = self.__get_element(element)
         output: list[_Element] = self.xpathall_safe(
-            path,
+            xpath,
             element,
         )
         if len(output) > 1:
             raise ValueError(
-                f"XPath “{path}” found more than one element in {element}!"
+                f"XPath “{xpath}” found more than one element in {element}!"
             )
         return output[0]
 
-    def xpathall(self, path: str, element: ElementLike = None) -> list[_Element] | None:
+    def xpathall(
+        self, xpath: str, element: ElementLike = None
+    ) -> list[_Element] | None:
         """
         Returns a list of elements matching the given XPath expression.
 
-        :param path: The XPath expression to match elements.
+        :param xpath: The XPath expression to match elements.
         :param element: The XML element to search within.
 
         :return: A list of elements matching the XPath expression, or None if no
           elements are found.
         """
         element = self.__get_element(element)
-        result: _XPathObject = element.xpath(path)
+        result: _XPathObject = element.xpath(xpath)
         output: list[_Element] = []
 
         if isinstance(result, list):
@@ -177,22 +196,22 @@ class Xml:
 
         return None
 
-    def xpathall_safe(self, path: str, element: ElementLike = None) -> list[_Element]:
+    def xpathall_safe(self, xpath: str, element: ElementLike = None) -> list[_Element]:
         """
         Safely retrieves a list of elements matching the given XPath expression within
         the specified element.
 
+        :param xpath: The XPath expression to match elements.
         :param element: The XML element to search within.
-        :param path: The XPath expression to match elements.
 
         :return: A list of elements matching the XPath expression.
 
         :raises ValueError: If the XPath expression is not found in the element.
         """
         element = self.__get_element(element)
-        output: list[_Element] | None = self.xpathall(path, element)
+        output: list[_Element] | None = self.xpathall(xpath, element)
         if output is None:
-            raise ValueError(f"XPath “{path}” not found in element {element}!")
+            raise ValueError(f"XPath “{xpath}” not found in element {element}!")
         return output
 
     def get_text(self, element: ElementLike = None) -> str | None:
@@ -226,18 +245,21 @@ class Xml:
         return element.text
 
     def set_text(
-        self, path: str, value: str | int | float, element: ElementLike = None
+        self, element_path: str, value: str | int | float, element: ElementLike = None
     ) -> None:
         """
         Set the text value of an XML element at the specified element path.
 
-        :param element: The XML element to modify.
-        :param path: The element path expression to locate the target element.
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support to locate the target element,
+          for example ``.//Note`` selects all ``<Note>`` elements.
         :param value: The new value to set for the element's text.
+        :param element: The XML element to modify.
 
         :return: None
         """
-        self.find_safe(path, element).text = str(value)
+        self.find_safe(element_path, element).text = str(value)
 
     @staticmethod
     def replace(old: _Element, new: _Element) -> None:
@@ -276,3 +298,41 @@ class Xml:
         if text:
             element.text = text
         return element
+
+    def remove_tags(self, *element_paths: str) -> Xml:
+        """
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support to locate the target element,
+          for example ``.//Note`` selects all ``<Note>`` elements.
+        """
+        for path in element_paths:
+            for element in self.findall(path):
+                self.remove(element)
+        return self
+
+    def remove_tags_by_xpath(self, *xpath_strings: str) -> None:
+        """Remove tags by xpath strings.
+
+        :param xpath_strings: A xpath string.
+
+        .. code:: Python
+
+            tree.remove_tags_by_xpath(
+                '/museScore/Score/Style', '//LayoutBreak', '//StemDirection'
+            )
+
+        """
+        for xpath_string in xpath_strings:
+            x: _XPathObject = self.root.xpath(xpath_string)
+            if isinstance(x, list):
+                for rm in x:
+                    if isinstance(rm, _Element):
+                        p: _Element | None = rm.getparent()
+                        if isinstance(p, _Element):
+                            p.remove(rm)
+
+    def strip_tags(self, *tag_names: str) -> Xml:
+        """TODO remove. Use remove_tags instead."""
+        strip_tags(self.root, *tag_names)
+        return self

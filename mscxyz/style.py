@@ -243,8 +243,8 @@ class Style:
     def clean(self) -> None:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
-        self.score.remove_tags_by_xpath(
-            "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
+        self.score.xml.remove_tags(
+            "./Score/Style", ".//LayoutBreak", ".//StemDirection"
         )
         strip_tags(self.score.xml_root, "font", "b", "i", "pos", "offset")
 
