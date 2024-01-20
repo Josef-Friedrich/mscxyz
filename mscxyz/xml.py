@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from io import TextIOWrapper
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 
 import lxml
 import lxml.etree
@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
 
 ListExtension = Literal["mscz", "mscx", "both"]
 
-ElementLike = _Element | _ElementTree | None
+ElementLike = Optional[Union[_Element, _ElementTree, None]]
 
 
 class Xml:
