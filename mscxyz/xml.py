@@ -310,24 +310,3 @@ class Xml:
             for element in self.findall(path):
                 self.remove(element)
         return self
-
-    def remove_tags_by_xpath(self, *xpath_strings: str) -> None:
-        """Remove tags by xpath strings.
-
-        :param xpath_strings: A xpath string.
-
-        .. code:: Python
-
-            tree.remove_tags_by_xpath(
-                '/museScore/Score/Style', '//LayoutBreak', '//StemDirection'
-            )
-
-        """
-        for xpath_string in xpath_strings:
-            x: _XPathObject = self.root.xpath(xpath_string)
-            if isinstance(x, list):
-                for rm in x:
-                    if isinstance(rm, _Element):
-                        p: _Element | None = rm.getparent()
-                        if isinstance(p, _Element):
-                            p.remove(rm)
