@@ -6,7 +6,6 @@ from __future__ import annotations
 import difflib
 import os
 import shutil
-import typing
 from pathlib import Path
 from typing import Any, Optional
 
@@ -21,9 +20,6 @@ from mscxyz.meta import Meta
 from mscxyz.settings import get_args
 from mscxyz.style import Style
 from mscxyz.xml import Xml
-
-if typing.TYPE_CHECKING:
-    from lxml.etree import _XPathObject
 
 
 class Score:
@@ -180,7 +176,7 @@ class Score:
         :return: The version number as a float.
         :raises ValueError: If the version number cannot be retrieved.
         """
-        version: _XPathObject = self.xml_root.xpath("number(/museScore[1]/@version)")
+        version = self.xml_root.xpath("number(/museScore[1]/@version)")
         if isinstance(version, float):
             return version
         raise ValueError("Could not get version number")
