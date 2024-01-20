@@ -8,7 +8,7 @@ from typing import Optional, Sequence, TypedDict, Union, cast
 
 import lxml
 import lxml.etree
-from lxml.etree import _Attrib, _Element, strip_tags
+from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
 from mscxyz.utils import INCH
@@ -244,9 +244,15 @@ class Style:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
         self.score.xml.remove_tags(
-            "./Score/Style", ".//LayoutBreak", ".//StemDirection"
+            "./Score/Style",
+            ".//LayoutBreak",
+            ".//StemDirection",
+            ".//font",
+            ".//b",
+            ".//i",
+            ".//pos",
+            ".//offset",
         )
-        strip_tags(self.score.xml_root, "font", "b", "i", "pos", "offset")
 
     def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """

@@ -7,7 +7,7 @@ from typing import Literal, Optional, Union
 
 import lxml
 import lxml.etree
-from lxml.etree import _Element, _ElementTree, strip_tags
+from lxml.etree import _Element, _ElementTree
 
 if typing.TYPE_CHECKING:
     from lxml.etree import _DictAnyStr, _XPathObject
@@ -331,8 +331,3 @@ class Xml:
                         p: _Element | None = rm.getparent()
                         if isinstance(p, _Element):
                             p.remove(rm)
-
-    def strip_tags(self, *tag_names: str) -> Xml:
-        """TODO remove. Use remove_tags instead."""
-        strip_tags(self.root, *tag_names)
-        return self
