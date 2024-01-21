@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-01-21
+
+### Added
+
+- A new command line interface that can be called via the script name `musescore-manager`.
+  The new interface no longer has any subcommands, so the program can be used much more flexibly.
+  The old CLI script `mscx-manager` is still available.
+
+### Changed
+
+- Support for Python 3.8 and lower versions has been discontinued.
+
 ## [1.3.1] - 2024-01-02
 
 ## [1.3.0] - 2021-06-23
