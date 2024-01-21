@@ -6,8 +6,6 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import Optional, Sequence, TypedDict, Union, cast
 
-import lxml
-import lxml.etree
 from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
@@ -169,7 +167,7 @@ class Style:
         for tag in tags:
             element: _Element | None = parent.find(tag)
             if element is None:
-                parent = lxml.etree.SubElement(parent, tag)
+                _, parent = self.xml.create_sub_element(parent, tag)
             else:
                 parent = element
         return parent
@@ -336,10 +334,10 @@ class Style:
                 raise ValueError(f"Parent not found on element {el}!")
             return el
         else:
-            el_text_style: _Element = lxml.etree.SubElement(
+            _, el_text_style = self.xml.create_sub_element(
                 self.parent_element, "TextStyle"
             )
-            el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
+            _, el_name = self.xml.create_sub_element(el_text_style, "name")
             el_name.text = name
             return el_text_style
 
@@ -395,7 +393,7 @@ class Style:
         for element_name, value in values.items():
             element: _Element | None = text_style.find(element_name)
             if element is None:
-                element = lxml.etree.SubElement(text_style, element_name)
+                _, element = self.xml.create_sub_element(text_style, element_name)
             element.text = str(value)
 
     def get_all_fonts(self) -> list[tuple[str, str]]:
@@ -562,7 +560,7 @@ class Style:
         if "<Style>" not in styles:
             styles = f'<?xml version="1.0"?>\n<museScore version="{self.score.version}"><Style>{styles}</Style></museScore>'
 
-        style = lxml.etree.XML(styles)
+        style = self.xml.parse_string(styles)
         self.__set_parent_style_element(style[0])
 
     def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
