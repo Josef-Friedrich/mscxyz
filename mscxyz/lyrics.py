@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import typing
 
-import lxml.etree as etree
 from lxml.etree import _Element
 
 if typing.TYPE_CHECKING:
@@ -179,7 +178,7 @@ class Lyrics:
                     tag,
                 )
                 text = self.score.xml.get_text_safe(element_text)
-                element_syllabic: _Element = etree.Element("syllabic")
+                element_syllabic: _Element = self.score.xml.create_element("syllabic")
                 append_syllabic: bool = True
                 if text.endswith("-"):
                     element_text.text = text[:-1]

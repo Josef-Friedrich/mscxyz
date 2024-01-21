@@ -9,8 +9,6 @@ import shutil
 from pathlib import Path
 from typing import Any, Optional
 
-import lxml
-import lxml.etree
 from lxml.etree import _Element
 
 from mscxyz import utils
@@ -248,9 +246,10 @@ class Score:
 
             # Since MuseScore 4 the style is stored in a separate file.
             if self.style_file:
-                element: _Element = lxml.etree.Element(
+                element = self.xml.create_element(
                     "museScore", {"version": str(self.version)}
                 )
+
                 element.append(self.style.parent_element)
                 self.xml.write(self.style_file, element)
 

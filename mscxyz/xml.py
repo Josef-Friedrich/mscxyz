@@ -275,8 +275,8 @@ class Xml:
             parent.replace(old, new)
 
     @staticmethod
-    def create_element(tag_name: str) -> _Element:
-        return Element(tag_name)
+    def create_element(tag_name: str, attrib: Optional[_DictAnyStr] = None) -> _Element:
+        return Element(tag_name, attrib=attrib)
 
     @staticmethod
     def create_sub_element(

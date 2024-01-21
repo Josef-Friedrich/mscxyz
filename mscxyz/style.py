@@ -12,6 +12,7 @@ from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
 from mscxyz.utils import INCH
+from mscxyz.xml import Xml
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -124,16 +125,20 @@ class Style:
     """The parent ``/museScore/Score/Style`` element that contains all style tags.
     """
 
+    @property
+    def xml(self) -> Xml:
+        return self.score.xml
+
     def __init__(self, score: "Score") -> None:
         self.score = score
 
         if self.score.style_file:
-            self.parent_element = self.score.xml.find_safe(
+            self.parent_element = self.xml.find_safe(
                 "Style",
-                self.score.xml.parse_file(self.score.style_file),
+                self.xml.parse_file(self.score.style_file),
             )
         else:
-            element: _Element | None = self.score.xml_root.find("Score/Style")
+            element: _Element | None = self.xml.find("Score/Style")
             if element is not None:
                 self.parent_element = element
             else:
@@ -145,10 +150,11 @@ class Style:
 
         :return: The created parent style element.
         """
-        score: _Element | None = self.score.xml_root.find("Score")
+        score: _Element | None = self.xml.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
-        return lxml.etree.SubElement(score, "Style")
+        _, sub_element = self.xml.create_sub_element(score, "Style")
+        return sub_element
 
     def __create_nested_element(self, tag: str) -> _Element:
         """
@@ -243,7 +249,7 @@ class Style:
     def clean(self) -> None:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
-        self.score.xml.remove_tags(
+        self.xml.remove_tags(
             "./Score/Style",
             ".//LayoutBreak",
             ".//StemDirection",
@@ -320,7 +326,7 @@ class Style:
                 "This operation is only allowed for MuseScore 2 score files"
             )
 
-        child: _Element | None = self.score.xml.xpath(
+        child: _Element | None = self.xml.xpath(
             f'//TextStyle/name[contains(., "{name}")]'
         )
 
@@ -399,7 +405,7 @@ class Style:
         output: list[tuple[str, str]] = []
         for element in self.parent_element:
             if "FontFace" in element.tag:
-                output.append((element.tag, self.score.xml.get_text_safe(element)))
+                output.append((element.tag, self.xml.get_text_safe(element)))
         return output
 
     def print_all_font_faces(self) -> None:
@@ -526,7 +532,7 @@ class Style:
         return self.set("musicalTextFont", font_face)
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
-        score_element: _Element = self.score.xml.find_safe("Score")
+        score_element: _Element = self.xml.find_safe("Score")
         score_element.insert(0, parent_style)
         self.parent_element = parent_style
 
@@ -560,7 +566,7 @@ class Style:
         self.__set_parent_style_element(style[0])
 
     def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
-        style: _Element = self.score.xml.parse_file(file)
+        style: _Element = self.xml.parse_file(file)
         self.__set_parent_style_element(style[0])
 
     def reload(self, save: bool = False) -> Style:
