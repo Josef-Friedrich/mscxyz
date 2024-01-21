@@ -275,6 +275,24 @@ class Xml:
             parent.replace(old, new)
 
     @staticmethod
+    def create_element(tag_name: str) -> _Element:
+        return Element(tag_name)
+
+    @staticmethod
+    def create_sub_element(
+        parent: _Element | str,
+        tag_name: str,
+        text: Optional[str] = None,
+        attrib: Optional[_DictAnyStr] = None,
+    ) -> tuple[_Element, _Element]:
+        if isinstance(parent, str):
+            parent = Xml.create_element(parent)
+        sub_element: _Element = SubElement(parent, tag_name, attrib=attrib)
+        if text:
+            sub_element.text = text
+        return (parent, sub_element)
+
+    @staticmethod
     def remove(element: _Element | None) -> None:
         """
         Remove the given element from its parent.
@@ -289,22 +307,6 @@ class Xml:
             return None
 
         parent.remove(element)
-
-    @staticmethod
-    def create_element(tag_name: str) -> _Element:
-        return Element(tag_name)
-
-    @staticmethod
-    def create_sub_element(
-        parent: _Element,
-        tag_name: str,
-        text: Optional[str] = None,
-        attrib: Optional[_DictAnyStr] = None,
-    ) -> _Element:
-        element: _Element = SubElement(parent, tag_name, attrib=attrib)
-        if text:
-            element.text = text
-        return element
 
     def remove_tags(self, *element_paths: str) -> Xml:
         """

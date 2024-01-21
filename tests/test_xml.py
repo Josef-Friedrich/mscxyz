@@ -41,7 +41,7 @@ def test_xpath() -> None:
     assert element is None
 
 
-class TestXpathSave:
+class TestMethodXpathSave:
     def test_xpath_safe(self) -> None:
         element = xml.xpath_safe(".//Score")
         assert element.tag == "Score"
@@ -74,7 +74,12 @@ def test_xml_write(tmp_path: Path) -> None:
     )
 
 
-class TestRemove:
+def test_method_create_sub_element() -> None:
+    element, _ = xml.create_sub_element("parent", "child", "test")
+    assert "<parent><child>test</child></parent>" in xml.tostring(element)
+
+
+class TestMethodRemoveTags:
     def test_element_with_childs(self, custom_xml: Xml) -> None:
         assert (
             "<root><d>some text<e/></d></root>"

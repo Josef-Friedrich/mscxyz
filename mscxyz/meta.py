@@ -8,8 +8,6 @@ import typing
 from pathlib import Path
 from typing import Any
 
-import lxml
-import lxml.etree
 import tmep
 from lxml.etree import _Element
 
@@ -184,7 +182,7 @@ class Metatag:
             '//metaTag[@name="' + field + '"]'
         )
         if element is None:
-            element = self.score.xml.create_sub_element(
+            _, element = self.score.xml.create_sub_element(
                 score_element, "metaTag", "", attrib={"name": field}
             )
         return element
@@ -468,9 +466,8 @@ class Vbox:
 
         vbox = self.score.xml.xpath(xpath + "/VBox")
         if vbox is None:
-            vbox = lxml.etree.Element("VBox")
-            height = lxml.etree.SubElement(vbox, "height")
-            height.text = "10"
+            vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
+
             self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
 
