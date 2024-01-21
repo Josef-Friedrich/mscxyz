@@ -140,8 +140,6 @@ Set all font faces (using a for loop, not available in MuseScore 2):
     new_score: Score = score.reload()
     assert new_score.style.get("defaultFontFace") == "Alegreya"
 
-.. code-block:: Python
-
 Set all text font faces (using the method ``score.style.set_text_font_faces(font_face)``,
 not available in MuseScore 2):
 
