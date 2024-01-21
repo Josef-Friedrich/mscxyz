@@ -276,11 +276,6 @@ CLI Usage
 
 {{ cli('musescore-manager --help') | literal }}
 
-Legacy CLI Usage
-================
-
-{{ cli('mscx-manager help --rst all') }}
-
 API Usage
 =========
 

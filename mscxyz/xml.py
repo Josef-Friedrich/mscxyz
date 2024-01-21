@@ -9,7 +9,6 @@ from lxml.etree import (
     XML,
     Element,
     SubElement,
-    XMLSyntaxError,
     _Element,
     _ElementTree,
     parse,
@@ -60,18 +59,6 @@ class XmlManipulator:
         :return: The root element of the XML file.
         """
         return parse(path).getroot()
-
-    @staticmethod
-    def parse_file_try(
-        file_path: str | Path | TextIOWrapper,
-    ) -> tuple[_Element | None, Exception | None]:
-        element: _Element | None = None
-        error: Exception | None = None
-        try:
-            element = parse(file_path).getroot()
-        except XMLSyntaxError as e:
-            error = e
-        return (element, error)
 
     @staticmethod
     def parse_string(xml_markup: str) -> _Element:

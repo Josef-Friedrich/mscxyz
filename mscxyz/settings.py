@@ -8,7 +8,7 @@ import argparse
 import configparser
 import os
 from io import TextIOWrapper
-from typing import Literal, Optional, Sequence, cast
+from typing import Optional, Sequence, cast
 
 
 class DefaultArguments:
@@ -84,23 +84,6 @@ class DefaultArguments:
 
     # positional argument
     path: str = "."
-
-    subcommand: Optional[
-        Literal["clean", "export", "help", "lyrics", "meta", "rename", "style"]
-    ] = None
-    """TODO for legacy cli: remove"""
-
-    lyrics_extract_legacy: str = "all"
-    """TODO for legacy cli: remove"""
-
-    clean_style: Optional[TextIOWrapper] = None
-    """TODO for legacy cli: remove"""
-
-    style_list_3: bool = False
-    """TODO for legacy cli: remove"""
-
-    style_list_4: bool = False
-    """TODO for legacy cli: remove"""
 
 
 args = DefaultArguments()

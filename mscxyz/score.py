@@ -49,9 +49,6 @@ class Score:
 
     zip_container: Optional[utils.ZipContainer] = None
 
-    errors: list[Exception]
-    """A list to store errors."""
-
     __xml_string_initial: Optional[str] = None
 
     __export: Optional[Export] = None
@@ -71,17 +68,9 @@ class Score:
         else:
             self.xml_file = str(self.path)
 
-        self.errors = []
-
-        element, e = XmlManipulator.parse_file_try(self.xml_file)
-
-        if element is not None:
-            self.xml_root = element
-            self.xml = XmlManipulator(element)
-            self.version = self.get_version()
-
-        if e is not None:
-            self.errors.append(e)
+        self.xml = XmlManipulator(file_path=self.xml_file)
+        self.xml_root = self.xml.root
+        self.version = self.get_version()
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
@@ -214,50 +203,50 @@ class Score:
             dest: str = new_dest
         else:
             dest = str(self.path)
-        if not self.errors:
-            # To get the same xml tag structure as the original score file
-            # has.
-            for xpath in (
-                ".//LayerTag",
-                ".//metaTag",
-                ".//font",
-                ".//i",
-                ".//evenFooterL",
-                ".//evenFooterC",
-                ".//evenFooterR",
-                ".//oddFooterL",
-                ".//oddFooterC",
-                ".//oddFooterR",
-                ".//chord/name",
-                ".//chord/render",
-                ".//StaffText/text",
-                ".//Jump/continueAt",
-            ):
-                x = self.xml.findall(xpath)
-                for tag in x:
-                    if not tag.text:
-                        tag.text = ""
 
-            xml_dest = dest
+        # To get the same xml tag structure as the original score file
+        # has.
+        for xpath in (
+            ".//LayerTag",
+            ".//metaTag",
+            ".//font",
+            ".//i",
+            ".//evenFooterL",
+            ".//evenFooterC",
+            ".//evenFooterR",
+            ".//oddFooterL",
+            ".//oddFooterC",
+            ".//oddFooterR",
+            ".//chord/name",
+            ".//chord/render",
+            ".//StaffText/text",
+            ".//Jump/continueAt",
+        ):
+            x = self.xml.findall(xpath)
+            for tag in x:
+                if not tag.text:
+                    tag.text = ""
 
-            if self.extension == "mscz":
-                xml_dest = self.xml_file
-            self.xml.write(xml_dest)
+        xml_dest = dest
 
-            # Since MuseScore 4 the style is stored in a separate file.
-            if self.style_file:
-                element = self.xml.create_element(
-                    "museScore", {"version": str(self.version)}
-                )
+        if self.extension == "mscz":
+            xml_dest = self.xml_file
+        self.xml.write(xml_dest)
 
-                element.append(self.style.parent_element)
-                self.xml.write(self.style_file, element)
+        # Since MuseScore 4 the style is stored in a separate file.
+        if self.style_file:
+            element = self.xml.create_element(
+                "museScore", {"version": str(self.version)}
+            )
 
-            if self.extension == "mscz" and self.zip_container:
-                self.zip_container.save(dest)
+            element.append(self.style.parent_element)
+            self.xml.write(self.style_file, element)
 
-            if mscore:
-                utils.re_open(dest)
+        if self.extension == "mscz" and self.zip_container:
+            self.zip_container.save(dest)
+
+        if mscore:
+            utils.re_open(dest)
 
     def read_as_text(self) -> str:
         """Read the MuseScore XML file as text.

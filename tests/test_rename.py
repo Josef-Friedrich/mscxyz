@@ -37,23 +37,6 @@ class TestFunctions:
 
 
 class TestIntegration:
-    @pytest.mark.legacy
-    @pytest.mark.parametrize("version", supported_versions)
-    def test_simple_legacy(self, version: int, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "--config-file",
-            ini_file,
-            "rename",
-            get_file("simple.mscx", version),
-            legacy=True,
-        ).stdout()
-        filename = "Title (Composer).mscx"
-        target = Path(cwd_tmpdir / filename)
-        assert target.exists()
-        assert "simple.mscx -> " in stdout
-        assert filename in stdout
-        target.unlink()
-
     @pytest.mark.parametrize("version", supported_versions)
     def test_simple(self, version: int, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
@@ -66,18 +49,6 @@ class TestIntegration:
         assert filename in stdout
         target.unlink()
 
-    @pytest.mark.legacy
-    @pytest.mark.parametrize("version", supported_versions)
-    def test_without_arguments_legacy(self, version: int, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "rename", get_file("meta-all-values.mscx", version), legacy=True
-        ).stdout()
-        filename = "vbox_title (vbox_composer).mscx"
-        dest = Path(cwd_tmpdir / filename)
-        assert dest.exists()
-        assert filename in stdout
-        dest.unlink()
-
     @pytest.mark.parametrize("version", supported_versions)
     def test_without_arguments(self, version: int, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
@@ -89,34 +60,11 @@ class TestIntegration:
         assert filename in stdout
         dest.unlink()
 
-    @pytest.mark.legacy
-    def test_format_legacy(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "rename",
-            "--format",
-            "${vbox_composer}_${vbox_title}",
-            get_file("score.mscz", 4),
-            append_score=False,
-            legacy=True,
-        ).stdout()
-        filename = "Composer_Title.mscz"
-        assert Path(cwd_tmpdir / filename).exists()
-        assert filename in stdout
-
     def test_format(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
             "--rename", "--format", "${vbox_composer}_${vbox_title}"
         ).stdout()
         filename = "Composer_Title.mscz"
-        assert Path(cwd_tmpdir / filename).exists()
-        assert filename in stdout
-
-    @pytest.mark.legacy
-    def test_no_whitespace_legacy(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "rename", "--no-whitespace", get_file("meta-real-world.mscx"), legacy=True
-        ).stdout()
-        filename = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscx"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
@@ -127,15 +75,6 @@ class TestIntegration:
             .stdout()
         )
         filename = "Wir-sind-des-Geyers-schwarze-Haufen (Florian-Geyer).mscz"
-        assert Path(cwd_tmpdir / filename).exists()
-        assert filename in stdout
-
-    @pytest.mark.legacy
-    def test_alphanum_legacy(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "rename", "--alphanum", get_file("meta-all-values.mscx"), legacy=True
-        ).stdout()
-        filename = "vbox title (vbox composer).mscx"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
@@ -152,43 +91,16 @@ class TestIntegration:
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
-    @pytest.mark.legacy
-    def test_ascii_legacy(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "rename", "--ascii", get_file("unicode.mscx"), legacy=True
-        ).stdout()
-        filename = "Tuetlae (Coempoesser).mscx"
-        assert Path(cwd_tmpdir / filename).exists()
-        assert filename in stdout
-
     def test_ascii(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli("--rename", "--ascii").append_score("unicode.mscz").stdout()
         filename = "Tuetlae (Coempoesser).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
-    @pytest.mark.legacy
-    def test_rename_file_twice_legacy(self, cwd_tmpdir: Path) -> None:
-        Cli("rename", get_file("simple.mscx"), legacy=True).execute()
-        assert Path(cwd_tmpdir / "Title (Composer).mscx").exists()
-        assert (
-            "with the same checksum (sha1) already"
-            in Cli("rename", get_file("simple.mscx"), legacy=True).stdout()
-        )
-
     def test_rename_file_twice(self, cwd_tmpdir: Path) -> None:
         Cli("--rename").execute()
         assert Path(cwd_tmpdir / "Title (Composer).mscz").exists()
         assert "with the same checksum (sha1) already" in Cli("--rename").stdout()
-
-    @pytest.mark.legacy
-    def test_rename_same_filename_legacy(self, cwd_tmpdir: Path) -> None:
-        for filename in ("simple.mscx", "lyrics.mscx", "no-vbox.mscx"):
-            Cli("rename", "-f", "same", get_file(filename), legacy=True).execute()
-        assert Path(cwd_tmpdir / "same.mscx").exists()
-        assert not Path(cwd_tmpdir / "same1.mscx").exists()
-        assert Path(cwd_tmpdir / "same2.mscx").exists()
-        assert Path(cwd_tmpdir / "same3.mscx").exists()
 
     def test_rename_same_filename(self, cwd_tmpdir: Path) -> None:
         for filename in ("simple.mscx", "lyrics.mscx", "no-vbox.mscx"):
@@ -198,18 +110,6 @@ class TestIntegration:
         assert Path(cwd_tmpdir / "same2.mscx").exists()
         assert Path(cwd_tmpdir / "same3.mscx").exists()
 
-    @pytest.mark.legacy
-    def test_rename_skips_legacy(self) -> None:
-        assert (
-            "Field “metatag_source” is empty! Skipping"
-            in Cli(
-                "rename",
-                "--skip-if-empty",
-                "metatag_composer,metatag_source",
-                legacy=True,
-            ).stdout()
-        )
-
     def test_rename_skips(self) -> None:
         assert (
             "Field “metatag_source” is empty! Skipping"
@@ -217,24 +117,6 @@ class TestIntegration:
                 "--rename", "--skip-if-empty", "metatag_composer,metatag_source"
             ).stdout()
         )
-
-    @pytest.mark.legacy
-    def test_rename_skip_pass_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "--config-file",
-            ini_file,
-            "rename",
-            "--skip-if-empty",
-            "metatag_composer,metatag_work_title",
-            score,
-            append_score=False,
-            legacy=True,
-        ).stdout()
-        filename = "Title (Composer).mscz"
-        target: Path = cwd_tmpdir / filename
-        assert target.exists()
-        assert "score.mscz -> " in stdout
-        assert filename in stdout
 
     def test_rename_skip_pass(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
@@ -249,19 +131,6 @@ class TestIntegration:
         assert target.exists()
         assert "score.mscz -> " in stdout
         assert filename in stdout
-
-    @pytest.mark.legacy
-    def test_rename_target_legacy(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli(
-            "rename",
-            "--target",
-            cwd_tmpdir,
-            score,
-            append_score=False,
-            legacy=True,
-        ).execute()
-        target: Path = cwd_tmpdir / "Title (Composer).mscz"
-        assert target.exists()
 
     def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
         Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()

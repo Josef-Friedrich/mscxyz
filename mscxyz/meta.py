@@ -822,32 +822,27 @@ class Meta:
     def __init__(self, score: "Score") -> None:
         self.score = score
 
-        if not self.score.errors:
-            self.metatag = Metatag(self.score)
-            self.vbox = Vbox(self.score)
-            self.combined = Combined(self.score)
-            self.interface_read_write = InterfaceReadWrite(self.score)
-            self.interface = Interface(self.score)
+        self.metatag = Metatag(self.score)
+        self.vbox = Vbox(self.score)
+        self.combined = Combined(self.score)
+        self.interface_read_write = InterfaceReadWrite(self.score)
+        self.interface = Interface(self.score)
 
     def sync_fields(self) -> None:
-        if not self.score.errors:
-            self.combined.title = self.combined.title
-            self.combined.subtitle = self.combined.subtitle
-            self.combined.composer = self.combined.composer
-            self.combined.lyricist = self.combined.lyricist
+        self.combined.title = self.combined.title
+        self.combined.subtitle = self.combined.subtitle
+        self.combined.composer = self.combined.composer
+        self.combined.lyricist = self.combined.lyricist
 
     def distribute_field(self, source_fields: str, format_string: str) -> None:
         f: list[str] = source_fields.split(",")
         for source_field in f:
-            try:
-                source = getattr(self.interface, source_field)
-                results: dict[str, str] = distribute_field(source, format_string)
-                if results:
-                    for field, value in results.items():
-                        setattr(self.interface, field, value)
-                return
-            except UnmatchedFormatStringError as error:
-                self.score.errors.append(error)
+            source = getattr(self.interface, source_field)
+            results: dict[str, str] = distribute_field(source, format_string)
+            if results:
+                for field, value in results.items():
+                    setattr(self.interface, field, value)
+            return
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")

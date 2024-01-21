@@ -15,7 +15,6 @@ from lxml.etree import _Element
 
 from mscxyz import Score
 from mscxyz.cli import execute
-from mscxyz.cli_legacy import execute as execute_legacy
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.style import Style
@@ -188,7 +187,8 @@ class Cli:
             stderr = StringIO()
             with redirect_stdout(stdout), redirect_stderr(stderr):
                 if self.__legacy:
-                    execute_legacy(self.__stringified_args)
+                    pass
+                    # execute_legacy(self.__stringified_args)
                 else:
                     execute(self.__stringified_args)
             if self.__score is not None:

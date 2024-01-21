@@ -648,20 +648,19 @@ for action in file_completers:
     action.complete = shtab.FILE  # type: ignore
 
 
-def __report_errors(errors: list[Exception]) -> None:
-    for error in errors:
-        msg = ""
+def __print_error(error: Exception) -> None:
+    msg = ""
 
-        if isinstance(error, SyntaxError):
-            msg = error.msg
+    if isinstance(error, SyntaxError):
+        msg = error.msg
 
-        print(
-            "{}: {}; message: {}".format(
-                utils.color("Error", "white", "on_red"),
-                utils.color(error.__class__.__name__, "red"),
-                msg,
-            )
+    print(
+        "{}: {}; message: {}".format(
+            utils.color("Error", "white", "on_red"),
+            utils.color(error.__class__.__name__, "red"),
+            msg,
         )
+    )
 
 
 # def __no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
@@ -696,150 +695,152 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         selection_glob = "*.mscx"
 
     for file in utils.list_files(src=args.path, glob=selection_glob):
-        if args.selection_list:
-            print(file)
-            continue
+        try:
+            if args.selection_list:
+                print(file)
+                continue
 
-        score = Score(file)
+            score = Score(file)
 
-        if args.style_list_fonts:
-            score.style.print_all_font_faces()
-            continue
+            if args.style_list_fonts:
+                score.style.print_all_font_faces()
+                continue
 
-        if args.general_backup:
-            score.backup()
+            if args.general_backup:
+                score.backup()
 
-        if args.general_diff:
-            score.make_snapshot()
+            if args.general_diff:
+                score.make_snapshot()
 
-        # style
+            # style
 
-        if args.style_clean:
-            score.style.clean()
+            if args.style_clean:
+                score.style.clean()
 
-        for style_name, value in args.style_value:
-            score.style.set(style_name, value)
+            for style_name, value in args.style_value:
+                score.style.set(style_name, value)
 
-        if args.style_file:
-            score.style.load_style_file(args.style_file.name)
+            if args.style_file:
+                score.style.load_style_file(args.style_file.name)
 
-        if args.style_text_font is not None:
-            score.style.set_text_fonts(args.style_text_font)
+            if args.style_text_font is not None:
+                score.style.set_text_fonts(args.style_text_font)
 
-        if args.style_title_font is not None:
-            score.style.set_title_fonts(args.style_title_font)
+            if args.style_title_font is not None:
+                score.style.set_title_fonts(args.style_title_font)
 
-        if args.style_musical_symbol_font is not None:
-            score.style.set_musical_symbol_fonts(args.style_musical_symbol_font)
+            if args.style_musical_symbol_font is not None:
+                score.style.set_musical_symbol_fonts(args.style_musical_symbol_font)
 
-        if args.style_musical_text_font is not None:
-            score.style.set_musical_text_font(args.style_musical_text_font)
+            if args.style_musical_text_font is not None:
+                score.style.set_musical_text_font(args.style_musical_text_font)
 
-        if args.style_staff_space is not None:
-            score.style.staff_space = args.style_staff_space
+            if args.style_staff_space is not None:
+                score.style.staff_space = args.style_staff_space
 
-        if args.style_page_size is not None:
-            score.style.page_width = __inch(args.style_page_size[0])
-            score.style.page_height = __inch(args.style_page_size[1])
+            if args.style_page_size is not None:
+                score.style.page_width = __inch(args.style_page_size[0])
+                score.style.page_height = __inch(args.style_page_size[1])
 
-        if args.style_margin is not None:
-            score.style.margin = __inch(args.style_margin)
+            if args.style_margin is not None:
+                score.style.margin = __inch(args.style_margin)
 
-        if args.style_show_header is not None:
-            score.style.show_header = args.style_show_header
+            if args.style_show_header is not None:
+                score.style.show_header = args.style_show_header
 
-        if args.style_show_footer is not None:
-            score.style.show_footer = args.style_show_footer
+            if args.style_show_footer is not None:
+                score.style.show_footer = args.style_show_footer
 
-        #     print("\n" + utils.color(file, "red"))
-        if args.lyrics_remap:
-            score.lyrics.remap(args.lyrics_remap)
+            #     print("\n" + utils.color(file, "red"))
+            if args.lyrics_remap:
+                score.lyrics.remap(args.lyrics_remap)
 
-        if args.lyrics_fix:
-            score.lyrics.fix_lyrics(mscore=args.general_mscore)
+            if args.lyrics_fix:
+                score.lyrics.fix_lyrics(mscore=args.general_mscore)
 
-        if args.lyrics_extract:
-            no = 0
-            if args.lyrics_extract != "all":
-                no = int(args.lyrics_extract)
-            score.lyrics.extract_lyrics(no)
+            if args.lyrics_extract:
+                no = 0
+                if args.lyrics_extract != "all":
+                    no = int(args.lyrics_extract)
+                score.lyrics.extract_lyrics(no)
 
-        # meta
+            # meta
 
-        if args.meta_metatag:
-            for a in args.meta_metatag:
-                field = a[0]
-                value = a[1]
-                if field not in Metatag.fields:
-                    raise ValueError(
-                        f"Unknown field {field}. "
-                        f"Possible fields: {', '.join(Metatag.fields)}"
-                    )
-                setattr(score.meta.metatag, field, value)
+            if args.meta_metatag:
+                for a in args.meta_metatag:
+                    field = a[0]
+                    value = a[1]
+                    if field not in Metatag.fields:
+                        raise ValueError(
+                            f"Unknown field {field}. "
+                            f"Possible fields: {', '.join(Metatag.fields)}"
+                        )
+                    setattr(score.meta.metatag, field, value)
 
-        if args.meta_vbox:
-            for a in args.meta_vbox:
-                field = a[0]
-                value = a[1]
-                if field not in Vbox.fields:
-                    raise ValueError(
-                        f"Unknown field {field}. "
-                        f"Possible fields: {', '.join(Vbox.fields)}"
-                    )
-                setattr(score.meta.vbox, field, value)
+            if args.meta_vbox:
+                for a in args.meta_vbox:
+                    field = a[0]
+                    value = a[1]
+                    if field not in Vbox.fields:
+                        raise ValueError(
+                            f"Unknown field {field}. "
+                            f"Possible fields: {', '.join(Vbox.fields)}"
+                        )
+                    setattr(score.meta.vbox, field, value)
 
-        if args.meta_combined:
-            for a in args.meta_combined:
-                field = a[0]
-                value = a[1]
-                if field not in Combined.fields:
-                    raise ValueError(
-                        f"Unknown field {field}. "
-                        f"Possible fields: {', '.join(Combined.fields)}"
-                    )
-                setattr(score.meta.combined, field, value)
+            if args.meta_combined:
+                for a in args.meta_combined:
+                    field = a[0]
+                    value = a[1]
+                    if field not in Combined.fields:
+                        raise ValueError(
+                            f"Unknown field {field}. "
+                            f"Possible fields: {', '.join(Combined.fields)}"
+                        )
+                    setattr(score.meta.combined, field, value)
 
-        if args.meta_set:
-            for a in args.meta_set:
-                score.meta.set_field(destination_field=a[0], format_string=a[1])
+            if args.meta_set:
+                for a in args.meta_set:
+                    score.meta.set_field(destination_field=a[0], format_string=a[1])
 
-        #     elif args.subcommand == "meta":
-        #         score = Score(file)
-        #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
-        #             pre: dict[str, str] = score.meta.interface.export_to_dict()
+            #     elif args.subcommand == "meta":
+            #         score = Score(file)
+            #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
+            #             pre: dict[str, str] = score.meta.interface.export_to_dict()
 
-        if args.meta_clean:
-            score.meta.clean_metadata(fields_spec=args.meta_clean)
+            if args.meta_clean:
+                score.meta.clean_metadata(fields_spec=args.meta_clean)
 
-        if args.meta_json:
-            score.meta.export_json()
+            if args.meta_json:
+                score.meta.export_json()
 
-        if args.meta_dist:
-            for a in args.meta_dist:
-                score.meta.distribute_field(source_fields=a[0], format_string=a[1])
+            if args.meta_dist:
+                for a in args.meta_dist:
+                    score.meta.distribute_field(source_fields=a[0], format_string=a[1])
 
-        if args.meta_delete:
-            score.meta.delete_duplicates()
+            if args.meta_delete:
+                score.meta.delete_duplicates()
 
-        if args.meta_sync:
-            score.meta.sync_fields()
+            if args.meta_sync:
+                score.meta.sync_fields()
 
-        if args.meta_log:
-            score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
+            if args.meta_log:
+                score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
 
-        #             post: dict[str, str] = score.meta.interface.export_to_dict()
-        #             score.meta.show(pre, post)
+            #             post: dict[str, str] = score.meta.interface.export_to_dict()
+            #             score.meta.show(pre, post)
 
-        if args.rename_rename:
-            rename(score)
+            if args.rename_rename:
+                rename(score)
 
-        if args.export_extension:
-            score.export.to_extension(args.export_extension)
+            if args.export_extension:
+                score.export.to_extension(args.export_extension)
 
-        if args.general_diff:
-            score.print_diff()
+            if args.general_diff:
+                score.print_diff()
 
-        if not args.general_dry_run:
-            score.save()
+            if not args.general_dry_run:
+                score.save()
 
-        __report_errors(score.errors)
+        except Exception as e:
+            __print_error(e)

@@ -8,7 +8,6 @@ repository = "https://github.com/Josef-Friedrich/mscxyz"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -40,7 +39,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 "musescore-manager" = "mscxyz.cli:execute"
-"mscx-manager" = "mscxyz.cli_legacy:execute"
 
 [[tool.readme_patcher.file]]
 src = "README_template.rst"

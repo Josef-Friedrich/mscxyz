@@ -424,25 +424,6 @@ class TestClassCombined:
 
 
 class TestOptionDistributeField:
-    @pytest.mark.legacy
-    def test_distribute_field_legacy(self) -> None:
-        c = (
-            Cli(
-                "meta",
-                "--distribute-field",
-                "vbox_title",
-                "$combined_title - $combined_composer",
-                legacy=True,
-            )
-            .append_score("meta-distribute-field.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert i.vbox_composer == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.vbox_title == "Title"
-        assert i.metatag_work_title == "Title"
-
     def test_distribute_field(self) -> None:
         c = (
             Cli(
@@ -451,25 +432,6 @@ class TestOptionDistributeField:
                 "$combined_title - $combined_composer",
             )
             .append_score("meta-distribute-field.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert i.vbox_composer == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.vbox_title == "Title"
-        assert i.metatag_work_title == "Title"
-
-    @pytest.mark.legacy
-    def test_distribute_field_multple_source_fields_legacy(self) -> None:
-        c = (
-            Cli(
-                "meta",
-                "--distribute-field",
-                "vbox_title,readonly_basename",
-                "$combined_title - $combined_composer",
-                legacy=True,
-            )
-            .append_score("Title - Composer.mscz")
             .execute()
         )
         i = c.post.meta.interface
@@ -494,28 +456,6 @@ class TestOptionDistributeField:
         assert i.vbox_title == "Title"
         assert i.metatag_work_title == "Title"
 
-    @pytest.mark.legacy
-    def test_distribute_field_multiple_values_legacy(self) -> None:
-        c = (
-            Cli(
-                "meta",
-                "--distribute-field",
-                "vbox_title",
-                "$metatag_work_title - $metatag_composer",
-                "--distribute-field",
-                "vbox_title",
-                "$metatag_movement_title - $metatag_lyricist",
-                legacy=True,
-            )
-            .append_score("meta-distribute-field.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert i.metatag_lyricist == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.metatag_movement_title == "Title"
-        assert i.metatag_work_title == "Title"
-
     def test_distribute_field_multiple_values(self) -> None:
         c = (
             Cli(
@@ -535,17 +475,6 @@ class TestOptionDistributeField:
         assert i.metatag_movement_title == "Title"
         assert i.metatag_work_title == "Title"
 
-    @pytest.mark.legacy
-    def test_distribute_field_invalid_format_string_legacy(self) -> None:
-        with pytest.raises(meta.FormatStringNoFieldError):
-            Cli(
-                "meta",
-                "--distribute-field",
-                "vbox_title",
-                "lol",
-                legacy=True,
-            ).append_score("meta-distribute-field.mscz").execute()
-
     def test_distribute_field_invalid_format_string(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
             Cli(
@@ -553,17 +482,6 @@ class TestOptionDistributeField:
                 "vbox_title",
                 "lol",
             ).append_score("meta-distribute-field.mscz").execute()
-
-    @pytest.mark.legacy
-    def test_distribute_field_exception_unmatched_legacy(self) -> None:
-        stdout = Cli(
-            "meta",
-            "--distribute-field",
-            "vbox_title",
-            "$metatag_work_title - $metatag_composer",
-            legacy=True,
-        ).stdout()
-        assert "UnmatchedFormatStringError" in stdout
 
     def test_distribute_field_exception_unmatched(self) -> None:
         stdout = Cli(
@@ -575,33 +493,11 @@ class TestOptionDistributeField:
 
 
 class TestOptionClean:
-    @pytest.mark.legacy
-    def test_clean_all_legacy(self) -> None:
-        c = (
-            Cli("meta", "--clean", "all", legacy=True)
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface_read_write
-        for field in i.fields:
-            assert getattr(i, field) is None, field
-
     def test_clean_all(self) -> None:
         c = Cli("--clean-meta", "all").append_score("meta-all-values.mscz").execute()
         i = c.post.meta.interface_read_write
         for field in i.fields:
             assert getattr(i, field) is None, field
-
-    @pytest.mark.legacy
-    def test_clean_single_field_legacy(self) -> None:
-        c = (
-            Cli("meta", "--clean", "vbox_title", legacy=True)
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface_read_write
-        assert i.vbox_title is None, "vbox_title"
-        assert i.vbox_composer == "vbox_composer", "vbox_composer"
 
     def test_clean_single_field(self) -> None:
         c = (
@@ -612,18 +508,6 @@ class TestOptionClean:
         i = c.post.meta.interface_read_write
         assert i.vbox_title is None, "vbox_title"
         assert i.vbox_composer == "vbox_composer", "vbox_composer"
-
-    @pytest.mark.legacy
-    def test_clean_some_fields_legacy(self) -> None:
-        c = (
-            Cli("meta", "--clean", "vbox_title,vbox_composer", legacy=True)
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface_read_write
-        assert i.vbox_title is None, "vbox_title"
-        assert i.vbox_composer is None, "vbox_composer"
-        assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
 
     def test_clean_some_fields(self) -> None:
         c = (
@@ -862,15 +746,6 @@ class TestStdout:
 
 
 class TestOptionSetField:
-    @pytest.mark.legacy
-    def test_simple_string_legacy(self) -> None:
-        c = (
-            Cli("meta", "--set-field", "vbox_title", "test", legacy=True)
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        assert c.post.meta.interface.vbox_title == "test"
-
     def test_simple_string(self) -> None:
         c = (
             Cli("--set-field", "vbox_title", "test")
@@ -878,26 +753,6 @@ class TestOptionSetField:
             .execute()
         )
         assert c.post.meta.interface.vbox_title == "test"
-
-    @pytest.mark.legacy
-    def test_multiple_times_legacy(self) -> None:
-        c = (
-            Cli(
-                "meta",
-                "--set-field",
-                "vbox_title",
-                "vt",
-                "--set-field",
-                "vbox_composer",
-                "vc",
-                legacy=True,
-            )
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert i.vbox_title == "vt"
-        assert i.vbox_composer == "vc"
 
     def test_multiple_times(self) -> None:
         c = (
@@ -916,21 +771,6 @@ class TestOptionSetField:
         assert i.vbox_title == "vt"
         assert i.vbox_composer == "vc"
 
-    @pytest.mark.legacy
-    def test_with_templating_legacy(self) -> None:
-        c = (
-            Cli(
-                "meta",
-                "--set-field",
-                "vbox_title",
-                "$vbox_title ($vbox_composer)",
-                legacy=True,
-            )
-            .append_score("meta-all-values.mscz")
-            .execute()
-        )
-        assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
-
     def test_with_templating(self) -> None:
         c = (
             Cli(
@@ -944,50 +784,18 @@ class TestOptionSetField:
         assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
 
 
-class TestOptionLog:
-    @pytest.mark.legacy
-    def test_log_legacy(self, tmp_path: Path) -> None:
-        log = tmp_path / "log.txt"
-        Cli(
-            "meta", "--log", log, "$combined_title-$combined_composer", legacy=True
-        ).execute()
-        assert open(log, "r").readline() == "Title-Composer\n"
-
-    def test_log(self, tmp_path: Path) -> None:
-        log = tmp_path / "log.txt"
-        Cli("--log", log, "$combined_title-$combined_composer").execute()
-        assert open(log, "r").readline() == "Title-Composer\n"
+def test_option_log(tmp_path: Path) -> None:
+    log = tmp_path / "log.txt"
+    Cli("--log", log, "$combined_title-$combined_composer").execute()
+    assert open(log, "r").readline() == "Title-Composer\n"
 
 
 class TestOptionDeleteDuplicates:
-    @pytest.mark.legacy
-    def test_normal_legacy(self) -> None:
-        c = (
-            Cli("meta", "--delete-duplicates", legacy=True)
-            .append_score("meta-duplicates.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
-
     def test_normal(self) -> None:
         c = Cli("--delete-duplicates").append_score("meta-duplicates.mscz").execute()
         i = c.post.meta.interface
         assert not i.combined_lyricist
         assert not i.combined_subtitle
-
-    @pytest.mark.legacy
-    def test_move_subtitle_legacy(self) -> None:
-        c = (
-            Cli("meta", "--delete-duplicates", legacy=True)
-            .append_score("meta-duplicates-move-subtitle.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
-        assert i.combined_title == "Title"
 
     def test_move_subtitle(self) -> None:
         c = (
@@ -999,42 +807,6 @@ class TestOptionDeleteDuplicates:
         assert not i.combined_lyricist
         assert not i.combined_subtitle
         assert i.combined_title == "Title"
-
-
-@pytest.mark.legacy
-def test_option_synchronize_legacy() -> None:
-    c = (
-        Cli("meta", "--synchronize", legacy=True)
-        .append_score("meta-all-values.mscz")
-        .execute()
-    )
-
-    pre = c.pre.meta
-    post = c.post.meta
-
-    # pre
-    assert pre.vbox.title == "vbox_title"
-    assert pre.metatag.work_title == "metatag_work_title"
-    # post
-    assert post.vbox.title == post.metatag.work_title == "vbox_title"
-
-    # pre
-    assert pre.vbox.subtitle == "vbox_subtitle"
-    assert pre.metatag.movement_title == "metatag_movement_title"
-    # post
-    assert post.vbox.subtitle == post.metatag.movement_title == "vbox_subtitle"
-
-    # pre
-    assert pre.vbox.composer == "vbox_composer"
-    assert pre.metatag.composer == "metatag_composer"
-    # post
-    assert post.vbox.composer == post.metatag.composer == "vbox_composer"
-
-    # pre
-    assert pre.vbox.lyricist is None
-    assert pre.metatag.lyricist == "metatag_lyricist"
-    # post
-    assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
 
 
 def test_option_synchronize() -> None:
@@ -1068,23 +840,11 @@ def test_option_synchronize() -> None:
     assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
 
 
-class TestOptionJson:
-    @pytest.mark.legacy
-    def test_legacy(self) -> None:
-        score = (
-            Cli("meta", "--json", legacy=True)
-            .append_score("meta-all-values.mscz")
-            .execute()
-        ).score()
-        json = score.json_file
-        assert json.exists()
-        assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
-
-    def test_json(self) -> None:
-        score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
-        json = score.json_file
-        assert json.exists()
-        assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
+def test_option_json() -> None:
+    score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
+    json = score.json_file
+    assert json.exists()
+    assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
 
 
 class TestClassMeta:
