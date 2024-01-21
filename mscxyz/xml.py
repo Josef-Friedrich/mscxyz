@@ -25,25 +25,30 @@ ListExtension = Literal["mscz", "mscx", "both"]
 ElementLike = Optional[Union[_Element, _ElementTree, None]]
 
 
-class Xml:
+class XmlManipulator:
     """A wrapper around lxml.etree"""
 
     root: _Element
 
-    def __init__(self, element: _Element) -> None:
-        self.root = element
+    file_path: Optional[Union[str, Path]] = None
 
-    def __get_element(self, element: ElementLike = None) -> _Element:
-        if isinstance(element, _ElementTree):
-            return element.getroot()
-        if element is None:
-            return self.root
-        return element
+    def __init__(
+        self,
+        element: Optional[_Element] = None,
+        file_path: Optional[Union[str, Path]] = None,
+        xml_markup: Optional[str] = None,
+    ) -> None:
+        if element is not None:
+            self.root = element
+        elif file_path is not None:
+            self.root = XmlManipulator.parse_file(file_path)
+            self.file_path = file_path
+        elif xml_markup is not None:
+            self.root = XmlManipulator.parse_string(xml_markup)
+        else:
+            self.root = Element("root")
 
-    def __normalize_element(self, element: ElementLike = None) -> _Element | None:
-        if isinstance(element, _ElementTree):
-            return element.getroot()
-        return element
+    # Crud: Create #############################################################
 
     @staticmethod
     def parse_file(path: str | Path | TextIOWrapper) -> _Element:
@@ -55,10 +60,6 @@ class Xml:
         :return: The root element of the XML file.
         """
         return parse(path).getroot()
-
-    @staticmethod
-    def parse_string(xml_markup: str) -> _Element:
-        return XML(xml_markup)
 
     @staticmethod
     def parse_file_try(
@@ -73,8 +74,8 @@ class Xml:
         return (element, error)
 
     @staticmethod
-    def new(file_path: str | Path | TextIOWrapper) -> Xml:
-        return Xml(Xml.parse_file(file_path))
+    def parse_string(xml_markup: str) -> _Element:
+        return XML(xml_markup)
 
     def tostring(self, element: ElementLike = None) -> str:
         """
@@ -103,6 +104,38 @@ class Xml:
         element = self.__get_element(element)
         with open(path, "w") as document:
             document.write(self.tostring(element))
+
+    @staticmethod
+    def create_element(tag_name: str, attrib: Optional[_DictAnyStr] = None) -> _Element:
+        return Element(tag_name, attrib=attrib)
+
+    @staticmethod
+    def create_sub_element(
+        parent: _Element | str,
+        tag_name: str,
+        text: Optional[str] = None,
+        attrib: Optional[_DictAnyStr] = None,
+    ) -> tuple[_Element, _Element]:
+        if isinstance(parent, str):
+            parent = XmlManipulator.create_element(parent)
+        sub_element: _Element = SubElement(parent, tag_name, attrib=attrib)
+        if text:
+            sub_element.text = text
+        return (parent, sub_element)
+
+    # cRud: Read ###############################################################
+
+    def __get_element(self, element: ElementLike = None) -> _Element:
+        if isinstance(element, _ElementTree):
+            return element.getroot()
+        if element is None:
+            return self.root
+        return element
+
+    def __normalize_element(self, element: ElementLike = None) -> _Element | None:
+        if isinstance(element, _ElementTree):
+            return element.getroot()
+        return element
 
     def find(self, element_path: str, element: ElementLike = None) -> _Element | None:
         """
@@ -251,9 +284,11 @@ class Xml:
             raise ValueError(f"Element {element} has no text!")
         return element.text
 
+    # crUd: Update #############################################################
+
     def set_text(
         self, element_path: str, value: str | int | float, element: ElementLike = None
-    ) -> None:
+    ) -> XmlManipulator:
         """
         Set the text value of an XML element at the specified element path.
 
@@ -267,30 +302,23 @@ class Xml:
         :return: None
         """
         self.find_safe(element_path, element).text = str(value)
+        return self
 
     @staticmethod
     def replace(old: _Element, new: _Element) -> None:
+        """
+        Replaces an element in its parent with a new element.
+
+        :param old: The element to be replaced.
+        :param new: The new element to replace the old element.
+
+        :return: None
+        """
         parent: _Element | None = old.getparent()
         if parent is not None:
             parent.replace(old, new)
 
-    @staticmethod
-    def create_element(tag_name: str, attrib: Optional[_DictAnyStr] = None) -> _Element:
-        return Element(tag_name, attrib=attrib)
-
-    @staticmethod
-    def create_sub_element(
-        parent: _Element | str,
-        tag_name: str,
-        text: Optional[str] = None,
-        attrib: Optional[_DictAnyStr] = None,
-    ) -> tuple[_Element, _Element]:
-        if isinstance(parent, str):
-            parent = Xml.create_element(parent)
-        sub_element: _Element = SubElement(parent, tag_name, attrib=attrib)
-        if text:
-            sub_element.text = text
-        return (parent, sub_element)
+    # cruD: Delete #############################################################
 
     @staticmethod
     def remove(element: _Element | None) -> None:
@@ -308,7 +336,7 @@ class Xml:
 
         parent.remove(element)
 
-    def remove_tags(self, *element_paths: str) -> Xml:
+    def remove_tags(self, *element_paths: str) -> XmlManipulator:
         """
         :param element_path: A `element path expression
           <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_

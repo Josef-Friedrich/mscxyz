@@ -12,7 +12,7 @@ from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
 from mscxyz.utils import INCH
-from mscxyz.xml import Xml
+from mscxyz.xml import XmlManipulator
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -126,7 +126,7 @@ class Style:
     """
 
     @property
-    def xml(self) -> Xml:
+    def xml(self) -> XmlManipulator:
         return self.score.xml
 
     def __init__(self, score: "Score") -> None:

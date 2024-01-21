@@ -17,7 +17,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.settings import get_args
 from mscxyz.style import Style
-from mscxyz.xml import Xml
+from mscxyz.xml import XmlManipulator
 
 
 class Score:
@@ -42,7 +42,7 @@ class Score:
     """The root element of the XML tree. It is the ``<museScore version="X.X">`` Tag.
       See the `lxml API <https://lxml.de/api.html>`_."""
 
-    xml: Xml
+    xml: XmlManipulator
 
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
@@ -73,11 +73,11 @@ class Score:
 
         self.errors = []
 
-        element, e = Xml.parse_file_try(self.xml_file)
+        element, e = XmlManipulator.parse_file_try(self.xml_file)
 
         if element is not None:
             self.xml_root = element
-            self.xml = Xml(element)
+            self.xml = XmlManipulator(element)
             self.version = self.get_version()
 
         if e is not None:

@@ -15,7 +15,7 @@ from typing import Any, Generator, List, Literal, Optional
 import termcolor
 
 from mscxyz.settings import get_args
-from mscxyz.xml import Xml
+from mscxyz.xml import XmlManipulator
 
 ListExtension = Literal["mscz", "mscx", "both"]
 
@@ -344,7 +344,7 @@ class ZipContainer:
     def __init__(self, abspath: str | Path) -> None:
         self.tmp_dir = ZipContainer._extract_zip(abspath)
 
-        xml = Xml.new(self.tmp_dir / "META-INF" / "container.xml")
+        xml = XmlManipulator(file_path=self.tmp_dir / "META-INF" / "container.xml")
 
         for root_file in xml.findall(".//rootfiles/rootfile"):
             relpath = root_file.get("full-path")
