@@ -84,6 +84,12 @@ parser.add_argument(
     help="Create a backup file.",
 )
 
+parser.add_argument(
+    "--bail",
+    dest="general_bail",
+    action="store_true",
+    help="Stop execution when an exception occurs.",
+)
 
 parser.add_argument(
     "-k",
@@ -110,7 +116,6 @@ parser.add_argument(
     help="Simulate the actions.",
 )
 
-
 parser.add_argument(
     "-m",
     "--mscore",
@@ -127,7 +132,6 @@ parser.add_argument(
     help="Show a diff of the XML file before and after the manipulation.",
 )
 
-
 file_completers.append(
     parser.add_argument(
         "-e",
@@ -137,7 +141,6 @@ file_completers.append(
         metavar="FILE_PATH",
     )
 )
-
 
 parser.add_argument(
     "-v",
@@ -663,13 +666,6 @@ def __print_error(error: Exception) -> None:
     )
 
 
-# def __no_error(error: Type[LxmlError], errors: list[Exception]) -> bool:
-#     for e in errors:
-#         if isinstance(e, error):
-#             return False
-#     return True
-
-
 def execute(cli_args: Sequence[str] | None = None) -> None:
     args = parse_args(parser, cli_args)
 
@@ -751,7 +747,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_show_footer is not None:
                 score.style.show_footer = args.style_show_footer
 
-            #     print("\n" + utils.color(file, "red"))
             if args.lyrics_remap:
                 score.lyrics.remap(args.lyrics_remap)
 
@@ -843,4 +838,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 score.save()
 
         except Exception as e:
-            __print_error(e)
+            if args.general_bail:
+                raise e
+            else:
+                __print_error(e)

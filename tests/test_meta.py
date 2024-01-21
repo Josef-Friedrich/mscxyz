@@ -478,6 +478,7 @@ class TestOptionDistributeField:
     def test_distribute_field_invalid_format_string(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
             Cli(
+                "--bail",
                 "--distribute-field",
                 "vbox_title",
                 "lol",

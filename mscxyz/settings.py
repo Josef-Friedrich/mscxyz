@@ -13,6 +13,7 @@ from typing import Optional, Sequence, cast
 
 class DefaultArguments:
     general_backup: bool = False
+    general_bail: bool = False
     general_colorize: bool = False
     general_config_file: Optional[str] = None
     general_diff: bool = False
