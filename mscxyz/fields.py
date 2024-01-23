@@ -234,28 +234,23 @@ class FieldsManager:
 
     def get(self, name: str) -> Any | None:
         field = self.get_field(name)
-
         attrs = field.attr_path.split(".")
         value = self.score
         for attr in attrs:
             value = getattr(value, attr)
             if value is None:
                 break
-
         return value
 
-    def set(self, name: str, value: Any) -> Any | None:
+    def set(self, name: str, value: Any) -> None:
         field = self.get_field(name)
         attrs = field.attr_path.split(".")
-
         last = attrs.pop()
-
         obj = self.score
         for attr in attrs:
             obj = getattr(obj, attr)
             if obj is None:
                 raise Exception(f"Cannot set attribute {field.attr_path}")
-
         setattr(obj, last, value)
 
     def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
@@ -302,7 +297,7 @@ class FieldsManager:
         #         print("{}: {}".format(utils.color(field, field_color), " ".join(line)))
 
     def export_to_dict(self) -> dict[str, FieldValue]:
-        output: FieldsExport = {}
+        output: dict[str, FieldValue] = {}
         for field in self.names:
             value = self.get(field)
             if value is not None:

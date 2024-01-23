@@ -871,7 +871,7 @@ class Meta:
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
-        log.write(tmep.parse(format_string, self.interface.export_to_dict()) + "\n")
+        log.write(tmep.parse(format_string, self.score.fields.export_to_dict()) + "\n")
         log.close()
 
     def set_field(self, destination_field: str, format_string: str) -> None:

@@ -85,7 +85,7 @@ class TestClassFieldsManager:
         assert fields.get("title") == new
 
     def test_distribute(self, fields: FieldsManager) -> None:
-        assert fields.distribute("title,compose", "$title - $composer") == {
-            "composer": "Queen",
-            "title": "We are the champions",
-        }
+        fields.set("title", "We are the champions - Queen")
+        fields.distribute("title,composer", "$title - $composer")
+        assert fields.get("title") == "We are the champions"
+        assert fields.get("composer") == "Queen"

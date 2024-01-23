@@ -391,38 +391,32 @@ class TestClassVbox:
 
 
 class TestOptionDistributeField:
-    def test_distribute_field(self) -> None:
-        c = (
-            Cli(
-                "--distribute-field",
-                "vbox_title",
-                "$title - $composer",
-            )
-            .append_score("meta-distribute-field.mscz")
-            .execute()
-        )
+    def test_distribute_field(self, score: Score) -> None:
+        score.meta.vbox.title = "Mozart: Alla Turca"
+        score.save()
+        c = Cli(
+            "--distribute-field", "vbox_title", "$composer: $title", score
+        ).execute()
         f = c.post.fields
+        assert f.get("vbox_composer") == "Mozart"
+        assert f.get("metatag_composer") == "Mozart"
+        assert f.get("vbox_title") == "Alla Turca"
+        assert f.get("metatag_work_title") == "Alla Turca"
 
-        assert f.get("vbox_composer") == "Composer"
-        assert f.get("metatag_composer") == "Composer"
-        assert f.get("vbox_title") == "Title"
-        assert f.get("metatag_work_title") == "Title"
-
-    def test_distribute_field_multple_source_fields(self) -> None:
-        c = (
-            Cli(
-                "--distribute-field",
-                "vbox_title,readonly_basename",
-                "$title - $composer",
-            )
-            .append_score("Title - Composer.mscz")
-            .execute()
-        )
-        i = c.post.meta.interface
-        assert i.vbox_composer == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.vbox_title == "Title"
-        assert i.metatag_work_title == "Title"
+    def test_distribute_field_multiple_source_fields(self, score: Score) -> None:
+        score.meta.vbox.title = "Für Elise - Ludwig van Beethoven"
+        score.save()
+        c = Cli(
+            "--distribute-field",
+            "vbox_title,metatag_poet",
+            "$title - $composer",
+            score,
+        ).execute()
+        f = c.post.fields
+        assert f.get("vbox_composer") == "Ludwig van Beethoven"
+        assert f.get("metatag_composer") == "Ludwig van Beethoven"
+        assert f.get("vbox_title") == "Für Elise"
+        assert f.get("metatag_work_title") == "Für Elise"
 
     def test_distribute_field_multiple_values(self) -> None:
         c = (
@@ -437,11 +431,11 @@ class TestOptionDistributeField:
             .append_score("meta-distribute-field.mscz")
             .execute()
         )
-        i = c.post.meta.interface
-        assert i.metatag_lyricist == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.metatag_movement_title == "Title"
-        assert i.metatag_work_title == "Title"
+        f = c.post.fields
+        assert f.get("metatag_lyricist") == "Composer"
+        assert f.get("metatag_composer") == "Composer"
+        assert f.get("metatag_movement_title") == "Title"
+        assert f.get("metatag_work_title") == "Title"
 
     def test_distribute_field_invalid_format_string(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
