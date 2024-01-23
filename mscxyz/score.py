@@ -29,7 +29,7 @@ class Score:
     """
 
     path: Path
-    """The absolute path of the input file.
+    """The absolute path of the MuseScore file, for example ``/home/xyz/score.mscz``.
     """
 
     xml_file: str
@@ -46,7 +46,7 @@ class Score:
     xml: XmlManipulator
 
     version: float
-    """The MuseScore version, for example 2.03 or 3.01"""
+    """The MuseScore version as a floating point number, for example ``2.03``, ``3.01`` or ``4.20``."""
 
     zip_container: Optional[utils.ZipContainer] = None
 
@@ -84,17 +84,18 @@ class Score:
 
     @property
     def version_major(self) -> int:
-        """The major MuseScore version, for example 2 or 3"""
+        """The major MuseScore version, for example ``2``, ``3`` or ``4``"""
         return int(self.version)
 
     @property
     def backup_file(self) -> Path:
-        """The path of the backup file."""
+        """The absolute path of the backup file.
+        The string ``_bak`` is appended to the file name before the extension."""
         return self.change_path(suffix="bak")
 
     @property
     def json_file(self) -> Path:
-        """The path of the JSON file in which the metadata is saved."""
+        """The absolute path of the JSON file in which the metadata can be exported."""
         return self.change_path(extension="json")
 
     @property
@@ -106,19 +107,18 @@ class Score:
     @property
     def filename(self) -> str:
         """The filename of the MuseScore file, for example:
-        ``simple.mscx``."""
+        ``score.mscz``."""
         return self.path.name
 
     @property
-    def extension(self) -> str:
-        """The extension (``mscx`` or ``mscz``) of the score file, for
-        example: ``mscx``."""
-        return self.filename.split(".")[-1].lower()
+    def basename(self) -> str:
+        """The basename of the score file, for example: ``score``."""
+        return self.filename.replace("." + self.extension, "")
 
     @property
-    def basename(self) -> str:
-        """The basename of the score file, for example: ``simple``."""
-        return self.filename.replace("." + self.extension, "")
+    def extension(self) -> str:
+        """The extension (``mscx`` or ``mscz``) of the score file."""
+        return self.filename.split(".")[-1].lower()
 
     def change_path(
         self, suffix: Optional[Any] = None, extension: Optional[str] = None
