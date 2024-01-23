@@ -7,7 +7,7 @@ from mscxyz import (
     Meta,
     Score,
     Style,
-    list_score_paths,
+    list_files,
 )
 
 
@@ -28,4 +28,4 @@ def test_class_style() -> None:
 
 
 def test_function_list_scores() -> None:
-    assert list_score_paths.__name__ == "list_score_paths"
+    assert list_files.__name__ == "list_files"

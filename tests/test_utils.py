@@ -3,7 +3,8 @@ from __future__ import annotations
 
 import os
 import tempfile
-from typing import Optional
+from pathlib import Path
+from typing import Generator, Optional
 from unittest import mock
 
 import pytest
@@ -23,12 +24,19 @@ class TestFunctions:
     def _list_scores(
         path: str, extension: ListExtension = "both", glob: Optional[str] = None
     ) -> list[str]:
-        with mock.patch("os.walk") as mockwalk:
+        with mock.patch("os.walk") as mockwalk, mock.patch(
+            "pathlib.Path.is_dir"
+        ) as is_dir:
+            is_dir.return_value = True
             mockwalk.return_value = [
                 ("/a", ("bar",), ("lorem.mscx",)),
                 ("/a/b", (), ("impsum.mscz", "dolor.mscx", "sit.txt")),
             ]
-            return utils.list_score_paths(path, extension, glob)
+            scores: list[str] = []
+            for score in utils.list_files(path, extension, glob):
+                scores.append(str(score))
+            scores.sort()
+            return scores
 
     @pytest.mark.skip("TODO: Fix this test")
     @mock.patch("mscxyz.score.Score")
@@ -42,7 +50,7 @@ class TestFunctions:
 
     def test_extension_both(self) -> None:
         result: list[str] = self._list_scores("/test", extension="both")
-        assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
+        assert result == ['/a/b/dolor.mscx', '/a/b/impsum.mscz', '/a/lorem.mscx']
 
     def test_extension_mscx(self) -> None:
         result: list[str] = self._list_scores("/test", extension="mscx")
@@ -57,20 +65,20 @@ class TestFunctions:
             self._list_scores("/test", extension="lol")  # type: ignore
 
     def test_isfile(self) -> None:
-        with mock.patch("os.path.isfile") as mock_isfile:
+        with mock.patch("pathlib.Path.is_file") as mock_isfile:
             mock_isfile.return_value = True
-            result = utils.list_score_paths("/a/b/lorem.mscx")
-            assert result == ["/a/b/lorem.mscx"]
+            result = list(utils.list_files("/a/b/lorem.mscx"))
+            assert str(result[0]) == "/a/b/lorem.mscx"
 
     def test_isfile_no_match(self) -> None:
-        with mock.patch("os.path.isfile") as mock_isfile:
+        with mock.patch("pathlib.Path.is_file") as mock_isfile:
             mock_isfile.return_value = True
-            result: list[str] = utils.list_score_paths("/a/b/lorem.lol")
+            result = list(utils.list_files("/a/b/lorem.lol"))
             assert result == []
 
     def test_arg_glob_txt(self) -> None:
         result: list[str] = self._list_scores("/test", glob="*.txt")
-        assert result == ["/a/b/sit.txt"]
+        assert str(result[0]) == "/a/b/sit.txt"
 
     def test_arg_glob_lol(self) -> None:
         result: list[str] = self._list_scores("/test", glob="*.lol")

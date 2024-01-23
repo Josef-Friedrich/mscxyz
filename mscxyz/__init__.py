@@ -25,5 +25,5 @@ Meta = mscxyz.meta.Meta
 
 Style = mscxyz.style.Style
 
-list_score_paths = utils.list_score_paths
+list_files = utils.list_files
 """list_score_paths"""

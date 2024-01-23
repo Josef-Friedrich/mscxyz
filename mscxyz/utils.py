@@ -22,40 +22,6 @@ ListExtension = Literal["mscz", "mscx", "both"]
 INCH = 25.4
 
 
-def list_score_paths(
-    path: str, extension: ListExtension = "both", glob: Optional[str] = None
-) -> list[str]:
-    """List all scores in path.
-
-    :param path: The path so search for score files.
-    :param extension: Possible values: “both”, “mscz” or “mscx”.
-    :param glob: A glob string, see fnmatch
-    """
-    if not glob:
-        if extension == "both":
-            glob = "*.msc[xz]"
-        elif extension in ("mscx", "mscz"):
-            glob = f"*.{extension}"
-        else:
-            raise ValueError(
-                "Possible values for the argument “extension” "
-                "are: “both”, “mscx”, “mscz”"
-            )
-    if os.path.isfile(path):
-        if fnmatch.fnmatch(path, glob):
-            return [path]
-        else:
-            return []
-    out: List[str] = []
-    for root, _, scores in os.walk(path):
-        for score in scores:
-            if fnmatch.fnmatch(score, glob):
-                scores_path = os.path.join(root, score)
-                out.append(scores_path)
-    out.sort()
-    return out
-
-
 def list_files(
     src: str | list[str], extension: ListExtension = "both", glob: Optional[str] = None
 ) -> Generator[Path, None, None]:

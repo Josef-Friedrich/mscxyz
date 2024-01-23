@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from lxml.etree import _Element
 
-from mscxyz import Score, list_score_paths
+from mscxyz import Score, list_files
 
 
 def test_instantiate_a_score_object(score_file: str) -> None:
@@ -32,7 +32,7 @@ def test_investigate_xml_root(score_file: str) -> None:
 
 
 def test_list_score_paths(nested_dir: Path) -> None:
-    score_paths = list_score_paths(path=str(nested_dir), extension="mscz")
+    score_paths = list(list_files(src=str(nested_dir), extension="mscz"))
     for score_path in score_paths:
         score = Score(score_path)
         assert score.path.exists()
@@ -40,10 +40,10 @@ def test_list_score_paths(nested_dir: Path) -> None:
 
     assert len(score_paths) == 4
 
-    assert "level1/level2/level3/score3.mscz" in score_paths[0]
-    assert "level1/level2/score2.mscz" in score_paths[1]
-    assert "level1/score1.mscz" in score_paths[2]
-    assert "score0.mscz" in score_paths[3]
+    assert "level1/level2/level3/score3.mscz" in str(score_paths[0])
+    assert "level1/level2/score2.mscz" in str(score_paths[1])
+    assert "level1/score1.mscz" in str(score_paths[2])
+    assert "score0.mscz" in str(score_paths[3])
 
 
 @pytest.mark.skip("Will be fixed later")
