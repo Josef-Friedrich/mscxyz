@@ -45,7 +45,7 @@ class TestArgparse:
         assert args.rename_rename
         assert args.rename_alphanum is False
         assert args.rename_ascii is False
-        assert args.rename_format == "$combined_title ($combined_composer)"
+        assert args.rename_format == "$title ($composer)"
         assert args.rename_target is None
 
 

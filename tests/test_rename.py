@@ -14,7 +14,7 @@ from tests.helper import Cli, get_file, get_score, ini_file
 class TestFunctions:
     def test_function_prepare_fields(self) -> None:
         reset_args()
-        fields: dict[str, str] = {
+        fields = {
             "field1": " Subtitle ",
             "field2": "Title / Composer",
         }
@@ -27,7 +27,7 @@ class TestFunctions:
     def test_function_apply_format_string(self) -> None:
         reset_args()
         score = get_score("meta-all-values.mscx")
-        fields: dict[str, str] = score.meta.interface.export_to_dict()
+        fields = score.fields.export_to_dict()
         name: str = rename.apply_format_string(fields)
         assert name == "vbox_title (vbox_composer)"
 
@@ -36,7 +36,7 @@ class TestFunctions:
         assert rename.get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
 
 
-class TestIntegration:
+class TestCli:
     @pytest.mark.parametrize("version", supported_versions)
     def test_simple(self, version: int, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(

@@ -55,7 +55,7 @@ class DefaultArguments:
     rename_rename: bool = False
     rename_alphanum: bool = False
     rename_ascii: bool = False
-    rename_format: str = "$combined_title ($combined_composer)"
+    rename_format: str = "$title ($composer)"
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
     rename_target: Optional[str] = None

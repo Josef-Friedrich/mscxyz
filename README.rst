@@ -672,7 +672,7 @@ CLI Usage
       -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.
       -K FIELDS, --skip-if-empty FIELDS
                             Skip rename action if FIELDS are empty. Separate FIELDS
-                            using commas: combined_composer,combined_title
+                            using commas: composer,title
       -t RENAME_TARGET, --target RENAME_TARGET
                             Target directory
 

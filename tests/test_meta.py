@@ -17,7 +17,6 @@ from mscxyz.meta import (
     Meta,
     Metatag,
     Vbox,
-    distribute_field,
     export_to_dict,
     to_underscore,
 )
@@ -60,11 +59,6 @@ class TestExceptions:
 
 
 class TestFunctions:
-    def test_distribute_field(self) -> None:
-        assert distribute_field(
-            "We are the champions - Queen", "$title - $composer"
-        ) == {"composer": "Queen", "title": "We are the champions"}
-
     def test_to_underscore(self) -> None:
         assert to_underscore("PascalCase") == "_pascal_case"
         assert to_underscore("lowerCamelCase") == "lower_camel_case"
@@ -402,23 +396,24 @@ class TestOptionDistributeField:
             Cli(
                 "--distribute-field",
                 "vbox_title",
-                "$combined_title - $combined_composer",
+                "$title - $composer",
             )
             .append_score("meta-distribute-field.mscz")
             .execute()
         )
-        i = c.post.meta.interface
-        assert i.vbox_composer == "Composer"
-        assert i.metatag_composer == "Composer"
-        assert i.vbox_title == "Title"
-        assert i.metatag_work_title == "Title"
+        f = c.post.fields
+
+        assert f.get("vbox_composer") == "Composer"
+        assert f.get("metatag_composer") == "Composer"
+        assert f.get("vbox_title") == "Title"
+        assert f.get("metatag_work_title") == "Title"
 
     def test_distribute_field_multple_source_fields(self) -> None:
         c = (
             Cli(
                 "--distribute-field",
                 "vbox_title,readonly_basename",
-                "$combined_title - $combined_composer",
+                "$title - $composer",
             )
             .append_score("Title - Composer.mscz")
             .execute()
@@ -766,7 +761,7 @@ class TestOptionSetField:
 
 def test_option_log(tmp_path: Path) -> None:
     log = tmp_path / "log.txt"
-    Cli("--log", log, "$combined_title-$combined_composer").execute()
+    Cli("--log", log, "$title-$composer").execute()
     assert open(log, "r").readline() == "Title-Composer\n"
 
 

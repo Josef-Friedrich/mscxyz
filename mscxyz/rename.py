@@ -10,6 +10,7 @@ import shutil
 import tmep
 from tmep.format import alphanum, asciify, nowhitespace
 
+from mscxyz.fields import FieldsExport
 from mscxyz.score import Score
 from mscxyz.settings import get_args
 from mscxyz.utils import color
@@ -23,11 +24,12 @@ def create_dir(path: str) -> None:
             raise
 
 
-def prepare_fields(fields: dict[str, str]) -> dict[str, str]:
+def prepare_fields(fields: FieldsExport) -> dict[str, str]:
     args = get_args()
-    out: dict[str, str] = {}
+    output: dict[str, str] = {}
     for field, value in fields.items():
         if value:
+            value = str(value)
             if args.rename_alphanum:
                 value = alphanum(value)
                 value = value.strip()
@@ -37,11 +39,11 @@ def prepare_fields(fields: dict[str, str]) -> dict[str, str]:
                 value = nowhitespace(value)
             value = value.strip()
             value = value.replace("/", "-")
-        out[field] = value
-    return out
+            output[field] = value
+    return output
 
 
-def apply_format_string(fields: dict[str, str]) -> str:
+def apply_format_string(fields: FieldsExport) -> str:
     args = get_args()
     fields = prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
@@ -66,13 +68,13 @@ def get_checksum(filename: str) -> str:
 def rename(score: Score) -> Score:
     args = get_args()
 
-    meta_values: dict[str, str] = score.meta.interface.export_to_dict()
+    meta_values = score.fields.export_to_dict()
     target_filename: str = apply_format_string(meta_values)
 
     if args.rename_skip:
         skips: list[str] = args.rename_skip.split(",")
         for skip in skips:
-            if not meta_values[skip]:
+            if skip not in meta_values:
                 print(color("Field “{}” is empty! Skipping".format(skip), "red"))
                 return score
 

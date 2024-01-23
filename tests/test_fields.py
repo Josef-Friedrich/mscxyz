@@ -78,3 +78,14 @@ class TestClassFieldsManager:
 
     def test_method_get(self, fields: FieldsManager) -> None:
         assert fields.get("title") == "Title"
+
+    def test_method_set(self, fields: FieldsManager) -> None:
+        new = "New Title"
+        fields.set("title", new)
+        assert fields.get("title") == new
+
+    def test_distribute(self, fields: FieldsManager) -> None:
+        assert fields.distribute("title,compose", "$title - $composer") == {
+            "composer": "Queen",
+            "title": "We are the champions",
+        }

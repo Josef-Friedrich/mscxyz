@@ -3,17 +3,20 @@
 from __future__ import annotations
 
 import json
+import re
 import typing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Mapping, Union
+
+from mscxyz.meta import FormatStringNoFieldError, UnmatchedFormatStringError
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
 FieldValue = Union[str, int, float]
-FieldsExport = dict[str, FieldValue]
+FieldsExport = Mapping[str, FieldValue]
 
 
 @dataclass
@@ -226,8 +229,13 @@ class FieldsManager:
     def names(self) -> tuple[str, ...]:
         return tuple(self.__fields_by_name.keys())
 
-    def __access_attr(self, attr_path: str) -> Any | None:
-        attrs = attr_path.split(".")
+    def get_field(self, name: str) -> Field:
+        return self.__fields_by_name[name]
+
+    def get(self, name: str) -> Any | None:
+        field = self.get_field(name)
+
+        attrs = field.attr_path.split(".")
         value = self.score
         for attr in attrs:
             value = getattr(value, attr)
@@ -236,9 +244,19 @@ class FieldsManager:
 
         return value
 
-    def get(self, name: str) -> Any | None:
-        field = self.__fields_by_name[name]
-        return self.__access_attr(field.attr_path)
+    def set(self, name: str, value: Any) -> Any | None:
+        field = self.get_field(name)
+        attrs = field.attr_path.split(".")
+
+        last = attrs.pop()
+
+        obj = self.score
+        for attr in attrs:
+            obj = getattr(obj, attr)
+            if obj is None:
+                raise Exception(f"Cannot set attribute {field.attr_path}")
+
+        setattr(obj, last, value)
 
     def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
         pass
@@ -283,7 +301,7 @@ class FieldsManager:
 
         #         print("{}: {}".format(utils.color(field, field_color), " ".join(line)))
 
-    def export_to_dict(self) -> FieldsExport:
+    def export_to_dict(self) -> dict[str, FieldValue]:
         output: FieldsExport = {}
         for field in self.names:
             value = self.get(field)
@@ -292,6 +310,26 @@ class FieldsManager:
                     value = str(value)
                 output[field] = value
         return output
+
+    def distribute(self, source_fields: str, format_string: str) -> None:
+        f: list[str] = source_fields.split(",")
+        for source_field in f:
+            source = self.get(source_field)
+            source = str(source)
+
+            fields = re.findall(r"\$([a-z_]*)", format_string)
+            if not fields:
+                raise FormatStringNoFieldError(format_string)
+            regex = re.sub(r"\$[a-z_]*", "(.*)", format_string)
+            match = re.search(regex, source)
+            if not match:
+                raise UnmatchedFormatStringError(format_string, source)
+            values = match.groups()
+            results: dict[str, str] = dict(zip(fields, values))
+            if results:
+                for field, value in results.items():
+                    self.set(field, value)
+            return
 
     def export_json(self) -> Path:
         """

@@ -47,27 +47,6 @@ class FormatStringNoFieldError(Exception):
         Exception.__init__(self, self.msg)
 
 
-def distribute_field(source: str, format_string: str) -> dict[str, str]:
-    """
-    Distributes the values from the source string into a dictionary based on the format string.
-
-    :param source: The source string from which values will be extracted.
-    :param format_string: The format string that specifies the pattern of the values to be extracted.
-    :return: A dictionary mapping field names to their corresponding values.
-    :raises FormatStringNoFieldError: If the format string does not contain any field markers.
-    :raises UnmatchedFormatStringError: If the format string does not match the source string.
-    """
-    fields = re.findall(r"\$([a-z_]*)", format_string)
-    if not fields:
-        raise FormatStringNoFieldError(format_string)
-    regex = re.sub(r"\$[a-z_]*", "(.*)", format_string)
-    match = re.search(regex, source)
-    if not match:
-        raise UnmatchedFormatStringError(format_string, source)
-    values = match.groups()
-    return dict(zip(fields, values))
-
-
 def to_underscore(field: str) -> str:
     """
     Convert a camel case string to snake case.
@@ -889,16 +868,6 @@ class Meta:
         self.combined.subtitle = self.combined.subtitle
         self.combined.composer = self.combined.composer
         self.combined.lyricist = self.combined.lyricist
-
-    def distribute_field(self, source_fields: str, format_string: str) -> None:
-        f: list[str] = source_fields.split(",")
-        for source_field in f:
-            source = getattr(self.interface, source_field)
-            results: dict[str, str] = distribute_field(source, format_string)
-            if results:
-                for field, value in results.items():
-                    setattr(self.interface, field, value)
-            return
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")

@@ -243,7 +243,7 @@ class TestRename:
             "--target",
             dest,
             "--format",
-            "%lower{%shorten{$combined_title,1}}/$combined_title",
+            "%lower{%shorten{$title,1}}/$title",
             "--no-whitespace",
             src,
         ).execute()

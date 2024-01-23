@@ -418,7 +418,7 @@ group_rename.add_argument(
     "-f",
     "--format",
     dest="rename_format",
-    default="$combined_title ($combined_composer)",
+    default="$title ($composer)",
     help="Format string.",
 )
 
@@ -452,7 +452,7 @@ group_rename.add_argument(
     dest="rename_skip",
     metavar="FIELDS",
     help="Skip rename action if FIELDS are empty. Separate FIELDS using "
-    "commas: combined_composer,combined_title",
+    "commas: composer,title",
 )
 
 group_rename.add_argument(
@@ -811,7 +811,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.meta_dist:
                 for a in args.meta_dist:
-                    score.meta.distribute_field(source_fields=a[0], format_string=a[1])
+                    score.fields.distribute(source_fields=a[0], format_string=a[1])
 
             if args.meta_delete:
                 score.meta.delete_duplicates()
