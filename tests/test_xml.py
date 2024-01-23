@@ -1,13 +1,17 @@
 """Test submodule “utils.py”."""
 from __future__ import annotations
 
+
 from pathlib import Path
+
 
 import pytest
 
 from mscxyz import utils
 from mscxyz.xml import Xml
+
 from tests import helper
+
 
 xml_file = helper.get_file("simple.mscx", 4)
 
@@ -58,7 +62,7 @@ def test_xpathall_safe() -> None:
     assert len(element) == 16
 
 
-def test_xml_write(tmp_path: Path) -> None:
+def test_write(tmp_path: Path) -> None:
     dest = tmp_path / "test.xml"
     element = Xml.parse("<root><a><b/><c/></a><d><e/></d></root>")
     xml.write(dest, element)
