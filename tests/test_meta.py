@@ -396,33 +396,6 @@ class TestClassVbox:
         assert "<text>New Title</text>" in new_score.read_as_text()
 
 
-class TestClassCombined:
-    def test_getter(self, score: Score) -> None:
-        c = score.meta.combined
-        assert c.title == "Title"
-        assert c.subtitle is None
-        assert c.composer == "Composer"
-        assert c.lyricist is None
-
-    def test_setter(self, score: Score) -> None:
-        c = score.meta.combined
-        c.title = "T"
-        c.subtitle = "S"
-        c.composer = "C"
-        c.lyricist = "L"
-        score.reload(save=True)
-        c = score.meta.combined
-        assert c.metatag.work_title == "T"
-        assert c.metatag.movement_title == "S"
-        assert c.metatag.composer == "C"
-        assert c.metatag.lyricist == "L"
-
-        assert c.vbox.title == "T"
-        assert c.vbox.subtitle == "S"
-        assert c.vbox.composer == "C"
-        assert c.vbox.lyricist == "L"
-
-
 class TestOptionDistributeField:
     def test_distribute_field(self) -> None:
         c = (
@@ -914,3 +887,36 @@ class TestClassMeta:
         # )
         assert '{\n    "combined_composer": "vbox_composer",\n' in json
         assert '"readonly_basename": "meta-all-values"' in json
+
+    def test_property_title(self, score: Score) -> None:
+        assert score.meta.title == "Title"
+        new = "New Title"
+        score.meta.title = new
+        assert score.meta.title == new
+        assert score.meta.vbox.title == new
+        assert score.meta.metatag.work_title == new
+
+    def test_property_subtitle(self, score: Score) -> None:
+        assert score.meta.subtitle is None
+        new = "New Subtitle"
+        score.meta.subtitle = new
+        assert score.meta.subtitle == new
+        assert score.meta.vbox.subtitle == new
+        assert score.meta.metatag.subtitle == new
+        assert score.meta.metatag.movement_title == new
+
+    def test_property_composer(self, score: Score) -> None:
+        assert score.meta.composer == "Composer"
+        new = "New Composer"
+        score.meta.composer = new
+        assert score.meta.composer == new
+        assert score.meta.vbox.composer == new
+        assert score.meta.metatag.composer == new
+
+    def test_property_lyricist(self, score: Score) -> None:
+        assert score.meta.lyricist is None
+        new = "New Lyricist"
+        score.meta.lyricist = new
+        assert score.meta.lyricist == new
+        assert score.meta.vbox.lyricist == new
+        assert score.meta.metatag.lyricist == new
