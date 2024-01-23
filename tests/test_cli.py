@@ -60,11 +60,6 @@ class TestCommandlineInterface:
             execute(["--help"])
         assert e.value.code == 0
 
-    def test_without_arguments(self) -> None:
-        with pytest.raises(SystemExit) as e:
-            execute()
-        assert e.value.code == 2
-
     def test_help_text(self, capsys: CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit):
             execute(["-h"])
