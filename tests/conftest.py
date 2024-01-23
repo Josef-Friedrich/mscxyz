@@ -7,6 +7,7 @@ from typing import Any, Generator
 import pytest
 
 from mscxyz import Score
+from mscxyz.fields import FieldsManager
 from tests import helper
 
 
@@ -50,6 +51,12 @@ def score4z() -> Score:
 def score() -> Score:
     """Instantiate a Score object from the file simple.mscz (version 4)."""
     return helper.get_score("score.mscz", version=4)
+
+
+@pytest.fixture(autouse=True)
+def fields() -> FieldsManager:
+    """Instantiate a Score object from the file simple.mscz (version 4)."""
+    return helper.get_fields("score.mscz", version=4)
 
 
 @pytest.fixture(autouse=True)

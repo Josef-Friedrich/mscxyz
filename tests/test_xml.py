@@ -1,21 +1,13 @@
 """Test submodule “utils.py”."""
 from __future__ import annotations
 
-
 from pathlib import Path
-
 
 import pytest
 
 from mscxyz import utils
-<<<<<<< HEAD
-from mscxyz.xml import Xml
-
-=======
 from mscxyz.xml import XmlManipulator
->>>>>>> 9fb215c9f72f452ad9cd1b8b1ff22f6f54643c9b
 from tests import helper
-
 
 xml_file = helper.get_file("simple.mscx", 4)
 
@@ -103,17 +95,6 @@ def test_method_xpathall_safe() -> None:
     assert len(element) == 16
 
 
-<<<<<<< HEAD
-def test_write(tmp_path: Path) -> None:
-    dest = tmp_path / "test.xml"
-    element = Xml.parse("<root><a><b/><c/></a><d><e/></d></root>")
-    xml.write(dest, element)
-    result: str = utils.read_file(dest)
-    assert result == (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        "<root><a><b/><c/></a><d><e/></d></root>\n"
-    )
-=======
 # crUd: Update #################################################################
 
 
@@ -169,4 +150,3 @@ class TestMethodRemoveTags:
 
     def test_navigate_in_tree(self, custom_xml: XmlManipulator) -> None:
         assert "<root><a><c/></a>" in custom_xml.remove_tags("./a/b").tostring()
->>>>>>> 9fb215c9f72f452ad9cd1b8b1ff22f6f54643c9b

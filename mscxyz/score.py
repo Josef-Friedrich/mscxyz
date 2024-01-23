@@ -13,6 +13,7 @@ from lxml.etree import _Element
 
 from mscxyz import utils
 from mscxyz.export import Export
+from mscxyz.fields import FieldsManager
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.settings import get_args
@@ -50,6 +51,8 @@ class Score:
     zip_container: Optional[utils.ZipContainer] = None
 
     __xml_string_initial: Optional[str] = None
+
+    __fields: Optional[FieldsManager] = None
 
     __export: Optional[Export] = None
 
@@ -127,6 +130,12 @@ class Score:
         if self.__export is None:
             self.__export = Export(self)
         return self.__export
+
+    @property
+    def fields(self) -> FieldsManager:
+        if self.__fields is None:
+            self.__fields = FieldsManager(self)
+        return self.__fields
 
     @property
     def lyrics(self) -> Lyrics:

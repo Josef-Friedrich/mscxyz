@@ -15,6 +15,7 @@ from lxml.etree import _Element
 
 from mscxyz import Score
 from mscxyz.cli import execute
+from mscxyz.fields import FieldsManager
 from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.style import Style
@@ -76,6 +77,10 @@ def get_score(filename: str, version: int = 2) -> Score:
 
 def get_meta(filename: str, version: int = 2) -> Meta:
     return get_score(filename, version).meta
+
+
+def get_fields(filename: str, version: int = 2) -> FieldsManager:
+    return get_score(filename, version).fields
 
 
 def get_lyrics(filename: str, version: int = 2) -> Lyrics:
