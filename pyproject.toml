@@ -8,7 +8,6 @@ repository = "https://github.com/Josef-Friedrich/mscxyz"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -20,10 +19,10 @@ keywords = ["audio"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-lxml = "^5.0.0"
+lxml = "^5.1.0"
 termcolor = "^2.4.0"
 tmep = "^2.4.0"
-lxml-stubs = "^0.4.0"
+lxml-stubs = "^0.5.1"
 shtab = "^1.6.5"
 
 [tool.poetry.group.dev.dependencies]
@@ -40,7 +39,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 "musescore-manager" = "mscxyz.cli:execute"
-"mscx-manager" = "mscxyz.cli_legacy:execute"
 
 [[tool.readme_patcher.file]]
 src = "README_template.rst"

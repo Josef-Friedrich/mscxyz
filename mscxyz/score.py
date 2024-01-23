@@ -6,12 +6,9 @@ from __future__ import annotations
 import difflib
 import os
 import shutil
-import typing
 from pathlib import Path
 from typing import Any, Optional
 
-import lxml
-import lxml.etree
 from lxml.etree import _Element
 
 from mscxyz import utils
@@ -20,9 +17,7 @@ from mscxyz.lyrics import Lyrics
 from mscxyz.meta import Meta
 from mscxyz.settings import get_args
 from mscxyz.style import Style
-
-if typing.TYPE_CHECKING:
-    from lxml.etree import _XPathObject
+from mscxyz.xml import XmlManipulator
 
 
 class Score:
@@ -44,15 +39,15 @@ class Score:
     """Score files created with MuseScore 4 have a separate style file."""
 
     xml_root: _Element
-    """The root element of the XML tree. See the `lxml API <https://lxml.de/api.html>`_."""
+    """The root element of the XML tree. It is the ``<museScore version="X.X">`` Tag.
+      See the `lxml API <https://lxml.de/api.html>`_."""
+
+    xml: XmlManipulator
 
     version: float
     """The MuseScore version, for example 2.03 or 3.01"""
 
     zip_container: Optional[utils.ZipContainer] = None
-
-    errors: list[Exception]
-    """A list to store errors."""
 
     __xml_string_initial: Optional[str] = None
 
@@ -73,20 +68,16 @@ class Score:
         else:
             self.xml_file = str(self.path)
 
-        self.errors = []
-        try:
-            self.xml_root = lxml.etree.parse(self.xml_file).getroot()
-        except lxml.etree.XMLSyntaxError as e:
-            self.errors.append(e)
-        else:
-            self.version = self.get_version()
+        self.xml = XmlManipulator(file_path=self.xml_file)
+        self.xml_root = self.xml.root
+        self.version = self.get_version()
 
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
 
     @property
     def xml_string(self) -> str:
-        return utils.xml.tostring(self.xml_root)
+        return self.xml.tostring(self.xml_root)
 
     @property
     def version_major(self) -> int:
@@ -172,31 +163,10 @@ class Score:
         :return: The version number as a float.
         :raises ValueError: If the version number cannot be retrieved.
         """
-        version: _XPathObject = self.xml_root.xpath("number(/museScore[1]/@version)")
+        version = self.xml_root.xpath("number(/museScore[1]/@version)")
         if isinstance(version, float):
             return version
         raise ValueError("Could not get version number")
-
-    def remove_tags_by_xpath(self, *xpath_strings: str) -> None:
-        """Remove tags by xpath strings.
-
-        :param xpath_strings: A xpath string.
-
-        .. code:: Python
-
-            tree.remove_tags_by_xpath(
-                '/museScore/Score/Style', '//LayoutBreak', '//StemDirection'
-            )
-
-        """
-        for xpath_string in xpath_strings:
-            x: _XPathObject = self.xml_root.xpath(xpath_string)
-            if isinstance(x, list):
-                for rm in x:
-                    if isinstance(rm, _Element):
-                        p: _Element | None = rm.getparent()
-                        if isinstance(p, _Element):
-                            p.remove(rm)
 
     def print_diff(self) -> None:
         if self.__xml_string_initial is None:
@@ -233,50 +203,50 @@ class Score:
             dest: str = new_dest
         else:
             dest = str(self.path)
-        if not self.errors:
-            # To get the same xml tag structure as the original score file
-            # has.
-            for xpath in (
-                "//LayerTag",
-                "//metaTag",
-                "//font",
-                "//i",
-                "//evenFooterL",
-                "//evenFooterC",
-                "//evenFooterR",
-                "//oddFooterL",
-                "//oddFooterC",
-                "//oddFooterR",
-                "//chord/name",
-                "//chord/render",
-                "//StaffText/text",
-                "//Jump/continueAt",
-            ):
-                x: list[_Element] | None = utils.xml.xpathall(self.xml_root, xpath)
-                if x:
-                    for tag in x:
-                        if not tag.text:
-                            tag.text = ""
 
-            xml_dest = dest
+        # To get the same xml tag structure as the original score file
+        # has.
+        for xpath in (
+            ".//LayerTag",
+            ".//metaTag",
+            ".//font",
+            ".//i",
+            ".//evenFooterL",
+            ".//evenFooterC",
+            ".//evenFooterR",
+            ".//oddFooterL",
+            ".//oddFooterC",
+            ".//oddFooterR",
+            ".//chord/name",
+            ".//chord/render",
+            ".//StaffText/text",
+            ".//Jump/continueAt",
+        ):
+            x = self.xml.findall(xpath)
+            for tag in x:
+                if not tag.text:
+                    tag.text = ""
 
-            if self.extension == "mscz":
-                xml_dest = self.xml_file
-            utils.xml.write(xml_dest, self.xml_root)
+        xml_dest = dest
 
-            # Since MuseScore 4 the style is stored in a separate file.
-            if self.style_file:
-                element: _Element = lxml.etree.Element(
-                    "museScore", {"version": str(self.version)}
-                )
-                element.append(self.style.parent_element)
-                utils.xml.write(self.style_file, element)
+        if self.extension == "mscz":
+            xml_dest = self.xml_file
+        self.xml.write(xml_dest)
 
-            if self.extension == "mscz" and self.zip_container:
-                self.zip_container.save(dest)
+        # Since MuseScore 4 the style is stored in a separate file.
+        if self.style_file:
+            element = self.xml.create_element(
+                "museScore", {"version": str(self.version)}
+            )
 
-            if mscore:
-                utils.re_open(dest)
+            element.append(self.style.parent_element)
+            self.xml.write(self.style_file, element)
+
+        if self.extension == "mscz" and self.zip_container:
+            self.zip_container.save(dest)
+
+        if mscore:
+            utils.re_open(dest)
 
     def read_as_text(self) -> str:
         """Read the MuseScore XML file as text.

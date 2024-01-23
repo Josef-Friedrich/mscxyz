@@ -3,8 +3,8 @@ all: test autocomplete
 test:
 	poetry run tox
 
-test_quick: autocomplete
-	poetry run tox -e py310,format,docs,lint
+test_quick:
+	poetry run tox -e quick,format,docs,lint
 
 test_real_binary:
 	pytest _test_real-binary.py
@@ -43,10 +43,10 @@ activate_venv:
 pin_docs_requirements:
 	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
 
-autocomplete:
-	musescore-manager --print-completion zsh > autocomplete.zsh
-	musescore-manager --print-completion bash > autocomplete.bash
-	musescore-manager --print-completion tcsh > autocomplete.tcsh
+# autocomplete:
+# 	musescore-manager --print-completion zsh > autocomplete.zsh
+# 	musescore-manager --print-completion bash > autocomplete.bash
+# 	musescore-manager --print-completion tcsh > autocomplete.tcsh
 
 install_autocomplete: autocomplete
 	cp autocomplete.zsh "$(HOME)/.zsh-completions/_musescore-manager"

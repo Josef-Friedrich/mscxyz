@@ -8,8 +8,6 @@ import typing
 from pathlib import Path
 from typing import Any
 
-import lxml
-import lxml.etree
 import tmep
 from lxml.etree import _Element
 
@@ -179,19 +177,19 @@ class Metatag:
         self.xml_root = score.xml_root
 
     def __get_element(self, field: str) -> _Element:
-        score_element: _Element = utils.xml.find_safe(self.xml_root, "Score")
-        element: _Element | None = utils.xml.xpath(
-            self.xml_root, '//metaTag[@name="' + field + '"]'
+        score_element: _Element = self.score.xml.find_safe("Score")
+        element: _Element | None = self.score.xml.xpath(
+            '//metaTag[@name="' + field + '"]'
         )
         if element is None:
-            element = utils.xml.create_sub_element(
+            _, element = self.score.xml.create_sub_element(
                 score_element, "metaTag", "", attrib={"name": field}
             )
         return element
 
     def __get_text(self, field: str) -> str | None:
         element: _Element | None = self.__get_element(field)
-        return utils.xml.get_text(element)
+        return self.score.xml.get_text(element)
 
     def __set_text(self, field: str, value: str | None) -> None:
         if value is None:
@@ -199,147 +197,195 @@ class Metatag:
         element: _Element = self.__get_element(field)
         element.text = value
 
-    # arranger
-
     @property
     def arranger(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="arranger">...</metaTag>
+        """
         return self.__get_text("arranger")
 
     @arranger.setter
     def arranger(self, value: str | None) -> None:
         self.__set_text("arranger", value)
 
-    # audio_com_url -> audioComUrl
-
     @property
     def audio_com_url(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="audioComUrl">...</metaTag>
+        """
         return self.__get_text("audioComUrl")
 
     @audio_com_url.setter
     def audio_com_url(self, value: str | None) -> None:
         self.__set_text("audioComUrl", value)
 
-    # composer
-
     @property
     def composer(self) -> str | None:
-        """Same text as "Composer" on the first page of the score"""
+        """Same text as "Composer" on the first page of the score
+
+        .. code-block:: xml
+
+            <metaTag name="composer">...</metaTag>
+        """
         return self.__get_text("composer")
 
     @composer.setter
     def composer(self, value: str | None) -> None:
         self.__set_text("composer", value)
 
-    # copyright
-
     @property
     def copyright(self) -> str | None:
-        """Same text as "Copyright" on the first page of the score."""
+        """Same text as "Copyright" on the first page of the score.
+
+        .. code-block:: xml
+
+            <metaTag name="copyright">...</metaTag>
+        """
         return self.__get_text("copyright")
 
     @copyright.setter
     def copyright(self, value: str | None) -> None:
         self.__set_text("copyright", value)
 
-    # creation_date -> creationDate
-
     @property
     def creation_date(self) -> str | None:
+        """
+        https://github.com/musescore/MuseScore/blob/06793ff5ff3065fe87fe9a8a651a6d20f49fd28c/src/engraving/dom/masterscore.cpp#L93
+
+        .. code-block:: xml
+
+            <metaTag name="creationDate">2024-01-05</metaTag>
+        """
         return self.__get_text("creationDate")
 
     @creation_date.setter
     def creation_date(self, value: str | None) -> None:
         self.__set_text("creationDate", value)
 
-    # lyricist
-
     @property
     def lyricist(self) -> str | None:
-        """Same text as “Lyricist” on the first page of the score."""
+        """Same text as “Lyricist” on the first page of the score.
+
+        .. code-block:: xml
+
+            <metaTag name="lyricist">...</metaTag>
+        """
         return self.__get_text("lyricist")
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
         self.__set_text("lyricist", value)
 
-    # movement_number -> movementNumber
-
     @property
     def movement_number(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="movementNumber">...</metaTag>
+        """
         return self.__get_text("movementNumber")
 
     @movement_number.setter
     def movement_number(self, value: str | None) -> None:
         self.__set_text("movementNumber", value)
 
-    # movement_title -> movementTitle
-
     @property
     def movement_title(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="movementTitle">...</metaTag>
+        """
         return self.__get_text("movementTitle")
 
     @movement_title.setter
     def movement_title(self, value: str | None) -> None:
         self.__set_text("movementTitle", value)
 
-    # msc_version -> mscVersion
-
     @property
     def msc_version(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="mscVersion">4.20</metaTag>
+        """
         return self.__get_text("mscVersion")
 
     @msc_version.setter
     def msc_version(self, value: str | None) -> None:
         self.__set_text("mscVersion", value)
 
-    # platform
-
     @property
     def platform(self) -> str | None:
-        """The computing platform the score was created on. This might be empty if the score was saved in test mode."""
+        """The computing platform the score was created on. This might be empty if the score was saved in test mode.
+
+        https://github.com/musescore/MuseScore/blob/06793ff5ff3065fe87fe9a8a651a6d20f49fd28c/src/engraving/dom/masterscore.cpp#L74-L81
+
+        .. code-block:: xml
+
+            <metaTag name="platform">Linux</metaTag>
+            <metaTag name="platform">Apple Macintosh</metaTag>
+        """
         return self.__get_text("platform")
 
     @platform.setter
     def platform(self, value: str | None) -> None:
         self.__set_text("platform", value)
 
-    # poet
-
     @property
     def poet(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="poet">...</metaTag>
+        """
         return self.__get_text("poet")
 
     @poet.setter
     def poet(self, value: str | None) -> None:
         self.__set_text("poet", value)
 
-    # source
-
     @property
     def source(self) -> str | None:
-        """May contain a URL if the score was downloaded from or Publish to MuseScore.com."""
+        """May contain a URL if the score was downloaded from or Publish to MuseScore.com.
+
+        .. code-block:: xml
+
+            <metaTag name="source">http://musescore.com/isaacweiss/getting-started</metaTag>
+            <metaTag name="source">http://musescore.com/score/111410</metaTag>
+        """
+
         return self.__get_text("source")
 
     @source.setter
     def source(self, value: str | None) -> None:
         self.__set_text("source", value)
 
-    # source_revision_id -> sourceRevisionId
-
     @property
     def source_revision_id(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="sourceRevisionId">...</metaTag>
+        """
         return self.__get_text("sourceRevisionId")
 
     @source_revision_id.setter
     def source_revision_id(self, value: str | None) -> None:
         self.__set_text("sourceRevisionId", value)
 
-    # subtitle
-
     @property
     def subtitle(self) -> str | None:
         """
-        The Subtitle. It has the same text as “Subtitle” on the first page of the score.
+        The subtitle. It has the same text as “Subtitle” on the first page of the score.
+
+        .. code-block:: xml
+
+            <metaTag name="subtitle">Subtitle</metaTag>
         """
         return self.__get_text("subtitle")
 
@@ -347,32 +393,40 @@ class Metatag:
     def subtitle(self, value: str | None) -> None:
         self.__set_text("subtitle", value)
 
-    # translator
-
     @property
     def translator(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="translator">...</metaTag>
+        """
         return self.__get_text("translator")
 
     @translator.setter
     def translator(self, value: str | None) -> None:
         self.__set_text("translator", value)
 
-    # work_number -> workNumber
-
     @property
     def work_number(self) -> str | None:
+        """
+        .. code-block:: xml
+
+            <metaTag name="workNumber">...</metaTag>
+        """
         return self.__get_text("workNumber")
 
     @work_number.setter
     def work_number(self, value: str | None) -> None:
         self.__set_text("workNumber", value)
 
-    # work_title -> workTitle
-
     @property
     def work_title(self) -> str | None:
         """
         The Work Title. It has the same text as “Title” on the first page of the score.
+
+        .. code-block:: xml
+
+            <metaTag name="workTitle">Untitled score</metaTag>
         """
         return self.__get_text("workTitle")
 
@@ -466,12 +520,11 @@ class Vbox:
         self.xml_root = score.xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
 
-        vbox = utils.xml.xpath(self.xml_root, xpath + "/VBox")
+        vbox = self.score.xml.xpath(xpath + "/VBox")
         if vbox is None:
-            vbox = lxml.etree.Element("VBox")
-            height = lxml.etree.SubElement(vbox, "height")
-            height.text = "10"
-            utils.xml.xpath_safe(self.xml_root, xpath).insert(0, vbox)
+            vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
+
+            self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
 
     def __normalize_style_name(self, style: str) -> str:
@@ -532,17 +585,17 @@ class Vbox:
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         :param text: The string inside the ``<text>`` tags.
         """
-        text_element: _Element = utils.xml.create_element("Text")
+        text_element: _Element = self.score.xml.create_element("Text")
 
         if self.score.version_major in (2, 3):
             style = style.title()
         elif self.score.version_major == 4:
             style = style.lower()
 
-        utils.xml.create_sub_element(
+        self.score.xml.create_sub_element(
             text_element, "style", self.__normalize_style_name(style)
         )
-        utils.xml.create_sub_element(text_element, "text", text)
+        self.score.xml.create_sub_element(text_element, "text", text)
         self.vbox.append(text_element)
 
     def __set_text(self, style: str, text: str | None) -> None:
@@ -567,7 +620,7 @@ class Vbox:
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
-        utils.xml.remove(self.__get_element(style))
+        self.score.xml.remove(self.__get_element(style))
         return None
 
     # composer -> Composer
@@ -825,32 +878,27 @@ class Meta:
     def __init__(self, score: "Score") -> None:
         self.score = score
 
-        if not self.score.errors:
-            self.metatag = Metatag(self.score)
-            self.vbox = Vbox(self.score)
-            self.combined = Combined(self.score)
-            self.interface_read_write = InterfaceReadWrite(self.score)
-            self.interface = Interface(self.score)
+        self.metatag = Metatag(self.score)
+        self.vbox = Vbox(self.score)
+        self.combined = Combined(self.score)
+        self.interface_read_write = InterfaceReadWrite(self.score)
+        self.interface = Interface(self.score)
 
     def sync_fields(self) -> None:
-        if not self.score.errors:
-            self.combined.title = self.combined.title
-            self.combined.subtitle = self.combined.subtitle
-            self.combined.composer = self.combined.composer
-            self.combined.lyricist = self.combined.lyricist
+        self.combined.title = self.combined.title
+        self.combined.subtitle = self.combined.subtitle
+        self.combined.composer = self.combined.composer
+        self.combined.lyricist = self.combined.lyricist
 
     def distribute_field(self, source_fields: str, format_string: str) -> None:
         f: list[str] = source_fields.split(",")
         for source_field in f:
-            try:
-                source = getattr(self.interface, source_field)
-                results: dict[str, str] = distribute_field(source, format_string)
-                if results:
-                    for field, value in results.items():
-                        setattr(self.interface, field, value)
-                return
-            except UnmatchedFormatStringError as error:
-                self.score.errors.append(error)
+            source = getattr(self.interface, source_field)
+            results: dict[str, str] = distribute_field(source, format_string)
+            if results:
+                for field, value in results.items():
+                    setattr(self.interface, field, value)
+            return
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
@@ -968,3 +1016,55 @@ class Meta:
         :see: :meth:`mscxyz.score.Score.reload`
         """
         return self.score.reload(save).meta
+
+    def __pick_value(self, *values: str | None) -> str | None:
+        for value in values:
+            if value:
+                return value
+        return None
+
+    @property
+    def title(self) -> str | None:
+        """
+        Get and set the value of ``VBox[title]`` and ``metaTag[workTitle]`` all at once.
+        """
+        return self.__pick_value(self.vbox.title, self.metatag.work_title)
+
+    @title.setter
+    def title(self, value: str | None) -> None:
+        self.vbox.title = self.metatag.work_title = value
+
+    @property
+    def subtitle(self) -> str | None:
+        """
+        Get and set the value of ``VBox[subtitle]``, ``metaTag[subtitle]`` and ``metaTag[movementTitle]`` all at once.
+        """
+        return self.__pick_value(
+            self.vbox.subtitle, self.metatag.subtitle, self.metatag.movement_title
+        )
+
+    @subtitle.setter
+    def subtitle(self, value: str | None) -> None:
+        self.vbox.subtitle = self.metatag.subtitle = self.metatag.movement_title = value
+
+    @property
+    def composer(self) -> str | None:
+        """
+        Get and set the value of ``VBox[composer]`` and ``metaTag[composer]`` all at once.
+        """
+        return self.__pick_value(self.vbox.composer, self.metatag.composer)
+
+    @composer.setter
+    def composer(self, value: str | None) -> None:
+        self.vbox.composer = self.metatag.composer = value
+
+    @property
+    def lyricist(self) -> str | None:
+        """
+        Get and set the value of ``VBox[lyricist]`` and ``metaTag[lyricist]`` all at once.
+        """
+        return self.__pick_value(self.vbox.lyricist, self.metatag.lyricist)
+
+    @lyricist.setter
+    def lyricist(self, value: str | None) -> None:
+        self.vbox.lyricist = self.metatag.lyricist = value

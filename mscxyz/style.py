@@ -6,12 +6,11 @@ from io import TextIOWrapper
 from pathlib import Path
 from typing import Optional, Sequence, TypedDict, Union, cast
 
-import lxml
-import lxml.etree
-from lxml.etree import _Attrib, _Element, strip_tags
+from lxml.etree import _Attrib, _Element
 
 from mscxyz import utils
 from mscxyz.utils import INCH
+from mscxyz.xml import XmlManipulator
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -124,15 +123,20 @@ class Style:
     """The parent ``/museScore/Score/Style`` element that contains all style tags.
     """
 
+    @property
+    def xml(self) -> XmlManipulator:
+        return self.score.xml
+
     def __init__(self, score: "Score") -> None:
         self.score = score
 
         if self.score.style_file:
-            self.parent_element = utils.xml.find_safe(
-                utils.xml.read(self.score.style_file), "Style"
+            self.parent_element = self.xml.find_safe(
+                "Style",
+                self.xml.parse_file(self.score.style_file),
             )
         else:
-            element: _Element | None = self.score.xml_root.find("Score/Style")
+            element: _Element | None = self.xml.find("Score/Style")
             if element is not None:
                 self.parent_element = element
             else:
@@ -144,10 +148,11 @@ class Style:
 
         :return: The created parent style element.
         """
-        score: _Element | None = self.score.xml_root.find("Score")
+        score: _Element | None = self.xml.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
-        return lxml.etree.SubElement(score, "Style")
+        _, sub_element = self.xml.create_sub_element(score, "Style")
+        return sub_element
 
     def __create_nested_element(self, tag: str) -> _Element:
         """
@@ -162,7 +167,7 @@ class Style:
         for tag in tags:
             element: _Element | None = parent.find(tag)
             if element is None:
-                parent = lxml.etree.SubElement(parent, tag)
+                _, parent = self.xml.create_sub_element(parent, tag)
             else:
                 parent = element
         return parent
@@ -242,10 +247,16 @@ class Style:
     def clean(self) -> None:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
-        self.score.remove_tags_by_xpath(
-            "/museScore/Score/Style", "//LayoutBreak", "//StemDirection"
+        self.xml.remove_tags(
+            "./Score/Style",
+            ".//LayoutBreak",
+            ".//StemDirection",
+            ".//font",
+            ".//b",
+            ".//i",
+            ".//pos",
+            ".//offset",
         )
-        strip_tags(self.score.xml_root, "font", "b", "i", "pos", "offset")
 
     def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """
@@ -313,8 +324,8 @@ class Style:
                 "This operation is only allowed for MuseScore 2 score files"
             )
 
-        child: _Element | None = utils.xml.xpath(
-            self.score.xml_root, f'//TextStyle/name[contains(., "{name}")]'
+        child: _Element | None = self.xml.xpath(
+            f'//TextStyle/name[contains(., "{name}")]'
         )
 
         if child is not None:
@@ -323,10 +334,10 @@ class Style:
                 raise ValueError(f"Parent not found on element {el}!")
             return el
         else:
-            el_text_style: _Element = lxml.etree.SubElement(
+            _, el_text_style = self.xml.create_sub_element(
                 self.parent_element, "TextStyle"
             )
-            el_name: _Element = lxml.etree.SubElement(el_text_style, "name")
+            _, el_name = self.xml.create_sub_element(el_text_style, "name")
             el_name.text = name
             return el_text_style
 
@@ -382,7 +393,7 @@ class Style:
         for element_name, value in values.items():
             element: _Element | None = text_style.find(element_name)
             if element is None:
-                element = lxml.etree.SubElement(text_style, element_name)
+                _, element = self.xml.create_sub_element(text_style, element_name)
             element.text = str(value)
 
     def get_all_fonts(self) -> list[tuple[str, str]]:
@@ -392,7 +403,7 @@ class Style:
         output: list[tuple[str, str]] = []
         for element in self.parent_element:
             if "FontFace" in element.tag:
-                output.append((element.tag, utils.xml.get_text_safe(element)))
+                output.append((element.tag, self.xml.get_text_safe(element)))
         return output
 
     def print_all_font_faces(self) -> None:
@@ -519,7 +530,7 @@ class Style:
         return self.set("musicalTextFont", font_face)
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
-        score_element: _Element = utils.xml.find_safe(self.score.xml_root, "Score")
+        score_element: _Element = self.xml.find_safe("Score")
         score_element.insert(0, parent_style)
         self.parent_element = parent_style
 
@@ -549,11 +560,11 @@ class Style:
         if "<Style>" not in styles:
             styles = f'<?xml version="1.0"?>\n<museScore version="{self.score.version}"><Style>{styles}</Style></museScore>'
 
-        style = lxml.etree.XML(styles)
+        style = self.xml.parse_string(styles)
         self.__set_parent_style_element(style[0])
 
     def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
-        style: _Element = utils.xml.read(file)
+        style: _Element = self.xml.parse_file(file)
         self.__set_parent_style_element(style[0])
 
     def reload(self, save: bool = False) -> Style:
