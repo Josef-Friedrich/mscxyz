@@ -3,8 +3,7 @@ from __future__ import annotations
 
 import os
 import tempfile
-from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
 from unittest import mock
 
 import pytest
@@ -50,7 +49,7 @@ class TestFunctions:
 
     def test_extension_both(self) -> None:
         result: list[str] = self._list_scores("/test", extension="both")
-        assert result == ['/a/b/dolor.mscx', '/a/b/impsum.mscz', '/a/lorem.mscx']
+        assert result == ["/a/b/dolor.mscx", "/a/b/impsum.mscz", "/a/lorem.mscx"]
 
     def test_extension_mscx(self) -> None:
         result: list[str] = self._list_scores("/test", extension="mscx")

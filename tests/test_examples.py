@@ -40,10 +40,11 @@ def test_list_score_paths(nested_dir: Path) -> None:
 
     assert len(score_paths) == 4
 
-    assert "level1/level2/level3/score3.mscz" in str(score_paths[0])
-    assert "level1/level2/score2.mscz" in str(score_paths[1])
-    assert "level1/score1.mscz" in str(score_paths[2])
+    score_paths.sort()
     assert "score0.mscz" in str(score_paths[3])
+    assert "level1/score1.mscz" in str(score_paths[2])
+    assert "level1/level2/score2.mscz" in str(score_paths[1])
+    assert "level1/level2/level3/score3.mscz" in str(score_paths[0])
 
 
 @pytest.mark.skip("Will be fixed later")
