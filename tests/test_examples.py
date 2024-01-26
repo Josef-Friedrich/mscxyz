@@ -29,9 +29,7 @@ def test_investigate_xml_root(score_file: str) -> None:
     print_elements(score.xml_root, 0)
 
 
-@pytest.mark.skip(
-    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
-)
+@pytest.mark.skip("Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title")
 def test_set_meta_tag_composer(score: Score) -> None:
     assert score.meta.metatag.composer == "Composer"
 
@@ -42,9 +40,7 @@ def test_set_meta_tag_composer(score: Score) -> None:
     assert new_score.meta.metatag.composer == "Mozart"
 
 
-@pytest.mark.skip(
-    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
-)
+@pytest.mark.skip("Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title")
 def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     assert score.style.get("defaultFontFace") == "FreeSerif"
 
@@ -57,9 +53,7 @@ def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     assert new_score.style.get("defaultFontFace") == "Alegreya"
 
 
-@pytest.mark.skip(
-    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
-)
+@pytest.mark.skip("Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title")
 def test_set_all_font_faces_using_method(score: Score) -> None:
     assert score.style.get("defaultFontFace") == "FreeSerif"
 

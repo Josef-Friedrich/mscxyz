@@ -9,8 +9,9 @@ import string
 import subprocess
 import tempfile
 import zipfile
+from os import PathLike
 from pathlib import Path
-from typing import Any, Generator, List, Literal, Optional
+from typing import Any, Generator, List, Literal, Optional, Union
 
 import termcolor
 
@@ -18,12 +19,16 @@ from mscxyz.settings import get_args
 from mscxyz.xml import XmlManipulator
 
 ListExtension = Literal["mscz", "mscx", "both"]
+PathOrStr = Union[PathLike[str], str, Path]
+
 
 INCH = 25.4
 
 
 def list_files(
-    src: str | list[str], extension: ListExtension = "both", glob: Optional[str] = None
+    src: PathOrStr | list[PathOrStr],
+    extension: ListExtension = "both",
+    glob: Optional[str] = None,
 ) -> Generator[Path, None, None]:
     """List all scores in path.
 
@@ -43,12 +48,12 @@ def list_files(
                 "are: “both”, “mscx”, “mscz”"
             )
 
-    if isinstance(src, str):
+    if not isinstance(src, list):
         src = [src]
 
     for s in src:
         path = Path(s)
-        if path.is_file() and fnmatch.fnmatch(s, glob):
+        if path.is_file() and fnmatch.fnmatch(str(s), glob):
             yield path
         elif path.is_dir():
             for root, _, files in os.walk(path):
