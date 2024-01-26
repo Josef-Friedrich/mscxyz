@@ -53,123 +53,147 @@ class FieldsManager:
             name="subtitle",
             description="The combined subtitle",
             attr_path="meta.subtitle",
+            color="green",
         ),
         Field(
             name="composer",
             description="The combined composer",
             attr_path="meta.composer",
+            color="green",
         ),
         Field(
             name="lyricist",
             description="The combined lyricist",
             attr_path="meta.lyricist",
+            color="green",
         ),
         # vbox
         Field(
             name="vbox_title",
             description="The title field of the score as it appears in the center of the first vertical frame (VBox).",
             attr_path="meta.vbox.title",
+            color="cyan",
         ),
         Field(
             name="vbox_subtitle",
             description="The subtitle field of the score as it appears in the center of the first vertical frame (VBox).",
             attr_path="meta.vbox.subtitle",
+            color="cyan",
         ),
         Field(
             name="vbox_composer",
             description="The composer field of the score as it appears in the center of the first vertical frame (VBox).",
             attr_path="meta.vbox.composer",
+            color="cyan",
         ),
         Field(
             name="vbox_lyricist",
             description="The lyricist field of the score as it appears in the center of the first vertical frame (VBox).",
             attr_path="meta.vbox.lyricist",
+            color="cyan",
         ),
         # metatag
         Field(
             name="metatag_arranger",
             description="The arranger field stored as project properties.",
             attr_path="meta.metatag.arranger",
+            color="blue",
         ),
         Field(
             name="metatag_audio_com_url",
             description="The audio.com URL field stored as project properties.",
             attr_path="meta.metatag.audio_com_url",
+            color="blue",
         ),
         Field(
             name="metatag_composer",
             description="The composer field stored as project properties.",
             attr_path="meta.metatag.composer",
+            color="blue",
         ),
         Field(
             name="metatag_copyright",
             description="The copyright field stored as project properties.",
             attr_path="meta.metatag.copyright",
+            color="blue",
         ),
         Field(
             name="metatag_creation_date",
             description="The creation date field stored as project properties.",
             attr_path="meta.metatag.creation_date",
+            color="blue",
         ),
         Field(
             name="metatag_lyricist",
             description="The lyricist field stored as project properties.",
             attr_path="meta.metatag.lyricist",
+            color="blue",
         ),
         Field(
             name="metatag_movement_number",
             description="The movement number field stored as project properties.",
             attr_path="meta.metatag.movement_number",
+            color="blue",
         ),
         Field(
             name="metatag_movement_title",
             description="The movement title field stored as project properties.",
             attr_path="meta.metatag.movement_title",
+            color="blue",
         ),
         Field(
             name="metatag_msc_version",
             description="The MuseScore version field stored as project properties.",
             attr_path="meta.metatag.msc_version",
+            color="blue",
         ),
         Field(
             name="metatag_platform",
             description="The platform field stored as project properties.",
             attr_path="meta.metatag.platform",
+            color="blue",
         ),
         Field(
             name="metatag_poet",
             description="The poet field stored as project properties.",
             attr_path="meta.metatag.poet",
+            color="blue",
         ),
         Field(
             name="metatag_source",
             description="The source field stored as project properties.",
             attr_path="meta.metatag.source",
+            color="blue",
         ),
         Field(
             name="metatag_source_revision_id",
             description="The source revision ID field stored as project properties.",
             attr_path="meta.metatag.source_revision_id",
+            color="blue",
         ),
         Field(
             name="metatag_subtitle",
             description="The subtitle field stored as project properties.",
             attr_path="meta.metatag.subtitle",
+            color="blue",
         ),
         Field(
             name="metatag_translator",
             description="The translator field stored as project properties.",
             attr_path="meta.metatag.translator",
+            color="blue",
         ),
         Field(
             name="metatag_work_number",
             description="The work number field stored as project properties.",
             attr_path="meta.metatag.work_number",
+            color="blue",
         ),
         Field(
             name="metatag_work_title",
             description="The work title field stored as project properties.",
             attr_path="meta.metatag.work_title",
+            color="blue",
         ),
         # Readonly
         Field(
@@ -280,20 +304,30 @@ class FieldsManager:
         pre = self.pre
 
         post = self.export_to_dict()
+        print("")
 
         for name in self.names:
             if name in pre and pre[name] or name in post and post[name]:
                 field = self.get_field(name)
-                if field.verbosity < args.general_verbose:
+                if field.verbosity > args.general_verbose:
                     continue
 
-                line: list[str] = []
-                if pre[name]:
-                    line.append(f"“{pre[name]}”")
+                pre_value = None
+                if name in pre:
+                    pre_value = pre[name]
 
-                if pre[name] != post[name]:
+                post_value = None
+                if name in post:
+                    post_value = post[name]
+
+                line: list[str] = []
+                if pre_value:
+                    line.append(f"“{pre_value}”")
+
+                if pre_value != post_value:
                     line.append("->")
-                    line.append(colorize(f"“{post[name]}”", "yellow"))
+                    if post_value:
+                        line.append(colorize(f"“{post_value}”", "yellow"))
 
                 print(f"{colorize(name, field.color)}: {' '.join(line)}")
 

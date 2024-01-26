@@ -485,25 +485,19 @@ class TestOptionClean:
 
 
 class TestStdout:
-    @pytest.mark.skip("Will be fixed later")
     def test_show(self) -> None:
         stdout = (
             Cli(
-                "--config-file",
-                ini_file,
-                "meta",
-                "--clean",
+                "-v",
+                "--clean-meta",
                 "all",
-                legacy=True,
             )
             .append_score("meta-all-values.mscz")
             .stdout()
         )
-
         lines = stdout.splitlines()
         assert lines[0] == ""
-        assert "meta-all-values.mscz" in stdout
-        assert lines[-1] == "vbox_title: “vbox_title” -> “”"
+        assert "vbox_title: “vbox_title” ->" in stdout
 
     @pytest.mark.skip("Will be fixed later")
     def test_show_simple_unverbose(self) -> None:
