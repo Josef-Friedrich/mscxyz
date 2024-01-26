@@ -171,8 +171,6 @@ class Metatag:
         return self.score.xml.get_text(element)
 
     def __set_text(self, field: str, value: str | None) -> None:
-        if value is None:
-            return None
         element: _Element = self.__get_element(field)
         element.text = value
 
@@ -414,19 +412,8 @@ class Metatag:
         self.__set_text("workTitle", value)
 
     def clean(self) -> None:
-        fields = (
-            "arranger",
-            "copyright",
-            "creationDate",
-            "movementNumber",
-            "platform",
-            "poet",
-            "source",
-            "translator",
-            "workNumber",
-        )
-        for field in fields:
-            setattr(self, field, "")
+        for field in self.fields:
+            setattr(self, field, None)
 
 
 class Vbox:
@@ -641,6 +628,10 @@ class Vbox:
     @title.setter
     def title(self, value: str | None) -> None:
         self.__set_text("Title", value)
+
+    def clean(self) -> None:
+        for field in self.fields:
+            setattr(self, field, None)
 
 
 class Combined:
@@ -878,21 +869,12 @@ class Meta:
         field_value = tmep.parse(format_string, self.interface.export_to_dict())
         setattr(self.interface, destination_field, field_value)
 
-    def clean_metadata(self, fields_spec: typing.Literal["all"] | str) -> None:
+    def clean(self) -> None:
         """
-        Clean the metadata fields of the object.
-
-        :param fields_spec: Specification of the fields to clean. It can be either
-            ``all`` to clean all fields, or a comma-separated string specifying
-            individual fields.
+        Clean all metadata fields of the object.
         """
-        fields: list[str]
-        if fields_spec == "all":
-            fields = self.interface_read_write.fields
-        else:
-            fields = fields_spec.split(",")
-        for field in fields:
-            setattr(self.interface_read_write, field, "")
+        self.metatag.clean()
+        self.vbox.clean()
 
     def delete_duplicates(self) -> None:
         """

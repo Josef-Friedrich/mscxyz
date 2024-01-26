@@ -210,6 +210,12 @@ class Cli:
         self.__execute()
         return self
 
+    def fields(self) -> FieldsManager:
+        self.__execute()
+        if self.__score is None:
+            raise Exception("No score object")
+        return self.__score.fields
+
     def score(self) -> Score:
         self.__execute()
         if self.__score is None:

@@ -815,13 +815,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 for a in args.meta_set:
                     score.meta.set_field(destination_field=a[0], format_string=a[1])
 
-            #     elif args.subcommand == "meta":
-            #         score = Score(file)
-            #         if __no_error(lxml.etree.XMLSyntaxError, score.errors):
-            #             pre: dict[str, str] = score.meta.interface.export_to_dict()
-
             if args.meta_clean:
-                score.meta.clean_metadata(fields_spec=args.meta_clean)
+                score.fields.clean(args.meta_clean)
 
             if args.meta_json:
                 score.meta.export_json()

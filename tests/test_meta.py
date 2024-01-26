@@ -7,8 +7,6 @@ from pathlib import Path
 
 import pytest
 
-import mscxyz
-import mscxyz.meta
 from mscxyz import meta, supported_versions, utils
 from mscxyz.meta import (
     Interface,
@@ -256,64 +254,6 @@ class TestClassInterfaceReadOnly:
         )
 
 
-class TestClassInterface:
-    def setup_method(self) -> None:
-        self.fields: list[str] = [
-            "combined_composer",
-            "combined_lyricist",
-            "combined_subtitle",
-            "combined_title",
-            "metatag_arranger",
-            "metatag_audio_com_url",
-            "metatag_composer",
-            "metatag_copyright",
-            "metatag_creation_date",
-            "metatag_lyricist",
-            "metatag_movement_number",
-            "metatag_movement_title",
-            "metatag_msc_version",
-            "metatag_platform",
-            "metatag_poet",
-            "metatag_source",
-            "metatag_source_revision_id",
-            "metatag_subtitle",
-            "metatag_translator",
-            "metatag_work_number",
-            "metatag_work_title",
-            "readonly_abspath",
-            "readonly_basename",
-            "readonly_dirname",
-            "readonly_extension",
-            "readonly_filename",
-            "readonly_relpath",
-            "readonly_relpath_backup",
-            "vbox_composer",
-            "vbox_lyricist",
-            "vbox_subtitle",
-            "vbox_title",
-        ]
-
-        self.tmp: str = helper.get_file("meta-all-values.mscx")
-        self.xml_tree = Score(self.tmp)
-        self.interface = Interface(self.xml_tree)
-
-    def test_static_method_get_all_fields(self) -> None:
-        assert Interface.get_all_fields() == self.fields
-
-    @pytest.mark.skip(reason="Test needs to be rewritten")
-    def test_get(self) -> None:
-        for field in self.fields:
-            assert getattr(self.interface, field), field
-
-    def test_set(self) -> None:
-        self.interface.vbox_title = "lol"
-        assert self.interface.vbox_title == "lol"
-
-    def test_exception(self) -> None:
-        with pytest.raises(mscxyz.meta.ReadOnlyFieldError):
-            self.interface.readonly_extension = "lol"
-
-
 def get_meta_tag(filename: str, version: int) -> Metatag:
     score = helper.get_score(filename, version)
     return score.meta.metatag
@@ -351,7 +291,7 @@ class TestClassMetaTag:
         m.arranger = "A"
         assert m.arranger == "A"
         m.clean()
-        assert m.arranger == ""
+        assert m.arranger is None
 
 
 def get_vbox(filename: str, version: int) -> Vbox:
@@ -457,31 +397,29 @@ class TestOptionDistributeField:
 
 class TestOptionClean:
     def test_clean_all(self) -> None:
-        c = Cli("--clean-meta", "all").append_score("meta-all-values.mscz").execute()
-        i = c.post.meta.interface_read_write
-        for field in i.fields:
-            assert getattr(i, field) is None, field
+        f = Cli("--clean-meta", "all").append_score("meta-all-values.mscz").fields()
+        for field in f:
+            if not field.readonly:
+                assert f.get(field.name) is None, field
 
     def test_clean_single_field(self) -> None:
-        c = (
+        f = (
             Cli("--clean-meta", "vbox_title")
             .append_score("meta-all-values.mscz")
             .execute()
-        )
-        i = c.post.meta.interface_read_write
-        assert i.vbox_title is None, "vbox_title"
-        assert i.vbox_composer == "vbox_composer", "vbox_composer"
+        ).fields()
+        assert f.get("vbox_title") is None, "vbox_title"
+        assert f.get("vbox_composer") == "vbox_composer", "vbox_composer"
 
     def test_clean_some_fields(self) -> None:
-        c = (
+        f = (
             Cli("--clean-meta", "vbox_title,vbox_composer")
             .append_score("meta-all-values.mscz")
             .execute()
-        )
-        i = c.post.meta.interface_read_write
-        assert i.vbox_title is None, "vbox_title"
-        assert i.vbox_composer is None, "vbox_composer"
-        assert i.vbox_subtitle == "vbox_subtitle", "vbox_subtitle"
+        ).fields()
+        assert f.get("vbox_title") is None, "vbox_title"
+        assert f.get("vbox_composer") is None, "vbox_composer"
+        assert f.get("vbox_subtitle") == "vbox_subtitle", "vbox_subtitle"
 
 
 class TestStdout:
@@ -817,9 +755,33 @@ class TestClassMeta:
         self.meta: Meta = helper.get_meta("meta-all-values.mscx")
 
     def test_method_clean_metadata(self) -> None:
-        self.meta.interface.combined_lyricist = "test"
-        self.meta.clean_metadata("all")
-        assert self.meta.interface.combined_lyricist is None
+        self.meta.vbox.lyricist = "test"
+        self.meta.clean()
+        assert self.meta.vbox.title is None
+        assert self.meta.vbox.subtitle is None
+        assert self.meta.vbox.composer is None
+        assert self.meta.vbox.lyricist is None
+        assert self.meta.metatag.arranger is None
+        assert self.meta.metatag.audio_com_url is None
+        assert self.meta.metatag.composer is None
+        assert self.meta.metatag.copyright is None
+        assert self.meta.metatag.creation_date is None
+        assert self.meta.metatag.lyricist is None
+        assert self.meta.metatag.movement_number is None
+        assert self.meta.metatag.movement_title is None
+        assert self.meta.metatag.msc_version is None
+        assert self.meta.metatag.platform is None
+        assert self.meta.metatag.poet is None
+        assert self.meta.metatag.source is None
+        assert self.meta.metatag.source_revision_id is None
+        assert self.meta.metatag.subtitle is None
+        assert self.meta.metatag.translator is None
+        assert self.meta.metatag.work_number is None
+        assert self.meta.metatag.work_title is None
+        assert self.meta.title is None
+        assert self.meta.subtitle is None
+        assert self.meta.composer is None
+        assert self.meta.lyricist is None
 
     def test_method_delete_duplicates(self) -> None:
         self.meta.interface.combined_lyricist = "test"

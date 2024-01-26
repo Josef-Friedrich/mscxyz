@@ -7,7 +7,7 @@ import re
 import typing
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping, Union
+from typing import Any, Iterator, Mapping, Sequence, Union
 
 from mscxyz.meta import FormatStringNoFieldError, UnmatchedFormatStringError
 from mscxyz.settings import DefaultArguments
@@ -41,6 +41,8 @@ class Field:
 
     color: Color = "white"
     """The color of the field in the debug output."""
+
+    readonly: bool = False
 
 
 class FieldsManager:
@@ -202,18 +204,21 @@ class FieldsManager:
             "for example ``2.03``, ``3.01`` or ``4.20``.",
             attr_path="version",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="version_major",
             description="The major MuseScore version, for example ``2``, ``3`` or ``4``.",
             attr_path="version_major",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="path",
             description="The absolute path of the MuseScore file, for example ``/home/xyz/score.mscz``.",
             attr_path="path",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="backup_file",
@@ -221,12 +226,14 @@ class FieldsManager:
             "The string ``_bak`` is appended to the file name before the extension.",
             attr_path="backup_file",
             verbosity=3,
+            readonly=True,
         ),
         Field(
             name="json_file",
             description="The absolute path of the JSON file in which the metadata can be exported.",
             attr_path="json_file",
             verbosity=3,
+            readonly=True,
         ),
         Field(
             name="dirname",
@@ -234,6 +241,7 @@ class FieldsManager:
             "example: ``/home/xyz/score_files``.",
             attr_path="dirname",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="filename",
@@ -241,18 +249,21 @@ class FieldsManager:
             "``score.mscz``.",
             attr_path="filename",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="basename",
             description="The basename of the score file, for example: ``score``.",
             attr_path="basename",
             verbosity=2,
+            readonly=True,
         ),
         Field(
             name="extension",
             description="The extension (``mscx`` or ``mscz``) of the score file.",
             attr_path="extension",
             verbosity=2,
+            readonly=True,
         ),
     )
 
@@ -269,6 +280,9 @@ class FieldsManager:
                 raise Exception("Duplicate field name")
             self.__fields_by_name[field.name] = field
         self.pre = self.export_to_dict()
+
+    def __iter__(self) -> Iterator[Field]:
+        return iter(self.fields)
 
     @property
     def names(self) -> tuple[str, ...]:
@@ -360,6 +374,18 @@ class FieldsManager:
                 for field, value in results.items():
                     self.set(field, value)
             return
+
+    def clean(self, fields_spec: str) -> None:
+        fields: Sequence[str]
+        if fields_spec == "all":
+            fields = self.names
+        else:
+            fields = fields_spec.split(",")
+
+        for name in fields:
+            field = self.get_field(name)
+            if not field.readonly:
+                self.set(name, None)
 
     def export_json(self) -> Path:
         """
