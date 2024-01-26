@@ -18,7 +18,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 project = "mscxyz"
-copyright = "2016 - 2023, Josef Friedrich"
+copyright = "2016 - 2024, Josef Friedrich"
 author = "Josef Friedrich"
 version: str = mscxyz.__version__
 release: str = mscxyz.__version__

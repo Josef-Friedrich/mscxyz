@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 from lxml.etree import _Element
 
-from mscxyz import Score, list_files
+from mscxyz import Score
 
 
 def test_instantiate_a_score_object(score_file: str) -> None:
@@ -31,23 +29,9 @@ def test_investigate_xml_root(score_file: str) -> None:
     print_elements(score.xml_root, 0)
 
 
-def test_list_files(nested_dir: Path) -> None:
-    score_paths: list[str] = []
-    for score_path in list_files(src=str(nested_dir), extension="mscz"):
-        score = Score(score_path)
-        assert score.path.exists()
-        assert score.extension == "mscz"
-        score_paths.append(str(score_path))
-
-    assert len(score_paths) == 4
-
-    assert "level1/level2/level3/score3.mscz" in score_paths[3]
-    assert "level1/level2/score2.mscz" in score_paths[2]
-    assert "level1/score1.mscz" in score_paths[1]
-    assert "score0.mscz" in score_paths[0]
-
-
-@pytest.mark.skip("Will be fixed later")
+@pytest.mark.skip(
+    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
+)
 def test_set_meta_tag_composer(score: Score) -> None:
     assert score.meta.metatag.composer == "Composer"
 
@@ -58,7 +42,9 @@ def test_set_meta_tag_composer(score: Score) -> None:
     assert new_score.meta.metatag.composer == "Mozart"
 
 
-@pytest.mark.skip("Will be fixed later")
+@pytest.mark.skip(
+    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
+)
 def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     assert score.style.get("defaultFontFace") == "FreeSerif"
 
@@ -71,7 +57,9 @@ def test_set_all_font_faces_using_for_loop(score: Score) -> None:
     assert new_score.style.get("defaultFontFace") == "Alegreya"
 
 
-@pytest.mark.skip("Will be fixed later")
+@pytest.mark.skip(
+    "Strange error! Fails in tox make test ... but works in vscode and with pytest -k test_set_meta_tag_title"
+)
 def test_set_all_font_faces_using_method(score: Score) -> None:
     assert score.style.get("defaultFontFace") == "FreeSerif"
 

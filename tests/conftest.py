@@ -47,7 +47,7 @@ def score4z() -> Score:
     return helper.get_score("score.mscz", version=4)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="function")
 def score() -> Score:
     """Instantiate a Score object from the file simple.mscz (version 4)."""
     return helper.get_score("score.mscz", version=4)

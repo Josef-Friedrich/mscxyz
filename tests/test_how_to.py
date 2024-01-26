@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from mscxyz import Score
+from mscxyz import Score, list_files
 from tests import helper
 from tests.helper import Cli, assert_file_type
 
@@ -92,6 +92,22 @@ class TestSpecifyMusescoreFiles:
             "--glob: not allowed with argument --mscx"
             in Cli("-L", "--mscx", "-glob", "*").sysexit()
         )
+
+
+def test_list_files(nested_dir: Path) -> None:
+    score_paths: list[str] = []
+    for score_path in list_files(src=str(nested_dir), extension="mscz"):
+        score = Score(score_path)
+        assert score.path.exists()
+        assert score.extension == "mscz"
+        score_paths.append(str(score_path))
+
+    assert len(score_paths) == 4
+
+    assert "level1/level2/level3/score3.mscz" in score_paths[3]
+    assert "level1/level2/score2.mscz" in score_paths[2]
+    assert "level1/score1.mscz" in score_paths[1]
+    assert "score0.mscz" in score_paths[0]
 
 
 @pytest.mark.slow
