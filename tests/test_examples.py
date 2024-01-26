@@ -31,20 +31,20 @@ def test_investigate_xml_root(score_file: str) -> None:
     print_elements(score.xml_root, 0)
 
 
-def test_list_score_paths(nested_dir: Path) -> None:
-    score_paths = list(list_files(src=str(nested_dir), extension="mscz"))
-    for score_path in score_paths:
+def test_list_files(nested_dir: Path) -> None:
+    score_paths: list[str] = []
+    for score_path in list_files(src=str(nested_dir), extension="mscz"):
         score = Score(score_path)
         assert score.path.exists()
         assert score.extension == "mscz"
+        score_paths.append(str(score_path))
 
     assert len(score_paths) == 4
 
-    score_paths.sort()
-    assert "score0.mscz" in str(score_paths[3])
-    assert "level1/score1.mscz" in str(score_paths[2])
-    assert "level1/level2/score2.mscz" in str(score_paths[1])
-    assert "level1/level2/level3/score3.mscz" in str(score_paths[0])
+    assert "level1/level2/level3/score3.mscz" in score_paths[3]
+    assert "level1/level2/score2.mscz" in score_paths[2]
+    assert "level1/score1.mscz" in score_paths[1]
+    assert "score0.mscz" in score_paths[0]
 
 
 @pytest.mark.skip("Will be fixed later")

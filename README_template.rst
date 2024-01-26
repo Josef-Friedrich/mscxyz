@@ -71,9 +71,45 @@ To apply glob patterns on the file paths, the ``--glob`` option can be used.
 
     musescore-manager -L --glob "*/folder/*.mscz"
 
-
 To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
 Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
+
+The python package ``mscxyz`` exports a function named ``list_files`` which can
+be used to list the paths of MuseScore files. This allows you to list score
+paths in a nested folder structure in a similar way to the command line.
+This folder structure is used for the following example:
+
+::
+
+    cd /home/xyz/scores
+    find . | sort
+
+    .
+    ./level1
+    ./level1/level2
+    ./level1/level2/score2.mscz
+    ./level1/level2/level3
+    ./level1/level2/level3/score3.mscz
+    ./level1/score1.mscz
+    ./score0.mscz
+
+.. code-block:: Python
+
+    from mscxyz import list_files, Score
+
+    score_paths = []
+    for score_path in list_files(path="/home/xyz/scores", extension="mscz"):
+        score = Score(score_path)
+        assert score.path.exists()
+        assert score.extension == "mscz"
+        score_paths.append(str(score_path))
+
+    assert len(score_paths) == 4
+
+    assert "level1/level2/level3/score3.mscz" in score_paths[3]
+    assert "level1/level2/score2.mscz" in score_paths[2]
+    assert "level1/score1.mscz" in score_paths[1]
+    assert "score0.mscz" in score_paths[0]
 
 ... export files to different files types?
 ------------------------------------------
@@ -326,42 +362,6 @@ The output of the code example is very long, so here is a shortened version:
         <open>
         <metaTag>
         ...
-
-
-List score paths in a nested folder structure:
-
-::
-
-    cd /home/xyz/scores
-    find . | sort
-
-::
-
-    .
-    ./level1
-    ./level1/level2
-    ./level1/level2/score2.mscz
-    ./level1/level2/level3
-    ./level1/level2/level3/score3.mscz
-    ./level1/score1.mscz
-    ./score0.mscz
-
-.. code-block:: Python
-
-    from mscxyz import list_score_paths, Score
-
-    score_paths = list_score_paths(path="/home/xyz/scores", extension="mscz")
-    for score_path in score_paths:
-        score = Score(score_path)
-        assert score.path.exists()
-        assert score.extension == "mscz"
-
-    assert len(score_paths) == 4
-
-    assert "level1/level2/level3/score3.mscz" in score_paths[0]
-    assert "level1/level2/score2.mscz" in score_paths[1]
-    assert "level1/score1.mscz" in score_paths[2]
-    assert "score0.mscz" in score_paths[3]
 
 ``meta``
 --------

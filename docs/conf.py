@@ -9,6 +9,7 @@ html_theme_path: list[str] = [sphinx_rtd_theme.get_html_theme_path()]
 
 extensions: list[str] = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
 ]
 templates_path: list[str] = ["_templates"]

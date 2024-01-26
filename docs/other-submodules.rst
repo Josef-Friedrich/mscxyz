@@ -20,3 +20,4 @@ mscxyz.utils module
 ^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: mscxyz.utils
+    :noindex:

@@ -19,11 +19,4 @@ supported_versions = (2, 3, 4)
 
 Score = mscxyz.score.Score
 
-Lyrics = mscxyz.lyrics.Lyrics
-
-Meta = mscxyz.meta.Meta
-
-Style = mscxyz.style.Style
-
 list_files = utils.list_files
-"""list_score_paths"""
