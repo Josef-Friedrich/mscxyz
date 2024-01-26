@@ -13,7 +13,7 @@ from tmep.format import alphanum, asciify, nowhitespace
 from mscxyz.fields import FieldsExport
 from mscxyz.score import Score
 from mscxyz.settings import get_args
-from mscxyz.utils import color
+from mscxyz.utils import colorize
 
 
 def create_dir(path: str) -> None:
@@ -51,7 +51,7 @@ def apply_format_string(fields: FieldsExport) -> str:
 
 
 def show(old: str, new: str) -> None:
-    print("{} -> {}".format(color(old, "yellow"), color(new, "green")))
+    print("{} -> {}".format(colorize(old, "yellow"), colorize(new, "green")))
 
 
 def get_checksum(filename: str) -> str:
@@ -75,7 +75,7 @@ def rename(score: Score) -> Score:
         skips: list[str] = args.rename_skip.split(",")
         for skip in skips:
             if skip not in meta_values:
-                print(color("Field “{}” is empty! Skipping".format(skip), "red"))
+                print(colorize("Field “{}” is empty! Skipping".format(skip), "red"))
                 return score
 
     if args.rename_target:
@@ -93,7 +93,7 @@ def rename(score: Score) -> Score:
             target = target_format.format(counter_format)
             if get_checksum(str(score.path)) == get_checksum(target):
                 print(
-                    color(
+                    colorize(
                         "The file “{}” with the same checksum (sha1) "
                         "already exists in the target path “{}”!".format(
                             str(score.path), target

@@ -955,9 +955,11 @@ class Meta:
 
                 if pre[field] != post[field]:
                     line.append("->")
-                    line.append(utils.color("“{}”".format(post[field]), "yellow"))
+                    line.append(utils.colorize("“{}”".format(post[field]), "yellow"))
 
-                print("{}: {}".format(utils.color(field, field_color), " ".join(line)))
+                print(
+                    "{}: {}".format(utils.colorize(field, field_color), " ".join(line))
+                )
 
     def export_json(self) -> Path:
         """

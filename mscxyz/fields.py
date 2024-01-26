@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any, Mapping, Union
 
 from mscxyz.meta import FormatStringNoFieldError, UnmatchedFormatStringError
+from mscxyz.settings import DefaultArguments
+from mscxyz.utils import Color, colorize
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -33,6 +35,12 @@ class Field:
 
     attr_path: str
     """``meta.title`` accesses ``score.meta.title``"""
+
+    verbosity: int = 1
+    """Verbosity level indicating if the field should be displayed in the debug output."""
+
+    color: Color = "white"
+    """The color of the field in the debug output."""
 
 
 class FieldsManager:
@@ -169,53 +177,65 @@ class FieldsManager:
             description="The MuseScore version as a floating point number, "
             "for example ``2.03``, ``3.01`` or ``4.20``.",
             attr_path="version",
+            verbosity=2,
         ),
         Field(
             name="version_major",
             description="The major MuseScore version, for example ``2``, ``3`` or ``4``.",
             attr_path="version_major",
+            verbosity=2,
         ),
         Field(
             name="path",
             description="The absolute path of the MuseScore file, for example ``/home/xyz/score.mscz``.",
             attr_path="path",
+            verbosity=2,
         ),
         Field(
             name="backup_file",
             description="The absolute path of the backup file. "
             "The string ``_bak`` is appended to the file name before the extension.",
             attr_path="backup_file",
+            verbosity=3,
         ),
         Field(
             name="json_file",
             description="The absolute path of the JSON file in which the metadata can be exported.",
             attr_path="json_file",
+            verbosity=3,
         ),
         Field(
             name="dirname",
             description="The name of the containing directory of the MuseScore file, for "
             "example: ``/home/xyz/score_files``.",
             attr_path="dirname",
+            verbosity=2,
         ),
         Field(
             name="filename",
             description="The filename of the MuseScore file, for example:"
             "``score.mscz``.",
             attr_path="filename",
+            verbosity=2,
         ),
         Field(
             name="basename",
             description="The basename of the score file, for example: ``score``.",
             attr_path="basename",
+            verbosity=2,
         ),
         Field(
             name="extension",
             description="The extension (``mscx`` or ``mscz``) of the score file.",
             attr_path="extension",
+            verbosity=2,
         ),
     )
 
     __fields_by_name: dict[str, Field]
+
+    pre: dict[str, FieldValue]
+    """The state of the field values at initialization, stored as a dictionary."""
 
     def __init__(self, score: "Score") -> None:
         self.score = score
@@ -224,6 +244,7 @@ class FieldsManager:
             if field.name in self.__fields_by_name:
                 raise Exception("Duplicate field name")
             self.__fields_by_name[field.name] = field
+        self.pre = self.export_to_dict()
 
     @property
     def names(self) -> tuple[str, ...]:
@@ -253,48 +274,28 @@ class FieldsManager:
                 raise Exception(f"Cannot set attribute {field.attr_path}")
         setattr(obj, last, value)
 
-    def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
-        pass
-        # args = get_args()
+    def diff(self, args: DefaultArguments) -> None:
+        if args.general_verbose == 0:
+            return
+        pre = self.pre
 
-        # fields = list(self.interface.fields)
+        post = self.export_to_dict()
 
-        # if args.general_verbose < 1:
-        #     fields.remove("readonly_abspath")
-        #     fields.remove("readonly_dirname")
-        #     fields.remove("readonly_extension")
-        #     fields.remove("readonly_filename")
-        #     fields.remove("readonly_relpath")
+        for name in self.names:
+            if name in pre and pre[name] or name in post and post[name]:
+                field = self.get_field(name)
+                if field.verbosity < args.general_verbose:
+                    continue
 
-        # if args.general_verbose < 2:
-        #     fields.remove("readonly_relpath_backup")
+                line: list[str] = []
+                if pre[name]:
+                    line.append(f"“{pre[name]}”")
 
-        # for field in fields:
-        #     field_color: utils.Color
-        #     if (
-        #         args.general_verbose == 0
-        #         and (field in pre and pre[field] or field in post and post[field])
-        #     ) or args.general_verbose > 0:
-        #         if re.match(r"^combined_", field):
-        #             field_color = "green"
-        #         elif re.match(r"^metatag_", field):
-        #             field_color = "blue"
-        #         elif re.match(r"^readonly_", field):
-        #             field_color = "red"
-        #         elif re.match(r"^vbox_", field):
-        #             field_color = "cyan"
-        #         else:
-        #             field_color = "white"
+                if pre[name] != post[name]:
+                    line.append("->")
+                    line.append(colorize(f"“{post[name]}”", "yellow"))
 
-        #         line: list[str] = []
-        #         if pre[field]:
-        #             line.append("“{}”".format(pre[field]))
-
-        #         if pre[field] != post[field]:
-        #             line.append("->")
-        #             line.append(utils.color("“{}”".format(post[field]), "yellow"))
-
-        #         print("{}: {}".format(utils.color(field, field_color), " ".join(line)))
+                print(f"{colorize(name, field.color)}: {' '.join(line)}")
 
     def export_to_dict(self) -> dict[str, FieldValue]:
         output: dict[str, FieldValue] = {}

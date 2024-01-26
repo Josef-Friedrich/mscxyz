@@ -659,8 +659,8 @@ def __print_error(error: Exception) -> None:
 
     print(
         "{}: {}; message: {}".format(
-            utils.color("Error", "white", "on_red"),
-            utils.color(error.__class__.__name__, "red"),
+            utils.colorize("Error", "white", "on_red"),
+            utils.colorize(error.__class__.__name__, "red"),
             msg,
         )
     )
@@ -761,6 +761,23 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             # meta
 
+            manipulate_meta: bool = False
+
+            if (
+                args.meta_metatag
+                or args.meta_vbox
+                or args.meta_combined
+                or args.meta_set
+                or args.meta_clean
+                or args.meta_dist
+                or args.meta_dist
+                or args.meta_delete
+                or args.meta_sync
+            ):
+                manipulate_meta = True
+                # to get score.fields.pre
+                score.fields
+
             if args.meta_metatag:
                 for a in args.meta_metatag:
                     field = a[0]
@@ -822,8 +839,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.meta_log:
                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
 
-            #             post: dict[str, str] = score.meta.interface.export_to_dict()
-            #             score.meta.show(pre, post)
+            if manipulate_meta:
+                score.fields.diff(args)
 
             if args.rename_rename:
                 rename(score)

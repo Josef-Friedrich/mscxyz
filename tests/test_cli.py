@@ -49,6 +49,20 @@ class TestArgparse:
         assert args.rename_target is None
 
 
+class TestVerbosity:
+    def test_0(self) -> None:
+        args = parser.parse_args([])
+        assert args.general_verbose == 0
+
+    def test_1(self) -> None:
+        args = parser.parse_args(["-v"])
+        assert args.general_verbose == 1
+
+    def test_2(self) -> None:
+        args = parser.parse_args(["-vv"])
+        assert args.general_verbose == 2
+
+
 class TestCommandlineInterface:
     def test_help_short(self) -> None:
         with pytest.raises(SystemExit) as e:

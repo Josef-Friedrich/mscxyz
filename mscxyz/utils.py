@@ -216,7 +216,7 @@ Highlight = Literal[
 ]
 
 
-def color(
+def colorize(
     text: str, color: Optional[Color] = None, on_color: Optional[Highlight] = None
 ) -> str:
     """Wrapper function around ``termcolor.colored()`` to easily turn off and
