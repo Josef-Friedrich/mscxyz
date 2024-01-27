@@ -11,7 +11,6 @@ from mscxyz.meta import (
     Meta,
     Metatag,
     Vbox,
-    export_to_dict,
 )
 from mscxyz.score import Score
 from tests import helper
@@ -45,16 +44,6 @@ class TestExceptions:
         with pytest.raises(meta.FormatStringNoFieldError) as e:
             raise meta.FormatStringNoFieldError("test")
         assert e.value.args[0] == "No fields found in your " "format string “test”!"
-
-
-class TestFunctions:
-    def test_export_to_dict(self) -> None:
-        class Data:
-            a = "a"
-            b = "b"
-
-        data = Data()
-        assert export_to_dict(data, ("a")) == {"a": "a"}
 
 
 def get_meta_tag(filename: str, version: int) -> Metatag:

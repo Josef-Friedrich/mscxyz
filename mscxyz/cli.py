@@ -20,15 +20,15 @@ from mscxyz.settings import parse_args
 from mscxyz.utils import Dimension
 
 
-def __mm(value: str) -> float:
+def _mm(value: str) -> float:
     return Dimension(value).to("mm")
 
 
-def __inch(value: str) -> float:
+def _inch(value: str) -> float:
     return Dimension(value).to("in")
 
 
-def __embed_fields(
+def _embed_fields(
     fields: Sequence[str], prefix: str = " Available fields: ", suffix: str = "."
 ) -> str:
     joined_fields: str = ", ".join(fields)
@@ -318,7 +318,7 @@ group_meta.add_argument(
     action="append",
     metavar=("<field>", "<value>"),
     dest="meta_metatag",
-    help="Define the metadata in MetaTag elements." + __embed_fields(Metatag.fields),
+    help="Define the metadata in MetaTag elements." + _embed_fields(Metatag.fields),
 )
 
 group_meta.add_argument(
@@ -328,7 +328,7 @@ group_meta.add_argument(
     action="append",
     metavar=("<field>", "<value>"),
     dest="meta_vbox",
-    help="Define the metadata in VBox elements." + __embed_fields(Vbox.fields),
+    help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
 )
 
 ###############################################################################
@@ -573,7 +573,7 @@ group_style.add_argument(
 group_style.add_argument(
     "--staff-space",
     dest="style_staff_space",
-    type=__mm,
+    type=_mm,
     metavar="<dimension>",
     help="Set the staff space or spatium. This is the vertical distance between "
     "two lines of a music staff.",
@@ -711,11 +711,11 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 score.style.staff_space = args.style_staff_space
 
             if args.style_page_size is not None:
-                score.style.page_width = __inch(args.style_page_size[0])
-                score.style.page_height = __inch(args.style_page_size[1])
+                score.style.page_width = _inch(args.style_page_size[0])
+                score.style.page_height = _inch(args.style_page_size[1])
 
             if args.style_margin is not None:
-                score.style.margin = __inch(args.style_margin)
+                score.style.margin = _inch(args.style_margin)
 
             if args.style_show_header is not None:
                 score.style.show_header = args.style_show_header

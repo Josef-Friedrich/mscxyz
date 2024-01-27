@@ -12,12 +12,16 @@ if typing.TYPE_CHECKING:
 
 
 class ReadOnlyFieldError(Exception):
+    """TODO remove: unused"""
+
     def __init__(self, field: str) -> None:
         self.msg = "The field “{}” is read only!".format(field)
         Exception.__init__(self, self.msg)
 
 
 class UnkownFieldError(Exception):
+    """TODO remove: unused"""
+
     def __init__(self, field: str, valid_fields: typing.Sequence[str]) -> None:
         self.msg = "Unkown field of name “{}”! Valid field names are: {}".format(
             field, ", ".join(valid_fields)
@@ -38,24 +42,6 @@ class FormatStringNoFieldError(Exception):
     def __init__(self, format_string: str) -> None:
         self.msg = "No fields found in your format string “{}”!".format(format_string)
         Exception.__init__(self, self.msg)
-
-
-def export_to_dict(obj: object, fields: typing.Iterable[str]) -> dict[str, str]:
-    """
-    Export the specified fields of an object to a dictionary.
-
-    :param obj: The object to export.
-    :param fields: The fields to include in the dictionary.
-
-    :return: A dictionary containing the specified fields and their values.
-    """
-    out: dict[str, str] = {}
-    for field in fields:
-        value = getattr(obj, field)
-        if not value:
-            value = ""
-        out[field] = value
-    return out
 
 
 class Metatag:
