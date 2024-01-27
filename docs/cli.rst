@@ -12,9 +12,9 @@ Comande line interface
                              [-l <log-file> <format-string>] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
-                             [--combined <field> <value>] [-x LYRICS_EXTRACT]
-                             [-r LYRICS_REMAP] [-F] [--rename] [-f RENAME_FORMAT]
-                             [-A] [-a] [-n] [-K FIELDS] [-t RENAME_TARGET] [-L]
+                             [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F] [--rename]
+                             [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
+                             [-t RENAME_TARGET] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--list-fonts] [--text-font <font-face>]
@@ -117,34 +117,6 @@ Comande line interface
           - composer (1. vbox_composer 2. metatag_composer)
           - lyricist (1. vbox_lyricist 2. metatag_lyricist)
 
-      You have access to all this metadata fields through following fields:
-
-          - combined_composer
-          - combined_lyricist
-          - combined_subtitle
-          - combined_title
-          - metatag_arranger
-          - metatag_audio_com_url
-          - metatag_composer
-          - metatag_copyright
-          - metatag_creation_date
-          - metatag_lyricist
-          - metatag_movement_number
-          - metatag_movement_title
-          - metatag_msc_version
-          - metatag_platform
-          - metatag_poet
-          - metatag_source
-          - metatag_source_revision_id
-          - metatag_subtitle
-          - metatag_translator
-          - metatag_work_number
-          - metatag_work_title
-          - vbox_composer
-          - vbox_lyricist
-          - vbox_subtitle
-          - vbox_title
-
       -c META_CLEAN, --clean-meta META_CLEAN
                             Clean the meta data fields. Possible values: „all“ or a
                             comma separated list of fields, for example:
@@ -182,10 +154,6 @@ Comande line interface
       --vbox <field> <value>, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
                             composer, lyricist, subtitle, title.
-      --combined <field> <value>, --combined-meta <field> <value>
-                            Define the metadata combined in one step for MetaTag and
-                            VBox elements. Available fields: composer, lyricist,
-                            subtitle, title.
 
     lyrics:
       -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT, --extract-lyrics LYRICS_EXTRACT
@@ -205,42 +173,6 @@ Comande line interface
 
     rename:
       Rename the “*.msc[zx]” files.Fields and functions you can use in the format string (-f, --format):
-
-      Fields
-      ======
-
-          - combined_composer
-          - combined_lyricist
-          - combined_subtitle
-          - combined_title
-          - metatag_arranger
-          - metatag_audio_com_url
-          - metatag_composer
-          - metatag_copyright
-          - metatag_creation_date
-          - metatag_lyricist
-          - metatag_movement_number
-          - metatag_movement_title
-          - metatag_msc_version
-          - metatag_platform
-          - metatag_poet
-          - metatag_source
-          - metatag_source_revision_id
-          - metatag_subtitle
-          - metatag_translator
-          - metatag_work_number
-          - metatag_work_title
-          - readonly_abspath
-          - readonly_basename
-          - readonly_dirname
-          - readonly_extension
-          - readonly_filename
-          - readonly_relpath
-          - readonly_relpath_backup
-          - vbox_composer
-          - vbox_lyricist
-          - vbox_subtitle
-          - vbox_title
 
       Functions
       =========

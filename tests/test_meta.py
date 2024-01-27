@@ -2,16 +2,12 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pytest
 
 from mscxyz import meta, supported_versions, utils
 from mscxyz.meta import (
-    Interface,
-    InterfaceReadOnly,
-    InterfaceReadWrite,
     Meta,
     Metatag,
     Vbox,
@@ -21,10 +17,6 @@ from mscxyz.meta import (
 from mscxyz.score import Score
 from tests import helper
 from tests.helper import Cli
-
-
-def reload(src: Score | str | Path) -> Interface:
-    return helper.reload(src).meta.interface
 
 
 class TestExceptions:
@@ -68,190 +60,6 @@ class TestFunctions:
 
         data = Data()
         assert export_to_dict(data, ("a")) == {"a": "a"}
-
-
-class TestClassUnifiedInterface:
-    def setup_method(self) -> None:
-        self.fields = [
-            "combined_composer",
-            "combined_lyricist",
-            "combined_subtitle",
-            "combined_title",
-            "metatag_arranger",
-            "metatag_audio_com_url",
-            "metatag_composer",
-            "metatag_copyright",
-            "metatag_creation_date",
-            "metatag_lyricist",
-            "metatag_movement_number",
-            "metatag_movement_title",
-            "metatag_msc_version",
-            "metatag_platform",
-            "metatag_poet",
-            "metatag_source",
-            "metatag_source_revision_id",
-            "metatag_subtitle",
-            "metatag_translator",
-            "metatag_work_number",
-            "metatag_work_title",
-            "vbox_composer",
-            "vbox_lyricist",
-            "vbox_subtitle",
-            "vbox_title",
-        ]
-
-    def _init_class(
-        self, filename: str, version: int = 2
-    ) -> tuple[InterfaceReadWrite, Score, str]:
-        tmp = helper.get_file(filename, version)
-        score = Score(tmp)
-        interface = InterfaceReadWrite(score)
-        return interface, score, tmp
-
-    def _test_subclasses(self, version: int) -> None:
-        interface, _, _ = self._init_class("simple.mscx", version)
-        assert interface.metatag
-        assert interface.vbox
-        assert interface.combined
-
-    def test_subclasses(self) -> None:
-        self._test_subclasses(version=2)
-        self._test_subclasses(version=3)
-
-    def _test_get_simple(self, version: int) -> None:
-        interface, _, _ = self._init_class("simple.mscx", version)
-        assert interface.vbox_title == "Title"
-        assert interface.metatag_work_title == "Title"
-
-    def test_get_simple(self) -> None:
-        self._test_get_simple(version=2)
-        self._test_get_simple(version=3)
-
-    def _test_get_all_values(self, version: int) -> None:
-        interface, _, _ = self._init_class("meta-all-values.mscx", version)
-
-        assert interface.combined_composer == "vbox_composer"
-        assert interface.combined_lyricist == "vbox_lyricist"
-        assert interface.combined_subtitle == "vbox_subtitle"
-        assert interface.combined_title == "vbox_title"
-
-        for field in self.fields[4:]:
-            assert getattr(interface, field) == field
-
-    @pytest.mark.skip(reason="Test needs to be rewritten")
-    def test_get_all_values(self) -> None:
-        self._test_get_all_values(version=2)
-        self._test_get_all_values(version=3)
-
-    def _test_set_all_values(self, version: int) -> None:
-        interface, score, tmp = self._init_class("meta-all-values.mscx", version)
-
-        for field in self.fields:
-            setattr(interface, field, field + "_test")
-            assert getattr(interface, field) == field + "_test"
-
-        score.save()
-        score = Score(tmp)
-        interface = InterfaceReadWrite(score)
-
-        assert interface.combined_composer == "vbox_composer_test"
-        assert interface.combined_lyricist == "vbox_lyricist_test"
-        assert interface.combined_subtitle == "vbox_subtitle_test"
-        assert interface.combined_title == "vbox_title_test"
-
-        for field in self.fields[4:]:
-            assert getattr(interface, field) == field + "_test"
-
-    @pytest.mark.skip(reason="Test needs to be rewritten")
-    def test_set_all_values(self) -> None:
-        self._test_set_all_values(version=2)
-        self._test_set_all_values(version=3)
-
-    def test_method_get_all_fields(self) -> None:
-        fields = InterfaceReadWrite.get_all_fields()
-        assert fields == self.fields
-
-    def _test_method_export_to_dict(self, version: int) -> None:
-        interface, _, _ = self._init_class("meta-all-values.mscx", version)
-        result = interface.export_to_dict()
-        assert result == {
-            "combined_composer": "vbox_composer",
-            "combined_lyricist": "vbox_lyricist",
-            "combined_subtitle": "vbox_subtitle",
-            "combined_title": "vbox_title",
-            "metatag_arranger": "metatag_arranger",
-            "metatag_audio_com_url": "",
-            "metatag_composer": "metatag_composer",
-            "metatag_copyright": "metatag_copyright",
-            "metatag_creation_date": "metatag_creation_date",
-            "metatag_lyricist": "metatag_lyricist",
-            "metatag_movement_number": "metatag_movement_number",
-            "metatag_movement_title": "metatag_movement_title",
-            "metatag_msc_version": "",
-            "metatag_platform": "metatag_platform",
-            "metatag_poet": "metatag_poet",
-            "metatag_source": "metatag_source",
-            "metatag_source_revision_id": "",
-            "metatag_subtitle": "",
-            "metatag_translator": "metatag_translator",
-            "metatag_work_number": "metatag_work_number",
-            "metatag_work_title": "metatag_work_title",
-            "vbox_composer": "vbox_composer",
-            "vbox_lyricist": "vbox_lyricist",
-            "vbox_subtitle": "vbox_subtitle",
-            "vbox_title": "vbox_title",
-        }
-
-    def test_method_export_to_dict(self) -> None:
-        self._test_method_export_to_dict(version=2)
-        self._test_method_export_to_dict(version=3)
-
-    def _test_attribute_fields(self, version: int) -> None:
-        interface, _, _ = self._init_class("meta-all-values.mscx", version)
-        assert interface.fields == self.fields
-
-    def test_attribute_fields(self) -> None:
-        self._test_attribute_fields(version=2)
-        self._test_attribute_fields(version=3)
-
-
-class TestClassInterfaceReadOnly:
-    def setup_method(self) -> None:
-        self.fields = (
-            "readonly_basename",
-            "readonly_dirname",
-            "readonly_extension",
-            "readonly_filename",
-            "readonly_relpath",
-            "readonly_relpath_backup",
-        )
-        self.tmp = helper.get_file("simple.mscx")
-        self.xml_tree = Score(self.tmp)
-        self.interface = InterfaceReadOnly(self.xml_tree)
-
-    def test_exception(self) -> None:
-        with pytest.raises(AttributeError):
-            self.interface.readonly_relpath = "lol"  # type: ignore
-
-    def test_field_readonly_basename(self) -> None:
-        assert self.interface.readonly_basename == "simple"
-
-    def test_field_readonly_dirname(self) -> None:
-        assert self.interface.readonly_dirname == os.path.dirname(self.tmp)
-
-    def test_field_readonly_extension(self) -> None:
-        assert self.interface.readonly_extension == "mscx"
-
-    def test_field_readonly_filename(self) -> None:
-        assert self.interface.readonly_filename == "simple.mscx"
-
-    def test_field_readonly_relpath(self) -> None:
-        assert self.interface.readonly_relpath == self.tmp
-
-    def test_field_readonly_relpath_backup(self) -> None:
-        assert self.interface.readonly_relpath_backup == self.tmp.replace(
-            ".mscx", "_bak.mscx"
-        )
 
 
 def get_meta_tag(filename: str, version: int) -> Metatag:
@@ -559,49 +367,17 @@ def test_option_vbox() -> None:
     assert v.title == "t"
 
 
-def test_option_combined() -> None:
-    score = Cli(
-        "--combined",
-        "composer",
-        "c",
-        #
-        "--combined",
-        "lyricist",
-        "l",
-        #
-        "--combined",
-        "subtitle",
-        "s",
-        #
-        "--combined",
-        "title",
-        "t",
-    ).score()
-
-    m = score.meta.metatag
-    assert m.composer == "c"
-    assert m.lyricist == "l"
-    assert m.movement_title == "s"
-    assert m.work_title == "t"
-
-    v = score.meta.vbox
-    assert v.composer == "c"
-    assert v.lyricist == "l"
-    assert v.subtitle == "s"
-    assert v.title == "t"
-
-
 class TestOptionSetField:
     def test_simple_string(self) -> None:
-        c = (
+        s = (
             Cli("--set-field", "vbox_title", "test")
             .append_score("meta-all-values.mscz")
-            .execute()
+            .score()
         )
-        assert c.post.meta.interface.vbox_title == "test"
+        assert s.meta.vbox.title == "test"
 
     def test_multiple_times(self) -> None:
-        c = (
+        s = (
             Cli(
                 "--set-field",
                 "vbox_title",
@@ -611,23 +387,23 @@ class TestOptionSetField:
                 "vc",
             )
             .append_score("meta-all-values.mscz")
-            .execute()
+            .score()
         )
-        i = c.post.meta.interface
-        assert i.vbox_title == "vt"
-        assert i.vbox_composer == "vc"
+
+        assert s.meta.vbox.title == "vt"
+        assert s.meta.vbox.composer == "vc"
 
     def test_with_templating(self) -> None:
-        c = (
+        s = (
             Cli(
                 "--set-field",
                 "vbox_title",
                 "$vbox_title ($vbox_composer)",
             )
             .append_score("meta-all-values.mscz")
-            .execute()
+            .score()
         )
-        assert c.post.meta.interface.vbox_title == "vbox_title (vbox_composer)"
+        assert s.meta.vbox.title == "vbox_title (vbox_composer)"
 
 
 def test_option_log(tmp_path: Path) -> None:
@@ -638,21 +414,19 @@ def test_option_log(tmp_path: Path) -> None:
 
 class TestOptionDeleteDuplicates:
     def test_normal(self) -> None:
-        c = Cli("--delete-duplicates").append_score("meta-duplicates.mscz").execute()
-        i = c.post.meta.interface
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
+        s = Cli("--delete-duplicates").append_score("meta-duplicates.mscz").score()
+        assert not s.meta.lyricist
+        assert not s.meta.subtitle
 
     def test_move_subtitle(self) -> None:
-        c = (
+        s = (
             Cli("--delete-duplicates")
             .append_score("meta-duplicates-move-subtitle.mscz")
-            .execute()
+            .score()
         )
-        i = c.post.meta.interface
-        assert not i.combined_lyricist
-        assert not i.combined_subtitle
-        assert i.combined_title == "Title"
+        assert not s.meta.lyricist
+        assert not s.meta.subtitle
+        assert s.meta.title == "Title"
 
 
 def test_option_synchronize() -> None:
@@ -690,7 +464,7 @@ def test_option_json() -> None:
     score = (Cli("--json").append_score("meta-all-values.mscz").execute()).score()
     json = score.json_file
     assert json.exists()
-    assert '"readonly_basename": "meta-all-values"' in utils.read_file(json)
+    assert '"basename": "meta-all-values"' in utils.read_file(json)
 
 
 class TestClassMeta:
@@ -729,54 +503,11 @@ class TestClassMeta:
         assert self.meta.lyricist is None
 
     def test_method_delete_duplicates(self) -> None:
-        self.meta.interface.combined_lyricist = "test"
-        self.meta.interface.combined_composer = "test"
-        assert self.meta.interface.combined_lyricist == "test"
+        self.meta.lyricist = "test"
+        self.meta.composer = "test"
+        assert self.meta.lyricist == "test"
         self.meta.delete_duplicates()
-        assert self.meta.interface.combined_lyricist is None
-
-    def test_method_show(self, capsys: pytest.CaptureFixture[str]) -> None:
-        self.meta.show({"combined_title": "pre"}, {"combined_title": "post"})
-        capture = capsys.readouterr()
-        assert capture.out == "combined_title: “pre” -> “post”\n"
-
-    def test_method_export_json(self) -> None:
-        result_path: Path = self.meta.export_json()
-        assert result_path.exists()
-
-        json: str = utils.read_file(result_path)
-        # json = (
-        #     '{\n    "combined_composer": "vbox_composer",\n'
-        #     '    "combined_lyricist": "vbox_lyricist",\n'
-        #     '    "combined_subtitle": "vbox_subtitle",\n'
-        #     '    "combined_title": "vbox_title",\n'
-        #     '    "metatag_arranger": "metatag_arranger",\n'
-        #     '    "metatag_composer": "metatag_composer",\n'
-        #     '    "metatag_copyright": "metatag_copyright",\n'
-        #     '    "metatag_creation_date": "metatag_creation_date",\n'
-        #     '    "metatag_lyricist": "metatag_lyricist",\n'
-        #     '    "metatag_movement_number": "metatag_movement_number",\n'
-        #     '    "metatag_movement_title": "metatag_movement_title",\n'
-        #     '    "metatag_platform": "metatag_platform",\n'
-        #     '    "metatag_poet": "metatag_poet",\n'
-        #     '    "metatag_source": "metatag_source",\n'
-        #     '    "metatag_translator": "metatag_translator",\n'
-        #     '    "metatag_work_number": "metatag_work_number",\n'
-        #     '    "metatag_work_title": "metatag_work_title",\n'
-        #     '    "readonly_abspath": "/tmp/tmp1rv5ybvu/meta-all-values.mscx",\n'
-        #     '    "readonly_basename": "meta-all-values",\n'
-        #     '    "readonly_dirname": "/tmp/tmp1rv5ybvu",\n'
-        #     '    "readonly_extension": "mscx",\n'
-        #     '    "readonly_filename": "meta-all-values.mscx",\n'
-        #     '    "readonly_relpath": "/tmp/tmp1rv5ybvu/meta-all-values.mscx",\n'
-        #     '    "readonly_relpath_backup": "/tmp/tmp1rv5ybvu/meta-all-values_bak.mscx",\n'
-        #     '    "vbox_composer": "vbox_composer",\n'
-        #     '    "vbox_lyricist": "vbox_lyricist",\n'
-        #     '    "vbox_subtitle": "vbox_subtitle",\n'
-        #     '    "vbox_title": "vbox_title"\n}'
-        # )
-        assert '{\n    "combined_composer": "vbox_composer",\n' in json
-        assert '"readonly_basename": "meta-all-values"' in json
+        assert self.meta.lyricist is None
 
     def test_property_title(self, score: Score) -> None:
         assert score.meta.title == "Title"

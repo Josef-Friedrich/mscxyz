@@ -13,7 +13,7 @@ import tmep
 
 import mscxyz.export
 from mscxyz import utils
-from mscxyz.meta import Combined, Interface, InterfaceReadWrite, Metatag, Vbox
+from mscxyz.meta import Metatag, Vbox
 from mscxyz.rename import rename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
@@ -26,13 +26,6 @@ def __mm(value: str) -> float:
 
 def __inch(value: str) -> float:
     return Dimension(value).to("in")
-
-
-def __itemized_fields(fields: Sequence[str], prefix: str = "", suffix: str = "") -> str:
-    out: list[str] = []
-    for field in fields:
-        out.append(prefix + "- " + field + suffix)
-    return "\n".join(out)
 
 
 def __embed_fields(
@@ -240,11 +233,8 @@ group_meta = parser.add_argument_group(
         - subtitle (1. vbox_subtitle 2. metatag_movement_title)
         - composer (1. vbox_composer 2. metatag_composer)
         - lyricist (1. vbox_lyricist 2. metatag_lyricist)
-
-    You have access to all this metadata fields through following fields:"""
-    )
-    + "\n\n"
-    + __itemized_fields(InterfaceReadWrite.get_all_fields(), prefix="    "),
+    """
+    ),
 )
 
 group_meta.add_argument(
@@ -341,17 +331,6 @@ group_meta.add_argument(
     help="Define the metadata in VBox elements." + __embed_fields(Vbox.fields),
 )
 
-group_meta.add_argument(
-    "--combined",
-    "--combined-meta",
-    nargs=2,
-    action="append",
-    metavar=("<field>", "<value>"),
-    dest="meta_combined",
-    help="Define the metadata combined in one step for MetaTag and VBox elements."
-    + __embed_fields(Combined.fields),
-)
-
 ###############################################################################
 # lyrics
 ###############################################################################
@@ -401,10 +380,7 @@ group_rename = parser.add_argument_group(
     "Rename the “*.msc[zx]” files."
     "Fields and functions you can use in the format "
     "string (-f, --format):\n\n"
-    "Fields\n======\n\n{}\n\n"
-    "Functions\n=========\n\n{}".format(
-        __itemized_fields(Interface.get_all_fields(), prefix="    "), tmep.get_doc()
-    ),
+    "Functions\n=========\n\n{}".format(tmep.get_doc()),
 )
 
 group_rename.add_argument(
@@ -766,7 +742,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if (
                 args.meta_metatag
                 or args.meta_vbox
-                or args.meta_combined
                 or args.meta_set
                 or args.meta_clean
                 or args.meta_dist
@@ -800,26 +775,15 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                         )
                     setattr(score.meta.vbox, field, value)
 
-            if args.meta_combined:
-                for a in args.meta_combined:
-                    field = a[0]
-                    value = a[1]
-                    if field not in Combined.fields:
-                        raise ValueError(
-                            f"Unknown field {field}. "
-                            f"Possible fields: {', '.join(Combined.fields)}"
-                        )
-                    setattr(score.meta.combined, field, value)
-
             if args.meta_set:
                 for a in args.meta_set:
-                    score.meta.set_field(destination_field=a[0], format_string=a[1])
+                    score.fields.set(a[0], a[1])
 
             if args.meta_clean:
                 score.fields.clean(args.meta_clean)
 
             if args.meta_json:
-                score.meta.export_json()
+                score.fields.export_json()
 
             if args.meta_dist:
                 for a in args.meta_dist:

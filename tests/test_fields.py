@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import os
 import re
+from pathlib import Path
 
+from mscxyz import utils
 from mscxyz.fields import FieldsManager
 
 
@@ -46,6 +48,14 @@ class TestClassFieldsManager:
             "basename",
             "extension",
         )
+
+    def test_method_export_json(self, fields: FieldsManager) -> None:
+        result_path: Path = fields.export_json()
+        assert result_path.exists()
+
+        json: str = utils.read_file(result_path)
+        assert '"composer": "Composer"' in json
+        assert '"basename": "score"' in json
 
     def test_method_export_to_dict(self, fields: FieldsManager) -> None:
         result = fields.export_to_dict()

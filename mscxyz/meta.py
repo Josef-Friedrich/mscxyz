@@ -2,17 +2,11 @@
 
 from __future__ import annotations
 
-import json
 import re
 import typing
-from pathlib import Path
-from typing import Any
 
 import tmep
 from lxml.etree import _Element
-
-from mscxyz import utils
-from mscxyz.settings import get_args
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -634,204 +628,6 @@ class Vbox:
             setattr(self, field, None)
 
 
-class Combined:
-    """Combines the metadata fields of the embedded ``metaTag`` and ``VBox`` elements."""
-
-    fields = (
-        "composer",
-        "lyricist",
-        "subtitle",
-        "title",
-    )
-
-    score: "Score"
-
-    xml_root: _Element
-
-    metatag: Metatag
-
-    vbox: Vbox
-
-    def __init__(self, score: "Score") -> None:
-        self.score = score
-        self.xml_root = self.score.xml_root
-        self.metatag = Metatag(self.score)
-        self.vbox = Vbox(self.score)
-
-    def _pick_value(self, *values: str | None) -> str | None:
-        for value in values:
-            if value:
-                return value
-        return None
-
-    @property
-    def title(self) -> str | None:
-        return self._pick_value(self.vbox.title, self.metatag.work_title)
-
-    @title.setter
-    def title(self, value: str | None) -> None:
-        self.vbox.title = self.metatag.work_title = value
-
-    @property
-    def subtitle(self) -> str | None:
-        return self._pick_value(self.vbox.subtitle, self.metatag.movement_title)
-
-    @subtitle.setter
-    def subtitle(self, value: str | None) -> None:
-        self.vbox.subtitle = self.metatag.movement_title = value
-
-    @property
-    def composer(self) -> str | None:
-        return self._pick_value(self.vbox.composer, self.metatag.composer)
-
-    @composer.setter
-    def composer(self, value: str | None) -> None:
-        self.vbox.composer = self.metatag.composer = value
-
-    @property
-    def lyricist(self) -> str | None:
-        return self._pick_value(self.vbox.lyricist, self.metatag.lyricist)
-
-    @lyricist.setter
-    def lyricist(self, value: str | None) -> None:
-        self.vbox.lyricist = self.metatag.lyricist = value
-
-
-class InterfaceReadWrite:
-    objects = ("metatag", "vbox", "combined")
-
-    score: "Score"
-
-    metatag: Metatag
-
-    vbox: Vbox
-
-    combined: Combined
-
-    fields: list[str]
-
-    def __init__(self, score: "Score") -> None:
-        self.score = score
-        self.metatag = Metatag(self.score)
-        self.vbox = Vbox(self.score)
-        self.combined = Combined(self.score)
-        self.fields = self.get_all_fields()
-
-    @staticmethod
-    def get_all_fields() -> list[str]:
-        fields: list[str] = []
-        for field in Metatag.fields:
-            fields.append("metatag_" + field)
-        for field in Vbox.fields:
-            fields.append("vbox_" + field)
-        for field in Combined.fields:
-            fields.append("combined_" + field)
-        return sorted(fields)
-
-    @staticmethod
-    def __split(field: str) -> dict[str, str | Any]:
-        match = re.search(r"([^_]*)_(.*)", field)
-        if not match:
-            raise ValueError("Field “" + field + "” can’t be splitted!")
-        matches = match.groups()
-
-        if matches[0] not in InterfaceReadWrite.objects:
-            raise ValueError(matches[0] + ": Not a supported object!")
-        return {"object": matches[0], "field": matches[1]}
-
-    def export_to_dict(self) -> dict[str, str]:
-        return export_to_dict(self, self.fields)
-
-    def __getattr__(self, field: str) -> Any:
-        parts = self.__split(field)
-        obj = getattr(self, parts["object"])
-        return getattr(obj, parts["field"])
-
-    def __setattr__(self, field: str, value: str) -> None:
-        if field in ("fields", "metatag", "objects", "vbox", "combined", "score"):
-            self.__dict__[field] = value
-        else:
-            parts = self.__split(field)
-            obj = getattr(self, parts["object"])
-            return setattr(obj, parts["field"], value)
-
-
-class InterfaceReadOnly:
-    fields = [
-        "readonly_abspath",
-        "readonly_basename",
-        "readonly_dirname",
-        "readonly_extension",
-        "readonly_filename",
-        "readonly_relpath",
-        "readonly_relpath_backup",
-    ]
-
-    score: Score
-
-    def __init__(self, score: Score) -> None:
-        self.score = score
-
-    @property
-    def readonly_abspath(self) -> str:
-        return str(self.score.path)
-
-    @property
-    def readonly_basename(self) -> str:
-        return self.score.basename
-
-    @property
-    def readonly_dirname(self) -> str:
-        return self.score.dirname
-
-    @property
-    def readonly_extension(self) -> str:
-        return self.score.extension
-
-    @property
-    def readonly_filename(self) -> str:
-        return self.score.filename
-
-    @property
-    def readonly_relpath(self) -> str:
-        return str(self.score.path)
-
-    @property
-    def readonly_relpath_backup(self) -> str:
-        return str(self.score.backup_file)
-
-
-class Interface:
-    score: "Score"
-
-    def __init__(self, score: "Score") -> None:
-        self.score = score
-        self.read_only = InterfaceReadOnly(self.score)
-        self.read_write = InterfaceReadWrite(self.score)
-        self.fields: list[str] = self.get_all_fields()
-
-    @staticmethod
-    def get_all_fields() -> list[str]:
-        return sorted(InterfaceReadOnly.fields + InterfaceReadWrite.get_all_fields())
-
-    def export_to_dict(self) -> dict[str, str]:
-        return export_to_dict(self, self.fields)
-
-    def __getattr__(self, field: str) -> Any:
-        if re.match(r"^readonly_", field):
-            return getattr(self.read_only, field)
-        else:
-            return getattr(self.read_write, field)
-
-    def __setattr__(self, field: str, value: str) -> None:
-        if field in ("score", "read_only", "read_write", "fields"):
-            self.__dict__[field] = value
-        elif not re.match(r"^readonly_", field):
-            return setattr(self.read_write, field, value)
-        else:
-            raise ReadOnlyFieldError(field)
-
-
 class Meta:
     score: "Score"
 
@@ -839,35 +635,22 @@ class Meta:
 
     vbox: Vbox
 
-    combined: Combined
-
-    interface_read_write: InterfaceReadWrite
-
-    interface: Interface
-
     def __init__(self, score: "Score") -> None:
         self.score = score
 
         self.metatag = Metatag(self.score)
         self.vbox = Vbox(self.score)
-        self.combined = Combined(self.score)
-        self.interface_read_write = InterfaceReadWrite(self.score)
-        self.interface = Interface(self.score)
 
     def sync_fields(self) -> None:
-        self.combined.title = self.combined.title
-        self.combined.subtitle = self.combined.subtitle
-        self.combined.composer = self.combined.composer
-        self.combined.lyricist = self.combined.lyricist
+        self.title = self.title
+        self.subtitle = self.subtitle
+        self.composer = self.composer
+        self.lyricist = self.lyricist
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
         log.write(tmep.parse(format_string, self.score.fields.export_to_dict()) + "\n")
         log.close()
-
-    def set_field(self, destination_field: str, format_string: str) -> None:
-        field_value = tmep.parse(format_string, self.interface.export_to_dict())
-        setattr(self.interface, destination_field, field_value)
 
     def clean(self) -> None:
         """
@@ -880,83 +663,23 @@ class Meta:
         """
         Delete duplicates in the metadata.
 
-        This method checks if the ``combined_lyricist`` and ``combined_composer`` are the same,
-        and if so, it sets ``combined_lyricist`` to an empty string.
+        This method checks if the ``lyricist`` and ``composer`` are the same,
+        and if so, it sets ``lyricist`` to an empty string.
 
-        It also checks if ``combined_title`` is empty but ``combined_subtitle`` is not,
-        and if so, it sets ``combined_title`` to ``combined_subtitle``.
+        It also checks if ``title`` is empty but ``subtitle`` is not,
+        and if so, it sets ``title`` to ``subtitle``.
 
-        Finally, it checks if ``combined_subtitle`` is the same as ``combined_title``,
-        and if so, it sets ``combined_subtitle`` to an empty string.
+        Finally, it checks if ``subtitle`` is the same as ``title``,
+        and if so, it sets ``subtitle`` to an empty string.
         """
-        iface: Interface = self.interface
-        if iface.combined_lyricist == iface.combined_composer:
-            iface.combined_lyricist = ""
+        if self.lyricist == self.composer:
+            self.lyricist = None
 
-        if not iface.combined_title and iface.combined_subtitle:
-            iface.combined_title = iface.combined_subtitle
+        if not self.title and self.subtitle:
+            self.title = self.subtitle
 
-        if iface.combined_subtitle == iface.combined_title:
-            iface.combined_subtitle = ""
-
-    def show(self, pre: dict[str, str], post: dict[str, str]) -> None:
-        args = get_args()
-
-        fields = list(self.interface.fields)
-
-        if args.general_verbose < 1:
-            fields.remove("readonly_abspath")
-            fields.remove("readonly_dirname")
-            fields.remove("readonly_extension")
-            fields.remove("readonly_filename")
-            fields.remove("readonly_relpath")
-
-        if args.general_verbose < 2:
-            fields.remove("readonly_relpath_backup")
-
-        for field in fields:
-            field_color: utils.Color
-            if (
-                args.general_verbose == 0
-                and (field in pre and pre[field] or field in post and post[field])
-            ) or args.general_verbose > 0:
-                if re.match(r"^combined_", field):
-                    field_color = "green"
-                elif re.match(r"^metatag_", field):
-                    field_color = "blue"
-                elif re.match(r"^readonly_", field):
-                    field_color = "red"
-                elif re.match(r"^vbox_", field):
-                    field_color = "cyan"
-                else:
-                    field_color = "white"
-
-                line: list[str] = []
-                if pre[field]:
-                    line.append("“{}”".format(pre[field]))
-
-                if pre[field] != post[field]:
-                    line.append("->")
-                    line.append(utils.colorize("“{}”".format(post[field]), "yellow"))
-
-                print(
-                    "{}: {}".format(utils.colorize(field, field_color), " ".join(line))
-                )
-
-    def export_json(self) -> Path:
-        """
-        Export the data as a JSON file.
-
-        :return: The path to the exported JSON file.
-        """
-        data: dict[str, str] = {}
-        result_path: Path = self.score.json_file
-        for field in self.interface.fields:
-            data[field] = self.interface.__getattr__(field)
-        output = open(result_path, "w")
-        json.dump(data, output, indent=4)
-        output.close()
-        return result_path
+        if self.subtitle == self.title:
+            self.subtitle = None
 
     def reload(self, save: bool = False) -> Meta:
         """

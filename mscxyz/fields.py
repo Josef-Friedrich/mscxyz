@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterator, Mapping, Sequence, Union
 
+import tmep
+
 from mscxyz.meta import FormatStringNoFieldError, UnmatchedFormatStringError
 from mscxyz.settings import DefaultArguments
 from mscxyz.utils import Color, colorize
@@ -310,6 +312,8 @@ class FieldsManager:
             obj = getattr(obj, attr)
             if obj is None:
                 raise Exception(f"Cannot set attribute {field.attr_path}")
+        if value is not None and isinstance(value, str) and "$" in value:
+            value = tmep.parse(value, self.export_to_dict())
         setattr(obj, last, value)
 
     def diff(self, args: DefaultArguments) -> None:
