@@ -386,7 +386,7 @@ class Metatag:
 
 
 class Vbox:
-    """The first `vertical` box of a score.
+    """The first `vertical` box or frame of a score.
 
     Available fields:
 
@@ -524,7 +524,7 @@ class Vbox:
 
         if self.score.version_major in (2, 3):
             style = style.title()
-        elif self.score.version_major == 4:
+        else:
             style = style.lower()
 
         self.score.xml.create_sub_element(
@@ -558,45 +558,109 @@ class Vbox:
         self.score.xml.remove(self.__get_element(style))
         return None
 
-    # composer -> Composer
-
-    @property
-    def composer(self) -> str | None:
-        return self.__get_text("Composer")
-
-    @composer.setter
-    def composer(self, value: str | None) -> None:
-        self.__set_text("Composer", value)
-
-    # lyricist -> Lyricist
-
-    @property
-    def lyricist(self) -> str | None:
-        return self.__get_text("Lyricist")
-
-    @lyricist.setter
-    def lyricist(self, value: str | None) -> None:
-        self.__set_text("Lyricist", value)
-
-    # subtitle -> Subtitle
-
-    @property
-    def subtitle(self) -> str | None:
-        return self.__get_text("Subtitle")
-
-    @subtitle.setter
-    def subtitle(self, value: str | None) -> None:
-        self.__set_text("Subtitle", value)
-
-    # title -> Title
-
     @property
     def title(self) -> str | None:
-        return self.__get_text("Title")
+        """
+        The title text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>title</style>
+                        <text>Mondscheinsonate</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("title")
 
     @title.setter
     def title(self, value: str | None) -> None:
-        self.__set_text("Title", value)
+        self.__set_text("title", value)
+
+    @property
+    def subtitle(self) -> str | None:
+        """
+        The subtitle text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>subtitle</style>
+                        <text>1. Satz</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("subtitle")
+
+    @subtitle.setter
+    def subtitle(self, value: str | None) -> None:
+        self.__set_text("subtitle", value)
+
+    @property
+    def composer(self) -> str | None:
+        """
+        The composer text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>composer</style>
+                        <text>Ludwig van Beethoven</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("composer")
+
+    @composer.setter
+    def composer(self, value: str | None) -> None:
+        self.__set_text("composer", value)
+
+    @property
+    def lyricist(self) -> str | None:
+        """
+        The composer text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>lyricist</style>
+                        <text>Johann Wolfgang von Goethe</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("lyricist")
+
+    @lyricist.setter
+    def lyricist(self, value: str | None) -> None:
+        self.__set_text("lyricist", value)
 
     def clean(self) -> None:
         for field in self.fields:
@@ -638,14 +702,14 @@ class Meta:
         """
         Delete duplicates in the metadata.
 
-        This method checks if the ``lyricist`` and ``composer`` are the same,
-        and if so, it sets ``lyricist`` to an empty string.
+        This method checks if the :attr:`lyricist` and :attr:`composer` are the same,
+        and if so, it sets :attr:`lyricist` to an empty string.
 
-        It also checks if ``title`` is empty but ``subtitle`` is not,
-        and if so, it sets ``title`` to ``subtitle``.
+        It also checks if :attr:`title` is empty but :attr:`subtitle` is not,
+        and if so, it sets :attr:`title` to :attr:`subtitle`.
 
-        Finally, it checks if ``subtitle`` is the same as ``title``,
-        and if so, it sets ``subtitle`` to an empty string.
+        Finally, it checks if :attr:`subtitle` is the same as :attr:`title`,
+        and if so, it sets :attr:`subtitle` to an empty string.
         """
         if self.lyricist == self.composer:
             self.lyricist = None
@@ -677,7 +741,9 @@ class Meta:
     @property
     def title(self) -> str | None:
         """
-        Get and set the value of ``VBox[title]`` and ``metaTag[workTitle]`` all at once.
+        Get and set the value of :attr:`VBox.title` and :attr:`Metatag.work_title` all at once.
+
+        If the attributes have different values, then the attribute :attr:`VBox.title` is preferred.
         """
         return self.__pick_value(self.vbox.title, self.metatag.work_title)
 
@@ -688,7 +754,9 @@ class Meta:
     @property
     def subtitle(self) -> str | None:
         """
-        Get and set the value of ``VBox[subtitle]``, ``metaTag[subtitle]`` and ``metaTag[movementTitle]`` all at once.
+        Get and set the value of :attr:`VBox.subtitle`, :attr:`Metatag.subtitle` and :attr:`Metatag.movement_title` all at once.
+
+        If the attributes have different values, then the attribute :attr:`VBox.subtitle` is preferred.
         """
         return self.__pick_value(
             self.vbox.subtitle, self.metatag.subtitle, self.metatag.movement_title
@@ -701,7 +769,9 @@ class Meta:
     @property
     def composer(self) -> str | None:
         """
-        Get and set the value of ``VBox[composer]`` and ``metaTag[composer]`` all at once.
+        Get and set the value of :attr:`VBox.composer` and :attr:`Metatag.composer` all at once.
+
+        If the attributes have different values, then the attribute :attr:`VBox.composer` is preferred.
         """
         return self.__pick_value(self.vbox.composer, self.metatag.composer)
 
@@ -712,7 +782,9 @@ class Meta:
     @property
     def lyricist(self) -> str | None:
         """
-        Get and set the value of ``VBox[lyricist]`` and ``metaTag[lyricist]`` all at once.
+        Get and set the value of :attr:`VBox.lyricist` and :attr:`Metatag.lyricist` all at once.
+
+        If the attributes have different values, then the attribute :attr:`VBox.lyricist` is preferred.
         """
         return self.__pick_value(self.vbox.lyricist, self.metatag.lyricist)
 
