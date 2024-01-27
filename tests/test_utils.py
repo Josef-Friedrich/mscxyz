@@ -37,10 +37,9 @@ class TestFunctions:
             scores.sort()
             return scores
 
-    @pytest.mark.skip("TODO: Fix this test")
-    @mock.patch("mscxyz.score.Score")
+    @mock.patch("mscxyz.cli.Score")
     def test_batch(self, Score: mock.Mock) -> None:
-        Cli("meta", helper.get_dir("batch"), legacy=True).execute()
+        Cli("--dry-run", helper.get_dir("batch"), append_score=False).execute()
         assert Score.call_count == 3
 
     def test_without_extension(self) -> None:

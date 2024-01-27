@@ -837,6 +837,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if manipulate_meta:
                 score.fields.diff(args)
 
+            # rename
+
             if args.rename_rename:
                 rename(score)
 
