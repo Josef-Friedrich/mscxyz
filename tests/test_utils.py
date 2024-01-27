@@ -32,7 +32,7 @@ class TestFunctions:
                 ("/a/b", (), ("impsum.mscz", "dolor.mscx", "sit.txt")),
             ]
             scores: list[str] = []
-            for score in utils.list_files(path, extension, glob):
+            for score in utils.list_path(path, extension, glob):
                 scores.append(str(score))
             scores.sort()
             return scores
@@ -65,13 +65,13 @@ class TestFunctions:
     def test_isfile(self) -> None:
         with mock.patch("pathlib.Path.is_file") as mock_isfile:
             mock_isfile.return_value = True
-            result = list(utils.list_files("/a/b/lorem.mscx"))
+            result = list(utils.list_path("/a/b/lorem.mscx"))
             assert str(result[0]) == "/a/b/lorem.mscx"
 
     def test_isfile_no_match(self) -> None:
         with mock.patch("pathlib.Path.is_file") as mock_isfile:
             mock_isfile.return_value = True
-            result = list(utils.list_files("/a/b/lorem.lol"))
+            result = list(utils.list_path("/a/b/lorem.lol"))
             assert result == []
 
     def test_arg_glob_txt(self) -> None:

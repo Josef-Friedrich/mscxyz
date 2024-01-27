@@ -4,7 +4,7 @@ command line."""
 
 from mscxyz import (
     Score,
-    list_files,
+    list_path,
 )
 
 
@@ -13,4 +13,4 @@ def test_class_score() -> None:
 
 
 def test_function_list_scores() -> None:
-    assert list_files.__name__ == "list_files"
+    assert list_path.__name__ == "list_path"

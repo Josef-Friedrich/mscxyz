@@ -6,7 +6,7 @@ Main module
    :toctree: stubs
    :nosignatures:
 
-   mscxyz.list_files
+   mscxyz.list_path
    mscxyz.Score
 
 .. automodule:: mscxyz

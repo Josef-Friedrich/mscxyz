@@ -19,4 +19,4 @@ supported_versions = (2, 3, 4)
 
 Score = mscxyz.score.Score
 
-list_files = utils.list_files
+list_path = utils.list_path

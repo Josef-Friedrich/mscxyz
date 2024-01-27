@@ -74,7 +74,7 @@ To apply glob patterns on the file paths, the ``--glob`` option can be used.
 To selection only *mscz* oder *mscx* files use the options ``--mscz`` or ``--mscx``.
 Don’t mix the options ``--mscz`` and ``--mscx`` with the option ``--glob``.
 
-The python package ``mscxyz`` exports a function named ``list_files`` which can
+The python package ``mscxyz`` exports a function named ``list_path`` which can
 be used to list the paths of MuseScore files. This allows you to list score
 paths in a nested folder structure in a similar way to the command line.
 This folder structure is used for the following example:
@@ -95,10 +95,10 @@ This folder structure is used for the following example:
 
 .. code-block:: Python
 
-    from mscxyz import list_files, Score
+    from mscxyz import list_path, Score
 
     score_paths = []
-    for score_path in list_files(path="/home/xyz/scores", extension="mscz"):
+    for score_path in list_path(path="/home/xyz/scores", extension="mscz"):
         score = Score(score_path)
         assert score.path.exists()
         assert score.extension == "mscz"

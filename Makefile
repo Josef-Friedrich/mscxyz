@@ -43,10 +43,10 @@ activate_venv:
 pin_docs_requirements:
 	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
 
-# autocomplete:
-# 	musescore-manager --print-completion zsh > autocomplete.zsh
-# 	musescore-manager --print-completion bash > autocomplete.bash
-# 	musescore-manager --print-completion tcsh > autocomplete.tcsh
+autocomplete:
+	poetry run musescore-manager --print-completion zsh > autocomplete.zsh
+	poetry run musescore-manager --print-completion bash > autocomplete.bash
+	poetry run musescore-manager --print-completion tcsh > autocomplete.tcsh
 
 install_autocomplete: autocomplete
 	cp autocomplete.zsh "$(HOME)/.zsh-completions/_musescore-manager"

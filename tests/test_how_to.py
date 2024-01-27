@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from mscxyz import Score, list_files
+from mscxyz import Score, list_path
 from tests import helper
 from tests.helper import Cli, assert_file_type
 
@@ -94,9 +94,9 @@ class TestSpecifyMusescoreFiles:
         )
 
 
-def test_list_files(nested_dir: Path) -> None:
+def test_list_path(nested_dir: Path) -> None:
     score_paths: list[str] = []
-    for score_path in list_files(src=str(nested_dir), extension="mscz"):
+    for score_path in list_path(src=str(nested_dir), extension="mscz"):
         score = Score(score_path)
         assert score.path.exists()
         assert score.extension == "mscz"

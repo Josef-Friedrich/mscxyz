@@ -25,7 +25,7 @@ PathOrStr = Union[PathLike[str], str, Path]
 INCH = 25.4
 
 
-def list_files(
+def list_path(
     src: PathOrStr | list[PathOrStr],
     extension: ListExtension = "both",
     glob: Optional[str] = None,

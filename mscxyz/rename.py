@@ -65,7 +65,7 @@ def _get_checksum(filename: str) -> str:
     return hasher.hexdigest()
 
 
-def rename(score: Score) -> Score:
+def rename(score: Score) -> None:
     args = get_args()
 
     meta_values = score.fields.export_to_dict()
@@ -76,7 +76,7 @@ def rename(score: Score) -> Score:
         for skip in skips:
             if skip not in meta_values:
                 print(colorize("Field “{}” is empty! Skipping".format(skip), "red"))
-                return score
+                return
 
     if args.rename_target:
         target_base: str = os.path.abspath(args.rename_target)
@@ -101,7 +101,7 @@ def rename(score: Score) -> Score:
                         "red",
                     )
                 )
-                return score
+                return
             if i == 1:
                 counter_format = ""
             else:
@@ -118,4 +118,4 @@ def rename(score: Score) -> Score:
         # os.rename(source, target)
         shutil.move(score.path, target)
 
-    return score
+    return

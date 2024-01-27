@@ -666,7 +666,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
     elif args.selection_mscx:
         selection_glob = "*.mscx"
 
-    for file in utils.list_files(src=args.path, glob=selection_glob):
+    for file in utils.list_path(src=args.path, glob=selection_glob):
         try:
             if args.selection_list:
                 print(file)
