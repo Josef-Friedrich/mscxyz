@@ -16,7 +16,7 @@ from mscxyz.settings import get_args
 from mscxyz.utils import colorize
 
 
-def create_dir(path: str) -> None:
+def _create_dir(path: str) -> None:
     try:
         os.makedirs(os.path.dirname(path))
     except OSError as exception:
@@ -24,7 +24,7 @@ def create_dir(path: str) -> None:
             raise
 
 
-def prepare_fields(fields: FieldsExport) -> dict[str, str]:
+def _prepare_fields(fields: FieldsExport) -> dict[str, str]:
     args = get_args()
     output: dict[str, str] = {}
     for field, value in fields.items():
@@ -43,18 +43,18 @@ def prepare_fields(fields: FieldsExport) -> dict[str, str]:
     return output
 
 
-def apply_format_string(fields: FieldsExport) -> str:
+def _apply_format_string(fields: FieldsExport) -> str:
     args = get_args()
-    fields = prepare_fields(fields)
+    fields = _prepare_fields(fields)
     name = tmep.parse(args.rename_format, fields)
     return name
 
 
-def show(old: str, new: str) -> None:
+def _show(old: str, new: str) -> None:
     print("{} -> {}".format(colorize(old, "yellow"), colorize(new, "green")))
 
 
-def get_checksum(filename: str) -> str:
+def _get_checksum(filename: str) -> str:
     BLOCKSIZE = 65536
     hasher = hashlib.sha1()
     with open(filename, "rb") as afile:
@@ -69,7 +69,7 @@ def rename(score: Score) -> Score:
     args = get_args()
 
     meta_values = score.fields.export_to_dict()
-    target_filename: str = apply_format_string(meta_values)
+    target_filename: str = _apply_format_string(meta_values)
 
     if args.rename_skip:
         skips: list[str] = args.rename_skip.split(",")
@@ -91,7 +91,7 @@ def rename(score: Score) -> Score:
         counter_format: str = ""
         while os.path.exists(target_format.format(counter_format)):
             target = target_format.format(counter_format)
-            if get_checksum(str(score.path)) == get_checksum(target):
+            if _get_checksum(str(score.path)) == _get_checksum(target):
                 print(
                     colorize(
                         "The file “{}” with the same checksum (sha1) "
@@ -110,10 +110,10 @@ def rename(score: Score) -> Score:
 
         target = target_format.format(counter_format)
 
-    show(str(score.path), target)
+    _show(str(score.path), target)
 
     if not args.general_dry_run:
-        create_dir(target)
+        _create_dir(target)
         # Invalid cross-device link:
         # os.rename(source, target)
         shutil.move(score.path, target)

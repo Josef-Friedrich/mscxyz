@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 import typing
 
 import tmep
@@ -39,16 +38,6 @@ class FormatStringNoFieldError(Exception):
     def __init__(self, format_string: str) -> None:
         self.msg = "No fields found in your format string “{}”!".format(format_string)
         Exception.__init__(self, self.msg)
-
-
-def to_underscore(field: str) -> str:
-    """
-    Convert a camel case string to snake case.
-
-    :param field: The camel case string to be converted.
-    :return: The snake case representation of the input string.
-    """
-    return re.sub("([A-Z]+)", r"_\1", field).lower()
 
 
 def export_to_dict(obj: object, fields: typing.Iterable[str]) -> dict[str, str]:

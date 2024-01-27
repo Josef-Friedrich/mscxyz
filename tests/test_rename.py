@@ -18,7 +18,7 @@ class TestFunctions:
             "field1": " Subtitle ",
             "field2": "Title / Composer",
         }
-        result: dict[str, str] = rename.prepare_fields(fields)
+        result: dict[str, str] = rename._prepare_fields(fields)
         assert result == {
             "field1": "Subtitle",
             "field2": "Title - Composer",
@@ -28,12 +28,12 @@ class TestFunctions:
         reset_args()
         score = get_score("meta-all-values.mscx")
         fields = score.fields.export_to_dict()
-        name: str = rename.apply_format_string(fields)
+        name: str = rename._apply_format_string(fields)
         assert name == "vbox_title (vbox_composer)"
 
     def test_function_get_checksum(self) -> None:
         tmp: str = get_file("simple.mscx")
-        assert rename.get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
+        assert rename._get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
 
 
 class TestCli:

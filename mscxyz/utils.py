@@ -127,17 +127,6 @@ def re_open(input_file: str) -> None:
     execute_musescore(["-o", input_file, input_file])
 
 
-def convert_mxl(input_file: str) -> None:
-    """
-    Convert a MusicXML file into a MuseScore file.
-
-    :param input_file: The path (relative or absolute) of a MusicXML file.
-    """
-    output_file = input_file.replace(".mxl", ".mscx")
-    execute_musescore(["-o", output_file, input_file])
-    os.remove(input_file)
-
-
 def round_float(value: str | int | float) -> float:
     return float(round(float(value), 4))
 

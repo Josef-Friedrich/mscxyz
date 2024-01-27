@@ -12,7 +12,6 @@ from mscxyz.meta import (
     Metatag,
     Vbox,
     export_to_dict,
-    to_underscore,
 )
 from mscxyz.score import Score
 from tests import helper
@@ -49,10 +48,6 @@ class TestExceptions:
 
 
 class TestFunctions:
-    def test_to_underscore(self) -> None:
-        assert to_underscore("PascalCase") == "_pascal_case"
-        assert to_underscore("lowerCamelCase") == "lower_camel_case"
-
     def test_export_to_dict(self) -> None:
         class Data:
             a = "a"
