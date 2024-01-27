@@ -400,7 +400,7 @@ class Vbox:
     .. code-block:: xml
 
         <Staff id="1">
-            <VBox>
+            <Vbox>
                 <height>10</height>
                 <Text>
                     <style>Title</style>
@@ -410,7 +410,7 @@ class Vbox:
                     <style>Composer</style>
                     <text>Composer</text>
                 </Text>
-            </VBox>
+            </Vbox>
         </Staff>
 
 
@@ -419,7 +419,7 @@ class Vbox:
     .. code-block:: xml
 
         <Staff id="1">
-            <VBox>
+            <Vbox>
                 <height>10</height>
                 <boxAutoSize>0</boxAutoSize>
                 <eid>4294967418</eid>
@@ -433,7 +433,7 @@ class Vbox:
                     <style>composer</style>
                     <text>Composer</text>
                 </Text>
-            </VBox>
+            </Vbox>
         </Staff>
     """
 
@@ -455,9 +455,9 @@ class Vbox:
         self.xml_root = score.xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
 
-        vbox = self.score.xml.xpath(xpath + "/VBox")
+        vbox = self.score.xml.xpath(xpath + "/Vbox")
         if vbox is None:
-            vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
+            vbox, _ = self.score.xml.create_sub_element("Vbox", "height", "10")
 
             self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
@@ -566,7 +566,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <VBox>
+                <Vbox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -575,7 +575,7 @@ class Vbox:
                         <style>title</style>
                         <text>Mondscheinsonate</text>
                     </Text>
-                </VBox>
+                </Vbox>
             </Staff>
         """
         return self.__get_text("title")
@@ -592,7 +592,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <VBox>
+                <Vbox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -601,7 +601,7 @@ class Vbox:
                         <style>subtitle</style>
                         <text>1. Satz</text>
                     </Text>
-                </VBox>
+                </Vbox>
             </Staff>
         """
         return self.__get_text("subtitle")
@@ -618,7 +618,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <VBox>
+                <Vbox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -627,7 +627,7 @@ class Vbox:
                         <style>composer</style>
                         <text>Ludwig van Beethoven</text>
                     </Text>
-                </VBox>
+                </Vbox>
             </Staff>
         """
         return self.__get_text("composer")
@@ -644,7 +644,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <VBox>
+                <Vbox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -653,7 +653,7 @@ class Vbox:
                         <style>lyricist</style>
                         <text>Johann Wolfgang von Goethe</text>
                     </Text>
-                </VBox>
+                </Vbox>
             </Staff>
         """
         return self.__get_text("lyricist")
@@ -728,7 +728,7 @@ class Meta:
 
         :return: The reloaded Meta object.
 
-        :see: :meth:`mscxyz.score.Score.reload`
+        :see: :meth:`mscxyz.Score.reload`
         """
         return self.score.reload(save).meta
 
@@ -741,9 +741,9 @@ class Meta:
     @property
     def title(self) -> str | None:
         """
-        Get and set the value of :attr:`VBox.title` and :attr:`Metatag.work_title` all at once.
+        Get and set the value of :attr:`Vbox.title` and :attr:`Metatag.work_title` all at once.
 
-        If the attributes have different values, then the attribute :attr:`VBox.title` is preferred.
+        If the attributes have different values, then the attribute :attr:`Vbox.title` is preferred.
         """
         return self.__pick_value(self.vbox.title, self.metatag.work_title)
 
@@ -754,9 +754,9 @@ class Meta:
     @property
     def subtitle(self) -> str | None:
         """
-        Get and set the value of :attr:`VBox.subtitle`, :attr:`Metatag.subtitle` and :attr:`Metatag.movement_title` all at once.
+        Get and set the value of :attr:`Vbox.subtitle`, :attr:`Metatag.subtitle` and :attr:`Metatag.movement_title` all at once.
 
-        If the attributes have different values, then the attribute :attr:`VBox.subtitle` is preferred.
+        If the attributes have different values, then the attribute :attr:`Vbox.subtitle` is preferred.
         """
         return self.__pick_value(
             self.vbox.subtitle, self.metatag.subtitle, self.metatag.movement_title
@@ -769,9 +769,9 @@ class Meta:
     @property
     def composer(self) -> str | None:
         """
-        Get and set the value of :attr:`VBox.composer` and :attr:`Metatag.composer` all at once.
+        Get and set the value of :attr:`Vbox.composer` and :attr:`Metatag.composer` all at once.
 
-        If the attributes have different values, then the attribute :attr:`VBox.composer` is preferred.
+        If the attributes have different values, then the attribute :attr:`Vbox.composer` is preferred.
         """
         return self.__pick_value(self.vbox.composer, self.metatag.composer)
 
@@ -782,9 +782,9 @@ class Meta:
     @property
     def lyricist(self) -> str | None:
         """
-        Get and set the value of :attr:`VBox.lyricist` and :attr:`Metatag.lyricist` all at once.
+        Get and set the value of :attr:`Vbox.lyricist` and :attr:`Metatag.lyricist` all at once.
 
-        If the attributes have different values, then the attribute :attr:`VBox.lyricist` is preferred.
+        If the attributes have different values, then the attribute :attr:`Vbox.lyricist` is preferred.
         """
         return self.__pick_value(self.vbox.lyricist, self.metatag.lyricist)
 

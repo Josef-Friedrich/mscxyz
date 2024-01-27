@@ -11,6 +11,7 @@ extensions: list[str] = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
+    "sphinxcontrib.jquery",
 ]
 templates_path: list[str] = ["_templates"]
 source_suffix = ".rst"

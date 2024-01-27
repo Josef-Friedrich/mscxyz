@@ -6,6 +6,16 @@ mscxyz.cli module
 
 .. automodule:: mscxyz.cli
 
+mscxyz.export module
+^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: mscxyz.export
+
+mscxyz.fields module
+^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: mscxyz.fields
+
 mscxyz.rename module
 ^^^^^^^^^^^^^^^^^^^^
 
