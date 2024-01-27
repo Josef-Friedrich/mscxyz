@@ -400,7 +400,7 @@ class Vbox:
     .. code-block:: xml
 
         <Staff id="1">
-            <Vbox>
+            <VBox>
                 <height>10</height>
                 <Text>
                     <style>Title</style>
@@ -410,7 +410,7 @@ class Vbox:
                     <style>Composer</style>
                     <text>Composer</text>
                 </Text>
-            </Vbox>
+            </VBox>
         </Staff>
 
 
@@ -419,7 +419,7 @@ class Vbox:
     .. code-block:: xml
 
         <Staff id="1">
-            <Vbox>
+            <VBox>
                 <height>10</height>
                 <boxAutoSize>0</boxAutoSize>
                 <eid>4294967418</eid>
@@ -433,7 +433,7 @@ class Vbox:
                     <style>composer</style>
                     <text>Composer</text>
                 </Text>
-            </Vbox>
+            </VBox>
         </Staff>
     """
 
@@ -455,9 +455,9 @@ class Vbox:
         self.xml_root = score.xml_root
         xpath = '/museScore/Score/Staff[@id="1"]'
 
-        vbox = self.score.xml.xpath(xpath + "/Vbox")
+        vbox = self.score.xml.xpath(xpath + "/VBox")
         if vbox is None:
-            vbox, _ = self.score.xml.create_sub_element("Vbox", "height", "10")
+            vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
 
             self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
@@ -566,7 +566,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <Vbox>
+                <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -575,7 +575,7 @@ class Vbox:
                         <style>title</style>
                         <text>Mondscheinsonate</text>
                     </Text>
-                </Vbox>
+                </VBox>
             </Staff>
         """
         return self.__get_text("title")
@@ -592,7 +592,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <Vbox>
+                <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -601,7 +601,7 @@ class Vbox:
                         <style>subtitle</style>
                         <text>1. Satz</text>
                     </Text>
-                </Vbox>
+                </VBox>
             </Staff>
         """
         return self.__get_text("subtitle")
@@ -618,7 +618,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <Vbox>
+                <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -627,7 +627,7 @@ class Vbox:
                         <style>composer</style>
                         <text>Ludwig van Beethoven</text>
                     </Text>
-                </Vbox>
+                </VBox>
             </Staff>
         """
         return self.__get_text("composer")
@@ -644,7 +644,7 @@ class Vbox:
         .. code-block:: xml
 
             <Staff id="1">
-                <Vbox>
+                <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
@@ -653,7 +653,7 @@ class Vbox:
                         <style>lyricist</style>
                         <text>Johann Wolfgang von Goethe</text>
                     </Text>
-                </Vbox>
+                </VBox>
             </Staff>
         """
         return self.__get_text("lyricist")

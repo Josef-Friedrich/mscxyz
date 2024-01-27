@@ -59,6 +59,8 @@ _shtab_musescore_manager_options=(
   "--musical-text-font[Set \“musicalTextFont\”.]:style_musical_text_font:"
   "--staff-space[Set the staff space or spatium. This is the vertical distance between two lines of a music staff.]:style_staff_space:"
   "--page-size[Set the page size.]:style_page_size:"
+  {--a4,--din-a4}"[Set the paper size to DIN A4 (210 by 297 mm).]"
+  "--letter[Set the paper size to Letter (8.5 by 11 in).]"
   "--margin[Set the top, right, bottom and left margins to the same value.]:style_margin:"
   {--header,--no-header}"[Show or hide the header]:style_show_header:"
   {--footer,--no-footer}"[Show or hide the footer.]:style_show_footer:"

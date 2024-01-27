@@ -17,15 +17,7 @@ from mscxyz.meta import Metatag, Vbox
 from mscxyz.rename import rename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
-from mscxyz.utils import Dimension
-
-
-def _mm(value: str) -> float:
-    return Dimension(value).to("mm")
-
-
-def _inch(value: str) -> float:
-    return Dimension(value).to("in")
+from mscxyz.style import inch, mm
 
 
 def _embed_fields(
@@ -573,7 +565,7 @@ group_style.add_argument(
 group_style.add_argument(
     "--staff-space",
     dest="style_staff_space",
-    type=_mm,
+    type=mm,
     metavar="<dimension>",
     help="Set the staff space or spatium. This is the vertical distance between "
     "two lines of a music staff.",
@@ -583,8 +575,23 @@ group_style.add_argument(
     "--page-size",
     dest="style_page_size",
     nargs=2,
-    metavar="<width> <height>",
+    metavar=("<width>", "<height>"),
     help="Set the page size.",
+)
+
+group_style.add_argument(
+    "--a4",
+    "--din-a4",
+    dest="style_page_size_a4",
+    action="store_true",
+    help="Set the paper size to DIN A4 (210 by 297 mm).",
+)
+
+group_style.add_argument(
+    "--letter",
+    dest="style_page_size_letter",
+    action="store_true",
+    help="Set the paper size to Letter (8.5 by 11 in).",
 )
 
 group_style.add_argument(
@@ -711,11 +718,16 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 score.style.staff_space = args.style_staff_space
 
             if args.style_page_size is not None:
-                score.style.page_width = _inch(args.style_page_size[0])
-                score.style.page_height = _inch(args.style_page_size[1])
+                score.style.set_page_size(*args.style_page_size)
+
+            if args.style_page_size_a4:
+                score.style.set_page_size_a4()
+
+            if args.style_page_size_letter:
+                score.style.set_page_size_letter()
 
             if args.style_margin is not None:
-                score.style.margin = _inch(args.style_margin)
+                score.style.margin = inch(args.style_margin)
 
             if args.style_show_header is not None:
                 score.style.show_header = args.style_show_header

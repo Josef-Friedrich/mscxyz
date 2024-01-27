@@ -22,7 +22,7 @@ Comande line interface
                              [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
                              [--staff-space <dimension>]
-                             [--page-size <width> <height> <width> <height>]
+                             [--page-size <width> <height>] [--a4] [--letter]
                              [--margin <dimension>] [--header | --no-header]
                              [--footer | --no-footer]
                              [<path> ...]
@@ -380,8 +380,10 @@ Comande line interface
       --staff-space <dimension>
                             Set the staff space or spatium. This is the vertical
                             distance between two lines of a music staff.
-      --page-size <width> <height> <width> <height>
+      --page-size <width> <height>
                             Set the page size.
+      --a4, --din-a4        Set the paper size to DIN A4 (210 by 297 mm).
+      --letter              Set the paper size to Letter (8.5 by 11 in).
       --margin <dimension>  Set the top, right, bottom and left margins to the same
                             value.
       --header, --no-header

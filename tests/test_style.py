@@ -383,6 +383,17 @@ class TestCli:
         assert score.style.page_width == 5.9055
         assert score.style.page_height == 3.9370
 
+    def test_option_page_size_a4(self) -> None:
+        score: Score = Cli("--a4").score()
+        # 8.27 in × 11.7 in ?
+        assert score.style.page_width == 8.2677
+        assert score.style.page_height == 11.6929
+
+    def test_option_page_size_letter(self) -> None:
+        score: Score = Cli("--letter").score()
+        assert score.style.page_width == 8.5
+        assert score.style.page_height == 11.0
+
     def test_option_margin(self) -> None:
         score = Cli("--margin", "30mm").score()
         s = score.style

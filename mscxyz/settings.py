@@ -79,6 +79,8 @@ class DefaultArguments:
     style_musical_text_font: Optional[str] = None
     style_staff_space: Optional[float] = None
     style_page_size: Optional[tuple[str, str]] = None
+    style_page_size_a4: bool = False
+    style_page_size_letter: bool = False
     style_margin: Optional[str] = None
     style_show_header: Optional[bool] = None
     style_show_footer: Optional[bool] = None

@@ -15,6 +15,20 @@ from mscxyz.xml import XmlManipulator
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
+from mscxyz.utils import Dimension
+
+
+def mm(value: str | float) -> float:
+    if not isinstance(value, str):
+        return value
+    return Dimension(value).to("mm")
+
+
+def inch(value: str | float) -> float:
+    if not isinstance(value, str):
+        return value
+    return Dimension(value).to("in")
+
 
 text_font_faces = (
     "lyricsOddFontFace",
@@ -614,6 +628,28 @@ class Style:
     @page_height.setter
     def page_height(self, value: float) -> None:
         self.set("pageHeight", value)
+
+    def set_page_size(self, width: float | str, height: float | str) -> None:
+        """
+        Set the page size in ``inch``.
+
+        :param width: The page width in ``inch`` as a float or a dimension string in ``mm`` or ``in``.
+        :param height: The page height in ``inch`` as a float or a dimension string in ``mm`` or ``in``.
+        """
+        self.page_width = inch(width)
+        self.page_height = inch(height)
+
+    def set_page_size_a4(self) -> None:
+        """
+        Set the page size to A4 (210mm x 297mm).
+        """
+        self.set_page_size("210mm", "297mm")
+
+    def set_page_size_letter(self) -> None:
+        """
+        Set the page size to Letter (8.5in x 11in).
+        """
+        self.set_page_size("8.5in", "11in")
 
     # page even/odd top/right/bottom/left margin # in CSS order ################
 
