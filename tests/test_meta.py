@@ -20,7 +20,7 @@ from mscxyz.meta import (
 )
 from mscxyz.score import Score
 from tests import helper
-from tests.helper import Cli, ini_file
+from tests.helper import Cli
 
 
 def reload(src: Score | str | Path) -> Interface:
@@ -423,227 +423,172 @@ class TestOptionClean:
 
 
 class TestStdout:
-    def test_show(self) -> None:
+    def test_verbose_0(self) -> None:
+        stdout = Cli("--clean-meta", "all").stdout()
+        assert stdout == ""
+
+    def test_verbose_1(self) -> None:
         stdout = (
-            Cli(
-                "-v",
-                "--clean-meta",
-                "all",
-            )
+            Cli("-v", "--clean-meta", "all")
             .append_score("meta-all-values.mscz")
             .stdout()
         )
         lines = stdout.splitlines()
         assert lines[0] == ""
         assert "vbox_title: “vbox_title” ->" in stdout
+        assert "path: " not in stdout
 
-    @pytest.mark.skip("Will be fixed later")
-    def test_show_simple_unverbose(self) -> None:
-        stdout = Cli(
-            "--config-file",
-            ini_file,
-            "meta",
-            "--clean",
-            "all",
-            legacy=True,
-        ).stdout()
-        lines = stdout.splitlines()
-        assert lines[0] == ""
-        assert "score.mscz" in stdout
-        assert lines[2] == "combined_composer: “Composer” -> “”"
-        assert lines[3] == "combined_title: “Title” -> “”"
-        assert lines[-1] == "vbox_title: “Title” -> “”"
+    def test_verbose_2(self) -> None:
+        assert "path: " in Cli("-vv", "--clean-meta", "all").stdout()
 
-    @pytest.mark.skip("Will be fixed later")
-    def test_show_verbose(self) -> None:
-        stdout = Cli(
-            "--config-file",
-            ini_file,
-            "--verbose",
-            "meta",
-            "--clean",
-            "all",
-            legacy=True,
-        ).stdout()
-        lines = stdout.splitlines()
-        assert lines[0] == ""
-        assert "score.mscz" in stdout
-        assert lines[2] == "combined_composer: “Composer” -> “”"
-        assert lines[3] == "combined_lyricist: "
-        assert lines[-2] == "vbox_subtitle: "
-        assert lines[-1] == "vbox_title: “Title” -> “”"
 
-    @pytest.mark.skip("Will be fixed later")
-    def test_show_verbose_zero(self) -> None:
-        stdout = Cli("meta", "--clean", "all", legacy=True).stdout()
-        assert "readonly_basename" in stdout
-        assert "readonly_abspath" not in stdout
-        assert "readonly_relpath_backup" not in stdout
+def test_option_metatag() -> None:
+    score = Cli(
+        "--metatag",
+        "arranger",
+        "a",
+        #
+        "--metatag",
+        "audio_com_url",
+        "acu",
+        #
+        "--metatag",
+        "composer",
+        "c",
+        #
+        "--metatag",
+        "copyright",
+        "c",
+        #
+        "--metatag",
+        "creation_date",
+        "cd",
+        #
+        "--metatag",
+        "lyricist",
+        "l",
+        #
+        "--metatag",
+        "movement_number",
+        "mn",
+        #
+        "--metatag",
+        "movement_title",
+        "mt",
+        #
+        "--metatag",
+        "msc_version",
+        "mv",
+        #
+        "--metatag",
+        "platform",
+        "p",
+        #
+        "--metatag",
+        "poet",
+        "p",
+        #
+        "--metatag",
+        "source",
+        "s",
+        #
+        "--metatag",
+        "source_revision_id",
+        "sri",
+        #
+        "--metatag",
+        "subtitle",
+        "s",
+        #
+        "--metatag",
+        "translator",
+        "t",
+        #
+        "--metatag",
+        "work_number",
+        "wn",
+        #
+        "--metatag",
+        "work_title",
+        "wt",
+    ).score()
 
-    @pytest.mark.skip("Will be fixed later")
-    def test_show_verbose_one(self) -> None:
-        stdout = Cli("-v", "meta", "--clean", "all", legacy=True).stdout()
-        assert "readonly_abspath" in stdout
-        assert "readonly_relpath_backup" not in stdout
+    m = score.meta.metatag
+    assert m.arranger == "a"
+    assert m.audio_com_url == "acu"
+    assert m.composer == "c"
+    assert m.copyright == "c"
+    assert m.creation_date == "cd"
+    assert m.lyricist == "l"
+    assert m.movement_number == "mn"
+    assert m.movement_title == "mt"
+    assert m.msc_version == "mv"
+    assert m.platform == "p"
+    assert m.poet == "p"
+    assert m.source == "s"
+    assert m.source_revision_id == "sri"
+    assert m.subtitle == "s"
+    assert m.translator == "t"
+    assert m.work_number == "wn"
+    assert m.work_title == "wt"
 
-    @pytest.mark.skip("Will be fixed later")
-    def test_show_verbose_two(self) -> None:
-        assert (
-            "readonly_relpath_backup"
-            in Cli(
-                "-vv",
-                "meta",
-                "--clean",
-                "all",
-                legacy=True,
-            ).stdout()
-        )
 
-    def test_option_metatag(self) -> None:
-        score = Cli(
-            "--metatag",
-            "arranger",
-            "a",
-            #
-            "--metatag",
-            "audio_com_url",
-            "acu",
-            #
-            "--metatag",
-            "composer",
-            "c",
-            #
-            "--metatag",
-            "copyright",
-            "c",
-            #
-            "--metatag",
-            "creation_date",
-            "cd",
-            #
-            "--metatag",
-            "lyricist",
-            "l",
-            #
-            "--metatag",
-            "movement_number",
-            "mn",
-            #
-            "--metatag",
-            "movement_title",
-            "mt",
-            #
-            "--metatag",
-            "msc_version",
-            "mv",
-            #
-            "--metatag",
-            "platform",
-            "p",
-            #
-            "--metatag",
-            "poet",
-            "p",
-            #
-            "--metatag",
-            "source",
-            "s",
-            #
-            "--metatag",
-            "source_revision_id",
-            "sri",
-            #
-            "--metatag",
-            "subtitle",
-            "s",
-            #
-            "--metatag",
-            "translator",
-            "t",
-            #
-            "--metatag",
-            "work_number",
-            "wn",
-            #
-            "--metatag",
-            "work_title",
-            "wt",
-        ).score()
+def test_option_vbox() -> None:
+    score = Cli(
+        "--vbox",
+        "composer",
+        "c",
+        #
+        "--vbox",
+        "lyricist",
+        "l",
+        #
+        "--vbox",
+        "subtitle",
+        "s",
+        #
+        "--vbox",
+        "title",
+        "t",
+    ).score()
 
-        m = score.meta.metatag
-        assert m.arranger == "a"
-        assert m.audio_com_url == "acu"
-        assert m.composer == "c"
-        assert m.copyright == "c"
-        assert m.creation_date == "cd"
-        assert m.lyricist == "l"
-        assert m.movement_number == "mn"
-        assert m.movement_title == "mt"
-        assert m.msc_version == "mv"
-        assert m.platform == "p"
-        assert m.poet == "p"
-        assert m.source == "s"
-        assert m.source_revision_id == "sri"
-        assert m.subtitle == "s"
-        assert m.translator == "t"
-        assert m.work_number == "wn"
-        assert m.work_title == "wt"
+    v = score.meta.vbox
+    assert v.composer == "c"
+    assert v.lyricist == "l"
+    assert v.subtitle == "s"
+    assert v.title == "t"
 
-    def test_option_vbox(self) -> None:
-        score = Cli(
-            "--vbox",
-            "composer",
-            "c",
-            #
-            "--vbox",
-            "lyricist",
-            "l",
-            #
-            "--vbox",
-            "subtitle",
-            "s",
-            #
-            "--vbox",
-            "title",
-            "t",
-        ).score()
 
-        v = score.meta.vbox
-        assert v.composer == "c"
-        assert v.lyricist == "l"
-        assert v.subtitle == "s"
-        assert v.title == "t"
+def test_option_combined() -> None:
+    score = Cli(
+        "--combined",
+        "composer",
+        "c",
+        #
+        "--combined",
+        "lyricist",
+        "l",
+        #
+        "--combined",
+        "subtitle",
+        "s",
+        #
+        "--combined",
+        "title",
+        "t",
+    ).score()
 
-    def test_option_combined(self) -> None:
-        score = Cli(
-            "--combined",
-            "composer",
-            "c",
-            #
-            "--combined",
-            "lyricist",
-            "l",
-            #
-            "--combined",
-            "subtitle",
-            "s",
-            #
-            "--combined",
-            "title",
-            "t",
-        ).score()
+    m = score.meta.metatag
+    assert m.composer == "c"
+    assert m.lyricist == "l"
+    assert m.movement_title == "s"
+    assert m.work_title == "t"
 
-        m = score.meta.metatag
-        assert m.composer == "c"
-        assert m.lyricist == "l"
-        assert m.movement_title == "s"
-        assert m.work_title == "t"
-
-        v = score.meta.vbox
-        assert v.composer == "c"
-        assert v.lyricist == "l"
-        assert v.subtitle == "s"
-        assert v.title == "t"
+    v = score.meta.vbox
+    assert v.composer == "c"
+    assert v.lyricist == "l"
+    assert v.subtitle == "s"
+    assert v.title == "t"
 
 
 class TestOptionSetField:

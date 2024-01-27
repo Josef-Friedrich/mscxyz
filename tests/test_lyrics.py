@@ -110,11 +110,10 @@ def test_fix(version: int) -> None:
     ]
 
 
-@pytest.mark.skip("Will be fixed later")
 def test_remap() -> None:
     score = helper.get_score("lyrics-remap.mscx")
 
-    Cli("lyrics", "--remap", "2:6", score, legacy=True).execute()
+    Cli("--remap-lyrics", "2:6", score).execute()
     new_score = score.reload()
     nos: list[int] = []
 
