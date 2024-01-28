@@ -29,6 +29,7 @@ class DefaultArguments:
 
     # export
     export_extension: Optional[str] = None
+    export_compress: bool = False
 
     # help
     help_markdown: bool = False

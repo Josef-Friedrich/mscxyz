@@ -120,6 +120,11 @@ class Score:
         """The extension (``mscx`` or ``mscz``) of the score file."""
         return self.filename.split(".")[-1].lower()
 
+    @property
+    def is_uncompressed(self) -> bool:
+        """Whether the MuseScore file is uncompressed , i.e. it is a ``*.mscx`` file"""
+        return self.extension != "mscz"
+
     def change_path(
         self, suffix: Optional[Any] = None, extension: Optional[str] = None
     ) -> Path:

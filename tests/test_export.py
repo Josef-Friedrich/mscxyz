@@ -1,7 +1,10 @@
 """Test the command line interface using subprocess."""
 from __future__ import annotations
 
+from pathlib import Path
 from unittest import mock
+
+import pytest
 
 from tests import helper
 from tests.helper import Cli
@@ -22,3 +25,10 @@ class TestExport:
             "musescore-manager: error: argument -E/--export: invalid choice: 'xxx' (choose from 'mscz', 'mscx', 'spos', 'mpos', 'pdf', 'svg', 'png', 'wav', 'mp3', 'ogg', 'flac', 'mid', 'midi', 'kar', 'musicxml', 'xml', 'mxl', 'brf', 'mei')"
             in Cli("--export", "xxx").sysexit()
         )
+
+
+@pytest.mark.slow
+def test_compress() -> None:
+    score = Cli("--compress").append_score("simple.mscx", 3).score()
+    dest = str(score.path).replace(".mscx", ".mscz")
+    assert Path(dest).exists()

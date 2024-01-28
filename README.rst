@@ -309,14 +309,14 @@ CLI Usage
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
                              [--bail] [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m]
                              [--diff] [-e FILE_PATH] [-v] [-E <extension>]
-                             [-c META_CLEAN] [-D]
+                             [--compress] [-c META_CLEAN] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F] [--rename]
-                             [-f RENAME_FORMAT] [-A] [-a] [-n] [-K FIELDS]
-                             [-t RENAME_TARGET] [-L]
+                             [-f <path-template>] [-A] [-a] [-n] [-K <fields>]
+                             [-t <directory>] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--list-fonts] [--text-font <font-face>]
@@ -346,7 +346,8 @@ CLI Usage
       -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
                             Specify a configuration file in the INI format.
       -d, --dry-run         Simulate the actions.
-      -m, --mscore          Open and save the XML file in MuseScore after manipulating
+      -m, --mscore, --save-in-mscore
+                            Open and save the XML file in MuseScore after manipulating
                             the XML with lxml to avoid differences in the XML structure.
       --diff                Show a diff of the XML file before and after the
                             manipulation.
@@ -363,6 +364,8 @@ CLI Usage
                             https://musescore.org/en/handbook/4/file-export. MuseScore
                             must be installed and the script must know the location of
                             the binary file.
+      --compress            Save an uncompressed MuseScore file (*.mscx) as a compressed
+                            file (*.mscz).
 
     meta:
       Deal with meta data informations stored in the MuseScore file. MuseScore can store meta data informations in different places:
@@ -633,16 +636,19 @@ CLI Usage
           %upper{text}
               Convert “text” to UPPERCASE.
 
-      --rename              Format string.
-      -f RENAME_FORMAT, --format RENAME_FORMAT
-                            Format string.
+      --rename              Flag to activate the renaming. If you omit this flag, the
+                            renaming will not be performed.
+      -f <path-template>, --format <path-template>
+                            A path template string to set the destination location
+                            (Default is “$title ($composer)”).
       -A, --alphanum        Use only alphanumeric characters.
       -a, --ascii           Use only ASCII characters.
       -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.
-      -K FIELDS, --skip-if-empty FIELDS
-                            Skip rename action if FIELDS are empty. Separate FIELDS
-                            using commas: composer,title
-      -t RENAME_TARGET, --target RENAME_TARGET
+      -K <fields>, --skip-if-empty <fields>
+                            Skip the rename action if the fields specified in <fields>
+                            are empty. Multiple fields can be separated by commas, e.
+                            g.: composer,title
+      -t <directory>, --target <directory>
                             Target directory
 
     selection:

@@ -104,6 +104,7 @@ parser.add_argument(
 parser.add_argument(
     "-m",
     "--mscore",
+    "--save-in-mscore",
     action="store_true",
     dest="general_mscore",
     help="Open and save the XML file in MuseScore after manipulating the XML "
@@ -161,6 +162,13 @@ parser.add_argument(
     "https://musescore.org/en/handbook/4/file-export. "
     "MuseScore must be installed and the script must know the location of the "
     "binary file.",
+)
+
+parser.add_argument(
+    "--compress",
+    dest="export_compress",
+    action="store_true",
+    help="Save an uncompressed MuseScore file (*.mscx) as a compressed file (*.mscz).",
 )
 
 ###############################################################################
@@ -379,7 +387,7 @@ group_rename.add_argument(
     "--rename",
     dest="rename_rename",
     action="store_true",
-    help="Format string.",
+    help="Flag to activate the renaming. If you omit this flag, the renaming will not be performed.",
 )
 
 group_rename.add_argument(
@@ -387,7 +395,8 @@ group_rename.add_argument(
     "--format",
     dest="rename_format",
     default="$title ($composer)",
-    help="Format string.",
+    metavar="<path-template>",
+    help="A path template string to set the destination location (Default is “$title ($composer)”).",
 )
 
 group_rename.add_argument(
@@ -418,15 +427,16 @@ group_rename.add_argument(
     "-K",
     "--skip-if-empty",
     dest="rename_skip",
-    metavar="FIELDS",
-    help="Skip rename action if FIELDS are empty. Separate FIELDS using "
-    "commas: composer,title",
+    metavar="<fields>",
+    help="Skip the rename action if the fields specified in <fields> are empty. "
+    "Multiple fields can be separated by commas, e. g.: composer,title",
 )
 
 group_rename.add_argument(
     "-t",
     "--target",
     dest="rename_target",
+    metavar="<directory>",
     help="Target directory",
 )
 
@@ -692,6 +702,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.general_diff:
                 score.make_snapshot()
+
+            if args.export_compress:
+                score = Score(score.export.compress())
 
             # style
 

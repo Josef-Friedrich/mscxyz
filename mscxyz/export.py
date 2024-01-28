@@ -44,10 +44,12 @@ class Export:
     def __init__(self, score: "Score") -> None:
         self.score = score
 
-    def to_extension(self, extension: str = "pdf") -> None:
+    def to_extension(self, extension: str = "pdf") -> Path:
         """Export the score to the specifed file type.
 
         :param extension: The extension (default: pdf)
+
+        :return: The path of the exported file.
         """
 
         extension = extension.lower()
@@ -65,6 +67,18 @@ class Export:
                 str(self.score.path),
             ]
         )
+        return dest
+
+    def compress(self) -> Path:
+        """Compress the score.
+
+        :return: The path of the new compress score.
+        """
+
+        if not self.score.is_uncompressed:
+            raise ValueError("The score is already compressed!")
+
+        return self.to_extension("mscz")
 
     def reload(self, save: bool = False) -> Export:
         """

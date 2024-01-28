@@ -39,6 +39,7 @@
       ~Score.extension
       ~Score.fields
       ~Score.filename
+      ~Score.is_uncompressed
       ~Score.json_file
       ~Score.lyrics
       ~Score.meta
