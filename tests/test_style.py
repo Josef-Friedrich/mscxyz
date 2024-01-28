@@ -188,8 +188,10 @@ def test_property_get_musical_symbols_font(version: int, expected: str) -> None:
 @pytest.mark.parametrize("version", mscxyz.supported_versions)
 def test_property_set_musical_symbol_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
-    style.set_musical_symbol_fonts("Test Font")
-    assert style.reload(save=True).musical_symbol_font == "Test Font"
+    with pytest.raises(ValueError):
+        style.musical_symbol_font = "Test Font"
+    style.musical_symbol_font = "Gonville"
+    assert style.reload(save=True).musical_symbol_font == "Gonville"
 
 
 @pytest.mark.parametrize(
@@ -210,8 +212,10 @@ def test_property_get_musical_text_font(
 @pytest.mark.parametrize("version", mscxyz.supported_versions)
 def test_property_set_musical_text_font(version: int) -> None:
     style = helper.get_style("score.mscz", version)
-    style.set_musical_text_font("Test Font")
-    assert style.reload(save=True).musical_text_font == "Test Font"
+    with pytest.raises(ValueError):
+        style.musical_text_font = "Test Font"
+    style.musical_text_font = "Gonville Text"
+    assert style.reload(save=True).musical_text_font == "Gootville Text"
 
 
 class TestVersion3:
@@ -386,8 +390,8 @@ class TestCli:
     def test_option_page_size_a4(self) -> None:
         score: Score = Cli("--a4").score()
         # 8.27 in × 11.7 in ?
-        assert score.style.page_width == 8.2677
-        assert score.style.page_height == 11.6929
+        assert score.style.page_width == 8.27
+        assert score.style.page_height == 11.69
 
     def test_option_page_size_letter(self) -> None:
         score: Score = Cli("--letter").score()

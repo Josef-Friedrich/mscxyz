@@ -14,5 +14,7 @@ complete musescore-manager \
         'n/--export/(mscz mscx spos mpos pdf svg png wav mp3 ogg flac mid midi kar musicxml xml mxl brf mei)/' \
         'n/-Y/f/' \
         'n/--style-file/f/' \
+        'n/--musical-symbol-font/(Leland Bravura Emmentaler Gonville MuseJazz Petaluma Finale Maestro Finale Broadway)/' \
+        'n/--musical-text-font/(Leland Text Bravura Text Emmentaler Text Gonville Text MuseJazz Text Petaluma Text Finale Maestro Text Finale Broadway Text)/' \
         'p/1/f/' \
         'p/*/()/'

@@ -226,7 +226,7 @@ class Cli:
             raise Exception("No stderr")
         return self.__stderr
 
-    def sysexit(self) -> str:
+    def sysexit(self, assert_none_zero: bool = False) -> str:
         if not self.__executed:
             result = subprocess.run(
                 ["musescore-manager"] + self.__stringified_args,
@@ -236,6 +236,8 @@ class Cli:
             self.__stderr = result.stderr
             self.__stdout = result.stdout
             self.__executed = True
+            if assert_none_zero and result.returncode == 0:
+                raise Exception("Zero exit code")
         if self.__stdout is None or self.__stderr is None:
             raise Exception("No stdout or stderr")
         return self.__stderr + self.__stdout

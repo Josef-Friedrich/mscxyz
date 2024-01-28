@@ -214,6 +214,7 @@ class TestStyle:
         assert c.post.style.get("dynamicsFontFace") == "Emmentaler"
 
     def test_set_musical_symbol_font(self) -> None:
+        Cli("--musical-symbol-font", "XXX").sysexit(assert_none_zero=True)
         c = Cli("--musical-symbol-font", "Emmentaler").execute()
 
         assert c.pre.style.get("musicalSymbolFont") == "Leland"
@@ -225,9 +226,10 @@ class TestStyle:
         assert c.post.style.get("dynamicsFontFace") == "Emmentaler"
 
     def test_set_musical_text_font(self) -> None:
+        Cli("--musical-text-font", "XXX Text").sysexit(assert_none_zero=True)
         c = Cli("--musical-text-font", "Emmentaler Text").execute()
         assert c.pre.style.get("musicalTextFont") == "Leland Text"
-        assert c.post.style.get("musicalTextFont") == "Emmentaler Text"
+        assert c.post.style.get("musicalTextFont") == "MScore Text"
 
 
 class TestAutocomplete:

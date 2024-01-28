@@ -15,6 +15,8 @@ _shtab_musescore_manager___style_file_COMPGEN=_shtab_compgen_files
 _shtab_musescore_manager___print_completion_choices=('bash' 'zsh' 'tcsh')
 _shtab_musescore_manager__E_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
 _shtab_musescore_manager___export_choices=('mscz' 'mscx' 'spos' 'mpos' 'pdf' 'svg' 'png' 'wav' 'mp3' 'ogg' 'flac' 'mid' 'midi' 'kar' 'musicxml' 'xml' 'mxl' 'brf' 'mei')
+_shtab_musescore_manager___musical_symbol_font_choices=('Leland' 'Bravura' 'Emmentaler' 'Gonville' 'MuseJazz' 'Petaluma' 'Finale Maestro' 'Finale Broadway')
+_shtab_musescore_manager___musical_text_font_choices=('Leland Text' 'Bravura Text' 'Emmentaler Text' 'Gonville Text' 'MuseJazz Text' 'Petaluma Text' 'Finale Maestro Text' 'Finale Broadway Text')
 
 _shtab_musescore_manager_pos_0_nargs=*
 _shtab_musescore_manager__h_nargs=0

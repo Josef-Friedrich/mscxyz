@@ -17,7 +17,7 @@ from mscxyz.meta import Metatag, Vbox
 from mscxyz.rename import rename
 from mscxyz.score import Score
 from mscxyz.settings import parse_args
-from mscxyz.style import inch, mm
+from mscxyz.style import inch, mm, musical_symbol_font_faces, musical_text_font_faces
 
 
 def _embed_fields(
@@ -551,6 +551,7 @@ group_style.add_argument(
 group_style.add_argument(
     "--musical-symbol-font",
     dest="style_musical_symbol_font",
+    choices=musical_symbol_font_faces,
     metavar="<font-face>",
     help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
 )
@@ -558,6 +559,7 @@ group_style.add_argument(
 group_style.add_argument(
     "--musical-text-font",
     dest="style_musical_text_font",
+    choices=musical_text_font_faces,
     metavar="<font-face>",
     help="Set “musicalTextFont”.",
 )
@@ -709,10 +711,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 score.style.set_title_fonts(args.style_title_font)
 
             if args.style_musical_symbol_font is not None:
-                score.style.set_musical_symbol_fonts(args.style_musical_symbol_font)
+                score.style.musical_symbol_font = args.style_musical_symbol_font
 
             if args.style_musical_text_font is not None:
-                score.style.set_musical_text_font(args.style_musical_text_font)
+                score.style.musical_text_font = args.style_musical_text_font
 
             if args.style_staff_space is not None:
                 score.style.staff_space = args.style_staff_space

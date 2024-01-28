@@ -30,6 +30,38 @@ def inch(value: str | float) -> float:
     return Dimension(value).to("in")
 
 
+# https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/engraving/engravingmodule.cpp#L120-L127
+musical_symbol_font_faces = (
+    "Leland",
+    "Bravura",
+    "Emmentaler",
+    # "MScore",
+    "Gonville",
+    # "Gootville",
+    "MuseJazz",
+    "Petaluma",
+    "Finale Maestro",
+    "Finale Broadway",
+)
+
+
+musical_text_font_faces = (
+    "Leland Text",
+    "Bravura Text",
+    "Emmentaler Text",  # -> MScore Text
+    # "MScore Text",
+    "Gonville Text",  # -> Gootville Text
+    # "Gootville Text",
+    "MuseJazz Text",
+    "Petaluma Text",
+    "Finale Maestro Text",
+    "Finale Broadway Text",
+)
+
+
+# https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/notation/view/widgets/editstyle.cpp#L1966-L1973
+
+
 text_font_faces = (
     "lyricsOddFontFace",
     "lyricsEvenFontFace",
@@ -507,9 +539,6 @@ class Style:
 
     @property
     def musical_symbol_font(self) -> str | None:
-        return self.get("musicalSymbolFont", raise_exception=False)
-
-    def set_musical_symbol_fonts(self, font_face: str) -> StyleChanges:
         """
 
         v3
@@ -527,21 +556,36 @@ class Style:
             <dynamicsFont>Leland</dynamicsFont>
 
         """
-        return self.set(
-            ("musicalSymbolFont", "dynamicsFont", "dynamicsFontFace"), font_face
-        )
+        return self.get("musicalSymbolFont", raise_exception=False)
+
+    @musical_symbol_font.setter
+    def musical_symbol_font(self, font_face: str) -> None:
+        if font_face not in musical_symbol_font_faces:
+            raise ValueError(
+                f"Font face {font_face} is not a valid musical symbol font face. Valid values are {musical_symbol_font_faces}."
+            )
+        self.set(("musicalSymbolFont", "dynamicsFont", "dynamicsFontFace"), font_face)
 
     @property
     def musical_text_font(self) -> str | None:
-        return self.get("musicalTextFont", raise_exception=False)
-
-    def set_musical_text_font(self, font_face: str) -> StyleChanges:
         """
         .. code :: XML
 
             <musicalTextFont>Leland Text</musicalTextFont>
         """
-        return self.set("musicalTextFont", font_face)
+        return self.get("musicalTextFont", raise_exception=False)
+
+    @musical_text_font.setter
+    def musical_text_font(self, font_face: str) -> None:
+        if font_face not in musical_text_font_faces:
+            raise ValueError(
+                f"Font face {font_face} is not a valid musical text font face. Valid values are {musical_text_font_faces}."
+            )
+        # https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/notation/view/widgets/editstyle.cpp#L1968-L1969
+        self.set(
+            "musicalTextFont",
+            font_face.replace("Emmentaler", "MScore").replace("Gonville", "Gootville"),
+        )
 
     def __set_parent_style_element(self, parent_style: _Element) -> None:
         score_element: _Element = self.xml.find_safe("Score")
@@ -643,13 +687,13 @@ class Style:
         """
         Set the page size to A4 (210mm x 297mm).
         """
-        self.set_page_size("210mm", "297mm")
+        self.set_page_size(8.27, 11.69)
 
     def set_page_size_letter(self) -> None:
         """
         Set the page size to Letter (8.5in x 11in).
         """
-        self.set_page_size("8.5in", "11in")
+        self.set_page_size(8.5, 11)
 
     # page even/odd top/right/bottom/left margin # in CSS order ################
 
