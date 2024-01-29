@@ -54,9 +54,10 @@ class DefaultArguments:
 
     # rename
     rename_rename: bool = False
+    rename_format: str = "$title ($composer)"
+    rename_file_name: Optional[str] = None
     rename_alphanum: bool = False
     rename_ascii: bool = False
-    rename_format: str = "$title ($composer)"
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
     rename_target: Optional[str] = None

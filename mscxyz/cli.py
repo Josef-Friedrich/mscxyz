@@ -390,13 +390,22 @@ group_rename.add_argument(
     help="Flag to activate the renaming. If you omit this flag, the renaming will not be performed.",
 )
 
-group_rename.add_argument(
+group_path_templates = group_rename.add_mutually_exclusive_group()
+
+group_path_templates.add_argument(
     "-f",
     "--format",
     dest="rename_format",
     default="$title ($composer)",
     metavar="<path-template>",
     help="A path template string to set the destination location (Default is “$title ($composer)”).",
+)
+
+group_path_templates.add_argument(
+    "--file-name",
+    dest="rename_file_name",
+    metavar="<file-name-template>",
+    help="A template string for the file name (without the extension).",
 )
 
 group_rename.add_argument(

@@ -315,8 +315,8 @@ CLI Usage
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F] [--rename]
-                             [-f <path-template>] [-A] [-a] [-n] [-K <fields>]
-                             [-t <directory>] [-L]
+                             [-f <path-template> | --file-name <file-name-template>]
+                             [-A] [-a] [-n] [-K <fields>] [-t <directory>] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--list-fonts] [--text-font <font-face>]
@@ -641,6 +641,8 @@ CLI Usage
       -f <path-template>, --format <path-template>
                             A path template string to set the destination location
                             (Default is “$title ($composer)”).
+      --file-name <file-name-template>
+                            A template string for the file name (without the extension).
       -A, --alphanum        Use only alphanumeric characters.
       -a, --ascii           Use only ASCII characters.
       -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.
