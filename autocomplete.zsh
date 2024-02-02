@@ -16,6 +16,7 @@ _shtab_musescore_manager_options=(
   "(- : *)"{-V,--version}"[show program\'s version number and exit]"
   {-b,--backup}"[Create a backup file.]"
   "--bail[Stop execution when an exception occurs.]"
+  "--catch-errors[Print error messages instead stop execution in a batch run.]"
   {-k,--colorize}"[Colorize the command line print statements.]"
   {-C,--config-file}"[Specify a configuration file in the INI format.]:general_config_file:_files"
   {-d,--dry-run}"[Simulate the actions.]"

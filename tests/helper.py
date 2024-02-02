@@ -186,7 +186,7 @@ class Cli:
             stderr = StringIO()
             with redirect_stdout(stdout), redirect_stderr(stderr):
                 execute(self.__stringified_args)
-            if self.__score is not None:
+            if self.__score is not None and self.__score.path.exists():
                 self.__score = self.__score.reload()
             self.__stdout = stdout.getvalue()
             self.__stderr = stderr.getvalue()

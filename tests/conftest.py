@@ -74,7 +74,7 @@ def nested_dir() -> Path:
     return Path(helper.get_dir("nested-folders", version=4))
 
 
-def __chdir(dstdir: Path) -> Generator[Path, Any, None]:
+def _chdir(dstdir: Path) -> Generator[Path, Any, None]:
     """https://github.com/ar90n/pytest-chdir"""
     lwd = os.getcwd()
     os.chdir(dstdir)
@@ -86,9 +86,9 @@ def __chdir(dstdir: Path) -> Generator[Path, Any, None]:
 
 @pytest.fixture
 def cwd_tmpdir(tmpdir: Path) -> Generator[Path, Any, None]:
-    yield from __chdir(tmpdir)
+    yield from _chdir(tmpdir)
 
 
 @pytest.fixture
 def cwd_test_path() -> Generator[Path, Any, None]:
-    yield from __chdir(Path(__file__).parent)
+    yield from _chdir(Path(__file__).parent)

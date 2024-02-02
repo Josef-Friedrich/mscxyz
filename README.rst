@@ -306,8 +306,8 @@ CLI Usage
 :: 
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
-                             [--bail] [-k] [-C GENERAL_CONFIG_FILE] [-d] [-m]
-                             [--diff] [-e FILE_PATH] [-v] [-E <extension>]
+                             [--bail] [--catch-errors] [-k] [-C GENERAL_CONFIG_FILE]
+                             [-d] [-m] [--diff] [-e FILE_PATH] [-v] [-E <extension>]
                              [--compress] [-c META_CLEAN] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
@@ -342,6 +342,7 @@ CLI Usage
       -V, --version         show program's version number and exit
       -b, --backup          Create a backup file.
       --bail                Stop execution when an exception occurs.
+      --catch-errors        Print error messages instead stop execution in a batch run.
       -k, --colorize        Colorize the command line print statements.
       -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
                             Specify a configuration file in the INI format.

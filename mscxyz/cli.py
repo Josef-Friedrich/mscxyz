@@ -77,6 +77,13 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--catch-errors",
+    dest="general_catch_errors",
+    action="store_true",
+    help="Print error messages instead stop execution in a batch run.",
+)
+
+parser.add_argument(
     "-k",
     "--colorize",
     action="store_true",
@@ -828,11 +835,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if manipulate_meta:
                 score.fields.diff(args)
 
-            # rename
-
-            if args.rename_rename:
-                rename(score, args.rename_rename)
-
             if args.export_extension:
                 score.export.to_extension(args.export_extension)
 
@@ -841,6 +843,11 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if not args.general_dry_run:
                 score.save()
+
+            # rename
+
+            if args.rename_rename:
+                rename(score, args.rename_rename)
 
         except Exception as e:
             if args.general_bail:
