@@ -41,11 +41,10 @@ class TestArgparse:
         assert args.meta_sync
 
     def test_args_general_rename(self) -> None:
-        args = parser.parse_args(["--rename", "."])
-        assert args.rename_rename
+        args = parser.parse_args(["--rename", "$title ($composer)", "."])
+        assert args.rename_rename == "$title ($composer)"
         assert args.rename_alphanum is False
         assert args.rename_ascii is False
-        assert args.rename_format == "$title ($composer)"
         assert args.rename_target is None
 
 

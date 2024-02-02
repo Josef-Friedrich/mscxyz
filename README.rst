@@ -280,15 +280,14 @@ title in the first vertical frame (VBox).
 
 The files should be moved to a target directory (``--target /home/xyz/tidy-leadsheets``) and
 the file names should not contain any spaces (``--no-whitespace``).
-The title should be used as the file name (``--format '$vbox_title'``).
+The title should be used as the file name (``--rename '$vbox_title'``).
 The individual files should be stored in subdirectories named after the first
-letter of the title (``--format '%lower{%shorten{$vbox_title,1}}/...'``)
+letter of the title (``--rename '%lower{%shorten{$vbox_title,1}}/...'``)
 
 ::
 
-    musescore-manager --rename \
+    musescore-manager --rename '%lower{%shorten{$vbox_title,1}}/$vbox_title' \
         --target /home/xyz/tidy-leadsheets \
-        --format '%lower{%shorten{$vbox_title,1}}/$vbox_title' \
         --no-whitespace \
         /home/xyz/messy-leadsheets
 
@@ -314,9 +313,10 @@ CLI Usage
                              [-l <log-file> <format-string>] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
-                             [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F] [--rename]
-                             [-f <path-template> | --file-name <file-name-template>]
-                             [-A] [-a] [-n] [-K <fields>] [-t <directory>] [-L]
+                             [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
+                             [--rename <path-template>]
+                             [--only-filename RENAME_ONLY_FILENAME] [-A] [-a] [-n]
+                             [-K <fields>] [-t <directory>] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--list-fonts] [--text-font <font-face>]
@@ -636,13 +636,11 @@ CLI Usage
           %upper{text}
               Convert “text” to UPPERCASE.
 
-      --rename              Flag to activate the renaming. If you omit this flag, the
-                            renaming will not be performed.
-      -f <path-template>, --format <path-template>
-                            A path template string to set the destination location
-                            (Default is “$title ($composer)”).
-      --file-name <file-name-template>
-                            A template string for the file name (without the extension).
+      --rename <path-template>
+                            A path template string to set the destination location.
+      --only-filename RENAME_ONLY_FILENAME
+                            Rename only the filename and don’t move the score to a
+                            different directory.
       -A, --alphanum        Use only alphanumeric characters.
       -a, --ascii           Use only ASCII characters.
       -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.

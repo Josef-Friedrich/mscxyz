@@ -282,15 +282,14 @@ title in the first vertical frame (VBox).
 
 The files should be moved to a target directory (``--target /home/xyz/tidy-leadsheets``) and
 the file names should not contain any spaces (``--no-whitespace``).
-The title should be used as the file name (``--format '$vbox_title'``).
+The title should be used as the file name (``--rename '$vbox_title'``).
 The individual files should be stored in subdirectories named after the first
-letter of the title (``--format '%lower{%shorten{$vbox_title,1}}/...'``)
+letter of the title (``--rename '%lower{%shorten{$vbox_title,1}}/...'``)
 
 ::
 
-    musescore-manager --rename \
+    musescore-manager --rename '%lower{%shorten{$vbox_title,1}}/$vbox_title' \
         --target /home/xyz/tidy-leadsheets \
-        --format '%lower{%shorten{$vbox_title,1}}/$vbox_title' \
         --no-whitespace \
         /home/xyz/messy-leadsheets
 

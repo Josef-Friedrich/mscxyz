@@ -258,10 +258,9 @@ class TestRename:
         dest = tmp_path
         Cli(
             "--rename",
+            "%lower{%shorten{$title,1}}/$title",
             "--target",
             dest,
-            "--format",
-            "%lower{%shorten{$title,1}}/$title",
             "--no-whitespace",
             src,
         ).execute()

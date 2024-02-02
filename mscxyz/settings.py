@@ -53,9 +53,8 @@ class DefaultArguments:
     meta_combined: Optional[list[tuple[str, str]]] = None
 
     # rename
-    rename_rename: bool = False
-    rename_format: str = "$title ($composer)"
-    rename_file_name: Optional[str] = None
+    rename_rename: Optional[str] = None
+    rename_file_name: bool = False
     rename_alphanum: bool = False
     rename_ascii: bool = False
     rename_no_whitespace = False

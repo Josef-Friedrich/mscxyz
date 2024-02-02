@@ -43,13 +43,6 @@ def _prepare_fields(fields: FieldsExport) -> dict[str, str]:
     return output
 
 
-def _apply_format_string(fields: FieldsExport) -> str:
-    args = get_args()
-    fields = _prepare_fields(fields)
-    name = tmep.parse(args.rename_format, fields)
-    return name
-
-
 def _show(old: str, new: str) -> None:
     print("{} -> {}".format(colorize(old, "yellow"), colorize(new, "green")))
 
@@ -65,11 +58,13 @@ def _get_checksum(filename: str) -> str:
     return hasher.hexdigest()
 
 
-def rename(score: Score) -> None:
+def rename(score: Score, path_template: str) -> None:
     args = get_args()
 
     meta_values = score.fields.export_to_dict()
-    target_filename: str = _apply_format_string(meta_values)
+
+    fields = _prepare_fields(meta_values)
+    target_filename = tmep.parse(path_template, fields)
 
     if args.rename_skip:
         skips: list[str] = args.rename_skip.split(",")

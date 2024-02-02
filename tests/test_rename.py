@@ -8,7 +8,7 @@ import pytest
 
 from mscxyz import Score, rename, supported_versions
 from mscxyz.settings import reset_args
-from tests.helper import Cli, get_file, get_score, ini_file
+from tests.helper import Cli, get_file
 
 
 class TestFunctions:
@@ -24,13 +24,6 @@ class TestFunctions:
             "field2": "Title - Composer",
         }
 
-    def test_function_apply_format_string(self) -> None:
-        reset_args()
-        score = get_score("meta-all-values.mscx")
-        fields = score.fields.export_to_dict()
-        name: str = rename._apply_format_string(fields)
-        assert name == "vbox_title (vbox_composer)"
-
     def test_function_get_checksum(self) -> None:
         tmp: str = get_file("simple.mscx")
         assert rename._get_checksum(tmp) == "dacd912aa0f6a1a67c3b13bb947395509e19dce2"
@@ -40,7 +33,9 @@ class TestCli:
     @pytest.mark.parametrize("version", supported_versions)
     def test_simple(self, version: int, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "--config-file", ini_file, "--rename", get_file("simple.mscx", version)
+            "--rename",
+            "$title ($composer)",
+            get_file("simple.mscx", version),
         ).stdout()
         filename = "Title (Composer).mscx"
         target = Path(cwd_tmpdir / filename)
@@ -52,7 +47,7 @@ class TestCli:
     @pytest.mark.parametrize("version", supported_versions)
     def test_without_arguments(self, version: int, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "--rename", get_file("meta-all-values.mscx", version)
+            "--rename", "$title ($composer)", get_file("meta-all-values.mscx", version)
         ).stdout()
         filename = "vbox_title (vbox_composer).mscx"
         dest = Path(cwd_tmpdir / filename)
@@ -61,16 +56,14 @@ class TestCli:
         dest.unlink()
 
     def test_format(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli(
-            "--rename", "--format", "${vbox_composer}_${vbox_title}"
-        ).stdout()
+        stdout: str = Cli("--rename", "${vbox_composer}_${vbox_title}").stdout()
         filename = "Composer_Title.mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
     def test_no_whitespace(self, cwd_tmpdir: Path) -> None:
         stdout: str = (
-            Cli("--rename", "--no-whitespace")
+            Cli("--rename", "$title ($composer)", "--no-whitespace")
             .append_score("meta-real-world.mscz")
             .stdout()
         )
@@ -82,6 +75,7 @@ class TestCli:
         stdout: str = (
             Cli(
                 "--rename",
+                "$title ($composer)",
                 "--alphanum",
             )
             .append_score("meta-all-values.mscz")
@@ -92,19 +86,26 @@ class TestCli:
         assert filename in stdout
 
     def test_ascii(self, cwd_tmpdir: Path) -> None:
-        stdout: str = Cli("--rename", "--ascii").append_score("unicode.mscz").stdout()
+        stdout: str = (
+            Cli("--rename", "$title ($composer)", "--ascii")
+            .append_score("unicode.mscz")
+            .stdout()
+        )
         filename = "Tuetlae (Coempoesser).mscz"
         assert Path(cwd_tmpdir / filename).exists()
         assert filename in stdout
 
     def test_rename_file_twice(self, cwd_tmpdir: Path) -> None:
-        Cli("--rename").execute()
+        Cli("--rename", "$title ($composer)").execute()
         assert Path(cwd_tmpdir / "Title (Composer).mscz").exists()
-        assert "with the same checksum (sha1) already" in Cli("--rename").stdout()
+        assert (
+            "with the same checksum (sha1) already"
+            in Cli("--rename", "$title ($composer)").stdout()
+        )
 
     def test_rename_same_filename(self, cwd_tmpdir: Path) -> None:
         for filename in ("simple.mscx", "lyrics.mscx", "no-vbox.mscx"):
-            Cli("--rename", "-f", "same", get_file(filename)).execute()
+            Cli("--rename", "same", get_file(filename)).execute()
         assert Path(cwd_tmpdir / "same.mscx").exists()
         assert not Path(cwd_tmpdir / "same1.mscx").exists()
         assert Path(cwd_tmpdir / "same2.mscx").exists()
@@ -114,15 +115,17 @@ class TestCli:
         assert (
             "Field “metatag_source” is empty! Skipping"
             in Cli(
-                "--rename", "--skip-if-empty", "metatag_composer,metatag_source"
+                "--rename",
+                "$title ($composer)",
+                "--skip-if-empty",
+                "metatag_composer,metatag_source",
             ).stdout()
         )
 
     def test_rename_skip_pass(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "--config-file",
-            ini_file,
             "--rename",
+            "$title ($composer)",
             "--skip-if-empty",
             "metatag_composer,metatag_work_title",
         ).stdout()
@@ -133,6 +136,13 @@ class TestCli:
         assert filename in stdout
 
     def test_rename_target(self, score: Score, cwd_tmpdir: Path) -> None:
-        Cli("--rename", "--target", cwd_tmpdir, score, append_score=False).execute()
+        Cli(
+            "--rename",
+            "$title ($composer)",
+            "--target",
+            cwd_tmpdir,
+            score,
+            append_score=False,
+        ).execute()
         target: Path = cwd_tmpdir / "Title (Composer).mscz"
         assert target.exists()

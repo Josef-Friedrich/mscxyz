@@ -3,8 +3,8 @@
 
 
 complete musescore-manager \
-        'c/--/(a4 alphanum ascii backup bail clean clean-meta colorize compress config-file delete-duplicates diff din-a4 distribute-fields dry-run executable export extract extract-lyrics file-name fix fix-lyrics footer format glob header help json letter list-files list-fonts log margin metatag metatag-meta mscore mscx mscz musical-symbol-font musical-text-font no-footer no-header no-whitespace page-size print-completion remap remap-lyrics rename s3 s4 save-in-mscore set-field skip-if-empty staff-space style style-file styles-v3 styles-v4 synchronize target text-font title-font vbox vbox-meta verbose version)/' \
-        'c/-/(- A C D E F K L S V Y a b c d e f g h i j k l m n r s t v x y)/' \
+        'c/--/(a4 alphanum ascii backup bail clean clean-meta colorize compress config-file delete-duplicates diff din-a4 distribute-fields dry-run executable export extract extract-lyrics fix fix-lyrics footer glob header help json letter list-files list-fonts log margin metatag metatag-meta mscore mscx mscz musical-symbol-font musical-text-font no-footer no-header no-whitespace only-filename page-size print-completion remap remap-lyrics rename s3 s4 save-in-mscore set-field skip-if-empty staff-space style style-file styles-v3 styles-v4 synchronize target text-font title-font vbox vbox-meta verbose version)/' \
+        'c/-/(- A C D E F K L S V Y a b c d e g h i j k l m n r s t v x y)/' \
         'n/--print-completion/(bash zsh tcsh)/' \
         'n/-C/f/' \
         'n/--config-file/f/' \

@@ -386,26 +386,14 @@ group_rename = parser.add_argument_group(
 group_rename.add_argument(
     "--rename",
     dest="rename_rename",
-    action="store_true",
-    help="Flag to activate the renaming. If you omit this flag, the renaming will not be performed.",
-)
-
-group_path_templates = group_rename.add_mutually_exclusive_group()
-
-group_path_templates.add_argument(
-    "-f",
-    "--format",
-    dest="rename_format",
-    default="$title ($composer)",
     metavar="<path-template>",
-    help="A path template string to set the destination location (Default is “$title ($composer)”).",
+    help="A path template string to set the destination location.",
 )
 
-group_path_templates.add_argument(
-    "--file-name",
-    dest="rename_file_name",
-    metavar="<file-name-template>",
-    help="A template string for the file name (without the extension).",
+group_rename.add_argument(
+    "--only-filename",
+    dest="rename_only_filename",
+    help="Rename only the filename and don’t move the score to a different directory.",
 )
 
 group_rename.add_argument(
@@ -840,7 +828,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             # rename
 
             if args.rename_rename:
-                rename(score)
+                rename(score, args.rename_rename)
 
             if args.export_extension:
                 score.export.to_extension(args.export_extension)
