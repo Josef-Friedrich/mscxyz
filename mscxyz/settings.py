@@ -54,12 +54,12 @@ class DefaultArguments:
 
     # rename
     rename_rename: Optional[str] = None
-    rename_file_name: bool = False
+    rename_target: Optional[str] = None
+    rename_only_filename: bool = False
     rename_alphanum: bool = False
     rename_ascii: bool = False
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
-    rename_target: Optional[str] = None
 
     # selection
     selection_list: bool = False

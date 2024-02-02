@@ -390,8 +390,19 @@ group_rename.add_argument(
     help="A path template string to set the destination location.",
 )
 
-group_rename.add_argument(
+group_rename_target = group_rename.add_mutually_exclusive_group()
+
+group_rename_target.add_argument(
+    "-t",
+    "--target",
+    dest="rename_target",
+    metavar="<directory>",
+    help="Target directory",
+)
+
+group_rename_target.add_argument(
     "--only-filename",
+    action="store_true",
     dest="rename_only_filename",
     help="Rename only the filename and don’t move the score to a different directory.",
 )
@@ -427,14 +438,6 @@ group_rename.add_argument(
     metavar="<fields>",
     help="Skip the rename action if the fields specified in <fields> are empty. "
     "Multiple fields can be separated by commas, e. g.: composer,title",
-)
-
-group_rename.add_argument(
-    "-t",
-    "--target",
-    dest="rename_target",
-    metavar="<directory>",
-    help="Target directory",
 )
 
 ###############################################################################

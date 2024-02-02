@@ -75,12 +75,15 @@ def rename(score: Score, path_template: str) -> None:
 
     if args.rename_target:
         target_base: str = os.path.abspath(args.rename_target)
+    elif args.rename_only_filename:
+        target_base = str(score.path.parent)
     else:
         target_base = os.getcwd()
 
     target: str = os.path.join(target_base, target_filename + "." + score.extension)
 
     if os.path.exists(target):
+        # TODO Support mscz
         target_format: str = target.replace(".mscx", "{}.mscx")
         i = 1
         counter_format: str = ""

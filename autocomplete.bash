@@ -2,7 +2,7 @@
 
 
 
-_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '--bail' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--save-in-mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--export' '--compress' '-c' '--clean-meta' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '--metatag' '--metatag-meta' '--vbox' '--vbox-meta' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '--rename' '--only-filename' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-t' '--target' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '--clean' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts' '--text-font' '--title-font' '--musical-symbol-font' '--musical-text-font' '--staff-space' '--page-size' '--a4' '--din-a4' '--letter' '--margin' '--header' '--no-header' '--footer' '--no-footer')
+_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '--bail' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--save-in-mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--export' '--compress' '-c' '--clean-meta' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '--metatag' '--metatag-meta' '--vbox' '--vbox-meta' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '--rename' '-t' '--target' '--only-filename' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '--clean' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts' '--text-font' '--title-font' '--musical-symbol-font' '--musical-text-font' '--staff-space' '--page-size' '--a4' '--din-a4' '--letter' '--margin' '--header' '--no-header' '--footer' '--no-footer')
 
 _shtab_musescore_manager_pos_0_COMPGEN=_shtab_compgen_files
 _shtab_musescore_manager__C_COMPGEN=_shtab_compgen_files
@@ -56,6 +56,7 @@ _shtab_musescore_manager___vbox_meta_nargs=2
 _shtab_musescore_manager__F_nargs=0
 _shtab_musescore_manager___fix_nargs=0
 _shtab_musescore_manager___fix_lyrics_nargs=0
+_shtab_musescore_manager___only_filename_nargs=0
 _shtab_musescore_manager__A_nargs=0
 _shtab_musescore_manager___alphanum_nargs=0
 _shtab_musescore_manager__a_nargs=0

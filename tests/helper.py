@@ -155,9 +155,7 @@ class Cli:
         if self.__append_score and self.__appended_score is None:
             if isinstance(self.__last_arg, Score):
                 self.__set_score(self.__last_arg)
-            elif not (
-                isinstance(self.__last_arg, str) and Path(self.__last_arg).exists()
-            ) and not isinstance(self.__last_arg, Score):
+            elif not Path(self.__last_arg).exists():
                 self.__set_score(
                     get_score("score.mscz", version=4), append_to_args=True
                 )

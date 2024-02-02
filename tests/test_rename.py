@@ -8,7 +8,7 @@ import pytest
 
 from mscxyz import Score, rename, supported_versions
 from mscxyz.settings import reset_args
-from tests.helper import Cli, get_file
+from tests.helper import Cli, get_dir, get_file
 
 
 class TestFunctions:
@@ -146,3 +146,15 @@ class TestCli:
         ).execute()
         target: Path = cwd_tmpdir / "Title (Composer).mscz"
         assert target.exists()
+
+
+def test_option_only_filename() -> None:
+    src = Path(get_dir("leadsheets", 4))
+    Cli(
+        "--rename",
+        "filename",
+        "--only-filename",
+        src / "Jackson.mscz",
+    ).execute()
+
+    assert (src / "filename.mscz").exists()

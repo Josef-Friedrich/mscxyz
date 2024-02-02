@@ -14,8 +14,8 @@ Comande line interface
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [--rename <path-template>]
-                             [--only-filename RENAME_ONLY_FILENAME] [-A] [-a] [-n]
-                             [-K <fields>] [-t <directory>] [-L]
+                             [-t <directory> | --only-filename] [-A] [-a] [-n]
+                             [-K <fields>] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--list-fonts] [--text-font <font-face>]
@@ -337,8 +337,9 @@ Comande line interface
 
       --rename <path-template>
                             A path template string to set the destination location.
-      --only-filename RENAME_ONLY_FILENAME
-                            Rename only the filename and don’t move the score to a
+      -t <directory>, --target <directory>
+                            Target directory
+      --only-filename       Rename only the filename and don’t move the score to a
                             different directory.
       -A, --alphanum        Use only alphanumeric characters.
       -a, --ascii           Use only ASCII characters.
@@ -347,8 +348,6 @@ Comande line interface
                             Skip the rename action if the fields specified in <fields>
                             are empty. Multiple fields can be separated by commas, e.
                             g.: composer,title
-      -t <directory>, --target <directory>
-                            Target directory
 
     selection:
       The following options affect how the manager selects the MuseScore files.
