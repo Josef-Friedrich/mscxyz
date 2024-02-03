@@ -964,21 +964,38 @@ class Style:
         self.set("showHeader", int(value))
 
     @property
-    def show_footer(self) -> bool:
+    def header_first_page(self) -> bool:
         """
-        Show the footer on the page.
+        Show the header on the first page.
 
         .. code :: XML
 
-            <showFooter>1</showFooter>
+            <headerFirstPage>1</headerFirstPage>
 
-        :see: `MuseScore C++ source code: styledef.cpp line 503 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L503>`_
+        :see: `MuseScore C++ source code: styledef.cpp line 495 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L495>`_
         """
-        return self.__get_bool_default("showFooter", True)
+        return self.__get_bool_default("headerFirstPage", False)
 
-    @show_footer.setter
-    def show_footer(self, value: bool) -> None:
-        self.set("showFooter", int(value))
+    @header_first_page.setter
+    def header_first_page(self, value: bool) -> None:
+        self.set("headerFirstPage", int(value))
+
+    @property
+    def header_odd_even(self) -> bool:
+        """
+        Use different headers for odd and even pages.
+
+        .. code :: XML
+
+            <headerOddEven>1</headerOddEven>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 496 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L496>`_
+        """
+        return self.__get_bool_default("headerOddEven", True)
+
+    @header_odd_even.setter
+    def header_odd_even(self, value: bool) -> None:
+        self.set("headerFirstPage", int(value))
 
     # even/odd header l/c/r ####################################################
 
@@ -1072,6 +1089,111 @@ class Style:
     def odd_header_right(self, value: str) -> None:
         self.set("oddHeaderR", value)
 
+    def set_header_all(self, left: str, center: str, right: str) -> None:
+        """
+        Set the header for all pages.
+
+        :param left: The left part of the header.
+        :param center: The center part of the header.
+        :param right: The right part of the header.
+
+        :see: :attr:`even_header_left`
+        :see: :attr:`even_header_center`
+        :see: :attr:`even_header_right`
+        :see: :attr:`odd_header_left`
+        :see: :attr:`odd_header_center`
+        :see: :attr:`odd_header_right`
+        """
+        self.show_header = True
+        self.header_odd_even = False
+        self.even_header_left = left
+        self.even_header_center = center
+        self.even_header_right = right
+        self.odd_header_left = left
+        self.odd_header_center = center
+        self.odd_header_right = right
+
+    def set_header_odd_even(
+        self,
+        odd_left: str,
+        even_left: str,
+        odd_center: str,
+        even_center: str,
+        odd_right: str,
+        even_right: str,
+    ) -> None:
+        """
+        Set the header for odd and even pages.
+
+        :see: :attr:`even_header_left`
+        :see: :attr:`even_header_center`
+        :see: :attr:`even_header_right`
+        :see: :attr:`odd_header_left`
+        :see: :attr:`odd_header_center`
+        :see: :attr:`odd_header_right`
+        """
+        self.show_header = True
+        self.header_odd_even = True
+        self.even_header_left = even_left
+        self.even_header_center = even_center
+        self.even_header_right = even_right
+        self.odd_header_left = odd_left
+        self.odd_header_center = odd_center
+        self.odd_header_right = odd_right
+
+    # footer ###################################################################
+
+    @property
+    def show_footer(self) -> bool:
+        """
+        Show the footer on the page.
+
+        .. code :: XML
+
+            <showFooter>1</showFooter>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 503 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L503>`_
+        """
+        return self.__get_bool_default("showFooter", True)
+
+    @show_footer.setter
+    def show_footer(self, value: bool) -> None:
+        self.set("showFooter", int(value))
+
+    @property
+    def footer_first_page(self) -> bool:
+        """
+        Show the footer on the first page.
+
+        .. code :: XML
+
+            <footerFirstPage>1</footerFirstPage>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 505 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L505>`_
+        """
+        return self.__get_bool_default("footerFirstPage", True)
+
+    @footer_first_page.setter
+    def footer_first_page(self, value: bool) -> None:
+        self.set("footerFirstPage", int(value))
+
+    @property
+    def footer_odd_even(self) -> bool:
+        """
+        Show the footer on the first page.
+
+        .. code :: XML
+
+            <footerOddEven>1</footerOddEven>
+
+        :see: `MuseScore C++ source code: styledef.cpp line 506 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L506>`_
+        """
+        return self.__get_bool_default("footerOddEven", True)
+
+    @footer_odd_even.setter
+    def footer_odd_even(self, value: bool) -> None:
+        self.set("footerOddEven", int(value))
+
     # even/odd footer l/c/r ####################################################
 
     @property
@@ -1163,6 +1285,60 @@ class Style:
     @odd_footer_right.setter
     def odd_footer_right(self, value: str) -> None:
         self.set("oddFooterR", value)
+
+    def set_footer_all(self, left: str, center: str, right: str) -> None:
+        """
+        Set the footer for all pages.
+
+        :param left: The left part of the footer.
+        :param center: The center part of the footer.
+        :param right: The right part of the footer.
+
+        :see: :attr:`even_footer_left`
+        :see: :attr:`even_footer_center`
+        :see: :attr:`even_footer_right`
+        :see: :attr:`odd_footer_left`
+        :see: :attr:`odd_footer_center`
+        :see: :attr:`odd_footer_right`
+        """
+        self.show_footer = True
+        self.footer_odd_even = False
+        self.even_footer_left = left
+        self.even_footer_center = center
+        self.even_footer_right = right
+        self.odd_footer_left = left
+        self.odd_footer_center = center
+        self.odd_footer_right = right
+
+    def set_footer_odd_even(
+        self,
+        odd_left: str,
+        even_left: str,
+        odd_center: str,
+        even_center: str,
+        odd_right: str,
+        even_right: str,
+    ) -> None:
+        """
+        Set the footer for odd and even pages.
+
+        :see: :attr:`even_footer_left`
+        :see: :attr:`even_footer_center`
+        :see: :attr:`even_footer_right`
+        :see: :attr:`odd_footer_left`
+        :see: :attr:`odd_footer_center`
+        :see: :attr:`odd_footer_right`
+        """
+        self.show_footer = True
+        self.footer_odd_even = True
+        self.even_footer_left = even_left
+        self.even_footer_center = even_center
+        self.even_footer_right = even_right
+        self.odd_footer_left = odd_left
+        self.odd_footer_center = odd_center
+        self.odd_footer_right = odd_right
+
+    # staff ####################################################################
 
     @property
     def staff_space(self) -> float | None:

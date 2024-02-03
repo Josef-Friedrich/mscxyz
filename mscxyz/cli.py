@@ -183,7 +183,7 @@ parser.add_argument(
 # meta
 ###############################################################################
 
-group_meta = parser.add_argument_group(
+meta_group = parser.add_argument_group(
     "meta",
     "Deal with meta data informations stored in the MuseScore file. "
     + textwrap.dedent(
@@ -245,7 +245,7 @@ group_meta = parser.add_argument_group(
     ),
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-c",
     "--clean-meta",
     dest="meta_clean",
@@ -254,7 +254,7 @@ group_meta.add_argument(
     "„field_one,field_two“.",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-D",
     "--delete-duplicates",
     dest="meta_delete",
@@ -265,7 +265,7 @@ group_meta.add_argument(
     "combined_title is empty.",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-i",
     "--distribute-fields",
     dest="meta_dist",
@@ -280,7 +280,7 @@ group_meta.add_argument(
     "fails, it tries the second source field ... and so on.",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-j",
     "--json",
     action="store_true",
@@ -289,7 +289,7 @@ group_meta.add_argument(
     "path as the input file, only the extension is changed to “json”.",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-l",
     "--log",
     nargs=2,
@@ -299,7 +299,7 @@ group_meta.add_argument(
     "/tmp/musescore-manager.log '$title $composer'",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-y",
     "--synchronize",
     action="store_true",
@@ -309,7 +309,7 @@ group_meta.add_argument(
     "metadata fields",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "-S",
     "--set-field",
     nargs=2,
@@ -319,7 +319,7 @@ group_meta.add_argument(
     help="Set value to meta data fields.",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--metatag",
     "--metatag-meta",
     nargs=2,
@@ -329,7 +329,7 @@ group_meta.add_argument(
     help="Define the metadata in MetaTag elements." + _embed_fields(Metatag.fields),
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--vbox",
     "--vbox-meta",
     nargs=2,
@@ -339,7 +339,7 @@ group_meta.add_argument(
     help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--title",
     metavar=("<string>"),
     dest="meta_title",
@@ -347,7 +347,7 @@ group_meta.add_argument(
     "set the corresponding document properties work title field (metatag).",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--subtitle",
     metavar=("<string>"),
     dest="meta_subtitle",
@@ -355,7 +355,7 @@ group_meta.add_argument(
     "set the corresponding document properties subtitle and movement title filed (metatag).",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--composer",
     metavar=("<string>"),
     dest="meta_composer",
@@ -363,7 +363,7 @@ group_meta.add_argument(
     "set the corresponding document properties composer field (metatag).",
 )
 
-group_meta.add_argument(
+meta_group.add_argument(
     "--lyricist",
     metavar=("<string>"),
     dest="meta_lyricist",
@@ -376,9 +376,9 @@ group_meta.add_argument(
 # lyrics
 ###############################################################################
 
-group_lyrics = parser.add_argument_group("lyrics")
+lyrics_group = parser.add_argument_group("lyrics")
 
-group_lyrics.add_argument(
+lyrics_group.add_argument(
     "-x",
     "--extract",
     "--extract-lyrics",
@@ -390,7 +390,7 @@ group_lyrics.add_argument(
     "score_1.mscx.",
 )
 
-group_lyrics.add_argument(
+lyrics_group.add_argument(
     "-r",
     "--remap",
     "--remap-lyrics",
@@ -404,7 +404,7 @@ group_lyrics.add_argument(
     "verse number.",
 )
 
-group_lyrics.add_argument(
+lyrics_group.add_argument(
     "-F",
     "--fix",
     "--fix-lyrics",
@@ -418,7 +418,7 @@ group_lyrics.add_argument(
 # rename
 ###############################################################################
 
-group_rename = parser.add_argument_group(
+rename_group = parser.add_argument_group(
     "rename",
     "Rename the “*.msc[zx]” files. "
     "Fields and functions you can use in the path "
@@ -426,14 +426,14 @@ group_rename = parser.add_argument_group(
     "Functions\n=========\n\n{}".format(tmep.get_doc()),
 )
 
-group_rename.add_argument(
+rename_group.add_argument(
     "--rename",
     dest="rename_rename",
     metavar="<path-template>",
     help="A path template string to set the destination location.",
 )
 
-group_rename_target = group_rename.add_mutually_exclusive_group()
+group_rename_target = rename_group.add_mutually_exclusive_group()
 
 group_rename_target.add_argument(
     "-t",
@@ -450,7 +450,7 @@ group_rename_target.add_argument(
     help="Rename only the filename and don’t move the score to a different directory.",
 )
 
-group_rename.add_argument(
+rename_group.add_argument(
     "-A",
     "--alphanum",
     dest="rename_alphanum",
@@ -458,7 +458,7 @@ group_rename.add_argument(
     help="Use only alphanumeric characters.",
 )
 
-group_rename.add_argument(
+rename_group.add_argument(
     "-a",
     "--ascii",
     dest="rename_ascii",
@@ -466,7 +466,7 @@ group_rename.add_argument(
     help="Use only ASCII characters.",
 )
 
-group_rename.add_argument(
+rename_group.add_argument(
     "-n",
     "--no-whitespace",
     dest="rename_no_whitespace",
@@ -474,7 +474,7 @@ group_rename.add_argument(
     help="Replace all whitespaces with dashes or sometimes underlines.",
 )
 
-group_rename.add_argument(
+rename_group.add_argument(
     "-K",
     "--skip-if-empty",
     dest="rename_skip",
@@ -487,12 +487,12 @@ group_rename.add_argument(
 # selection
 ###############################################################################
 
-group_selection = parser.add_argument_group(
+selection_group = parser.add_argument_group(
     "selection",
     "The following options affect how the manager selects the MuseScore files.",
 )
 
-group_selection.add_argument(
+selection_group.add_argument(
     "-L",
     "--list-files",
     action="store_true",
@@ -500,9 +500,9 @@ group_selection.add_argument(
     help="Only list files and do nothing else.",
 )
 
-group_selection_exclusive = group_selection.add_mutually_exclusive_group()
+exclusive_selection_group = selection_group.add_mutually_exclusive_group()
 
-group_selection_exclusive.add_argument(
+exclusive_selection_group.add_argument(
     "-g",
     "--glob",
     dest="selection_glob",
@@ -513,14 +513,14 @@ group_selection_exclusive.add_argument(
     'option, the standard glob pattern "*.msc[xz]" is used.',
 )
 
-group_selection_exclusive.add_argument(
+exclusive_selection_group.add_argument(
     "--mscz",
     dest="selection_mscz",
     action="store_true",
     help='Take only "*.mscz" files into account.',
 )
 
-group_selection_exclusive.add_argument(
+exclusive_selection_group.add_argument(
     "--mscx",
     dest="selection_mscx",
     action="store_true",
@@ -532,9 +532,9 @@ group_selection_exclusive.add_argument(
 # style
 ###############################################################################
 
-group_style = parser.add_argument_group("style", "Change the styles.")
+style_group = parser.add_argument_group("style", "Change the styles.")
 
-group_style.add_argument(
+style_group.add_argument(
     "-s",
     "--style",
     nargs=2,
@@ -545,7 +545,7 @@ group_style.add_argument(
     help="Set a single style value. For example: --style pageWidth 8.5",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--clean",
     dest="style_clean",
     action="store_true",
@@ -553,7 +553,7 @@ group_style.add_argument(
 )
 
 file_completers.append(
-    group_style.add_argument(
+    style_group.add_argument(
         "-Y",
         "--style-file",
         dest="style_file",
@@ -563,7 +563,7 @@ file_completers.append(
     )
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--s3",
     "--styles-v3",
     dest="style_styles_v3",
@@ -571,7 +571,7 @@ group_style.add_argument(
     help="List all possible version 3 styles.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--s4",
     "--styles-v4",
     dest="style_styles_v4",
@@ -579,14 +579,14 @@ group_style.add_argument(
     help="List all possible version 4 styles.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--list-fonts",
     dest="style_list_fonts",
     action="store_true",
     help="List all font related styles.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--text-font",
     dest="style_text_font",
     metavar="<font-face>",
@@ -594,14 +594,14 @@ group_style.add_argument(
     "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--title-font",
     dest="style_title_font",
     metavar="<font-face>",
     help="Set “titleFontFace” and “subTitleFontFace”.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--musical-symbol-font",
     dest="style_musical_symbol_font",
     choices=musical_symbol_font_faces,
@@ -609,7 +609,7 @@ group_style.add_argument(
     help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--musical-text-font",
     dest="style_musical_text_font",
     choices=musical_text_font_faces,
@@ -617,7 +617,7 @@ group_style.add_argument(
     help="Set “musicalTextFont”.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--staff-space",
     dest="style_staff_space",
     type=mm,
@@ -626,7 +626,7 @@ group_style.add_argument(
     "two lines of a music staff.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--page-size",
     dest="style_page_size",
     nargs=2,
@@ -634,7 +634,7 @@ group_style.add_argument(
     help="Set the page size.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--a4",
     "--din-a4",
     dest="style_page_size_a4",
@@ -642,35 +642,78 @@ group_style.add_argument(
     help="Set the paper size to DIN A4 (210 by 297 mm).",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--letter",
     dest="style_page_size_letter",
     action="store_true",
     help="Set the paper size to Letter (8.5 by 11 in).",
 )
 
-group_style.add_argument(
+style_group.add_argument(
     "--margin",
     dest="style_margin",
     metavar="<dimension>",
     help="Set the top, right, bottom and left margins to the same value.",
 )
 
-group_style.add_argument(
-    "--header",
+style_group.add_argument(
+    "--show-header",
     dest="style_show_header",
     action=argparse.BooleanOptionalAction,
     help="Show or hide the header",
 )
 
-group_style.add_argument(
-    "--footer",
+style_group.add_argument(
+    "--header",
+    nargs=3,
+    dest="style_header_all",
+    metavar=("<left>", "<center>", "<right>"),
+)
+
+style_group.add_argument(
+    "--header-odd-even",
+    nargs=6,
+    dest="style_header_odd_even",
+    metavar=(
+        "<odd-left>",
+        "<even-left>",
+        "<odd-center>",
+        "<even-center>",
+        "<odd-right>",
+        "<even-right>",
+    ),
+)
+
+style_group.add_argument(
+    "--show-footer",
     dest="style_show_footer",
     action=argparse.BooleanOptionalAction,
     help="Show or hide the footer.",
 )
 
-group_style.add_argument(
+style_group.add_argument(
+    "--footer",
+    nargs=3,
+    dest="style_footer_all",
+    metavar=("<left>", "<center>", "<right>"),
+)
+
+style_group.add_argument(
+    "--footer-odd-even",
+    nargs=6,
+    dest="style_footer_odd_even",
+    metavar=(
+        "<odd-left>",
+        "<even-left>",
+        "<odd-center>",
+        "<even-center>",
+        "<odd-right>",
+        "<even-right>",
+    ),
+)
+
+
+style_group.add_argument(
     "--reset-small-staffs",
     dest="style_reset_small_staffs",
     action="store_true",
@@ -797,8 +840,20 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_show_header is not None:
                 score.style.show_header = args.style_show_header
 
+            if args.style_header_all:
+                score.style.set_header_all(*args.style_header_all)
+
+            if args.style_header_odd_even:
+                score.style.set_header_odd_even(*args.style_header_odd_even)
+
             if args.style_show_footer is not None:
                 score.style.show_footer = args.style_show_footer
+
+            if args.style_footer_all:
+                score.style.set_footer_all(*args.style_footer_all)
+
+            if args.style_footer_odd_even:
+                score.style.set_footer_odd_even(*args.style_footer_odd_even)
 
             if args.style_reset_small_staffs:
                 score.style.reset_small_staffs()

@@ -88,7 +88,11 @@ class DefaultArguments:
     style_page_size_letter: bool = False
     style_margin: Optional[str] = None
     style_show_header: Optional[bool] = None
+    style_header_all: Optional[tuple[str, str, str]] = None
+    style_header_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
     style_show_footer: Optional[bool] = None
+    style_footer_all: Optional[tuple[str, str, str]] = None
+    style_footer_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
     style_reset_small_staffs: bool = False
 
     # positional argument

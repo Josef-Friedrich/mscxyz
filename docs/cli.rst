@@ -26,8 +26,14 @@ Comande line interface
                              [--musical-text-font <font-face>]
                              [--staff-space <dimension>]
                              [--page-size <width> <height>] [--a4] [--letter]
-                             [--margin <dimension>] [--header | --no-header]
-                             [--footer | --no-footer] [--reset-small-staffs]
+                             [--margin <dimension>]
+                             [--show-header | --no-show-header]
+                             [--header <left> <center> <right>]
+                             [--header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
+                             [--show-footer | --no-show-footer]
+                             [--footer <left> <center> <right>]
+                             [--footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
+                             [--reset-small-staffs]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -407,9 +413,13 @@ Comande line interface
       --letter              Set the paper size to Letter (8.5 by 11 in).
       --margin <dimension>  Set the top, right, bottom and left margins to the same
                             value.
-      --header, --no-header
+      --show-header, --no-show-header
                             Show or hide the header
-      --footer, --no-footer
+      --header <left> <center> <right>
+      --header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
+      --show-footer, --no-show-footer
                             Show or hide the footer.
+      --footer <left> <center> <right>
+      --footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
       --reset-small-staffs  Reset all small staffs to normal size.
 

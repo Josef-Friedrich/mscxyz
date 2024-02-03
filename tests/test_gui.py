@@ -10,7 +10,7 @@ from tests.helper import Cli, get_file, invoke, open_in_gui
 
 
 @pytest.mark.gui
-def test_din_a4_compress_rename() -> None:
+def test_a4_piano_fruehtau() -> None:
     src = (
         Cli(
             "--save-in-mscore",
@@ -43,6 +43,51 @@ def test_din_a4_compress_rename() -> None:
     assert dest.meta.composer == "Edwin Ericson"
     assert dest.meta.lyricist == "Olof Thunman"
 
+    # open_in_gui(dest)
+
+
+@pytest.mark.gui
+def test_a4_piano_drunken() -> None:
+    src = (
+        Cli(
+            "--save-in-mscore",
+            "--a4",
+            "--rename",
+            "_Piano_A4",
+            "--only-filename",
+            "--staff-space",
+            "1.75mm",
+            "--margin",
+            "15mm",
+            "--title",
+            "Drunken Sailor",
+            "--subtitle",
+            "What shall we do with the drunken sailor",
+            "--reset-small-staffs",
+            "--header",
+            "",
+            "$:workTitle:",
+            "",
+            "--footer",
+            "",
+            "$P",
+            "",
+        )
+        .append_score("Drunken-Sailor.mscz")
+        .score()
+    )
+    dest = src.new(filename="_Piano_A4.mscz")
+    assert dest.exists()
+
+    assert dest.meta.title == "Drunken Sailor"
+    assert dest.meta.subtitle == "What shall we do with the drunken sailor"
+    assert dest.meta.composer is None
+    assert dest.meta.lyricist is None
+
+    assert dest.style.even_header_center == "$:workTitle:"
+    assert dest.style.odd_header_center == "$:workTitle:"
+    assert dest.style.even_footer_center == "$P"
+    assert dest.style.odd_footer_center == "$P"
     open_in_gui(dest)
 
 
