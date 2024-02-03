@@ -6,6 +6,7 @@ import errno
 import hashlib
 import os
 import shutil
+from pathlib import Path
 
 import tmep
 from tmep.format import alphanum, asciify, nowhitespace
@@ -115,5 +116,4 @@ def rename(score: Score, path_template: str) -> None:
         # Invalid cross-device link:
         # os.rename(source, target)
         shutil.move(score.path, target)
-
-    return
+        score.path = Path(target)

@@ -247,3 +247,13 @@ class Cli:
 def open_in_gui(file: str | Path) -> None:
     """Open a file wiht xdg-open in the background"""
     subprocess.Popen(("/usr/local/bin/mscore", str(file)), close_fds=True)
+
+
+def invoke(*args: str) -> subprocess.Popen[str]:
+    """Invoke musescore-manager with an real mscore executable."""
+    p = subprocess.Popen(
+        ("musescore-manager", "--executable", str(mscore_executable), *args),
+        encoding="utf-8",
+    )
+    p.communicate()
+    return p

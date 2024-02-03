@@ -6,6 +6,9 @@ test:
 test_quick:
 	poetry run tox -e quick,format,docs,lint
 
+test_gui:
+	poetry run pytest -m "gui"
+
 test_real_binary:
 	pytest _test_real-binary.py
 
