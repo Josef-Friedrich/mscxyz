@@ -30,6 +30,7 @@ def test_din_a4_compress_rename() -> None:
             "Edwin Ericson",
             "--lyricist",
             "Olof Thunman",
+            "--reset-small-staffs",
         )
         .append_score("Im-Fruehtau-zu-Berge.mscz")
         .score()

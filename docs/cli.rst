@@ -27,7 +27,7 @@ Comande line interface
                              [--staff-space <dimension>]
                              [--page-size <width> <height>] [--a4] [--letter]
                              [--margin <dimension>] [--header | --no-header]
-                             [--footer | --no-footer]
+                             [--footer | --no-footer] [--reset-small-staffs]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -411,4 +411,5 @@ Comande line interface
                             Show or hide the header
       --footer, --no-footer
                             Show or hide the footer.
+      --reset-small-staffs  Reset all small staffs to normal size.
 

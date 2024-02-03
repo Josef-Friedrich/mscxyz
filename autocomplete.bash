@@ -2,7 +2,7 @@
 
 
 
-_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '--bail' '--catch-errors' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--save-in-mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--export' '--compress' '-c' '--clean-meta' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '--metatag' '--metatag-meta' '--vbox' '--vbox-meta' '--title' '--subtitle' '--composer' '--lyricist' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '--rename' '-t' '--target' '--only-filename' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '--clean' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts' '--text-font' '--title-font' '--musical-symbol-font' '--musical-text-font' '--staff-space' '--page-size' '--a4' '--din-a4' '--letter' '--margin' '--header' '--no-header' '--footer' '--no-footer')
+_shtab_musescore_manager_option_strings=('-h' '--help' '--print-completion' '-V' '--version' '-b' '--backup' '--bail' '--catch-errors' '-k' '--colorize' '-C' '--config-file' '-d' '--dry-run' '-m' '--mscore' '--save-in-mscore' '--diff' '-e' '--executable' '-v' '--verbose' '-E' '--export' '--compress' '-c' '--clean-meta' '-D' '--delete-duplicates' '-i' '--distribute-fields' '-j' '--json' '-l' '--log' '-y' '--synchronize' '-S' '--set-field' '--metatag' '--metatag-meta' '--vbox' '--vbox-meta' '--title' '--subtitle' '--composer' '--lyricist' '-x' '--extract' '--extract-lyrics' '-r' '--remap' '--remap-lyrics' '-F' '--fix' '--fix-lyrics' '--rename' '-t' '--target' '--only-filename' '-A' '--alphanum' '-a' '--ascii' '-n' '--no-whitespace' '-K' '--skip-if-empty' '-L' '--list-files' '-g' '--glob' '--mscz' '--mscx' '-s' '--style' '--clean' '-Y' '--style-file' '--s3' '--styles-v3' '--s4' '--styles-v4' '--list-fonts' '--text-font' '--title-font' '--musical-symbol-font' '--musical-text-font' '--staff-space' '--page-size' '--a4' '--din-a4' '--letter' '--margin' '--header' '--no-header' '--footer' '--no-footer' '--reset-small-staffs')
 
 _shtab_musescore_manager_pos_0_COMPGEN=_shtab_compgen_files
 _shtab_musescore_manager__C_COMPGEN=_shtab_compgen_files
@@ -84,6 +84,7 @@ _shtab_musescore_manager___header_nargs=0
 _shtab_musescore_manager___no_header_nargs=0
 _shtab_musescore_manager___footer_nargs=0
 _shtab_musescore_manager___no_footer_nargs=0
+_shtab_musescore_manager___reset_small_staffs_nargs=0
 
 
 # $1=COMP_WORDS[1]

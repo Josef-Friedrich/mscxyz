@@ -89,6 +89,7 @@ class DefaultArguments:
     style_margin: Optional[str] = None
     style_show_header: Optional[bool] = None
     style_show_footer: Optional[bool] = None
+    style_reset_small_staffs: bool = False
 
     # positional argument
     path: str = "."

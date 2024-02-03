@@ -70,6 +70,7 @@ _shtab_musescore_manager_options=(
   "--margin[Set the top, right, bottom and left margins to the same value.]:style_margin:"
   {--header,--no-header}"[Show or hide the header]:style_show_header:"
   {--footer,--no-footer}"[Show or hide the footer.]:style_show_footer:"
+  "--reset-small-staffs[Reset all small staffs to normal size.]"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 

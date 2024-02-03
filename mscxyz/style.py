@@ -1197,3 +1197,26 @@ class Style:
     @measure_number_offset.setter
     def measure_number_offset(self, value: Offset) -> None:
         self.set("measureNumberOffset", cast(AttibutesDict, value))
+
+    def reset_small_staffs(self) -> None:
+        """
+        Reset all small staffs to normal size.
+
+        .. code-block:: xml
+
+            <Part id="1">
+                <Staff id="1">
+                    <StaffType group="pitched">
+                    <name>stdNormal</name>
+                    <small>1</small>
+                    </StaffType>
+                    </Staff>
+                <trackName>Voice</trackName>
+                <Instrument id="voice">
+                    <trackName>Voice</trackName>
+                    <minPitchP>36</minPitchP>
+                    <maxPitchP>94</maxPitchP>
+        """
+        for element in self.xml.findall(".//StaffType/small"):
+            if element.text == "1":
+                self.xml.remove(element)

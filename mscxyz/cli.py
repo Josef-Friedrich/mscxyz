@@ -670,6 +670,13 @@ group_style.add_argument(
     help="Show or hide the footer.",
 )
 
+group_style.add_argument(
+    "--reset-small-staffs",
+    dest="style_reset_small_staffs",
+    action="store_true",
+    help="Reset all small staffs to normal size.",
+)
+
 ###############################################################################
 # last positional parameter
 ###############################################################################
@@ -792,6 +799,11 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.style_show_footer is not None:
                 score.style.show_footer = args.style_show_footer
+
+            if args.style_reset_small_staffs:
+                score.style.reset_small_staffs()
+
+            # lyrics
 
             if args.lyrics_remap:
                 score.lyrics.remap(args.lyrics_remap)
