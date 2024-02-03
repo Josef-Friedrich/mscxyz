@@ -153,7 +153,10 @@ To set mulitple styles at once specify the option ``--style`` multiple times:
 
     musescore-manager --style staffUpperBorder 5.5 --style staffLowerBorder 5.5 score.mscz
 
-Some options change mutliple styles at once:
+... change the font faces of a score?
+-------------------------------------
+
+Some options change mutliple font related xml elements at once:
 
 ::
 
@@ -188,66 +191,12 @@ not available in MuseScore 2):
     response = score.style.set_text_font_faces("Alegreya")
 
     assert response == [
-        ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
-        ("lyricsEvenFontFace", "FreeSerif", "Alegreya"),
-        ("hairpinFontFace", "FreeSerif", "Alegreya"),
-        ("pedalFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
-        ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
-        ("voltaFontFace", "FreeSerif", "Alegreya"),
-        ("ottavaFontFace", "FreeSerif", "Alegreya"),
-        ("tupletFontFace", "FreeSerif", "Alegreya"),
-        ("defaultFontFace", "FreeSerif", "Alegreya"),
-        ("titleFontFace", "FreeSerif", "Alegreya"),
-        ("subTitleFontFace", "FreeSerif", "Alegreya"),
-        ("composerFontFace", "FreeSerif", "Alegreya"),
-        ("lyricistFontFace", "FreeSerif", "Alegreya"),
-        ("fingeringFontFace", "FreeSerif", "Alegreya"),
-        ("lhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("rhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("stringNumberFontFace", "FreeSerif", "Alegreya"),
-        ("harpPedalDiagramFontFace", "Edwin", "Alegreya"),
+        ...
         ("harpPedalTextDiagramFontFace", "Edwin", "Alegreya"),
         ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("expressionFontFace", "FreeSerif", "Alegreya"),
-        ("tempoFontFace", "FreeSerif", "Alegreya"),
-        ("tempoChangeFontFace", "Edwin", "Alegreya"),
-        ("metronomeFontFace", "FreeSerif", "Alegreya"),
-        ("measureNumberFontFace", "FreeSerif", "Alegreya"),
-        ("mmRestRangeFontFace", "Edwin", "Alegreya"),
-        ("translatorFontFace", "FreeSerif", "Alegreya"),
-        ("systemFontFace", "FreeSerif", "Alegreya"),
-        ("staffFontFace", "FreeSerif", "Alegreya"),
-        ("rehearsalMarkFontFace", "FreeSerif", "Alegreya"),
-        ("repeatLeftFontFace", "FreeSerif", "Alegreya"),
-        ("repeatRightFontFace", "FreeSerif", "Alegreya"),
-        ("frameFontFace", "FreeSerif", "Alegreya"),
-        ("textLineFontFace", "FreeSerif", "Alegreya"),
-        ("systemTextLineFontFace", "Edwin", "Alegreya"),
-        ("glissandoFontFace", "FreeSerif", "Alegreya"),
-        ("bendFontFace", "FreeSerif", "Alegreya"),
-        ("headerFontFace", "FreeSerif", "Alegreya"),
-        ("footerFontFace", "FreeSerif", "Alegreya"),
-        ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
-        ("stickingFontFace", "FreeSerif", "Alegreya"),
-        ("user1FontFace", "FreeSerif", "Alegreya"),
-        ("user2FontFace", "FreeSerif", "Alegreya"),
-        ("user3FontFace", "FreeSerif", "Alegreya"),
-        ("user4FontFace", "FreeSerif", "Alegreya"),
-        ("user5FontFace", "FreeSerif", "Alegreya"),
-        ("user6FontFace", "FreeSerif", "Alegreya"),
-        ("user7FontFace", "FreeSerif", "Alegreya"),
-        ("user8FontFace", "FreeSerif", "Alegreya"),
-        ("user9FontFace", "FreeSerif", "Alegreya"),
-        ("user10FontFace", "FreeSerif", "Alegreya"),
-        ("user11FontFace", "FreeSerif", "Alegreya"),
-        ("user12FontFace", "FreeSerif", "Alegreya"),
-        ("letRingFontFace", "FreeSerif", "Alegreya"),
-        ("palmMuteFontFace", "FreeSerif", "Alegreya"),
+        ...
     ]
+
     score.save()
 
     new_score: Score = score.reload()
@@ -262,7 +211,8 @@ Use one of the following autocomplete files ...
 * `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_
 * `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_
 
-... or generate the autocomplete files by yourself:
+... or generate the autocomplete files by yourself?
+---------------------------------------------------
 
 ::
 
@@ -271,6 +221,7 @@ Use one of the following autocomplete files ...
     musescore-manager --print-completion tcsh > autocomplete.tcsh
 
 ... rename many files at once?
+------------------------------
 
 The following example assumes that the folder ``/home/xyz/messy-leadsheets``
 contains the following three MuseScore files: ``folsom prison blues.mscz``,
@@ -299,6 +250,87 @@ should show the following output:
     i/I-Walk-the-Line.mscz
     j/Jackson.mscz
     f/Folsom-Prison-Blues.mscz
+
+... use the Python API?
+-----------------------
+
+Please visit the `API documentation <https://mscxyz.readthedocs.io>`_ on readthedocs.
+
+Instantiate a ``Score`` object:
+
+.. code-block:: Python
+
+    from mscxyz import Score
+    score = Score('score.mscz')
+    assert score.path.exists()
+    assert score.filename == "score.mscz"
+    assert score.basename == "score"
+    assert score.extension == "mscz"
+    assert score.version == 4.20
+    assert score.version_major == 4
+
+Examine the most important attribute of a ``Score`` object: ``xml_root``.
+It is the root element of the XML document in which MuseScore stores all information
+about a score.
+It’s best to take a look at the `lxml API <https://lxml.de/api.html>`_ documentation
+to see what you can do with this element. So much can be revealed:
+lots of interesting things.
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+
+    def print_elements(element: _Element, level: int) -> None:
+        for sub_element in element:
+            print(f"{'    ' * level}<{sub_element.tag}>")
+            print_elements(sub_element, level + 1)
+
+    print_elements(score.xml_root, 0)
+
+The output of the code example is very long, so here is a shortened version:
+
+::
+
+    <programVersion>
+    <programRevision>
+    <LastEID>
+    <Score>
+        <Division>
+        <showInvisible>
+        <showUnprintable>
+        <showFrames>
+        <showMargins>
+        <open>
+        <metaTag>
+        ...
+
+... edit the meta data of a score file?
+---------------------------------------
+
+Set the meta tag ``composer``:
+
+.. code-block:: xml
+
+    <museScore version="4.20">
+        <Score>
+            <metaTag name="composer">Composer</metaTag>
+
+.. code-block:: Python
+
+    score = Score('score.mscz')
+    assert score.meta.meta_tag.composer == "Composer"
+
+    score.meta.meta_tag.composer  = "Mozart"
+    score.save()
+
+    new_score: Score = score.reload()
+    assert new_score.meta.meta_tag.composer == "Mozart"
+
+.. code-block:: xml
+
+    <museScore version="4.20">
+        <Score>
+            <metaTag name="composer">Mozart</metaTag>
 
 CLI Usage
 =========
@@ -712,85 +744,6 @@ CLI Usage
                             Show or hide the header
       --footer, --no-footer
                             Show or hide the footer.
-
-API Usage
-=========
-
-Instantiate a ``Score`` object:
-
-.. code-block:: Python
-
-    from mscxyz import Score
-    score = Score('score.mscz')
-    assert score.path.exists()
-    assert score.filename == "score.mscz"
-    assert score.basename == "score"
-    assert score.extension == "mscz"
-    assert score.version == 4.20
-    assert score.version_major == 4
-
-Examine the most important attribute of a ``Score`` object: ``xml_root``.
-It is the root element of the XML document in which MuseScore stores all information
-about a score.
-It’s best to take a look at the `lxml API <https://lxml.de/api.html>`_ documentation
-to see what you can do with this element. So much can be revealed:
-lots of interesting things.
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
-
-    def print_elements(element: _Element, level: int) -> None:
-        for sub_element in element:
-            print(f"{'    ' * level}<{sub_element.tag}>")
-            print_elements(sub_element, level + 1)
-
-    print_elements(score.xml_root, 0)
-
-The output of the code example is very long, so here is a shortened version:
-
-::
-
-    <programVersion>
-    <programRevision>
-    <LastEID>
-    <Score>
-        <Division>
-        <showInvisible>
-        <showUnprintable>
-        <showFrames>
-        <showMargins>
-        <open>
-        <metaTag>
-        ...
-
-``meta``
---------
-
-Set the meta tag ``composer``:
-
-.. code-block:: xml
-
-    <museScore version="4.20">
-        <Score>
-            <metaTag name="composer">Composer</metaTag>
-
-.. code-block:: Python
-
-    score = Score('score.mscz')
-    assert score.meta.meta_tag.composer == "Composer"
-
-    score.meta.meta_tag.composer  = "Mozart"
-    score.save()
-
-    new_score: Score = score.reload()
-    assert new_score.meta.meta_tag.composer == "Mozart"
-
-.. code-block:: xml
-
-    <museScore version="4.20">
-        <Score>
-            <metaTag name="composer">Mozart</metaTag>
 
 Configuration file
 ==================

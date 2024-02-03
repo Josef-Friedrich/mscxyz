@@ -151,8 +151,10 @@ To set mulitple styles at once specify the option ``--style`` multiple times:
 
     musescore-manager --style staffUpperBorder 5.5 --style staffLowerBorder 5.5 score.mscz
 
+... change the font faces of a score?
+-------------------------------------
 
-Some options change mutliple styles at once:
+Some options change mutliple font related xml elements at once:
 
 ::
 
@@ -160,6 +162,7 @@ Some options change mutliple styles at once:
     musescore-manager --title-font "Alegreya Sans" score.mscz
     musescore-manager --musical-symbol-font Leland score.mscz
     musescore-manager --musical-text-font "Leland Text" score.mscz
+
 
 Set all font faces (using a for loop, not available in MuseScore 2):
 
@@ -187,66 +190,12 @@ not available in MuseScore 2):
     response = score.style.set_text_font_faces("Alegreya")
 
     assert response == [
-        ("lyricsOddFontFace", "FreeSerif", "Alegreya"),
-        ("lyricsEvenFontFace", "FreeSerif", "Alegreya"),
-        ("hairpinFontFace", "FreeSerif", "Alegreya"),
-        ("pedalFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolAFontFace", "FreeSerif", "Alegreya"),
-        ("chordSymbolBFontFace", "FreeSerif", "Alegreya"),
-        ("nashvilleNumberFontFace", "FreeSerif", "Alegreya"),
-        ("voltaFontFace", "FreeSerif", "Alegreya"),
-        ("ottavaFontFace", "FreeSerif", "Alegreya"),
-        ("tupletFontFace", "FreeSerif", "Alegreya"),
-        ("defaultFontFace", "FreeSerif", "Alegreya"),
-        ("titleFontFace", "FreeSerif", "Alegreya"),
-        ("subTitleFontFace", "FreeSerif", "Alegreya"),
-        ("composerFontFace", "FreeSerif", "Alegreya"),
-        ("lyricistFontFace", "FreeSerif", "Alegreya"),
-        ("fingeringFontFace", "FreeSerif", "Alegreya"),
-        ("lhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("rhGuitarFingeringFontFace", "FreeSerif", "Alegreya"),
-        ("stringNumberFontFace", "FreeSerif", "Alegreya"),
-        ("harpPedalDiagramFontFace", "Edwin", "Alegreya"),
+        ...
         ("harpPedalTextDiagramFontFace", "Edwin", "Alegreya"),
         ("longInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("shortInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("partInstrumentFontFace", "FreeSerif", "Alegreya"),
-        ("expressionFontFace", "FreeSerif", "Alegreya"),
-        ("tempoFontFace", "FreeSerif", "Alegreya"),
-        ("tempoChangeFontFace", "Edwin", "Alegreya"),
-        ("metronomeFontFace", "FreeSerif", "Alegreya"),
-        ("measureNumberFontFace", "FreeSerif", "Alegreya"),
-        ("mmRestRangeFontFace", "Edwin", "Alegreya"),
-        ("translatorFontFace", "FreeSerif", "Alegreya"),
-        ("systemFontFace", "FreeSerif", "Alegreya"),
-        ("staffFontFace", "FreeSerif", "Alegreya"),
-        ("rehearsalMarkFontFace", "FreeSerif", "Alegreya"),
-        ("repeatLeftFontFace", "FreeSerif", "Alegreya"),
-        ("repeatRightFontFace", "FreeSerif", "Alegreya"),
-        ("frameFontFace", "FreeSerif", "Alegreya"),
-        ("textLineFontFace", "FreeSerif", "Alegreya"),
-        ("systemTextLineFontFace", "Edwin", "Alegreya"),
-        ("glissandoFontFace", "FreeSerif", "Alegreya"),
-        ("bendFontFace", "FreeSerif", "Alegreya"),
-        ("headerFontFace", "FreeSerif", "Alegreya"),
-        ("footerFontFace", "FreeSerif", "Alegreya"),
-        ("instrumentChangeFontFace", "FreeSerif", "Alegreya"),
-        ("stickingFontFace", "FreeSerif", "Alegreya"),
-        ("user1FontFace", "FreeSerif", "Alegreya"),
-        ("user2FontFace", "FreeSerif", "Alegreya"),
-        ("user3FontFace", "FreeSerif", "Alegreya"),
-        ("user4FontFace", "FreeSerif", "Alegreya"),
-        ("user5FontFace", "FreeSerif", "Alegreya"),
-        ("user6FontFace", "FreeSerif", "Alegreya"),
-        ("user7FontFace", "FreeSerif", "Alegreya"),
-        ("user8FontFace", "FreeSerif", "Alegreya"),
-        ("user9FontFace", "FreeSerif", "Alegreya"),
-        ("user10FontFace", "FreeSerif", "Alegreya"),
-        ("user11FontFace", "FreeSerif", "Alegreya"),
-        ("user12FontFace", "FreeSerif", "Alegreya"),
-        ("letRingFontFace", "FreeSerif", "Alegreya"),
-        ("palmMuteFontFace", "FreeSerif", "Alegreya"),
+        ...
     ]
+
     score.save()
 
     new_score: Score = score.reload()
@@ -262,7 +211,8 @@ Use one of the following autocomplete files ...
 * `zsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.zsh>`_
 * `tcsh <https://github.com/Josef-Friedrich/mscxyz/blob/main/autocomplete.tcsh>`_
 
-... or generate the autocomplete files by yourself:
+... or generate the autocomplete files by yourself?
+---------------------------------------------------
 
 ::
 
@@ -271,6 +221,7 @@ Use one of the following autocomplete files ...
     musescore-manager --print-completion tcsh > autocomplete.tcsh
 
 ... rename many files at once?
+------------------------------
 
 The following example assumes that the folder ``/home/xyz/messy-leadsheets``
 contains the following three MuseScore files: ``folsom prison blues.mscz``,
@@ -305,14 +256,10 @@ should show the following output:
     j/Jackson.mscz
     f/Folsom-Prison-Blues.mscz
 
+... use the Python API?
+-----------------------
 
-CLI Usage
-=========
-
-{{ cli('musescore-manager --help') | literal }}
-
-API Usage
-=========
+Please visit the `API documentation <https://mscxyz.readthedocs.io>`_ on readthedocs.
 
 Instantiate a ``Score`` object:
 
@@ -362,8 +309,8 @@ The output of the code example is very long, so here is a shortened version:
         <metaTag>
         ...
 
-``meta``
---------
+... edit the meta data of a score file?
+---------------------------------------
 
 Set the meta tag ``composer``:
 
@@ -390,6 +337,10 @@ Set the meta tag ``composer``:
         <Score>
             <metaTag name="composer">Mozart</metaTag>
 
+CLI Usage
+=========
+
+{{ cli('musescore-manager --help') | literal }}
 
 Configuration file
 ==================

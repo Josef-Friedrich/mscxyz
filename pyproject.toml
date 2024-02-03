@@ -4,6 +4,7 @@ version = "2.0.0"
 description = "A command line tool to manipulate the XML based *.mscX and *.mscZ files of the notation software MuseScore."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
+homepage = "https://mscxyz.readthedocs.io"
 repository = "https://github.com/Josef-Friedrich/mscxyz"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
