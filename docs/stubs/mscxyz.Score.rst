@@ -44,6 +44,8 @@
       ~Score.json_file
       ~Score.lyrics
       ~Score.meta
+      ~Score.program_revision
+      ~Score.program_version
       ~Score.style
       ~Score.style_file
       ~Score.version_major

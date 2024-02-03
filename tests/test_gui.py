@@ -22,10 +22,14 @@ def test_din_a4_compress_rename() -> None:
             "1.75mm",
             "--margin",
             "15mm",
-            "--title", "Im Frühtau zu Berge",
-            "--subtitle", "Vi gå över daggstänkta berg",
-            "--composer", "Edwin Ericson",
-            "--lyricist", "Olof Thunman",
+            "--title",
+            "Im Frühtau zu Berge",
+            "--subtitle",
+            "Vi gå över daggstänkta berg",
+            "--composer",
+            "Edwin Ericson",
+            "--lyricist",
+            "Olof Thunman",
         )
         .append_score("Im-Fruehtau-zu-Berge.mscz")
         .score()

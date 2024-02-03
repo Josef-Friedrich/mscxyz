@@ -216,6 +216,20 @@ class FieldsManager:
             readonly=True,
         ),
         Field(
+            name="program_version",
+            description="The semantic version number of the MuseScore program, for example: ``4.2.0``.",
+            attr_path="program_version",
+            verbosity=2,
+            readonly=True,
+        ),
+        Field(
+            name="program_revision",
+            description="The revision number of the MuseScore program, for example: ``eb8d33c``.",
+            attr_path="program_revision",
+            verbosity=2,
+            readonly=True,
+        ),
+        Field(
             name="path",
             description="The absolute path of the MuseScore file, for example ``/home/xyz/score.mscz``.",
             attr_path="path",

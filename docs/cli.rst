@@ -12,6 +12,8 @@ Comande line interface
                              [-l <log-file> <format-string>] [-y]
                              [-S DESTINATION_FIELD FORMAT_STRING]
                              [--metatag <field> <value>] [--vbox <field> <value>]
+                             [--title <string>] [--subtitle <string>]
+                             [--composer <string>] [--lyricist <string>]
                              [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
                              [--rename <path-template>]
                              [-t <directory> | --only-filename] [-A] [-a] [-n]
@@ -159,6 +161,18 @@ Comande line interface
       --vbox <field> <value>, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
                             composer, lyricist, subtitle, title.
+      --title <string>      Create a vertical frame (vbox) containing a title text field
+                            and set the corresponding document properties work title
+                            field (metatag).
+      --subtitle <string>   Create a vertical frame (vbox) containing a subtitle text
+                            field and set the corresponding document properties subtitle
+                            and movement title filed (metatag).
+      --composer <string>   Create a vertical frame (vbox) containing a composer text
+                            field and set the corresponding document properties composer
+                            field (metatag).
+      --lyricist <string>   Create a vertical frame (vbox) containing a lyricist text
+                            field and set the corresponding document properties lyricist
+                            field (metatag).
 
     lyrics:
       -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT, --extract-lyrics LYRICS_EXTRACT

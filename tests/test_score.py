@@ -45,19 +45,25 @@ class TestClassScore:
         assert not self.score.zip_container
         assert score4z.zip_container
 
+    def test_program_version(self, score: Score) -> None:
+        assert score.program_version == "4.2.0"
+
+    def test_program_revision(self, score: Score) -> None:
+        assert score.program_revision == "eb8d33c"
+
     def test_property_dirname(self) -> None:
         path = Path(self.score.dirname)
         assert path.is_dir()
         assert path.exists()
 
-    def test_property_filename(self) -> None:
-        assert self.score.filename == "simple.mscx"
+    def test_property_filename(self, score: Score) -> None:
+        assert score.filename == "score.mscz"
 
-    def test_property_extension(self) -> None:
-        assert self.score.extension == "mscx"
+    def test_property_basename(self, score: Score) -> None:
+        assert score.basename == "score"
 
-    def test_property_basename(self) -> None:
-        assert self.score.basename == "simple"
+    def test_property_extension(self, score: Score) -> None:
+        assert score.extension == "mscz"
 
     def test_method_save(self) -> None:
         score: Score = helper.get_score("simple.mscx")

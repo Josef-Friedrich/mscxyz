@@ -113,6 +113,13 @@ class XmlManipulator:
     # cRud: Read ###############################################################
 
     def __get_element(self, element: ElementLike = None) -> _Element:
+        """
+        Get a XML element. If the element argument is a tree, return the root of the element argument.
+        If the element argument is None, return the root element of the current instance.
+
+        :param element: The XML element. Defaults to None.
+        :return: The XML element.
+        """
         if isinstance(element, _ElementTree):
             return element.getroot()
         if element is None:
@@ -256,17 +263,25 @@ class XmlManipulator:
             return None
         return element.text
 
-    def get_text_safe(self, element: ElementLike = None) -> str:
+    def get_text_safe(
+        self, element: ElementLike = None, element_path: Optional[str] = None
+    ) -> str:
         """
         Safely retrieves the text content from an XML element.
 
         :param element: The XML element to retrieve the text from.
+        :param element_path: A `element path expression
+          <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
+          with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
 
         :return: The text content of the element.
 
         :raises ValueError: If the element is None or has no text content.
         """
-        element = self.__get_element(element)
+        if element_path is not None:
+            element = self.find_safe(element_path)
+        else:
+            element = self.__get_element(element)
         if element.text is None:
             raise ValueError(f"Element {element} has no text!")
         return element.text
