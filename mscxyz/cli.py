@@ -95,6 +95,7 @@ file_completers.append(
     parser.add_argument(
         "-C",
         "--config-file",
+        metavar="<file-path>",
         dest="general_config_file",
         help="Specify a configuration file in the INI format.",
     )
@@ -313,7 +314,7 @@ group_meta.add_argument(
     "--set-field",
     nargs=2,
     action="append",
-    metavar=("DESTINATION_FIELD", "FORMAT_STRING"),
+    metavar=("<field>", "<format-string>"),
     dest="meta_set",
     help="Set value to meta data fields.",
 )
@@ -382,6 +383,7 @@ group_lyrics.add_argument(
     "--extract",
     "--extract-lyrics",
     dest="lyrics_extract",
+    metavar="<number-or-all>",
     help="Extract each lyrics verse into a separate MuseScore file. "
     "Specify ”all” to extract all lyrics "
     "verses. The old verse number is appended to the file name, e. g.: "
@@ -393,6 +395,7 @@ group_lyrics.add_argument(
     "--remap",
     "--remap-lyrics",
     dest="lyrics_remap",
+    metavar="<remap-pairs>",
     help='Remap lyrics. Example: "--remap 3:2,5:3". This '
     "example remaps lyrics verse 3 to verse 2 and verse 5 to 3. "
     "Use commas to specify multiple remap pairs. One remap pair "
@@ -417,9 +420,9 @@ group_lyrics.add_argument(
 
 group_rename = parser.add_argument_group(
     "rename",
-    "Rename the “*.msc[zx]” files."
-    "Fields and functions you can use in the format "
-    "string (-f, --format):\n\n"
+    "Rename the “*.msc[zx]” files. "
+    "Fields and functions you can use in the path "
+    "template string (-r, --rename):\n\n"
     "Functions\n=========\n\n{}".format(tmep.get_doc()),
 )
 

@@ -306,16 +306,16 @@ CLI Usage
 :: 
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
-                             [--bail] [--catch-errors] [-k] [-C GENERAL_CONFIG_FILE]
-                             [-d] [-m] [--diff] [-e FILE_PATH] [-v] [-E <extension>]
+                             [--bail] [--catch-errors] [-k] [-C <file-path>] [-d]
+                             [-m] [--diff] [-e FILE_PATH] [-v] [-E <extension>]
                              [--compress] [-c META_CLEAN] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
-                             [-S DESTINATION_FIELD FORMAT_STRING]
+                             [-S <field> <format-string>]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
                              [--composer <string>] [--lyricist <string>]
-                             [-x LYRICS_EXTRACT] [-r LYRICS_REMAP] [-F]
+                             [-x <number-or-all>] [-r <remap-pairs>] [-F]
                              [--rename <path-template>]
                              [-t <directory> | --only-filename] [-A] [-a] [-n]
                              [-K <fields>] [-L]
@@ -346,7 +346,7 @@ CLI Usage
       --bail                Stop execution when an exception occurs.
       --catch-errors        Print error messages instead stop execution in a batch run.
       -k, --colorize        Colorize the command line print statements.
-      -C GENERAL_CONFIG_FILE, --config-file GENERAL_CONFIG_FILE
+      -C <file-path>, --config-file <file-path>
                             Specify a configuration file in the INI format.
       -d, --dry-run         Simulate the actions.
       -m, --mscore, --save-in-mscore
@@ -451,7 +451,7 @@ CLI Usage
       -y, --synchronize     Synchronize the values of the first vertical frame (vbox)
                             (title, subtitle, composer, lyricist) with the corresponding
                             metadata fields
-      -S DESTINATION_FIELD FORMAT_STRING, --set-field DESTINATION_FIELD FORMAT_STRING
+      -S <field> <format-string>, --set-field <field> <format-string>
                             Set value to meta data fields.
       --metatag <field> <value>, --metatag-meta <field> <value>
                             Define the metadata in MetaTag elements. Available fields:
@@ -476,11 +476,11 @@ CLI Usage
                             field (metatag).
 
     lyrics:
-      -x LYRICS_EXTRACT, --extract LYRICS_EXTRACT, --extract-lyrics LYRICS_EXTRACT
+      -x <number-or-all>, --extract <number-or-all>, --extract-lyrics <number-or-all>
                             Extract each lyrics verse into a separate MuseScore file.
                             Specify ”all” to extract all lyrics verses. The old verse
                             number is appended to the file name, e. g.: score_1.mscx.
-      -r LYRICS_REMAP, --remap LYRICS_REMAP, --remap-lyrics LYRICS_REMAP
+      -r <remap-pairs>, --remap <remap-pairs>, --remap-lyrics <remap-pairs>
                             Remap lyrics. Example: "--remap 3:2,5:3". This example
                             remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
                             commas to specify multiple remap pairs. One remap pair is
@@ -492,7 +492,7 @@ CLI Usage
                             correct hyphenation ("la - la - la")
 
     rename:
-      Rename the “*.msc[zx]” files.Fields and functions you can use in the format string (-f, --format):
+      Rename the “*.msc[zx]” files. Fields and functions you can use in the path template string (-r, --rename):
 
       Functions
       =========
