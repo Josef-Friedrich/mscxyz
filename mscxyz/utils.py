@@ -250,8 +250,13 @@ class PathChanger:
         )
 
     def change(
-        self, suffix: Optional[Any] = None, extension: Optional[str] = None
+        self,
+        suffix: Optional[Any] = None,
+        extension: Optional[str] = None,
+        filename: Optional[str] = None,
     ) -> Path:
+        if filename is not None:
+            return self.path.parent / filename
         path_changer: PathChanger = self.new()
         if suffix:
             path_changer = PathChanger(path_changer.add_suffix(suffix))

@@ -22,11 +22,8 @@ def test_din_a4_compress_rename() -> None:
         .append_score("Im-Fruehtau-zu-Berge.mscz")
         .score()
     )
-
-    dest = score.path.parent / "_Piano_A4.mscz"
-
+    dest = score.new(filename="_Piano_A4.mscz")
     assert dest.exists()
-
     open_in_gui(dest)
 
 

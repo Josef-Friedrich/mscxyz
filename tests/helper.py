@@ -244,7 +244,7 @@ class Cli:
         open_in_gui(self.score().path)
 
 
-def open_in_gui(file: str | Path) -> None:
+def open_in_gui(file: str | Path | Score) -> None:
     """Open a file wiht xdg-open in the background"""
     subprocess.Popen(("/usr/local/bin/mscore", str(file)), close_fds=True)
 

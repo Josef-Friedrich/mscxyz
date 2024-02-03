@@ -126,9 +126,14 @@ class Score:
         return self.extension != "mscz"
 
     def change_path(
-        self, suffix: Optional[Any] = None, extension: Optional[str] = None
+        self,
+        suffix: Optional[Any] = None,
+        extension: Optional[str] = None,
+        filename: Optional[str] = None,
     ) -> Path:
-        return utils.PathChanger(self.path).change(suffix=suffix, extension=extension)
+        return utils.PathChanger(self.path).change(
+            suffix=suffix, extension=extension, filename=filename
+        )
 
     @property
     def export(self) -> Export:
@@ -163,8 +168,21 @@ class Score:
     def make_snapshot(self) -> None:
         self.__xml_string_initial = self.xml_string
 
-    def new(self) -> Score:
-        return Score(self.path)
+    def new(
+        self,
+        suffix: Optional[Any] = None,
+        extension: Optional[str] = None,
+        filename: Optional[str] = None,
+    ) -> Score:
+        return Score(
+            self.change_path(suffix=suffix, extension=extension, filename=filename)
+        )
+
+    def __str__(self) -> str:
+        return str(self.path)
+
+    def exists(self) -> bool:
+        return self.path.exists()
 
     def backup(self) -> None:
         """Make a copy of the MuseScore file."""
@@ -279,4 +297,4 @@ class Score:
         """
         if save:
             self.save()
-        return Score(self.path)
+        return self.new()
