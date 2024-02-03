@@ -16,6 +16,7 @@
       ~Score.__init__
       ~Score.backup
       ~Score.change_path
+      ~Score.exists
       ~Score.get_version
       ~Score.make_snapshot
       ~Score.new

@@ -18,6 +18,10 @@ def test_din_a4_compress_rename() -> None:
             "--rename",
             "_Piano_A4",
             "--only-filename",
+            "--staff-space",
+            "1.75mm",
+            "--margin",
+            "15mm",
         )
         .append_score("Im-Fruehtau-zu-Berge.mscz")
         .score()

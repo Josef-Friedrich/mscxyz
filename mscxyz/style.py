@@ -675,13 +675,33 @@ class Style:
 
     def set_page_size(self, width: float | str, height: float | str) -> None:
         """
-        Set the page size in ``inch``.
+        Set the page size in ``inch``. At the same time, the
+        :attr:`page_printable_width` attribute is set so that the margins do not change.
 
         :param width: The page width in ``inch`` as a float or a dimension string in ``mm`` or ``in``.
         :param height: The page height in ``inch`` as a float or a dimension string in ``mm`` or ``in``.
+
+        :see: :attr:`page_width`
+        :see: :attr:`page_height`
+        :see: :attr:`page_printable_width`
+
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            score.style.set_page_size("210mm", "297mm")
+            # or:
+            score.style.set_page_size(8.2677165354 , 11.6929133858)
         """
-        self.page_width = inch(width)
+        old_page_width = self.page_width
+        new_page_width = inch(width)
+
+        self.page_width = new_page_width
         self.page_height = inch(height)
+
+        self.page_printable_width = (
+            new_page_width / old_page_width * self.page_printable_width
+        )
 
     def set_page_size_a4(self) -> None:
         """
@@ -857,6 +877,10 @@ class Style:
         :see: `MuseScore C++ source code: styledef.cpp line 45 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L45>`_
         """
         return self.__get_float_default("pagePrintableWidth", 180 / INCH)
+
+    @page_printable_width.setter
+    def page_printable_width(self, value: float) -> None:
+        self.set("pagePrintableWidth", value)
 
     @property
     def margin(self) -> Margin | float:
