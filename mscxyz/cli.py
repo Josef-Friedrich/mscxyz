@@ -338,6 +338,39 @@ group_meta.add_argument(
     help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
 )
 
+group_meta.add_argument(
+    "--title",
+    metavar=("<string>"),
+    dest="meta_title",
+    help="Create a vertical frame (vbox) containing a title text field and "
+    "set the corresponding document properties work title field (metatag).",
+)
+
+group_meta.add_argument(
+    "--subtitle",
+    metavar=("<string>"),
+    dest="meta_subtitle",
+    help="Create a vertical frame (vbox) containing a subtitle text field and "
+    "set the corresponding document properties subtitle and movement title filed (metatag).",
+)
+
+group_meta.add_argument(
+    "--composer",
+    metavar=("<string>"),
+    dest="meta_composer",
+    help="Create a vertical frame (vbox) containing a composer text field and "
+    "set the corresponding document properties composer field (metatag).",
+)
+
+group_meta.add_argument(
+    "--lyricist",
+    metavar=("<string>"),
+    dest="meta_lyricist",
+    help="Create a vertical frame (vbox) containing a lyricist text field and "
+    "set the corresponding document properties lyricist field (metatag).",
+)
+
+
 ###############################################################################
 # lyrics
 ###############################################################################
@@ -782,6 +815,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 or args.meta_dist
                 or args.meta_delete
                 or args.meta_sync
+                or args.meta_title
+                or args.meta_subtitle
+                or args.meta_composer
+                or args.meta_lyricist
             ):
                 manipulate_meta = True
                 # to get score.fields.pre
@@ -832,8 +869,22 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.meta_log:
                 score.meta.write_to_log_file(args.meta_log[0], args.meta_log[1])
 
+            if args.meta_title:
+                score.meta.title = args.meta_title
+
+            if args.meta_subtitle:
+                score.meta.subtitle = args.meta_subtitle
+
+            if args.meta_composer:
+                score.meta.composer = args.meta_composer
+
+            if args.meta_lyricist:
+                score.meta.lyricist = args.meta_lyricist
+
             if manipulate_meta:
                 score.fields.diff(args)
+
+            # export
 
             if args.export_extension:
                 score.export.to_extension(args.export_extension)

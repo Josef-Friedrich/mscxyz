@@ -11,7 +11,7 @@ from tests.helper import Cli, get_file, invoke, open_in_gui
 
 @pytest.mark.gui
 def test_din_a4_compress_rename() -> None:
-    score = (
+    src = (
         Cli(
             "--save-in-mscore",
             "--a4",
@@ -22,12 +22,22 @@ def test_din_a4_compress_rename() -> None:
             "1.75mm",
             "--margin",
             "15mm",
+            "--title", "Im Frühtau zu Berge",
+            "--subtitle", "Vi gå över daggstänkta berg",
+            "--composer", "Edwin Ericson",
+            "--lyricist", "Olof Thunman",
         )
         .append_score("Im-Fruehtau-zu-Berge.mscz")
         .score()
     )
-    dest = score.new(filename="_Piano_A4.mscz")
+    dest = src.new(filename="_Piano_A4.mscz")
     assert dest.exists()
+
+    assert dest.meta.title == "Im Frühtau zu Berge"
+    assert dest.meta.subtitle == "Vi gå över daggstänkta berg"
+    assert dest.meta.composer == "Edwin Ericson"
+    assert dest.meta.lyricist == "Olof Thunman"
+
     open_in_gui(dest)
 
 
