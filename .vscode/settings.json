@@ -21,6 +21,6 @@
     "--rootdir",
     "${workspaceFolder}/tests",
     "-m",
-    "not slow"
+    "not (slow or gui)"
   ]
 }
