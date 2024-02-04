@@ -656,11 +656,27 @@ style_group.add_argument(
     help="Set the top, right, bottom and left margins to the same value.",
 )
 
+# header
+
 style_group.add_argument(
     "--show-header",
     dest="style_show_header",
     action=argparse.BooleanOptionalAction,
-    help="Show or hide the header",
+    help="Show or hide the header.",
+)
+
+style_group.add_argument(
+    "--header-first-page",
+    dest="style_header_first_page",
+    action=argparse.BooleanOptionalAction,
+    help="Show the header on the first page.",
+)
+
+style_group.add_argument(
+    "--different-odd-even-header",
+    dest="style_different_odd_even_header",
+    action=argparse.BooleanOptionalAction,
+    help="Use different header for odd and even pages.",
 )
 
 style_group.add_argument(
@@ -668,6 +684,7 @@ style_group.add_argument(
     nargs=3,
     dest="style_header_all",
     metavar=("<left>", "<center>", "<right>"),
+    help="Set the header for all pages.",
 )
 
 style_group.add_argument(
@@ -682,7 +699,10 @@ style_group.add_argument(
         "<odd-right>",
         "<even-right>",
     ),
+    help="Set different headers for odd and even pages.",
 )
+
+# footer
 
 style_group.add_argument(
     "--show-footer",
@@ -692,10 +712,25 @@ style_group.add_argument(
 )
 
 style_group.add_argument(
+    "--footer-first-page",
+    dest="style_footer_first_page",
+    action=argparse.BooleanOptionalAction,
+    help="Show the footer on the first page.",
+)
+
+style_group.add_argument(
+    "--different-odd-even-footer",
+    dest="style_different_odd_even_footer",
+    action=argparse.BooleanOptionalAction,
+    help="Use different footers for odd and even pages.",
+)
+
+style_group.add_argument(
     "--footer",
     nargs=3,
     dest="style_footer_all",
     metavar=("<left>", "<center>", "<right>"),
+    help="Set the footer for all pages.",
 )
 
 style_group.add_argument(
@@ -710,8 +745,8 @@ style_group.add_argument(
         "<odd-right>",
         "<even-right>",
     ),
+    help="Set different footers for odd and even pages.",
 )
-
 
 style_group.add_argument(
     "--reset-small-staffs",
@@ -837,8 +872,16 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_margin is not None:
                 score.style.margin = inch(args.style_margin)
 
+            # header
+
             if args.style_show_header is not None:
                 score.style.show_header = args.style_show_header
+
+            if args.style_header_first_page is not None:
+                score.style.header_first_page = args.style_header_first_page
+
+            if args.style_different_odd_even_header is not None:
+                score.style.header_odd_even = args.style_different_odd_even_header
 
             if args.style_header_all:
                 score.style.set_header_all(*args.style_header_all)
@@ -846,14 +889,24 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_header_odd_even:
                 score.style.set_header_odd_even(*args.style_header_odd_even)
 
+            # footer
+
             if args.style_show_footer is not None:
                 score.style.show_footer = args.style_show_footer
+
+            if args.style_footer_first_page is not None:
+                score.style.footer_first_page = args.style_footer_first_page
+
+            if args.style_different_odd_even_footer is not None:
+                score.style.footer_odd_even = args.style_different_odd_even_footer
 
             if args.style_footer_all:
                 score.style.set_footer_all(*args.style_footer_all)
 
             if args.style_footer_odd_even:
                 score.style.set_footer_odd_even(*args.style_footer_odd_even)
+
+            # small staffs
 
             if args.style_reset_small_staffs:
                 score.style.reset_small_staffs()

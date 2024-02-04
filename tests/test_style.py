@@ -413,6 +413,8 @@ class TestCli:
         assert s.page_even_left_margin == 1.1811
         assert s.page_odd_left_margin == 1.1811
 
+    # header
+
     def test_option_show_header(self) -> None:
         c = Cli("--show-header").execute()
         assert not c.pre.style.show_header
@@ -422,6 +424,46 @@ class TestCli:
         assert c.pre.style.show_header
         assert not c.post.style.show_header
 
+    def test_option_header_first_page(self) -> None:
+        c = Cli("--header-first-page").execute()
+        assert not c.pre.style.header_first_page
+        assert c.post.style.header_first_page
+
+        c = Cli("--no-header-first-page", c.score()).execute()
+        assert c.pre.style.header_first_page
+        assert not c.post.style.header_first_page
+
+    def test_option_different_odd_even_header(self) -> None:
+        c = Cli("--different-odd-even-header").execute()
+        assert c.pre.style.header_odd_even
+        assert c.post.style.header_odd_even
+
+        c = Cli("--no-different-odd-even-header", c.score()).execute()
+        assert c.pre.style.header_odd_even
+        assert not c.post.style.header_odd_even
+
+    def test_option_header(self) -> None:
+        s = Cli("--header", "l", "c", "r").score()
+        assert s.style.show_header
+        assert s.style.odd_header_left == "l"
+        assert s.style.even_header_left == "l"
+        assert s.style.odd_header_center == "c"
+        assert s.style.even_header_center == "c"
+        assert s.style.odd_header_right == "r"
+        assert s.style.even_header_right == "r"
+
+    def test_option_header_odd_even(self) -> None:
+        s = Cli("--header-odd-even", "ol", "el", "oc", "ec", "or", "er").score()
+        assert s.style.show_header
+        assert s.style.odd_header_left == "ol"
+        assert s.style.even_header_left == "el"
+        assert s.style.odd_header_center == "oc"
+        assert s.style.even_header_center == "ec"
+        assert s.style.odd_header_right == "or"
+        assert s.style.even_header_right == "er"
+
+    # footer
+
     def test_option_show_footer(self) -> None:
         c = Cli("--show-footer").execute()
         assert c.pre.style.show_footer
@@ -430,6 +472,44 @@ class TestCli:
         c = Cli("--no-show-footer", c.score()).execute()
         assert c.pre.style.show_footer
         assert not c.post.style.show_footer
+
+    def test_option_footer_first_page(self) -> None:
+        c = Cli("--footer-first-page").execute()
+        assert c.pre.style.footer_first_page
+        assert c.post.style.footer_first_page
+
+        c = Cli("--no-footer-first-page", c.score()).execute()
+        assert c.pre.style.footer_first_page
+        assert not c.post.style.footer_first_page
+
+    def test_option_different_odd_even_footer(self) -> None:
+        c = Cli("--different-odd-even-footer").execute()
+        assert c.pre.style.footer_odd_even
+        assert c.post.style.footer_odd_even
+
+        c = Cli("--no-different-odd-even-footer", c.score()).execute()
+        assert c.pre.style.footer_odd_even
+        assert not c.post.style.footer_odd_even
+
+    def test_option_footer(self) -> None:
+        s = Cli("--footer", "l", "c", "r").score()
+        assert s.style.show_footer
+        assert s.style.odd_footer_left == "l"
+        assert s.style.even_footer_left == "l"
+        assert s.style.odd_footer_center == "c"
+        assert s.style.even_footer_center == "c"
+        assert s.style.odd_footer_right == "r"
+        assert s.style.even_footer_right == "r"
+
+    def test_option_footer_odd_even(self) -> None:
+        s = Cli("--footer-odd-even", "ol", "el", "oc", "ec", "or", "er").score()
+        assert s.style.show_footer
+        assert s.style.odd_footer_left == "ol"
+        assert s.style.even_footer_left == "el"
+        assert s.style.odd_footer_center == "oc"
+        assert s.style.even_footer_center == "ec"
+        assert s.style.odd_footer_right == "or"
+        assert s.style.even_footer_right == "er"
 
 
 class TestProperties:

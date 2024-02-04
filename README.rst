@@ -361,9 +361,13 @@ CLI Usage
                              [--page-size <width> <height>] [--a4] [--letter]
                              [--margin <dimension>]
                              [--show-header | --no-show-header]
+                             [--header-first-page | --no-header-first-page]
+                             [--different-odd-even-header | --no-different-odd-even-header]
                              [--header <left> <center> <right>]
                              [--header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
                              [--show-footer | --no-show-footer]
+                             [--footer-first-page | --no-footer-first-page]
+                             [--different-odd-even-footer | --no-different-odd-even-footer]
                              [--footer <left> <center> <right>]
                              [--footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
                              [--reset-small-staffs]
@@ -747,13 +751,25 @@ CLI Usage
       --margin <dimension>  Set the top, right, bottom and left margins to the same
                             value.
       --show-header, --no-show-header
-                            Show or hide the header
+                            Show or hide the header.
+      --header-first-page, --no-header-first-page
+                            Show the header on the first page.
+      --different-odd-even-header, --no-different-odd-even-header
+                            Use different header for odd and even pages.
       --header <left> <center> <right>
+                            Set the header for all pages.
       --header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
+                            Set different headers for odd and even pages.
       --show-footer, --no-show-footer
                             Show or hide the footer.
+      --footer-first-page, --no-footer-first-page
+                            Show the footer on the first page.
+      --different-odd-even-footer, --no-different-odd-even-footer
+                            Use different footers for odd and even pages.
       --footer <left> <center> <right>
+                            Set the footer for all pages.
       --footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
+                            Set different footers for odd and even pages.
       --reset-small-staffs  Reset all small staffs to normal size.
 
 Configuration file

@@ -946,6 +946,8 @@ class Style:
     def max_system_distance(self, value: float) -> None:
         self.set("maxSystemDistance", value)
 
+    # header ###################################################################
+
     @property
     def show_header(self) -> bool:
         """
@@ -995,7 +997,7 @@ class Style:
 
     @header_odd_even.setter
     def header_odd_even(self, value: bool) -> None:
-        self.set("headerFirstPage", int(value))
+        self.set("headerOddEven", int(value))
 
     # even/odd header l/c/r ####################################################
 
@@ -1123,7 +1125,7 @@ class Style:
         even_right: str,
     ) -> None:
         """
-        Set the header for odd and even pages.
+        Set different headers for odd and even pages.
 
         :see: :attr:`even_header_left`
         :see: :attr:`even_header_center`
@@ -1180,7 +1182,7 @@ class Style:
     @property
     def footer_odd_even(self) -> bool:
         """
-        Show the footer on the first page.
+        Use different footers for odd and even pages.
 
         .. code :: XML
 
