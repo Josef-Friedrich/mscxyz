@@ -110,48 +110,6 @@ file_completers.append(
     )
 )
 
-# output and info
-
-parser.add_argument(
-    "-V",
-    "--version",
-    action="version",
-    version="%(prog)s {version}".format(version="0.0.0"),
-)
-
-parser.add_argument(
-    "-v",
-    "--verbose",
-    action="count",
-    dest="general_verbose",
-    default=0,
-    help="Make commands more verbose. You can specifiy "
-    "multiple arguments (. g.: -vvv) to make the command more "
-    "verbose.",
-)
-
-parser.add_argument(
-    "-k",
-    "--colorize",
-    action="store_true",
-    dest="general_colorize",
-    help="Colorize the command line print statements.",
-)
-
-parser.add_argument(
-    "--diff",
-    action="store_true",
-    dest="general_diff",
-    help="Show a diff of the XML file before and after the manipulation.",
-)
-
-parser.add_argument(
-    "--print-xml",
-    action="store_true",
-    dest="general_print_xml",
-    help="Print the XML markup of the score.",
-)
-
 ###############################################################################
 # groups in alphabetical order
 ###############################################################################
@@ -160,7 +118,11 @@ parser.add_argument(
 # export
 ###############################################################################
 
-parser.add_argument(
+export_group = parser.add_argument_group(
+    "export", "Export the scores in different formats."
+)
+
+export_group.add_argument(
     "-E",
     "--export",
     dest="export_extension",
@@ -176,12 +138,61 @@ parser.add_argument(
     "binary file.",
 )
 
-parser.add_argument(
+export_group.add_argument(
     "--compress",
     dest="export_compress",
     action="store_true",
     help="Save an uncompressed MuseScore file (*.mscx) as a compressed file (*.mscz).",
 )
+
+###############################################################################
+# info
+###############################################################################
+
+info_group = parser.add_argument_group(
+    "info", "Print informations about the score and the CLI interface itself."
+)
+
+info_group.add_argument(
+    "-V",
+    "--version",
+    action="version",
+    version="%(prog)s {version}".format(version="0.0.0"),
+)
+
+info_group.add_argument(
+    "-v",
+    "--verbose",
+    action="count",
+    dest="general_verbose",
+    default=0,
+    help="Make commands more verbose. You can specifiy "
+    "multiple arguments (. g.: -vvv) to make the command more "
+    "verbose.",
+)
+
+info_group.add_argument(
+    "-k",
+    "--colorize",
+    action="store_true",
+    dest="general_colorize",
+    help="Colorize the command line print statements.",
+)
+
+info_group.add_argument(
+    "--diff",
+    action="store_true",
+    dest="general_diff",
+    help="Show a diff of the XML file before and after the manipulation.",
+)
+
+info_group.add_argument(
+    "--print-xml",
+    action="store_true",
+    dest="general_print_xml",
+    help="Print the XML markup of the score.",
+)
+
 
 ###############################################################################
 # meta

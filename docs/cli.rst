@@ -6,8 +6,8 @@ Comande line interface
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
                              [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
-                             [-e FILE_PATH] [-V] [-v] [-k] [--diff] [--print-xml]
-                             [-E <extension>] [--compress] [-c <fields>] [-D]
+                             [-e FILE_PATH] [-E <extension>] [--compress] [-V] [-v]
+                             [-k] [--diff] [--print-xml] [-c <fields>] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
@@ -60,13 +60,10 @@ Comande line interface
                             the XML with lxml to avoid differences in the XML structure.
       -e FILE_PATH, --executable FILE_PATH
                             Path of the musescore executable.
-      -V, --version         show program's version number and exit
-      -v, --verbose         Make commands more verbose. You can specifiy multiple
-                            arguments (. g.: -vvv) to make the command more verbose.
-      -k, --colorize        Colorize the command line print statements.
-      --diff                Show a diff of the XML file before and after the
-                            manipulation.
-      --print-xml           Print the XML markup of the score.
+
+    export:
+      Export the scores in different formats.
+
       -E <extension>, --export <extension>
                             Export the scores in a format defined by the extension. The
                             exported file has the same path, only the file extension is
@@ -78,6 +75,17 @@ Comande line interface
                             the binary file.
       --compress            Save an uncompressed MuseScore file (*.mscx) as a compressed
                             file (*.mscz).
+
+    info:
+      Print informations about the score and the CLI interface itself.
+
+      -V, --version         show program's version number and exit
+      -v, --verbose         Make commands more verbose. You can specifiy multiple
+                            arguments (. g.: -vvv) to make the command more verbose.
+      -k, --colorize        Colorize the command line print statements.
+      --diff                Show a diff of the XML file before and after the
+                            manipulation.
+      --print-xml           Print the XML markup of the score.
 
     meta:
       Deal with meta data informations stored in the MuseScore file.
