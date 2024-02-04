@@ -88,6 +88,7 @@ def test_a4_piano_drunken() -> None:
     assert dest.style.odd_header_center == "$:workTitle:"
     assert dest.style.even_footer_center == "$P"
     assert dest.style.odd_footer_center == "$P"
+
     open_in_gui(dest)
 
 

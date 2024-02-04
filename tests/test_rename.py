@@ -111,7 +111,6 @@ class TestCli:
         assert Path(cwd_tmpdir / "same2.mscx").exists()
         assert Path(cwd_tmpdir / "same3.mscx").exists()
 
-    @pytest.mark.skip(reason="Hangs")
     def test_rename_skips(self) -> None:
         assert (
             "Field “metatag_source” is empty! Skipping"
@@ -123,7 +122,6 @@ class TestCli:
             ).stdout()
         )
 
-    @pytest.mark.skip(reason="Hangs")
     def test_rename_skip_pass(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
             "--bail",

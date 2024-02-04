@@ -367,7 +367,7 @@ class FieldsManager:
         output: dict[str, FieldValue] = {}
         for field in self.names:
             value = self.get(field)
-            if value is not None:
+            if value:
                 if isinstance(value, Path):
                     value = str(value)
                 output[field] = value

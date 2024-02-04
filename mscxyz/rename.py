@@ -5,6 +5,7 @@ from __future__ import annotations
 import errno
 import hashlib
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -84,8 +85,7 @@ def rename(score: Score, path_template: str) -> None:
     target: str = os.path.join(target_base, target_filename + "." + score.extension)
 
     if os.path.exists(target):
-        # TODO Support mscz
-        target_format: str = target.replace(".mscx", "{}.mscx")
+        target_format: str = re.sub(r".msc(x|z)$", r"{}.msc\1", target)
         i = 1
         counter_format: str = ""
         while os.path.exists(target_format.format(counter_format)):
