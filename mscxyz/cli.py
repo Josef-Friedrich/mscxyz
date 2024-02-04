@@ -9,7 +9,6 @@ import typing
 from typing import Sequence
 
 import shtab
-import tmep
 
 import mscxyz.export
 from mscxyz import utils
@@ -189,65 +188,7 @@ parser.add_argument(
 ###############################################################################
 
 meta_group = parser.add_argument_group(
-    "meta",
-    "Deal with meta data informations stored in the MuseScore file. "
-    + textwrap.dedent(
-        """\
-    MuseScore can store meta data informations in different places:
-
-    # metatag
-
-    ## XML structure of a meta tag:
-
-        <metaTag name="tag"></metaTag>
-
-    ## All meta tags:
-
-    - arranger
-    - audioComUrl (new in v4
-    - composer
-    - copyright
-    - creationDate
-    - lyricist
-    - movementNumber
-    - movementTitle
-    - mscVersion
-    - platform
-    - poet (not in v4)
-    - source
-    - sourceRevisionId
-    - subtitle
-    - translator
-    - workNumber
-    - workTitle
-
-    # vbox
-
-    ## XML structure of a vbox tag:
-
-        <VBox>
-          <Text>
-            <style>Title</style>
-            <text>Some title text</text>
-            </Text>
-
-    ## All vbox tags:
-
-        - title (v2,3: Title)
-        - subtitle (v2,3: Subtitle)
-        - composer (v2,3: Composer)
-        - lyricist (v2,3: Lyricist)
-
-    This command line tool bundles some meta data informations:
-
-    # Combined meta data fields:
-
-        - title (1. vbox_title 2. metatag_work_title)
-        - subtitle (1. vbox_subtitle 2. metatag_movement_title)
-        - composer (1. vbox_composer 2. metatag_composer)
-        - lyricist (1. vbox_lyricist 2. metatag_lyricist)
-    """
-    ),
+    "meta", "Deal with meta data informations stored in the MuseScore file."
 )
 
 meta_group.add_argument(
@@ -423,13 +364,7 @@ lyrics_group.add_argument(
 # rename
 ###############################################################################
 
-rename_group = parser.add_argument_group(
-    "rename",
-    "Rename the “*.msc[zx]” files. "
-    "Fields and functions you can use in the path "
-    "template string (-r, --rename):\n\n"
-    "Functions\n=========\n\n{}".format(tmep.get_doc()),
-)
+rename_group = parser.add_argument_group("rename", "Rename the “*.msc[zx]” files. ")
 
 rename_group.add_argument(
     "--rename",

@@ -80,9 +80,9 @@ class TestCommandlineInterface:
         assert "[-h]" in capture.out
 
 
-def test_functions_in_rename() -> None:
+def test_option_help() -> None:
     stderr = Cli("--help", append_score=False).sysexit()
-    assert "%asciify{text}" in stderr
+    assert "notation software MuseScore" in stderr
 
 
 def test_version() -> None:

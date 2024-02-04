@@ -312,6 +312,65 @@ The output of the code example is very long, so here is a shortened version:
 ... edit the meta data of a score file?
 ---------------------------------------
 
+metatag
+^^^^^^^
+
+XML structure of a meta tag:
+
+.. code-block:: xml
+
+    <metaTag name="tag"></metaTag>
+
+All meta tags:
+
+- arranger
+- audioComUrl (new in v4)
+- composer
+- copyright
+- creationDate
+- lyricist
+- movementNumber
+- movementTitle
+- mscVersion
+- platform
+- poet (not in v4)
+- source
+- sourceRevisionId
+- subtitle
+- translator
+- workNumber
+- workTitle
+
+vbox
+^^^^
+
+XML structure of a vbox tag:
+
+.. code-block:: xml
+
+    <VBox>
+        <Text>
+        <style>Title</style>
+        <text>Some title text</text>
+        </Text>
+
+All vbox tags:
+
+- title (v2,3: Title)
+- subtitle (v2,3: Subtitle)
+- composer (v2,3: Composer)
+- lyricist (v2,3: Lyricist)
+
+This command line tool bundles some meta data informations:
+
+Combined meta data fields:
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- title (1. vbox_title 2. metatag_work_title)
+- subtitle (1. vbox_subtitle 2. metatag_movement_title)
+- composer (1. vbox_composer 2. metatag_composer)
+- lyricist (1. vbox_lyricist 2. metatag_lyricist)
+
 Set the meta tag ``composer``:
 
 .. code-block:: xml
