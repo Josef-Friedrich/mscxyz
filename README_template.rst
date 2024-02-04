@@ -354,7 +354,7 @@ Configuration file
     colorize = True
 
     [rename]
-    format = '$combined_title ($combined_composer)'
+    format = '$title ($composer)'
 
 Other MuseScore related projects
 ================================

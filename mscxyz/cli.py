@@ -264,10 +264,10 @@ meta_group.add_argument(
     "--delete-duplicates",
     dest="meta_delete",
     action="store_true",
-    help="Deletes combined_lyricist if this field is equal to "
-    "combined_composer. Deletes combined_subtitle if this field is equal to"
-    "combined_title. Move combined_subtitle to combimed_title if "
-    "combined_title is empty.",
+    help="Deletes lyricist if this field is equal to "
+    "composer. Deletes subtitle if this field is equal to"
+    "title. Move subtitle to combimed_title if "
+    "title is empty.",
 )
 
 meta_group.add_argument(

@@ -472,10 +472,9 @@ CLI Usage
                             comma separated list of fields, for example:
                             „field_one,field_two“.
       -D, --delete-duplicates
-                            Deletes combined_lyricist if this field is equal to
-                            combined_composer. Deletes combined_subtitle if this field
-                            is equal tocombined_title. Move combined_subtitle to
-                            combimed_title if combined_title is empty.
+                            Deletes lyricist if this field is equal to composer. Deletes
+                            subtitle if this field is equal totitle. Move subtitle to
+                            combimed_title if title is empty.
       -i <source-fields> <format-string>, --distribute-fields <source-fields> <format-string>
                             Distribute source fields to target fields by applying a
                             format string on the source fields. It is possible to apply
@@ -784,7 +783,7 @@ Configuration file
     colorize = True
 
     [rename]
-    format = '$combined_title ($combined_composer)'
+    format = '$title ($composer)'
 
 Other MuseScore related projects
 ================================
