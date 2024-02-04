@@ -586,6 +586,20 @@ CLI Usage
                             file.
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
+      --staff-space <dimension>
+                            Set the staff space or spatium. This is the vertical
+                            distance between two lines of a music staff.
+      --page-size <width> <height>
+                            Set the page size.
+      --a4, --din-a4        Set the paper size to DIN A4 (210 by 297 mm).
+      --letter              Set the paper size to Letter (8.5 by 11 in).
+      --margin <dimension>  Set the top, right, bottom and left margins to the same
+                            value.
+      --reset-small-staffs  Reset all small staffs to normal size.
+
+    font (style):
+      Change the font faces of a score.
+
       --list-fonts          List all font related styles.
       --text-font <font-face>
                             Set nearly all fonts except “romanNumeralFontFace”,
@@ -598,15 +612,10 @@ CLI Usage
                             “dynamicsFontFace”.
       --musical-text-font <font-face>
                             Set “musicalTextFont”.
-      --staff-space <dimension>
-                            Set the staff space or spatium. This is the vertical
-                            distance between two lines of a music staff.
-      --page-size <width> <height>
-                            Set the page size.
-      --a4, --din-a4        Set the paper size to DIN A4 (210 by 297 mm).
-      --letter              Set the paper size to Letter (8.5 by 11 in).
-      --margin <dimension>  Set the top, right, bottom and left margins to the same
-                            value.
+
+    header (style):
+      Change the header.
+
       --show-header, --no-show-header
                             Show or hide the header.
       --header-first-page, --no-header-first-page
@@ -617,6 +626,10 @@ CLI Usage
                             Set the header for all pages.
       --header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
                             Set different headers for odd and even pages.
+
+    footer (style):
+      Change the footer.
+
       --show-footer, --no-show-footer
                             Show or hide the footer.
       --footer-first-page, --no-footer-first-page
@@ -627,7 +640,6 @@ CLI Usage
                             Set the footer for all pages.
       --footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
                             Set different footers for odd and even pages.
-      --reset-small-staffs  Reset all small staffs to normal size.
 
 Configuration file
 ==================

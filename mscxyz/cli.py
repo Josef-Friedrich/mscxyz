@@ -531,14 +531,18 @@ style_group.add_argument(
     help="List all possible version 4 styles.",
 )
 
-style_group.add_argument(
+font_group = parser.add_argument_group(
+    "font (style)", "Change the font faces of a score."
+)
+
+font_group.add_argument(
     "--list-fonts",
     dest="style_list_fonts",
     action="store_true",
     help="List all font related styles.",
 )
 
-style_group.add_argument(
+font_group.add_argument(
     "--text-font",
     dest="style_text_font",
     metavar="<font-face>",
@@ -546,14 +550,14 @@ style_group.add_argument(
     "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
 )
 
-style_group.add_argument(
+font_group.add_argument(
     "--title-font",
     dest="style_title_font",
     metavar="<font-face>",
     help="Set “titleFontFace” and “subTitleFontFace”.",
 )
 
-style_group.add_argument(
+font_group.add_argument(
     "--musical-symbol-font",
     dest="style_musical_symbol_font",
     choices=musical_symbol_font_faces,
@@ -561,7 +565,7 @@ style_group.add_argument(
     help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
 )
 
-style_group.add_argument(
+font_group.add_argument(
     "--musical-text-font",
     dest="style_musical_text_font",
     choices=musical_text_font_faces,
@@ -610,28 +614,30 @@ style_group.add_argument(
 
 # header
 
-style_group.add_argument(
+header_group = parser.add_argument_group("header (style)", "Change the header.")
+
+header_group.add_argument(
     "--show-header",
     dest="style_show_header",
     action=argparse.BooleanOptionalAction,
     help="Show or hide the header.",
 )
 
-style_group.add_argument(
+header_group.add_argument(
     "--header-first-page",
     dest="style_header_first_page",
     action=argparse.BooleanOptionalAction,
     help="Show the header on the first page.",
 )
 
-style_group.add_argument(
+header_group.add_argument(
     "--different-odd-even-header",
     dest="style_different_odd_even_header",
     action=argparse.BooleanOptionalAction,
     help="Use different header for odd and even pages.",
 )
 
-style_group.add_argument(
+header_group.add_argument(
     "--header",
     nargs=3,
     dest="style_header_all",
@@ -639,7 +645,7 @@ style_group.add_argument(
     help="Set the header for all pages.",
 )
 
-style_group.add_argument(
+header_group.add_argument(
     "--header-odd-even",
     nargs=6,
     dest="style_header_odd_even",
@@ -656,28 +662,30 @@ style_group.add_argument(
 
 # footer
 
-style_group.add_argument(
+footer_group = parser.add_argument_group("footer (style)", "Change the footer.")
+
+footer_group.add_argument(
     "--show-footer",
     dest="style_show_footer",
     action=argparse.BooleanOptionalAction,
     help="Show or hide the footer.",
 )
 
-style_group.add_argument(
+footer_group.add_argument(
     "--footer-first-page",
     dest="style_footer_first_page",
     action=argparse.BooleanOptionalAction,
     help="Show the footer on the first page.",
 )
 
-style_group.add_argument(
+footer_group.add_argument(
     "--different-odd-even-footer",
     dest="style_different_odd_even_footer",
     action=argparse.BooleanOptionalAction,
     help="Use different footers for odd and even pages.",
 )
 
-style_group.add_argument(
+footer_group.add_argument(
     "--footer",
     nargs=3,
     dest="style_footer_all",
@@ -685,7 +693,7 @@ style_group.add_argument(
     help="Set the footer for all pages.",
 )
 
-style_group.add_argument(
+footer_group.add_argument(
     "--footer-odd-even",
     nargs=6,
     dest="style_footer_odd_even",
