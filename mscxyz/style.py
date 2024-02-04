@@ -175,26 +175,25 @@ class Style:
 
     def __init__(self, score: "Score") -> None:
         self.score = score
-
-        style_root_score: _Element | None = self.xml.find("Score/Style")
-        if style_root_score is None:
-            style_root_score = self.__create_parent_style()
-
+        parent_element = self.__get_parent_element()
         if self.score.style_file:
             self.parent_element = self.xml.find_safe(
                 "Style",
                 self.xml.parse_file(self.score.style_file),
             )
-            self.xml.replace(style_root_score, self.parent_element)
+            self.xml.replace(parent_element, self.parent_element)
         else:
-            self.parent_element = style_root_score
+            self.parent_element = parent_element
 
-    def __create_parent_style(self) -> _Element:
+    def __get_parent_element(self) -> _Element:
         """
-        Create the parent style element.
+        Get the parent style element. The element is created if it doesn’t exists.
 
         :return: The created parent style element.
         """
+        parent_element = self.xml.find("Score/Style")
+        if parent_element is not None:
+            return parent_element
         score: _Element | None = self.xml.find("Score")
         if score is None:
             raise ValueError("The score file has no <Score> tag.")
@@ -295,7 +294,6 @@ class Style:
         """Remove the style, the layout breaks, the stem directions and the
         ``font``, ``b``, ``i``, ``pos``, ``offset`` tags"""
         self.xml.remove_tags(
-            "./Score/Style",
             ".//LayoutBreak",
             ".//StemDirection",
             ".//font",
@@ -304,6 +302,7 @@ class Style:
             ".//pos",
             ".//offset",
         )
+        self.parent_element.clear()
 
     def get(self, style_name: str, raise_exception: bool = True) -> str | None:
         """
@@ -588,9 +587,8 @@ class Style:
             font_face.replace("Emmentaler", "MScore").replace("Gonville", "Gootville"),
         )
 
-    def __set_parent_style_element(self, parent_style: _Element) -> None:
-        score_element: _Element = self.xml.find_safe("Score")
-        score_element.insert(0, parent_style)
+    def __replace_parent_element(self, parent_style: _Element) -> None:
+        self.xml.replace(self.parent_element, parent_style)
         self.parent_element = parent_style
 
     def load_styles_as_string(self, styles: str) -> None:
@@ -620,11 +618,11 @@ class Style:
             styles = f'<?xml version="1.0"?>\n<museScore version="{self.score.version}"><Style>{styles}</Style></museScore>'
 
         style = self.xml.parse_string(styles)
-        self.__set_parent_style_element(style[0])
+        self.__replace_parent_element(style[0])
 
     def load_style_file(self, file: str | Path | TextIOWrapper) -> None:
         style: _Element = self.xml.parse_file(file)
-        self.__set_parent_style_element(style[0])
+        self.__replace_parent_element(style[0])
 
     def reload(self, save: bool = False) -> Style:
         """

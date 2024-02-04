@@ -78,6 +78,9 @@ class Score:
         if self.extension == "mscz" and self.version_major == 4 and self.zip_container:
             self.style_file = self.zip_container.score_style_file
 
+        # Initialize the Style class to embed the style file into the score file.
+        self.style
+
     @property
     def xml_string(self) -> str:
         return self.xml.tostring(self.xml_root)
@@ -267,6 +270,7 @@ class Score:
             and self.__xml_string_initial == self.xml_string
         ):
             return
+
         if new_dest:
             dest: str = new_dest
         else:
@@ -276,16 +280,17 @@ class Score:
 
         if self.extension == "mscz":
             xml_dest = self.xml_file
-        self.xml.write(xml_dest)
 
         # Since MuseScore 4 the style is stored in a separate file.
         if self.style_file:
             element = self.xml.create_element(
                 "museScore", {"version": str(self.version)}
             )
-
             element.append(self.style.parent_element)
             self.xml.write(self.style_file, element)
+            self.xml.remove_tags("./Score/Style")
+
+        self.xml.write(xml_dest)
 
         if self.extension == "mscz" and self.zip_container:
             self.zip_container.save(dest)

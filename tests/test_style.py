@@ -50,7 +50,7 @@ class TestClassStyle:
         score.save()
         score = Score(str(score.path))
         xml_tree = score.xml_root
-        assert xml_tree.xpath("/museScore/Score/Style") == []
+        assert score.style.styles == []
         assert xml_tree.xpath("//LayoutBreak") == []
         assert xml_tree.xpath("//StemDirection") == []
         assert xml_tree.xpath("//font") == []
@@ -346,7 +346,7 @@ class TestClean:
             .append_score("score.mscz")
             .score()
         )
-        assert "<musicalSymbolFont>MuseJazz</musicalSymbolFont>" in score.read_as_text()
+        assert "<musicalSymbolFont>MuseJazz</musicalSymbolFont>" in score.xml_string
 
 
 def test_load_style_file() -> None:
