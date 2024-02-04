@@ -18,20 +18,6 @@ from tests.helper import Cli
 
 
 class TestExceptions:
-    def test_read_only_field_error(self) -> None:
-        with pytest.raises(meta.ReadOnlyFieldError) as e:
-            raise meta.ReadOnlyFieldError("lol")
-        assert e.value.args[0] == "The field “lol” is read only!"
-
-    def test_unkown_field_error(self) -> None:
-        valid_fields = ("troll", "trill")
-        with pytest.raises(meta.UnkownFieldError) as e:
-            raise meta.UnkownFieldError("lol", valid_fields)
-        assert (
-            e.value.args[0] == "Unkown field of name “lol”! Valid field names are: "
-            "troll, trill"
-        )
-
     def test_unmatched_format_string_error(self) -> None:
         with pytest.raises(meta.UnmatchedFormatStringError) as e:
             raise meta.UnmatchedFormatStringError("test", "test")

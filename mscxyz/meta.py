@@ -11,24 +11,6 @@ if typing.TYPE_CHECKING:
     from mscxyz.score import Score
 
 
-class ReadOnlyFieldError(Exception):
-    """TODO remove: unused"""
-
-    def __init__(self, field: str) -> None:
-        self.msg = "The field “{}” is read only!".format(field)
-        Exception.__init__(self, self.msg)
-
-
-class UnkownFieldError(Exception):
-    """TODO remove: unused"""
-
-    def __init__(self, field: str, valid_fields: typing.Sequence[str]) -> None:
-        self.msg = "Unkown field of name “{}”! Valid field names are: {}".format(
-            field, ", ".join(valid_fields)
-        )
-        Exception.__init__(self, self.msg)
-
-
 class UnmatchedFormatStringError(Exception):
     def __init__(self, format_string: str, input_string: str) -> None:
         self.msg = (
