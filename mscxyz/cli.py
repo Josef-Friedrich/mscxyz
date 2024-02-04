@@ -54,12 +54,17 @@ shtab.add_argument_to(parser, ["--print-completion"])
 # Global options
 ###############################################################################
 
-parser.add_argument(
-    "-V",
-    "--version",
-    action="version",
-    version="%(prog)s {version}".format(version="0.0.0"),
+file_completers.append(
+    parser.add_argument(
+        "-C",
+        "--config-file",
+        metavar="<file-path>",
+        dest="general_config_file",
+        help="Specify a configuration file in the INI format.",
+    )
 )
+
+# backup and dry run
 
 parser.add_argument(
     "-b",
@@ -69,6 +74,15 @@ parser.add_argument(
     help="Create a backup file.",
 )
 
+parser.add_argument(
+    "-d",
+    "--dry-run",
+    action="store_true",
+    dest="general_dry_run",
+    help="Simulate the actions.",
+)
+
+# TODO remove and use --catch-errors
 parser.add_argument(
     "--bail",
     dest="general_bail",
@@ -83,31 +97,7 @@ parser.add_argument(
     help="Print error messages instead stop execution in a batch run.",
 )
 
-parser.add_argument(
-    "-k",
-    "--colorize",
-    action="store_true",
-    dest="general_colorize",
-    help="Colorize the command line print statements.",
-)
-
-file_completers.append(
-    parser.add_argument(
-        "-C",
-        "--config-file",
-        metavar="<file-path>",
-        dest="general_config_file",
-        help="Specify a configuration file in the INI format.",
-    )
-)
-
-parser.add_argument(
-    "-d",
-    "--dry-run",
-    action="store_true",
-    dest="general_dry_run",
-    help="Simulate the actions.",
-)
+# musescore executable
 
 parser.add_argument(
     "-m",
@@ -119,13 +109,6 @@ parser.add_argument(
     "with lxml to avoid differences in the XML structure.",
 )
 
-parser.add_argument(
-    "--diff",
-    action="store_true",
-    dest="general_diff",
-    help="Show a diff of the XML file before and after the manipulation.",
-)
-
 file_completers.append(
     parser.add_argument(
         "-e",
@@ -134,6 +117,15 @@ file_completers.append(
         help="Path of the musescore executable.",
         metavar="FILE_PATH",
     )
+)
+
+# output and info
+
+parser.add_argument(
+    "-V",
+    "--version",
+    action="version",
+    version="%(prog)s {version}".format(version="0.0.0"),
 )
 
 parser.add_argument(
@@ -147,6 +139,27 @@ parser.add_argument(
     "verbose.",
 )
 
+parser.add_argument(
+    "-k",
+    "--colorize",
+    action="store_true",
+    dest="general_colorize",
+    help="Colorize the command line print statements.",
+)
+
+parser.add_argument(
+    "--diff",
+    action="store_true",
+    dest="general_diff",
+    help="Show a diff of the XML file before and after the manipulation.",
+)
+
+parser.add_argument(
+    "--print-xml",
+    action="store_true",
+    dest="general_print_xml",
+    help="Print the XML markup of the score.",
+)
 
 ###############################################################################
 # groups in alphabetical order
@@ -828,8 +841,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.general_backup:
                 score.backup()
 
-            if args.general_diff:
-                score.make_snapshot()
+            score.make_snapshot()
 
             if args.export_compress:
                 score = Score(score.export.compress())
@@ -1014,6 +1026,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.general_diff:
                 score.print_diff()
+
+            if args.general_print_xml:
+                print(score.xml_string)
 
             if not args.general_dry_run:
                 score.save()

@@ -12,20 +12,21 @@ from typing import Optional, Sequence, cast
 
 
 class DefaultArguments:
-    general_backup: bool = False
-    general_bail: bool = False
-    general_colorize: bool = False
+    # keep order in sync with cli.py
     general_config_file: Optional[str] = None
-    general_diff: bool = False
+    general_backup: bool = False
     general_dry_run: bool = False
-    general_executable: Optional[str] = None
+    general_bail: bool = False
     general_mscore: bool = False
-
+    general_executable: Optional[str] = None
     general_verbose: int = 0
+    general_colorize: bool = False
+    general_diff: bool = False
+    general_print_xml: bool = False
 
     # Groups alphabetically
     # in groups related not alphabetically
-    # keep Order in sync with cli.py
+    # keep order in sync with cli.py
 
     # export
     export_extension: Optional[str] = None

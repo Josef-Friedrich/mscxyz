@@ -4,10 +4,11 @@ Comande line interface
 
 :: 
 
-    usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}] [-V] [-b]
-                             [--bail] [--catch-errors] [-k] [-C <file-path>] [-d]
-                             [-m] [--diff] [-e FILE_PATH] [-v] [-E <extension>]
-                             [--compress] [-c META_CLEAN] [-D]
+    usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
+                             [-C <file-path>] [-b] [-d] [--bail] [--catch-errors]
+                             [-m] [-e FILE_PATH] [-V] [-v] [-k] [--diff]
+                             [--print-xml] [-E <extension>] [--compress]
+                             [-c META_CLEAN] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
@@ -50,23 +51,24 @@ Comande line interface
       -h, --help            show this help message and exit
       --print-completion {bash,zsh,tcsh}
                             print shell completion script
-      -V, --version         show program's version number and exit
-      -b, --backup          Create a backup file.
-      --bail                Stop execution when an exception occurs.
-      --catch-errors        Print error messages instead stop execution in a batch run.
-      -k, --colorize        Colorize the command line print statements.
       -C <file-path>, --config-file <file-path>
                             Specify a configuration file in the INI format.
+      -b, --backup          Create a backup file.
       -d, --dry-run         Simulate the actions.
+      --bail                Stop execution when an exception occurs.
+      --catch-errors        Print error messages instead stop execution in a batch run.
       -m, --mscore, --save-in-mscore
                             Open and save the XML file in MuseScore after manipulating
                             the XML with lxml to avoid differences in the XML structure.
-      --diff                Show a diff of the XML file before and after the
-                            manipulation.
       -e FILE_PATH, --executable FILE_PATH
                             Path of the musescore executable.
+      -V, --version         show program's version number and exit
       -v, --verbose         Make commands more verbose. You can specifiy multiple
                             arguments (. g.: -vvv) to make the command more verbose.
+      -k, --colorize        Colorize the command line print statements.
+      --diff                Show a diff of the XML file before and after the
+                            manipulation.
+      --print-xml           Print the XML markup of the score.
       -E <extension>, --export <extension>
                             Export the scores in a format defined by the extension. The
                             exported file has the same path, only the file extension is

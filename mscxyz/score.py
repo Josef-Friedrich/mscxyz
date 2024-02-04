@@ -194,6 +194,8 @@ class Score:
         return self.__style
 
     def make_snapshot(self) -> None:
+        if self.__xml_string_initial is not None:
+            raise ValueError("Snapshot already exists")
         self.__xml_string_initial = self.xml_string
 
     def new(
@@ -259,33 +261,16 @@ class Score:
         args = get_args()
         if args.general_dry_run:
             return
+
+        if (
+            self.__xml_string_initial is not None
+            and self.__xml_string_initial == self.xml_string
+        ):
+            return
         if new_dest:
             dest: str = new_dest
         else:
             dest = str(self.path)
-
-        # To get the same xml tag structure as the original score file
-        # has.
-        for xpath in (
-            ".//LayerTag",
-            ".//metaTag",
-            ".//font",
-            ".//i",
-            ".//evenFooterL",
-            ".//evenFooterC",
-            ".//evenFooterR",
-            ".//oddFooterL",
-            ".//oddFooterC",
-            ".//oddFooterR",
-            ".//chord/name",
-            ".//chord/render",
-            ".//StaffText/text",
-            ".//Jump/continueAt",
-        ):
-            x = self.xml.findall(xpath)
-            for tag in x:
-                if not tag.text:
-                    tag.text = ""
 
         xml_dest = dest
 

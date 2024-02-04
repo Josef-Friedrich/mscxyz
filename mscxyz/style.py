@@ -176,17 +176,18 @@ class Style:
     def __init__(self, score: "Score") -> None:
         self.score = score
 
+        style_root_score: _Element | None = self.xml.find("Score/Style")
+        if style_root_score is None:
+            style_root_score = self.__create_parent_style()
+
         if self.score.style_file:
             self.parent_element = self.xml.find_safe(
                 "Style",
                 self.xml.parse_file(self.score.style_file),
             )
+            self.xml.replace(style_root_score, self.parent_element)
         else:
-            element: _Element | None = self.xml.find("Score/Style")
-            if element is not None:
-                self.parent_element = element
-            else:
-                self.parent_element: _Element = self.__create_parent_style()
+            self.parent_element = style_root_score
 
     def __create_parent_style(self) -> _Element:
         """

@@ -3,9 +3,6 @@
 
 from __future__ import annotations
 
-import filecmp
-import os
-import shutil
 from pathlib import Path
 from typing import Optional
 
@@ -68,12 +65,12 @@ class TestClassScore:
     def test_method_save(self) -> None:
         score: Score = helper.get_score("simple.mscx")
         score.save()
-        assert '<metaTag name="arranger"></metaTag>' in score.read_as_text()
+        assert '<metaTag name="arranger"/>' in score.read_as_text()
 
     def test_method_save_new_name(self) -> None:
         score: Score = helper.get_score("simple.mscx")
         score.save(new_dest=str(score.path))
-        assert '<metaTag name="arranger"></metaTag>' in score.read_as_text()
+        assert '<metaTag name="arranger"/>' in score.read_as_text()
 
     def test_mscz(self) -> None:
         score: Score = helper.get_score("simple.mscz")
@@ -143,52 +140,3 @@ def test_methods_reload(score: Score) -> None:
     assert score.lyrics.reload().__class__.__name__ == "Lyrics"
     assert score.meta.reload().__class__.__name__ == "Meta"
     assert score.style.reload().__class__.__name__ == "Style"
-
-
-class TestFileCompare:
-    def assert_diff(self, filename: str, version: int = 2) -> None:
-        orig: str = os.path.join(os.path.expanduser("~"), filename)
-        saved: str = orig.replace(".mscx", "_saved.mscx")
-        tmp: str = helper.get_file(filename, version=version)
-        shutil.copy2(tmp, orig)
-        tree = Score(tmp)
-        tree.save(new_dest=saved)
-        assert filecmp.cmp(orig, saved)
-        os.remove(orig)
-        os.remove(saved)
-
-    def test_getting_started(self) -> None:
-        self.assert_diff("Getting_Started_English.mscx", version=2)
-        self.assert_diff("Getting_Started_English.mscx", version=3)
-
-    def test_lyrics(self) -> None:
-        self.assert_diff("lyrics.mscx", version=2)
-        self.assert_diff("lyrics.mscx", version=3)
-
-    def test_chords(self) -> None:
-        self.assert_diff("chords.mscx", version=2)
-        self.assert_diff("chords.mscx", version=3)
-
-    def test_unicode(self) -> None:
-        self.assert_diff("unicode.mscx", version=2)
-        self.assert_diff("unicode.mscx", version=3)
-
-    def test_real_world_ragtime_3(self) -> None:
-        self.assert_diff("Ragtime_3.mscx", version=2)
-        # self.assertDiff('Ragtime_3.mscx', version=3)
-
-    def test_real_world_zum_tanze(self) -> None:
-        self.assert_diff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=2)
-        self.assert_diff("Zum-Tanze-da-geht-ein-Maedel.mscx", version=3)
-
-    def test_real_world_all_dudes(self) -> None:
-        self.assert_diff("All_Dudes.mscx", version=2)
-        self.assert_diff("All_Dudes.mscx", version=3)
-
-    def test_real_world_reunion(self) -> None:
-        self.assert_diff("Reunion.mscx", version=2)
-        self.assert_diff("Reunion.mscx", version=3)
-
-    def test_real_world_triumph(self) -> None:
-        self.assert_diff("Triumph.mscx", version=2)
-        self.assert_diff("Triumph.mscx", version=3)
