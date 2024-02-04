@@ -124,7 +124,6 @@ class TestCli:
 
     def test_rename_skip_pass(self, cwd_tmpdir: Path) -> None:
         stdout: str = Cli(
-            "--bail",
             "--rename",
             "$title ($composer)",
             "--skip-if-empty",

@@ -172,7 +172,6 @@ class TestOptionDistributeField:
     def test_distribute_field_invalid_format_string(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError):
             Cli(
-                "--bail",
                 "--distribute-field",
                 "vbox_title",
                 "lol",
@@ -180,6 +179,7 @@ class TestOptionDistributeField:
 
     def test_distribute_field_exception_unmatched(self) -> None:
         stdout = Cli(
+            "--catch-errors",
             "--distribute-field",
             "vbox_title",
             "$metatag_work_title - $metatag_composer",

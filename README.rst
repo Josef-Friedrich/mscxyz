@@ -338,10 +338,9 @@ CLI Usage
 :: 
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
-                             [-C <file-path>] [-b] [-d] [--bail] [--catch-errors]
-                             [-m] [-e FILE_PATH] [-V] [-v] [-k] [--diff]
-                             [--print-xml] [-E <extension>] [--compress]
-                             [-c META_CLEAN] [-D]
+                             [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
+                             [-e FILE_PATH] [-V] [-v] [-k] [--diff] [--print-xml]
+                             [-E <extension>] [--compress] [-c META_CLEAN] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
@@ -388,7 +387,6 @@ CLI Usage
                             Specify a configuration file in the INI format.
       -b, --backup          Create a backup file.
       -d, --dry-run         Simulate the actions.
-      --bail                Stop execution when an exception occurs.
       --catch-errors        Print error messages instead stop execution in a batch run.
       -m, --mscore, --save-in-mscore
                             Open and save the XML file in MuseScore after manipulating

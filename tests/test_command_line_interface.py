@@ -23,11 +23,12 @@ class TestOptionBackup:
         assert os.path.getsize(score.path) == os.path.getsize(score.backup_file)
 
 
-class TestOptionBail:
-    def test_no_bail(self) -> None:
-        assert "XMLSyntaxError" in Cli(helper.get_file("broken.mscx")).stdout()
-
-    def test_bail(self) -> None:
+class TestOptionCatchErrors:
+    def test_catch(self) -> None:
         assert (
-            "XMLSyntaxError" in Cli("--bail", helper.get_file("broken.mscx")).sysexit()
+            "XMLSyntaxError"
+            in Cli("--catch-errors", helper.get_file("broken.mscx")).stdout()
         )
+
+    def test_no_catch(self) -> None:
+        assert "XMLSyntaxError" in Cli(helper.get_file("broken.mscx")).sysexit()

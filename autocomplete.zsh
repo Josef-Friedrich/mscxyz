@@ -16,7 +16,6 @@ _shtab_musescore_manager_options=(
   {-C,--config-file}"[Specify a configuration file in the INI format.]:general_config_file:_files"
   {-b,--backup}"[Create a backup file.]"
   {-d,--dry-run}"[Simulate the actions.]"
-  "--bail[Stop execution when an exception occurs.]"
   "--catch-errors[Print error messages instead stop execution in a batch run.]"
   {-m,--mscore,--save-in-mscore}"[Open and save the XML file in MuseScore after manipulating the XML with lxml to avoid differences in the XML structure.]"
   {-e,--executable}"[Path of the musescore executable.]:general_executable:_files"

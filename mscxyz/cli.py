@@ -82,14 +82,6 @@ parser.add_argument(
     help="Simulate the actions.",
 )
 
-# TODO remove and use --catch-errors
-parser.add_argument(
-    "--bail",
-    dest="general_bail",
-    action="store_true",
-    help="Stop execution when an exception occurs.",
-)
-
 parser.add_argument(
     "--catch-errors",
     dest="general_catch_errors",
@@ -1039,7 +1031,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 rename(score, args.rename_rename)
 
         except Exception as e:
-            if args.general_bail:
+            if not args.general_catch_errors:
                 raise e
             else:
                 __print_error(e)

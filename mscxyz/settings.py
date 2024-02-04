@@ -16,7 +16,7 @@ class DefaultArguments:
     general_config_file: Optional[str] = None
     general_backup: bool = False
     general_dry_run: bool = False
-    general_bail: bool = False
+    general_catch_errors: bool = False
     general_mscore: bool = False
     general_executable: Optional[str] = None
     general_verbose: int = 0
