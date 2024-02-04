@@ -194,6 +194,7 @@ meta_group = parser.add_argument_group(
 meta_group.add_argument(
     "-c",
     "--clean-meta",
+    metavar="<fields>",
     dest="meta_clean",
     help="Clean the meta data fields. Possible values: „all“ or a comma separated "
     "list of fields, for example: "
@@ -714,7 +715,7 @@ for action in file_completers:
     action.complete = shtab.FILE  # type: ignore
 
 
-def __print_error(error: Exception) -> None:
+def _print_error(error: Exception) -> None:
     msg = ""
 
     if isinstance(error, SyntaxError):
@@ -969,4 +970,4 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if not args.general_catch_errors:
                 raise e
             else:
-                __print_error(e)
+                _print_error(e)

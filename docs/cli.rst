@@ -7,7 +7,7 @@ Comande line interface
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
                              [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
                              [-e FILE_PATH] [-V] [-v] [-k] [--diff] [--print-xml]
-                             [-E <extension>] [--compress] [-c META_CLEAN] [-D]
+                             [-E <extension>] [--compress] [-c <fields>] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
@@ -82,7 +82,7 @@ Comande line interface
     meta:
       Deal with meta data informations stored in the MuseScore file.
 
-      -c META_CLEAN, --clean-meta META_CLEAN
+      -c <fields>, --clean-meta <fields>
                             Clean the meta data fields. Possible values: „all“ or a
                             comma separated list of fields, for example:
                             „field_one,field_two“.

@@ -318,23 +318,23 @@ XML structure of a meta tag:
 
 All meta tags:
 
-- arranger
-- audioComUrl (new in v4)
-- composer
-- copyright
-- creationDate
-- lyricist
-- movementNumber
-- movementTitle
-- mscVersion
-- platform
-- poet (not in v4)
-- source
-- sourceRevisionId
-- subtitle
-- translator
-- workNumber
-- workTitle
+- ``arranger``
+- ``audioComUrl`` (new in v4)
+- ``composer``
+- ``copyright``
+- ``creationDate``
+- ``lyricist``
+- ``movementNumber``
+- ``movementTitle``
+- ``mscVersion``
+- ``platform``
+- ``poet`` (not in v4)
+- ``source``
+- ``sourceRevisionId``
+- ``subtitle``
+- ``translator``
+- ``workNumber``
+- ``workTitle``
 
 vbox
 ^^^^
@@ -345,26 +345,26 @@ XML structure of a vbox tag:
 
     <VBox>
         <Text>
-        <style>Title</style>
+        <style>title</style>
         <text>Some title text</text>
         </Text>
 
 All vbox tags:
 
-- title (v2,3: Title)
-- subtitle (v2,3: Subtitle)
-- composer (v2,3: Composer)
-- lyricist (v2,3: Lyricist)
+- ``title`` (v2,3: ``Title``)
+- ``subtitle`` (v2,3: ``Subtitle``)
+- ``composer`` (v2,3: ``Composer``)
+- ``lyricist`` (v2,3: ``Lyricist``)
 
 This command line tool bundles some meta data informations:
 
 Combined meta data fields:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- title (1. vbox_title 2. metatag_work_title)
-- subtitle (1. vbox_subtitle 2. metatag_movement_title)
-- composer (1. vbox_composer 2. metatag_composer)
-- lyricist (1. vbox_lyricist 2. metatag_lyricist)
+- ``title`` (1. ``vbox_title`` 2. ``metatag_work_title``)
+- ``subtitle`` (1. ``vbox_subtitle`` 2. ``metatag_subtitle`` 3. ``metatag_movement_title``)
+- ``composer`` (1. ``vbox_composer`` 2. ``metatag_composer``)
+- ``lyricist`` (1. ``vbox_lyricist`` 2. ``metatag_lyricist``)
 
 Set the meta tag ``composer``:
 
@@ -399,7 +399,7 @@ CLI Usage
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
                              [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
                              [-e FILE_PATH] [-V] [-v] [-k] [--diff] [--print-xml]
-                             [-E <extension>] [--compress] [-c META_CLEAN] [-D]
+                             [-E <extension>] [--compress] [-c <fields>] [-D]
                              [-i <source-fields> <format-string>] [-j]
                              [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
@@ -474,7 +474,7 @@ CLI Usage
     meta:
       Deal with meta data informations stored in the MuseScore file.
 
-      -c META_CLEAN, --clean-meta META_CLEAN
+      -c <fields>, --clean-meta <fields>
                             Clean the meta data fields. Possible values: „all“ or a
                             comma separated list of fields, for example:
                             „field_one,field_two“.
