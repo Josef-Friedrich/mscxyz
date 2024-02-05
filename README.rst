@@ -223,6 +223,205 @@ Use one of the following autocomplete files ...
 ... rename many files at once?
 ------------------------------
 
+Fields
+^^^^^^
+
+- ``title``: The combined title
+- ``subtitle``: The combined subtitle
+- ``composer``: The combined composer
+- ``lyricist``: The combined lyricist
+- ``vbox_title``: The title field of the score as it appears in the center of the first vertical frame (VBox).
+- ``vbox_subtitle``: The subtitle field of the score as it appears in the center of the first vertical frame (VBox).
+- ``vbox_composer``: The composer field of the score as it appears in the center of the first vertical frame (VBox).
+- ``vbox_lyricist``: The lyricist field of the score as it appears in the center of the first vertical frame (VBox).
+- ``metatag_arranger``: The arranger field stored as project properties.
+- ``metatag_audio_com_url``: The audio.com URL field stored as project properties.
+- ``metatag_composer``: The composer field stored as project properties.
+- ``metatag_copyright``: The copyright field stored as project properties.
+- ``metatag_creation_date``: The creation date field stored as project properties.
+- ``metatag_lyricist``: The lyricist field stored as project properties.
+- ``metatag_movement_number``: The movement number field stored as project properties.
+- ``metatag_movement_title``: The movement title field stored as project properties.
+- ``metatag_msc_version``: The MuseScore version field stored as project properties.
+- ``metatag_platform``: The platform field stored as project properties.
+- ``metatag_poet``: The poet field stored as project properties.
+- ``metatag_source``: The source field stored as project properties.
+- ``metatag_source_revision_id``: The source revision ID field stored as project properties.
+- ``metatag_subtitle``: The subtitle field stored as project properties.
+- ``metatag_translator``: The translator field stored as project properties.
+- ``metatag_work_number``: The work number field stored as project properties.
+- ``metatag_work_title``: The work title field stored as project properties.
+- ``version``: The MuseScore version as a floating point number, for example ``2.03``, ``3.01`` or ``4.20``.
+- ``version_major``: The major MuseScore version, for example ``2``, ``3`` or ``4``.
+- ``program_version``: The semantic version number of the MuseScore program, for example: ``4.2.0``.
+- ``program_revision``: The revision number of the MuseScore program, for example: ``eb8d33c``.
+- ``path``: The absolute path of the MuseScore file, for example ``/home/xyz/score.mscz``.
+- ``backup_file``: The absolute path of the backup file. The string ``_bak`` is appended to the file name before the extension.
+- ``json_file``: The absolute path of the JSON file in which the metadata can be exported.
+- ``dirname``: The name of the containing directory of the MuseScore file, for example: ``/home/xyz/score_files``.
+- ``filename``: The filename of the MuseScore file, for example:``score.mscz``.
+- ``basename``: The basename of the score file, for example: ``score``.
+- ``extension``: The extension (``mscx`` or ``mscz``) of the score file.
+
+Functions
+^^^^^^^^^
+
+:: 
+
+    alpha
+        -----
+
+        %alpha{text}
+            This function first ASCIIfies the given text, then all non alphabet
+            characters are replaced with whitespaces.
+
+        alphanum
+        --------
+
+        %alphanum{text}
+            This function first ASCIIfies the given text, then all non alpanumeric
+            characters are replaced with whitespaces.
+
+        asciify
+        -------
+
+        %asciify{text}
+            Translate non-ASCII characters to their ASCII equivalents. For
+            example, “café” becomes “cafe”. Uses the mapping provided by the
+            unidecode module.
+
+        delchars
+        --------
+
+        %delchars{text,chars}
+            Delete every single character of “chars“ in “text”.
+
+        deldupchars
+        -----------
+
+        %deldupchars{text,chars}
+            Search for duplicate characters and replace with only one occurrance
+            of this characters.
+
+        first
+        -----
+
+        %first{text} or %first{text,count,skip} or
+        %first{text,count,skip,sep,join}
+            Returns the first item, separated by ; . You can use
+            %first{text,count,skip}, where count is the number of items (default
+            1) and skip is number to skip (default 0). You can also use
+            %first{text,count,skip,sep,join} where sep is the separator, like ; or
+            / and join is the text to concatenate the items.
+
+        if
+        --
+
+        %if{condition,truetext} or %if{condition,truetext,falsetext}
+            If condition is nonempty (or nonzero, if it’s a number), then returns
+            the second argument. Otherwise, returns the third argument if
+            specified (or nothing if falsetext is left off).
+
+        ifdef
+        -----
+
+        %ifdef{field}, %ifdef{field,text} or %ifdef{field,text,falsetext}
+            If field exists, then return truetext or field (default). Otherwise,
+            returns falsetext. The field should be entered without $.
+
+        ifdefempty
+        ----------
+
+        %ifdefempty{field,text} or %ifdefempty{field,text,falsetext}
+            If field exists and is empty, then return truetext. Otherwise, returns
+            falsetext. The field should be entered without $.
+
+        ifdefnotempty
+        -------------
+
+        %ifdefnotempty{field,text} or %ifdefnotempty{field,text,falsetext}
+            If field is not empty, then return truetext. Otherwise, returns
+            falsetext. The field should be entered without $.
+
+        initial
+        -------
+
+        %initial{text}
+            Get the first character of a text in lowercase. The text is converted
+            to ASCII. All non word characters are erased.
+
+        left
+        ----
+
+        %left{text,n}
+            Return the first “n” characters of “text”.
+
+        lower
+        -----
+
+        %lower{text}
+            Convert “text” to lowercase.
+
+        nowhitespace
+        ------------
+
+        %nowhitespace{text,replace}
+            Replace all whitespace characters with replace. By default: a dash (-)
+            %nowhitespace{$track,_}
+
+        num
+        ---
+
+        %num{number,count}
+            Pad decimal number with leading zeros.
+            %num{$track,3}
+
+        replchars
+        ---------
+
+        %replchars{text,chars,replace}
+            Replace the characters “chars” in “text” with “replace”.
+            %replchars{text,ex,-} > t--t
+
+        right
+        -----
+
+        %right{text,n}
+            Return the last “n” characters of “text”.
+
+        sanitize
+        --------
+
+        %sanitize{text}
+            Delete in most file systems not allowed characters.
+
+        shorten
+        -------
+
+        %shorten{text} or %shorten{text,max_size}
+            Shorten “text” on word boundarys.
+            %shorten{$title,32}
+
+        time
+        ----
+
+        %time{date_time,format,curformat}
+            Return the date and time in any format accepted by strftime. For
+            example, to get the year some music was added to your library, use
+            %time{$added,%Y}.
+
+        title
+        -----
+
+        %title{text}
+            Convert “text” to Title Case.
+
+        upper
+        -----
+
+        %upper{text}
+            Convert “text” to UPPERCASE.
+
 The following example assumes that the folder ``/home/xyz/messy-leadsheets``
 contains the following three MuseScore files: ``folsom prison blues.mscz``,
 ``Johnny Cash - I Walk the Line.mscz``, ``Jackson (Cash).mscz``

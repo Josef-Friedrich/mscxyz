@@ -223,6 +223,16 @@ Use one of the following autocomplete files ...
 ... rename many files at once?
 ------------------------------
 
+Fields
+^^^^^^
+
+{{ cli('musescore-manager --list-fields') }}
+
+Functions
+^^^^^^^^^
+
+{{ cli('musescore-manager --list-functions') | literal }}
+
 The following example assumes that the folder ``/home/xyz/messy-leadsheets``
 contains the following three MuseScore files: ``folsom prison blues.mscz``,
 ``Johnny Cash - I Walk the Line.mscz``, ``Jackson (Cash).mscz``

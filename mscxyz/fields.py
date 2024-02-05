@@ -420,4 +420,4 @@ class FieldsManager:
     @staticmethod
     def print() -> None:
         for field in FieldsManager.fields:
-            print(f"{field.name}: {field.description}")
+            print(f"- ``{field.name}``: {field.description}")
