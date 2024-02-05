@@ -15,7 +15,7 @@ from mscxyz import utils
 from mscxyz.meta import Metatag, Vbox
 from mscxyz.rename import rename
 from mscxyz.score import Score
-from mscxyz.settings import parse_args
+from mscxyz.settings import DefaultArguments, parse_args
 from mscxyz.style import inch, mm, musical_symbol_font_faces, musical_text_font_faces
 
 
@@ -40,699 +40,699 @@ class LineWrapRawTextHelpFormatter(argparse.RawDescriptionHelpFormatter):
 file_completers: list[argparse.Action] = []
 
 
-parser = argparse.ArgumentParser(
-    description="The next generation command "
-    'line tool to manipulate the XML based "*.mscX" and "*.mscZ" '
-    "files of the notation software MuseScore.",
-    formatter_class=LineWrapRawTextHelpFormatter,
-)
-
-shtab.add_argument_to(parser, ["--print-completion"])
-
-###############################################################################
-# Global options
-###############################################################################
-
-file_completers.append(
-    parser.add_argument(
-        "-C",
-        "--config-file",
-        metavar="<file-path>",
-        dest="general_config_file",
-        help="Specify a configuration file in the INI format.",
+def setup_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="The next generation command "
+        'line tool to manipulate the XML based "*.mscX" and "*.mscZ" '
+        "files of the notation software MuseScore.",
+        formatter_class=LineWrapRawTextHelpFormatter,
     )
-)
 
-# backup and dry run
+    shtab.add_argument_to(parser, ["--print-completion"])
 
-parser.add_argument(
-    "-b",
-    "--backup",
-    dest="general_backup",
-    action="store_true",
-    help="Create a backup file.",
-)
+    ###############################################################################
+    # Global options
+    ###############################################################################
 
-parser.add_argument(
-    "-d",
-    "--dry-run",
-    action="store_true",
-    dest="general_dry_run",
-    help="Simulate the actions.",
-)
-
-parser.add_argument(
-    "--catch-errors",
-    dest="general_catch_errors",
-    action="store_true",
-    help="Print error messages instead stop execution in a batch run.",
-)
-
-# musescore executable
-
-parser.add_argument(
-    "-m",
-    "--mscore",
-    "--save-in-mscore",
-    action="store_true",
-    dest="general_mscore",
-    help="Open and save the XML file in MuseScore after manipulating the XML "
-    "with lxml to avoid differences in the XML structure.",
-)
-
-file_completers.append(
-    parser.add_argument(
-        "-e",
-        "--executable",
-        dest="general_executable",
-        help="Path of the musescore executable.",
-        metavar="FILE_PATH",
+    file_completers.append(
+        parser.add_argument(
+            "-C",
+            "--config-file",
+            metavar="<file-path>",
+            dest="general_config_file",
+            help="Specify a configuration file in the INI format.",
+        )
     )
-)
 
-###############################################################################
-# groups in alphabetical order
-###############################################################################
+    # backup and dry run
 
-###############################################################################
-# export
-###############################################################################
+    parser.add_argument(
+        "-b",
+        "--backup",
+        dest="general_backup",
+        action="store_true",
+        help="Create a backup file.",
+    )
 
-export_group = parser.add_argument_group(
-    "export", "Export the scores in different formats."
-)
+    parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        dest="general_dry_run",
+        help="Simulate the actions.",
+    )
 
-export_group.add_argument(
-    "-E",
-    "--export",
-    dest="export_extension",
-    choices=mscxyz.export.extensions,
-    metavar="<extension>",
-    help="Export the scores in a format defined by the extension. The exported file "
-    "has the same path, only the file extension is different. Further information "
-    "can be found at the MuseScore website: "
-    "https://musescore.org/en/handbook/2/file-formats, "
-    "https://musescore.org/en/handbook/3/file-export, "
-    "https://musescore.org/en/handbook/4/file-export. "
-    "MuseScore must be installed and the script must know the location of the "
-    "binary file.",
-)
+    parser.add_argument(
+        "--catch-errors",
+        dest="general_catch_errors",
+        action="store_true",
+        help="Print error messages instead stop execution in a batch run.",
+    )
 
-export_group.add_argument(
-    "--compress",
-    dest="export_compress",
-    action="store_true",
-    help="Save an uncompressed MuseScore file (*.mscx) as a compressed file (*.mscz).",
-)
+    # musescore executable
 
-###############################################################################
-# info
-###############################################################################
+    parser.add_argument(
+        "-m",
+        "--mscore",
+        "--save-in-mscore",
+        action="store_true",
+        dest="general_mscore",
+        help="Open and save the XML file in MuseScore after manipulating the XML "
+        "with lxml to avoid differences in the XML structure.",
+    )
 
-info_group = parser.add_argument_group(
-    "info", "Print informations about the score and the CLI interface itself."
-)
+    file_completers.append(
+        parser.add_argument(
+            "-e",
+            "--executable",
+            dest="general_executable",
+            help="Path of the musescore executable.",
+            metavar="FILE_PATH",
+        )
+    )
 
-info_group.add_argument(
-    "-V",
-    "--version",
-    action="version",
-    version="%(prog)s {version}".format(version="0.0.0"),
-)
+    ###############################################################################
+    # groups in alphabetical order
+    ###############################################################################
 
-info_group.add_argument(
-    "-v",
-    "--verbose",
-    action="count",
-    dest="general_verbose",
-    default=0,
-    help="Make commands more verbose. You can specifiy "
-    "multiple arguments (. g.: -vvv) to make the command more "
-    "verbose.",
-)
+    ###############################################################################
+    # export
+    ###############################################################################
 
-info_group.add_argument(
-    "-k",
-    "--color",
-    action=argparse.BooleanOptionalAction,
-    dest="general_color",
-    default=True,
-    help="Colorize the command line print statements.",
-)
+    export_group = parser.add_argument_group(
+        "export", "Export the scores in different formats."
+    )
 
-info_group.add_argument(
-    "--diff",
-    action="store_true",
-    dest="general_diff",
-    help="Show a diff of the XML file before and after the manipulation.",
-)
+    export_group.add_argument(
+        "-E",
+        "--export",
+        dest="export_extension",
+        choices=mscxyz.export.extensions,
+        metavar="<extension>",
+        help="Export the scores in a format defined by the extension. The exported file "
+        "has the same path, only the file extension is different. Further information "
+        "can be found at the MuseScore website: "
+        "https://musescore.org/en/handbook/2/file-formats, "
+        "https://musescore.org/en/handbook/3/file-export, "
+        "https://musescore.org/en/handbook/4/file-export. "
+        "MuseScore must be installed and the script must know the location of the "
+        "binary file.",
+    )
 
-info_group.add_argument(
-    "--print-xml",
-    action="store_true",
-    dest="general_print_xml",
-    help="Print the XML markup of the score.",
-)
+    export_group.add_argument(
+        "--compress",
+        dest="export_compress",
+        action="store_true",
+        help="Save an uncompressed MuseScore file (*.mscx) as a compressed file (*.mscz).",
+    )
 
+    ###############################################################################
+    # info
+    ###############################################################################
 
-###############################################################################
-# meta
-###############################################################################
+    info_group = parser.add_argument_group(
+        "info", "Print informations about the score and the CLI interface itself."
+    )
 
-meta_group = parser.add_argument_group(
-    "meta", "Deal with meta data informations stored in the MuseScore file."
-)
+    info_group.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version="%(prog)s {version}".format(version="0.0.0"),
+    )
 
-meta_group.add_argument(
-    "-c",
-    "--clean-meta",
-    metavar="<fields>",
-    dest="meta_clean",
-    help="Clean the meta data fields. Possible values: „all“ or a comma separated "
-    "list of fields, for example: "
-    "„field_one,field_two“.",
-)
+    info_group.add_argument(
+        "-v",
+        "--verbose",
+        action="count",
+        dest="general_verbose",
+        default=0,
+        help="Make commands more verbose. You can specifiy "
+        "multiple arguments (. g.: -vvv) to make the command more "
+        "verbose.",
+    )
 
-meta_group.add_argument(
-    "-D",
-    "--delete-duplicates",
-    dest="meta_delete",
-    action="store_true",
-    help="Deletes lyricist if this field is equal to "
-    "composer. Deletes subtitle if this field is equal to"
-    "title. Move subtitle to combimed_title if "
-    "title is empty.",
-)
+    info_group.add_argument(
+        "-k",
+        "--color",
+        action=argparse.BooleanOptionalAction,
+        dest="general_color",
+        default=True,
+        help="Colorize the command line print statements.",
+    )
 
-meta_group.add_argument(
-    "-i",
-    "--distribute-fields",
-    dest="meta_dist",
-    action="append",
-    nargs=2,
-    metavar=("<source-fields>", "<format-string>"),
-    help="Distribute source fields to target fields by applying a format string "
-    "on the source fields. It is possible to apply multiple "
-    "--distribute-fields options. <source-fields> can be a single field or a "
-    "comma separated list of fields: field_one,field_two. The program "
-    "tries first to match the <format-string> on the first source field. If this"
-    "fails, it tries the second source field ... and so on.",
-)
+    info_group.add_argument(
+        "--diff",
+        action="store_true",
+        dest="general_diff",
+        help="Show a diff of the XML file before and after the manipulation.",
+    )
 
-meta_group.add_argument(
-    "-j",
-    "--json",
-    action="store_true",
-    dest="meta_json",
-    help="Write the meta data to a json file. The resulting file has the same "
-    "path as the input file, only the extension is changed to “json”.",
-)
+    info_group.add_argument(
+        "--print-xml",
+        action="store_true",
+        dest="general_print_xml",
+        help="Print the XML markup of the score.",
+    )
 
-meta_group.add_argument(
-    "-l",
-    "--log",
-    nargs=2,
-    metavar=("<log-file>", "<format-string>"),
-    dest="meta_log",
-    help="Write one line per file to a text file. e. g. --log "
-    "/tmp/musescore-manager.log '$title $composer'",
-)
+    ###############################################################################
+    # meta
+    ###############################################################################
 
-meta_group.add_argument(
-    "-y",
-    "--synchronize",
-    action="store_true",
-    dest="meta_sync",
-    help="Synchronize the values of the first vertical frame (vbox) "
-    "(title, subtitle, composer, lyricist) with the corresponding "
-    "metadata fields",
-)
+    meta_group = parser.add_argument_group(
+        "meta", "Deal with meta data informations stored in the MuseScore file."
+    )
 
-meta_group.add_argument(
-    "-S",
-    "--set-field",
-    nargs=2,
-    action="append",
-    metavar=("<field>", "<format-string>"),
-    dest="meta_set",
-    help="Set value to meta data fields.",
-)
+    meta_group.add_argument(
+        "-c",
+        "--clean-meta",
+        metavar="<fields>",
+        dest="meta_clean",
+        help="Clean the meta data fields. Possible values: „all“ or a comma separated "
+        "list of fields, for example: "
+        "„field_one,field_two“.",
+    )
 
-meta_group.add_argument(
-    "--metatag",
-    "--metatag-meta",
-    nargs=2,
-    action="append",
-    metavar=("<field>", "<value>"),
-    dest="meta_metatag",
-    help="Define the metadata in MetaTag elements." + _embed_fields(Metatag.fields),
-)
+    meta_group.add_argument(
+        "-D",
+        "--delete-duplicates",
+        dest="meta_delete",
+        action="store_true",
+        help="Deletes lyricist if this field is equal to "
+        "composer. Deletes subtitle if this field is equal to"
+        "title. Move subtitle to combimed_title if "
+        "title is empty.",
+    )
 
-meta_group.add_argument(
-    "--vbox",
-    "--vbox-meta",
-    nargs=2,
-    action="append",
-    metavar=("<field>", "<value>"),
-    dest="meta_vbox",
-    help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
-)
+    meta_group.add_argument(
+        "-i",
+        "--distribute-fields",
+        dest="meta_dist",
+        action="append",
+        nargs=2,
+        metavar=("<source-fields>", "<format-string>"),
+        help="Distribute source fields to target fields by applying a format string "
+        "on the source fields. It is possible to apply multiple "
+        "--distribute-fields options. <source-fields> can be a single field or a "
+        "comma separated list of fields: field_one,field_two. The program "
+        "tries first to match the <format-string> on the first source field. If this"
+        "fails, it tries the second source field ... and so on.",
+    )
 
-meta_group.add_argument(
-    "--title",
-    metavar=("<string>"),
-    dest="meta_title",
-    help="Create a vertical frame (vbox) containing a title text field and "
-    "set the corresponding document properties work title field (metatag).",
-)
+    meta_group.add_argument(
+        "-j",
+        "--json",
+        action="store_true",
+        dest="meta_json",
+        help="Write the meta data to a json file. The resulting file has the same "
+        "path as the input file, only the extension is changed to “json”.",
+    )
 
-meta_group.add_argument(
-    "--subtitle",
-    metavar=("<string>"),
-    dest="meta_subtitle",
-    help="Create a vertical frame (vbox) containing a subtitle text field and "
-    "set the corresponding document properties subtitle and movement title filed (metatag).",
-)
+    meta_group.add_argument(
+        "-l",
+        "--log",
+        nargs=2,
+        metavar=("<log-file>", "<format-string>"),
+        dest="meta_log",
+        help="Write one line per file to a text file. e. g. --log "
+        "/tmp/musescore-manager.log '$title $composer'",
+    )
 
-meta_group.add_argument(
-    "--composer",
-    metavar=("<string>"),
-    dest="meta_composer",
-    help="Create a vertical frame (vbox) containing a composer text field and "
-    "set the corresponding document properties composer field (metatag).",
-)
+    meta_group.add_argument(
+        "-y",
+        "--synchronize",
+        action="store_true",
+        dest="meta_sync",
+        help="Synchronize the values of the first vertical frame (vbox) "
+        "(title, subtitle, composer, lyricist) with the corresponding "
+        "metadata fields",
+    )
 
-meta_group.add_argument(
-    "--lyricist",
-    metavar=("<string>"),
-    dest="meta_lyricist",
-    help="Create a vertical frame (vbox) containing a lyricist text field and "
-    "set the corresponding document properties lyricist field (metatag).",
-)
+    meta_group.add_argument(
+        "-S",
+        "--set-field",
+        nargs=2,
+        action="append",
+        metavar=("<field>", "<format-string>"),
+        dest="meta_set",
+        help="Set value to meta data fields.",
+    )
 
+    meta_group.add_argument(
+        "--metatag",
+        "--metatag-meta",
+        nargs=2,
+        action="append",
+        metavar=("<field>", "<value>"),
+        dest="meta_metatag",
+        help="Define the metadata in MetaTag elements." + _embed_fields(Metatag.fields),
+    )
 
-###############################################################################
-# lyrics
-###############################################################################
+    meta_group.add_argument(
+        "--vbox",
+        "--vbox-meta",
+        nargs=2,
+        action="append",
+        metavar=("<field>", "<value>"),
+        dest="meta_vbox",
+        help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
+    )
 
-lyrics_group = parser.add_argument_group("lyrics")
+    meta_group.add_argument(
+        "--title",
+        metavar=("<string>"),
+        dest="meta_title",
+        help="Create a vertical frame (vbox) containing a title text field and "
+        "set the corresponding document properties work title field (metatag).",
+    )
 
-lyrics_group.add_argument(
-    "-x",
-    "--extract",
-    "--extract-lyrics",
-    dest="lyrics_extract",
-    metavar="<number-or-all>",
-    help="Extract each lyrics verse into a separate MuseScore file. "
-    "Specify ”all” to extract all lyrics "
-    "verses. The old verse number is appended to the file name, e. g.: "
-    "score_1.mscx.",
-)
+    meta_group.add_argument(
+        "--subtitle",
+        metavar=("<string>"),
+        dest="meta_subtitle",
+        help="Create a vertical frame (vbox) containing a subtitle text field and "
+        "set the corresponding document properties subtitle and movement title filed (metatag).",
+    )
 
-lyrics_group.add_argument(
-    "-r",
-    "--remap",
-    "--remap-lyrics",
-    dest="lyrics_remap",
-    metavar="<remap-pairs>",
-    help='Remap lyrics. Example: "--remap 3:2,5:3". This '
-    "example remaps lyrics verse 3 to verse 2 and verse 5 to 3. "
-    "Use commas to specify multiple remap pairs. One remap pair "
-    'is separated by a colon in this form: "old:new": "old" '
-    'stands for the old verse number. "new" stands for the new '
-    "verse number.",
-)
+    meta_group.add_argument(
+        "--composer",
+        metavar=("<string>"),
+        dest="meta_composer",
+        help="Create a vertical frame (vbox) containing a composer text field and "
+        "set the corresponding document properties composer field (metatag).",
+    )
 
-lyrics_group.add_argument(
-    "-F",
-    "--fix",
-    "--fix-lyrics",
-    action="store_true",
-    dest="lyrics_fix",
-    help='Fix lyrics: Convert trailing hyphens ("la- la- la") '
-    'to a correct hyphenation ("la - la - la")',
-)
+    meta_group.add_argument(
+        "--lyricist",
+        metavar=("<string>"),
+        dest="meta_lyricist",
+        help="Create a vertical frame (vbox) containing a lyricist text field and "
+        "set the corresponding document properties lyricist field (metatag).",
+    )
 
-###############################################################################
-# rename
-###############################################################################
+    ###############################################################################
+    # lyrics
+    ###############################################################################
 
-rename_group = parser.add_argument_group("rename", "Rename the “*.msc[zx]” files. ")
+    lyrics_group = parser.add_argument_group("lyrics")
 
-rename_group.add_argument(
-    "--rename",
-    dest="rename_rename",
-    metavar="<path-template>",
-    help="A path template string to set the destination location.",
-)
+    lyrics_group.add_argument(
+        "-x",
+        "--extract",
+        "--extract-lyrics",
+        dest="lyrics_extract",
+        metavar="<number-or-all>",
+        help="Extract each lyrics verse into a separate MuseScore file. "
+        "Specify ”all” to extract all lyrics "
+        "verses. The old verse number is appended to the file name, e. g.: "
+        "score_1.mscx.",
+    )
 
-group_rename_target = rename_group.add_mutually_exclusive_group()
+    lyrics_group.add_argument(
+        "-r",
+        "--remap",
+        "--remap-lyrics",
+        dest="lyrics_remap",
+        metavar="<remap-pairs>",
+        help='Remap lyrics. Example: "--remap 3:2,5:3". This '
+        "example remaps lyrics verse 3 to verse 2 and verse 5 to 3. "
+        "Use commas to specify multiple remap pairs. One remap pair "
+        'is separated by a colon in this form: "old:new": "old" '
+        'stands for the old verse number. "new" stands for the new '
+        "verse number.",
+    )
 
-group_rename_target.add_argument(
-    "-t",
-    "--target",
-    dest="rename_target",
-    metavar="<directory>",
-    help="Target directory",
-)
+    lyrics_group.add_argument(
+        "-F",
+        "--fix",
+        "--fix-lyrics",
+        action="store_true",
+        dest="lyrics_fix",
+        help='Fix lyrics: Convert trailing hyphens ("la- la- la") '
+        'to a correct hyphenation ("la - la - la")',
+    )
 
-group_rename_target.add_argument(
-    "--only-filename",
-    action="store_true",
-    dest="rename_only_filename",
-    help="Rename only the filename and don’t move the score to a different directory.",
-)
+    ###############################################################################
+    # rename
+    ###############################################################################
 
-rename_group.add_argument(
-    "-A",
-    "--alphanum",
-    dest="rename_alphanum",
-    action="store_true",
-    help="Use only alphanumeric characters.",
-)
+    rename_group = parser.add_argument_group("rename", "Rename the “*.msc[zx]” files. ")
 
-rename_group.add_argument(
-    "-a",
-    "--ascii",
-    dest="rename_ascii",
-    action="store_true",
-    help="Use only ASCII characters.",
-)
+    rename_group.add_argument(
+        "--rename",
+        dest="rename_rename",
+        metavar="<path-template>",
+        help="A path template string to set the destination location.",
+    )
 
-rename_group.add_argument(
-    "-n",
-    "--no-whitespace",
-    dest="rename_no_whitespace",
-    action="store_true",
-    help="Replace all whitespaces with dashes or sometimes underlines.",
-)
+    group_rename_target = rename_group.add_mutually_exclusive_group()
 
-rename_group.add_argument(
-    "-K",
-    "--skip-if-empty",
-    dest="rename_skip",
-    metavar="<fields>",
-    help="Skip the rename action if the fields specified in <fields> are empty. "
-    "Multiple fields can be separated by commas, e. g.: composer,title",
-)
+    group_rename_target.add_argument(
+        "-t",
+        "--target",
+        dest="rename_target",
+        metavar="<directory>",
+        help="Target directory",
+    )
 
-###############################################################################
-# selection
-###############################################################################
+    group_rename_target.add_argument(
+        "--only-filename",
+        action="store_true",
+        dest="rename_only_filename",
+        help="Rename only the filename and don’t move the score to a different directory.",
+    )
 
-selection_group = parser.add_argument_group(
-    "selection",
-    "The following options affect how the manager selects the MuseScore files.",
-)
+    rename_group.add_argument(
+        "-A",
+        "--alphanum",
+        dest="rename_alphanum",
+        action="store_true",
+        help="Use only alphanumeric characters.",
+    )
 
-selection_group.add_argument(
-    "-L",
-    "--list-files",
-    action="store_true",
-    dest="selection_list",
-    help="Only list files and do nothing else.",
-)
+    rename_group.add_argument(
+        "-a",
+        "--ascii",
+        dest="rename_ascii",
+        action="store_true",
+        help="Use only ASCII characters.",
+    )
 
-exclusive_selection_group = selection_group.add_mutually_exclusive_group()
+    rename_group.add_argument(
+        "-n",
+        "--no-whitespace",
+        dest="rename_no_whitespace",
+        action="store_true",
+        help="Replace all whitespaces with dashes or sometimes underlines.",
+    )
 
-exclusive_selection_group.add_argument(
-    "-g",
-    "--glob",
-    dest="selection_glob",
-    metavar="<glob-pattern>",
-    default="*.msc[xz]",
-    help="Handle only files which matches against Unix style "
-    'glob patterns (e. g. "*.mscx", "* - *"). If you omit this '
-    'option, the standard glob pattern "*.msc[xz]" is used.',
-)
+    rename_group.add_argument(
+        "-K",
+        "--skip-if-empty",
+        dest="rename_skip",
+        metavar="<fields>",
+        help="Skip the rename action if the fields specified in <fields> are empty. "
+        "Multiple fields can be separated by commas, e. g.: composer,title",
+    )
 
-exclusive_selection_group.add_argument(
-    "--mscz",
-    dest="selection_mscz",
-    action="store_true",
-    help='Take only "*.mscz" files into account.',
-)
+    ###############################################################################
+    # selection
+    ###############################################################################
 
-exclusive_selection_group.add_argument(
-    "--mscx",
-    dest="selection_mscx",
-    action="store_true",
-    help='Take only "*.mscx" files into account.',
-)
+    selection_group = parser.add_argument_group(
+        "selection",
+        "The following options affect how the manager selects the MuseScore files.",
+    )
 
+    selection_group.add_argument(
+        "-L",
+        "--list-files",
+        action="store_true",
+        dest="selection_list",
+        help="Only list files and do nothing else.",
+    )
 
-###############################################################################
-# style
-###############################################################################
+    exclusive_selection_group = selection_group.add_mutually_exclusive_group()
 
-style_group = parser.add_argument_group("style", "Change the styles.")
+    exclusive_selection_group.add_argument(
+        "-g",
+        "--glob",
+        dest="selection_glob",
+        metavar="<glob-pattern>",
+        default="*.msc[xz]",
+        help="Handle only files which matches against Unix style "
+        'glob patterns (e. g. "*.mscx", "* - *"). If you omit this '
+        'option, the standard glob pattern "*.msc[xz]" is used.',
+    )
 
-style_group.add_argument(
-    "-s",
-    "--style",
-    nargs=2,
-    action="append",
-    metavar=("<style-name>", "<value>"),
-    default=[],
-    dest="style_value",
-    help="Set a single style value. For example: --style pageWidth 8.5",
-)
+    exclusive_selection_group.add_argument(
+        "--mscz",
+        dest="selection_mscz",
+        action="store_true",
+        help='Take only "*.mscz" files into account.',
+    )
 
-style_group.add_argument(
-    "--clean",
-    dest="style_clean",
-    action="store_true",
-    help='Clean and reset the formating of the "*.mscx" file',
-)
+    exclusive_selection_group.add_argument(
+        "--mscx",
+        dest="selection_mscx",
+        action="store_true",
+        help='Take only "*.mscx" files into account.',
+    )
 
-file_completers.append(
+    ###############################################################################
+    # style
+    ###############################################################################
+
+    style_group = parser.add_argument_group("style", "Change the styles.")
+
     style_group.add_argument(
-        "-Y",
-        "--style-file",
-        dest="style_file",
-        metavar="<file>",
-        type=open,
-        help='Load a "*.mss" style file and include the contents of this file.',
+        "-s",
+        "--style",
+        nargs=2,
+        action="append",
+        metavar=("<style-name>", "<value>"),
+        default=[],
+        dest="style_value",
+        help="Set a single style value. For example: --style pageWidth 8.5",
     )
-)
 
-style_group.add_argument(
-    "--s3",
-    "--styles-v3",
-    dest="style_styles_v3",
-    action="store_true",
-    help="List all possible version 3 styles.",
-)
-
-style_group.add_argument(
-    "--s4",
-    "--styles-v4",
-    dest="style_styles_v4",
-    action="store_true",
-    help="List all possible version 4 styles.",
-)
-
-font_group = parser.add_argument_group(
-    "font (style)", "Change the font faces of a score."
-)
-
-font_group.add_argument(
-    "--list-fonts",
-    dest="style_list_fonts",
-    action="store_true",
-    help="List all font related styles.",
-)
-
-font_group.add_argument(
-    "--text-font",
-    dest="style_text_font",
-    metavar="<font-face>",
-    help="Set nearly all fonts except “romanNumeralFontFace”, “figuredBassFontFace”, "
-    "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
-)
-
-font_group.add_argument(
-    "--title-font",
-    dest="style_title_font",
-    metavar="<font-face>",
-    help="Set “titleFontFace” and “subTitleFontFace”.",
-)
-
-font_group.add_argument(
-    "--musical-symbol-font",
-    dest="style_musical_symbol_font",
-    choices=musical_symbol_font_faces,
-    metavar="<font-face>",
-    help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
-)
-
-font_group.add_argument(
-    "--musical-text-font",
-    dest="style_musical_text_font",
-    choices=musical_text_font_faces,
-    metavar="<font-face>",
-    help="Set “musicalTextFont”.",
-)
-
-style_group.add_argument(
-    "--staff-space",
-    dest="style_staff_space",
-    type=mm,
-    metavar="<dimension>",
-    help="Set the staff space or spatium. This is the vertical distance between "
-    "two lines of a music staff.",
-)
-
-style_group.add_argument(
-    "--page-size",
-    dest="style_page_size",
-    nargs=2,
-    metavar=("<width>", "<height>"),
-    help="Set the page size.",
-)
-
-style_group.add_argument(
-    "--a4",
-    "--din-a4",
-    dest="style_page_size_a4",
-    action="store_true",
-    help="Set the paper size to DIN A4 (210 by 297 mm).",
-)
-
-style_group.add_argument(
-    "--letter",
-    dest="style_page_size_letter",
-    action="store_true",
-    help="Set the paper size to Letter (8.5 by 11 in).",
-)
-
-style_group.add_argument(
-    "--margin",
-    dest="style_margin",
-    metavar="<dimension>",
-    help="Set the top, right, bottom and left margins to the same value.",
-)
-
-# header
-
-header_group = parser.add_argument_group("header (style)", "Change the header.")
-
-header_group.add_argument(
-    "--show-header",
-    dest="style_show_header",
-    action=argparse.BooleanOptionalAction,
-    help="Show or hide the header.",
-)
-
-header_group.add_argument(
-    "--header-first-page",
-    dest="style_header_first_page",
-    action=argparse.BooleanOptionalAction,
-    help="Show the header on the first page.",
-)
-
-header_group.add_argument(
-    "--different-odd-even-header",
-    dest="style_different_odd_even_header",
-    action=argparse.BooleanOptionalAction,
-    help="Use different header for odd and even pages.",
-)
-
-header_group.add_argument(
-    "--header",
-    nargs=3,
-    dest="style_header_all",
-    metavar=("<left>", "<center>", "<right>"),
-    help="Set the header for all pages.",
-)
-
-header_group.add_argument(
-    "--header-odd-even",
-    nargs=6,
-    dest="style_header_odd_even",
-    metavar=(
-        "<odd-left>",
-        "<even-left>",
-        "<odd-center>",
-        "<even-center>",
-        "<odd-right>",
-        "<even-right>",
-    ),
-    help="Set different headers for odd and even pages.",
-)
-
-# footer
-
-footer_group = parser.add_argument_group("footer (style)", "Change the footer.")
-
-footer_group.add_argument(
-    "--show-footer",
-    dest="style_show_footer",
-    action=argparse.BooleanOptionalAction,
-    help="Show or hide the footer.",
-)
-
-footer_group.add_argument(
-    "--footer-first-page",
-    dest="style_footer_first_page",
-    action=argparse.BooleanOptionalAction,
-    help="Show the footer on the first page.",
-)
-
-footer_group.add_argument(
-    "--different-odd-even-footer",
-    dest="style_different_odd_even_footer",
-    action=argparse.BooleanOptionalAction,
-    help="Use different footers for odd and even pages.",
-)
-
-footer_group.add_argument(
-    "--footer",
-    nargs=3,
-    dest="style_footer_all",
-    metavar=("<left>", "<center>", "<right>"),
-    help="Set the footer for all pages.",
-)
-
-footer_group.add_argument(
-    "--footer-odd-even",
-    nargs=6,
-    dest="style_footer_odd_even",
-    metavar=(
-        "<odd-left>",
-        "<even-left>",
-        "<odd-center>",
-        "<even-center>",
-        "<odd-right>",
-        "<even-right>",
-    ),
-    help="Set different footers for odd and even pages.",
-)
-
-style_group.add_argument(
-    "--reset-small-staffs",
-    dest="style_reset_small_staffs",
-    action="store_true",
-    help="Reset all small staffs to normal size.",
-)
-
-###############################################################################
-# last positional parameter
-###############################################################################
-
-file_completers.append(
-    parser.add_argument(
-        "path",
-        nargs="*",
-        default=["."],
-        metavar="<path>",
-        help='Path to a "*.msc[zx]" file or a folder containing "*.msc[zx]" files. '
-        "can be specified several times.",
+    style_group.add_argument(
+        "--clean",
+        dest="style_clean",
+        action="store_true",
+        help='Clean and reset the formating of the "*.mscx" file',
     )
-)
 
-for action in file_completers:
-    action.complete = shtab.FILE  # type: ignore
+    file_completers.append(
+        style_group.add_argument(
+            "-Y",
+            "--style-file",
+            dest="style_file",
+            metavar="<file>",
+            type=open,
+            help='Load a "*.mss" style file and include the contents of this file.',
+        )
+    )
+
+    style_group.add_argument(
+        "--s3",
+        "--styles-v3",
+        dest="style_styles_v3",
+        action="store_true",
+        help="List all possible version 3 styles.",
+    )
+
+    style_group.add_argument(
+        "--s4",
+        "--styles-v4",
+        dest="style_styles_v4",
+        action="store_true",
+        help="List all possible version 4 styles.",
+    )
+
+    font_group = parser.add_argument_group(
+        "font (style)", "Change the font faces of a score."
+    )
+
+    font_group.add_argument(
+        "--list-fonts",
+        dest="style_list_fonts",
+        action="store_true",
+        help="List all font related styles.",
+    )
+
+    font_group.add_argument(
+        "--text-font",
+        dest="style_text_font",
+        metavar="<font-face>",
+        help="Set nearly all fonts except “romanNumeralFontFace”, “figuredBassFontFace”, "
+        "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
+    )
+
+    font_group.add_argument(
+        "--title-font",
+        dest="style_title_font",
+        metavar="<font-face>",
+        help="Set “titleFontFace” and “subTitleFontFace”.",
+    )
+
+    font_group.add_argument(
+        "--musical-symbol-font",
+        dest="style_musical_symbol_font",
+        choices=musical_symbol_font_faces,
+        metavar="<font-face>",
+        help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
+    )
+
+    font_group.add_argument(
+        "--musical-text-font",
+        dest="style_musical_text_font",
+        choices=musical_text_font_faces,
+        metavar="<font-face>",
+        help="Set “musicalTextFont”.",
+    )
+
+    style_group.add_argument(
+        "--staff-space",
+        dest="style_staff_space",
+        type=mm,
+        metavar="<dimension>",
+        help="Set the staff space or spatium. This is the vertical distance between "
+        "two lines of a music staff.",
+    )
+
+    style_group.add_argument(
+        "--page-size",
+        dest="style_page_size",
+        nargs=2,
+        metavar=("<width>", "<height>"),
+        help="Set the page size.",
+    )
+
+    style_group.add_argument(
+        "--a4",
+        "--din-a4",
+        dest="style_page_size_a4",
+        action="store_true",
+        help="Set the paper size to DIN A4 (210 by 297 mm).",
+    )
+
+    style_group.add_argument(
+        "--letter",
+        dest="style_page_size_letter",
+        action="store_true",
+        help="Set the paper size to Letter (8.5 by 11 in).",
+    )
+
+    style_group.add_argument(
+        "--margin",
+        dest="style_margin",
+        metavar="<dimension>",
+        help="Set the top, right, bottom and left margins to the same value.",
+    )
+
+    # header
+
+    header_group = parser.add_argument_group("header (style)", "Change the header.")
+
+    header_group.add_argument(
+        "--show-header",
+        dest="style_show_header",
+        action=argparse.BooleanOptionalAction,
+        help="Show or hide the header.",
+    )
+
+    header_group.add_argument(
+        "--header-first-page",
+        dest="style_header_first_page",
+        action=argparse.BooleanOptionalAction,
+        help="Show the header on the first page.",
+    )
+
+    header_group.add_argument(
+        "--different-odd-even-header",
+        dest="style_different_odd_even_header",
+        action=argparse.BooleanOptionalAction,
+        help="Use different header for odd and even pages.",
+    )
+
+    header_group.add_argument(
+        "--header",
+        nargs=3,
+        dest="style_header_all",
+        metavar=("<left>", "<center>", "<right>"),
+        help="Set the header for all pages.",
+    )
+
+    header_group.add_argument(
+        "--header-odd-even",
+        nargs=6,
+        dest="style_header_odd_even",
+        metavar=(
+            "<odd-left>",
+            "<even-left>",
+            "<odd-center>",
+            "<even-center>",
+            "<odd-right>",
+            "<even-right>",
+        ),
+        help="Set different headers for odd and even pages.",
+    )
+
+    # footer
+
+    footer_group = parser.add_argument_group("footer (style)", "Change the footer.")
+
+    footer_group.add_argument(
+        "--show-footer",
+        dest="style_show_footer",
+        action=argparse.BooleanOptionalAction,
+        help="Show or hide the footer.",
+    )
+
+    footer_group.add_argument(
+        "--footer-first-page",
+        dest="style_footer_first_page",
+        action=argparse.BooleanOptionalAction,
+        help="Show the footer on the first page.",
+    )
+
+    footer_group.add_argument(
+        "--different-odd-even-footer",
+        dest="style_different_odd_even_footer",
+        action=argparse.BooleanOptionalAction,
+        help="Use different footers for odd and even pages.",
+    )
+
+    footer_group.add_argument(
+        "--footer",
+        nargs=3,
+        dest="style_footer_all",
+        metavar=("<left>", "<center>", "<right>"),
+        help="Set the footer for all pages.",
+    )
+
+    footer_group.add_argument(
+        "--footer-odd-even",
+        nargs=6,
+        dest="style_footer_odd_even",
+        metavar=(
+            "<odd-left>",
+            "<even-left>",
+            "<odd-center>",
+            "<even-center>",
+            "<odd-right>",
+            "<even-right>",
+        ),
+        help="Set different footers for odd and even pages.",
+    )
+
+    style_group.add_argument(
+        "--reset-small-staffs",
+        dest="style_reset_small_staffs",
+        action="store_true",
+        help="Reset all small staffs to normal size.",
+    )
+
+    ###############################################################################
+    # last positional parameter
+    ###############################################################################
+
+    file_completers.append(
+        parser.add_argument(
+            "path",
+            nargs="*",
+            default=["."],
+            metavar="<path>",
+            help='Path to a "*.msc[zx]" file or a folder containing "*.msc[zx]" files. '
+            "can be specified several times.",
+        )
+    )
+
+    for action in file_completers:
+        action.complete = shtab.FILE  # type: ignore
+
+    return parser
 
 
 def _print_error(error: Exception) -> None:
@@ -750,8 +750,12 @@ def _print_error(error: Exception) -> None:
     )
 
 
+def get_args(cli_args: Sequence[str] | None = None) -> DefaultArguments:
+    return parse_args(setup_parser(), cli_args)
+
+
 def execute(cli_args: Sequence[str] | None = None) -> None:
-    args = parse_args(parser, cli_args)
+    args = get_args(cli_args)
 
     if args.style_styles_v3 or args.style_styles_v4:
 

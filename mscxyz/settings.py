@@ -7,8 +7,12 @@ from __future__ import annotations
 import argparse
 import configparser
 import os
+import typing
 from io import TextIOWrapper
 from typing import Optional, Sequence, cast
+
+if typing.TYPE_CHECKING:
+    from mscxyz.utils import PathOrStr
 
 
 class DefaultArguments:
@@ -101,7 +105,7 @@ class DefaultArguments:
     style_reset_small_staffs: bool = False
 
     # positional argument
-    path: str = "."
+    path: list[PathOrStr] = ["."]
 
 
 args = DefaultArguments()

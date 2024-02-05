@@ -23,7 +23,7 @@ _shtab_musescore_manager_options=(
   "--compress[Save an uncompressed MuseScore file (\*.mscx) as a compressed file (\*.mscz).]"
   "(- : *)"{-V,--version}"[show program\'s version number and exit]"
   "*"{-v,--verbose}"[Make commands more verbose. You can specifiy multiple arguments (. g.\: -vvv) to make the command more verbose.]"
-  {-k,--colorize}"[Colorize the command line print statements.]"
+  {-k,--color,--no-color}"[Colorize the command line print statements. (default\: True)]:general_color:"
   "--diff[Show a diff of the XML file before and after the manipulation.]"
   "--print-xml[Print the XML markup of the score.]"
   {-c,--clean-meta}"[Clean the meta data fields. Possible values\: \„all\“ or a comma separated list of fields, for example\: \„field_one,field_two\“.]:meta_clean:"

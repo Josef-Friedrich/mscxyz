@@ -399,9 +399,9 @@ CLI Usage
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
                              [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
                              [-e FILE_PATH] [-E <extension>] [--compress] [-V] [-v]
-                             [-k] [--diff] [--print-xml] [-c <fields>] [-D]
-                             [-i <source-fields> <format-string>] [-j]
-                             [-l <log-file> <format-string>] [-y]
+                             [-k | --color | --no-color] [--diff] [--print-xml]
+                             [-c <fields>] [-D] [-i <source-fields> <format-string>]
+                             [-j] [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
@@ -474,7 +474,8 @@ CLI Usage
       -V, --version         show program's version number and exit
       -v, --verbose         Make commands more verbose. You can specifiy multiple
                             arguments (. g.: -vvv) to make the command more verbose.
-      -k, --colorize        Colorize the command line print statements.
+      -k, --color, --no-color
+                            Colorize the command line print statements. (default: True)
       --diff                Show a diff of the XML file before and after the
                             manipulation.
       --print-xml           Print the XML markup of the score.

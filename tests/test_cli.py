@@ -5,13 +5,13 @@ import re
 import pytest
 from pytest import CaptureFixture
 
-from mscxyz.cli import execute, parser
+from mscxyz.cli import execute, get_args
 from tests.helper import Cli
 
 
 class TestArgparse:
     def test_args_general(self) -> None:
-        args = parser.parse_args(["."])
+        args = get_args(["."])
         assert args.general_backup is False
         assert args.general_color is True
         assert args.general_dry_run is False
@@ -21,27 +21,27 @@ class TestArgparse:
         assert args.path == ["."]
 
     def test_args_clean(self) -> None:
-        args = parser.parse_args(["--clean", "."])
+        args = get_args(["--clean", "."])
         assert args.style_clean
 
     def test_args_export(self) -> None:
-        args = parser.parse_args(["--export", "pdf", "."])
+        args = get_args(["--export", "pdf", "."])
         assert args.export_extension == "pdf"
 
     def test_args_general_lyrics(self) -> None:
-        args = parser.parse_args(["--fix-lyrics", "."])
+        args = get_args(["--fix-lyrics", "."])
         assert args.lyrics_fix
         assert args.lyrics_remap is None
 
     def test_args_general_meta(self) -> None:
-        args = parser.parse_args(["--synchronize", "."])
+        args = get_args(["--synchronize", "."])
         assert args.meta_clean is None
         assert args.meta_json is False
         assert args.meta_set is None
         assert args.meta_sync
 
     def test_args_general_rename(self) -> None:
-        args = parser.parse_args(["--rename", "$title ($composer)", "."])
+        args = get_args(["--rename", "$title ($composer)", "."])
         assert args.rename_rename == "$title ($composer)"
         assert args.rename_alphanum is False
         assert args.rename_ascii is False
@@ -50,15 +50,15 @@ class TestArgparse:
 
 class TestVerbosity:
     def test_0(self) -> None:
-        args = parser.parse_args([])
+        args = get_args([])
         assert args.general_verbose == 0
 
     def test_1(self) -> None:
-        args = parser.parse_args(["-v"])
+        args = get_args(["-v"])
         assert args.general_verbose == 1
 
     def test_2(self) -> None:
-        args = parser.parse_args(["-vv"])
+        args = get_args(["-vv"])
         assert args.general_verbose == 2
 
 
