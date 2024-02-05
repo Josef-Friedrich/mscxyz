@@ -416,3 +416,8 @@ class FieldsManager:
         json.dump(self.export_to_dict(), output, indent=4)
         output.close()
         return result_path
+
+    @staticmethod
+    def print() -> None:
+        for field in FieldsManager.fields:
+            print(f"{field.name}: {field.description}")

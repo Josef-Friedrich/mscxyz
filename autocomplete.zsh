@@ -49,6 +49,8 @@ _shtab_musescore_manager_options=(
   {-a,--ascii}"[Use only ASCII characters.]"
   {-n,--no-whitespace}"[Replace all whitespaces with dashes or sometimes underlines.]"
   {-K,--skip-if-empty}"[Skip the rename action if the fields specified in \<fields\> are empty. Multiple fields can be separated by commas, e. g.\: composer,title]:rename_skip:"
+  "--list-fields[List all available fields that can be used in the path templates.]"
+  "--list-functions[List all available functions that can be used in the path templates.]"
   {-L,--list-files}"[Only list files and do nothing else.]"
   {-g,--glob}"[Handle only files which matches against Unix style glob patterns (e. g. \"\*.mscx\", \"\* - \*\"). If you omit this option, the standard glob pattern \"\*.msc\[xz\]\" is used.]:selection_glob:"
   "--mscz[Take only \"\*.mscz\" files into account.]"

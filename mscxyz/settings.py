@@ -71,6 +71,8 @@ class DefaultArguments:
     rename_ascii: bool = False
     rename_no_whitespace = False
     rename_skip: Optional[str] = None
+    rename_list_fields: bool = False
+    rename_list_functions: bool = False
 
     # selection
     selection_list: bool = False

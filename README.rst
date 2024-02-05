@@ -409,7 +409,7 @@ CLI Usage
                              [-x <number-or-all>] [-r <remap-pairs>] [-F]
                              [--rename <path-template>]
                              [-t <directory> | --only-filename] [-A] [-a] [-n]
-                             [-K <fields>] [-L]
+                             [-K <fields>] [--list-fields] [--list-functions] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--reset-small-staffs] [--list-fonts]
@@ -563,6 +563,10 @@ CLI Usage
                             Skip the rename action if the fields specified in <fields>
                             are empty. Multiple fields can be separated by commas, e.
                             g.: composer,title
+      --list-fields         List all available fields that can be used in the path
+                            templates.
+      --list-functions      List all available functions that can be used in the path
+                            templates.
 
     selection:
       The following options affect how the manager selects the MuseScore files.

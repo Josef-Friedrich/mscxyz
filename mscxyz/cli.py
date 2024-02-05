@@ -9,9 +9,11 @@ import typing
 from typing import Sequence
 
 import shtab
+import tmep
 
 import mscxyz.export
 from mscxyz import utils
+from mscxyz.fields import FieldsManager
 from mscxyz.meta import Metatag, Vbox
 from mscxyz.rename import rename
 from mscxyz.score import Score
@@ -435,6 +437,20 @@ def setup_parser() -> argparse.ArgumentParser:
         "Multiple fields can be separated by commas, e. g.: composer,title",
     )
 
+    rename.add_argument(
+        "--list-fields",
+        dest="rename_list_fields",
+        action="store_true",
+        help="List all available fields that can be used in the path templates.",
+    )
+
+    rename.add_argument(
+        "--list-functions",
+        dest="rename_list_functions",
+        action="store_true",
+        help="List all available functions that can be used in the path templates.",
+    )
+
     ###############################################################################
     # selection
     ###############################################################################
@@ -773,6 +789,14 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
         if args.style_styles_v4:
             list_styles(4)
             return
+
+    if args.rename_list_fields:
+        FieldsManager.print()
+        return
+
+    if args.rename_list_functions:
+        print(tmep.get_doc())
+        return
 
     selection_glob: str = args.selection_glob
     if args.selection_mscz:
