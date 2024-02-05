@@ -165,7 +165,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "-v",
         "--verbose",
         action="count",
-        dest="general_verbose",
+        dest="info_verbose",
         default=0,
         help="Make commands more verbose. You can specifiy "
         "multiple arguments (. g.: -vvv) to make the command more "
@@ -176,7 +176,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "-k",
         "--color",
         action=argparse.BooleanOptionalAction,
-        dest="general_color",
+        dest="info_color",
         default=True,
         help="Colorize the command line print statements.",
     )
@@ -184,14 +184,14 @@ def setup_parser() -> argparse.ArgumentParser:
     info_group.add_argument(
         "--diff",
         action="store_true",
-        dest="general_diff",
+        dest="info_diff",
         help="Show a diff of the XML file before and after the manipulation.",
     )
 
     info_group.add_argument(
         "--print-xml",
         action="store_true",
-        dest="general_print_xml",
+        dest="info_print_xml",
         help="Print the XML markup of the score.",
     )
 
@@ -976,10 +976,10 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.export_extension:
                 score.export.to_extension(args.export_extension)
 
-            if args.general_diff:
+            if args.info_diff:
                 score.print_diff()
 
-            if args.general_print_xml:
+            if args.info_print_xml:
                 print(score.xml_string)
 
             if not args.general_dry_run:

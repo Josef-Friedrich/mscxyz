@@ -331,7 +331,7 @@ class FieldsManager:
         setattr(obj, last, value)
 
     def diff(self, args: DefaultArguments) -> None:
-        if args.general_verbose == 0:
+        if args.info_verbose == 0:
             return
         pre = self.pre
 
@@ -341,7 +341,7 @@ class FieldsManager:
         for name in self.names:
             if name in pre and pre[name] or name in post and post[name]:
                 field = self.get_field(name)
-                if field.verbosity > args.general_verbose:
+                if field.verbosity > args.info_verbose:
                     continue
 
                 pre_value = None

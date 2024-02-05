@@ -23,10 +23,6 @@ class DefaultArguments:
     general_catch_errors: bool = False
     general_mscore: bool = False
     general_executable: Optional[str] = None
-    general_verbose: int = 0
-    general_color: bool = True
-    general_diff: bool = False
-    general_print_xml: bool = False
 
     # Groups alphabetically
     # in groups related not alphabetically
@@ -35,6 +31,12 @@ class DefaultArguments:
     # export
     export_extension: Optional[str] = None
     export_compress: bool = False
+
+    # info
+    info_verbose: int = 0
+    info_color: bool = True
+    info_diff: bool = False
+    info_print_xml: bool = False
 
     # help
     help_markdown: bool = False
@@ -165,7 +167,7 @@ def merge_config_into_args(
 
     for arg in [
         "general_backup",
-        "general_colorize",
+        "info_colorize",
         "general_dry_run",
         "general_mscore",
         "help_markdown",
