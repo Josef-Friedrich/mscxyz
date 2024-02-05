@@ -572,7 +572,9 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set “musicalTextFont”.",
     )
 
-    style_group.add_argument(
+    page_group = parser.add_argument_group("page (style)", "Page settings.")
+
+    page_group.add_argument(
         "--staff-space",
         dest="style_staff_space",
         type=mm,
@@ -581,7 +583,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "two lines of a music staff.",
     )
 
-    style_group.add_argument(
+    page_group.add_argument(
         "--page-size",
         dest="style_page_size",
         nargs=2,
@@ -589,7 +591,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the page size.",
     )
 
-    style_group.add_argument(
+    page_group.add_argument(
         "--a4",
         "--din-a4",
         dest="style_page_size_a4",
@@ -597,14 +599,14 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the paper size to DIN A4 (210 by 297 mm).",
     )
 
-    style_group.add_argument(
+    page_group.add_argument(
         "--letter",
         dest="style_page_size_letter",
         action="store_true",
         help="Set the paper size to Letter (8.5 by 11 in).",
     )
 
-    style_group.add_argument(
+    page_group.add_argument(
         "--margin",
         dest="style_margin",
         metavar="<dimension>",

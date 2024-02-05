@@ -587,15 +587,6 @@ CLI Usage
                             file.
       --s3, --styles-v3     List all possible version 3 styles.
       --s4, --styles-v4     List all possible version 4 styles.
-      --staff-space <dimension>
-                            Set the staff space or spatium. This is the vertical
-                            distance between two lines of a music staff.
-      --page-size <width> <height>
-                            Set the page size.
-      --a4, --din-a4        Set the paper size to DIN A4 (210 by 297 mm).
-      --letter              Set the paper size to Letter (8.5 by 11 in).
-      --margin <dimension>  Set the top, right, bottom and left margins to the same
-                            value.
       --reset-small-staffs  Reset all small staffs to normal size.
 
     font (style):
@@ -613,6 +604,19 @@ CLI Usage
                             “dynamicsFontFace”.
       --musical-text-font <font-face>
                             Set “musicalTextFont”.
+
+    page (style):
+      Page settings.
+
+      --staff-space <dimension>
+                            Set the staff space or spatium. This is the vertical
+                            distance between two lines of a music staff.
+      --page-size <width> <height>
+                            Set the page size.
+      --a4, --din-a4        Set the paper size to DIN A4 (210 by 297 mm).
+      --letter              Set the paper size to Letter (8.5 by 11 in).
+      --margin <dimension>  Set the top, right, bottom and left margins to the same
+                            value.
 
     header (style):
       Change the header.
