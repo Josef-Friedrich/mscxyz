@@ -173,9 +173,10 @@ info_group.add_argument(
 
 info_group.add_argument(
     "-k",
-    "--colorize",
-    action="store_true",
-    dest="general_colorize",
+    "--color",
+    action=argparse.BooleanOptionalAction,
+    dest="general_color",
+    default=True,
     help="Colorize the command line print statements.",
 )
 

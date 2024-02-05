@@ -20,7 +20,7 @@ class DefaultArguments:
     general_mscore: bool = False
     general_executable: Optional[str] = None
     general_verbose: int = 0
-    general_colorize: bool = False
+    general_color: bool = True
     general_diff: bool = False
     general_print_xml: bool = False
 

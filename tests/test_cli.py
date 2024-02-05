@@ -13,7 +13,7 @@ class TestArgparse:
     def test_args_general(self) -> None:
         args = parser.parse_args(["."])
         assert args.general_backup is False
-        assert args.general_colorize is False
+        assert args.general_color is True
         assert args.general_dry_run is False
         assert args.selection_glob == "*.msc[xz]"
         assert args.general_mscore is False

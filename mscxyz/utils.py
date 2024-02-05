@@ -218,7 +218,7 @@ def colorize(
         color('“{}”'.format(post[field]), 'yellow')
     """
     settings = get_args()
-    if settings.general_colorize:
+    if settings.general_color:
         return termcolor.colored(text, color, on_color)
     else:
         return text
