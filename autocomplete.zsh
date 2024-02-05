@@ -58,6 +58,7 @@ _shtab_musescore_manager_options=(
   {-Y,--style-file}"[Load a \"\*.mss\" style file and include the contents of this file.]:style_file:_files"
   {--s3,--styles-v3}"[List all possible version 3 styles.]"
   {--s4,--styles-v4}"[List all possible version 4 styles.]"
+  "--reset-small-staffs[Reset all small staffs to normal size.]"
   "--list-fonts[List all font related styles.]"
   "--text-font[Set nearly all fonts except \“romanNumeralFontFace\”, \“figuredBassFontFace\”, \“dynamicsFontFace\“, \“musicalSymbolFont\” and \“musicalTextFont\”.]:style_text_font:"
   "--title-font[Set \“titleFontFace\” and \“subTitleFontFace\”.]:style_title_font:"
@@ -78,7 +79,6 @@ _shtab_musescore_manager_options=(
   {--different-odd-even-footer,--no-different-odd-even-footer}"[Use different footers for odd and even pages.]:style_different_odd_even_footer:"
   "--footer[Set the footer for all pages.]:style_footer_all:"
   "--footer-odd-even[Set different footers for odd and even pages.]:style_footer_odd_even:"
-  "--reset-small-staffs[Reset all small staffs to normal size.]"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 

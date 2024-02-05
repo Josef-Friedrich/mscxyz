@@ -20,8 +20,8 @@ Comande line interface
                              [-K <fields>] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
-                             [--s4] [--list-fonts] [--text-font <font-face>]
-                             [--title-font <font-face>]
+                             [--s4] [--reset-small-staffs] [--list-fonts]
+                             [--text-font <font-face>] [--title-font <font-face>]
                              [--musical-symbol-font <font-face>]
                              [--musical-text-font <font-face>]
                              [--staff-space <dimension>]
@@ -37,7 +37,6 @@ Comande line interface
                              [--different-odd-even-footer | --no-different-odd-even-footer]
                              [--footer <left> <center> <right>]
                              [--footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
-                             [--reset-small-staffs]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.

@@ -84,31 +84,31 @@ class DefaultArguments:
     style_file: Optional[TextIOWrapper] = None
     style_styles_v3: bool = False
     style_styles_v4: bool = False
-    # page
-    style_staff_space: Optional[float] = None
-    style_page_size: Optional[tuple[str, str]] = None
-    style_page_size_a4: bool = False
-    style_page_size_letter: bool = False
-    style_margin: Optional[str] = None
-    # font
+    style_reset_small_staffs: bool = False
+    # style: font
     style_list_fonts: bool = False
     style_text_font: Optional[str] = None
     style_title_font: Optional[str] = None
     style_musical_symbol_font: Optional[str] = None
     style_musical_text_font: Optional[str] = None
-    # header
+    # style: page
+    style_staff_space: Optional[float] = None
+    style_page_size: Optional[tuple[str, str]] = None
+    style_page_size_a4: bool = False
+    style_page_size_letter: bool = False
+    style_margin: Optional[str] = None
+    # style: header
     style_show_header: Optional[bool] = None
     style_header_first_page: Optional[bool] = None
     style_different_odd_even_header: Optional[bool] = None
     style_header_all: Optional[tuple[str, str, str]] = None
     style_header_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
-    # footer
+    # style: footer
     style_different_odd_even_footer: Optional[bool] = None
     style_show_footer: Optional[bool] = None
     style_footer_first_page: Optional[bool] = None
     style_footer_all: Optional[tuple[str, str, str]] = None
     style_footer_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
-    style_reset_small_staffs: bool = False
 
     # positional argument
     path: list[PathOrStr] = ["."]

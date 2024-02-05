@@ -119,11 +119,11 @@ def setup_parser() -> argparse.ArgumentParser:
     # export
     ###############################################################################
 
-    export_group = parser.add_argument_group(
+    export = parser.add_argument_group(
         "export", "Export the scores in different formats."
     )
 
-    export_group.add_argument(
+    export.add_argument(
         "-E",
         "--export",
         dest="export_extension",
@@ -139,7 +139,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "binary file.",
     )
 
-    export_group.add_argument(
+    export.add_argument(
         "--compress",
         dest="export_compress",
         action="store_true",
@@ -150,18 +150,18 @@ def setup_parser() -> argparse.ArgumentParser:
     # info
     ###############################################################################
 
-    info_group = parser.add_argument_group(
+    info = parser.add_argument_group(
         "info", "Print informations about the score and the CLI interface itself."
     )
 
-    info_group.add_argument(
+    info.add_argument(
         "-V",
         "--version",
         action="version",
         version="%(prog)s {version}".format(version="0.0.0"),
     )
 
-    info_group.add_argument(
+    info.add_argument(
         "-v",
         "--verbose",
         action="count",
@@ -172,7 +172,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "verbose.",
     )
 
-    info_group.add_argument(
+    info.add_argument(
         "-k",
         "--color",
         action=argparse.BooleanOptionalAction,
@@ -181,14 +181,14 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Colorize the command line print statements.",
     )
 
-    info_group.add_argument(
+    info.add_argument(
         "--diff",
         action="store_true",
         dest="info_diff",
         help="Show a diff of the XML file before and after the manipulation.",
     )
 
-    info_group.add_argument(
+    info.add_argument(
         "--print-xml",
         action="store_true",
         dest="info_print_xml",
@@ -199,11 +199,11 @@ def setup_parser() -> argparse.ArgumentParser:
     # meta
     ###############################################################################
 
-    meta_group = parser.add_argument_group(
+    meta = parser.add_argument_group(
         "meta", "Deal with meta data informations stored in the MuseScore file."
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-c",
         "--clean-meta",
         metavar="<fields>",
@@ -213,7 +213,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "„field_one,field_two“.",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-D",
         "--delete-duplicates",
         dest="meta_delete",
@@ -224,7 +224,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "title is empty.",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-i",
         "--distribute-fields",
         dest="meta_dist",
@@ -239,7 +239,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "fails, it tries the second source field ... and so on.",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-j",
         "--json",
         action="store_true",
@@ -248,7 +248,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "path as the input file, only the extension is changed to “json”.",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-l",
         "--log",
         nargs=2,
@@ -258,7 +258,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "/tmp/musescore-manager.log '$title $composer'",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-y",
         "--synchronize",
         action="store_true",
@@ -268,7 +268,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "metadata fields",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "-S",
         "--set-field",
         nargs=2,
@@ -278,7 +278,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set value to meta data fields.",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--metatag",
         "--metatag-meta",
         nargs=2,
@@ -288,7 +288,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Define the metadata in MetaTag elements." + _embed_fields(Metatag.fields),
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--vbox",
         "--vbox-meta",
         nargs=2,
@@ -298,7 +298,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Define the metadata in VBox elements." + _embed_fields(Vbox.fields),
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--title",
         metavar=("<string>"),
         dest="meta_title",
@@ -306,7 +306,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "set the corresponding document properties work title field (metatag).",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--subtitle",
         metavar=("<string>"),
         dest="meta_subtitle",
@@ -314,7 +314,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "set the corresponding document properties subtitle and movement title filed (metatag).",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--composer",
         metavar=("<string>"),
         dest="meta_composer",
@@ -322,7 +322,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "set the corresponding document properties composer field (metatag).",
     )
 
-    meta_group.add_argument(
+    meta.add_argument(
         "--lyricist",
         metavar=("<string>"),
         dest="meta_lyricist",
@@ -334,9 +334,9 @@ def setup_parser() -> argparse.ArgumentParser:
     # lyrics
     ###############################################################################
 
-    lyrics_group = parser.add_argument_group("lyrics")
+    lyrics = parser.add_argument_group("lyrics")
 
-    lyrics_group.add_argument(
+    lyrics.add_argument(
         "-x",
         "--extract",
         "--extract-lyrics",
@@ -348,7 +348,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "score_1.mscx.",
     )
 
-    lyrics_group.add_argument(
+    lyrics.add_argument(
         "-r",
         "--remap",
         "--remap-lyrics",
@@ -362,7 +362,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "verse number.",
     )
 
-    lyrics_group.add_argument(
+    lyrics.add_argument(
         "-F",
         "--fix",
         "--fix-lyrics",
@@ -376,18 +376,18 @@ def setup_parser() -> argparse.ArgumentParser:
     # rename
     ###############################################################################
 
-    rename_group = parser.add_argument_group("rename", "Rename the “*.msc[zx]” files. ")
+    rename = parser.add_argument_group("rename", "Rename the “*.msc[zx]” files. ")
 
-    rename_group.add_argument(
+    rename.add_argument(
         "--rename",
         dest="rename_rename",
         metavar="<path-template>",
         help="A path template string to set the destination location.",
     )
 
-    group_rename_target = rename_group.add_mutually_exclusive_group()
+    rename_target = rename.add_mutually_exclusive_group()
 
-    group_rename_target.add_argument(
+    rename_target.add_argument(
         "-t",
         "--target",
         dest="rename_target",
@@ -395,14 +395,14 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Target directory",
     )
 
-    group_rename_target.add_argument(
+    rename_target.add_argument(
         "--only-filename",
         action="store_true",
         dest="rename_only_filename",
         help="Rename only the filename and don’t move the score to a different directory.",
     )
 
-    rename_group.add_argument(
+    rename.add_argument(
         "-A",
         "--alphanum",
         dest="rename_alphanum",
@@ -410,7 +410,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Use only alphanumeric characters.",
     )
 
-    rename_group.add_argument(
+    rename.add_argument(
         "-a",
         "--ascii",
         dest="rename_ascii",
@@ -418,7 +418,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Use only ASCII characters.",
     )
 
-    rename_group.add_argument(
+    rename.add_argument(
         "-n",
         "--no-whitespace",
         dest="rename_no_whitespace",
@@ -426,7 +426,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Replace all whitespaces with dashes or sometimes underlines.",
     )
 
-    rename_group.add_argument(
+    rename.add_argument(
         "-K",
         "--skip-if-empty",
         dest="rename_skip",
@@ -439,12 +439,12 @@ def setup_parser() -> argparse.ArgumentParser:
     # selection
     ###############################################################################
 
-    selection_group = parser.add_argument_group(
+    selection = parser.add_argument_group(
         "selection",
         "The following options affect how the manager selects the MuseScore files.",
     )
 
-    selection_group.add_argument(
+    selection.add_argument(
         "-L",
         "--list-files",
         action="store_true",
@@ -452,9 +452,9 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Only list files and do nothing else.",
     )
 
-    exclusive_selection_group = selection_group.add_mutually_exclusive_group()
+    exclusive_selection = selection.add_mutually_exclusive_group()
 
-    exclusive_selection_group.add_argument(
+    exclusive_selection.add_argument(
         "-g",
         "--glob",
         dest="selection_glob",
@@ -465,14 +465,14 @@ def setup_parser() -> argparse.ArgumentParser:
         'option, the standard glob pattern "*.msc[xz]" is used.',
     )
 
-    exclusive_selection_group.add_argument(
+    exclusive_selection.add_argument(
         "--mscz",
         dest="selection_mscz",
         action="store_true",
         help='Take only "*.mscz" files into account.',
     )
 
-    exclusive_selection_group.add_argument(
+    exclusive_selection.add_argument(
         "--mscx",
         dest="selection_mscx",
         action="store_true",
@@ -483,9 +483,9 @@ def setup_parser() -> argparse.ArgumentParser:
     # style
     ###############################################################################
 
-    style_group = parser.add_argument_group("style", "Change the styles.")
+    style = parser.add_argument_group("style", "Change the styles.")
 
-    style_group.add_argument(
+    style.add_argument(
         "-s",
         "--style",
         nargs=2,
@@ -496,7 +496,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set a single style value. For example: --style pageWidth 8.5",
     )
 
-    style_group.add_argument(
+    style.add_argument(
         "--clean",
         dest="style_clean",
         action="store_true",
@@ -504,7 +504,7 @@ def setup_parser() -> argparse.ArgumentParser:
     )
 
     file_completers.append(
-        style_group.add_argument(
+        style.add_argument(
             "-Y",
             "--style-file",
             dest="style_file",
@@ -514,7 +514,7 @@ def setup_parser() -> argparse.ArgumentParser:
         )
     )
 
-    style_group.add_argument(
+    style.add_argument(
         "--s3",
         "--styles-v3",
         dest="style_styles_v3",
@@ -522,7 +522,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="List all possible version 3 styles.",
     )
 
-    style_group.add_argument(
+    style.add_argument(
         "--s4",
         "--styles-v4",
         dest="style_styles_v4",
@@ -530,18 +530,25 @@ def setup_parser() -> argparse.ArgumentParser:
         help="List all possible version 4 styles.",
     )
 
-    font_group = parser.add_argument_group(
+    style.add_argument(
+        "--reset-small-staffs",
+        dest="style_reset_small_staffs",
+        action="store_true",
+        help="Reset all small staffs to normal size.",
+    )
+
+    font = parser.add_argument_group(
         "font (style)", "Change the font faces of a score."
     )
 
-    font_group.add_argument(
+    font.add_argument(
         "--list-fonts",
         dest="style_list_fonts",
         action="store_true",
         help="List all font related styles.",
     )
 
-    font_group.add_argument(
+    font.add_argument(
         "--text-font",
         dest="style_text_font",
         metavar="<font-face>",
@@ -549,14 +556,14 @@ def setup_parser() -> argparse.ArgumentParser:
         "“dynamicsFontFace“, “musicalSymbolFont” and “musicalTextFont”.",
     )
 
-    font_group.add_argument(
+    font.add_argument(
         "--title-font",
         dest="style_title_font",
         metavar="<font-face>",
         help="Set “titleFontFace” and “subTitleFontFace”.",
     )
 
-    font_group.add_argument(
+    font.add_argument(
         "--musical-symbol-font",
         dest="style_musical_symbol_font",
         choices=musical_symbol_font_faces,
@@ -564,7 +571,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
     )
 
-    font_group.add_argument(
+    font.add_argument(
         "--musical-text-font",
         dest="style_musical_text_font",
         choices=musical_text_font_faces,
@@ -572,9 +579,9 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set “musicalTextFont”.",
     )
 
-    page_group = parser.add_argument_group("page (style)", "Page settings.")
+    page = parser.add_argument_group("page (style)", "Page settings.")
 
-    page_group.add_argument(
+    page.add_argument(
         "--staff-space",
         dest="style_staff_space",
         type=mm,
@@ -583,7 +590,7 @@ def setup_parser() -> argparse.ArgumentParser:
         "two lines of a music staff.",
     )
 
-    page_group.add_argument(
+    page.add_argument(
         "--page-size",
         dest="style_page_size",
         nargs=2,
@@ -591,7 +598,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the page size.",
     )
 
-    page_group.add_argument(
+    page.add_argument(
         "--a4",
         "--din-a4",
         dest="style_page_size_a4",
@@ -599,14 +606,14 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the paper size to DIN A4 (210 by 297 mm).",
     )
 
-    page_group.add_argument(
+    page.add_argument(
         "--letter",
         dest="style_page_size_letter",
         action="store_true",
         help="Set the paper size to Letter (8.5 by 11 in).",
     )
 
-    page_group.add_argument(
+    page.add_argument(
         "--margin",
         dest="style_margin",
         metavar="<dimension>",
@@ -615,30 +622,30 @@ def setup_parser() -> argparse.ArgumentParser:
 
     # header
 
-    header_group = parser.add_argument_group("header (style)", "Change the header.")
+    header = parser.add_argument_group("header (style)", "Change the header.")
 
-    header_group.add_argument(
+    header.add_argument(
         "--show-header",
         dest="style_show_header",
         action=argparse.BooleanOptionalAction,
         help="Show or hide the header.",
     )
 
-    header_group.add_argument(
+    header.add_argument(
         "--header-first-page",
         dest="style_header_first_page",
         action=argparse.BooleanOptionalAction,
         help="Show the header on the first page.",
     )
 
-    header_group.add_argument(
+    header.add_argument(
         "--different-odd-even-header",
         dest="style_different_odd_even_header",
         action=argparse.BooleanOptionalAction,
         help="Use different header for odd and even pages.",
     )
 
-    header_group.add_argument(
+    header.add_argument(
         "--header",
         nargs=3,
         dest="style_header_all",
@@ -646,7 +653,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the header for all pages.",
     )
 
-    header_group.add_argument(
+    header.add_argument(
         "--header-odd-even",
         nargs=6,
         dest="style_header_odd_even",
@@ -663,30 +670,30 @@ def setup_parser() -> argparse.ArgumentParser:
 
     # footer
 
-    footer_group = parser.add_argument_group("footer (style)", "Change the footer.")
+    footer = parser.add_argument_group("footer (style)", "Change the footer.")
 
-    footer_group.add_argument(
+    footer.add_argument(
         "--show-footer",
         dest="style_show_footer",
         action=argparse.BooleanOptionalAction,
         help="Show or hide the footer.",
     )
 
-    footer_group.add_argument(
+    footer.add_argument(
         "--footer-first-page",
         dest="style_footer_first_page",
         action=argparse.BooleanOptionalAction,
         help="Show the footer on the first page.",
     )
 
-    footer_group.add_argument(
+    footer.add_argument(
         "--different-odd-even-footer",
         dest="style_different_odd_even_footer",
         action=argparse.BooleanOptionalAction,
         help="Use different footers for odd and even pages.",
     )
 
-    footer_group.add_argument(
+    footer.add_argument(
         "--footer",
         nargs=3,
         dest="style_footer_all",
@@ -694,7 +701,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the footer for all pages.",
     )
 
-    footer_group.add_argument(
+    footer.add_argument(
         "--footer-odd-even",
         nargs=6,
         dest="style_footer_odd_even",
@@ -707,13 +714,6 @@ def setup_parser() -> argparse.ArgumentParser:
             "<even-right>",
         ),
         help="Set different footers for odd and even pages.",
-    )
-
-    style_group.add_argument(
-        "--reset-small-staffs",
-        dest="style_reset_small_staffs",
-        action="store_true",
-        help="Reset all small staffs to normal size.",
     )
 
     ###############################################################################
