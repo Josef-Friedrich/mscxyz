@@ -231,7 +231,9 @@ Fields
 Functions
 ^^^^^^^^^
 
-{{ cli('musescore-manager --list-functions') | literal }}
+{{ cli('tmep-doc --functions-rst') }}
+
+{{ cli('tmep-doc --introduction-rst') }}
 
 The following example assumes that the folder ``/home/xyz/messy-leadsheets``
 contains the following three MuseScore files: ``folsom prison blues.mscz``,
