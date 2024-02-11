@@ -36,8 +36,17 @@ def test_compress() -> None:
 
 
 @pytest.mark.slow
-def test_remove_origin() -> None:
-    score = Cli("--compress", "--remove-origin").append_score("simple.mscx", 3).score()
-    dest = str(score.path).replace(".mscx", ".mscz")
-    assert not score.exists()
-    assert Path(dest).exists()
+class TestOptionRemoveOrigin:
+    def test_uncompressed(self) -> None:
+        score = (
+            Cli("--compress", "--remove-origin").append_score("simple.mscx", 3).score()
+        )
+        dest = str(score.path).replace(".mscx", ".mscz")
+        assert not score.exists()
+        assert Path(dest).exists()
+
+    def test_already_compressed(self) -> None:
+        score = (
+            Cli("--compress", "--remove-origin").append_score("simple.mscz", 3).score()
+        )
+        assert score.exists()
