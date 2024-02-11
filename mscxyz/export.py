@@ -72,12 +72,11 @@ class Export:
     def compress(self) -> Path:
         """Compress the score.
 
-        :return: The path of the new compress score.
+        :return: The path of the new compressed score or the path of the score itself
+          if it is already compressed.
         """
-
         if not self.score.is_uncompressed:
-            raise ValueError("The score is already compressed!")
-
+            return self.score.path
         return self.to_extension("mscz")
 
     def reload(self, save: bool = False) -> Export:
