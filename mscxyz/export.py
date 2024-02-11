@@ -69,7 +69,7 @@ class Export:
         )
         return dest
 
-    def compress(self) -> Path:
+    def compress(self, remove_origin: bool = False) -> Path:
         """Compress the score.
 
         :return: The path of the new compressed score or the path of the score itself
@@ -77,7 +77,10 @@ class Export:
         """
         if not self.score.is_uncompressed:
             return self.score.path
-        return self.to_extension("mscz")
+        new_path = self.to_extension("mscz")
+        if remove_origin:
+            self.score.path.unlink()
+        return new_path
 
     def reload(self, save: bool = False) -> Export:
         """

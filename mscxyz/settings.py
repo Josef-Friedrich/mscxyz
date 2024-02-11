@@ -31,6 +31,7 @@ class DefaultArguments:
     # export
     export_extension: Optional[str] = None
     export_compress: bool = False
+    export_remove_origin: bool = False
 
     # info
     info_verbose: int = 0

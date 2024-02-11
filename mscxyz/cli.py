@@ -148,6 +148,14 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Save an uncompressed MuseScore file (*.mscx) as a compressed file (*.mscz).",
     )
 
+    export.add_argument(
+        "--remove-origin",
+        dest="export_remove_origin",
+        action="store_true",
+        help="Delete the uncompressed original MuseScore file (*.mscx) if it has been "
+        "successfully converted to a compressed file (*.mscz).",
+    )
+
     ###############################################################################
     # info
     ###############################################################################
@@ -820,7 +828,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             score.make_snapshot()
 
             if args.export_compress:
-                score = Score(score.export.compress())
+                score = Score(score.export.compress(args.export_remove_origin))
 
             # style
 
@@ -995,10 +1003,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if manipulate_meta:
                 score.fields.diff(args)
 
-            # export
-
-            if args.export_extension:
-                score.export.to_extension(args.export_extension)
+            # info
 
             if args.info_diff:
                 score.print_diff()
@@ -1006,8 +1011,15 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.info_print_xml:
                 print(score.xml_string)
 
+            # save
+
             if not args.general_dry_run:
                 score.save()
+
+            # export
+
+            if args.export_extension:
+                score.export.to_extension(args.export_extension)
 
             # rename
 

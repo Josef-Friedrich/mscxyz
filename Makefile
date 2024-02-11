@@ -9,6 +9,9 @@ test_quick:
 test_gui:
 	poetry run pytest -m "gui"
 
+test_all:
+	poetry run pytest
+
 test_real_binary:
 	pytest _test_real-binary.py
 

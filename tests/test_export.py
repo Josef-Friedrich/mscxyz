@@ -31,4 +31,13 @@ class TestExport:
 def test_compress() -> None:
     score = Cli("--compress").append_score("simple.mscx", 3).score()
     dest = str(score.path).replace(".mscx", ".mscz")
+    assert score.exists()
+    assert Path(dest).exists()
+
+
+@pytest.mark.slow
+def test_remove_origin() -> None:
+    score = Cli("--compress", "--remove-origin").append_score("simple.mscx", 3).score()
+    dest = str(score.path).replace(".mscx", ".mscz")
+    assert not score.exists()
     assert Path(dest).exists()

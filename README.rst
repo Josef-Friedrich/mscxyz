@@ -629,10 +629,11 @@ CLI Usage
 
     usage: musescore-manager [-h] [--print-completion {bash,zsh,tcsh}]
                              [-C <file-path>] [-b] [-d] [--catch-errors] [-m]
-                             [-e FILE_PATH] [-E <extension>] [--compress] [-V] [-v]
-                             [-k | --color | --no-color] [--diff] [--print-xml]
-                             [-c <fields>] [-D] [-i <source-fields> <format-string>]
-                             [-j] [-l <log-file> <format-string>] [-y]
+                             [-e FILE_PATH] [-E <extension>] [--compress]
+                             [--remove-origin] [-V] [-v] [-k | --color | --no-color]
+                             [--diff] [--print-xml] [-c <fields>] [-D]
+                             [-i <source-fields> <format-string>] [-j]
+                             [-l <log-file> <format-string>] [-y]
                              [-S <field> <format-string>]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
@@ -697,6 +698,9 @@ CLI Usage
                             the binary file.
       --compress            Save an uncompressed MuseScore file (*.mscx) as a compressed
                             file (*.mscz).
+      --remove-origin       Delete the uncompressed original MuseScore file (*.mscx) if
+                            it has been successfully converted to a compressed file
+                            (*.mscz).
 
     info:
       Print informations about the score and the CLI interface itself.

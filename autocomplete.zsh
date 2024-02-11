@@ -21,6 +21,7 @@ _shtab_musescore_manager_options=(
   {-e,--executable}"[Path of the musescore executable.]:general_executable:_files"
   {-E,--export}"[Export the scores in a format defined by the extension. The exported file has the same path, only the file extension is different. Further information can be found at the MuseScore website\: https\:\/\/musescore.org\/en\/handbook\/2\/file-formats, https\:\/\/musescore.org\/en\/handbook\/3\/file-export, https\:\/\/musescore.org\/en\/handbook\/4\/file-export. MuseScore must be installed and the script must know the location of the binary file.]:export_extension:(mscz mscx spos mpos pdf svg png wav mp3 ogg flac mid midi kar musicxml xml mxl brf mei)"
   "--compress[Save an uncompressed MuseScore file (\*.mscx) as a compressed file (\*.mscz).]"
+  "--remove-origin[Delete the uncompressed original MuseScore file (\*.mscx) if it has been successfully converted to a compressed file (\*.mscz).]"
   "(- : *)"{-V,--version}"[show program\'s version number and exit]"
   "*"{-v,--verbose}"[Make commands more verbose. You can specifiy multiple arguments (. g.\: -vvv) to make the command more verbose.]"
   {-k,--color,--no-color}"[Colorize the command line print statements. (default\: True)]:info_color:"
