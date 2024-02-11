@@ -30,7 +30,6 @@ def inch(value: str | float) -> float:
     return Dimension(value).to("in")
 
 
-# https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/engraving/engravingmodule.cpp#L120-L127
 musical_symbol_font_faces = (
     "Leland",
     "Bravura",
@@ -43,7 +42,11 @@ musical_symbol_font_faces = (
     "Finale Maestro",
     "Finale Broadway",
 )
+"""
+Musical symbol font faces
 
+:see: `MuseScore C++ source code: engravingmodule.cpp lines 120-127 <https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/engraving/engravingmodule.cpp#L120-L127>`_
+"""
 
 musical_text_font_faces = (
     "Leland Text",
@@ -57,9 +60,11 @@ musical_text_font_faces = (
     "Finale Maestro Text",
     "Finale Broadway Text",
 )
+"""
+Musical text font faces
 
-
-# https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/notation/view/widgets/editstyle.cpp#L1966-L1973
+:see: `MuseScore C++ source code: editstyle.cpp lines 1966-1973 <https://github.com/musescore/MuseScore/blob/940f5ce4c83c9168e3be0e1509664a7abffcf9e8/src/notation/view/widgets/editstyle.cpp#L1966-L1973>`_
+"""
 
 
 text_font_faces = (

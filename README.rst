@@ -645,8 +645,8 @@ CLI Usage
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--reset-small-staffs] [--list-fonts]
                              [--text-font <font-face>] [--title-font <font-face>]
-                             [--musical-symbol-font <font-face>]
-                             [--musical-text-font <font-face>]
+                             [--musical-symbol-font {Leland,Bravura,Emmentaler,Gonville,MuseJazz,Petaluma,Finale Maestro,Finale Broadway}]
+                             [--musical-text-font {Leland Text,Bravura Text,Emmentaler Text,Gonville Text,MuseJazz Text,Petaluma Text,Finale Maestro Text,Finale Broadway Text}]
                              [--staff-space <dimension>]
                              [--page-size <width> <height>] [--a4] [--letter]
                              [--margin <dimension>]
@@ -833,10 +833,10 @@ CLI Usage
                             “musicalSymbolFont” and “musicalTextFont”.
       --title-font <font-face>
                             Set “titleFontFace” and “subTitleFontFace”.
-      --musical-symbol-font <font-face>
+      --musical-symbol-font {Leland,Bravura,Emmentaler,Gonville,MuseJazz,Petaluma,Finale Maestro,Finale Broadway}
                             Set “musicalSymbolFont”, “dynamicsFont” and
                             “dynamicsFontFace”.
-      --musical-text-font <font-face>
+      --musical-text-font {Leland Text,Bravura Text,Emmentaler Text,Gonville Text,MuseJazz Text,Petaluma Text,Finale Maestro Text,Finale Broadway Text}
                             Set “musicalTextFont”.
 
     page (style):

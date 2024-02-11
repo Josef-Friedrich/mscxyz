@@ -583,7 +583,6 @@ def setup_parser() -> argparse.ArgumentParser:
         "--musical-symbol-font",
         dest="style_musical_symbol_font",
         choices=musical_symbol_font_faces,
-        metavar="<font-face>",
         help="Set “musicalSymbolFont”, “dynamicsFont” and  “dynamicsFontFace”.",
     )
 
@@ -591,7 +590,6 @@ def setup_parser() -> argparse.ArgumentParser:
         "--musical-text-font",
         dest="style_musical_text_font",
         choices=musical_text_font_faces,
-        metavar="<font-face>",
         help="Set “musicalTextFont”.",
     )
 
