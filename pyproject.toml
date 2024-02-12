@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mscxyz"
-version = "2.0.0"
+version = "3.0.0"
 description = "A command line tool to manipulate the XML based *.mscX and *.mscZ files of the notation software MuseScore."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
@@ -31,8 +31,8 @@ readme-patcher = "^0.6.0"
 tox = "^4.11.4"
 ruff = "^0.1.9"
 pytest = "^7.4.4"
-Sphinx = "6"
-sphinx-rtd-theme = "^2.0.0"
+Sphinx = "7"
+sphinx-rtd-theme = "2"
 
 [build-system]
 requires = ["poetry-core"]

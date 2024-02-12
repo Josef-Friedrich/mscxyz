@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2024-02-12
+
+### Added
+
+- Add new options: `--a4`, `--letter`, `--remove-origin`, `--list-fields`, `--list-functions`,
+  `--header-*` and `--footer-*` related options, meta data related options like
+  `--title`, `--subtitle`, `--composer`, `--lyricist`, `--reset-small-staffs`
+- More argparse groups
+
+### Changed
+
+- Colorize the command line output by default
+- Less output in `--help`
+- Merge the options `--rename` and `--format` into one
+
+### Removed
+
+- Legacy command line interface `mscx-manager` (use the new `musescore-manager`)
+
 ## [2.0.0] - 2024-01-21
 
 ### Added
@@ -61,13 +80,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.6] - 2016-10-02
 
-## [0.0.5] - 2016-10-02
-
-## [0.0.4] - 2016-09-14
-
-## [0.0.3] - 2016-09-03
-
-[unreleased]: https://github.com/Josef-Friedrich/mscxyz/compare/v1.3.1...HEAD
+[unreleased]: https://github.com/Josef-Friedrich/mscxyz/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/Josef-Friedrich/mscxyz/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/Josef-Friedrich/mscxyz/compare/v1.3.1...v2.0.0
 [1.3.1]: https://github.com/Josef-Friedrich/mscxyz/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Josef-Friedrich/mscxyz/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Josef-Friedrich/mscxyz/compare/v1.1.1...v1.2.0

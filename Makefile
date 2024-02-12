@@ -12,11 +12,7 @@ test_gui:
 test_all:
 	poetry run pytest
 
-test_real_binary:
-	pytest _test_real-binary.py
-
-install:
-	poetry install
+install: update
 
 # https://github.com/python-poetry/poetry/issues/34#issuecomment-1054626460
 install_editable:
@@ -43,9 +39,6 @@ docs:
 lint:
 	poetry run tox -e lint
 
-activate_venv:
-	source .venv/bin/activate
-
 pin_docs_requirements:
 	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
 
@@ -57,4 +50,4 @@ autocomplete:
 install_autocomplete: autocomplete
 	cp autocomplete.zsh "$(HOME)/.zsh-completions/_musescore-manager"
 
-.PHONY: test test_real_binary install install_editable update build publish format docs lint activate_venv pin_docs_requirements
+.PHONY: test test_real_binary install install_editable update build publish format docs lint pin_docs_requirements
