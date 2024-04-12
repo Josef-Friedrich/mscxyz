@@ -1,7 +1,6 @@
 """Test API interface. The mscxyz module is used in Python code not on the
 command line."""
 
-
 from mscxyz import (
     Score,
     list_path,

@@ -1,5 +1,4 @@
-"""Manipulate the lyrics
-"""
+"""Manipulate the lyrics"""
 
 from __future__ import annotations
 

@@ -1,5 +1,4 @@
-"""A class that represents one MuseScore file.
-"""
+"""A class that represents one MuseScore file."""
 
 from __future__ import annotations
 

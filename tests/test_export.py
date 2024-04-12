@@ -1,4 +1,5 @@
 """Test the command line interface using subprocess."""
+
 from __future__ import annotations
 
 from pathlib import Path
