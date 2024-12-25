@@ -86,7 +86,7 @@ Comande line interface
       -v, --verbose         Make commands more verbose. You can specifiy multiple
                             arguments (. g.: -vvv) to make the command more verbose.
       -k, --color, --no-color
-                            Colorize the command line print statements. (default: True)
+                            Colorize the command line print statements.
       --diff                Show a diff of the XML file before and after the
                             manipulation.
       --print-xml           Print the XML markup of the score.

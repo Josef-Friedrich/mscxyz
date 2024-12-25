@@ -24,7 +24,7 @@ _shtab_musescore_manager_options=(
   "--remove-origin[Delete the uncompressed original MuseScore file (\*.mscx) if it has been successfully converted to a compressed file (\*.mscz).]"
   "(- : *)"{-V,--version}"[show program\'s version number and exit]"
   "*"{-v,--verbose}"[Make commands more verbose. You can specifiy multiple arguments (. g.\: -vvv) to make the command more verbose.]"
-  {-k,--color,--no-color}"[Colorize the command line print statements. (default\: True)]:info_color:"
+  {-k,--color,--no-color}"[Colorize the command line print statements.]:info_color:"
   "--diff[Show a diff of the XML file before and after the manipulation.]"
   "--print-xml[Print the XML markup of the score.]"
   {-c,--clean-meta}"[Clean the meta data fields. Possible values\: \„all\“ or a comma separated list of fields, for example\: \„field_one,field_two\“.]:meta_clean:"
@@ -108,4 +108,12 @@ _shtab_musescore_manager() {
 
 
 typeset -A opt_args
-_shtab_musescore_manager "$@"
+
+if [[ $zsh_eval_context[-1] == eval ]]; then
+  # eval/source/. command, register function for later
+  compdef _shtab_musescore_manager -N musescore-manager
+else
+  # autoload from fpath, call function directly
+  _shtab_musescore_manager "$@"
+fi
+

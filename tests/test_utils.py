@@ -24,9 +24,10 @@ class TestFunctions:
     def _list_scores(
         path: str, extension: ListExtension = "both", glob: Optional[str] = None
     ) -> list[str]:
-        with mock.patch("os.walk") as mockwalk, mock.patch(
-            "pathlib.Path.is_dir"
-        ) as is_dir:
+        with (
+            mock.patch("os.walk") as mockwalk,
+            mock.patch("pathlib.Path.is_dir") as is_dir,
+        ):
             is_dir.return_value = True
             mockwalk.return_value = [
                 ("/a", ("bar",), ("lorem.mscx",)),
