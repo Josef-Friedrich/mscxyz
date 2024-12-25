@@ -22,10 +22,7 @@ class TestExport:
             assert args[2] == tmp
 
     def test_export_fails(self) -> None:
-        assert (
-            "invalid choice"
-            in Cli("--export", "xxx").sysexit()
-        )
+        assert "invalid choice" in Cli("--export", "xxx").sysexit()
 
 
 @pytest.mark.slow

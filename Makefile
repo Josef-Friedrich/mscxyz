@@ -40,7 +40,7 @@ lint:
 	poetry run tox -e lint
 
 pin_docs_requirements:
-	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
+	poetry run pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
 
 autocomplete:
 	poetry run musescore-manager --print-completion zsh > autocomplete.zsh

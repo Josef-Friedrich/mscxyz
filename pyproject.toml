@@ -19,21 +19,22 @@ classifiers = [
 keywords = ["audio"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-lxml = "^5.1.0"
-termcolor = "^2.4.0"
+python = "^3.10"
+lxml = "^5.3.0"
+termcolor = "^2.5.0"
 tmep = "^3.0.0"
 lxml-stubs = "^0.5.1"
-shtab = "^1.6.5"
+shtab = "^1.7.1"
 
 [tool.poetry.group.dev.dependencies]
 readme-patcher = "^0"
 tox = "^4"
 ruff = "^0"
 pytest = "^8"
-Sphinx = "7"
-sphinx-rtd-theme = "2"
+Sphinx = "^8"
+sphinx-rtd-theme = "^3"
 mypy = "^1"
+pip-tools = "^7"
 
 [build-system]
 requires = ["poetry-core"]
