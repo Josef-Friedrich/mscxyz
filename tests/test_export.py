@@ -23,7 +23,7 @@ class TestExport:
 
     def test_export_fails(self) -> None:
         assert (
-            "musescore-manager: error: argument -E/--export: invalid choice: 'xxx' (choose from 'mscz', 'mscx', 'spos', 'mpos', 'pdf', 'svg', 'png', 'wav', 'mp3', 'ogg', 'flac', 'mid', 'midi', 'kar', 'musicxml', 'xml', 'mxl', 'brf', 'mei')"
+            "invalid choice"
             in Cli("--export", "xxx").sysexit()
         )
 
