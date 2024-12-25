@@ -22,5 +22,6 @@
     "${workspaceFolder}/tests",
     "-m",
     "not (slow or gui)"
-  ]
+  ],
+  "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy"
 }

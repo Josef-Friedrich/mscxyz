@@ -33,6 +33,7 @@ ruff = "^0"
 pytest = "^8"
 Sphinx = "7"
 sphinx-rtd-theme = "2"
+mypy = "^1"
 
 [build-system]
 requires = ["poetry-core"]
