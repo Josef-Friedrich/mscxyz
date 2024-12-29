@@ -549,6 +549,16 @@ class TestCli:
         assert s.style.odd_footer_right is None
         assert s.style.even_footer_right is None
 
+    def test_option_lyrics_font_size(self) -> None:
+        c = Cli("--lyrics-font-size", "42").execute()
+        assert c.pre.style.lyrics_font_size == 11
+        assert c.post.style.lyrics_font_size == 42
+
+    def test_option_lyrics_min_distance(self) -> None:
+        c = Cli("--lyrics-min-distance", "7").execute()
+        assert c.pre.style.lyrics_min_distance == 0
+        assert c.post.style.lyrics_min_distance == 7
+
 
 class TestProperties:
     def test_measure_number_offset(self, score: Score) -> None:

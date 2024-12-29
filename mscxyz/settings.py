@@ -114,6 +114,9 @@ class DefaultArguments:
     style_footer_all: Optional[tuple[str, str, str]] = None
     style_footer_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
     style_clear_footer: bool = False
+    # style: lyrics
+    style_lyrics_font_size: Optional[float] = None
+    style_lyrics_min_distance: Optional[float] = None
 
     # positional argument
     path: list[PathOrStr] = ["."]

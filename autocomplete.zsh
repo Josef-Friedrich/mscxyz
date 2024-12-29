@@ -84,6 +84,8 @@ _shtab_musescore_manager_options=(
   "--footer[Set the footer for all pages.]:style_footer_all:"
   "--footer-odd-even[Set different footers for odd and even pages.]:style_footer_odd_even:"
   "--clear-footer[Clear all footer fields by setting all fields to empty strings. The footer is hidden.]"
+  "--lyrics-font-size[Set the font size of both even and odd lyrics.]:style_lyrics_font_size:"
+  "--lyrics-min-distance[Set the minimum gap or minimum distance between syllables or words.]:style_lyrics_min_distance:"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 

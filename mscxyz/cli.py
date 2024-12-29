@@ -561,6 +561,8 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Reset all small staffs to normal size.",
     )
 
+    # font (style)
+
     font = parser.add_argument_group(
         "font (style)", "Change the font faces of a score."
     )
@@ -600,6 +602,8 @@ def setup_parser() -> argparse.ArgumentParser:
         choices=musical_text_font_faces,
         help="Set “musicalTextFont”.",
     )
+
+    # page (style)
 
     page = parser.add_argument_group("page (style)", "Page settings.")
 
@@ -642,7 +646,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set the top, right, bottom and left margins to the same value.",
     )
 
-    # header
+    # header (style)
 
     header = parser.add_argument_group("header (style)", "Change the header.")
 
@@ -697,7 +701,7 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Clear all header fields by setting all fields to empty strings. The header is hidden.",
     )
 
-    # footer
+    # footer (style)
 
     footer = parser.add_argument_group("footer (style)", "Change the footer.")
 
@@ -750,6 +754,26 @@ def setup_parser() -> argparse.ArgumentParser:
         action="store_true",
         dest="style_clear_footer",
         help="Clear all footer fields by setting all fields to empty strings. The footer is hidden.",
+    )
+
+    # lyrics (style)
+
+    lyrics_style = parser.add_argument_group(
+        "lyrics (style)", "Change the lyrics styles."
+    )
+
+    lyrics_style.add_argument(
+        "--lyrics-font-size",
+        type=float,
+        dest="style_lyrics_font_size",
+        help="Set the font size of both even and odd lyrics.",
+    )
+
+    lyrics_style.add_argument(
+        "--lyrics-min-distance",
+        type=float,
+        dest="style_lyrics_min_distance",
+        help="Set the minimum gap or minimum distance between syllables or words.",
     )
 
     ###############################################################################
@@ -855,6 +879,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_file:
                 score.style.load_style_file(args.style_file.name)
 
+            # font (style)
+
             if args.style_text_font is not None:
                 score.style.set_text_fonts(args.style_text_font)
 
@@ -866,6 +892,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.style_musical_text_font is not None:
                 score.style.musical_text_font = args.style_musical_text_font
+
+            # page (style)
 
             if args.style_staff_space is not None:
                 score.style.staff_space = args.style_staff_space
@@ -882,7 +910,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_margin is not None:
                 score.style.margin = inch(args.style_margin)
 
-            # header
+            # header (style)
 
             if args.style_show_header is not None:
                 score.style.show_header = args.style_show_header
@@ -902,7 +930,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_clear_header:
                 score.style.clear_header()
 
-            # footer
+            # footer (style)
 
             if args.style_show_footer is not None:
                 score.style.show_footer = args.style_show_footer
@@ -921,6 +949,14 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.style_clear_footer:
                 score.style.clear_footer()
+
+            # lyrics (style)
+
+            if args.style_lyrics_font_size is not None:
+                score.style.lyrics_font_size = args.style_lyrics_font_size
+
+            if args.style_lyrics_min_distance is not None:
+                score.style.lyrics_min_distance = args.style_lyrics_min_distance
 
             # small staffs
 

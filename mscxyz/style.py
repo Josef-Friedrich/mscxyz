@@ -1420,3 +1420,35 @@ class Style:
         for element in self.xml.findall(".//StaffType/small"):
             if element.text == "1":
                 self.xml.remove(element)
+
+    # lyrics ###################################################################
+
+    @property
+    def lyrics_font_size(self) -> float:
+        even = self.__get_float("lyricsEvenFontSize")
+        odd = self.__get_float("lyricsOddFontSize")
+        if even is None or odd is None or even != odd:
+            raise Exception(
+                f"Lyrics even and odd size differs: even: {even} odd: {odd}"
+            )
+        return even
+
+    @lyrics_font_size.setter
+    def lyrics_font_size(self, value: float) -> None:
+        self.set("lyricsEvenFontSize", value)
+        self.set("lyricsOddFontSize", value)
+
+    @property
+    def lyrics_min_distance(self) -> Optional[float]:
+        """
+        default: 0.25
+
+        https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L80
+
+
+        """
+        return self.__get_float("lyricsMinDistance")
+
+    @lyrics_min_distance.setter
+    def lyrics_min_distance(self, value: float) -> None:
+        self.set("lyricsMinDistance", value)

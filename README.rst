@@ -662,6 +662,8 @@ CLI Usage
                              [--footer <left> <center> <right>]
                              [--footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
                              [--clear-footer]
+                             [--lyrics-font-size STYLE_LYRICS_FONT_SIZE]
+                             [--lyrics-min-distance STYLE_LYRICS_MIN_DISTANCE]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -888,6 +890,15 @@ CLI Usage
                             Set different footers for odd and even pages.
       --clear-footer        Clear all footer fields by setting all fields to empty
                             strings. The footer is hidden.
+
+    lyrics (style):
+      Change the lyrics styles.
+
+      --lyrics-font-size STYLE_LYRICS_FONT_SIZE
+                            Set the font size of both even and odd lyrics.
+      --lyrics-min-distance STYLE_LYRICS_MIN_DISTANCE
+                            Set the minimum gap or minimum distance between syllables or
+                            words.
 
 Configuration file
 ==================
