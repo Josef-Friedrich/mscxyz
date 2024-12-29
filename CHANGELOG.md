@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2024-12-29
+
+### Added
+
+- Add support for Python 3.13
+- New option: `--lyrics-min-distance`, `--lyrcis-font-size`
+  `--clear-header` and `--clear-footer`
+
+### Changed
+
+- Drop support for Python 3.9
+
 ## [3.0.0] - 2024-02-12
 
 ### Added
