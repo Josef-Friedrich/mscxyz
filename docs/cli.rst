@@ -33,11 +33,12 @@ Comande line interface
                              [--different-odd-even-header | --no-different-odd-even-header]
                              [--header <left> <center> <right>]
                              [--header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
-                             [--show-footer | --no-show-footer]
+                             [--clear-header] [--show-footer | --no-show-footer]
                              [--footer-first-page | --no-footer-first-page]
                              [--different-odd-even-footer | --no-different-odd-even-footer]
                              [--footer <left> <center> <right>]
                              [--footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>]
+                             [--clear-footer]
                              [<path> ...]
 
     The next generation command line tool to manipulate the XML based "*.mscX" and "*.mscZ" files of the notation software MuseScore.
@@ -246,6 +247,8 @@ Comande line interface
                             Set the header for all pages.
       --header-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
                             Set different headers for odd and even pages.
+      --clear-header        Clear all header fields by setting all fields to empty
+                            strings. The header is hidden.
 
     footer (style):
       Change the footer.
@@ -260,4 +263,6 @@ Comande line interface
                             Set the footer for all pages.
       --footer-odd-even <odd-left> <even-left> <odd-center> <even-center> <odd-right> <even-right>
                             Set different footers for odd and even pages.
+      --clear-footer        Clear all footer fields by setting all fields to empty
+                            strings. The footer is hidden.
 

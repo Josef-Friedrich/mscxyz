@@ -77,11 +77,13 @@ _shtab_musescore_manager_options=(
   {--different-odd-even-header,--no-different-odd-even-header}"[Use different header for odd and even pages.]:style_different_odd_even_header:"
   "--header[Set the header for all pages.]:style_header_all:"
   "--header-odd-even[Set different headers for odd and even pages.]:style_header_odd_even:"
+  "--clear-header[Clear all header fields by setting all fields to empty strings. The header is hidden.]"
   {--show-footer,--no-show-footer}"[Show or hide the footer.]:style_show_footer:"
   {--footer-first-page,--no-footer-first-page}"[Show the footer on the first page.]:style_footer_first_page:"
   {--different-odd-even-footer,--no-different-odd-even-footer}"[Use different footers for odd and even pages.]:style_different_odd_even_footer:"
   "--footer[Set the footer for all pages.]:style_footer_all:"
   "--footer-odd-even[Set different footers for odd and even pages.]:style_footer_odd_even:"
+  "--clear-footer[Clear all footer fields by setting all fields to empty strings. The footer is hidden.]"
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 

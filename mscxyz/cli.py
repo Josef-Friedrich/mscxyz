@@ -690,6 +690,13 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Set different headers for odd and even pages.",
     )
 
+    header.add_argument(
+        "--clear-header",
+        dest="style_clear_header",
+        action="store_true",
+        help="Clear all header fields by setting all fields to empty strings. The header is hidden.",
+    )
+
     # footer
 
     footer = parser.add_argument_group("footer (style)", "Change the footer.")
@@ -736,6 +743,13 @@ def setup_parser() -> argparse.ArgumentParser:
             "<even-right>",
         ),
         help="Set different footers for odd and even pages.",
+    )
+
+    footer.add_argument(
+        "--clear-footer",
+        action="store_true",
+        dest="style_clear_footer",
+        help="Clear all footer fields by setting all fields to empty strings. The footer is hidden.",
     )
 
     ###############################################################################
@@ -885,6 +899,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
             if args.style_header_odd_even:
                 score.style.set_header_odd_even(*args.style_header_odd_even)
 
+            if args.style_clear_header:
+                score.style.clear_header()
+
             # footer
 
             if args.style_show_footer is not None:
@@ -901,6 +918,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.style_footer_odd_even:
                 score.style.set_footer_odd_even(*args.style_footer_odd_even)
+
+            if args.style_clear_footer:
+                score.style.clear_footer()
 
             # small staffs
 

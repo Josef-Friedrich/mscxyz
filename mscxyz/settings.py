@@ -106,12 +106,14 @@ class DefaultArguments:
     style_different_odd_even_header: Optional[bool] = None
     style_header_all: Optional[tuple[str, str, str]] = None
     style_header_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
+    style_clear_header: bool = False
     # style: footer
     style_different_odd_even_footer: Optional[bool] = None
     style_show_footer: Optional[bool] = None
     style_footer_first_page: Optional[bool] = None
     style_footer_all: Optional[tuple[str, str, str]] = None
     style_footer_odd_even: Optional[tuple[str, str, str, str, str, str]] = None
+    style_clear_footer: bool = False
 
     # positional argument
     path: list[PathOrStr] = ["."]

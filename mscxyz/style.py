@@ -1006,7 +1006,7 @@ class Style:
     # even/odd header l/c/r ####################################################
 
     @property
-    def even_header_left(self) -> str:
+    def even_header_left(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1014,14 +1014,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 497 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L497>`_
         """
-        return self.__get_str_default("evenHeaderL", "$p")
+        return self.get("evenHeaderL", False)
 
     @even_header_left.setter
     def even_header_left(self, value: str) -> None:
         self.set("evenHeaderL", value)
 
     @property
-    def even_header_center(self) -> str:
+    def even_header_center(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1029,14 +1029,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 498 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L498>`_
         """
-        return self.__get_str_default("evenHeaderC", "")
+        return self.get("evenHeaderC", False)
 
     @even_header_center.setter
     def even_header_center(self, value: str) -> None:
         self.set("evenHeaderC", value)
 
     @property
-    def even_header_right(self) -> str:
+    def even_header_right(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1044,14 +1044,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 499 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L499>`_
         """
-        return self.__get_str_default("evenHeaderR", "")
+        return self.get("evenHeaderR", False)
 
     @even_header_right.setter
     def even_header_right(self, value: str) -> None:
         self.set("evenHeaderR", value)
 
     @property
-    def odd_header_left(self) -> str:
+    def odd_header_left(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1059,14 +1059,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 500 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L500>`_
         """
-        return self.__get_str_default("oddHeaderL", "")
+        return self.get("oddHeaderL", False)
 
     @odd_header_left.setter
     def odd_header_left(self, value: str) -> None:
         self.set("oddHeaderL", value)
 
     @property
-    def odd_header_center(self) -> str:
+    def odd_header_center(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1074,14 +1074,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 501 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L501>`_
         """
-        return self.__get_str_default("oddHeaderC", "")
+        return self.get("oddHeaderC", False)
 
     @odd_header_center.setter
     def odd_header_center(self, value: str) -> None:
         self.set("oddHeaderC", value)
 
     @property
-    def odd_header_right(self) -> str:
+    def odd_header_right(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1089,7 +1089,7 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 502 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L502>`_
         """
-        return self.__get_str_default("oddHeaderR", "$p")
+        return self.get("oddHeaderR", False)
 
     @odd_header_right.setter
     def odd_header_right(self, value: str) -> None:
@@ -1147,6 +1147,15 @@ class Style:
         self.odd_header_center = odd_center
         self.odd_header_right = odd_right
 
+    def clear_header(self) -> None:
+        self.show_header = False
+        self.even_header_left = ""
+        self.even_header_center = ""
+        self.even_header_right = ""
+        self.odd_header_left = ""
+        self.odd_header_center = ""
+        self.odd_header_right = ""
+
     # footer ###################################################################
 
     @property
@@ -1203,7 +1212,7 @@ class Style:
     # even/odd footer l/c/r ####################################################
 
     @property
-    def even_footer_left(self) -> str:
+    def even_footer_left(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1211,14 +1220,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 507 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L507>`_
         """
-        return self.__get_str_default("evenFooterL", "")
+        return self.get("evenFooterL", False)
 
     @even_footer_left.setter
     def even_footer_left(self, value: str) -> None:
         self.set("evenFooterL", value)
 
     @property
-    def even_footer_center(self) -> str:
+    def even_footer_center(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1226,14 +1235,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 508 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L508>`_
         """
-        return self.__get_str_default("evenFooterC", "$C")
+        return self.get("evenFooterC", False)
 
     @even_footer_center.setter
     def even_footer_center(self, value: str) -> None:
         self.set("evenFooterC", value)
 
     @property
-    def even_footer_right(self) -> str:
+    def even_footer_right(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1241,14 +1250,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 509 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L509>`_
         """
-        return self.__get_str_default("evenFooterR", "")
+        return self.get("evenFooterR", False)
 
     @even_footer_right.setter
     def even_footer_right(self, value: str) -> None:
         self.set("evenFooterR", value)
 
     @property
-    def odd_footer_left(self) -> str:
+    def odd_footer_left(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1256,14 +1265,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 510 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L510>`_
         """
-        return self.__get_str_default("oddFooterL", "")
+        return self.get("oddFooterL", False)
 
     @odd_footer_left.setter
     def odd_footer_left(self, value: str) -> None:
         self.set("oddFooterL", value)
 
     @property
-    def odd_footer_center(self) -> str:
+    def odd_footer_center(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1271,14 +1280,14 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 511 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L511>`_
         """
-        return self.__get_str_default("oddFooterC", "$C")
+        return self.get("oddFooterC", False)
 
     @odd_footer_center.setter
     def odd_footer_center(self, value: str) -> None:
         self.set("oddFooterC", value)
 
     @property
-    def odd_footer_right(self) -> str:
+    def odd_footer_right(self) -> Optional[str]:
         """
         .. code :: XML
 
@@ -1286,7 +1295,7 @@ class Style:
 
         :see: `MuseScore C++ source code: styledef.cpp line 512 <https://github.com/musescore/MuseScore/blob/e0f941733ac2c0959203a5e99252eb4c58f67606/src/engraving/style/styledef.cpp#L512>`_
         """
-        return self.__get_str_default("oddFooterR", "")
+        return self.get("oddFooterR", False)
 
     @odd_footer_right.setter
     def odd_footer_right(self, value: str) -> None:
@@ -1343,6 +1352,15 @@ class Style:
         self.odd_footer_left = odd_left
         self.odd_footer_center = odd_center
         self.odd_footer_right = odd_right
+
+    def clear_footer(self) -> None:
+        self.show_footer = False
+        self.even_footer_left = ""
+        self.even_footer_center = ""
+        self.even_footer_right = ""
+        self.odd_footer_left = ""
+        self.odd_footer_center = ""
+        self.odd_footer_right = ""
 
     # staff ####################################################################
 
