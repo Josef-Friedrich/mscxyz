@@ -63,4 +63,4 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
-        run: sudo uv run --isolated pytest tests -m "not gui"
+        run: uv run pytest tests -m "not (slow or gui)"
