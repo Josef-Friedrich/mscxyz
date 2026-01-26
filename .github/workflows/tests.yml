@@ -47,6 +47,9 @@ jobs:
       # https://github.com/marketplace/actions/checkout
       - uses: actions/checkout@v6
 
+      - name: Install dev dependencies for lxml
+        run: apt install libxml2-dev libxslt1-dev
+
       # https://docs.astral.sh/uv/guides/integration/github/#multiple-python-versions
       - name: Install uv and set the Python version
         uses: astral-sh/setup-uv@v7
