@@ -166,6 +166,7 @@ _set_new_action() {
 #     ${!x} -> ${hello} -> "world"
 _shtab_musescore_manager() {
   local completing_word="${COMP_WORDS[COMP_CWORD]}"
+  local previous_word="${COMP_WORDS[COMP_CWORD-1]}"
   local completed_positional_actions
   local current_action
   local current_action_args_start_index
@@ -204,6 +205,7 @@ _shtab_musescore_manager() {
 
       if [[ "$current_action_nargs" != "*" ]] && \
          [[ "$current_action_nargs" != "+" ]] && \
+         [[ "$current_action_nargs" != "?" ]] && \
          [[ "$current_action_nargs" != *"..." ]] && \
          (( $word_index + 1 - $current_action_args_start_index - $pos_only >= \
             $current_action_nargs )); then
@@ -222,6 +224,10 @@ _shtab_musescore_manager() {
   if [[ $pos_only = 0 && "${completing_word}" == -* ]]; then
     # optional argument started: use option strings
     COMPREPLY=( $(compgen -W "${current_option_strings[*]}" -- "${completing_word}") )
+  elif [[ "${previous_word}" == ">" || "${previous_word}" == ">>" ||
+          "${previous_word}" =~ ^[12]">" || "${previous_word}" =~ ^[12]">>" ]]; then
+    # handle redirection operators
+    COMPREPLY=( $(compgen -f -- "${completing_word}") )
   else
     # use choices & compgen
     local IFS=$'\n' # items may contain spaces, so delimit using newline

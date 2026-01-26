@@ -14,8 +14,9 @@ if typing.TYPE_CHECKING:
 class UnmatchedFormatStringError(Exception):
     def __init__(self, format_string: str, input_string: str) -> None:
         self.msg = (
-            "Your format string “{}” doesn’t match on this "
-            "input string: “{}”".format(format_string, input_string)
+            "Your format string “{}” doesn’t match on this input string: “{}”".format(
+                format_string, input_string
+            )
         )
         Exception.__init__(self, self.msg)
 

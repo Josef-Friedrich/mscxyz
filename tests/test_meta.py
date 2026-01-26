@@ -29,7 +29,7 @@ class TestExceptions:
     def test_format_string_no_field_error(self) -> None:
         with pytest.raises(meta.FormatStringNoFieldError) as e:
             raise meta.FormatStringNoFieldError("test")
-        assert e.value.args[0] == "No fields found in your " "format string “test”!"
+        assert e.value.args[0] == "No fields found in your format string “test”!"
 
 
 def get_meta_tag(filename: str, version: int) -> Metatag:

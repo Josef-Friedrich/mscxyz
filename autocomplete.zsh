@@ -89,12 +89,19 @@ _shtab_musescore_manager_options=(
   "(*)::Path to a \"\*.msc\[zx\]\" file or a folder containing \"\*.msc\[zx\]\" files. can be specified several times.:_files"
 )
 
+# guard to ensure default positional specs are added only once per session
+_shtab_musescore_manager_defaults_added=0
+
 
 _shtab_musescore_manager() {
-  local context state line curcontext="$curcontext" one_or_more='(-)*' remainder='(*)'
+  local context state line curcontext="$curcontext" one_or_more='(*)' remainder='(-)*' default='*::: :->musescore-manager'
 
-  if ((${_shtab_musescore_manager_options[(I)${(q)one_or_more}*]} + ${_shtab_musescore_manager_options[(I)${(q)remainder}*]} == 0)); then  # noqa: E501
-    _shtab_musescore_manager_options+=(': :_shtab_musescore_manager_commands' '*::: :->musescore-manager')
+  # Add default positional/remainder specs only if none exist, and only once per session
+  if (( ! _shtab_musescore_manager_defaults_added )); then
+    if (( ${_shtab_musescore_manager_options[(I)${(q)one_or_more}*]} +          ${_shtab_musescore_manager_options[(I)${(q)remainder}*]} +          ${_shtab_musescore_manager_options[(I)${(q)default}]} == 0 )); then
+      _shtab_musescore_manager_options+=(': :_shtab_musescore_manager_commands' '*::: :->musescore-manager')
+    fi
+    _shtab_musescore_manager_defaults_added=1
   fi
   _arguments -C -s $_shtab_musescore_manager_options
 
