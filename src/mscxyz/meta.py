@@ -425,6 +425,7 @@ class Vbox:
         "lyricist",
         "subtitle",
         "title",
+        "instrument_excerpt",
     )
 
     score: "Score"
@@ -645,6 +646,32 @@ class Vbox:
     def lyricist(self, value: str | None) -> None:
         self.__set_text("lyricist", value)
 
+    @property
+    def instrument_excerpt(self) -> str | None:
+        """
+        The instrument excerpt text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>instrument_excerpt</style>
+                        <text>Instrument Name</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("instrument_excerpt")
+
+    @instrument_excerpt.setter
+    def instrument_excerpt(self, value: str | None) -> None:
+        self.__set_text("instrument_excerpt", value)
+
     def clean(self) -> None:
         for field in self.fields:
             setattr(self, field, None)
@@ -668,6 +695,7 @@ class Meta:
         self.subtitle = self.subtitle
         self.composer = self.composer
         self.lyricist = self.lyricist
+        self.instrument_excerpt = self.instrument_excerpt
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")

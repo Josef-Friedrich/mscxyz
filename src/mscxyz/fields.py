@@ -96,6 +96,12 @@ class FieldsManager:
             attr_path="meta.vbox.lyricist",
             color="cyan",
         ),
+        Field(
+            name="vbox_instrument_excerpt",
+            description="The excerpt field of the score as it appears in the top left of the first vertical frame (VBox).",
+            attr_path="meta.vbox.instrument_excerpt",
+            color="cyan",
+        ),
         # metatag
         Field(
             name="metatag_arranger",

@@ -325,6 +325,14 @@ def setup_parser() -> argparse.ArgumentParser:
     )
 
     meta.add_argument(
+        "--instrument_excerpt",
+        metavar=("<string>"),
+        dest="meta_instrument_excerpt",
+        help="Create a vertical frame (vbox) containing a instrument_excerpt text field and "
+        "set the corresponding document properties instrument_excerpt filed (metatag).",
+    )
+
+    meta.add_argument(
         "--composer",
         metavar=("<string>"),
         dest="meta_composer",
@@ -992,6 +1000,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 or args.meta_sync
                 or args.meta_title
                 or args.meta_subtitle
+                or args.meta_instrument_excerpt
                 or args.meta_composer
                 or args.meta_lyricist
             ):
@@ -1049,6 +1058,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.meta_subtitle:
                 score.meta.subtitle = args.meta_subtitle
+
+            if args.meta_instrument_excerpt:
+                score.meta.instrument_excerpt = args.meta_instrument_excerpt
 
             if args.meta_composer:
                 score.meta.composer = args.meta_composer
