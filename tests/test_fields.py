@@ -21,6 +21,7 @@ class TestClassFieldsManager:
             "vbox_subtitle",
             "vbox_composer",
             "vbox_lyricist",
+            "vbox_instrument_excerpt",
             "metatag_arranger",
             "metatag_audio_com_url",
             "metatag_composer",

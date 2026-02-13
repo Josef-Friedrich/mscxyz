@@ -695,7 +695,6 @@ class Meta:
         self.subtitle = self.subtitle
         self.composer = self.composer
         self.lyricist = self.lyricist
-        self.instrument_excerpt = self.instrument_excerpt
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
