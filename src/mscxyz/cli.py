@@ -321,15 +321,15 @@ def setup_parser() -> argparse.ArgumentParser:
         metavar=("<string>"),
         dest="meta_subtitle",
         help="Create a vertical frame (vbox) containing a subtitle text field and "
-        "set the corresponding document properties subtitle and movement title filed (metatag).",
+        "set the corresponding document properties subtitle and movement title field (metatag).",
     )
 
     meta.add_argument(
-        "--instrument_excerpt",
+        "--instrument-excerpt",
+        "--part-name",
         metavar=("<string>"),
         dest="meta_instrument_excerpt",
-        help="Create a vertical frame (vbox) containing a instrument_excerpt text field and "
-        "set the corresponding document properties instrument_excerpt filed (metatag).",
+        help="Create a vertical frame (vbox) containing a instrument_excerpt (part name) text field.",
     )
 
     meta.add_argument(
@@ -1063,6 +1063,9 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.meta_lyricist:
                 score.meta.lyricist = args.meta_lyricist
+
+            if args.meta_instrument_excerpt:
+                score.meta.vbox.instrument_excerpt = args.meta_instrument_excerpt
 
             if manipulate_meta:
                 score.fields.diff(args)

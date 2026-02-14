@@ -30,6 +30,8 @@ def test_a4_piano_fruehtau() -> None:
             "Edwin Ericson",
             "--lyricist",
             "Olof Thunman",
+            "--instrument-excerpt",
+            "Voice!",
             "--reset-small-staffs",
         )
         .append_score("Im-Fruehtau-zu-Berge.mscz")
@@ -42,6 +44,7 @@ def test_a4_piano_fruehtau() -> None:
     assert dest.meta.subtitle == "Vi gå över daggstänkta berg"
     assert dest.meta.composer == "Edwin Ericson"
     assert dest.meta.lyricist == "Olof Thunman"
+    assert dest.meta.vbox.instrument_excerpt == "Voice!"
 
     # open_in_gui(dest)
 

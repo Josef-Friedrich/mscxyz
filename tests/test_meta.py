@@ -333,10 +333,14 @@ def test_option_metatag() -> None:
 
 def test_option_vbox() -> None:
     score = Cli(
+        #
         "--vbox",
         "composer",
         "c",
         #
+        "--vbox",
+        "instrument_excerpt",
+        "i",
         "--vbox",
         "lyricist",
         "l",
@@ -352,6 +356,7 @@ def test_option_vbox() -> None:
 
     v = score.meta.vbox
     assert v.composer == "c"
+    assert v.instrument_excerpt == "i"
     assert v.lyricist == "l"
     assert v.subtitle == "s"
     assert v.title == "t"
@@ -365,6 +370,14 @@ class TestOptionSetField:
             .score()
         )
         assert s.meta.vbox.title == "test"
+
+    def test_instrument_excerpt(self) -> None:
+        s = (
+            Cli("--set-field", "vbox_instrument_excerpt", "Part name!")
+            .append_score("meta-all-values.mscz")
+            .score()
+        )
+        assert s.meta.vbox.instrument_excerpt == "Part name!"
 
     def test_multiple_times(self) -> None:
         s = (

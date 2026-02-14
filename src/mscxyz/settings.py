@@ -58,11 +58,13 @@ class DefaultArguments:
     meta_set: Optional[list[tuple[str, str]]] = None
     meta_metatag: Optional[list[tuple[str, str]]] = None
     meta_vbox: Optional[list[tuple[str, str]]] = None
+
     meta_combined: Optional[list[tuple[str, str]]] = None
     meta_title: Optional[str] = None
     meta_subtitle: Optional[str] = None
     meta_composer: Optional[str] = None
     meta_lyricist: Optional[str] = None
+    meta_instrument_excerpt: Optional[str] = None
 
     # rename
     rename_rename: Optional[str] = None
