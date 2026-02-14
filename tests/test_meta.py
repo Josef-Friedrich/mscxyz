@@ -107,6 +107,26 @@ class TestClassVbox:
         assert new_score.meta.vbox.title == "New Title"
         assert "<text>New Title</text>" in new_score.read_as_text()
 
+    def test_title(self) -> None:
+        vbox = get_vbox("instrument_excerpt.mscz", 4)
+        assert vbox.title == "Untitled score"
+
+    def test_subtitle(self) -> None:
+        vbox = get_vbox("instrument_excerpt.mscz", 4)
+        assert vbox.subtitle == "Subtitle"
+
+    def test_composer(self) -> None:
+        vbox = get_vbox("instrument_excerpt.mscz", 4)
+        assert vbox.composer == "Composer / arranger"
+
+    def test_lyricist(self) -> None:
+        vbox = get_vbox("instrument_excerpt.mscz", 4)
+        assert vbox.lyricist is None
+
+    def test_instrument_excerpt(self) -> None:
+        vbox = get_vbox("instrument_excerpt.mscz", 4)
+        assert vbox.instrument_excerpt == "Part name"
+
 
 class TestOptionDistributeField:
     def test_distribute_field(self, score: Score) -> None:

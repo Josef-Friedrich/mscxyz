@@ -373,10 +373,11 @@ class Vbox:
 
     Available fields:
 
-    * `Composer`
-    * `Lyricist`
-    * `Subtitle`
-    * `Title`
+    * `title`: Title
+    * `subtitle`: Subtitle
+    * `composer`: Composer
+    * `lyricist`: Lyricist
+    * `instrument_excerpt`: Part name
 
     Version 2, 3
 
