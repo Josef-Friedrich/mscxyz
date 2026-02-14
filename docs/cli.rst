@@ -14,11 +14,11 @@ Comande line interface
                              [-S <field> <format-string>]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
-                             [--composer <string>] [--lyricist <string>]
-                             [-x <number-or-all>] [-r <remap-pairs>] [-F]
-                             [--rename <path-template>] [-t <directory> |
-                             --only-filename] [-A] [-a] [-n] [-K <fields>]
-                             [--list-fields] [--list-functions] [-L]
+                             [--instrument_excerpt <string>] [--composer <string>]
+                             [--lyricist <string>] [-x <number-or-all>]
+                             [-r <remap-pairs>] [-F] [--rename <path-template>]
+                             [-t <directory> | --only-filename] [-A] [-a] [-n]
+                             [-K <fields>] [--list-fields] [--list-functions] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--reset-small-staffs] [--list-fonts]
@@ -132,13 +132,17 @@ Comande line interface
                             translator, work_number, work_title.
       --vbox, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
-                            composer, lyricist, subtitle, title.
+                            composer, lyricist, subtitle, title, instrument_excerpt.
       --title <string>      Create a vertical frame (vbox) containing a title text field
                             and set the corresponding document properties work title
                             field (metatag).
       --subtitle <string>   Create a vertical frame (vbox) containing a subtitle text
                             field and set the corresponding document properties subtitle
                             and movement title filed (metatag).
+      --instrument_excerpt <string>
+                            Create a vertical frame (vbox) containing a
+                            instrument_excerpt text field and set the corresponding
+                            document properties instrument_excerpt filed (metatag).
       --composer <string>   Create a vertical frame (vbox) containing a composer text
                             field and set the corresponding document properties composer
                             field (metatag).
