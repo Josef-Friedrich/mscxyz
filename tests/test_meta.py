@@ -470,6 +470,7 @@ class TestClassMeta:
         assert self.meta.vbox.subtitle is None
         assert self.meta.vbox.composer is None
         assert self.meta.vbox.lyricist is None
+        assert self.meta.vbox.instrument_excerpt is None
         assert self.meta.metatag.arranger is None
         assert self.meta.metatag.audio_com_url is None
         assert self.meta.metatag.composer is None
