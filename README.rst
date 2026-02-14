@@ -638,8 +638,8 @@ CLI Usage
                              [-S <field> <format-string>]
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
-                             [--instrument_excerpt <string>] [--composer <string>]
-                             [--lyricist <string>] [-x <number-or-all>]
+                             [--composer <string>] [--lyricist <string>]
+                             [--part-name <string>] [-x <number-or-all>]
                              [-r <remap-pairs>] [-F] [--rename <path-template>]
                              [-t <directory> | --only-filename] [-A] [-a] [-n]
                              [-K <fields>] [--list-fields] [--list-functions] [-L]
@@ -762,17 +762,16 @@ CLI Usage
                             field (metatag).
       --subtitle <string>   Create a vertical frame (vbox) containing a subtitle text
                             field and set the corresponding document properties subtitle
-                            and movement title filed (metatag).
-      --instrument_excerpt <string>
-                            Create a vertical frame (vbox) containing a
-                            instrument_excerpt text field and set the corresponding
-                            document properties instrument_excerpt filed (metatag).
+                            and movement title field (metatag).
       --composer <string>   Create a vertical frame (vbox) containing a composer text
                             field and set the corresponding document properties composer
                             field (metatag).
       --lyricist <string>   Create a vertical frame (vbox) containing a lyricist text
                             field and set the corresponding document properties lyricist
                             field (metatag).
+      --part-name, --instrument-excerpt <string>
+                            Create a vertical frame (vbox) containing a
+                            instrument_excerpt (part name) text field.
 
     lyrics:
       -x, --extract, --extract-lyrics <number-or-all>

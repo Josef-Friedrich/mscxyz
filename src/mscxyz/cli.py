@@ -325,14 +325,6 @@ def setup_parser() -> argparse.ArgumentParser:
     )
 
     meta.add_argument(
-        "--instrument-excerpt",
-        "--part-name",
-        metavar=("<string>"),
-        dest="meta_instrument_excerpt",
-        help="Create a vertical frame (vbox) containing a instrument_excerpt (part name) text field.",
-    )
-
-    meta.add_argument(
         "--composer",
         metavar=("<string>"),
         dest="meta_composer",
@@ -346,6 +338,14 @@ def setup_parser() -> argparse.ArgumentParser:
         dest="meta_lyricist",
         help="Create a vertical frame (vbox) containing a lyricist text field and "
         "set the corresponding document properties lyricist field (metatag).",
+    )
+
+    meta.add_argument(
+        "--part-name",
+        "--instrument-excerpt",
+        metavar=("<string>"),
+        dest="meta_instrument_excerpt",
+        help="Create a vertical frame (vbox) containing a instrument_excerpt (part name) text field.",
     )
 
     ###############################################################################

@@ -37,7 +37,7 @@ format:
 docs: docs_readme_patcher docs_sphinx
 
 docs_readme_patcher:
-	uv tool run --isolated --with . readme-patcher
+	uv tool run --no-cache --isolated --with . readme-patcher
 
 docs_sphinx:
 	rm -rf docs/_build
