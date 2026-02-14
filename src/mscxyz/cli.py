@@ -1002,6 +1002,7 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 or args.meta_subtitle
                 or args.meta_composer
                 or args.meta_lyricist
+                or args.meta_instrument_excerpt
             ):
                 manipulate_meta = True
                 # to get score.fields.pre
