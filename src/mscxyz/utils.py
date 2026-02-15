@@ -210,12 +210,6 @@ def colorize(
 ) -> str:
     """Wrapper function around ``termcolor.colored()`` to easily turn off and
     on colorized terminal output on the command line.
-
-    Example usage:
-
-    .. code:: Python
-
-        color('“{}”'.format(post[field]), 'yellow')
     """
     settings = get_args()
     if settings.info_color:

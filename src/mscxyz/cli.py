@@ -812,11 +812,7 @@ def _print_error(error: Exception) -> None:
         msg = error.msg
 
     print(
-        "{}: {}; message: {}".format(
-            utils.colorize("Error", "white", "on_red"),
-            utils.colorize(error.__class__.__name__, "red"),
-            msg,
-        )
+        f"{utils.colorize('Error', 'white', 'on_red')}: {utils.colorize(error.__class__.__name__, 'red')}; message: {msg}"
     )
 
 

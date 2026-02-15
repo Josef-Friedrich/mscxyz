@@ -13,17 +13,13 @@ if typing.TYPE_CHECKING:
 
 class UnmatchedFormatStringError(Exception):
     def __init__(self, format_string: str, input_string: str) -> None:
-        self.msg = (
-            "Your format string “{}” doesn’t match on this input string: “{}”".format(
-                format_string, input_string
-            )
-        )
+        self.msg = f"Your format string “{format_string}” doesn’t match on this input string: “{input_string}”"
         Exception.__init__(self, self.msg)
 
 
 class FormatStringNoFieldError(Exception):
     def __init__(self, format_string: str) -> None:
-        self.msg = "No fields found in your format string “{}”!".format(format_string)
+        self.msg = f"No fields found in your format string “{format_string}”!"
         Exception.__init__(self, self.msg)
 
 

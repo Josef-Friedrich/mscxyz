@@ -175,7 +175,7 @@ def merge_config_into_args(
 ) -> DefaultArguments:
     for section in config.sections():
         for key, value in config[section].items():
-            arg = "{}_{}".format(section, key)
+            arg = f"{section}_{key}"
             if not hasattr(args, arg) or not getattr(args, arg):
                 setattr(args, arg, value)
 

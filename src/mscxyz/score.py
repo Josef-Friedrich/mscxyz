@@ -113,7 +113,6 @@ class Score:
             <programRevision>eb8d33c</programRevision>
 
         :see: `MuseScore C++ source code: writer.cpp line 57 <https://github.com/musescore/MuseScore/blob/ed678925efbbdbb9bd14ea3f6f7c9b5ab42491e7/src/engraving/rw/write/writer.cpp#L57>`_
-
         """
         return self.xml.get_text_safe(element_path="programRevision")
 

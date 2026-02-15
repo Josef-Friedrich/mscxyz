@@ -80,7 +80,7 @@ def _show(old: str, new: str) -> None:
     :param old: The original file path or name (displayed in yellow)
     :param new: The new file path or name (displayed in green)
     """
-    print("{} -> {}".format(colorize(old, "yellow"), colorize(new, "green")))
+    print(f"{colorize(old, 'yellow')} -> {colorize(new, 'green')}")
 
 
 def _get_checksum(filename: str) -> str:
@@ -122,7 +122,7 @@ def rename(score: Score, path_template: str) -> None:
         skips: list[str] = args.rename_skip.split(",")
         for skip in skips:
             if skip not in meta_values:
-                print(colorize("Field “{}” is empty! Skipping".format(skip), "red"))
+                print(colorize(f"Field “{skip}” is empty! Skipping", "red"))
                 return
 
     if args.rename_target:
@@ -143,10 +143,8 @@ def rename(score: Score, path_template: str) -> None:
             if _get_checksum(str(score.path)) == _get_checksum(target):
                 print(
                     colorize(
-                        "The file “{}” with the same checksum (sha1) "
-                        "already exists in the target path “{}”!".format(
-                            str(score.path), target
-                        ),
+                        f"The file “{score.path}” with the same checksum (sha1) "
+                        f"already exists in the target path “{target}”!",
                         "red",
                     )
                 )
