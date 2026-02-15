@@ -19,6 +19,13 @@ from mscxyz.utils import colorize
 
 
 def _create_dir(path: str) -> None:
+    """
+    Create a directory and any necessary parent directories.
+
+    :param path: The file path whose parent directory should be created
+
+    :raises OSError: If a directory creation error occurs other than the directory already existing
+    """
     try:
         os.makedirs(os.path.dirname(path))
     except OSError as exception:
@@ -27,6 +34,27 @@ def _create_dir(path: str) -> None:
 
 
 def _prepare_fields(fields: FieldsExport) -> dict[str, str]:
+    """
+    Prepare and normalize field values for renaming operations.
+
+    Applies a series of text transformations to field values based on command-line
+    arguments. Transformations may include alphanumeric filtering, ASCII conversion,
+    whitespace removal, and character substitution.
+
+    :param fields: Dictionary of fields and their values to be processed
+
+    :return: Dictionary with processed field names and normalized values
+
+    :note:
+        The following transformations are applied conditionally:
+
+        - If ``rename_alphanum`` is enabled: filters to alphanumeric characters
+        - If ``rename_ascii`` is enabled: converts to ASCII representation
+        - If ``rename_no_whitespace`` is enabled: removes all whitespace
+        - Unconditional: strips leading/trailing whitespace and replaces "/" with "-"
+
+    :return: Only non-empty field values are included in the output dictionary
+    """
     args = get_args()
     output: dict[str, str] = {}
     for field, value in fields.items():
@@ -46,10 +74,22 @@ def _prepare_fields(fields: FieldsExport) -> dict[str, str]:
 
 
 def _show(old: str, new: str) -> None:
+    """
+    Display a file rename operation with color-coded output.
+
+    :param old: The original file path or name (displayed in yellow)
+    :param new: The new file path or name (displayed in green)
+    """
     print("{} -> {}".format(colorize(old, "yellow"), colorize(new, "green")))
 
 
 def _get_checksum(filename: str) -> str:
+    """
+    Calculate the SHA1 checksum of a file.
+
+    :param filename: Path to the file for which to compute the checksum
+    :return: Hexadecimal representation of the SHA1 checksum
+    """
     BLOCKSIZE = 65536
     hasher = hashlib.sha1()
     with open(filename, "rb") as afile:
@@ -61,6 +101,16 @@ def _get_checksum(filename: str) -> str:
 
 
 def rename(score: Score, path_template: str) -> None:
+    """
+    Rename a MuseScore file based on a path template and metadata fields.
+
+    :param score: A Score object containing the file path and metadata fields
+    :param path_template: A template string for generating the target filename
+
+    :example:
+        >>> score = Score(path='song.mscx')
+        >>> rename(score, '{composer}/{title}')
+    """
     args = get_args()
 
     meta_values = score.fields.export_to_dict()

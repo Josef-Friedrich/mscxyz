@@ -1,4 +1,4 @@
-"""Test submodule “utils.py”."""
+"""Test submodule “xml.py”."""
 
 from __future__ import annotations
 
