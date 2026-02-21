@@ -55,12 +55,6 @@ dest = "README.rst"
 src = "cli_template.rst"
 dest = "docs/cli.rst"
 
-[tool.pytest]
-python_files = "*_test.py"
-
-[tool.pytest.ini_options]
-markers = ["only", "slow", "gui"]
-
 [tool.pyright]
 reportPrivateUsage = false
 

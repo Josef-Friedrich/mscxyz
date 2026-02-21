@@ -15,8 +15,8 @@ Comande line interface
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
                              [--composer <string>] [--lyricist <string>]
-                             [--part-name <string>] [-x <number-or-all>]
-                             [-r <remap-pairs>] [-F] [--rename <path-template>]
+                             [-x <number-or-all>] [-r <remap-pairs>] [-F]
+                             [--rename <path-template>]
                              [-t <directory> | --only-filename] [-A] [-a] [-n]
                              [-K <fields>] [--list-fields] [--list-functions] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
@@ -53,7 +53,7 @@ Comande line interface
       -h, --help            show this help message and exit
       --print-completion {bash,zsh,tcsh}
                             print shell completion script
-      -C, --config-file <file-path>
+      -C <file-path>, --config-file <file-path>
                             Specify a configuration file in the INI format.
       -b, --backup          Create a backup file.
       -d, --dry-run         Simulate the actions.
@@ -61,13 +61,13 @@ Comande line interface
       -m, --mscore, --save-in-mscore
                             Open and save the XML file in MuseScore after manipulating
                             the XML with lxml to avoid differences in the XML structure.
-      -e, --executable FILE_PATH
+      -e FILE_PATH, --executable FILE_PATH
                             Path of the musescore executable.
 
     export:
       Export the scores in different formats.
 
-      -E, --export <extension>
+      -E <extension>, --export <extension>
                             Export the scores in a format defined by the extension. The
                             exported file has the same path, only the file extension is
                             different. Further information can be found at the MuseScore
@@ -97,7 +97,7 @@ Comande line interface
     meta:
       Deal with meta data informations stored in the MuseScore file.
 
-      -c, --clean-meta <fields>
+      -c <fields>, --clean-meta <fields>
                             Clean the meta data fields. Possible values: „all“ or a
                             comma separated list of fields, for example:
                             „field_one,field_two“.
@@ -105,7 +105,7 @@ Comande line interface
                             Deletes lyricist if this field is equal to composer. Deletes
                             subtitle if this field is equal totitle. Move subtitle to
                             combimed_title if title is empty.
-      -i, --distribute-fields <source-fields> <format-string>
+      -i <source-fields> <format-string>, --distribute-fields <source-fields> <format-string>
                             Distribute source fields to target fields by applying a
                             format string on the source fields. It is possible to apply
                             multiple --distribute-fields options. <source-fields> can be
@@ -116,45 +116,42 @@ Comande line interface
       -j, --json            Write the meta data to a json file. The resulting file has
                             the same path as the input file, only the extension is
                             changed to “json”.
-      -l, --log <log-file> <format-string>
+      -l <log-file> <format-string>, --log <log-file> <format-string>
                             Write one line per file to a text file. e. g. --log
                             /tmp/musescore-manager.log '$title $composer'
       -y, --synchronize     Synchronize the values of the first vertical frame (vbox)
                             (title, subtitle, composer, lyricist) with the corresponding
                             metadata fields
-      -S, --set-field <field> <format-string>
+      -S <field> <format-string>, --set-field <field> <format-string>
                             Set value to meta data fields.
-      --metatag, --metatag-meta <field> <value>
+      --metatag <field> <value>, --metatag-meta <field> <value>
                             Define the metadata in MetaTag elements. Available fields:
                             arranger, audio_com_url, composer, copyright, creation_date,
                             lyricist, movement_number, movement_title, msc_version,
                             platform, poet, source, source_revision_id, subtitle,
                             translator, work_number, work_title.
-      --vbox, --vbox-meta <field> <value>
+      --vbox <field> <value>, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
-                            composer, lyricist, subtitle, title, instrument_excerpt.
+                            composer, lyricist, subtitle, title.
       --title <string>      Create a vertical frame (vbox) containing a title text field
                             and set the corresponding document properties work title
                             field (metatag).
       --subtitle <string>   Create a vertical frame (vbox) containing a subtitle text
                             field and set the corresponding document properties subtitle
-                            and movement title field (metatag).
+                            and movement title filed (metatag).
       --composer <string>   Create a vertical frame (vbox) containing a composer text
                             field and set the corresponding document properties composer
                             field (metatag).
       --lyricist <string>   Create a vertical frame (vbox) containing a lyricist text
                             field and set the corresponding document properties lyricist
                             field (metatag).
-      --part-name, --instrument-excerpt <string>
-                            Create a vertical frame (vbox) containing a
-                            instrument_excerpt (part name) text field.
 
     lyrics:
-      -x, --extract, --extract-lyrics <number-or-all>
+      -x <number-or-all>, --extract <number-or-all>, --extract-lyrics <number-or-all>
                             Extract each lyrics verse into a separate MuseScore file.
                             Specify ”all” to extract all lyrics verses. The old verse
                             number is appended to the file name, e. g.: score_1.mscx.
-      -r, --remap, --remap-lyrics <remap-pairs>
+      -r <remap-pairs>, --remap <remap-pairs>, --remap-lyrics <remap-pairs>
                             Remap lyrics. Example: "--remap 3:2,5:3". This example
                             remaps lyrics verse 3 to verse 2 and verse 5 to 3. Use
                             commas to specify multiple remap pairs. One remap pair is
@@ -170,14 +167,14 @@ Comande line interface
 
       --rename <path-template>
                             A path template string to set the destination location.
-      -t, --target <directory>
+      -t <directory>, --target <directory>
                             Target directory
       --only-filename       Rename only the filename and don’t move the score to a
                             different directory.
       -A, --alphanum        Use only alphanumeric characters.
       -a, --ascii           Use only ASCII characters.
       -n, --no-whitespace   Replace all whitespaces with dashes or sometimes underlines.
-      -K, --skip-if-empty <fields>
+      -K <fields>, --skip-if-empty <fields>
                             Skip the rename action if the fields specified in <fields>
                             are empty. Multiple fields can be separated by commas, e.
                             g.: composer,title
@@ -190,7 +187,7 @@ Comande line interface
       The following options affect how the manager selects the MuseScore files.
 
       -L, --list-files      Only list files and do nothing else.
-      -g, --glob <glob-pattern>
+      -g <glob-pattern>, --glob <glob-pattern>
                             Handle only files which matches against Unix style glob
                             patterns (e. g. "*.mscx", "* - *"). If you omit this option,
                             the standard glob pattern "*.msc[xz]" is used.
@@ -200,10 +197,10 @@ Comande line interface
     style:
       Change the styles.
 
-      -s, --style <style-name> <value>
+      -s <style-name> <value>, --style <style-name> <value>
                             Set a single style value. For example: --style pageWidth 8.5
       --clean               Clean and reset the formating of the "*.mscx" file
-      -Y, --style-file <file>
+      -Y <file>, --style-file <file>
                             Load a "*.mss" style file and include the contents of this
                             file.
       --s3, --styles-v3     List all possible version 3 styles.
