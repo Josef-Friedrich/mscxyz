@@ -372,6 +372,7 @@ All vbox tags:
 - ``subtitle`` (v2,3: ``Subtitle``)
 - ``composer`` (v2,3: ``Composer``)
 - ``lyricist`` (v2,3: ``Lyricist``)
+- ``instrument_excerpt`` (v4 only “part name”)
 
 This command line tool bundles some meta data informations:
 
