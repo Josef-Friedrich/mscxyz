@@ -18,12 +18,19 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
 ]
+
 dependencies = [
-    "lxml>=5.4.0",
+    "lxml>=6.0.2",
     "lxml-stubs>=0.5.1",
     "shtab>=1.8.0",
     "termcolor>=3.3.0",
-    "tmep>=3.0.1",
+    "tmep>=4.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
 ]
 
 [project.urls]
@@ -36,18 +43,8 @@ Changelog = "https://github.com/Josef-Friedrich/mplugin/blob/main/HISTORY.txt"
 [project.scripts]
 musescore-manager = "mscxyz.cli:execute"
 
-[dependency-groups]
-dev = [
-    "readme-patcher>=0,<1",
-    "tox>=4,<5",
-    "ruff>=0,<1",
-    "pytest>=8,<9",
-    "mypy>=1,<2",
-    "pip-tools>=7,<8",
-]
-
 [build-system]
-requires = ["uv_build>=0.9.26,<0.10.0"]
+requires = ["uv_build>=0.10.4,<0.11.0"]
 build-backend = "uv_build"
 
 [[tool.readme_patcher.file]]
