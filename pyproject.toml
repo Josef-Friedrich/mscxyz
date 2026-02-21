@@ -27,8 +27,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://mscxyz.readthedocs.io"
+Documentation = "https://mscxyz.readthedocs.io"
+Download = "https://pypi.org/project/mplugin/"
 Repository = "https://github.com/Josef-Friedrich/mscxyz"
+Issues = "https://github.com/Josef-Friedrich/mplugin/issues"
+Changelog = "https://github.com/Josef-Friedrich/mplugin/blob/main/HISTORY.txt"
 
 [project.scripts]
 musescore-manager = "mscxyz.cli:execute"
