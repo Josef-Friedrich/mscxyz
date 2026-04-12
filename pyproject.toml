@@ -44,7 +44,7 @@ Changelog = "https://github.com/Josef-Friedrich/mplugin/blob/main/HISTORY.txt"
 musescore-manager = "mscxyz.cli:execute"
 
 [build-system]
-requires = ["uv_build>=0.10.4,<0.11.0"]
+requires = ["uv_build>=0.11.6,<0.12.0"]
 build-backend = "uv_build"
 
 [[tool.readme_patcher.file]]
