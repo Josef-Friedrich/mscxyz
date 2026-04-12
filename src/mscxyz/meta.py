@@ -620,7 +620,7 @@ class Vbox:
     @property
     def lyricist(self) -> str | None:
         """
-        The composer text field of the first `vertical` box or frame of a score.
+        The lyricist text field of the first `vertical` box or frame of a score.
 
         .. code-block:: xml
 
@@ -642,6 +642,32 @@ class Vbox:
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
         self.__set_text("lyricist", value)
+
+    @property
+    def poet(self) -> str | None:
+        """
+        The poet text field of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>4294967418</eid>
+                    <Text>
+                        <eid>8589934598</eid>
+                        <style>poet</style>
+                        <text>Johann Wolfgang von Goethe</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
+        return self.__get_text("poet")
+
+    @poet.setter
+    def poet(self, value: str | None) -> None:
+        self.__set_text("poet", value)
 
     @property
     def instrument_excerpt(self) -> str | None:
