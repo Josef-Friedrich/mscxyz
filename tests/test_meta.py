@@ -545,3 +545,11 @@ class TestClassMeta:
         assert score.meta.lyricist == new
         assert score.meta.vbox.lyricist == new
         assert score.meta.metatag.lyricist == new
+
+    def test_property_poet(self, score: Score) -> None:
+        assert score.meta.poet is None
+        new = "New Poety"
+        score.meta.poet = new
+        assert score.meta.poet == new
+        assert score.meta.vbox.poet == new
+        assert score.meta.metatag.poet == new

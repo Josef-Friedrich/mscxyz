@@ -419,10 +419,11 @@ class Vbox:
 
     fields = (
         "composer",
+        "instrument_excerpt",
         "lyricist",
+        "poet",
         "subtitle",
         "title",
-        "instrument_excerpt",
     )
 
     score: "Score"
@@ -718,6 +719,7 @@ class Meta:
         self.subtitle = self.subtitle
         self.composer = self.composer
         self.lyricist = self.lyricist
+        self.poet = self.poet
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         log = open(log_file, "w")
@@ -824,3 +826,16 @@ class Meta:
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
         self.vbox.lyricist = self.metatag.lyricist = value
+
+    @property
+    def poet(self) -> str | None:
+        """
+        Get and set the value of :attr:`Vbox.poet` and :attr:`Metatag.poet` all at once.
+
+        If the attributes have different values, then the attribute :attr:`Vbox.poet` is preferred.
+        """
+        return self.__pick_value(self.vbox.poet, self.metatag.poet)
+
+    @poet.setter
+    def poet(self, value: str | None) -> None:
+        self.vbox.poet = self.metatag.poet = value
