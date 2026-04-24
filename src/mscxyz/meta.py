@@ -415,6 +415,38 @@ class Vbox:
                 </Text>
             </VBox>
         </Staff>
+
+    Version 4.6.5 (lyricist is now poet)
+
+    .. code-block:: xml
+
+        <Staff id="1">
+            <VBox>
+                <height>10</height>
+                <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
+                <Text>
+                    <eid>hibWj5obkBO_6AUar0D+y6K</eid>
+                    <style>title</style>
+                    <text>Untitled score</text>
+                </Text>
+                <Text>
+                    <eid>mDB0b0Sa0SM_73LrivvAWEC</eid>
+                    <style>subtitle</style>
+                    <text>Subtitle</text>
+                </Text>
+                <Text>
+                    <eid>13Y3EfRgceC_QRif2MiL9ZM</eid>
+                    <style>composer</style>
+                    <text>Composer / arranger</text>
+                </Text>
+                <Text>
+                    <eid>5bIbUnhSBCP_qqv84cvOnMO</eid>
+                    <style>poet</style>
+                    <text>Lyricist</text>
+                </Text>
+            </VBox>
+        </Staff>
+
     """
 
     # eid
