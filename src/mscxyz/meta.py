@@ -417,6 +417,26 @@ class Vbox:
         </Staff>
     """
 
+    # eid
+    # eid Refactor EID into a pseudo-UUID https://github.com/musescore/MuseScore/commit/a6784896ae10a08559ac48ca4fba9ba63d2b471d
+
+    # https://github.com/musescore/MuseScore/blob/master/src/engraving/infrastructure/eid.cpp
+    # https://github.com/musescore/MuseScore/blob/master/src/engraving/infrastructure/eidregister.cpp
+
+    # https://musescore.org/en/node/379559
+    # However, in 4.4.4 it is of the 'numeric' type, while in 4.5.2 it is of the 'alphanumeric' type.
+    # I believe their main purpose is to link elements between main score and parts.
+
+    # EID: same examples
+    # TVJRSgwuZD_EwSwNORnKz
+    # pYMYtt7e63I_bcIcXkGdYWH
+    # /da47B/ELqH_MFU63hCcg7F
+    # OTzv11PTP6E_aqOziUGyuBF
+    # UUID: 907a3f91-5c2a-441e-98c2-7c65d4b4b0b5
+
+    # as base64: b8tRS7h4TJ2Vt43Dp85v2A
+    # as uuid  : 6fcb514b-b878-4c9d-95b7-8dc3a7ce6fd8
+
     fields = (
         "composer",
         "instrument_excerpt",
