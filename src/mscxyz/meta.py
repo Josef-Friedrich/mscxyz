@@ -372,7 +372,7 @@ class Vbox:
     * `title`: Title
     * `subtitle`: Subtitle
     * `composer`: Composer
-    * `lyricist`: Lyricist
+    * `poet`: Lyricist
     * `instrument_excerpt`: Part name
 
     Version 2, 3
@@ -472,7 +472,6 @@ class Vbox:
     fields = (
         "composer",
         "instrument_excerpt",
-        "lyricist",
         "poet",
         "subtitle",
         "title",
@@ -492,7 +491,6 @@ class Vbox:
         vbox = self.score.xml.xpath(xpath + "/VBox")
         if vbox is None:
             vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
-
             self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
 
@@ -577,7 +575,7 @@ class Vbox:
             self.__remove_text_element(style)
             return None
 
-        element: _Element | None = self.__get_element(style)
+        element = self.__get_element(style)
         if hasattr(element, "text"):
             if element is not None:
                 element.text = text
@@ -591,6 +589,24 @@ class Vbox:
         """
         self.score.xml.remove(self.__get_element(style))
         return None
+
+    def __rename_element(self, old_style: str, new_style):
+        """
+        Rename a text element style tag inside the first score VBox.
+
+        :param old_style: Existing style name to look up (for example
+          ``Title``/``title`` or ``Composer``/``composer``).
+        :param new_style: New style name to assign to the matching element.
+
+        Notes:
+            Style normalization is version-dependent and handled by
+            :meth:`__normalize_style_name`.
+        """
+        old = self.__get_element(old_style)
+        if old is not None:
+            style = old.find("style")
+            if style is not None:
+                style.text = new_style
 
     @property
     def title(self) -> str | None:
@@ -690,11 +706,13 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.__get_text("lyricist")
+        self.__rename_element("lyricist", "poet")
+        return self.__get_text("poet")
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
-        self.__set_text("lyricist", value)
+        self.__rename_element("lyricist", "poet")
+        self.__set_text("poet", value)
 
     @property
     def poet(self) -> str | None:
@@ -754,6 +772,15 @@ class Vbox:
 
 
 class Meta:
+    """
+    High-level interface for score metadata.
+
+    This class combines metadata stored in MuseScore ``metaTag`` elements
+    (:class:`Metatag`) and text objects in the first vertical frame
+    (:class:`Vbox`) and exposes them through a unified API.
+
+    MuseScore version 4.7.2 metatag_lyricist == vbox_poet
+    """
     score: "Score"
 
     metatag: Metatag
@@ -761,12 +788,18 @@ class Meta:
     vbox: Vbox
 
     def __init__(self, score: "Score") -> None:
+        """Initialize metadata helpers for a score."""
         self.score = score
-
         self.metatag = Metatag(self.score)
         self.vbox = Vbox(self.score)
 
     def sync_fields(self) -> None:
+        """
+        Re-assign key fields to trigger internal synchronization.
+
+        This forces current values to be written back through property setters,
+        ensuring ``metaTag`` and ``VBox`` representations are aligned.
+        """
         self.title = self.title
         self.subtitle = self.subtitle
         self.composer = self.composer
@@ -774,6 +807,12 @@ class Meta:
         self.poet = self.poet
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
+        """
+        Write formatted exported score fields to a log file.
+
+        :param log_file: Path of the output log file.
+        :param format_string: Template string parsed with exported fields.
+        """
         log = open(log_file, "w")
         log.write(tmep.parse(format_string, self.score.fields.export_to_dict()) + "\n")
         log.close()
@@ -873,11 +912,11 @@ class Meta:
 
         If the attributes have different values, then the attribute :attr:`Vbox.lyricist` is preferred.
         """
-        return self.__pick_value(self.vbox.lyricist, self.metatag.lyricist)
+        return self.__pick_value(self.vbox.poet, self.metatag.lyricist)
 
     @lyricist.setter
     def lyricist(self, value: str | None) -> None:
-        self.vbox.lyricist = self.metatag.lyricist = value
+        self.vbox.poet = self.metatag.lyricist = value
 
     @property
     def poet(self) -> str | None:
@@ -886,8 +925,8 @@ class Meta:
 
         If the attributes have different values, then the attribute :attr:`Vbox.poet` is preferred.
         """
-        return self.__pick_value(self.vbox.poet, self.metatag.poet)
+        return self.__pick_value(self.vbox.poet, self.metatag.lyricist)
 
     @poet.setter
     def poet(self, value: str | None) -> None:
-        self.vbox.poet = self.metatag.poet = value
+        self.vbox.poet = self.metatag.lyricist = value

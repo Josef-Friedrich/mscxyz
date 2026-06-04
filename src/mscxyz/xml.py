@@ -94,6 +94,14 @@ class XmlManipulator:
 
     @staticmethod
     def create_element(tag_name: str, attrib: Optional[_DictAnyStr] = None) -> _Element:
+        """
+        Create a new XML element.
+
+        :param tag_name: The name of the tag to create.
+        :param attrib: Optional dictionary of attributes for the element.
+
+        :return: The newly created XML element.
+        """
         return Element(tag_name, attrib=attrib)
 
     @staticmethod
@@ -103,6 +111,17 @@ class XmlManipulator:
         text: Optional[str] = None,
         attrib: Optional[_DictAnyStr] = None,
     ) -> tuple[_Element, _Element]:
+        """
+        Create a subelement and add it to a parent element.
+
+        :param parent: The parent XML element or tag name string. If a string is provided,
+          a new element will be created.
+        :param tag_name: The name of the subelement tag to create.
+        :param text: Optional text content for the subelement.
+        :param attrib: Optional dictionary of attributes for the subelement.
+
+        :return: A tuple containing the parent element and the newly created subelement.
+        """
         if isinstance(parent, str):
             parent = XmlManipulator.create_element(parent)
         sub_element: _Element = SubElement(parent, tag_name, attrib=attrib)
@@ -127,15 +146,26 @@ class XmlManipulator:
         return element
 
     def __normalize_element(self, element: ElementLike = None) -> _Element | None:
+        """
+        Normalize an element by extracting the root if it's a tree.
+
+        :param element: The XML element or tree to normalize.
+        :return: The normalized element or None.
+        """
         if isinstance(element, _ElementTree):
             return element.getroot()
         return element
 
     def find(self, element_path: str, element: ElementLike = None) -> _Element | None:
         """
+        Find the first element matching the element path expression.
+
         :param element_path: A `element path expression
           <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
           with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
+        :param element: The XML element to search within. Defaults to the root element.
+
+        :return: The first matching element or None if not found.
         """
         return self.__get_element(element).find(element_path)
 
@@ -160,9 +190,14 @@ class XmlManipulator:
 
     def findall(self, element_path: str, element: ElementLike = None) -> list[_Element]:
         """
+        Find all elements matching the element path expression.
+
         :param element_path: A `element path expression
           <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
           with limited XPath support, for example ``.//Note`` selects all ``<Note>`` elements.
+        :param element: The XML element to search within. Defaults to the root element.
+
+        :return: A list of all matching elements.
         """
         return self.__get_element(element).findall(element_path)
 
@@ -301,7 +336,7 @@ class XmlManipulator:
         :param value: The new value to set for the element's text.
         :param element: The XML element to modify.
 
-        :return: None
+        :return: The XmlManipulator instance for method chaining.
         """
         self.find_safe(element_path, element).text = str(value)
         return self
@@ -340,10 +375,14 @@ class XmlManipulator:
 
     def remove_tags(self, *element_paths: str) -> XmlManipulator:
         """
-        :param element_path: A `element path expression
+        Remove all elements matching the given element path expressions.
+
+        :param element_paths: Variable number of element path expressions
           <https://docs.python.org/3/library/xml.etree.elementtree.html#elementtree-xpath>`_
-          with limited XPath support to locate the target element,
+          with limited XPath support to locate the target elements,
           for example ``.//Note`` selects all ``<Note>`` elements.
+
+        :return: The XmlManipulator instance for method chaining.
         """
         for path in element_paths:
             for element in self.findall(path):

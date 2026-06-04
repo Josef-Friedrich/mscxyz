@@ -1027,6 +1027,8 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 for a in args.meta_vbox:
                     field = a[0]
                     value = a[1]
+                    if field == "lyricist":
+                        field = "poet"
                     if field not in Vbox.fields:
                         raise ValueError(
                             f"Unknown field {field}. "
