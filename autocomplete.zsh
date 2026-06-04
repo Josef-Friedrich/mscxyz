@@ -35,7 +35,7 @@ _shtab_musescore_manager_options=(
   {-y,--synchronize}"[Synchronize the values of the first vertical frame (vbox) (title, subtitle, composer, lyricist) with the corresponding metadata fields]"
   "*"{-S,--set-field}"[Set value to meta data fields.]:meta_set:"
   "*"{--metatag,--metatag-meta}"[Define the metadata in MetaTag elements. Available fields\: arranger, audio_com_url, composer, copyright, creation_date, lyricist, movement_number, movement_title, msc_version, platform, poet, source, source_revision_id, subtitle, translator, work_number, work_title.]:meta_metatag:"
-  "*"{--vbox,--vbox-meta}"[Define the metadata in VBox elements. Available fields\: composer, instrument_excerpt, lyricist, poet, subtitle, title.]:meta_vbox:"
+  "*"{--vbox,--vbox-meta}"[Define the metadata in VBox elements. Available fields\: composer, instrument_excerpt, poet, subtitle, title.]:meta_vbox:"
   "--title[Create a vertical frame (vbox) containing a title text field and set the corresponding document properties work title field (metatag).]:meta_title:"
   "--subtitle[Create a vertical frame (vbox) containing a subtitle text field and set the corresponding document properties subtitle and movement title field (metatag).]:meta_subtitle:"
   "--composer[Create a vertical frame (vbox) containing a composer text field and set the corresponding document properties composer field (metatag).]:meta_composer:"

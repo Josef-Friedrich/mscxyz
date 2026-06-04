@@ -760,8 +760,7 @@ CLI Usage
                             translator, work_number, work_title.
       --vbox, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
-                            composer, instrument_excerpt, lyricist, poet, subtitle,
-                            title.
+                            composer, instrument_excerpt, poet, subtitle, title.
       --title <string>      Create a vertical frame (vbox) containing a title text field
                             and set the corresponding document properties work title
                             field (metatag).

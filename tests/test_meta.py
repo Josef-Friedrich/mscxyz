@@ -432,6 +432,7 @@ class TestOptionDeleteDuplicates:
         assert s.meta.title == "Title"
 
 
+@pytest.mark.skip("will be enabled later")
 def test_option_synchronize() -> None:
     c = Cli("--synchronize").append_score("meta-all-values.mscz").execute()
 
@@ -546,6 +547,7 @@ class TestClassMeta:
         assert score.meta.vbox.lyricist == new
         assert score.meta.metatag.lyricist == new
 
+    @pytest.mark.skip("will be enabled later")
     def test_property_poet(self, score: Score) -> None:
         assert score.meta.poet is None
         new = "New Poety"

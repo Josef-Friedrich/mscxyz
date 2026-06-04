@@ -364,6 +364,35 @@ class Metatag:
             setattr(self, field, None)
 
 
+class VboxText:
+    """
+    Represents one text element of the first vbox element.
+
+    .. code-block:: xml
+
+        <Text>
+            <eid>hibWj5obkBO_6AUar0D+y6K</eid>
+            <style>title</style>
+            <text>Untitled score</text>
+        </Text>
+    """
+
+    __style: str
+    __parent_vbox: _Element
+    __text: typing.Optional[_Element]
+
+    def __init__(
+        self, style: str, parent_vbox: _Element, text: typing.Optional[_Element]
+    ) -> None:
+        self.__style = style
+        self.__parent_vbox = parent_vbox
+        self.__text = text
+
+    def clean(self) -> None:
+        if self.__text is None:
+            return
+
+
 class Vbox:
     """The first `vertical` box or frame of a score.
 
@@ -511,7 +540,7 @@ class Vbox:
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
         for element in self.vbox:
-            s: _Element | None = element.find("style")
+            s = element.find("style")
             if s is not None and s.text == self.__normalize_style_name(style):
                 return element.find("text")
         return None
@@ -521,7 +550,7 @@ class Vbox:
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer``.
         """
-        element: _Element | None = self.__get_element(style)
+        element = self.__get_element(style)
         if element is not None and hasattr(element, "text"):
             return element.text
         return None
@@ -552,7 +581,7 @@ class Vbox:
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         :param text: The string inside the ``<text>`` tags.
         """
-        text_element: _Element = self.score.xml.create_element("Text")
+        text_element = self.score.xml.create_element("Text")
 
         if self.score.version_major in (2, 3):
             style = style.title()
@@ -590,7 +619,7 @@ class Vbox:
         self.score.xml.remove(self.__get_element(style))
         return None
 
-    def __rename_element(self, old_style: str, new_style):
+    def __rename_element(self, old_style: str, new_style: str) -> None:
         """
         Rename a text element style tag inside the first score VBox.
 
@@ -607,6 +636,49 @@ class Vbox:
             style = old.find("style")
             if style is not None:
                 style.text = new_style
+
+    __title: typing.Optional[VboxText]
+
+    def _title(self) -> VboxText:
+        if self.__title is None:
+            self.__title = VboxText("title", self.vbox, self.__get_element("title"))
+        return self.__title
+
+    __subtitle: typing.Optional[VboxText]
+
+    def _subtitle(self) -> VboxText:
+        if self.__subtitle is None:
+            self.__subtitle = VboxText(
+                "subtitle", self.vbox, self.__get_element("subtitle")
+            )
+        return self.__subtitle
+
+    __composer: typing.Optional[VboxText]
+
+    def _composer(self) -> VboxText:
+        if self.__composer is None:
+            self.__composer = VboxText(
+                "composer", self.vbox, self.__get_element("composer")
+            )
+        return self.__composer
+
+    __lyricist: typing.Optional[VboxText]
+
+    def _lyricist(self) -> VboxText:
+        if self.__lyricist is None:
+            self.__lyricist = VboxText("poet", self.vbox, self.__get_element("poet"))
+        return self.__lyricist
+
+    __instrument_excerpt: typing.Optional[VboxText]
+
+    def _instrument_excerpt(self) -> VboxText:
+        if self.__instrument_excerpt is None:
+            self.__instrument_excerpt = VboxText(
+                "instrument_excerpt",
+                self.vbox,
+                self.__get_element("instrument_excerpt"),
+            )
+        return self.__instrument_excerpt
 
     @property
     def title(self) -> str | None:
@@ -781,6 +853,7 @@ class Meta:
 
     MuseScore version 4.7.2 metatag_lyricist == vbox_poet
     """
+
     score: "Score"
 
     metatag: Metatag
