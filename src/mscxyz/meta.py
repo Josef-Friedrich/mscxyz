@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import typing
+from typing import Optional
 
 import tmep
 from lxml.etree import Element, _Element
@@ -407,20 +408,17 @@ class VboxText:
     __parent_vbox: _Element
     """The parent vbox element."""
 
-    __container: typing.Optional[_Element]
+    __container: Optional[_Element]
     """The surrounding text element in uppercase letters, for example ``<Text>...</Text>``"""
 
-    __style: typing.Optional[_Element]
+    __style: Optional[_Element]
     """The style element, for example ``<style>title</style>``."""
-
-    __content: typing.Optional[_Element]
-    """The text element in lowercase letters, for example <text>Untitled score</text>"""
 
     def __init__(
         self,
         style_name: str,
         parent_vbox: _Element,
-        container: typing.Optional[_Element],
+        container: Optional[_Element],
     ) -> None:
         self.__style_name = style_name
         self.__parent_vbox = parent_vbox
@@ -433,11 +431,24 @@ class VboxText:
             self.__content = self.__container.find("text")
 
     def clean(self) -> None:
+        """Remove all style overwrites."""
         if self.__container is None:
             return
         for element in list(self.__container):
             if element.tag not in ("eid", "style", "text"):
                 self.__container.remove(element)
+
+    def remove(self) -> None:
+        """Remove the container element ``<Text>...</Text>`` from the
+        parent ``<Vbox>...</Vbox>`` element."""
+        if self.__container is not None:
+            self.__parent_vbox.remove(self.__container)
+
+            self.__container = None
+            self.__style = None
+            self.__content = None
+
+        return None
 
     @property
     def style_name(self) -> str:
@@ -462,6 +473,9 @@ class VboxText:
     def style(self, style_name: str) -> None:
         self.style.text = style_name
 
+    __content: Optional[_Element]
+    """The text element in lowercase letters, for example <text>Untitled score</text>"""
+
     @property
     def _content(self) -> _Element:
         if self.__content is None:
@@ -470,12 +484,34 @@ class VboxText:
         return self.__content
 
     @property
-    def content(self) -> typing.Optional[str]:
-        return self._content.text
+    def content(self) -> Optional[str]:
+        if self.__container is None:
+            return None
+        # To get the content of all child elements,
+        # for example: ``<text><b><i><font face="FreeSans"/>Untitled score</i></b></text>``
+        content = self._content.xpath(".//text()")
+        if (
+            isinstance(content, bool)
+            or isinstance(content, float)
+            or isinstance(content, int)
+        ):
+            return str(content)
+        elements: list[str] = []
+        for i in content:
+            elements.append(str(i))
+
+        if len(elements) == 0:
+            return None
+        return "".join(elements)
 
     @content.setter
-    def content(self, content: str) -> None:
+    def content(self, content: Optional[str]) -> None:
+        if content is None:
+            self.remove()
+            return None
+        # To create the style-tag
         self.style = self.__style_name
+        self._content.clear()
         self._content.text = content
 
 
@@ -620,7 +656,7 @@ class Vbox:
             style = style.lower()
         return style
 
-    def __get_container(self, style: str) -> typing.Optional[_Element]:
+    def __get_container(self, style: str) -> Optional[_Element]:
         """
         :param style: The string inside the ``<style>`` tags, for example
         ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
@@ -733,15 +769,14 @@ class Vbox:
             if style is not None:
                 style.text = new_style
 
-    __title: typing.Optional[VboxText] = None
+    def __create_vbox_text(self, style_name: str) -> VboxText:
+        return VboxText(
+            self.__normalize_style_name(style_name),
+            self.vbox,
+            self.__get_container(style_name),
+        )
 
-    @property
-    def _title(self) -> VboxText:
-        if self.__title is None:
-            self.__title = VboxText("title", self.vbox, self.__get_container("title"))
-        return self.__title
-
-    __subtitle: typing.Optional[VboxText] = None
+    __subtitle: Optional[VboxText] = None
 
     @property
     def _subtitle(self) -> VboxText:
@@ -751,7 +786,7 @@ class Vbox:
             )
         return self.__subtitle
 
-    __composer: typing.Optional[VboxText] = None
+    __composer: Optional[VboxText] = None
 
     @property
     def _composer(self) -> VboxText:
@@ -761,7 +796,7 @@ class Vbox:
             )
         return self.__composer
 
-    __lyricist: typing.Optional[VboxText] = None
+    __lyricist: Optional[VboxText] = None
 
     @property
     def _lyricist(self) -> VboxText:
@@ -769,7 +804,7 @@ class Vbox:
             self.__lyricist = VboxText("poet", self.vbox, self.__get_container("poet"))
         return self.__lyricist
 
-    __instrument_excerpt: typing.Optional[VboxText] = None
+    __instrument_excerpt: Optional[VboxText] = None
 
     def _instrument_excerpt(self) -> VboxText:
         if self.__instrument_excerpt is None:
@@ -779,6 +814,14 @@ class Vbox:
                 self.__get_element("instrument_excerpt"),
             )
         return self.__instrument_excerpt
+
+    __title: Optional[VboxText] = None
+
+    @property
+    def _title(self) -> VboxText:
+        if self.__title is None:
+            self.__title = self.__create_vbox_text("title")
+        return self.__title
 
     @property
     def title(self) -> str | None:
@@ -800,11 +843,11 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.__get_text("title")
+        return self._title.content
 
     @title.setter
     def title(self, value: str | None) -> None:
-        self.__set_text("title", value)
+        self._title.content = value
 
     @property
     def subtitle(self) -> str | None:
