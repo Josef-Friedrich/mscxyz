@@ -5,7 +5,7 @@ from __future__ import annotations
 import typing
 
 import tmep
-from lxml.etree import _Element
+from lxml.etree import Element, _Element
 
 if typing.TYPE_CHECKING:
     from mscxyz.score import Score
@@ -375,22 +375,64 @@ class VboxText:
             <style>title</style>
             <text>Untitled score</text>
         </Text>
+
+    Global styled:
+
+    .. code-block:: xml
+
+        <Text>
+            <eid>MX+29xsCL0G_gQ+qjPGU4EO</eid>
+            <style>title</style>
+            <family>FreeSans</family>
+            <bold>1</bold>
+            <italic>1</italic>
+            <text><b><i><font face="FreeSans"/>Untitled score</i></b></text>
+        </Text>
+
+    Inline styles:
+
+    .. code-block:: xml
+
+        <Text>
+            <eid>0iZtR+qEd6C_jIRPV50caLG</eid>
+            <style>composer</style>
+            <text><i>Composer</i> / <b>arranger</b></text>
+        </Text>
     """
 
-    __style: str
+    __style_name: str
+    """The name of the style, for example in this xml markup
+    ``<style>title</style>`` the style name is ``title``."""
+
     __parent_vbox: _Element
+    """The parent vbox element."""
+
     __text: typing.Optional[_Element]
+    """The surounding text element in uppercase letters."""
+
+    __content: typing.Optional[_Element]
+    """The text element in lowercase letters."""
 
     def __init__(
         self, style: str, parent_vbox: _Element, text: typing.Optional[_Element]
     ) -> None:
-        self.__style = style
+        self.__style_name = style
         self.__parent_vbox = parent_vbox
         self.__text = text
+
+        if self.__text is not None:
+            self.__content = self.__text.find("text")
 
     def clean(self) -> None:
         if self.__text is None:
             return
+        for element in self.__text:
+            if element.tag not in ("eid", "style", "text"):
+                self.__parent_vbox.remove(element)
+
+    def set(self, content: str) -> None:
+        if self.__text is None:
+            self.__text = Element("Text")
 
 
 class Vbox:
