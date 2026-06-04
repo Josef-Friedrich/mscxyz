@@ -5,12 +5,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from lxml.etree import Element
 
 from mscxyz import meta, supported_versions, utils
 from mscxyz.meta import (
     Meta,
     Metatag,
     Vbox,
+    VboxText,
 )
 from mscxyz.score import Score
 from tests import helper
@@ -126,6 +128,73 @@ class TestClassVbox:
     def test_instrument_excerpt(self) -> None:
         vbox = get_vbox("instrument_excerpt.mscz", 4)
         assert vbox.instrument_excerpt == "Part name"
+
+    def test_clean(self) -> None:
+        vbox = get_vbox("meta-vbox-styled.mscz", 4)
+
+        assert vbox.subtitle == "Subtitle"
+        assert vbox._subtitle.style_name == "subtitle"
+        assert vbox._subtitle.content == "Subtitle"
+        vbox._subtitle.content = "New subtitle"
+        assert vbox.subtitle == "New subtitle"
+
+
+class TestClassVboxText:
+    def test_set_creates_missing_text_elements(self) -> None:
+        parent_vbox = Element("VBox")
+        vbox_text = VboxText("title", parent_vbox, None)
+
+        vbox_text.content = "Untitled score"
+
+        container = parent_vbox.find("Text")
+        assert container is not None
+
+        style = container.find("style")
+        content = container.find("text")
+
+        assert style is not None
+        assert style.text == "title"
+        assert content is not None
+        assert content.text == "Untitled score"
+
+    def test_set_updates_existing_text(self) -> None:
+        parent_vbox = Element("VBox")
+        container = Element("Text")
+        style = Element("style")
+        style.text = "title"
+        text = Element("text")
+        text.text = "Old title"
+        container.append(style)
+        container.append(text)
+        parent_vbox.append(container)
+
+        vbox_text = VboxText("title", parent_vbox, container)
+        vbox_text.content = "New title"
+
+        content = container.find("text")
+        assert content is not None
+        assert content.text == "New title"
+
+    def test_clean_removes_non_core_elements(self) -> None:
+        parent_vbox = Element("VBox")
+        container = Element("Text")
+        for tag, value in (
+            ("eid", "123"),
+            ("style", "title"),
+            ("text", "Title"),
+            ("family", "FreeSans"),
+            ("bold", "1"),
+        ):
+            child = Element(tag)
+            child.text = value
+            container.append(child)
+        parent_vbox.append(container)
+
+        vbox_text = VboxText("title", parent_vbox, container)
+        vbox_text.clean()
+
+        tags = [child.tag for child in container]
+        assert tags == ["eid", "style", "text"]
 
 
 class TestOptionDistributeField:

@@ -407,32 +407,76 @@ class VboxText:
     __parent_vbox: _Element
     """The parent vbox element."""
 
-    __text: typing.Optional[_Element]
-    """The surounding text element in uppercase letters."""
+    __container: typing.Optional[_Element]
+    """The surrounding text element in uppercase letters, for example ``<Text>...</Text>``"""
+
+    __style: typing.Optional[_Element]
+    """The style element, for example ``<style>title</style>``."""
 
     __content: typing.Optional[_Element]
-    """The text element in lowercase letters."""
+    """The text element in lowercase letters, for example <text>Untitled score</text>"""
 
     def __init__(
-        self, style: str, parent_vbox: _Element, text: typing.Optional[_Element]
+        self,
+        style_name: str,
+        parent_vbox: _Element,
+        container: typing.Optional[_Element],
     ) -> None:
-        self.__style_name = style
+        self.__style_name = style_name
         self.__parent_vbox = parent_vbox
-        self.__text = text
+        self.__container = container
+        self.__style = None
+        self.__content = None
 
-        if self.__text is not None:
-            self.__content = self.__text.find("text")
+        if self.__container is not None:
+            self.__style = self.__container.find("style")
+            self.__content = self.__container.find("text")
 
     def clean(self) -> None:
-        if self.__text is None:
+        if self.__container is None:
             return
-        for element in self.__text:
+        for element in list(self.__container):
             if element.tag not in ("eid", "style", "text"):
-                self.__parent_vbox.remove(element)
+                self.__container.remove(element)
 
-    def set(self, content: str) -> None:
-        if self.__text is None:
-            self.__text = Element("Text")
+    @property
+    def style_name(self) -> str:
+        return self.__style_name
+
+    @property
+    def container(self) -> _Element:
+        if self.__container is None:
+            self.__container = Element("Text")
+            self.__parent_vbox.append(self.__container)
+        return self.__container
+
+    @property
+    def style(self) -> _Element:
+        if self.__style is None:
+            self.__style = Element("style")
+            self.__style.text = self.__style_name
+            self.container.append(self.__style)
+        return self.__style
+
+    @style.setter
+    def style(self, style_name: str) -> None:
+        self.style.text = style_name
+
+    @property
+    def _content(self) -> _Element:
+        if self.__content is None:
+            self.__content = Element("text")
+            self.container.append(self.__content)
+        return self.__content
+
+    @property
+    def content(self) -> typing.Optional[str]:
+        return self._content.text
+
+    @content.setter
+    def content(self, content: str) -> None:
+        self.style = self.__style_name
+        self._content.text = content
 
 
 class Vbox:
@@ -576,15 +620,25 @@ class Vbox:
             style = style.lower()
         return style
 
+    def __get_container(self, style: str) -> typing.Optional[_Element]:
+        """
+        :param style: The string inside the ``<style>`` tags, for example
+        ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
+        """
+        for element in self.vbox:
+            s = element.find("style")
+            if s is not None and s.text == self.__normalize_style_name(style):
+                return element
+        return None
+
     def __get_element(self, style: str) -> _Element | None:
         """
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
-        for element in self.vbox:
-            s = element.find("style")
-            if s is not None and s.text == self.__normalize_style_name(style):
-                return element.find("text")
+        container = self.__get_container(style)
+        if container is not None:
+            return container.find("text")
         return None
 
     def __get_text(self, style: str) -> str | None:
@@ -679,39 +733,43 @@ class Vbox:
             if style is not None:
                 style.text = new_style
 
-    __title: typing.Optional[VboxText]
+    __title: typing.Optional[VboxText] = None
 
+    @property
     def _title(self) -> VboxText:
         if self.__title is None:
-            self.__title = VboxText("title", self.vbox, self.__get_element("title"))
+            self.__title = VboxText("title", self.vbox, self.__get_container("title"))
         return self.__title
 
-    __subtitle: typing.Optional[VboxText]
+    __subtitle: typing.Optional[VboxText] = None
 
+    @property
     def _subtitle(self) -> VboxText:
         if self.__subtitle is None:
             self.__subtitle = VboxText(
-                "subtitle", self.vbox, self.__get_element("subtitle")
+                "subtitle", self.vbox, self.__get_container("subtitle")
             )
         return self.__subtitle
 
-    __composer: typing.Optional[VboxText]
+    __composer: typing.Optional[VboxText] = None
 
+    @property
     def _composer(self) -> VboxText:
         if self.__composer is None:
             self.__composer = VboxText(
-                "composer", self.vbox, self.__get_element("composer")
+                "composer", self.vbox, self.__get_container("composer")
             )
         return self.__composer
 
-    __lyricist: typing.Optional[VboxText]
+    __lyricist: typing.Optional[VboxText] = None
 
+    @property
     def _lyricist(self) -> VboxText:
         if self.__lyricist is None:
-            self.__lyricist = VboxText("poet", self.vbox, self.__get_element("poet"))
+            self.__lyricist = VboxText("poet", self.vbox, self.__get_container("poet"))
         return self.__lyricist
 
-    __instrument_excerpt: typing.Optional[VboxText]
+    __instrument_excerpt: typing.Optional[VboxText] = None
 
     def _instrument_excerpt(self) -> VboxText:
         if self.__instrument_excerpt is None:
