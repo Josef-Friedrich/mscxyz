@@ -367,7 +367,7 @@ class Metatag:
 
 class VboxText:
     """
-    Represents one text element of the first vbox element.
+    Manage one ``<Text>`` entry inside a ``<VBox>`` element.
 
     .. code-block:: xml
 
@@ -420,6 +420,11 @@ class VboxText:
         parent_vbox: _Element,
         container: Optional[_Element],
     ) -> None:
+        """
+        :param style_name: The style name used in ``<style>...</style>``.
+        :param parent_vbox: the parent ``<VBox>`` element where ``<Text>`` lives.
+        :param container: The existing ``<Text>`` element or ``None``.
+        """
         self.__style_name = style_name
         self.__parent_vbox = parent_vbox
         self.__container = container
@@ -433,13 +438,40 @@ class VboxText:
     def exists(self) -> bool:
         return self.__container is not None
 
-    def clean(self) -> None:
-        """Remove all style overwrites."""
+    def clear_formatting(self) -> None:
+        """Remove all style overwrites.  ``clean()`` removes style override tags from the ``<Text>`` container and
+        keeps only ``<eid>``, ``<style>``, and ``<text>``.
+
+        Before:
+
+        .. code-block:: xml
+
+            <Text>
+                <eid>MX+29xsCL0G_gQ+qjPGU4EO</eid>
+                <style>title</style>
+                <family>FreeSans</family>
+                <bold>1</bold>
+                <italic>1</italic>
+                <text><b><i><font face="FreeSans"/>Untitled score</i></b></text>
+            </Text>
+
+        After:
+
+        .. code-block:: xml
+
+            <Text>
+                <eid>MX+29xsCL0G_gQ+qjPGU4EO</eid>
+                <style>title</style>
+                <text>Untitled score</text>
+            </Text>
+
+        """
         if self.__container is None:
             return
         for element in list(self.__container):
             if element.tag not in ("eid", "style", "text"):
                 self.__container.remove(element)
+        self.content = self.content
 
     def remove(self) -> None:
         """Remove the container element ``<Text>...</Text>`` from the
@@ -489,6 +521,7 @@ class VboxText:
 
     @property
     def content(self) -> Optional[str]:
+        """Setting ``content`` to ``None`` removes the full ``<Text>`` container."""
         if self.__container is None:
             return None
         # To get the content of all child elements,
@@ -698,9 +731,9 @@ class Vbox:
                 <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
-                    <eid>4294967418</eid>
+                    <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
                     <Text>
-                        <eid>8589934598</eid>
+                        <eid>9EZXpseYfo_z5oSRZ7xoaL</eid>
                         <style>title</style>
                         <text>Mondscheinsonate</text>
                     </Text>
@@ -732,9 +765,9 @@ class Vbox:
                 <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
-                    <eid>4294967418</eid>
+                    <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
                     <Text>
-                        <eid>8589934598</eid>
+                        <eid>W2TmIWNulw_3xwF7Hs22D</eid>
                         <style>subtitle</style>
                         <text>1. Satz</text>
                     </Text>
@@ -766,9 +799,9 @@ class Vbox:
                 <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
-                    <eid>4294967418</eid>
+                    <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
                     <Text>
-                        <eid>8589934598</eid>
+                        <eid>TzY/P+VBDFG_lyazF6x468M</eid>
                         <style>composer</style>
                         <text>Ludwig van Beethoven</text>
                     </Text>
@@ -816,10 +849,10 @@ class Vbox:
                 <VBox>
                     <height>10</height>
                     <boxAutoSize>0</boxAutoSize>
-                    <eid>4294967418</eid>
+                    <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
                     <Text>
-                        <eid>8589934598</eid>
-                        <style>lyricist</style>
+                        <eid>iklYO/iK0CE_kALp5O5iuVN</eid>
+                        <style>poet</style>
                         <text>Johann Wolfgang von Goethe</text>
                     </Text>
                 </VBox>
@@ -852,7 +885,7 @@ class Vbox:
                     <boxAutoSize>0</boxAutoSize>
                     <eid>4294967418</eid>
                     <Text>
-                        <eid>8589934598</eid>
+                        <eid>fx/RTjxo4CE_M0P0jIU0j3L</eid>
                         <style>instrument_excerpt</style>
                         <text>Instrument Name</text>
                     </Text>

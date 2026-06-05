@@ -208,7 +208,7 @@ class TestClassVboxText:
         assert content is not None
         assert content.text == "New title"
 
-    def test_clean_removes_non_core_elements(self) -> None:
+    def test_clear_formatting(self) -> None:
         parent_vbox = Element("VBox")
         container = Element("Text")
         for tag, value in (
@@ -224,7 +224,7 @@ class TestClassVboxText:
         parent_vbox.append(container)
 
         vbox_text = VboxText("title", parent_vbox, container)
-        vbox_text.clean()
+        vbox_text.clear_formatting()
 
         tags = [child.tag for child in container]
         assert tags == ["eid", "style", "text"]
@@ -327,7 +327,6 @@ class TestStdout:
         stdout = Cli("--clean-meta", "all").stdout()
         assert stdout == ""
 
-    @pytest.mark.skip("Fix later")
     def test_verbose_1(self) -> None:
         stdout = (
             Cli("-v", "--clean-meta", "all")
@@ -535,7 +534,6 @@ class TestOptionDeleteDuplicates:
         assert s.meta.title == "Title"
 
 
-@pytest.mark.skip("will be enabled later")
 def test_option_synchronize() -> None:
     c = Cli("--synchronize").append_score("meta-all-values.mscz").execute()
 
@@ -561,10 +559,10 @@ def test_option_synchronize() -> None:
     assert post.vbox.composer == post.metatag.composer == "vbox_composer"
 
     # pre
-    assert pre.vbox.lyricist is None
+    assert pre.vbox.lyricist == "vbox_lyricist"
     assert pre.metatag.lyricist == "metatag_lyricist"
     # post
-    assert post.vbox.lyricist == post.metatag.lyricist == "metatag_lyricist"
+    assert post.vbox.lyricist == post.metatag.lyricist == "vbox_lyricist"
 
 
 def test_option_json() -> None:
