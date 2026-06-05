@@ -115,16 +115,16 @@ class Metatag:
             )
         return element
 
-    def __get_text(self, field: str) -> str | None:
+    def __get_text(self, field: str) -> Optional[str]:
         element: _Element | None = self.__get_element(field)
         return self.score.xml.get_text(element)
 
-    def __set_text(self, field: str, value: str | None) -> None:
+    def __set_text(self, field: str, value: Optional[str]) -> None:
         element: _Element = self.__get_element(field)
         element.text = value
 
     @property
-    def arranger(self) -> str | None:
+    def arranger(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -133,11 +133,11 @@ class Metatag:
         return self.__get_text("arranger")
 
     @arranger.setter
-    def arranger(self, value: str | None) -> None:
+    def arranger(self, value: Optional[str]) -> None:
         self.__set_text("arranger", value)
 
     @property
-    def audio_com_url(self) -> str | None:
+    def audio_com_url(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -146,11 +146,11 @@ class Metatag:
         return self.__get_text("audioComUrl")
 
     @audio_com_url.setter
-    def audio_com_url(self, value: str | None) -> None:
+    def audio_com_url(self, value: Optional[str]) -> None:
         self.__set_text("audioComUrl", value)
 
     @property
-    def composer(self) -> str | None:
+    def composer(self) -> Optional[str]:
         """Same text as "Composer" on the first page of the score
 
         .. code-block:: xml
@@ -160,11 +160,11 @@ class Metatag:
         return self.__get_text("composer")
 
     @composer.setter
-    def composer(self, value: str | None) -> None:
+    def composer(self, value: Optional[str]) -> None:
         self.__set_text("composer", value)
 
     @property
-    def copyright(self) -> str | None:
+    def copyright(self) -> Optional[str]:
         """Same text as "Copyright" on the first page of the score.
 
         .. code-block:: xml
@@ -174,11 +174,11 @@ class Metatag:
         return self.__get_text("copyright")
 
     @copyright.setter
-    def copyright(self, value: str | None) -> None:
+    def copyright(self, value: Optional[str]) -> None:
         self.__set_text("copyright", value)
 
     @property
-    def creation_date(self) -> str | None:
+    def creation_date(self) -> Optional[str]:
         """
         https://github.com/musescore/MuseScore/blob/06793ff5ff3065fe87fe9a8a651a6d20f49fd28c/src/engraving/dom/masterscore.cpp#L93
 
@@ -189,11 +189,11 @@ class Metatag:
         return self.__get_text("creationDate")
 
     @creation_date.setter
-    def creation_date(self, value: str | None) -> None:
+    def creation_date(self, value: Optional[str]) -> None:
         self.__set_text("creationDate", value)
 
     @property
-    def lyricist(self) -> str | None:
+    def lyricist(self) -> Optional[str]:
         """Same text as “Lyricist” on the first page of the score.
 
         .. code-block:: xml
@@ -203,11 +203,11 @@ class Metatag:
         return self.__get_text("lyricist")
 
     @lyricist.setter
-    def lyricist(self, value: str | None) -> None:
+    def lyricist(self, value: Optional[str]) -> None:
         self.__set_text("lyricist", value)
 
     @property
-    def movement_number(self) -> str | None:
+    def movement_number(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -216,11 +216,11 @@ class Metatag:
         return self.__get_text("movementNumber")
 
     @movement_number.setter
-    def movement_number(self, value: str | None) -> None:
+    def movement_number(self, value: Optional[str]) -> None:
         self.__set_text("movementNumber", value)
 
     @property
-    def movement_title(self) -> str | None:
+    def movement_title(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -229,11 +229,11 @@ class Metatag:
         return self.__get_text("movementTitle")
 
     @movement_title.setter
-    def movement_title(self, value: str | None) -> None:
+    def movement_title(self, value: Optional[str]) -> None:
         self.__set_text("movementTitle", value)
 
     @property
-    def msc_version(self) -> str | None:
+    def msc_version(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -242,11 +242,11 @@ class Metatag:
         return self.__get_text("mscVersion")
 
     @msc_version.setter
-    def msc_version(self, value: str | None) -> None:
+    def msc_version(self, value: Optional[str]) -> None:
         self.__set_text("mscVersion", value)
 
     @property
-    def platform(self) -> str | None:
+    def platform(self) -> Optional[str]:
         """The computing platform the score was created on. This might be empty if the score was saved in test mode.
 
         https://github.com/musescore/MuseScore/blob/06793ff5ff3065fe87fe9a8a651a6d20f49fd28c/src/engraving/dom/masterscore.cpp#L74-L81
@@ -259,11 +259,11 @@ class Metatag:
         return self.__get_text("platform")
 
     @platform.setter
-    def platform(self, value: str | None) -> None:
+    def platform(self, value: Optional[str]) -> None:
         self.__set_text("platform", value)
 
     @property
-    def poet(self) -> str | None:
+    def poet(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -272,11 +272,11 @@ class Metatag:
         return self.__get_text("poet")
 
     @poet.setter
-    def poet(self, value: str | None) -> None:
+    def poet(self, value: Optional[str]) -> None:
         self.__set_text("poet", value)
 
     @property
-    def source(self) -> str | None:
+    def source(self) -> Optional[str]:
         """May contain a URL if the score was downloaded from or Publish to MuseScore.com.
 
         .. code-block:: xml
@@ -288,11 +288,11 @@ class Metatag:
         return self.__get_text("source")
 
     @source.setter
-    def source(self, value: str | None) -> None:
+    def source(self, value: Optional[str]) -> None:
         self.__set_text("source", value)
 
     @property
-    def source_revision_id(self) -> str | None:
+    def source_revision_id(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -301,11 +301,11 @@ class Metatag:
         return self.__get_text("sourceRevisionId")
 
     @source_revision_id.setter
-    def source_revision_id(self, value: str | None) -> None:
+    def source_revision_id(self, value: Optional[str]) -> None:
         self.__set_text("sourceRevisionId", value)
 
     @property
-    def subtitle(self) -> str | None:
+    def subtitle(self) -> Optional[str]:
         """
         The subtitle. It has the same text as “Subtitle” on the first page of the score.
 
@@ -316,11 +316,11 @@ class Metatag:
         return self.__get_text("subtitle")
 
     @subtitle.setter
-    def subtitle(self, value: str | None) -> None:
+    def subtitle(self, value: Optional[str]) -> None:
         self.__set_text("subtitle", value)
 
     @property
-    def translator(self) -> str | None:
+    def translator(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -329,11 +329,11 @@ class Metatag:
         return self.__get_text("translator")
 
     @translator.setter
-    def translator(self, value: str | None) -> None:
+    def translator(self, value: Optional[str]) -> None:
         self.__set_text("translator", value)
 
     @property
-    def work_number(self) -> str | None:
+    def work_number(self) -> Optional[str]:
         """
         .. code-block:: xml
 
@@ -342,11 +342,11 @@ class Metatag:
         return self.__get_text("workNumber")
 
     @work_number.setter
-    def work_number(self, value: str | None) -> None:
+    def work_number(self, value: Optional[str]) -> None:
         self.__set_text("workNumber", value)
 
     @property
-    def work_title(self) -> str | None:
+    def work_title(self) -> Optional[str]:
         """
         The Work Title. It has the same text as “Title” on the first page of the score.
 
@@ -357,7 +357,7 @@ class Metatag:
         return self.__get_text("workTitle")
 
     @work_title.setter
-    def work_title(self, value: str | None) -> None:
+    def work_title(self, value: Optional[str]) -> None:
         self.__set_text("workTitle", value)
 
     def clean(self) -> None:
@@ -430,6 +430,9 @@ class VboxText:
             self.__style = self.__container.find("style")
             self.__content = self.__container.find("text")
 
+    def exists(self) -> bool:
+        return self.__container is not None
+
     def clean(self) -> None:
         """Remove all style overwrites."""
         if self.__container is None:
@@ -471,6 +474,7 @@ class VboxText:
 
     @style.setter
     def style(self, style_name: str) -> None:
+        self.__style_name = style_name
         self.style.text = style_name
 
     __content: Optional[_Element]
@@ -523,7 +527,7 @@ class Vbox:
     * `title`: Title
     * `subtitle`: Subtitle
     * `composer`: Composer
-    * `poet`: Lyricist
+    * `lyricist`: Lyricist (poet)
     * `instrument_excerpt`: Part name
 
     Version 2, 3
@@ -623,7 +627,7 @@ class Vbox:
     fields = (
         "composer",
         "instrument_excerpt",
-        "poet",
+        "lyricist",
         "subtitle",
         "title",
     )
@@ -644,6 +648,7 @@ class Vbox:
             vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
             self.score.xml.xpath_safe(xpath).insert(0, vbox)
         self.vbox = vbox
+        self.migrate_lyricist()
 
     def __normalize_style_name(self, style: str) -> str:
         """
@@ -667,153 +672,12 @@ class Vbox:
                 return element
         return None
 
-    def __get_element(self, style: str) -> _Element | None:
-        """
-        :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
-        """
-        container = self.__get_container(style)
-        if container is not None:
-            return container.find("text")
-        return None
-
-    def __get_text(self, style: str) -> str | None:
-        """
-        :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer``.
-        """
-        element = self.__get_element(style)
-        if element is not None and hasattr(element, "text"):
-            return element.text
-        return None
-
-    def __create_text_element(self, style: str, text: str) -> None:
-        """
-        Version 2, 3
-
-        .. code-block:: xml
-
-            <Text>
-                <style>Title</style>
-                <text>Title</text>
-            </Text>
-
-        Version 4
-
-        .. code-block:: xml
-
-            <Text>
-                <eid>8589934598</eid>
-                <style>title</style>
-                <text>Title</text>
-            </Text>
-
-
-        :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
-        :param text: The string inside the ``<text>`` tags.
-        """
-        text_element = self.score.xml.create_element("Text")
-
-        if self.score.version_major in (2, 3):
-            style = style.title()
-        else:
-            style = style.lower()
-
-        self.score.xml.create_sub_element(
-            text_element, "style", self.__normalize_style_name(style)
-        )
-        self.score.xml.create_sub_element(text_element, "text", text)
-        self.vbox.append(text_element)
-
-    def __set_text(self, style: str, text: str | None) -> None:
-        """
-        :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
-        """
-
-        if text is None:
-            self.__remove_text_element(style)
-            return None
-
-        element = self.__get_element(style)
-        if hasattr(element, "text"):
-            if element is not None:
-                element.text = text
-        else:
-            self.__create_text_element(style, text)
-
-    def __remove_text_element(self, style: str) -> None:
-        """
-        :param style: The string inside the ``<style>`` tags, for example
-          ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
-        """
-        self.score.xml.remove(self.__get_element(style))
-        return None
-
-    def __rename_element(self, old_style: str, new_style: str) -> None:
-        """
-        Rename a text element style tag inside the first score VBox.
-
-        :param old_style: Existing style name to look up (for example
-          ``Title``/``title`` or ``Composer``/``composer``).
-        :param new_style: New style name to assign to the matching element.
-
-        Notes:
-            Style normalization is version-dependent and handled by
-            :meth:`__normalize_style_name`.
-        """
-        old = self.__get_element(old_style)
-        if old is not None:
-            style = old.find("style")
-            if style is not None:
-                style.text = new_style
-
     def __create_vbox_text(self, style_name: str) -> VboxText:
         return VboxText(
             self.__normalize_style_name(style_name),
             self.vbox,
             self.__get_container(style_name),
         )
-
-    __subtitle: Optional[VboxText] = None
-
-    @property
-    def _subtitle(self) -> VboxText:
-        if self.__subtitle is None:
-            self.__subtitle = VboxText(
-                "subtitle", self.vbox, self.__get_container("subtitle")
-            )
-        return self.__subtitle
-
-    __composer: Optional[VboxText] = None
-
-    @property
-    def _composer(self) -> VboxText:
-        if self.__composer is None:
-            self.__composer = VboxText(
-                "composer", self.vbox, self.__get_container("composer")
-            )
-        return self.__composer
-
-    __lyricist: Optional[VboxText] = None
-
-    @property
-    def _lyricist(self) -> VboxText:
-        if self.__lyricist is None:
-            self.__lyricist = VboxText("poet", self.vbox, self.__get_container("poet"))
-        return self.__lyricist
-
-    __instrument_excerpt: Optional[VboxText] = None
-
-    def _instrument_excerpt(self) -> VboxText:
-        if self.__instrument_excerpt is None:
-            self.__instrument_excerpt = VboxText(
-                "instrument_excerpt",
-                self.vbox,
-                self.__get_element("instrument_excerpt"),
-            )
-        return self.__instrument_excerpt
 
     __title: Optional[VboxText] = None
 
@@ -824,7 +688,7 @@ class Vbox:
         return self.__title
 
     @property
-    def title(self) -> str | None:
+    def title(self) -> Optional[str]:
         """
         The title text field of the first `vertical` box or frame of a score.
 
@@ -846,11 +710,19 @@ class Vbox:
         return self._title.content
 
     @title.setter
-    def title(self, value: str | None) -> None:
+    def title(self, value: Optional[str]) -> None:
         self._title.content = value
 
+    __subtitle: Optional[VboxText] = None
+
     @property
-    def subtitle(self) -> str | None:
+    def _subtitle(self) -> VboxText:
+        if self.__subtitle is None:
+            self.__subtitle = self.__create_vbox_text("subtitle")
+        return self.__subtitle
+
+    @property
+    def subtitle(self) -> Optional[str]:
         """
         The subtitle text field of the first `vertical` box or frame of a score.
 
@@ -869,14 +741,22 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.__get_text("subtitle")
+        return self._subtitle.content
 
     @subtitle.setter
-    def subtitle(self, value: str | None) -> None:
-        self.__set_text("subtitle", value)
+    def subtitle(self, value: Optional[str]) -> None:
+        self._subtitle.content = value
+
+    __composer: Optional[VboxText] = None
 
     @property
-    def composer(self) -> str | None:
+    def _composer(self) -> VboxText:
+        if self.__composer is None:
+            self.__composer = self.__create_vbox_text("composer")
+        return self.__composer
+
+    @property
+    def composer(self) -> Optional[str]:
         """
         The composer text field of the first `vertical` box or frame of a score.
 
@@ -895,14 +775,38 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.__get_text("composer")
+        return self._composer.content
 
     @composer.setter
-    def composer(self, value: str | None) -> None:
-        self.__set_text("composer", value)
+    def composer(self, value: Optional[str]) -> None:
+        self._composer.content = value
+
+    __lyricist: Optional[VboxText] = None
 
     @property
-    def lyricist(self) -> str | None:
+    def _lyricist(self) -> VboxText:
+        if self.__lyricist is None:
+            self.__lyricist = self.__create_vbox_text("lyricist")
+        return self.__lyricist
+
+    __poet: Optional[VboxText] = None
+
+    @property
+    def _poet(self) -> VboxText:
+        if self.__poet is None:
+            self.__poet = self.__create_vbox_text("poet")
+        return self.__poet
+
+    def migrate_lyricist(self) -> None:
+        if self._lyricist.exists() and not self._poet.exists():
+            self._lyricist.style = "poet"
+            self.__poet = self.__lyricist
+            self.__lyricist = None
+        elif self._lyricist.exists() and self._poet.exists():
+            self._lyricist.remove()
+
+    @property
+    def lyricist(self) -> Optional[str]:
         """
         The lyricist text field of the first `vertical` box or frame of a score.
 
@@ -921,42 +825,22 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        self.__rename_element("lyricist", "poet")
-        return self.__get_text("poet")
+        return self._poet.content
 
     @lyricist.setter
-    def lyricist(self, value: str | None) -> None:
-        self.__rename_element("lyricist", "poet")
-        self.__set_text("poet", value)
+    def lyricist(self, value: Optional[str]) -> None:
+        self._poet.content = value
+
+    __instrument_excerpt: Optional[VboxText] = None
 
     @property
-    def poet(self) -> str | None:
-        """
-        The poet text field of the first `vertical` box or frame of a score.
-
-        .. code-block:: xml
-
-            <Staff id="1">
-                <VBox>
-                    <height>10</height>
-                    <boxAutoSize>0</boxAutoSize>
-                    <eid>4294967418</eid>
-                    <Text>
-                        <eid>8589934598</eid>
-                        <style>poet</style>
-                        <text>Johann Wolfgang von Goethe</text>
-                    </Text>
-                </VBox>
-            </Staff>
-        """
-        return self.__get_text("poet")
-
-    @poet.setter
-    def poet(self, value: str | None) -> None:
-        self.__set_text("poet", value)
+    def _instrument_excerpt(self) -> VboxText:
+        if self.__instrument_excerpt is None:
+            self.__instrument_excerpt = self.__create_vbox_text("instrument_excerpt")
+        return self.__instrument_excerpt
 
     @property
-    def instrument_excerpt(self) -> str | None:
+    def instrument_excerpt(self) -> Optional[str]:
         """
         The instrument excerpt text field of the first `vertical` box or frame of a score.
 
@@ -975,11 +859,11 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.__get_text("instrument_excerpt")
+        return self._instrument_excerpt.content
 
     @instrument_excerpt.setter
-    def instrument_excerpt(self, value: str | None) -> None:
-        self.__set_text("instrument_excerpt", value)
+    def instrument_excerpt(self, value: Optional[str]) -> None:
+        self._instrument_excerpt.content = value
 
     def clean(self) -> None:
         for field in self.fields:
@@ -1020,7 +904,6 @@ class Meta:
         self.subtitle = self.subtitle
         self.composer = self.composer
         self.lyricist = self.lyricist
-        self.poet = self.poet
 
     def write_to_log_file(self, log_file: str, format_string: str) -> None:
         """
@@ -1074,14 +957,14 @@ class Meta:
         """
         return self.score.reload(save).meta
 
-    def __pick_value(self, *values: str | None) -> str | None:
+    def __pick_value(self, *values: Optional[str]) -> Optional[str]:
         for value in values:
             if value:
                 return value
         return None
 
     @property
-    def title(self) -> str | None:
+    def title(self) -> Optional[str]:
         """
         Get and set the value of :attr:`Vbox.title` and :attr:`Metatag.work_title` all at once.
 
@@ -1090,11 +973,11 @@ class Meta:
         return self.__pick_value(self.vbox.title, self.metatag.work_title)
 
     @title.setter
-    def title(self, value: str | None) -> None:
+    def title(self, value: Optional[str]) -> None:
         self.vbox.title = self.metatag.work_title = value
 
     @property
-    def subtitle(self) -> str | None:
+    def subtitle(self) -> Optional[str]:
         """
         Get and set the value of :attr:`Vbox.subtitle`, :attr:`Metatag.subtitle` and :attr:`Metatag.movement_title` all at once.
 
@@ -1105,11 +988,11 @@ class Meta:
         )
 
     @subtitle.setter
-    def subtitle(self, value: str | None) -> None:
+    def subtitle(self, value: Optional[str]) -> None:
         self.vbox.subtitle = self.metatag.subtitle = self.metatag.movement_title = value
 
     @property
-    def composer(self) -> str | None:
+    def composer(self) -> Optional[str]:
         """
         Get and set the value of :attr:`Vbox.composer` and :attr:`Metatag.composer` all at once.
 
@@ -1118,31 +1001,18 @@ class Meta:
         return self.__pick_value(self.vbox.composer, self.metatag.composer)
 
     @composer.setter
-    def composer(self, value: str | None) -> None:
+    def composer(self, value: Optional[str]) -> None:
         self.vbox.composer = self.metatag.composer = value
 
     @property
-    def lyricist(self) -> str | None:
+    def lyricist(self) -> Optional[str]:
         """
         Get and set the value of :attr:`Vbox.lyricist` and :attr:`Metatag.lyricist` all at once.
 
         If the attributes have different values, then the attribute :attr:`Vbox.lyricist` is preferred.
         """
-        return self.__pick_value(self.vbox.poet, self.metatag.lyricist)
+        return self.__pick_value(self.vbox.lyricist, self.metatag.lyricist)
 
     @lyricist.setter
-    def lyricist(self, value: str | None) -> None:
-        self.vbox.poet = self.metatag.lyricist = value
-
-    @property
-    def poet(self) -> str | None:
-        """
-        Get and set the value of :attr:`Vbox.poet` and :attr:`Metatag.poet` all at once.
-
-        If the attributes have different values, then the attribute :attr:`Vbox.poet` is preferred.
-        """
-        return self.__pick_value(self.vbox.poet, self.metatag.lyricist)
-
-    @poet.setter
-    def poet(self, value: str | None) -> None:
-        self.vbox.poet = self.metatag.lyricist = value
+    def lyricist(self, value: Optional[str]) -> None:
+        self.vbox.lyricist = self.metatag.lyricist = value

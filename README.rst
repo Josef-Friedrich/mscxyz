@@ -230,12 +230,10 @@ Fields
 - ``subtitle``: The combined subtitle
 - ``composer``: The combined composer
 - ``lyricist``: The combined lyricist
-- ``poet``: The combined poet
 - ``vbox_title``: The title field of the score as it appears in the center of the first vertical frame (VBox).
 - ``vbox_subtitle``: The subtitle field of the score as it appears in the center of the first vertical frame (VBox).
 - ``vbox_composer``: The composer field of the score as it appears in the center of the first vertical frame (VBox).
 - ``vbox_lyricist``: The lyricist field of the score as it appears in the center of the first vertical frame (VBox).
-- ``vbox_poet``: The poet field of the score as it appears in the center of the first vertical frame (VBox).
 - ``vbox_instrument_excerpt``: The excerpt field of the score as it appears in the top left of the first vertical frame (VBox).
 - ``metatag_arranger``: The arranger field stored as project properties.
 - ``metatag_audio_com_url``: The audio.com URL field stored as project properties.
@@ -247,7 +245,6 @@ Fields
 - ``metatag_movement_title``: The movement title field stored as project properties.
 - ``metatag_msc_version``: The MuseScore version field stored as project properties.
 - ``metatag_platform``: The platform field stored as project properties.
-- ``metatag_poet``: The poet field stored as project properties.
 - ``metatag_source``: The source field stored as project properties.
 - ``metatag_source_revision_id``: The source revision ID field stored as project properties.
 - ``metatag_subtitle``: The subtitle field stored as project properties.
@@ -642,11 +639,10 @@ CLI Usage
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
                              [--composer <string>] [--lyricist <string>]
-                             [--poet <string>] [--part-name <string>]
-                             [-x <number-or-all>] [-r <remap-pairs>] [-F]
-                             [--rename <path-template>] [-t <directory> |
-                             --only-filename] [-A] [-a] [-n] [-K <fields>]
-                             [--list-fields] [--list-functions] [-L]
+                             [--part-name <string>] [-x <number-or-all>]
+                             [-r <remap-pairs>] [-F] [--rename <path-template>]
+                             [-t <directory> | --only-filename] [-A] [-a] [-n]
+                             [-K <fields>] [--list-fields] [--list-functions] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--reset-small-staffs] [--list-fonts]
@@ -760,7 +756,7 @@ CLI Usage
                             translator, work_number, work_title.
       --vbox, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
-                            composer, instrument_excerpt, poet, subtitle, title.
+                            composer, instrument_excerpt, lyricist, subtitle, title.
       --title <string>      Create a vertical frame (vbox) containing a title text field
                             and set the corresponding document properties work title
                             field (metatag).
@@ -773,9 +769,6 @@ CLI Usage
       --lyricist <string>   Create a vertical frame (vbox) containing a lyricist text
                             field and set the corresponding document properties lyricist
                             field (metatag).
-      --poet <string>       Create a vertical frame (vbox) containing a poet text field
-                            and set the corresponding document properties poet field
-                            (metatag).
       --part-name, --instrument-excerpt <string>
                             Create a vertical frame (vbox) containing a
                             instrument_excerpt (part name) text field.

@@ -64,7 +64,6 @@ class DefaultArguments:
     meta_subtitle: Optional[str] = None
     meta_composer: Optional[str] = None
     meta_lyricist: Optional[str] = None
-    meta_poet: Optional[str] = None
     meta_instrument_excerpt: Optional[str] = None
 
     # rename

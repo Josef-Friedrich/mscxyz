@@ -15,11 +15,10 @@ Comande line interface
                              [--metatag <field> <value>] [--vbox <field> <value>]
                              [--title <string>] [--subtitle <string>]
                              [--composer <string>] [--lyricist <string>]
-                             [--poet <string>] [--part-name <string>]
-                             [-x <number-or-all>] [-r <remap-pairs>] [-F]
-                             [--rename <path-template>] [-t <directory> |
-                             --only-filename] [-A] [-a] [-n] [-K <fields>]
-                             [--list-fields] [--list-functions] [-L]
+                             [--part-name <string>] [-x <number-or-all>]
+                             [-r <remap-pairs>] [-F] [--rename <path-template>]
+                             [-t <directory> | --only-filename] [-A] [-a] [-n]
+                             [-K <fields>] [--list-fields] [--list-functions] [-L]
                              [-g <glob-pattern> | --mscz | --mscx]
                              [-s <style-name> <value>] [--clean] [-Y <file>] [--s3]
                              [--s4] [--reset-small-staffs] [--list-fonts]
@@ -133,7 +132,7 @@ Comande line interface
                             translator, work_number, work_title.
       --vbox, --vbox-meta <field> <value>
                             Define the metadata in VBox elements. Available fields:
-                            composer, instrument_excerpt, poet, subtitle, title.
+                            composer, instrument_excerpt, lyricist, subtitle, title.
       --title <string>      Create a vertical frame (vbox) containing a title text field
                             and set the corresponding document properties work title
                             field (metatag).
@@ -146,9 +145,6 @@ Comande line interface
       --lyricist <string>   Create a vertical frame (vbox) containing a lyricist text
                             field and set the corresponding document properties lyricist
                             field (metatag).
-      --poet <string>       Create a vertical frame (vbox) containing a poet text field
-                            and set the corresponding document properties poet field
-                            (metatag).
       --part-name, --instrument-excerpt <string>
                             Create a vertical frame (vbox) containing a
                             instrument_excerpt (part name) text field.

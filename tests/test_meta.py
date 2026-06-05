@@ -132,7 +132,9 @@ class TestClassVbox:
     def test_clean(self) -> None:
         vbox = get_vbox("meta-vbox-styled.mscz", 4)
 
+        # title
         assert vbox.title == "Untitled score"
+        assert vbox._title.style_name == "title"
         assert vbox._title.content == "Untitled score"
         vbox._title.content = "New title"
         assert vbox.title == "New title"
@@ -141,11 +143,33 @@ class TestClassVbox:
         vbox.title = None
         assert vbox._title.content is None
 
+        # subtitle
         assert vbox.subtitle == "Subtitle"
         assert vbox._subtitle.style_name == "subtitle"
         assert vbox._subtitle.content == "Subtitle"
         vbox._subtitle.content = "New subtitle"
         assert vbox.subtitle == "New subtitle"
+
+        # composer
+        assert vbox.composer == "Composer / arranger"
+        assert vbox._composer.style_name == "composer"
+        assert vbox._composer.content == "Composer / arranger"
+        vbox._composer.content = "New composer"
+        assert vbox.composer == "New composer"
+
+        # lyricist
+        assert vbox.lyricist is None
+        assert vbox._poet.style_name == "poet"
+        assert vbox._poet.content is None
+        vbox._poet.content = "New lyricist"
+        assert vbox.lyricist == "New lyricist"
+
+        # instrument_excerpt
+        assert vbox.instrument_excerpt is None
+        assert vbox._instrument_excerpt.style_name == "instrument_excerpt"
+        assert vbox._instrument_excerpt.content is None
+        vbox._instrument_excerpt.content = "My part"
+        assert vbox.instrument_excerpt == "My part"
 
 
 class TestClassVboxText:
@@ -625,12 +649,3 @@ class TestClassMeta:
         assert score.meta.lyricist == new
         assert score.meta.vbox.lyricist == new
         assert score.meta.metatag.lyricist == new
-
-    @pytest.mark.skip("will be enabled later")
-    def test_property_poet(self, score: Score) -> None:
-        assert score.meta.poet is None
-        new = "New Poety"
-        score.meta.poet = new
-        assert score.meta.poet == new
-        assert score.meta.vbox.poet == new
-        assert score.meta.metatag.poet == new

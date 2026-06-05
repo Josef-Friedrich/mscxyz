@@ -341,14 +341,6 @@ def setup_parser() -> argparse.ArgumentParser:
     )
 
     meta.add_argument(
-        "--poet",
-        metavar=("<string>"),
-        dest="meta_poet",
-        help="Create a vertical frame (vbox) containing a poet text field and "
-        "set the corresponding document properties poet field (metatag).",
-    )
-
-    meta.add_argument(
         "--part-name",
         "--instrument-excerpt",
         metavar=("<string>"),
@@ -1027,8 +1019,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
                 for a in args.meta_vbox:
                     field = a[0]
                     value = a[1]
-                    if field == "lyricist":
-                        field = "poet"
                     if field not in Vbox.fields:
                         raise ValueError(
                             f"Unknown field {field}. "
@@ -1070,9 +1060,6 @@ def execute(cli_args: Sequence[str] | None = None) -> None:
 
             if args.meta_lyricist:
                 score.meta.lyricist = args.meta_lyricist
-
-            if args.meta_poet:
-                score.meta.poet = args.meta_poet
 
             if args.meta_instrument_excerpt:
                 score.meta.vbox.instrument_excerpt = args.meta_instrument_excerpt

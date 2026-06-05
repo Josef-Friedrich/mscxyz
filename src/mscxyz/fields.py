@@ -71,12 +71,6 @@ class FieldsManager:
             attr_path="meta.lyricist",
             color="green",
         ),
-        Field(
-            name="poet",
-            description="The combined poet",
-            attr_path="meta.poet",
-            color="green",
-        ),
         # vbox
         Field(
             name="vbox_title",
@@ -99,12 +93,6 @@ class FieldsManager:
         Field(
             name="vbox_lyricist",
             description="The lyricist field of the score as it appears in the center of the first vertical frame (VBox).",
-            attr_path="meta.vbox.lyricist",
-            color="cyan",
-        ),
-        Field(
-            name="vbox_poet",
-            description="The poet field of the score as it appears in the center of the first vertical frame (VBox).",
             attr_path="meta.vbox.lyricist",
             color="cyan",
         ),
@@ -173,12 +161,6 @@ class FieldsManager:
             name="metatag_platform",
             description="The platform field stored as project properties.",
             attr_path="meta.metatag.platform",
-            color="blue",
-        ),
-        Field(
-            name="metatag_poet",
-            description="The poet field stored as project properties.",
-            attr_path="meta.metatag.poet",
             color="blue",
         ),
         Field(
