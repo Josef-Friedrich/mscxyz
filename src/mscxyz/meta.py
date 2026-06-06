@@ -401,18 +401,8 @@ class VboxText:
         </Text>
     """
 
-    __style_name: str
-    """The name of the style, for example in this xml markup
-    ``<style>title</style>`` the style name is ``title``."""
-
     __parent_vbox: _Element
     """The parent vbox element."""
-
-    __container: Optional[_Element]
-    """The surrounding text element in uppercase letters, for example ``<Text>...</Text>``"""
-
-    __style: Optional[_Element]
-    """The style element, for example ``<style>title</style>``."""
 
     def __init__(
         self,
@@ -485,9 +475,8 @@ class VboxText:
 
         return None
 
-    @property
-    def style_name(self) -> str:
-        return self.__style_name
+    __container: Optional[_Element]
+    """The surrounding text element in uppercase letters, for example ``<Text>...</Text>``"""
 
     @property
     def container(self) -> _Element:
@@ -495,6 +484,17 @@ class VboxText:
             self.__container = Element("Text")
             self.__parent_vbox.append(self.__container)
         return self.__container
+
+    __style_name: str
+    """The name of the style, for example in this xml markup
+    ``<style>title</style>`` the style name is ``title``."""
+
+    @property
+    def style_name(self) -> str:
+        return self.__style_name
+
+    __style: Optional[_Element]
+    """The style element, for example ``<style>title</style>``."""
 
     @property
     def style(self) -> _Element:
@@ -560,7 +560,7 @@ class Vbox:
     * `title`: Title
     * `subtitle`: Subtitle
     * `composer`: Composer
-    * `lyricist`: Lyricist (poet)
+    * `lyricist` (poet): Lyricist
     * `instrument_excerpt`: Part name
 
     Version 2, 3
@@ -665,22 +665,19 @@ class Vbox:
         "title",
     )
 
-    score: "Score"
+    _score: "Score"
 
-    xml_root: _Element
-
-    vbox: _Element
+    _vbox: _Element
 
     def __init__(self, score: "Score") -> None:
-        self.score = score
-        self.xml_root = score.xml_root
+        self._score = score
         xpath = '/museScore/Score/Staff[@id="1"]'
 
-        vbox = self.score.xml.xpath(xpath + "/VBox")
+        vbox = self._score.xml.xpath(xpath + "/VBox")
         if vbox is None:
-            vbox, _ = self.score.xml.create_sub_element("VBox", "height", "10")
-            self.score.xml.xpath_safe(xpath).insert(0, vbox)
-        self.vbox = vbox
+            vbox, _ = self._score.xml.create_sub_element("VBox", "height", "10")
+            self._score.xml.xpath_safe(xpath).insert(0, vbox)
+        self._vbox = vbox
         self.migrate_lyricist()
 
     def __normalize_style_name(self, style: str) -> str:
@@ -688,9 +685,9 @@ class Vbox:
         :param style: The string inside the ``<style>`` tags, for example
           ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
-        if self.score.version_major in (2, 3):
+        if self._score.version_major in (2, 3):
             style = style.title()
-        elif self.score.version_major == 4:
+        elif self._score.version_major == 4:
             style = style.lower()
         return style
 
@@ -699,7 +696,7 @@ class Vbox:
         :param style: The string inside the ``<style>`` tags, for example
         ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
         """
-        for element in self.vbox:
+        for element in self._vbox:
             s = element.find("style")
             if s is not None and s.text == self.__normalize_style_name(style):
                 return element
@@ -708,14 +705,32 @@ class Vbox:
     def __create_vbox_text(self, style_name: str) -> VboxText:
         return VboxText(
             self.__normalize_style_name(style_name),
-            self.vbox,
+            self._vbox,
             self.__get_container(style_name),
         )
 
     __title: Optional[VboxText] = None
 
     @property
-    def _title(self) -> VboxText:
+    def title_element(self) -> VboxText:
+        """
+        The title element of the first `vertical` box or frame of a score.
+
+        .. code-block:: xml
+
+            <Staff id="1">
+                <VBox>
+                    <height>10</height>
+                    <boxAutoSize>0</boxAutoSize>
+                    <eid>3yH8HKTgwb_p8uM4j9efcE</eid>
+                    <Text>
+                        <eid>9EZXpseYfo_z5oSRZ7xoaL</eid>
+                        <style>title</style>
+                        <text>Mondscheinsonate</text>
+                    </Text>
+                </VBox>
+            </Staff>
+        """
         if self.__title is None:
             self.__title = self.__create_vbox_text("title")
         return self.__title
@@ -740,24 +755,27 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._title.content
+        return self.title_element.content
 
     @title.setter
     def title(self, value: Optional[str]) -> None:
-        self._title.content = value
+        """
+        The title plain text content of the first `vertical` box or frame of
+        a score.
+
+        Setting this field to ``None`` will delete the corresponding XML element
+        from the score.
+
+        If this field is ``None``, the corresponding XML element does not exist.
+        """
+        self.title_element.content = value
 
     __subtitle: Optional[VboxText] = None
 
     @property
-    def _subtitle(self) -> VboxText:
-        if self.__subtitle is None:
-            self.__subtitle = self.__create_vbox_text("subtitle")
-        return self.__subtitle
-
-    @property
-    def subtitle(self) -> Optional[str]:
+    def subtitle_element(self) -> VboxText:
         """
-        The subtitle text field of the first `vertical` box or frame of a score.
+        The subtitle element of the first `vertical` box or frame of a score.
 
         .. code-block:: xml
 
@@ -774,24 +792,33 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._subtitle.content
+        if self.__subtitle is None:
+            self.__subtitle = self.__create_vbox_text("subtitle")
+        return self.__subtitle
+
+    @property
+    def subtitle(self) -> Optional[str]:
+        """
+        The subtitle plain text content of the first `vertical` box or frame of
+        a score.
+
+        Setting this field to ``None`` will delete the corresponding XML element
+        from the score.
+
+        If this field is ``None``, the corresponding XML element does not exist.
+        """
+        return self.subtitle_element.content
 
     @subtitle.setter
     def subtitle(self, value: Optional[str]) -> None:
-        self._subtitle.content = value
+        self.subtitle_element.content = value
 
     __composer: Optional[VboxText] = None
 
     @property
-    def _composer(self) -> VboxText:
-        if self.__composer is None:
-            self.__composer = self.__create_vbox_text("composer")
-        return self.__composer
-
-    @property
-    def composer(self) -> Optional[str]:
+    def composer_element(self) -> VboxText:
         """
-        The composer text field of the first `vertical` box or frame of a score.
+        The composer element of the first `vertical` box or frame of a score.
 
         .. code-block:: xml
 
@@ -808,16 +835,31 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._composer.content
+        if self.__composer is None:
+            self.__composer = self.__create_vbox_text("composer")
+        return self.__composer
+
+    @property
+    def composer(self) -> Optional[str]:
+        """
+        The composer plain text content of the first `vertical` box or frame of
+        a score.
+
+        Setting this field to ``None`` will delete the corresponding XML element
+        from the score.
+
+        If this field is ``None``, the corresponding XML element does not exist.
+        """
+        return self.composer_element.content
 
     @composer.setter
     def composer(self, value: Optional[str]) -> None:
-        self._composer.content = value
+        self.composer_element.content = value
 
     __lyricist: Optional[VboxText] = None
 
     @property
-    def _lyricist(self) -> VboxText:
+    def _legacy_lyricist_element(self) -> VboxText:
         if self.__lyricist is None:
             self.__lyricist = self.__create_vbox_text("lyricist")
         return self.__lyricist
@@ -825,23 +867,9 @@ class Vbox:
     __poet: Optional[VboxText] = None
 
     @property
-    def _poet(self) -> VboxText:
-        if self.__poet is None:
-            self.__poet = self.__create_vbox_text("poet")
-        return self.__poet
-
-    def migrate_lyricist(self) -> None:
-        if self._lyricist.exists() and not self._poet.exists():
-            self._lyricist.style = "poet"
-            self.__poet = self.__lyricist
-            self.__lyricist = None
-        elif self._lyricist.exists() and self._poet.exists():
-            self._lyricist.remove()
-
-    @property
-    def lyricist(self) -> Optional[str]:
+    def lyricist_element(self) -> VboxText:
         """
-        The lyricist text field of the first `vertical` box or frame of a score.
+        The lyricist element of the first `vertical` box or frame of a score.
 
         .. code-block:: xml
 
@@ -858,11 +886,39 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._poet.content
+        if self.__poet is None:
+            self.__poet = self.__create_vbox_text("poet")
+        return self.__poet
+
+    def migrate_lyricist(self) -> None:
+        """Migrate the lyricist text element by renaming the style from
+        ``lyricist`` to ``poet``."""
+        if (
+            self._legacy_lyricist_element.exists()
+            and not self.lyricist_element.exists()
+        ):
+            self._legacy_lyricist_element.style = "poet"
+            self.__poet = self.__lyricist
+            self.__lyricist = None
+        elif self._legacy_lyricist_element.exists() and self.lyricist_element.exists():
+            self._legacy_lyricist_element.remove()
+
+    @property
+    def lyricist(self) -> Optional[str]:
+        """
+        The lyricist plain text content of the first `vertical` box or frame of
+        a score.
+
+        Setting this field to ``None`` will delete the corresponding XML element
+        from the score.
+
+        If this field is ``None``, the corresponding XML element does not exist.
+        """
+        return self.lyricist_element.content
 
     @lyricist.setter
     def lyricist(self, value: Optional[str]) -> None:
-        self._poet.content = value
+        self.lyricist_element.content = value
 
     __instrument_excerpt: Optional[VboxText] = None
 

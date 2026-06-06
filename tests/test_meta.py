@@ -102,9 +102,9 @@ class TestClassVbox:
     def test_set(self, filename: str, version: int) -> None:
         vbox = get_vbox(filename, version)
         vbox.title = "New Title"
-        vbox.score.save()
+        vbox._score.save()
 
-        new_score = vbox.score.reload()
+        new_score = vbox._score.reload()
 
         assert new_score.meta.vbox.title == "New Title"
         assert "<text>New Title</text>" in new_score.read_as_text()
@@ -134,34 +134,34 @@ class TestClassVbox:
 
         # title
         assert vbox.title == "Untitled score"
-        assert vbox._title.style_name == "title"
-        assert vbox._title.content == "Untitled score"
-        vbox._title.content = "New title"
+        assert vbox.title_element.style_name == "title"
+        assert vbox.title_element.content == "Untitled score"
+        vbox.title_element.content = "New title"
         assert vbox.title == "New title"
         vbox.title = "New title 2"
-        assert vbox._title.content == "New title 2"
+        assert vbox.title_element.content == "New title 2"
         vbox.title = None
-        assert vbox._title.content is None
+        assert vbox.title_element.content is None
 
         # subtitle
         assert vbox.subtitle == "Subtitle"
-        assert vbox._subtitle.style_name == "subtitle"
-        assert vbox._subtitle.content == "Subtitle"
-        vbox._subtitle.content = "New subtitle"
+        assert vbox.subtitle_element.style_name == "subtitle"
+        assert vbox.subtitle_element.content == "Subtitle"
+        vbox.subtitle_element.content = "New subtitle"
         assert vbox.subtitle == "New subtitle"
 
         # composer
         assert vbox.composer == "Composer / arranger"
-        assert vbox._composer.style_name == "composer"
-        assert vbox._composer.content == "Composer / arranger"
-        vbox._composer.content = "New composer"
+        assert vbox.composer_element.style_name == "composer"
+        assert vbox.composer_element.content == "Composer / arranger"
+        vbox.composer_element.content = "New composer"
         assert vbox.composer == "New composer"
 
         # lyricist
         assert vbox.lyricist is None
-        assert vbox._poet.style_name == "poet"
-        assert vbox._poet.content is None
-        vbox._poet.content = "New lyricist"
+        assert vbox.lyricist_element.style_name == "poet"
+        assert vbox.lyricist_element.content is None
+        vbox.lyricist_element.content = "New lyricist"
         assert vbox.lyricist == "New lyricist"
 
         # instrument_excerpt

@@ -51,7 +51,7 @@ docs_readme_patcher:
 # Generate the HTML documentation using Sphinx
 docs_sphinx:
 	rm -rf docs/_build
-	uv tool run --isolated --from sphinx --with . --with sphinx_rtd_theme --with sphinx-argparse sphinx-build -W -q docs docs/_build
+	uv tool run --isolated --from sphinx --with-editable . --with sphinx_rtd_theme --with sphinx-argparse sphinx-build -W -q docs docs/_build
 	xdg-open docs/_build/index.html
 
 # Pin the requirements for readthedocs
