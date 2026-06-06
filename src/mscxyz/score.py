@@ -307,7 +307,7 @@ class Score:
         """
         Reload the MuseScore file.
 
-        :param save: Whether to save the changes before reloading. Default is False.
+        :param save: Whether to save the changes before reloading. Default is ``False``.
 
         :return: The reloaded Score object.
         """

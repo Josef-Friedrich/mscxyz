@@ -377,7 +377,11 @@ class VboxText:
             <text>Untitled score</text>
         </Text>
 
-    Global styled:
+    Text style overrides:
+    =====================
+
+    Global overrides:
+    -----------------
 
     .. code-block:: xml
 
@@ -390,7 +394,8 @@ class VboxText:
             <text><b><i><font face="FreeSans"/>Untitled score</i></b></text>
         </Text>
 
-    Inline styles:
+    Inline overrides:
+    -----------------
 
     .. code-block:: xml
 
@@ -399,6 +404,10 @@ class VboxText:
             <style>composer</style>
             <text><i>Composer</i> / <b>arranger</b></text>
         </Text>
+
+    :param style: The style name used in ``<style>...</style>``.
+    :param parent_vbox: The parent ``<VBox>`` element where ``<Text>`` lives.
+    :param container: The existing ``<Text>`` element or ``None``.
     """
 
     __parent_vbox: _Element
@@ -406,31 +415,34 @@ class VboxText:
 
     def __init__(
         self,
-        style_name: str,
+        style: str,
         parent_vbox: _Element,
         container: Optional[_Element],
     ) -> None:
-        """
-        :param style_name: The style name used in ``<style>...</style>``.
-        :param parent_vbox: the parent ``<VBox>`` element where ``<Text>`` lives.
-        :param container: The existing ``<Text>`` element or ``None``.
-        """
-        self.__style_name = style_name
+        self.__style = style
         self.__parent_vbox = parent_vbox
         self.__container = container
-        self.__style = None
-        self.__content = None
+        self.__style_element = None
+        self.__text_element = None
 
         if self.__container is not None:
-            self.__style = self.__container.find("style")
-            self.__content = self.__container.find("text")
+            self.__style_element = self.__container.find("style")
+            self.__text_element = self.__container.find("text")
 
     def exists(self) -> bool:
+        """Checks whether the ``<Text>...</Text>`` element with the given style name
+        exists.
+
+        :return: ``True`` if the ``</Text>`` element with the given style name,
+           otherwise ``False``.
+        """
         return self.__container is not None
 
-    def clear_formatting(self) -> None:
-        """Remove all style overwrites.  ``clean()`` removes style override tags from the ``<Text>`` container and
-        keeps only ``<eid>``, ``<style>``, and ``<text>``.
+    def reset_text_style_overrides(self) -> None:
+        """Reset the text style override
+
+        This method removes style override tags from the ``<Text>`` container and
+        keeps only ``<eid>``, ``<style>``, and ``<text>`` tags.
 
         Before:
 
@@ -461,7 +473,8 @@ class VboxText:
         for element in list(self.__container):
             if element.tag not in ("eid", "style", "text"):
                 self.__container.remove(element)
-        self.content = self.content
+        # The get the plain text and remove the HMTL style tags.
+        self.text = self.text
 
     def remove(self) -> None:
         """Remove the container element ``<Text>...</Text>`` from the
@@ -470,63 +483,73 @@ class VboxText:
             self.__parent_vbox.remove(self.__container)
 
             self.__container = None
-            self.__style = None
-            self.__content = None
+            self.__style_element = None
+            self.__text_element = None
 
         return None
 
     __container: Optional[_Element]
-    """The surrounding text element in uppercase letters, for example ``<Text>...</Text>``"""
+    """The surrounding text element in uppercase letters
+    (``<Text>...</Text>``)."""
 
     @property
-    def container(self) -> _Element:
+    def _container(self) -> _Element:
+        """The surrounding text element in uppercase letters
+        (``<Text>...</Text>``)."""
         if self.__container is None:
             self.__container = Element("Text")
             self.__parent_vbox.append(self.__container)
         return self.__container
 
-    __style_name: str
-    """The name of the style, for example in this xml markup
-    ``<style>title</style>`` the style name is ``title``."""
-
-    @property
-    def style_name(self) -> str:
-        return self.__style_name
-
-    __style: Optional[_Element]
+    __style_element: Optional[_Element]
     """The style element, for example ``<style>title</style>``."""
 
     @property
-    def style(self) -> _Element:
-        if self.__style is None:
-            self.__style = Element("style")
-            self.__style.text = self.__style_name
-            self.container.append(self.__style)
+    def _style_element(self) -> _Element:
+        if self.__style_element is None:
+            self.__style_element = Element("style")
+            self.__style_element.text = self.__style
+            self._container.append(self.__style_element)
+        return self.__style_element
+
+    __text_element: Optional[_Element]
+    """The text element in lowercase letters inside the container
+    (``<text>...</text>``)."""
+
+    __style: str
+    """The name of the style."""
+
+    @property
+    def style(self) -> str:
+        """The name of the style.
+
+        For example, in the XML markup
+        ``<style>title</style>`` the style name is ``title``."""
         return self.__style
 
     @style.setter
-    def style(self, style_name: str) -> None:
-        self.__style_name = style_name
-        self.style.text = style_name
-
-    __content: Optional[_Element]
-    """The text element in lowercase letters, for example <text>Untitled score</text>"""
+    def style(self, style: str) -> None:
+        self.__style = style
+        self._style_element.text = style
 
     @property
-    def _content(self) -> _Element:
-        if self.__content is None:
-            self.__content = Element("text")
-            self.container.append(self.__content)
-        return self.__content
+    def _text_element(self) -> _Element:
+        if self.__text_element is None:
+            self.__text_element = Element("text")
+            self._container.append(self.__text_element)
+        return self.__text_element
 
     @property
-    def content(self) -> Optional[str]:
-        """Setting ``content`` to ``None`` removes the full ``<Text>`` container."""
+    def text(self) -> Optional[str]:
+        """
+        The plain text content.
+
+        Setting ``text`` to ``None`` removes the entire ``<Text>`` container."""
         if self.__container is None:
             return None
         # To get the content of all child elements,
         # for example: ``<text><b><i><font face="FreeSans"/>Untitled score</i></b></text>``
-        content = self._content.xpath(".//text()")
+        content = self._text_element.xpath(".//text()")
         if (
             isinstance(content, bool)
             or isinstance(content, float)
@@ -541,15 +564,15 @@ class VboxText:
             return None
         return "".join(elements)
 
-    @content.setter
-    def content(self, content: Optional[str]) -> None:
+    @text.setter
+    def text(self, content: Optional[str]) -> None:
         if content is None:
             self.remove()
             return None
         # To create the style-tag
-        self.style = self.__style_name
-        self._content.clear()
-        self._content.text = content
+        self.style = self.__style
+        self._text_element.clear()
+        self._text_element.text = content
 
 
 class Vbox:
@@ -755,7 +778,7 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self.title_element.content
+        return self.title_element.text
 
     @title.setter
     def title(self, value: Optional[str]) -> None:
@@ -768,7 +791,7 @@ class Vbox:
 
         If this field is ``None``, the corresponding XML element does not exist.
         """
-        self.title_element.content = value
+        self.title_element.text = value
 
     __subtitle: Optional[VboxText] = None
 
@@ -807,11 +830,11 @@ class Vbox:
 
         If this field is ``None``, the corresponding XML element does not exist.
         """
-        return self.subtitle_element.content
+        return self.subtitle_element.text
 
     @subtitle.setter
     def subtitle(self, value: Optional[str]) -> None:
-        self.subtitle_element.content = value
+        self.subtitle_element.text = value
 
     __composer: Optional[VboxText] = None
 
@@ -850,11 +873,11 @@ class Vbox:
 
         If this field is ``None``, the corresponding XML element does not exist.
         """
-        return self.composer_element.content
+        return self.composer_element.text
 
     @composer.setter
     def composer(self, value: Optional[str]) -> None:
-        self.composer_element.content = value
+        self.composer_element.text = value
 
     __lyricist: Optional[VboxText] = None
 
@@ -914,11 +937,11 @@ class Vbox:
 
         If this field is ``None``, the corresponding XML element does not exist.
         """
-        return self.lyricist_element.content
+        return self.lyricist_element.text
 
     @lyricist.setter
     def lyricist(self, value: Optional[str]) -> None:
-        self.lyricist_element.content = value
+        self.lyricist_element.text = value
 
     __instrument_excerpt: Optional[VboxText] = None
 
@@ -948,11 +971,11 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._instrument_excerpt.content
+        return self._instrument_excerpt.text
 
     @instrument_excerpt.setter
     def instrument_excerpt(self, value: Optional[str]) -> None:
-        self._instrument_excerpt.content = value
+        self._instrument_excerpt.text = value
 
     def clean(self) -> None:
         for field in self.fields:

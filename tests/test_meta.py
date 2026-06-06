@@ -129,46 +129,46 @@ class TestClassVbox:
         vbox = get_vbox("instrument_excerpt.mscz", 4)
         assert vbox.instrument_excerpt == "Part name"
 
-    def test_clean(self) -> None:
+    def test_interaction_with_vbox_text(self) -> None:
         vbox = get_vbox("meta-vbox-styled.mscz", 4)
 
         # title
         assert vbox.title == "Untitled score"
-        assert vbox.title_element.style_name == "title"
-        assert vbox.title_element.content == "Untitled score"
-        vbox.title_element.content = "New title"
+        assert vbox.title_element.style == "title"
+        assert vbox.title_element.text == "Untitled score"
+        vbox.title_element.text = "New title"
         assert vbox.title == "New title"
         vbox.title = "New title 2"
-        assert vbox.title_element.content == "New title 2"
+        assert vbox.title_element.text == "New title 2"
         vbox.title = None
-        assert vbox.title_element.content is None
+        assert vbox.title_element.text is None
 
         # subtitle
         assert vbox.subtitle == "Subtitle"
-        assert vbox.subtitle_element.style_name == "subtitle"
-        assert vbox.subtitle_element.content == "Subtitle"
-        vbox.subtitle_element.content = "New subtitle"
+        assert vbox.subtitle_element.style == "subtitle"
+        assert vbox.subtitle_element.text == "Subtitle"
+        vbox.subtitle_element.text = "New subtitle"
         assert vbox.subtitle == "New subtitle"
 
         # composer
         assert vbox.composer == "Composer / arranger"
-        assert vbox.composer_element.style_name == "composer"
-        assert vbox.composer_element.content == "Composer / arranger"
-        vbox.composer_element.content = "New composer"
+        assert vbox.composer_element.style == "composer"
+        assert vbox.composer_element.text == "Composer / arranger"
+        vbox.composer_element.text = "New composer"
         assert vbox.composer == "New composer"
 
         # lyricist
         assert vbox.lyricist is None
-        assert vbox.lyricist_element.style_name == "poet"
-        assert vbox.lyricist_element.content is None
-        vbox.lyricist_element.content = "New lyricist"
+        assert vbox.lyricist_element.style == "poet"
+        assert vbox.lyricist_element.text is None
+        vbox.lyricist_element.text = "New lyricist"
         assert vbox.lyricist == "New lyricist"
 
         # instrument_excerpt
         assert vbox.instrument_excerpt is None
-        assert vbox._instrument_excerpt.style_name == "instrument_excerpt"
-        assert vbox._instrument_excerpt.content is None
-        vbox._instrument_excerpt.content = "My part"
+        assert vbox._instrument_excerpt.style == "instrument_excerpt"
+        assert vbox._instrument_excerpt.text is None
+        vbox._instrument_excerpt.text = "My part"
         assert vbox.instrument_excerpt == "My part"
 
 
@@ -177,7 +177,7 @@ class TestClassVboxText:
         parent_vbox = Element("VBox")
         vbox_text = VboxText("title", parent_vbox, None)
 
-        vbox_text.content = "Untitled score"
+        vbox_text.text = "Untitled score"
 
         container = parent_vbox.find("Text")
         assert container is not None
@@ -202,13 +202,13 @@ class TestClassVboxText:
         parent_vbox.append(container)
 
         vbox_text = VboxText("title", parent_vbox, container)
-        vbox_text.content = "New title"
+        vbox_text.text = "New title"
 
         content = container.find("text")
         assert content is not None
         assert content.text == "New title"
 
-    def test_clear_formatting(self) -> None:
+    def test_reset_text_style_overrides(self) -> None:
         parent_vbox = Element("VBox")
         container = Element("Text")
         for tag, value in (
@@ -224,7 +224,7 @@ class TestClassVboxText:
         parent_vbox.append(container)
 
         vbox_text = VboxText("title", parent_vbox, container)
-        vbox_text.clear_formatting()
+        vbox_text.reset_text_style_overrides()
 
         tags = [child.tag for child in container]
         assert tags == ["eid", "style", "text"]
