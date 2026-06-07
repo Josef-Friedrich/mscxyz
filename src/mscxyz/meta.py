@@ -439,7 +439,7 @@ class VboxText:
         return self.__container is not None
 
     def reset_text_style_overrides(self) -> None:
-        """Reset the text style override
+        """Reset the text style overrides.
 
         This method removes style override tags from the ``<Text>`` container and
         keeps only ``<eid>``, ``<style>``, and ``<text>`` tags.
@@ -481,7 +481,6 @@ class VboxText:
         parent ``<Vbox>...</Vbox>`` element."""
         if self.__container is not None:
             self.__parent_vbox.remove(self.__container)
-
             self.__container = None
             self.__style_element = None
             self.__text_element = None
@@ -506,15 +505,12 @@ class VboxText:
 
     @property
     def _style_element(self) -> _Element:
+        """The style element, for example ``<style>title</style>``."""
         if self.__style_element is None:
             self.__style_element = Element("style")
             self.__style_element.text = self.__style
             self._container.append(self.__style_element)
         return self.__style_element
-
-    __text_element: Optional[_Element]
-    """The text element in lowercase letters inside the container
-    (``<text>...</text>``)."""
 
     __style: str
     """The name of the style."""
@@ -532,8 +528,12 @@ class VboxText:
         self.__style = style
         self._style_element.text = style
 
+    __text_element: Optional[_Element]
+
     @property
     def _text_element(self) -> _Element:
+        """The text element in lowercase letters inside the container
+        (``<text>...</text>``)."""
         if self.__text_element is None:
             self.__text_element = Element("text")
             self._container.append(self.__text_element)
@@ -946,7 +946,7 @@ class Vbox:
     __instrument_excerpt: Optional[VboxText] = None
 
     @property
-    def _instrument_excerpt(self) -> VboxText:
+    def instrument_excerpt_element(self) -> VboxText:
         if self.__instrument_excerpt is None:
             self.__instrument_excerpt = self.__create_vbox_text("instrument_excerpt")
         return self.__instrument_excerpt
@@ -971,15 +971,20 @@ class Vbox:
                 </VBox>
             </Staff>
         """
-        return self._instrument_excerpt.text
+        return self.instrument_excerpt_element.text
 
     @instrument_excerpt.setter
     def instrument_excerpt(self, value: Optional[str]) -> None:
-        self._instrument_excerpt.text = value
+        self.instrument_excerpt_element.text = value
 
     def clean(self) -> None:
-        for field in self.fields:
-            setattr(self, field, None)
+        """Remove the text elements ``title``, ``subtitle``,
+        ``composer``, ``lyricist`` and ``instrument_excerpt`` from the vbox."""
+        self.title_element.remove()
+        self.subtitle_element.remove()
+        self.composer_element.remove()
+        self.lyricist_element.remove()
+        self.instrument_excerpt_element.remove()
 
 
 class Meta:

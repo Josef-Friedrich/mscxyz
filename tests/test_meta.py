@@ -109,6 +109,24 @@ class TestClassVbox:
         assert new_score.meta.vbox.title == "New Title"
         assert "<text>New Title</text>" in new_score.read_as_text()
 
+    def test_access_does_not_create_text_elements(self) -> None:
+        vbox = get_vbox("no-vbox.mscz", 4)
+
+        assert vbox.title is None
+        assert vbox.subtitle is None
+        assert vbox.composer is None
+        assert vbox.lyricist is None
+        assert vbox.instrument_excerpt is None
+
+        vbox._score.save()
+        xml_markup = vbox._score.reload().read_as_text()
+
+        assert "<style>title</style>" not in xml_markup
+        assert "<style>subtitle</style>" not in xml_markup
+        assert "<style>composer</style>" not in xml_markup
+        assert "<style>poet</style>" not in xml_markup
+        assert "<style>instrument_excerpt</style>" not in xml_markup
+
     def test_title(self) -> None:
         vbox = get_vbox("instrument_excerpt.mscz", 4)
         assert vbox.title == "Untitled score"
@@ -166,10 +184,27 @@ class TestClassVbox:
 
         # instrument_excerpt
         assert vbox.instrument_excerpt is None
-        assert vbox._instrument_excerpt.style == "instrument_excerpt"
-        assert vbox._instrument_excerpt.text is None
-        vbox._instrument_excerpt.text = "My part"
+        assert vbox.instrument_excerpt_element.style == "instrument_excerpt"
+        assert vbox.instrument_excerpt_element.text is None
+        vbox.instrument_excerpt_element.text = "My part"
         assert vbox.instrument_excerpt == "My part"
+
+    def test_clean(self) -> None:
+        vbox = get_vbox("meta-all-values.mscz", 4)
+
+        assert vbox.title == "vbox_title"
+        assert vbox.subtitle == "vbox_subtitle"
+        assert vbox.composer == "vbox_composer"
+        assert vbox.lyricist == "vbox_lyricist"
+        assert vbox.instrument_excerpt is None
+
+        vbox.clean()
+
+        assert vbox.title is None
+        assert vbox.subtitle is None
+        assert vbox.composer is None
+        assert vbox.lyricist is None
+        assert vbox.instrument_excerpt is None
 
 
 class TestClassVboxText:
