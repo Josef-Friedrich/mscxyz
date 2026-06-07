@@ -432,36 +432,3 @@ Other MuseScore related projects
 ================================
 
 * https://github.com/johentsch/ms3
-
-Development
-===========
-
-Test
-----
-
-::
-
-    make test
-
-
-Publish a new version
----------------------
-
-::
-
-    git tag 1.1.1
-    git push --tags
-    make publish
-
-
-Package documentation
----------------------
-
-The package documentation is hosted on
-`readthedocs <http://mscxyz.readthedocs.io>`_.
-
-Generate the package documentation:
-
-::
-
-    make docs
