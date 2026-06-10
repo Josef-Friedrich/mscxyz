@@ -405,7 +405,7 @@ class VboxText:
             <text><i>Composer</i> / <b>arranger</b></text>
         </Text>
 
-    :param style: The style name used in ``<style>...</style>``.
+    :param style: The style name used in the ``<style>...</style>`` element.
     :param parent_vbox: The parent ``<VBox>`` element where ``<Text>`` lives.
     :param container: The existing ``<Text>`` element or ``None``.
     """
@@ -438,7 +438,7 @@ class VboxText:
         """
         return self.__container is not None
 
-    def reset_text_style_overrides(self) -> None:
+    def reset_style(self) -> None:
         """Reset the text style overrides.
 
         This method removes style override tags from the ``<Text>`` container and
@@ -978,13 +978,25 @@ class Vbox:
         self.instrument_excerpt_element.text = value
 
     def clean(self) -> None:
-        """Remove the text elements ``title``, ``subtitle``,
-        ``composer``, ``lyricist`` and ``instrument_excerpt`` from the vbox."""
+        """Remove the text elements :attr:`title` :attr:`subtitle`,
+        :attr:`composer`, :attr:`lyricist` and :attr:`instrument_excerpt`
+        from the vbox."""
         self.title_element.remove()
         self.subtitle_element.remove()
         self.composer_element.remove()
         self.lyricist_element.remove()
         self.instrument_excerpt_element.remove()
+
+    def reset_style(self) -> None:
+        """Reset the text style overrides of the elements :attr:`title`
+        :attr:`subtitle`, :attr:`composer`, :attr:`lyricist` and
+        :attr:`instrument_excerpt` from the vbox.
+        """
+        self.title_element.reset_style()
+        self.subtitle_element.reset_style()
+        self.composer_element.reset_style()
+        self.lyricist_element.reset_style()
+        self.instrument_excerpt_element.reset_style()
 
 
 class Meta:

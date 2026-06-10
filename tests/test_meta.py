@@ -206,6 +206,69 @@ class TestClassVbox:
         assert vbox.lyricist is None
         assert vbox.instrument_excerpt is None
 
+    def test_reset_style_does_not_create_text_elements(self) -> None:
+        vbox = get_vbox("no-vbox.mscz", 4)
+
+        vbox.reset_style()
+        vbox._score.save()
+        xml_markup = vbox._score.reload().read_as_text()
+
+        assert "<style>title</style>" not in xml_markup
+        assert "<style>subtitle</style>" not in xml_markup
+        assert "<style>composer</style>" not in xml_markup
+        assert "<style>poet</style>" not in xml_markup
+        assert "<style>instrument_excerpt</style>" not in xml_markup
+
+    def test_reset_style_removes_overrides_from_all_fields(self) -> None:
+        vbox = get_vbox("no-vbox.mscz", 4)
+        values = {
+            "title": "Styled title",
+            "subtitle": "Styled subtitle",
+            "composer": "Styled composer",
+            "lyricist": "Styled lyricist",
+            "instrument_excerpt": "Styled part",
+        }
+        for field, value in values.items():
+            setattr(vbox, field, value)
+
+        elements = (
+            vbox.title_element,
+            vbox.subtitle_element,
+            vbox.composer_element,
+            vbox.lyricist_element,
+            vbox.instrument_excerpt_element,
+        )
+
+        for element in elements:
+            container = element._container
+
+            family = Element("family")
+            family.text = "FreeSans"
+            bold = Element("bold")
+            bold.text = "1"
+            container.append(family)
+            container.append(bold)
+
+            content = container.find("text")
+            assert content is not None
+            plain_text = element.text
+            content.clear()
+            italic = Element("i")
+            italic.text = plain_text
+            content.append(italic)
+
+        vbox.reset_style()
+
+        for field, expected in values.items():
+            element = getattr(vbox, f"{field}_element")
+            container = element._container
+            tags = [child.tag for child in container]
+
+            assert all(tag in ("eid", "style", "text") for tag in tags)
+            assert "family" not in tags
+            assert "bold" not in tags
+            assert element.text == expected
+
 
 class TestClassVboxText:
     def test_set_creates_missing_text_elements(self) -> None:
@@ -259,7 +322,7 @@ class TestClassVboxText:
         parent_vbox.append(container)
 
         vbox_text = VboxText("title", parent_vbox, container)
-        vbox_text.reset_text_style_overrides()
+        vbox_text.reset_style()
 
         tags = [child.tag for child in container]
         assert tags == ["eid", "style", "text"]
