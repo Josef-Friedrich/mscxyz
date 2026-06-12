@@ -519,8 +519,8 @@ class VboxText:
     def style(self) -> str:
         """The name of the style.
 
-        For example, in the XML markup
-        ``<style>title</style>`` the style name is ``title``."""
+        In the XML markup ``<style>title</style>``, for example, the style
+        name is ``title``."""
         return self.__style
 
     @style.setter
@@ -716,8 +716,13 @@ class Vbox:
 
     def __get_container(self, style: str) -> Optional[_Element]:
         """
-        :param style: The string inside the ``<style>`` tags, for example
+        Get the ``<Text>...</Text>``container XML element by the style name.
+
+        :param style: The string inside the ``<style>`` tag, for example
         ``Title`` or ``Composer`` or for v4 ``title`` or ``composer``.
+
+        :return: The ``<Text>...</Text>``container XML element or ``None``
+          if the XML element doen’t exist.
         """
         for element in self._vbox:
             s = element.find("style")
@@ -733,6 +738,76 @@ class Vbox:
         )
 
     __title: Optional[VboxText] = None
+
+    def set_text(self, style_name: str, text: str) -> VboxText:
+        """
+        Add a ``<Text>`` element to the first VBox of a score, or set it if it
+        already exists.
+
+        If a ``<Text>`` element already exists, its content is updated; otherwise,
+        the ``<Text>`` element is created.
+
+        :param style_name: The style name used in the
+          ``<style>...</style>`` element.
+
+        :return: A :class:`VBoxText` wrapper instance that provides further,
+          more fine-grained access to the text element.
+        """
+        element = self.__create_vbox_text(style_name)
+        element.text = text
+        return element
+
+    def get_text(self, style_name: str) -> Optional[str]:
+        """Retrieve the text content of a ``<Text>`` element by its style name.
+
+        :param style_name: The style name used in the
+          ``<style>...</style>`` element.
+
+        :return: The text content of the ``<Text>`` element
+        """
+
+        element = self.__create_vbox_text(style_name)
+        return element.text
+
+    def rename_style(self, old: str, new: str) -> VboxText:
+        """Rename the style name of a ``<Text>`` element.
+
+        :param old: The old style name used in the
+          ``<style>...</style>`` element.
+        :param new: The new style name used in the
+          ``<style>...</style>`` element.
+
+        :return: A :class:`VBoxText` wrapper instance that provides further,
+          more fine-grained access to the text element.
+        """
+        element = self.__create_vbox_text(old)
+        element.style = new
+        return element
+
+    def remove_text(self, style_name: str) -> VboxText:
+        """Remove a ``<Text>`` element from the first VBox in a score by its style
+        name.
+
+        :param style_name: The style name used in the
+          ``<style>...</style>`` element.
+
+        :return: A :class:`VBoxText` wrapper instance that provides further,
+          more fine-grained access to the text element.
+        """
+        element = self.__create_vbox_text(style_name)
+        element.remove()
+        return element
+
+    def reset_text_style(self, style_name: str) -> VboxText:
+        """:param style_name: The style name used in the
+          ``<style>...</style>`` element.
+
+        :return: A :class:`VBoxText` wrapper instance that provides further,
+          more fine-grained access to the text element.
+        """
+        element = self.__create_vbox_text(style_name)
+        element.reset_style()
+        return element
 
     @property
     def title_element(self) -> VboxText:

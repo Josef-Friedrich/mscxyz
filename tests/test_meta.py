@@ -109,6 +109,65 @@ class TestClassVbox:
         assert new_score.meta.vbox.title == "New Title"
         assert "<text>New Title</text>" in new_score.read_as_text()
 
+    def test_set_text(self) -> None:
+        vbox = get_vbox("no-vbox.mscz", 4)
+
+        element = vbox.set_text("title", "New title")
+
+        assert isinstance(element, VboxText)
+        assert element.style == "title"
+        assert element.text == "New title"
+        assert vbox.title == "New title"
+
+    def test_get_text(self) -> None:
+        vbox = get_vbox("score.mscz", 4)
+
+        assert vbox.get_text("title") == "Title"
+        assert vbox.get_text("subtitle") is None
+
+    def test_remove_text(self) -> None:
+        vbox = get_vbox("score.mscz", 4)
+
+        element = vbox.remove_text("title")
+
+        assert isinstance(element, VboxText)
+        assert element.text is None
+        assert vbox.get_text("title") is None
+
+    def test_rename_style(self) -> None:
+        vbox = get_vbox("score.mscz", 4)
+
+        element = vbox.rename_style("title", "subtitle")
+
+        assert isinstance(element, VboxText)
+        assert element.style == "subtitle"
+        assert element.text == "Title"
+        assert vbox.get_text("title") is None
+        assert vbox.get_text("subtitle") == "Title"
+
+    def test_reset_text_style(self) -> None:
+        vbox = get_vbox("no-vbox.mscz", 4)
+        vbox.set_text("title", "Styled title")
+        vbox.set_text("subtitle", "Keep overrides")
+
+        title_container = vbox.title_element._container
+        subtitle_container = vbox.subtitle_element._container
+        for container in (title_container, subtitle_container):
+            family = Element("family")
+            family.text = "FreeSans"
+            bold = Element("bold")
+            bold.text = "1"
+            container.append(family)
+            container.append(bold)
+
+        element = vbox.reset_text_style("title")
+
+        assert isinstance(element, VboxText)
+        assert [child.tag for child in title_container] == ["style", "text"]
+        assert element.text == "Styled title"
+        assert "family" in [child.tag for child in subtitle_container]
+        assert "bold" in [child.tag for child in subtitle_container]
+
     def test_access_does_not_create_text_elements(self) -> None:
         vbox = get_vbox("no-vbox.mscz", 4)
 
